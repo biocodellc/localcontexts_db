@@ -7,16 +7,16 @@ class Users(models.Model):
     phone = models.CharField(max_length=80)
     affiliation = models.CharField(max_length=80)
     bio = models.CharField(max_length=150)
-    # date_created = 
-    # date_modified =
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
 class UserInstitution(models.Model):
     users_id = models.IntegerField()
     # institution_id =
     admin = models.BooleanField()
     manager = models.BooleanField()
-    # governance = 
-    # team =
+    governance = models.BooleanField()
+    team = models.BooleanField()
 
 class UserCommunity(models.Model):
     users_id = models.IntegerField()
@@ -24,7 +24,7 @@ class UserCommunity(models.Model):
     admin = models.BooleanField()
     manager = models.BooleanField()
     board = models.BooleanField()
-    # member =
+    member = models.BooleanField()
 
 class Institutions(models.Model):
     name = models.CharField(max_length=80)
