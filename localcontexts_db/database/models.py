@@ -11,20 +11,35 @@ class Users(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
 class UserInstitution(models.Model):
-    users_id = models.IntegerField()
+    users_id = models.CharField(max_length=20)
     institution_id = models.CharField(max_length=100)
     admin = models.BooleanField()
     manager = models.BooleanField()
     governance = models.BooleanField()
     team = models.BooleanField()
 
+    def __str__(self):
+        return self.users_id
+
+    class Meta:
+        verbose_name = 'User Institution'
+        verbose_name_plural = "User Institutions"
+
+
 class UserCommunity(models.Model):
-    users_id = models.IntegerField()
+    users_id = models.CharField(max_length=20)
     institution_id = models.CharField(max_length=100) 
     admin = models.BooleanField()
     manager = models.BooleanField()
     board = models.BooleanField()
     member = models.BooleanField()
+
+    def __str__(self):
+        return self.users_id
+
+    class Meta:
+        verbose_name = 'User Community'
+        verbose_name_plural = "User Communities"
 
 class Institutions(models.Model):
     name = models.CharField(max_length=80)
@@ -33,10 +48,26 @@ class Institutions(models.Model):
     contact_name = models.CharField(max_length=80)
     contact_email = models.EmailField(max_length=254)
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Institution'
+        verbose_name_plural = "Institutions"
+
+
 class Community(models.Model):
     name = models.CharField(max_length=80)
     code = models.CharField(max_length=80)
     address = models.CharField(max_length=80)
     contact_name = models.CharField(max_length=80)
     contact_email = models.EmailField(max_length=254)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Community'
+        verbose_name_plural = "Communities"
+
 
