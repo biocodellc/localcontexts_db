@@ -39,7 +39,8 @@ create table institutions (
   code text, # code /abbreviation for institution
   address text,
   contact name,
-  contact email
+  contact email,
+  institution_approved boolean default FALSE  # site_administrator approves and then sets this to TRUE
 ) create index id;
 
 create table community (
@@ -48,7 +49,8 @@ create table community (
   code text, # code /abbreviation for community
   address text,
   contact name,
-  contact email
+  contact email,
+  community_approved boolean default FALSE  # site_administrator approves and then sets this to TRUE
 ) create index id;
 
 
