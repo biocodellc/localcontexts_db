@@ -9,7 +9,8 @@ create table users (
   affiliation text,
   bio text,
   date_created date,
-  date_modified date
+  date_modified date,
+  site_administrator boolean # has ability to create institutions and communities
 ) create index id;
 
 create table userInstitution (
