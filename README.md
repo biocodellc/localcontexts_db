@@ -3,10 +3,10 @@ Local contexts back-end
 
 ## Getting Started
 What you need to run this app:
-- `virtualenv`
-- Django
+- virtualenv
+- Django 3.1
 - PostGreSQL
-- Make sure you're running the latest version of `pip` and python.
+- Python 3.8.3 with the latest version of `pip`
 
 To run the app:
 ```python manage.py runserver```
