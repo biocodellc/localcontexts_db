@@ -1,5 +1,5 @@
 from django.contrib import admin
-from database.models import UserInstitution, Institutions, Community, UserCommunity, UserProfile
+from apps.database.models import UserInstitution, Institutions, Community, UserCommunity, UserProfile
 
 # Register your models here.
 admin.site.register(UserInstitution)
