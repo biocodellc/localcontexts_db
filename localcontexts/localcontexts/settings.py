@@ -25,7 +25,7 @@ SECRET_KEY = os.environ['PROD_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['DEBUG_VALUE']
 
-ALLOWED_HOSTS = ['localcontexts-develop.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['lc-develop.herokuapp.com', 'localhost']
 
 
 # Application definition
