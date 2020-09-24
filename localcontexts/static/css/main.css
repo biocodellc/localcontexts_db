@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;300;400&display=swap');
+/* GENERAL */
+* {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+h1 {
+    background-color: rgb(170, 238, 170);
+}
+
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f1f4f5;
+}
+
+/* HEADER */
+#header-wrapper {
+    display: flex;
+    width: 100%;
+    height: 10vh;
+    margin: 0;
+    background: rgb(53,172,153);
+    background: linear-gradient(0deg, rgba(53,172,153,1) 4%, rgba(56,116,171,1) 100%);
+    /* box-shadow: 5px 5px #babdbd; */
+}
+
+.wave {
+    position: absolute;
+    top: 10;
+    left: 0;
+    background: rgb(53,172,153);
+    background: linear-gradient(0deg, rgba(53,172,153,1) 4%, rgba(56,116,171,1) 100%);
+}
+
+#header-logo {
+    text-decoration: none;
+    margin: 20px;
+    padding: 10px;
+    width: 30%;
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: 300;
+    color: #fff;
+    font-size: 26px;
+}
+
+#nav-links-ul {
+    list-style-type: none;
+    font-size: 16px;
+    width: 70%;
+    display: inline-flex;
+    justify-content: flex-end;
+    margin: 20px;
+}
+
+.inline {
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: 200;
+    text-transform: uppercase;
+    padding: 5px;
+    color: #fff;
+}
+
+#content {
+    margin: 10px;
+    display: flex;
+    width: 90%;
+    background-color: #fff;
+    justify-content: center;
+    border-radius: 15px;
+    box-shadow: -2px 4px 14px 3px rgba(173,164,173,1);
+}
+
+.footer-wave {
+    position: absolute;
+    bottom: 0;
+    background: rgb(53,172,153);
+    background: linear-gradient(0deg, rgba(53,172,153,1) 4%, rgba(56,116,171,1) 100%);
+}
