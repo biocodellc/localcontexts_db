@@ -9,6 +9,30 @@ What you need to run this app:
 - Python 3.8.3 with the latest version of `pip`
 
 ### Installing Dependencies
+Setup virtualenvironment:
+```
+pyenv virtualenv 3.8.3 envi
+```
+
+Activate virtualenvironment:
+```
+source /Users/jdeck/.pyenv/versions/envi/bin/activate
+```
+
+### Setting up
+Set localcontexts Environment Variables using EXPORT Statements
+This will set local environment variables accessible via PYTHON
+# TODO use a file to set these instead of Environment Variables
+
+Set up database:
+```
+psql 
+	> create database localcontextsdb
+python manage.py makemigrations
+python manage.py migrate
+```
+
+### Installing Dependencies
 Once in virtualenv, in the project root run:
 ```pip install -r requirements.txt```
 
