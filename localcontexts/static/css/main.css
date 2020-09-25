@@ -1,13 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;300;400&display=swap');
+
 /* GENERAL */
 * {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    box-sizing: border-box;
+    font-family: 'Fira Sans', Verdana, sans-serif;
 }
-
-h1 {
-    background-color: rgb(170, 238, 170);
-}
-
 body {
     margin: 0;
     width: 100%;
@@ -15,62 +12,117 @@ body {
     background-color: #f1f4f5;
 }
 
+h1 {
+    color: #3874AB;
+    font-weight: 400;
+}
+
+p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 16.8px;
+}
+
 /* HEADER */
-#header-wrapper {
-    display: flex;
+#header-container {
     width: 100%;
-    height: 10vh;
+    height: 12vh;
     margin: 0;
+    padding: 10px;
     background: rgb(53,172,153);
-    background: linear-gradient(0deg, rgba(53,172,153,1) 4%, rgba(56,116,171,1) 100%);
+    background: linear-gradient(0deg, rgba(53,172,153,1) 2%, rgba(56,116,171,1) 100%);
     /* box-shadow: 5px 5px #babdbd; */
 }
 
-.wave {
-    position: absolute;
-    top: 10;
-    left: 0;
-    background: rgb(53,172,153);
-    background: linear-gradient(0deg, rgba(53,172,153,1) 4%, rgba(56,116,171,1) 100%);
+#header-container header {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    /* border: 1px solid yellowgreen; */
 }
 
+/* HEADER CONTENT */
 #header-logo {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 20px;
     text-decoration: none;
-    margin: 20px;
-    padding: 10px;
-    width: 30%;
-    font-family: 'Fira Sans', sans-serif;
+    width: 25%;
     font-weight: 300;
     color: #fff;
     font-size: 26px;
+    /* border: 1px solid purple; */
 }
 
-#nav-links-ul {
+/* NAVIGATION LINKS */
+.nav-links-ul {
     list-style-type: none;
-    font-size: 16px;
-    width: 70%;
-    display: inline-flex;
+    font-size: 18px;
+    width: 50%;
+    display: flex;
     justify-content: flex-end;
-    margin: 20px;
+    /* border: 1px solid silver; */
 }
 
-.inline {
-    font-family: 'Fira Sans', sans-serif;
+.nav-links-ul li {
+    width: 15%;
+    margin: 5px;
+    /* border: 1px solid green; */
+}
+
+.nav-links-ul a {
+    padding: 5px;
+    text-decoration: none;
     font-weight: 200;
     text-transform: uppercase;
-    padding: 5px;
     color: #fff;
+    /* border: 1px solid red; */
 }
 
+/* NAV BUTTONS */
+
+#btn-container {
+    width: 15%;
+    /* display: inline-flex; */
+}
+
+.nav-btn {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 3px;
+    text-transform: uppercase;
+    border: 1px solid #fff;
+    cursor: pointer;
+    width: 50%;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+#register-btn {
+    color: #fff;
+    background-color: transparent;
+}
+
+#sign-in-btn {
+    background-color: #fff;
+    color: #3874AB;
+    font-weight: 500;
+    margin-left: -5px;
+}
+
+/* BODY */
+
 #content {
-    margin: 10px;
+    margin: 20px auto 10px auto;
     display: flex;
     width: 90%;
     background-color: #fff;
     justify-content: center;
     border-radius: 15px;
-    box-shadow: -2px 4px 14px 3px rgba(173,164,173,1);
+    box-shadow: -2px 4px 5px 3px rgba(173,164,173,1);
 }
+
+/* FOOTER */
 
 .footer-wave {
     position: absolute;
