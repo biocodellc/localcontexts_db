@@ -51,9 +51,9 @@ class Account(AbstractBaseUser):
     country = CountryField()
     city_or_town = models.CharField(verbose_name='city or town', max_length=80)
     job_title = models.CharField(verbose_name='job title', max_length=80)
-    community_member = models.BooleanField(default=False)
     affiliation = models.CharField(verbose_name='affiliation', max_length=60)
     bio = models.CharField(verbose_name='bio', max_length=120)
+    community_member = models.BooleanField(default=False)
 
     # This is what the user will log in with
     USERNAME_FIELD = 'email'
@@ -116,3 +116,15 @@ class Institution(models.Model):
     class Meta:
         verbose_name = 'Institution'
         verbose_name_plural = 'Institutions'
+
+class UserCommunity(models.Model):
+    name = models.CharField(max_length=10, default='')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, default=None)
+    communities = models.ManyToManyField(Community)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = 'User Community'
+        verbose_name_plural = 'User Communities'
