@@ -31,6 +31,25 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+class Role(models.Model):
+    ADMIN = 1
+    APPROVER = 2
+    WRITER = 3
+    EDITOR = 4
+    IMPLEMENTOR = 5
+    ROLE_CHOICES = (
+        (ADMIN, 'admin'),
+        (APPROVER, 'approver'),
+        (WRITER, 'writer'),
+        (EDITOR, 'editor'),
+        (IMPLEMENTOR, 'implementor'),
+    )
+
+    id = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, primary_key=True)
+
+    def __str__(self):
+        return self.get_id_display()
+
 class Account(AbstractBaseUser):
     email = models.EmailField(verbose_name='email', max_length=60, unique=True)
     # Required fields
@@ -43,7 +62,7 @@ class Account(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     # Optional fields
     is_researcher = models.BooleanField(default=False)
-    orchid = models.CharField(max_length=16)
+    orchid = models.CharField(max_length=16, unique=True)
     last_name = models.CharField(verbose_name='last name', max_length=60)
     first_name = models.CharField(verbose_name='first name', max_length=60)
     phone = models.CharField(verbose_name='phone number', max_length=20)
@@ -54,6 +73,7 @@ class Account(AbstractBaseUser):
     affiliation = models.CharField(verbose_name='affiliation', max_length=60)
     bio = models.CharField(verbose_name='bio', max_length=120)
     community_member = models.BooleanField(default=False)
+    roles = models.ManyToManyField(Role)
 
     # This is what the user will log in with
     USERNAME_FIELD = 'email'
@@ -64,7 +84,7 @@ class Account(AbstractBaseUser):
     objects = MyAccountManager()
 
     def __str__(self):
-        return self.email
+        return self.first_name
 
     #Required methods for custom user ( can do things if admin )
     def has_perm(self, perm, obj=None):
@@ -80,13 +100,7 @@ class Community(models.Model):
     contact_name = models.CharField(max_length=80)
     contact_email = models.EmailField(max_length=254)
     country = CountryField()
-    role = [
-        ('Administrator', 'Administrator'),
-        ('Approver', 'Approver'),
-        ('Writer', 'Writer'),
-        ('Editor', 'Editor'),
-        ('Implementor', 'Implementor'),
-    ]
+    members = models.ManyToManyField(Account)
 
     def __str__(self):
         return self.community_name
@@ -102,13 +116,7 @@ class Institution(models.Model):
     contact_name = models.CharField(max_length=80)
     contact_email = models.EmailField(max_length=254)
     country = CountryField()
-    role = [
-        ('Administrator', 'Administrator'),
-        ('Approver', 'Approver'),
-        ('Writer', 'Writer'),
-        ('Editor', 'Editor'),
-        ('Implementor', 'Implementor'),
-    ]
+    members = models.ManyToManyField(Account)
 
     def __str__(self):
         return self.institution_name
@@ -128,3 +136,15 @@ class UserCommunity(models.Model):
     class Meta:
         verbose_name = 'User Community'
         verbose_name_plural = 'User Communities'
+
+class UserInstitution(models.Model):
+    name = models.CharField(max_length=10)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, default=None)
+    institution = models.ManyToManyField(Institution)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'User Institution'
+        verbose_name_plural = 'User Institutions'

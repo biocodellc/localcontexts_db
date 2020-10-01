@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from apps.accounts.models import Community, Institution, Account, UserCommunity
+from apps.accounts.models import Community, Institution, Account, UserCommunity, UserInstitution, Role
 
 
 class AccountAdmin(UserAdmin):
@@ -17,3 +17,5 @@ admin.site.register(Institution)
 admin.site.register(Community)
 admin.site.register(Account, AccountAdmin)
 admin.site.register(UserCommunity)
+admin.site.register(UserInstitution)
+admin.site.register(Role)
