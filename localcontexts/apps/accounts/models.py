@@ -62,7 +62,6 @@ class Account(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     # Optional fields
     is_researcher = models.BooleanField(default=False)
-    orchid = models.CharField(max_length=16, unique=True)
     last_name = models.CharField(verbose_name='last name', max_length=60)
     first_name = models.CharField(verbose_name='first name', max_length=60)
     phone = models.CharField(verbose_name='phone number', max_length=20)
@@ -73,7 +72,6 @@ class Account(AbstractBaseUser):
     affiliation = models.CharField(verbose_name='affiliation', max_length=60)
     bio = models.CharField(verbose_name='bio', max_length=120)
     community_member = models.BooleanField(default=False)
-    roles = models.ManyToManyField(Role)
 
     # This is what the user will log in with
     USERNAME_FIELD = 'email'
@@ -84,7 +82,7 @@ class Account(AbstractBaseUser):
     objects = MyAccountManager()
 
     def __str__(self):
-        return self.first_name
+        return self.email
 
     #Required methods for custom user ( can do things if admin )
     def has_perm(self, perm, obj=None):
@@ -129,6 +127,7 @@ class UserCommunity(models.Model):
     name = models.CharField(max_length=10, default='')
     account = models.ForeignKey(Account, on_delete=models.CASCADE, default=None)
     communities = models.ManyToManyField(Community)
+    roles = models.ManyToManyField(Role)
 
     def __str__(self):
         return self.name
@@ -141,6 +140,7 @@ class UserInstitution(models.Model):
     name = models.CharField(max_length=10)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, default=None)
     institution = models.ManyToManyField(Institution)
+    roles = models.ManyToManyField(Role)
 
     def __str__(self):
         return self.name
