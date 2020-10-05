@@ -10,31 +10,153 @@
         <title>Local Contexts</title>
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     </head>
-    <section id="header-container">
-        <header>
-            <a href="#" id="header-logo">Local <br> Contexts</a>
+    <header id="header-container">
+        <nav>
+            <img src="../static/images/logo.png" id="header-logo">
             <ul class="nav-links-ul">
                 <li><a href="#">Home</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Labels</a></li>
                 <li><a href="#">Notices</a></li>
+                <li><a href="#">Licenses</a></li>
                 <li><a href="#">Contact</a></li>   
             </ul>
             <div id="btn-container">
                 <button id="register-btn" class="nav-btn">Register</a>
                 <button  id="sign-in-btn" class="nav-btn">Sign In</a>         
             </div>
-        </header>
-    </section>
+        </nav>
+        <h2 class='tagline'>
+            Establishing and communicating <br>
+            rights over indigenous knowledge <br>
+            and biocultural matter.
+        </h2>
+    </header>
     <body>
-        <div id="content">
+        <section>
+            <h1>Indigenous Communities</h1>
+            <p>Local Contexts supports Indigenous communities to manage their intellectual and cultural property, cultural heritage, environmental data and genetic resources within digital environments. 
+                Local Contexts recognizes the inherent sovereignty that Indigenous communities have over knowledge and data that comes from lands, territories, and waters.
+            </p>
+
+            <h3>Traditional Knowledge (TK) Labels</h3>
+            <p>The TK Labels are digital markers that define attribution, access, and use rights for Indigenous cultural heritage. 
+                Eighteen TK Labels have been developed though direct community partnership and collaboration. 
+                Each TK Label can be adapted and customized to reflect ongoing relationships and authority including proper use, guidelines for action, or responsible stewardship and re-use.
+            </p>
+
+            <h3>Biocultural (BC) Labels</h3>
+            <p>
+                The BC Labels focus on accurate provenance, transparency and integrity in research engagements. 
+                The BC Labels are digital markers that define community expectations and consent about appropriate use of collections and data. 
+                They connect data to people and environments over time. The BC Labels provide a practical application of Indigenous data governance principles to issues of access and benefit-sharing for genetic resources.
+            </p>
+
+            <h3>Local Contexts Hub</h3>
+            <p>
+                The Local Contexts Hub allows Indigenous communities to adapt TK & BC Labels to their needs and share them safely with institutions, researchers and data repositories.
+            </p>
+            <button>Register</button>
+        </section>
+
+        <section>
+            <h1>Institutions and Researchers</h1>
+            <p>
+                Local Contexts provides a new set of procedural workflows that emphasize vetting content, collaborative curation, ethical management and sustained outreach practices within institutions. 
+                For researchers, Local Contexts provides specific Notices that support the recognition of Indigenous interests and function as place-holders on collections, data, or in a sample field until a TK or a BC Label is added by the community to replace it.
+            </p>
+
+            <h3>Traditional Knowledge (TK) Notice</h3>
+            <p>
+                The TK Notice is a visible digital identifier applied to recognize that there could be accompanying cultural rights, protocols and responsibilities that need further attention for future sharing and use of this material.
+            </p>
+
+            <h3>Biocultural (BC) Notice</h3>
+            <p>
+                The BC Notice is a visible digital identifier applied to recognize the rights of Indigenous peoples define the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with their traditional lands, waters, and territories.
+            </p>
+
+            <h3>Cultural Institution (CI) Notices</h3>
+            <p>
+                The CI Notices are for use by collecting institutions who engage in collaborative curation with Indigenous and other marginalized communities who have been traditionally excluded from processes of documentation and record keeping.
+            </p>
+
+            <h3> Local Contexts Hub</h3>
+            <p>
+                The Local Contexts Hub allows Institutions and Researchers to generate Notices and engage with Indigenous communities about the appropriate use of the TK & BC Labels.
+            </p>
+
+            <button>Register</button>
+        </section>
+
+        <section>
+            <h1>Features</h1>
+            <div id="feature-cards">
+                <div class='card'>
+                    <img src="https://via.placeholder.com/350x100" alt="card" style="width:100%;">
+                    <div class="card-container">
+                        <h4>Card 1</h4>
+                        <p>Card text will go here</p>
+                        <button>Read More</button>
+                    </div>            
+                </div>
+
+                <div class='card'>
+                    <img src="https://via.placeholder.com/350x100" alt="card" style="width:100%;">
+                    <div class="card-container">
+                        <h4>Card 2</h4>
+                        <p>Card text will go here</p>
+                        <button>Read More</button>
+                    </div>            
+                </div>
+
+                <div class='card'>
+                    <img src="https://via.placeholder.com/350x100" alt="card" style="width:100%;">
+                    <div class="card-container">
+                        <h4>Card 3</h4>
+                        <p>Card text will go here</p>
+                        <button>Read More</button>
+                    </div>            
+                </div>
+
+                <div class='card'>
+                    <img src="https://via.placeholder.com/350x100" alt="card" style="width:100%;">
+                    <div class="card-container">
+                        <h4>Card 4</h4>
+                        <p>Card text will go here</p>
+                        <button>Read More</button>
+                    </div>            
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div>
+                <h1>Contact Us</h1>
+                <p>info@localcontexts.org</p>
+                <button>About Us</button>
+            </div>
+            <div>
+                <h4>Creative Commons License</h4>
+                <p>This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. <br>
+                    All images and marks are subject to copyright and trademark protection.<br>
+                    All educational material is being shared collaboratively but does not constitute binding legal advice.</p>
+            </div>
+            <div id="footer-logos">
+                <img src="../static/images/logo.png" alt="local contexts logo">
+                <img src="../static/images/neh-logo.png" alt="national endowment for the humanities logo">
+                <img src="../static/images/nyu-logo.png" alt="new york university logo">
+                <img src="../static/images/wsu-logo.png" alt="washington state university logo">
+            </div>
+        </footer>
+        <!-- <div id="content">
             {% block content %}
 
             {% endblock content %}
-        </div>
+        </div> -->
 
+        <!-- <footer id="footer-wrapper">
+            <svg class="footer-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f1f4f5" fill-opacity="1" d="M0,160L48,149.3C96,139,192,117,288,117.3C384,117,480,139,576,154.7C672,171,768,181,864,192C960,203,1056,213,1152,192C1248,171,1344,117,1392,90.7L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>
+        </footer> -->
     </body>
-    <footer id="footer-wrapper">
-        <svg class="footer-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f1f4f5" fill-opacity="1" d="M0,160L48,149.3C96,139,192,117,288,117.3C384,117,480,139,576,154.7C672,171,768,181,864,192C960,203,1056,213,1152,192C1248,171,1344,117,1392,90.7L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>
-    </footer>
 </html>

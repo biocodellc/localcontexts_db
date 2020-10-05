@@ -13,7 +13,7 @@ body {
 }
 
 h1 {
-    color: #3874AB;
+    color: #F47D20;
     font-weight: 400;
 }
 
@@ -26,15 +26,13 @@ p {
 /* HEADER */
 #header-container {
     width: 100%;
-    height: 12vh;
     margin: 0;
     padding: 10px;
     background: rgb(53,172,153);
     background: linear-gradient(0deg, rgba(53,172,153,1) 2%, rgba(56,116,171,1) 100%);
-    /* box-shadow: 5px 5px #babdbd; */
 }
 
-#header-container header {
+#header-container nav {
     display: flex;
     flex-direction: row;
     height: 100%;
@@ -46,12 +44,6 @@ p {
     margin-top: 5px;
     margin-bottom: 5px;
     margin-left: 20px;
-    text-decoration: none;
-    width: 25%;
-    font-weight: 300;
-    color: #fff;
-    font-size: 26px;
-    /* border: 1px solid purple; */
 }
 
 /* NAVIGATION LINKS */
@@ -108,6 +100,21 @@ p {
     color: #3874AB;
     font-weight: 500;
     margin-left: -5px;
+}
+
+/* TAGLINE */
+.tagline {
+    color: white;
+    font-weight: 300;
+}
+
+/* FEATURES SECTION */
+#feature-cards {
+    display: flex;
+}
+
+.card {
+    border: 2px solid red;
 }
 
 /* BODY */
