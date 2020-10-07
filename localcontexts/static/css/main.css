@@ -28,6 +28,10 @@ p {
     line-height: 16.8px;
 }
 
+.flex-this {
+    display: flex;
+}
+
 /* HEADER */
 #header-container {
     background: url('../images/hero-bg.png') no-repeat center center scroll;
@@ -145,37 +149,47 @@ section h1 {
     font-weight: 400;
 }
 
-/* INFO SECTION ONE */
+/* SECTION ONE */
 #section-one-container {
     background-color: #f1f4f5;
 }
 
-#section-one-content {
-    width: 50%;
-    margin: auto;
+.labels {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
-/* INFO SECTION TWO */
+.labels > h3, .labels >p {
+    width: 100%;
+}
+
+.labels-img-container {
+    margin: 2%;
+    width: 30%;
+}
+
+.labels-img {
+    width: 100%;
+    padding: 15% 1% 10% 5%;
+    align-self: center;
+}
+
+/* SECTION TWO */
 #section-two-container {
     background-color: #f5f9f6;
 }
 
-#section-two-content {
+#section-one-content, #section-two-content {
     width: 50%;
     margin: auto;
-}
-
-.columns {
-    display: flex;
 }
 
 /* FEATURES SECTION */
 #features-container {
     background-color:#dfebe8;
-    /* padding-bottom: 50%; */
     background: url('../images/features-bg.png') no-repeat center center scroll;
     background-size: cover;
-    /* height: 100vh; */
 }
 
 #features-content {
