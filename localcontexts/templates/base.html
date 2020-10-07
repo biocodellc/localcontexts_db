@@ -16,29 +16,43 @@
         <title>Local Contexts</title>
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     </head>
+    <body>
+
     <header id="header-container">
-        <nav>
-            <img src="../static/images/logo.png" id="header-logo">
-            <ul class="nav-links-ul">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Labels</a></li>
-                <li><a href="#">Notices</a></li>
-                <li><a href="#">Licenses</a></li>
-                <li><a href="#">Contact</a></li>   
-            </ul>
-            <div id="btn-container">
-                <button id="register-btn" class="nav-btn">Register</a>
-                <button  id="sign-in-btn" class="nav-btn">Sign In</a>         
-            </div>
-        </nav>
+        <!-- <div id="bg">
+            <img src="../static/images/hero.png" alt="">
+        </div> -->
+
+            <nav class="landing-nav-content">
+
+                <div id="logo-container">
+                    <img src="../static/images/logos/logo.png" id="header-logo">
+                </div>
+                <ul class="nav-links-ul">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Labels</a></li>
+                    <li><a href="#">Notices</a></li>
+                    <li><a href="#">Licenses</a></li>
+                    <div id="column">
+                        <li><a id="register" href="#">Register</a></li> 
+                        <li><a href="#">TK Label Hub</a></li>
+                    </div>  
+                </ul>
+    
+                <div id="btn-container">
+                    <a id="sign-in">Sign In</a>   
+                    <a id="contact" href="#">Contact</a>     
+                </div>
+            </nav>
+
+        
         <h3 class='tagline'>
             Establishing and communicating <br>
             rights over indigenous knowledge <br>
             and biocultural matter.
         </h3>
     </header>
-    <body>
         <section id="section-one-container">
             <div id="section-one-content">
             <h1>Indigenous <br> Communities</h1>
@@ -108,50 +122,71 @@
         <section id="features-container">
             <div id="features-content">
                 <h1>Features</h1>
+
                 <div id="feature-cards">
                     <div class='card'>
-                        <img src="https://via.placeholder.com/350x150" alt="card" style="width:100%;">
+                        <div class="card-img-container">
+                            <img src="../static/images/logos/placeholder-logo.png" alt="card">
+                        </div>
                         <div class="card-container">
                             <h4>Passamaquoddy Tribe and the Library of Congress</h4>
                             <p>The Passamaquoddy Tribe in Maine has integrated their customized TK Labels to the first sound-recordings ever made on Indigenous lands in 1890. 
                                 These recordings currently reside in the Library of Congress. 
                                 The Passamaquoddy TK Labels has transformed the digital online record...
                             </p>
-                            <button class="landing-btn">Read More >></button>
+                            <div class="card-btn-container">
+                                <button class="landing-btn">Read More >></button>
+                            </div>
                         </div>            
                     </div>
 
                     <div class='card'>
-                        <img src="https://via.placeholder.com/350x150" alt="card" style="width:100%;">
+
+                        <div class="card-img-container">
+                            <img src="../static/images/logos/placeholder-logo.png" alt="card">
+                        </div>
+
                         <div class="card-container">
                             <h4>Sq’éwlets Virtual Museum</h4>
                             <p>Sq’éwlets First Nation is part of the broader Stó:lō-Coast Salish people of the southern Pacific Northwest.  
                                 The Sq’éwlets First Nation has incorporated the TK Labels into their Virtual Museum of Canada exhibit about Sq’éwlets culture, past and present. 
                                 The Sq’éwlets customization of their TK Labels are also translated into Halq’emeylem.
                             </p>
-                            <button class="landing-btn">Read More >></button>
-                        </div>            
+                            <div class="card-btn-container">
+                                <button class="landing-btn">Read More >></button>
+                            </div>
+                        </div>    
+
                     </div>
 
                     <div class='card'>
-                        <img src="https://via.placeholder.com/350x150" alt="card" style="width:100%;">
+                        <div class="card-img-container">
+                            <img src="../static/images/logos/placeholder-logo.png" alt="card">
+                        </div>                        
                         <div class="card-container">
                             <h4>Ravenspace Publishing</h4>
                             <p>RavenSpace is a digital publishing platform for media-rich, interactive books, where Indigenous communities and scholars can work together respectfully and knowledge circulates across networks and generations. 
                                 The first publication, As I Remember It - Teachings (ʔəms tɑʔɑw) from the Life of a Sliammon Elder integrates the TK Labels.
                             </p>
-                            <button class="landing-btn">Read More >></button>
+                            <div class="card-btn-container">
+                                <button class="landing-btn">Read More >></button>
+                            </div>
                         </div>            
                     </div>
 
                     <div class='card'>
-                        <img src="https://via.placeholder.com/350x150" alt="card" style="width:100%;">
+                        <div class="card-img-container">
+                            <img src="../static/images/logos/placeholder-logo.png" alt="card">
+                        </div>
                         <div class="card-container">
                             <h4>TBD</h4>
                             <p>Content To Be Determined</p>
-                            <button class="landing-btn">Read More >></button>
+                            <div class="card-btn-container">
+                                <button class="landing-btn">Read More >></button>
+                            </div>
                         </div>            
                     </div>
+
                 </div>
             </div>
         </section>
@@ -167,10 +202,10 @@
                     All educational material is being shared collaboratively but does not constitute binding legal advice.</p>
             </div>
             <div id="footer-logos">
-                <img src="../static/images/logo.png" alt="local contexts logo">
-                <img src="../static/images/neh-logo.png" alt="national endowment for the humanities logo">
-                <img src="../static/images/nyu-logo.png" alt="new york university logo">
-                <img src="../static/images/wsu-logo.png" alt="washington state university logo">
+                <img src="../static/images/logos/logo.png" alt="local contexts logo">
+                <img src="../static/images/logos/neh-logo.png" alt="national endowment for the humanities logo">
+                <img src="../static/images/logos/nyu-logo.png" alt="new york university logo">
+                <img src="../static/images/logos/wsu-logo.png" alt="washington state university logo">
             </div>
         </footer>
 
