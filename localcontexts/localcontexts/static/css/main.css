@@ -45,6 +45,7 @@ p {
 
 /* LANDING PAGE CONTENT BUTTONS */
 .landing-btn {
+    cursor: pointer;
     min-width: 200px;
     max-width: 200px;
     padding: 1%;
