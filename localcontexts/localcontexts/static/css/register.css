@@ -1,0 +1,44 @@
+
+#reg-container {
+    /* border: 1px solid purple; */
+    width: 100%;
+    justify-content: center;
+}
+
+#reg-content {
+    border-radius: 10px;
+    width: 70%;
+    /* border: 1px solid red; */
+}
+
+#reg-prog-container, #reg-form-container {
+    padding: 0.5%;
+    border-radius: 10px;
+}
+
+/* Progress Container Width */
+#reg-prog-container {
+    width: 35%;
+} 
+
+/* Logo */
+#reg-prog-container img {
+    max-width: 100px;
+}
+
+/* Form div */
+#reg-form-container {
+    width: 65%;
+}
+
+#top-right {
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 0.5%;
+}
+
+#registration-form {
+    /* border: 1px solid brown; */
+    padding: 1%;
+}
