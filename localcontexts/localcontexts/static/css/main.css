@@ -288,6 +288,7 @@ footer p {
 }
 
 #footer-btn {
+    cursor: pointer;
     width: 150px;
     background-color: #f47d20;
     color:white;
