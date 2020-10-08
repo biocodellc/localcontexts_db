@@ -24,6 +24,10 @@ body {
     min-height: 100%;
 }
 
+a {
+    text-decoration: none;
+}
+
 .orange-h1 {
     color: #F47D20;
     font-weight: 400;
