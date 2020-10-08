@@ -1,5 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;300;400;600&display=swap');
 
+@font-face {
+    font-family: 'Gilroy-Light';
+    src: local('Gilroy-Light'),
+    url('../fonts/Gilroy-Light.otf') format('truetype')
+}
+
+@font-face {
+    font-family: 'Gilroy-ExtraBold';
+    src: local('Gilroy-ExtraBold'),
+    url('../fonts/Gilroy-ExtraBold.otf') format('truetype')
+}
+
 /* GENERAL */
 * {
     box-sizing: border-box;
@@ -276,6 +288,7 @@ footer p {
 }
 
 #footer-btn {
+    cursor: pointer;
     width: 150px;
     background-color: #f47d20;
     color:white;
