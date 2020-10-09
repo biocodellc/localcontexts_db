@@ -38,7 +38,7 @@
     max-width: 60%;
     min-width: 60%;
     border-radius: 0px 5px 5px 0px;
-    font-weight: 400;
+    font-weight: 300;
     font-size: 14px;
 }
 
@@ -154,7 +154,7 @@
 }
 
 #checkbox-label {
-    width: 75%;
+    width: 90%;
 }
 
 /* Register Button */
