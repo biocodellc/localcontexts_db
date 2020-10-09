@@ -24,6 +24,10 @@ body {
     min-height: 100%;
 }
 
+ul {
+    list-style-type: none;
+}
+
 a {
     text-decoration: none;
 }
@@ -36,6 +40,14 @@ a {
 .teal-h3 {
     color: #72b79c;
     font-weight: 300;
+}
+
+.darkteal-text {
+    color: #007586;
+}
+
+.primary-blue-text {
+    color: #3876aa;
 }
 
 .white-text {
@@ -93,13 +105,13 @@ a {
 }
 
 /* LOGO */
-#logo-container {
+.logo-container {
     margin: 0;
     padding: 10px 0 0 0;
     width: 50%;
 }
 
-#header-logo {
+.header-logo {
     min-height: 60px;
     max-height: 70px;
     margin: 30px 30px 0 30px;

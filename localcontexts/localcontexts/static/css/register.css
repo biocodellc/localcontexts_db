@@ -1,44 +1,171 @@
-
-#reg-container {
-    /* border: 1px solid purple; */
+/* Main container */
+#registration-section {
     width: 100%;
     justify-content: center;
+    background-image: linear-gradient(to bottom, #3876aa, #2876a5, #18769e, #087697, #007590, #00778d, #007989, #007b85, #008083, #008680, #008a7a, #058f73);
+    padding-bottom: 5%;
 }
 
-#reg-content {
-    border-radius: 10px;
-    width: 70%;
-    /* border: 1px solid red; */
+/* The entire card */
+#reg-card {
+    flex-direction: row;
+    justify-content: center;
+    border-radius: 5px 5px;
+    max-width: 900px;
+    min-width: 900px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    background-color: #fff;
 }
 
-#reg-prog-container, #reg-form-container {
-    padding: 0.5%;
-    border-radius: 10px;
+/* Progress List and Registration form containers */
+#progress-container, #complete-form-container {
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Progress Container Width */
-#reg-prog-container {
-    width: 35%;
+/* Progress Container || THE ORANGE PART */
+#progress-container {
+    max-width: 40%;
+    min-width: 40%;
+    border-radius: 5px 0px 0px 5px;
+    font-weight: 600;
+    font-size: 14px;
 } 
 
-/* Logo */
-#reg-prog-container img {
-    max-width: 100px;
+/* Form Container || THE WHITE PART */
+#complete-form-container {
+    justify-content: center;
+    max-width: 60%;
+    min-width: 60%;
+    border-radius: 0px 5px 5px 0px;
+    font-weight: 400;
+    font-size: 14px;
 }
 
-/* Form div */
-#reg-form-container {
-    width: 65%;
+/* Card Logo */
+.mini-logo-container {
+    width: 100%;
+    padding: 5%;
 }
 
+.mini-logo {
+    max-width: 30%;
+    padding: 1%;
+}
+
+/* Progress Container */
+#progress-ul-container {
+    width: 100%;
+    justify-content: flex-end;
+}
+
+#progress-ul {
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+    padding: 2% 5% 3% 1%;
+}
+
+#progress-ul li {
+    padding: 4%;
+    width: 70%;
+    font-weight: 400;
+}
+
+#progress-bottom-container {
+    border-top: 2px solid #fff;
+    padding: 3%;
+}
+
+#progress-bottom-container h2 {
+    font-weight: 400;
+    text-align: center;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+/* Form Section */
+
+/* "Already a member? Sign in" DIV */
 #top-right {
     flex-direction: row;
     justify-content: flex-end;
-    width: 100%;
-    padding: 0.5%;
 }
 
-#registration-form {
-    /* border: 1px solid brown; */
-    padding: 1%;
+#top-right a {
+    color: #007385;
+}
+
+#top-right, .form-house {
+    width: 90%;
+}
+
+/* DIV that houses the h4, form and register button */
+.form-house {
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 10%;
+}
+
+/* THE FORM ITSELF */
+.form-house form {
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-house input {
+    width: 100%;
+    height: 30px;
+}
+
+/* Grouped text-fields (Names, Passwords) */
+.form-elem-group  div {
+    width: 50%;
+}
+
+.one {
+    padding-right: 1.5%;
+}
+
+.two {
+    padding-left: 1.5%;
+}
+
+/* Checkbox */
+.checkbox-div {
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+    padding-top: 2%;
+}
+
+.checkbox-div a {
+    color: #007385;
+}
+
+#checkbox {
+    width: 5%;
+    padding-right: 2%;
+}
+
+#checkbox input {
+    max-height: 15px;
+    min-height: 15px;
+}
+
+#checkbox-label {
+    width: 75%;
+}
+
+/* Register Button */
+#register-new-user-btn {
+    margin-top: 2%;
+    background-color: #007385;
+    border: none;
+    min-width: 120px;
+    max-width: 120px;
+    max-height: 30px;
+    min-height: 30px;
+    border-radius:5px;
+    font-size: 18px;
 }
