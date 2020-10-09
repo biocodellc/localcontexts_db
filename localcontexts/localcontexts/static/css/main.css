@@ -42,6 +42,14 @@ a {
     font-weight: 300;
 }
 
+.darkteal-text {
+    color: #007586;
+}
+
+.primary-blue-text {
+    color: #3876aa;
+}
+
 .white-text {
     color: #fff;
 }
