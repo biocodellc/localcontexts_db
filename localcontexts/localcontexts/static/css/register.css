@@ -125,6 +125,7 @@
 /* Grouped text-fields (Names, Passwords) */
 .form-elem-group  div {
     width: 50%;
+    padding-bottom: 1%;
 }
 
 .one {
