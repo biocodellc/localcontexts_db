@@ -1,16 +1,18 @@
 {% load static %}
-<header id="reg-page-header">
-    <img src="{% static 'images/logos/logo.png' %}" style="background-color: #e5e5e5;">
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Labels</a></li>
-            <li><a href="#">Notices</a></li>
-            <li><a href="#">Contact</a></li>
-            <div>
-                <li><a href="#">Register</a></li>
-                <li><a href="#">Login</a></li>
+<header id="reg-header" class="flex-this">
+    <div class="generic-logo-container">
+        <img class="logo" src="{% static 'images/logos/logo.png' %}">
+    </div>
+    <nav class="generic-nav flex-this">
+        <ul class="flex-this generic-nav-ul">
+            <li><a class="white-text upper" href="/">Home</a></li>
+            <li><a class="white-text upper" href="#">About</a></li>
+            <li><a class="white-text upper" href="#">Labels</a></li>
+            <li><a class="white-text upper" href="#">Notices</a></li>
+            <li><a class="white-text upper" href="#">Contact</a></li>
+            <div id="btn-group" class="flex-this">
+                <li><a class="white-text upper" href="#">Register</a></li>
+                <li class="white-bg"><a class="upper" href="#">Sign In</a></li>
             </div>
         </ul>
     </nav>

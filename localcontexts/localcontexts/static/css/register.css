@@ -1,24 +1,25 @@
-
+/* Main container */
 #reg-container {
-    /* border: 1px solid purple; */
     width: 100%;
     justify-content: center;
 }
 
+/* Content Container */
 #reg-content {
-    border-radius: 10px;
+    border-radius: 5px 5px;
     width: 70%;
-    /* border: 1px solid red; */
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
+/* Progress List and Registration form containers */
 #reg-prog-container, #reg-form-container {
     padding: 0.5%;
-    border-radius: 10px;
 }
 
 /* Progress Container Width */
 #reg-prog-container {
     width: 35%;
+    border-radius: 5px 0px 0px 5px;
 } 
 
 /* Logo */
@@ -26,11 +27,13 @@
     max-width: 100px;
 }
 
-/* Form div */
+/* Form itself */
 #reg-form-container {
     width: 65%;
+    border-radius: 0px 5px 5px 0px;
 }
 
+/* "Already a member? Sign in" DIV */
 #top-right {
     flex-direction: row;
     justify-content: flex-end;
@@ -39,6 +42,15 @@
 }
 
 #registration-form {
-    /* border: 1px solid brown; */
+    border: 1px solid brown;
     padding: 1%;
+    margin: 1%;
+}
+
+.form-elem-group  div {
+    width: 50%;
+}
+
+#registration-form input {
+    width: 100%;
 }

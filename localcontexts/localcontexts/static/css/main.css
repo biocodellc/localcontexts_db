@@ -24,6 +24,10 @@ body {
     min-height: 100%;
 }
 
+ul {
+    list-style-type: none;
+}
+
 a {
     text-decoration: none;
 }
@@ -93,13 +97,13 @@ a {
 }
 
 /* LOGO */
-#logo-container {
+.logo-container {
     margin: 0;
     padding: 10px 0 0 0;
     width: 50%;
 }
 
-#header-logo {
+.header-logo {
     min-height: 60px;
     max-height: 70px;
     margin: 30px 30px 0 30px;
