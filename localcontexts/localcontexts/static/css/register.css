@@ -107,6 +107,10 @@
     padding-bottom: 10%;
 }
 
+.form-house h2 {
+    font-weight: 500;
+}
+
 /* THE FORM ITSELF */
 .form-house form {
     flex-direction: column;
@@ -121,6 +125,7 @@
 /* Grouped text-fields (Names, Passwords) */
 .form-elem-group  div {
     width: 50%;
+    padding-bottom: 1%;
 }
 
 .one {
