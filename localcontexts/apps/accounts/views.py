@@ -25,9 +25,14 @@ def register(request):
                     messages.error(request, 'That email is being used')
                     return redirect('register')
                 else:
+                    #TODO: Fix this! create_user not working because of custom user model?
+                    # Also do we need a user_auth table with custom user?
+                    # AND: look into forms.py
+
                     # If this works, create user
                     user = Account.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
-                    #Login after register
+                    
+                    # Use the following if you want to Login after register
                     # auth.login(request, user)
                     # messages.success(request, 'User is now logged in')
                     # return redirect('index')
