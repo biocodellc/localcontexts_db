@@ -5,25 +5,25 @@
             <nav class="landing-nav-content upper">
 
                 <div class="logo-container">
-                    <a href="/">
+                    <a href="{% url 'index' %}">
                         <img src="../static/images/logos/logo.png" class="header-logo">
                     </a>
                 </div>
                 <ul class="nav-links-ul">
-                    <li><a class="white-text" href="">Home</a></li>
-                    <li><a class="white-text" href="/about">About</a></li>
+                    <li><a class="white-text" href="{% url 'index' %}">Home</a></li>
+                    <li><a class="white-text" href="{% url 'about' %}">About</a></li>
                     <li><a class="white-text" href="#">Labels</a></li>
                     <li><a class="white-text" href="#">Notices</a></li>
                     <li><a class="white-text" href="#">Licenses</a></li>
                     <div id="column">
-                        <li><a class="white-text" id="register" href="/register">Register</a></li> 
+                        <li><a class="white-text" id="register" href="{% url 'register' %}">Register</a></li> 
                         <li><a class="white-text" href="#">TK Label Hub</a></li>
                     </div>  
                 </ul>
     
                 <div id="btn-container">
-                    <a id="sign-in-btn" class="orange-bg white-text" href="#">Sign In</a>   
-                    <a id="contact-btn" class="white-bg orange-text" href="/contact">Contact</a>     
+                    <a id="sign-in-btn" class="orange-bg white-text" href="{% url 'login' %}">Sign In</a>   
+                    <a id="contact-btn" class="white-bg orange-text" href="{% url 'contact' %}">Contact</a>     
                 </div>
             </nav>
         
@@ -73,7 +73,7 @@
                 <p class="landing-p">
                     The Local Contexts Hub allows Indigenous communities to adapt TK & BC Labels to their needs and share them safely with institutions, researchers and data repositories.
                 </p>
-                <button class="landing-btn upper" onclick="location.href='/register'">Register >></button>
+                <button class="landing-btn upper" onclick="location.href='accounts/register'">Register >></button>
             </div>
 
         </section>
@@ -127,8 +127,8 @@
                     </p>
                 </div>
             </div>
-            
-            <button class="landing-btn upper" onclick="location.href='/register'">Register >></button>
+                <button class="landing-btn upper" onclick="location.href='accounts/register'">Register >></button>
+
 
         </section>
 
