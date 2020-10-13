@@ -5,7 +5,7 @@ from django_countries.fields import CountryField
 # What happens when a user gets created, and when a superuser gets created
 class MyAccountManager(BaseUserManager):
     # Make sure to include arguments if you added more items to the REQUIRED_FIELDS in the Account class.
-    def create_user(self, email, username, password=None):
+    def create_user(self, email, username, first_name, last_name, password=None):
         if not email:
             raise ValueError('Can not register without email address.')
         if not username:
@@ -14,6 +14,8 @@ class MyAccountManager(BaseUserManager):
         user = self.model(
             email=self.normalize_email(email),
             username=username,
+            first_name=first_name,
+            last_name=last_name
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -77,7 +79,7 @@ class Account(AbstractBaseUser):
     USERNAME_FIELD = 'email'
     # Fields that will be required upon user registration. 
     # If adding to this, make sure to update the argument list in MyAccountManager above.
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['username', 'last_name', 'first_name']
 
     objects = MyAccountManager()
 
