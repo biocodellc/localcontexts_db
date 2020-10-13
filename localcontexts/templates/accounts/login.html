@@ -1,23 +1,42 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_header.html' %}
 
-<div>
-    <h1>
-        Login Page
-    </h1>
-    
-    <form action="{% url 'login' %}" method="POST">
-        {% csrf_token %}
-        <div>
-            <label>Username</label>
-            <input type="text" name="username" required>
-        </div>
-        <div>
-            <label>Password</label>
-            <input type="password" name="password" required>
-        </div>
-        <input type="submit" name="sign in">
-    </form>
-</div>
+<section id="registration-section" class="flex-this">
+    <div id="reg-card" class="flex-this">
 
-<!-- {% include 'partials/_footer.html' %} -->
+        <div id="progress-container" class="orange-bg white-text flex-this">
+            <img class="login-logo" src="{% static 'images/logos/lc-logo-signin.png' %}">
+        </div>
+    
+        <div id="complete-form-container" class="flex-this">
+            <div id="top-right" class="flex-this">
+                    <p>Not a Member?<a href="{% url 'register' %}"> Register</a></p>
+            </div>
+
+            <!-- Alerts -->
+            {% include 'partials/_alerts.html' %}
+    
+            <div class="form-house flex-this">
+                <h2 class="darkteal-text">Sign In with Local Contexts</h2>
+    
+                <form action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+                    <div>
+                        <label>Username or Email Address</label>
+                        <input type="text" name="username" required>
+                    </div>
+                    <div>
+                        <label>Password</label>
+                        <input type="password" name="password" required>
+                    </div>
+                    <button id="login-user-btn" class="white-text action-btn">Sign In</button>
+
+                </form>
+            </div>
+    
+        </div>
+    </div>
+
+</section>
+
+{% include 'partials/_footer.html' %}
 {% endblock %}

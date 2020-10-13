@@ -5,7 +5,7 @@
 
         <div id="progress-container" class="orange-bg white-text flex-this">
             <div class="mini-logo-container">
-                <img class="mini-logo" src="{% static 'images/logos/logo.png' %}">
+                <img class="mini-logo" src="{% static 'images/logos/lc-logo-mini.png' %}">
             </div>
 
             <div id="progress-ul-container" class="flex-this">
@@ -30,7 +30,7 @@
     
         <div id="complete-form-container" class="flex-this">
             <div id="top-right" class="flex-this">
-                    <p>Already a Member?<a href="#"> Sign in</a></p>
+                    <p>Already a Member?<a href="{% url 'login' %}"> Sign in</a></p>
             </div>
 
             <!-- Alerts -->
@@ -83,7 +83,7 @@
                     </div>
 
                     <br>
-                    <button id="register-new-user-btn" class="white-text">Register</button>
+                    <button id="register-new-user-btn" class="white-text action-btn">Register</button>
                 </form>
             </div>
     
