@@ -13,10 +13,10 @@
             <li><a class="white-text upper" href="#">Notices</a></li>
             <li><a class="white-text upper" href="{% url 'contact' %}">Contact</a></li>
             {% if user.is_authenticated %}
-            <li><p>Hi, {{ user.first_name }}!</p></li>
+            <!-- <li><p>Hi, {{ user.first_name }}!</p></li> -->
 
             <div id="btn-group" class="flex-this">
-                <li><a class="white-text upper" href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a class="white-text upper dash-btn" href="{% url 'dashboard' %}">Dashboard</a></li>
                 <li class="white-bg"><a class="upper primary-blue-text" href="javascript:{document.getElementById('logout').submit()}">Log Out
                     <form action="{% url 'logout' %}" method="POST" id="logout">
                         {% csrf_token %}
