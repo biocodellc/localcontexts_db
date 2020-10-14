@@ -13,8 +13,8 @@
     flex-direction: row;
     justify-content: center;
     border-radius: 5px 5px;
-    max-width: 900px;
-    min-width: 900px;
+    max-width: 1000px;
+    min-width: 1000px;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     background-color: #fff;
 }
@@ -57,14 +57,14 @@
 /* Progress Container */
 #progress-ul-container {
     width: 100%;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
 #progress-ul {
     flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
     width: 100%;
-    padding: 2% 5% 3% 1%;
+    padding: 2% 5% 5% 1%;
 }
 
 #progress-ul li {
@@ -75,13 +75,15 @@
 
 #progress-bottom-container {
     border-top: 2px solid #fff;
-    padding: 3%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 
 #progress-bottom-container h2 {
     font-weight: 400;
     text-align: center;
-    padding-top: 2%;
+    padding-top: 10%;
     padding-bottom: 2%;
 }
 

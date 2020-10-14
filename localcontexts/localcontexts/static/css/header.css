@@ -17,6 +17,7 @@
 .generic-nav {
     width: 60%;
     justify-content: flex-end;
+    padding-right: 2%;
 }
 
 .generic-nav-ul {
@@ -39,10 +40,12 @@
     border: 1px solid white;
     border-radius: 5px;
     justify-content: center;
-    min-width: 200px;
+    min-width: 170px;
+    max-width: 170px;
 }
 
 #btn-group li {
+    border-radius: 3px;
     padding: 1%;
     width: 50%;
     text-align: center;
