@@ -7,18 +7,18 @@
             <img class="login-logo" src="{% static 'images/logos/lc-logo-signin.png' %}">
         </div>
     
-        <div id="complete-form-container" class="flex-this">
-            <div id="top-right" class="flex-this">
-                    <p>Not a Member?<a href="{% url 'register' %}"> Register</a></p>
+        <div id="complete-form-container" class="flex-this column">
+            <div class="flex-this row top-right">
+                    <p>Not a Member?<a href="{% url 'register' %}" class="darkteal-text"> Register</a></p>
             </div>
 
             <!-- Alerts -->
             {% include 'partials/_alerts.html' %}
     
-            <div class="form-house flex-this">
+            <div class="form-house flex-this column">
                 <h2 class="darkteal-text">Sign In with Local Contexts</h2>
     
-                <form action="{% url 'login' %}" method="POST">
+                <form action="{% url 'login' %}" method="POST" class="flex-this column">
                     {% csrf_token %}
                     <div>
                         <label>Username or Email Address</label>

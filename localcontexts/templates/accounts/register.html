@@ -1,15 +1,15 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_header.html' %}
 
 <section id="registration-section" class="flex-this">
-    <div id="reg-card" class="flex-this">
+    <div id="reg-card" class="flex-this row">
 
-        <div id="progress-container" class="orange-bg white-text flex-this">
+        <div id="progress-container" class="orange-bg white-text flex-this column">
             <div class="mini-logo-container">
                 <img class="mini-logo" src="{% static 'images/logos/lc-logo-mini.png' %}">
             </div>
 
             <div id="progress-ul-container" class="flex-this">
-                <ul id="progress-ul" class="flex-this">
+                <ul id="progress-ul" class="flex-this column">
                     <li>Register</li>
                     <li>Verify Email</li>
                     <li>Create Your Profile</li>
@@ -28,18 +28,18 @@
 
         </div>
     
-        <div id="complete-form-container" class="flex-this">
-            <div id="top-right" class="flex-this">
-                    <p>Already a Member?<a href="{% url 'login' %}"> Sign in</a></p>
+        <div id="complete-form-container" class="flex-this column">
+            <div class="flex-this row top-right">
+                    <p>Already a Member?<a href="{% url 'login' %}" class="darkteal-text"> Sign in</a></p>
             </div>
 
             <!-- Alerts -->
             {% include 'partials/_alerts.html' %}
     
-            <div class="form-house flex-this">
+            <div class="form-house flex-this column">
                 <h2 class="darkteal-text">Register with Local Contexts</h2>
     
-                <form action="{% url 'register' %}" method="POST" class="flex-this">
+                <form action="{% url 'register' %}" method="POST" class="flex-this column">
                     {% csrf_token %}
                     <div class="flex-this form-elem-group">
 
@@ -71,13 +71,13 @@
                         </div>
                     </div>
 
-                    <div class="flex-this checkbox-div">
+                    <div class="flex-this row checkbox-div">
                         <div id="checkbox">
                             <input type="checkbox" id="terms-agreement" name="terms-agreement" required>
                         </div>
                         <div id="checkbox-label">
                             <label for="terms-agreement">
-                                Creating an account means you agree with the <a href="#">Term and Conditions</a> and <a href="#">Data Sovereignty Agreement</a>.
+                                Creating an account means you agree with the <a href="#" class="darkteal-text">Term and Conditions</a> and <a href="#" class="darkteal-text">Data Sovereignty Agreement</a>.
                             </label>
                         </div>
                     </div>

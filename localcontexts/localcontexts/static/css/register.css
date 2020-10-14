@@ -10,7 +10,6 @@
 
 /* The entire card */
 #reg-card {
-    flex-direction: row;
     justify-content: center;
     border-radius: 5px 5px;
     max-width: 1000px;
@@ -21,7 +20,6 @@
 
 /* Progress List and Registration form containers */
 #progress-container, #complete-form-container {
-    flex-direction: column;
     align-items: center;
 }
 
@@ -61,7 +59,6 @@
 }
 
 #progress-ul {
-    flex-direction: column;
     align-items: center;
     width: 100%;
     padding: 2% 5% 5% 1%;
@@ -90,22 +87,17 @@
 /* Form Section */
 
 /* "Already a member? Sign in" DIV */
-#top-right {
-    flex-direction: row;
+.top-right {
     justify-content: flex-end;
+    margin-top: 1%;
 }
 
-#top-right a {
-    color: #007385;
-}
-
-#top-right, .form-house {
+.top-right, .form-house {
     width: 90%;
 }
 
 /* DIV that houses the h4, form and register button */
 .form-house {
-    flex-direction: column;
     justify-content: center;
     padding-bottom: 10%;
 }
@@ -116,7 +108,6 @@
 
 /* THE FORM ITSELF */
 .form-house form {
-    flex-direction: column;
     width: 100%;
 }
 
@@ -141,14 +132,9 @@
 
 /* Checkbox */
 .checkbox-div {
-    flex-direction: row;
     justify-content: flex-start;
     width: 100%;
     padding-top: 2%;
-}
-
-.checkbox-div a {
-    color: #007385;
 }
 
 #checkbox {
