@@ -1,22 +1,22 @@
 #user-info-container {
     margin: 2% auto;
     padding: 1%;
-    max-height: 200px;
-    min-height: 200px;
-    max-width: 1280px;
-    min-width: 1280px;
+    max-width: 90%;
+    min-width: 90%;
     border-radius: 10px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
-#user-info-content {
-    flex-direction: column;
-    /* border: 1px solid lime; */
+#user-affiliation-container {
+    margin: 2% auto;
+    padding: 1%;
+    min-width: 100%;
+    max-width: 100%;
 }
 
-/* #user-icon-container {
-    border: 1px solid black;
-} */
+#user-icon-container {
+    padding-left: 1%;
+}
 
 .profile-settings {
     width: 100%;
@@ -24,9 +24,42 @@
 }
 
 .user-info {
-    /* border: 1px solid purple; */
     width:100%;
     padding: 1%;
+}
+
+#user-affiliation-content {
+    width: 93%;
+    justify-content: center;
+    margin: auto;
+    padding: 0.5%;
+}
+
+.member-card {
+    margin: 1%;
+    width: 32%;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.member-card-img {
+    /* border: 1px solid black; */
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.member-card-img img {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.member-card-text {
+    padding: 1% 3% 1% 3%;
 }
 
 /* BODY BACKGROUND COLOR: #F1F4F5 */

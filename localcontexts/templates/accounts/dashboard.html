@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_header.html' %}
 
 <section id="user-info-container">
-    <div id="user-info-content" class="flex-this">
+    <div id="user-info-content" class="flex-this column">
 
         <div class="profile-settings flex-this">
             <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Profile Settings</a>
@@ -19,6 +19,42 @@
                     Job Title: <strong>{{ user.job_title }}</strong> <br>
                     Personal Location: <strong>{{ user.city_or_town }}, {{ user.country }}</strong>    
                 </p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section id="user-affiliation-container">
+    <div id="user-affiliation-content" class="flex-this">
+
+        <div class="member-card">
+            <div class="member-card-img">
+                <img src="https://picsum.photos/400/190">
+            </div>
+            <div class="member-card-text">
+                <h3 class="darkteal-text">Title</h3>
+                <p class="upper">Community</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <div class="member-card-img">
+                <img src="https://picsum.photos/400/190">
+            </div>
+            <div class="member-card-text">
+                <h3 class="darkteal-text">Title</h3>
+                <p class="upper">Community</p>
+            </div>
+        </div>
+
+        <div class="member-card">
+            <div class="member-card-img">
+                <img src="https://picsum.photos/400/190">
+            </div>
+            <div class="member-card-text">
+                <h3 class="darkteal-text">Title</h3>
+                <p class="upper">Community</p>
             </div>
         </div>
 
