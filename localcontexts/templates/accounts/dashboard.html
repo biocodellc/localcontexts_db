@@ -1,8 +1,28 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_header.html' %}
 
-<h1>
-    Dashboard for logged in user
-</h1>
+<section id="user-info-container">
+    <div id="user-info-content" class="flex-this">
 
-<!-- {% include 'partials/_footer.html' %} -->
+        <div class="profile-settings flex-this">
+            <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Profile Settings</a>
+        </div>
+
+        <div class="row flex-this">
+            <div id="user-icon-container">
+                <img src="https://icon-library.com/images/avatar-icon-png/avatar-icon-png-26.jpg" width="150px">
+            </div>
+    
+            <div class="row user-info">
+                <h2 class="orange-text">{{ user.last_name }}, {{ user.first_name }}</h2>
+                <p>
+                    Username: <strong>{{ user.username }} </strong><br>
+                    Job Title: <strong>{{ user.job_title }}</strong> <br>
+                    Personal Location: <strong>{{ user.city_or_town }}, {{ user.country }}</strong>    
+                </p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
 {% endblock %}

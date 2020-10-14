@@ -80,6 +80,10 @@ a {
     display: flex;
 }
 
+.row {
+    flex-direction: row;
+}
+
 /* LANDING PAGE CONTENT BUTTONS */
 .landing-btn {
     cursor: pointer;
