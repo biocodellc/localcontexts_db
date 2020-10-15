@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from apps.accounts.models import Account
-
-# Create your views here.
+from django.core.mail import send_mail
 
 def register(request):
     if request.method == 'POST':
@@ -33,9 +32,9 @@ def register(request):
                     # auth.login(request, user)
                     # messages.success(request, 'User is now logged in')
                     # return redirect('index')
+                    user.is_active = False
                     user.save()
-                    # messages.success(request, 'You are registered')
-                    return redirect('login')
+                    return redirect('validate')
         else:
             messages.error(request, 'Passwords do not match')
             return redirect('register')
@@ -66,3 +65,13 @@ def logout(request):
 
 def dashboard(request):
     return render(request, "accounts/dashboard.html")
+
+def validate(request):
+    send_mail(
+        'Subject',
+        'Body text hello',
+        'primallather@gmail.com',
+        ['vofir28806@deselling.com'],
+        fail_silently=False
+    )
+    return render(request, 'accounts/validate.html')
