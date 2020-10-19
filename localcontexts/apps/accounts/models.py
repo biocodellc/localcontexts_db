@@ -150,3 +150,12 @@ class UserInstitution(models.Model):
     class Meta:
         verbose_name = 'User Institution'
         verbose_name_plural = 'User Institutions'
+
+class Project(models.Model):
+    who = models.TextField()
+    when = models.TextField()
+    where = models.TextField()
+    what = models.TextField()
+    abstract = models.TextField()
+    target_species = models.TextField()
+
