@@ -27,11 +27,7 @@ def register(request):
                 else:
                     # If data unique, create user
                     user = Account.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
-                    
-                    # Use the following if you want to Login after register
-                    # auth.login(request, user)
-                    # messages.success(request, 'User is now logged in')
-                    # return redirect('index')
+
                     user.is_active = False
                     user.save()
                     return redirect('validate')
@@ -67,11 +63,11 @@ def dashboard(request):
     return render(request, "accounts/dashboard.html")
 
 def validate(request):
-    send_mail(
-        'Subject',
-        'Body text hello',
-        'primallather@gmail.com',
-        ['vofir28806@deselling.com'],
-        fail_silently=False
-    )
+    # send_mail(
+    #     'Subject',
+    #     'Body text hello',
+    #     'primallather@gmail.com',
+    #     ['vofir28806@deselling.com'],
+    #     fail_silently=False
+    # )
     return render(request, 'accounts/validate.html')
