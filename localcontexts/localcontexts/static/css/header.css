@@ -17,7 +17,7 @@
 .generic-nav {
     width: 60%;
     justify-content: flex-end;
-    padding-right: 2%;
+    padding-right: 1%;
 }
 
 .generic-nav-ul {
@@ -28,7 +28,7 @@
 }
 
 .generic-nav li {
-    padding: 2% 3% 0.5% 1%;
+    padding: 2% 1% 0.5% 1%;
 }
 
 .generic-nav a {
@@ -36,23 +36,28 @@
 }
 
 #btn-group {
-    align-items: flex-end;
-    border: 1px solid white;
-    border-radius: 5px;
-    justify-content: center;
+    justify-content: flex-start;
     min-width: 200px;
     max-width: 200px;
 }
 
 #btn-group li {
-    border-radius: 3px;
     padding: 1%;
-    width: 50%;
     text-align: center;
 }
 
 #btn-group a {
     font-weight: 400;
+}
+
+.reg {
+    width: 50%;
+}
+
+.log {
+    width: 40%;
+    padding: 1%;
+    border-radius: 31px;
 }
 
 @media only screen and (max-width: 820px) {
