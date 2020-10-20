@@ -63,6 +63,7 @@ def dashboard(request):
     return render(request, "accounts/dashboard.html")
 
 def validate(request):
+    #TODO: figure out why this is not working
     # send_mail(
     #     'Subject',
     #     'Body text hello',
@@ -71,3 +72,6 @@ def validate(request):
     #     fail_silently=False
     # )
     return render(request, 'accounts/validate.html')
+
+def create_profile(request):
+    return render(request, 'accounts/createprofile.html')
