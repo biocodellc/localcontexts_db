@@ -1,0 +1,76 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_header.html' %}
+
+<section id="registration-section" class="flex-this">
+    <div id="reg-card" class="flex-this row">
+
+        <div id="progress-container" class="orange-bg white-text flex-this column">
+            <div class="mini-logo-container">
+                <img class="mini-logo" src="{% static 'images/logos/lc-logo-mini.png' %}">
+            </div>
+
+            <div id="progress-ul-container" class="flex-this">
+                <ul id="progress-ul" class="flex-this column">
+                    <li>
+                        <div class="bullet">
+                            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false"><circle stroke="none" cx="16" cy="16" r="10"></circle></svg>
+                        </div>
+                        Register</li>
+                    <li>
+                        <div class="bullet">
+                            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false"><circle stroke="none" cx="16" cy="16" r="10"></circle></svg>
+                        </div>
+                        Verify Email</li>
+                    <li>
+                        <div class="bullet">
+                            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false"><circle stroke="none" cx="16" cy="16" r="10"></circle></svg>
+                        </div>
+                        Create Your Profile</li>
+                    <li>
+                        <div class="bullet big">
+                            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false"><path d="M16 4c6.6 0 12 5.4 12 12s-5.4 12-12 12S4 22.6 4 16 9.4 4 16 4zm0-4C7.2 0 0 7.2 0 16s7.2 16 16 16 16-7.2 16-16S24.8 0 16 0z"></path><circle cx="16" cy="16" r="6"></circle></svg>
+                        </div>
+                        Connect or Create an Account</li>
+                    <li>
+                        <div class="bullet">
+                            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false"><circle stroke="none" cx="16" cy="16" r="10"></circle></svg>
+                        </div>
+                        Start Creating Labels and Notices</li>
+                </ul>
+            </div>
+
+            <div id="progress-bottom-container">
+                <div>
+                    <h2>
+                        Because Local Contexts Matters
+                    </h2>
+                </div>
+            </div>
+
+        </div>
+    
+        <div id="complete-form-container" class="flex-this column">
+    
+            <div id="validate-content" class="flex-this column">
+                <div>
+                    <img src="{% static 'images/logos/welcome-logo.png' %}" width="209px">
+                </div>
+
+                <h2 class="darkteal-text">Hello Name, <br> Welcome to Local Contexts</h2>
+                <p>
+                    Before we start would you like to connect with an existing Institution or create your own?<br>
+
+                    <button class="white-text action-btn">Search the Register</button><br>
+                    OR <br>
+                    <button class="white-text action-btn">Create an Institution profile</button>
+                </p>
+    
+            </div>
+    
+        </div>
+    </div>
+
+</section>
+
+
+{% include 'partials/_footer.html' %}
+{% endblock %}

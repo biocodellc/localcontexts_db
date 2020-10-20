@@ -75,3 +75,9 @@ def validate(request):
 
 def create_profile(request):
     return render(request, 'accounts/createprofile.html')
+
+def connect_institution(request):
+    return render(request, 'accounts/connect-institution.html')
+
+def connect_community(request):
+    return render(request, 'accounts/connect-community.html')
