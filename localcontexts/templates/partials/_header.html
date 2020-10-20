@@ -15,8 +15,8 @@
             {% if user.is_authenticated %}
 
             <div id="btn-group" class="flex-this">
-                <li><a class="white-text upper dash-btn" href="{% url 'dashboard' %}">Account</a></li>
-                <li class="white-bg"><a class="upper primary-blue-text" href="javascript:{document.getElementById('logout').submit()}">Log Out
+                <li><a class="white-text upper" href="{% url 'dashboard' %}">Account</a></li>
+                <li class="white-bg log"><a class="upper orange-text" href="javascript:{document.getElementById('logout').submit()}">Sign Out
                     <form action="{% url 'logout' %}" method="POST" id="logout">
                         {% csrf_token %}
                         <input type="hidden">
@@ -26,8 +26,8 @@
 
             {% else %}
             <div id="btn-group" class="flex-this">
-                <li><a class="white-text upper" href="{% url 'register' %}">Register</a></li>
-                <li class="white-bg"><a class="upper primary-blue-text" href="{% url 'login' %}">Sign In</a></li>
+                <li class="reg"><a class="white-text upper" href="{% url 'register' %}">Register</a></li>
+                <li class="log orange-bg"><a class="upper white-text orange-bg" href="{% url 'login' %}">Sign In</a></li>
             </div>
             {% endif %}
         </ul>
