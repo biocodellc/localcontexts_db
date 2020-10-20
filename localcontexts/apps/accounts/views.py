@@ -62,7 +62,7 @@ def logout(request):
 def dashboard(request):
     return render(request, "accounts/dashboard.html")
 
-def validate(request):
+def verify(request):
     #TODO: figure out why this is not working
     # send_mail(
     #     'Subject',
@@ -71,7 +71,7 @@ def validate(request):
     #     ['vofir28806@deselling.com'],
     #     fail_silently=False
     # )
-    return render(request, 'accounts/validate.html')
+    return render(request, 'accounts/verify.html')
 
 def create_profile(request):
     return render(request, 'accounts/createprofile.html')

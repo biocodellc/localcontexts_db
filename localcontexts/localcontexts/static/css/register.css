@@ -196,10 +196,29 @@
     margin-top: 2%;
     background-color: #007385;
     border: none;
-    min-width: 120px;
-    max-width: 120px;
     max-height: 30px;
     min-height: 30px;
     border-radius:5px;
     font-size: 18px;
+}
+
+/* For validate and connect pages */
+.centered-content {
+    padding-top: 2%;
+    padding-bottom: 2%;
+    width: 70%;
+    text-align: center;
+}
+
+/* Verify Buttons */
+#verify-email-btn {
+    margin: 1% auto 2% auto;
+    font-size: 14px;
+}
+
+#resend-email-btn {
+    border: none;
+    max-width: 130px;
+    min-width: 130px;
+    margin: 2% auto 2% auto;
 }
