@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from apps.accounts.models import Account
-
-# Create your views here.
+from django.core.mail import send_mail
 
 def register(request):
     if request.method == 'POST':
@@ -28,14 +27,10 @@ def register(request):
                 else:
                     # If data unique, create user
                     user = Account.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
-                    
-                    # Use the following if you want to Login after register
-                    # auth.login(request, user)
-                    # messages.success(request, 'User is now logged in')
-                    # return redirect('index')
+
+                    user.is_active = False
                     user.save()
-                    # messages.success(request, 'You are registered')
-                    return redirect('login')
+                    return redirect('validate')
         else:
             messages.error(request, 'Passwords do not match')
             return redirect('register')
@@ -66,3 +61,17 @@ def logout(request):
 
 def dashboard(request):
     return render(request, "accounts/dashboard.html")
+
+def validate(request):
+    #TODO: figure out why this is not working
+    # send_mail(
+    #     'Subject',
+    #     'Body text hello',
+    #     'primallather@gmail.com',
+    #     ['vofir28806@deselling.com'],
+    #     fail_silently=False
+    # )
+    return render(request, 'accounts/validate.html')
+
+def create_profile(request):
+    return render(request, 'accounts/createprofile.html')
