@@ -61,13 +61,53 @@
 #progress-ul {
     align-items: center;
     width: 100%;
-    padding: 2% 5% 5% 1%;
+    padding: 2% 5% 3% 1%;
 }
 
 #progress-ul li {
-    padding: 4%;
+      /* Turn on relative positioning so the line is placed relative to the item rather than absolutely on the page */
+      /* Use padding to space things out rather than margins as the line would get broken up otherwise */
+    position: relative;
+    margin: 0;
+    padding-bottom: 2em;
+    padding-left: 5%;
     width: 70%;
     font-weight: 400;
+}
+
+#progress-ul li:before {
+    background-color: #fff;
+    width: 2px;
+    content: '';
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 5px; 
+}
+
+/* Start the line further down on the first list item */
+#progress-ul li:first-child:before { 
+    top: 15px;  
+}
+
+/* Stop the line short on the final list item */
+#progress-ul li:last-child:before { 
+    height: 6px; 
+}
+    
+/* SVG bullet points */
+.bullet { 
+    margin-left: -23px; 
+    width: 30px; 
+    fill: #fff; 
+    float: left; 
+    padding-right: 10px 
+}
+
+.bullet.big { 
+    width: 30px; 
+    margin-left: -24px; 
+    padding-right: 8px 
 }
 
 #progress-bottom-container {
