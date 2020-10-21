@@ -10,9 +10,8 @@
 
             <div class="row flex-this">
                 <div id="user-icon-container">
-                    <!-- TODO: Figure out if/else for profile pics -->
-                    <!-- <img width="150px"
-                    {% if not user.profile_pic.url %}
+                    <img width="150px"
+                    {% if not user.profile_pic %}
 
                     src="https://icon-library.com/images/avatar-icon-png/avatar-icon-png-26.jpg"
                     
@@ -20,8 +19,7 @@
 
                     src="{{ user.profile_pic.url }}" 
                     {% endif %}
-                    > -->
-                    <img src='https://icon-library.com/images/avatar-icon-png/avatar-icon-png-26.jpg' width="150px">
+                    >
                 </div>
         
                 <div class="row user-info">
