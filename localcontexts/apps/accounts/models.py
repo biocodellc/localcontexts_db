@@ -63,12 +63,13 @@ class Account(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     # Optional fields
+    profile_pic = models.ImageField(upload_to='photos/', blank=True)
     is_researcher = models.BooleanField(default=False)
     last_name = models.CharField(verbose_name='last name', max_length=60, blank=True)
     first_name = models.CharField(verbose_name='first name', max_length=60, blank=True)
     phone = models.CharField(verbose_name='phone number', max_length=20, blank=True)
     nationality = models.CharField(verbose_name='nationality', max_length=60, blank=True)
-    country = CountryField()
+    country = CountryField(blank=True)
     city_or_town = models.CharField(verbose_name='city or town', max_length=80, blank=True)
     job_title = models.CharField(verbose_name='job title', max_length=80, blank=True)
     affiliation = models.CharField(verbose_name='affiliation', max_length=60, blank=True)
@@ -158,4 +159,7 @@ class Project(models.Model):
     what = models.TextField()
     abstract = models.TextField()
     target_species = models.TextField()
+
+    def __str__(self):
+        return self.who
 

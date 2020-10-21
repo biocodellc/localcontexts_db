@@ -28,9 +28,10 @@ def register(request):
                     # If data unique, create user
                     user = Account.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
 
-                    user.is_active = False
+                    # TODO: Once email verification works, set this to false.
+                    user.is_active = True
                     user.save()
-                    return redirect('validate')
+                    return redirect('verify')
         else:
             messages.error(request, 'Passwords do not match')
             return redirect('register')
@@ -39,10 +40,11 @@ def register(request):
 
 def login(request):
     if request.method == 'POST':
-        username = request.POST['username']
+        email = request.POST['email']
         password = request.POST['password']
 
-        user = auth.authenticate(username=username, password=password)
+        user = auth.authenticate(request, email=email, password=password)
+        print(user)
 
         # If user is found, log in the user.
         if user is not None:

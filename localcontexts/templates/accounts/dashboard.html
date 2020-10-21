@@ -10,7 +10,14 @@
 
             <div class="row flex-this">
                 <div id="user-icon-container">
+                    {% if user.profile_pic.url is None %}
                     <img src="https://icon-library.com/images/avatar-icon-png/avatar-icon-png-26.jpg" width="150px">
+
+
+                    {% else %}
+                    <img src="{{ user.profile_pic.url }}" width="150px">
+
+                    {% endif %}
                 </div>
         
                 <div class="row user-info">
