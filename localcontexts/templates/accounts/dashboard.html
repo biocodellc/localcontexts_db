@@ -10,14 +10,18 @@
 
             <div class="row flex-this">
                 <div id="user-icon-container">
-                    {% if user.profile_pic.url is None %}
-                    <img src="https://icon-library.com/images/avatar-icon-png/avatar-icon-png-26.jpg" width="150px">
+                    <!-- TODO: Figure out if/else for profile pics -->
+                    <!-- <img width="150px"
+                    {% if not user.profile_pic.url %}
 
-
+                    src="https://icon-library.com/images/avatar-icon-png/avatar-icon-png-26.jpg"
+                    
                     {% else %}
-                    <img src="{{ user.profile_pic.url }}" width="150px">
 
+                    src="{{ user.profile_pic.url }}" 
                     {% endif %}
+                    > -->
+                    <img src='https://icon-library.com/images/avatar-icon-png/avatar-icon-png-26.jpg' width="150px">
                 </div>
         
                 <div class="row user-info">

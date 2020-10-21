@@ -76,6 +76,13 @@ def verify(request):
     return render(request, 'accounts/verify.html')
 
 def create_profile(request):
+    if request.method == 'POST':
+        full_name = request.POST['full_name']
+        username = request.POST['username']
+        job_title = request.POST['job_title']
+        country = request.POST['country']
+        city_or_town = request.POST['city_or_town']
+
     return render(request, 'accounts/createprofile.html')
 
 def connect_institution(request):
