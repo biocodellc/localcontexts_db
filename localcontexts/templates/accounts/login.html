@@ -1,4 +1,5 @@
-{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_header.html' %}
+{% extends 'base.html' %} {% load static %} {% block title %} | Login {% endblock %}
+{% block content %} {% include 'partials/_header.html' %}
 
 <section id="registration-section" class="flex-this">
     <div id="reg-card" class="flex-this">
@@ -21,8 +22,8 @@
                 <form action="{% url 'login' %}" method="POST" class="flex-this column">
                     {% csrf_token %}
                     <div>
-                        <label>Username or Email Address</label>
-                        <input type="text" name="username" required>
+                        <label>Email Address</label>
+                        <input type="email" name="email" required>
                     </div>
                     <div>
                         <label>Password</label>
