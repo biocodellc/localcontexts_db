@@ -64,15 +64,15 @@ class Account(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     # Optional fields
     is_researcher = models.BooleanField(default=False)
-    last_name = models.CharField(verbose_name='last name', max_length=60)
-    first_name = models.CharField(verbose_name='first name', max_length=60)
-    phone = models.CharField(verbose_name='phone number', max_length=20)
-    nationality = models.CharField(verbose_name='nationality', max_length=60)
+    last_name = models.CharField(verbose_name='last name', max_length=60, blank=True)
+    first_name = models.CharField(verbose_name='first name', max_length=60, blank=True)
+    phone = models.CharField(verbose_name='phone number', max_length=20, blank=True)
+    nationality = models.CharField(verbose_name='nationality', max_length=60, blank=True)
     country = CountryField()
-    city_or_town = models.CharField(verbose_name='city or town', max_length=80)
-    job_title = models.CharField(verbose_name='job title', max_length=80)
-    affiliation = models.CharField(verbose_name='affiliation', max_length=60)
-    bio = models.CharField(verbose_name='bio', max_length=120)
+    city_or_town = models.CharField(verbose_name='city or town', max_length=80, blank=True)
+    job_title = models.CharField(verbose_name='job title', max_length=80, blank=True)
+    affiliation = models.CharField(verbose_name='affiliation', max_length=60, blank=True)
+    bio = models.TextField(verbose_name='bio', blank=True)
     community_member = models.BooleanField(default=False)
 
     # This is what the user will log in with
