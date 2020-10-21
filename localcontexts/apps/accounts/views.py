@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from apps.accounts.models import Account
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 
 def register(request):
@@ -56,14 +57,6 @@ def login(request):
     else:
         return render(request, "accounts/login.html")
 
-def logout(request):
-    if request.method == 'POST':
-        auth.logout(request)
-        return redirect('index')
-
-def dashboard(request):
-    return render(request, "accounts/dashboard.html")
-
 def verify(request):
     #TODO: figure out why this is not working
     # send_mail(
@@ -74,7 +67,18 @@ def verify(request):
     #     fail_silently=False
     # )
     return render(request, 'accounts/verify.html')
+    
+@login_required
+def logout(request):
+    if request.method == 'POST':
+        auth.logout(request)
+        return redirect('index')
 
+@login_required
+def dashboard(request):
+    return render(request, "accounts/dashboard.html")
+
+@login_required
 def create_profile(request):
     if request.method == 'POST':
         full_name = request.POST['full_name']
@@ -85,8 +89,10 @@ def create_profile(request):
 
     return render(request, 'accounts/createprofile.html')
 
+@login_required
 def connect_institution(request):
     return render(request, 'accounts/connect-institution.html')
 
+@login_required
 def connect_community(request):
     return render(request, 'accounts/connect-community.html')

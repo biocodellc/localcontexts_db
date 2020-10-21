@@ -54,7 +54,7 @@
                 <h2 class="darkteal-text">Create your profile</h2>
                 <p>This information will be kept secure to protect your identity.</p>
     
-                <form action="{% url 'register' %}" method="POST" class="flex-this column">
+                <form action="{% url 'create-profile' %}" method="POST" class="flex-this column">
                     {% csrf_token %}
                     <div class="flex-this form-elem-group">
 
