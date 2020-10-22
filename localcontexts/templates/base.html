@@ -1,35 +1,36 @@
 {% load static %}
 <!DOCTYPE html>
+    <html lang="en">
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Local Contexts Hub</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="description" content="Establishing and communicating rights over indigenous knowledge and biocultural matter.">
+
+        <!-- Favicons-->
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/favicons/apple-touch-icon.png' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicons/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicons/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'images/favicons/site.webmanifest' %}">
+
+        <!-- Font Awesome Icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
+        <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+
+        <title>Local Contexts {% block title %} {% endblock %}</title>
     </head>
-    <section>
-        <div id="header-wrapper">
-            <a href="#" id="header-logo">Local Contexts</a>
-            <ul id="nav-links-ul">
-                <li class="inline">Home</li>
-                <li class="inline">About</li>
-                <li class="inline">Labels</li>
-                <li class="inline">Notices</li>
-                <li class="inline">Contact</li>
-            </ul>
-        </div>
-        <!-- <svg class="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f1f4f5" fill-opacity="1" d="M0,160L48,149.3C96,139,192,117,288,117.3C384,117,480,139,576,154.7C672,171,768,181,864,192C960,203,1056,213,1152,192C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>     -->
-    </section>
+
     <body>
-        <div id="content">
-            {% block content %}
+        {% block content %} {% endblock %}
 
-            {% endblock content %}
-        </div>
-
+    <script src="{% static 'javascript/main.js' %}"></script>
     </body>
-    <footer id="footer-wrapper">
-        <svg class="footer-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#f1f4f5" fill-opacity="1" d="M0,160L48,149.3C96,139,192,117,288,117.3C384,117,480,139,576,154.7C672,171,768,181,864,192C960,203,1056,213,1152,192C1248,171,1344,117,1392,90.7L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>
-    </footer>
+
 </html>

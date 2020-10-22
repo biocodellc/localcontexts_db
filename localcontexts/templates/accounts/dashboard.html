@@ -1,0 +1,76 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_header.html' %}
+<div class="grey-bg">
+
+    <section id="user-info-container" class="white-bg">
+        <div id="user-info-content" class="flex-this column">
+
+            <div class="profile-settings flex-this">
+                <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Profile Settings</a>
+            </div>
+
+            <div class="row flex-this">
+                <div id="user-icon-container">
+                    <img width="150px"
+                    {% if not user.profile_pic %}
+
+                    src="https://icon-library.com/images/avatar-icon-png/avatar-icon-png-26.jpg"
+                    
+                    {% else %}
+
+                    src="{{ user.profile_pic.url }}" 
+                    {% endif %}
+                    >
+                </div>
+        
+                <div class="row user-info">
+                    <h2 class="orange-text">{{ user.last_name }}, {{ user.first_name }}</h2>
+                    <p>
+                        Username: {{ user.username }} <br>
+                        Job Title: {{ user.job_title }} <br>
+                        Personal Location: {{ user.city_or_town }}, {{ user.country.name }}    
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="user-affiliation-container">
+        <div id="user-affiliation-content" class="flex-this">
+
+            <div class="member-card flex-this column white-bg">
+                <div class="member-card-img">
+                    <img src="https://picsum.photos/400/190">
+                </div>
+                <div class="member-card-text flex-this column">
+                    <h3 class="darkteal-text">Title</h3>
+                    <p class="upper">Community</p>
+                </div>
+            </div>
+
+            <div class="member-card flex-this column white-bg">
+                <div class="member-card-img">
+                    <img src="https://picsum.photos/400/190">
+                </div>
+                <div class="member-card-text flex-this column">
+                    <h3 class="darkteal-text">Title</h3>
+                    <p class="upper">Community</p>
+                </div>
+            </div>
+
+            <div class="member-card flex-this column white-bg">
+                <div class="member-card-img">
+                    <img src="https://picsum.photos/400/190">
+                </div>
+                <div class="member-card-text flex-this column">
+                    <h3 class="darkteal-text">Title</h3>
+                    <p class="upper">Community</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</div>
+
+{% endblock %}
