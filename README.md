@@ -26,6 +26,7 @@ This will set local environment variables accessible via PYTHON
 
 
 Set up database:
+NOTE: See section below on Heroku vs. Local Deploymet and setting environment variables
 ```
 psql> create database localcontextsdb # create the database
 python manage.py makemigrations
@@ -42,3 +43,9 @@ To run the app:
 
 Configuration can be found in the `settings.py` file.
 Database models are located in `apps/accounts/models.py`.
+
+### Heroku Deployment vs. Local Deployment
+```source setupHeroku.sh``` sets up environment variables for heroku hosted database
+```source setupLocal.sh``` sets up environment variables for locally hosted database
+
+
