@@ -1,5 +1,8 @@
 # localcontexts_db
-Local contexts back-end
+Branches:
+- Master: Final location and config of LocalContexts (Live Site)
+- Develop: dev branch for pushing changes
+- heroku-demo: heroku config for live demo of [LocalContexts](https://localcontexts.herokuapp.com/)
 
 ## Getting Started
 What you need to run this app:
