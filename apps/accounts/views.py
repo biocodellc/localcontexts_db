@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
-from apps.accounts.models import Account
+from .models import Account
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 
 def register(request):
     if request.method == 'POST':
@@ -32,6 +31,8 @@ def register(request):
                     # TODO: Once email verification works, set this to false.
                     user.is_active = True
                     user.save()
+                    # Pass user to verify view
+                    verify(user)
                     return redirect('verify')
         else:
             messages.error(request, 'Passwords do not match')
@@ -57,15 +58,25 @@ def login(request):
     else:
         return render(request, "accounts/login.html")
 
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
+
 def verify(request):
-    #TODO: figure out why this is not working
-    # send_mail(
-    #     'Subject',
-    #     'Body text hello',
-    #     'primallather@gmail.com',
-    #     ['vofir28806@deselling.com'],
-    #     fail_silently=False
-    # )
+    #TODO: make this dynamic using custom user OR change custom user to be able to use request.user
+    user = Account.objects.get(username='deeana')
+    template = render_to_string('accounts/email-template.html', {'name':user.first_name})
+    email = EmailMessage(
+        'Activate Your Account',
+        #Body of the email
+        template,
+        settings.EMAIL_HOST_USER,
+        #Recipient, in list to send to multiple addresses at a time.
+        #If template works, set recipient dynamically with request.user.email
+        ['dianalovette90@gmail.com']
+    )
+    email.fail_silently=False
+    email.send()
     return render(request, 'accounts/verify.html')
     
 @login_required
