@@ -1,7 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
-from .models import Account
+from django.contrib.auth.models import User
+from django.views.generic import View
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+from .utils import generate_token
+from django.contrib.sites.shortcuts import get_current_site
 
 def register(request):
     if request.method == 'POST':
@@ -16,23 +24,41 @@ def register(request):
         #Check for password match
         if password == password2:
             #Check that username exists
-            if Account.objects.filter(username=username).exists():
+            if User.objects.filter(username=username).exists():
                 messages.error(request, 'That username is taken')
                 return redirect('register')
             else:
                 #Check that email exists
-                if Account.objects.filter(email=email).exists():
+                if User.objects.filter(email=email).exists():
                     messages.error(request, 'That email is being used')
                     return redirect('register')
                 else:
                     # If data unique, create user
-                    user = Account.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
-
-                    # TODO: Once email verification works, set this to false.
-                    user.is_active = True
+                    user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+                    user.is_active = False
                     user.save()
-                    # Pass user to verify view
-                    verify(user)
+
+                    # Remember the current location
+                    current_site=get_current_site(request)
+                    template = render_to_string('accounts/activate.html', 
+                    {
+                        'user': user,
+                        'domain':current_site.domain,
+                        'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+                        'token': generate_token.make_token(user)
+                    })
+                    email_contents = EmailMessage(
+                        #Email subject
+                        'Activate Your Account',
+                        #Body of the email
+                        template,
+                        #Sender
+                        settings.EMAIL_HOST_USER,
+                        #Recipient, in list to send to multiple addresses at a time.
+                        [email]
+                    )
+                    email_contents.fail_silently=False
+                    email_contents.send()
                     return redirect('verify')
         else:
             messages.error(request, 'Passwords do not match')
@@ -42,41 +68,39 @@ def register(request):
 
 def login(request):
     if request.method == 'POST':
-        email = request.POST['email']
+        # email = request.POST['email']
+        username = request.POST['username']
         password = request.POST['password']
 
-        user = auth.authenticate(request, email=email, password=password)
-        print(user)
+        user = auth.authenticate(request, username=username, password=password)
 
         # If user is found, log in the user.
         if user is not None:
             auth.login(request, user)
             return redirect('dashboard')
+
         else:
             messages.error(request, 'Invalid Credentials')
             return redirect('login')
     else:
         return render(request, "accounts/login.html")
 
-from django.core.mail import EmailMessage
-from django.conf import settings
-from django.template.loader import render_to_string
+class ActivateAccountView(View):
+    def get(self, request, uidb64, token):
+        try:
+            uid=force_text(urlsafe_base64_decode(uidb64))
+            user=User.objects.get(pk=uid)
+        except Exception as identifier:
+            user=None
+
+        if user is not None and generate_token.check_token(user, token):
+            user.is_active=True
+            user.save()
+            messages.add_message(request, messages.INFO, 'account activation successful')
+            return redirect('login')
+        return render(request, 'activate_failed.html', status=401)
 
 def verify(request):
-    #TODO: make this dynamic using custom user OR change custom user to be able to use request.user
-    user = Account.objects.get(username='deeana')
-    template = render_to_string('accounts/email-template.html', {'name':user.first_name})
-    email = EmailMessage(
-        'Activate Your Account',
-        #Body of the email
-        template,
-        settings.EMAIL_HOST_USER,
-        #Recipient, in list to send to multiple addresses at a time.
-        #If template works, set recipient dynamically with request.user.email
-        ['dianalovette90@gmail.com']
-    )
-    email.fail_silently=False
-    email.send()
     return render(request, 'accounts/verify.html')
     
 @login_required
@@ -91,12 +115,12 @@ def dashboard(request):
 
 @login_required
 def create_profile(request):
-    if request.method == 'POST':
-        full_name = request.POST['full_name']
-        username = request.POST['username']
-        job_title = request.POST['job_title']
-        country = request.POST['country']
-        city_or_town = request.POST['city_or_town']
+    # if request.method == 'POST':
+    #     full_name = request.POST['full_name']
+    #     username = request.POST['username']
+    #     job_title = request.POST['job_title']
+    #     country = request.POST['country']
+    #     city_or_town = request.POST['city_or_town']
 
     return render(request, 'accounts/createprofile.html')
 

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
@@ -70,13 +71,13 @@ TEMPLATES = [
 ]
 
 # Using the custom user model to authenticate
-AUTH_USER_MODEL = 'accounts.Account'
+# AUTH_USER_MODEL = 'accounts.Account'
 
 # from 'https://stackoverflow.com/questions/18971928/cant-login-to-django-admin-after-creating-a-super-user-with-a-custom-user-model'
-AUTHENTICATION_BACKENDS = (
-        'django.contrib.auth.backends.RemoteUserBackend',
-        'django.contrib.auth.backends.ModelBackend',
-)
+# AUTHENTICATION_BACKENDS = (
+#         'django.contrib.auth.backends.RemoteUserBackend',
+#         'django.contrib.auth.backends.ModelBackend',
+# )
 
 WSGI_APPLICATION = 'localcontexts.wsgi.application'
 
