@@ -76,9 +76,12 @@ def login(request):
 
         # If user is found, log in the user.
         if user is not None:
-            auth.login(request, user)
-            return redirect('dashboard')
-
+            if not user.last_login:
+                auth.login(request, user)
+                return render(request, 'accounts/create-profile.html')
+            else:
+                auth.login(request, user)
+                return redirect('dashboard')
         else:
             messages.error(request, 'Invalid Credentials')
             return redirect('login')
@@ -96,7 +99,7 @@ class ActivateAccountView(View):
         if user is not None and generate_token.check_token(user, token):
             user.is_active=True
             user.save()
-            messages.add_message(request, messages.INFO, 'account activation successful')
+            messages.add_message(request, messages.INFO, 'Account activation successful. You may now log in.')
             return redirect('login')
         return render(request, 'activate_failed.html', status=401)
 
@@ -122,7 +125,7 @@ def create_profile(request):
     #     country = request.POST['country']
     #     city_or_town = request.POST['city_or_town']
 
-    return render(request, 'accounts/createprofile.html')
+    return render(request, 'accounts/create-profile.html')
 
 @login_required
 def connect_institution(request):

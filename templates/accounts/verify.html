@@ -1,5 +1,7 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_header.html' %}
-
+{% if user.is_authenticated %}
+    <h1>You do not have access to this page. :)</h1>
+{% else %}
 <section id="registration-section" class="flex-this">
     <div id="reg-card" class="flex-this row">
 
@@ -56,10 +58,9 @@
 
                     <h2 class="darkteal-text">Verify Your Email</h2>
                     <p>Thank you for registering with Local Contexts. <br><br>
-                    Please click the button below to confirm your email address and activate your account.</p>
+                    Check your email for a verification link or click Resend Email to send it again.</p>
     
-                        <button id="verify-email-btn" class="white-text action-btn">Verify Email</button>
-                        <button id="resend-email-btn" class="white-bg darkteal-text">Resend Email</button>    
+                    <button id="resend-email-btn" class="white-bg darkteal-text">Resend Email</button>    
             </div>
     
         </div>
@@ -69,4 +70,5 @@
 
 
 {% include 'partials/_footer.html' %}
+{% endif%}
 {% endblock %}
