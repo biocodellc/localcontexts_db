@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.contrib.sites',
 ]
 
 MIDDLEWARE = [
@@ -69,15 +68,6 @@ TEMPLATES = [
         },
     },
 ]
-
-# Using the custom user model to authenticate
-# AUTH_USER_MODEL = 'accounts.Account'
-
-# from 'https://stackoverflow.com/questions/18971928/cant-login-to-django-admin-after-creating-a-super-user-with-a-custom-user-model'
-# AUTHENTICATION_BACKENDS = (
-#         'django.contrib.auth.backends.RemoteUserBackend',
-#         'django.contrib.auth.backends.ModelBackend',
-# )
 
 WSGI_APPLICATION = 'localcontexts.wsgi.application'
 
@@ -150,6 +140,7 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
 
+# Config for sending out emails
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_PORT = 587
