@@ -1,5 +1,7 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_header.html' %}
 
+{% if user.is_authenticated %}
+
 <section id="registration-section" class="flex-this">
     <div id="reg-card" class="flex-this row">
 
@@ -102,7 +104,7 @@
     </div>
 
 </section>
-
+{% endif %}
 
 {% include 'partials/_footer.html' %}
 {% endblock %}

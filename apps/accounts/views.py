@@ -76,9 +76,12 @@ def login(request):
 
         # If user is found, log in the user.
         if user is not None:
-            auth.login(request, user)
-            return redirect('dashboard')
-
+            if not user.last_login:
+                auth.login(request, user)
+                return render(request, 'accounts/create-profile.html')
+            else:
+                auth.login(request, user)
+                return redirect('dashboard')
         else:
             messages.error(request, 'Invalid Credentials')
             return redirect('login')
@@ -122,7 +125,7 @@ def create_profile(request):
     #     country = request.POST['country']
     #     city_or_town = request.POST['city_or_town']
 
-    return render(request, 'accounts/createprofile.html')
+    return render(request, 'accounts/create-profile.html')
 
 @login_required
 def connect_institution(request):

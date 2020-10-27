@@ -1,6 +1,8 @@
 {% extends 'base.html' %} {% load static %} {% block title %} | Register {% endblock %}
 {% block content %} {% include 'partials/_header.html' %}
-
+{% if user.is_authenticated %}
+    <h1>You do not have access to this page. :)</h1>
+{% else %}
 <section id="registration-section" class="flex-this">
     <div id="reg-card" class="flex-this row">
 
@@ -114,6 +116,6 @@
 
 </section>
 
-
 {% include 'partials/_footer.html' %}
+{% endif %}
 {% endblock %}
