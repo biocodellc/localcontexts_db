@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
+from phone_field import PhoneField
 
 class Role(models.Model):
     ADMIN = 1
@@ -25,7 +26,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_pic = models.ImageField(upload_to='photos/', blank=True)
     is_researcher = models.BooleanField(default=False)
-    phone = models.CharField(verbose_name='phone number', max_length=20, blank=True)
+    phone = PhoneField(blank=True, help_text='Contact phone number')
     nationality = models.CharField(verbose_name='nationality', max_length=60, blank=True)
     country = CountryField(blank=True)
     city_or_town = models.CharField(verbose_name='city or town', max_length=80, blank=True)
