@@ -35,6 +35,9 @@ class UserProfile(models.Model):
     bio = models.TextField(verbose_name='bio', blank=True)
     community_member = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f'{self.user.username} Profile'
+
 
 class Community(models.Model):
     community_name = models.CharField(max_length=80)
