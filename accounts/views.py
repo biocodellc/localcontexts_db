@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
+from .models import Profile
 from django.views.generic import View
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
@@ -118,12 +119,16 @@ def dashboard(request):
 
 @login_required
 def create_profile(request):
-    # if request.method == 'POST':
-    #     full_name = request.POST['full_name']
-    #     username = request.POST['username']
-    #     job_title = request.POST['job_title']
-    #     country = request.POST['country']
-    #     city_or_town = request.POST['city_or_town']
+    # TODO: Fix user profile creation
+    if request.method == 'POST':
+        # full_name = request.POST['full_name']
+        username = request.POST['username']
+        job_title = request.POST['job_title']
+        country = request.POST['country']
+        # city_or_town = request.POST['city_or_town']
+
+        user = Profile.objects.create(username=username, job_title=job_title, country=country)
+        user.save()
 
     return render(request, 'accounts/create-profile.html')
 
