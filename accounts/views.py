@@ -43,7 +43,7 @@ def register(request):
 
                     # Remember the current location
                     current_site=get_current_site(request)
-                    template = render_to_string('accounts/activate.html', 
+                    template = render_to_string('snippets/activate.html', 
                     {
                         'user': user,
                         'domain':current_site.domain,
@@ -104,7 +104,7 @@ class ActivateAccountView(View):
             user.save()
             messages.add_message(request, messages.INFO, 'Account activation successful. You may now log in.')
             return redirect('login')
-        return render(request, 'activate_failed.html', status=401)
+        return render(request, 'snippets/activate_failed.html', status=401)
 
 def verify(request):
     return render(request, 'accounts/verify.html')

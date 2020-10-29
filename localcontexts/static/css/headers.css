@@ -1,3 +1,9 @@
+#auth-header {
+    background: linear-gradient(180.59deg, #016BA7 0.51%, #058F73 134.01%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width: 100%;
+}
+
 #reg-header {
     background-color: #3876aa;
     width: 100%;

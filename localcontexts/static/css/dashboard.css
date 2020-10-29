@@ -30,11 +30,13 @@
 }
 
 #user-affiliation-container {
-    margin: 1% auto;
+    margin: auto;
     min-width: 100%;
     max-width: 100%;
     padding-left: 0;
     padding-right: 0;
+    padding-top: 3%;
+    padding-bottom: 5%;
 }
 
 #user-affiliation-content {
