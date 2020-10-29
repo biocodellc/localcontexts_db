@@ -33,7 +33,7 @@ a {
 }
 
 .orange-h1 {
-    color: #F47D20;
+    color: #EF6C00;
     font-weight: 400;
 }
 
@@ -55,7 +55,7 @@ a {
 }
 
 .orange-text {
-    color: #f47d20;
+    color: #EF6C00;
 }
 
 .orange-bg {
@@ -95,7 +95,7 @@ a {
     border: none;
     max-height: 30px;
     min-height: 30px;
-    border-radius:5px;
+    border-radius: 5px;
     font-size: 18px;
 }
 
