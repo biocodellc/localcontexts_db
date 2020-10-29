@@ -23,12 +23,14 @@
                         <li><a class="white-text" href="{% url 'contact' %}">Contact</a></li>  
                         <li><a class="white-text" href="{% url 'dashboard' %}">Account</a></li>   
                         <li class="orange-bg log">
-                            <a class="white-text" href="javascript:{document.getElementById('logout').submit()}">Sign Out
+                            <a class="white-text" href="javascript:{document.getElementById('logout').submit()}">
+                                Sign Out
                             <form action="{% url 'logout' %}" method="POST" id="logout">
                                 {% csrf_token %}
                                 <input type="hidden">
                             </form>
-                        </a></li>
+                        </a>
+                    </li>
                     {% else %}
                         <li><a class="white-text" href="{% url 'index' %}">Home</a></li>
                         <li><a class="white-text" href="{% url 'about' %}">About</a></li>

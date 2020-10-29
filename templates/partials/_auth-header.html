@@ -16,8 +16,8 @@
             <li><a class="white-text upper" href="{% url 'about' %}">About</a></li>
 
             <div id="btn-group" class="flex-this">
-                <li><a class="white-text upper" href="{% url 'dashboard' %}">Account</a></li>
-                <li class="white-bg log"><a class="upper orange-text" href="javascript:{document.getElementById('logout').submit()}">Sign Out
+                <li class="reg"><a class="white-text upper" href="{% url 'dashboard' %}">Account</a></li>
+                <li class="white-bg log reg"><a class="upper orange-text" href="javascript:{document.getElementById('logout').submit()}">Sign Out
                     <form action="{% url 'logout' %}" method="POST" id="logout">
                         {% csrf_token %}
                         <input type="hidden">
