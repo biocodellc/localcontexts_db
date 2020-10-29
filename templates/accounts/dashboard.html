@@ -17,7 +17,7 @@
                     
                     {% else %}
 
-                    src="{{ user.profile_pic.url }}" 
+                    src="{{ user.profile.profile_pic.url }}" 
                     {% endif %}
                     >
                 </div>
@@ -26,8 +26,8 @@
                     <h2 class="orange-text">{{ user.last_name }} {{ user.first_name }}</h2>
                     <p>
                         Username: {{ user.username }} <br>
-                        Job Title: {{ user.job_title }} <br>
-                        Personal Location: {{ user.city_or_town }} {{ user.country.name }}    
+                        Job Title: {{ user.profile.job_title }} <br>
+                        Personal Location: {{ user.profile.city_or_town }} {{ user.profile.country.name }}    
                     </p>
                 </div>
             </div>

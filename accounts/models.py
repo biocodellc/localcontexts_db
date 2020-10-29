@@ -36,7 +36,7 @@ class Profile(models.Model):
     community_member = models.BooleanField(default=False, null=True)
 
     def __str__(self):
-        return f'{self.user.username}s Profile'
+        return str(self.user)
 
 
 class Community(models.Model):
