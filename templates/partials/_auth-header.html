@@ -1,4 +1,5 @@
 {% load static %}
+
 <header id="auth-header" class="flex-this">
     <div class="generic-logo-container">
         <a href="{% url 'index' %}">
@@ -6,14 +7,13 @@
         </a>
     </div>
     <nav class="generic-nav flex-this">
+        {% if user.is_authenticated %}
         <ul class="flex-this generic-nav-ul">
             <li><a class="white-text upper" href="#">Labels</a></li>
             <li><a class="white-text upper" href="#">Communities</a></li>
             <li><a class="white-text upper" href="#">Institutions & Researchers</a></li>
             <li><a class="white-text upper" href="#">Notices</a></li>
             <li><a class="white-text upper" href="{% url 'about' %}">About</a></li>
-
-            {% if user.is_authenticated %}
 
             <div id="btn-group" class="flex-this">
                 <li><a class="white-text upper" href="{% url 'dashboard' %}">Account</a></li>
@@ -30,7 +30,7 @@
                 <li class="reg"><a class="white-text upper" href="{% url 'register' %}">Register</a></li>
                 <li class="log orange-bg"><a class="upper white-text orange-bg" href="{% url 'login' %}">Sign In</a></li>
             </div>
-            {% endif %}
         </ul>
+        {% endif %}
     </nav>
 </header>
