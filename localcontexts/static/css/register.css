@@ -191,17 +191,6 @@
     width: 90%;
 }
 
-/* Register/Sign in Buttons */
-.action-btn {
-    margin-top: 2%;
-    background-color: #007385;
-    border: none;
-    max-height: 30px;
-    min-height: 30px;
-    border-radius:5px;
-    font-size: 18px;
-}
-
 /* For validate and connect pages */
 .centered-content {
     padding-top: 2%;

@@ -11,23 +11,23 @@
             <div class="row flex-this">
                 <div id="user-icon-container">
                     <img width="150px"
-                    {% if not user.profile_pic %}
+                    {% if not user.profile.profile_pic %}
 
-                    src="https://icon-library.com/images/avatar-icon-png/avatar-icon-png-26.jpg"
+                    src="{% static 'images/profile-pic-placeholder.png' %}"
                     
                     {% else %}
 
-                    src="{{ user.profile_pic.url }}" 
+                    src="{{ user.profile.profile_pic.url }}" 
                     {% endif %}
                     >
                 </div>
         
                 <div class="row user-info">
-                    <h2 class="orange-text">{{ user.last_name }}, {{ user.first_name }}</h2>
+                    <h2 class="orange-text">{{ user.last_name }} {{ user.first_name }}</h2>
                     <p>
                         Username: {{ user.username }} <br>
-                        Job Title: {{ user.job_title }} <br>
-                        Personal Location: {{ user.city_or_town }}, {{ user.country.name }}    
+                        Job Title: {{ user.profile.job_title }} <br>
+                        Personal Location: {{ user.profile.city_or_town }} {{ user.profile.country.name }}    
                     </p>
                 </div>
             </div>
@@ -40,7 +40,7 @@
 
             <div class="member-card flex-this column white-bg">
                 <div class="member-card-img">
-                    <img src="https://picsum.photos/400/190">
+                    <img src="https://picsum.photos/350/150">
                 </div>
                 <div class="member-card-text flex-this column">
                     <h3 class="darkteal-text">Title</h3>
@@ -50,7 +50,7 @@
 
             <div class="member-card flex-this column white-bg">
                 <div class="member-card-img">
-                    <img src="https://picsum.photos/400/190">
+                    <img src="https://picsum.photos/350/150">
                 </div>
                 <div class="member-card-text flex-this column">
                     <h3 class="darkteal-text">Title</h3>
@@ -60,7 +60,7 @@
 
             <div class="member-card flex-this column white-bg">
                 <div class="member-card-img">
-                    <img src="https://picsum.photos/400/190">
+                    <img src="https://picsum.photos/350/150">
                 </div>
                 <div class="member-card-text flex-this column">
                     <h3 class="darkteal-text">Title</h3>
