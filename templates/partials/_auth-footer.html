@@ -1,0 +1,29 @@
+{% load static %}
+
+<footer id="auth-footer-container" class="white-text flex-this column">
+
+    <div id="auth-footer-content">
+        <h4 class="bold">
+            <a class="white-text" href="{% url 'contact' %}"> Contact Us </a> | 
+            <a class="white-text" href="{% url 'about' %}">About Us</a> | 
+            <a class="white-text" href="#">Useful Links</a>
+        </h4>
+
+        <h4 id="underline" class="bold"> Creative Commons License</h4>
+        <p class="landing-p">
+            This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.<br> 
+    
+            All images and marks are subject to copyright and trademark protection. <br>
+    
+            All educational material is being shared collaboratively but does not constitute binding legal advice.
+        </p>
+    
+        <div id="footer-logos" class="flex-this">
+            <img src="{% static 'images/logos/logo.png' %}" alt="local contexts logo">
+            <img src="{% static 'images/logos/neh-logo.png' %}" alt="national endowment for the humanities logo">
+            <img src="{% static 'images/logos/nyu-logo.png' %}" alt="new york university logo">
+            <img src="{% static 'images/logos/wsu-logo.png' %}" alt="washington state university logo">
+        </div>
+    </div>
+
+</footer>
