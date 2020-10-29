@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% load static %} {% block title %} | Login {% endblock %}
-{% block content %} {% include 'partials/_header.html' %}
+{% block content %} {% include 'partials/_reg-header.html' %}
 {% if user.is_authenticated %}
     <h1>You are already logged in.</h1>
 {% else %}
