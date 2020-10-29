@@ -59,7 +59,7 @@ a {
 }
 
 .orange-bg {
-    background-color: #f47d20;
+    background-color: #EF6C00;
 }
 
 .white-bg {
@@ -88,15 +88,26 @@ a {
     flex-direction: column;
 }
 
+/* ACTION Buttons / Register,Sign in, etc. */
+.action-btn {
+    margin-top: 2%;
+    background-color: #007385;
+    border: none;
+    max-height: 30px;
+    min-height: 30px;
+    border-radius:5px;
+    font-size: 18px;
+}
+
 /* LANDING PAGE CONTENT BUTTONS */
 .landing-btn {
     cursor: pointer;
     min-width: 200px;
     max-width: 200px;
     padding: 1%;
-    color: #f47d20;
+    color: #EF6C00;
     background-color: transparent;
-    border: 1px solid #f47d20;
+    border: 1px solid #EF6C00;
     border-radius: 20px;
     font-size: 16px;
 }
