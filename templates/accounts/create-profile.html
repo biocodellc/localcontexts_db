@@ -50,11 +50,25 @@
                 <h2 class="darkteal-text">Create your profile</h2>
                 <p>This information will be kept secure to protect your identity.</p>
     
-                <form action="{% url 'create-profile' %}" method="POST" class="flex-this column">
+                <form action="{% url 'create-profile' %}" method="POST" enctype="multipart/form-data" class="flex-this column">
                     {% csrf_token %}
-                    <div class="flex-this form-elem-group">
-
+                    <div class="flex-this form-elem-group column">
+                        <div class="one">   
+                            {{ user_form }}
+                        </div>
                         <div class="one">
+                            {{ profile_form }}
+
+                            <label for="select">What is the reason for registering?</label><br>
+                            <select>
+                                <option value=""></option>
+                                <option value="reg-community-acct">Register a Community Account</option>
+                                <option value="reg-institution-acct">Register an Institution Account</option>
+                                <option value="reg-research-acct">Register a Research Account</option>
+                            </select> 
+                        </div>
+
+                        <!-- <div class="one">
                             <label for="full_name">Name</label><br>
                             <input type="text" id="full_name" name="full_name">
                         </div>
@@ -78,17 +92,12 @@
                             <label for="location">City, Town, or Provence</label><br>
                             <input type="location" id="location" name="location">    
                         </div>
-                    </div>
-                    <label for="select">What is the reason for registering?</label><br>
-                    <select>
-                        <option value=""></option>
-                        <option value="reg-community-acct">Register a Community Account</option>
-                        <option value="reg-institution-acct">Register an Institution Account</option>
-                        <option value="reg-research-acct">Register a Research Account</option>
-                    </select> 
+                    </div> -->
 
-                    <br>
-                    <button id="continue" class="white-text action-btn">Continue</button>
+
+                    <div>
+                        <button id="continue" class="white-text action-btn">Continue</button>
+                    </div>
                 </form>
             </div>
     
