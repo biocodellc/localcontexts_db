@@ -50,6 +50,7 @@ class Profile(models.Model):
 
 
 class Community(models.Model):
+    image = models.ImageField(upload_to='photos/communities', blank=True, null=True)
     community_name = models.CharField(max_length=80)
     community_code = models.CharField(max_length=80)
     address = models.CharField(max_length=80)
@@ -66,6 +67,7 @@ class Community(models.Model):
         verbose_name_plural = 'Communities'
 
 class Institution(models.Model):
+    image = models.ImageField(upload_to='photos/institutions', blank=True, null=True)
     institution_name = models.CharField(max_length=80)
     institution_code = models.CharField(max_length=80)
     address = models.CharField(max_length=80)
