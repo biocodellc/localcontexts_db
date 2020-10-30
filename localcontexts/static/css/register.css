@@ -1,10 +1,10 @@
 /* Main container */
-#registration-section {
+.gradient-section {
     width: 100%;
     min-height: 550px;
     max-height: 550px;
     justify-content: center;
-    background-image: linear-gradient(to bottom, #3876aa, #2876a5, #18769e, #087697, #007590, #00778d, #007989, #007b85, #008083, #008680, #008a7a, #058f73);
+    background: linear-gradient(to bottom, #3876aa, #2876a5, #18769e, #087697, #007590, #00778d, #007989, #007b85, #008083, #008680, #008a7a, #058f73);
     padding: 1%;
 }
 

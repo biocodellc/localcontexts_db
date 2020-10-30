@@ -30,11 +30,13 @@
 }
 
 #user-affiliation-container {
-    margin: 1% auto;
+    margin: auto;
     min-width: 100%;
     max-width: 100%;
     padding-left: 0;
     padding-right: 0;
+    padding-top: 3%;
+    padding-bottom: 5%;
 }
 
 #user-affiliation-content {
@@ -46,13 +48,16 @@
 }
 
 /* Community member cards */
-.member-card {
+.member-card, .add-card {
     min-height: 265px;
     max-height: 265px;
     min-width: 400px;
     max-width: 400px;
     align-items: center;
-    border-radius: 10px;
+    border-radius: 5px;
+}
+
+.member-card {
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
@@ -70,8 +75,8 @@
     margin: 0;
     padding: 0;
     width: 100%;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .member-card-text {
@@ -84,4 +89,21 @@
     width: 100%;
     margin: 0;
     padding: 1%;
+}
+
+/* Add Workspace card */
+.add-card {
+    border: 2px dashed #7d7d7d;
+    position: relative;
+}
+
+.add-card h2 {
+    position: absolute;
+    color: #A09D9D;
+    min-height: 36px;
+    max-height: 36px;
+    min-width: 264px;
+    max-width: 264px;
+    text-align: center;
+    top: 50px;
 }

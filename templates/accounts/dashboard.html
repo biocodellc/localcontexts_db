@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_header.html' %}
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
 <div class="grey-bg">
 
     <section id="user-info-container" class="white-bg">
@@ -23,7 +23,7 @@
                 </div>
         
                 <div class="row user-info">
-                    <h2 class="orange-text">{{ user.last_name }} {{ user.first_name }}</h2>
+                    <h2 class="orange-text">Kia Ora, {{ user.first_name }}</h2>
                     <p>
                         Username: {{ user.username }} <br>
                         Job Title: {{ user.profile.job_title }} <br>
@@ -38,39 +38,13 @@
     <section id="user-affiliation-container">
         <div id="user-affiliation-content" class="flex-this">
 
-            <div class="member-card flex-this column white-bg">
-                <div class="member-card-img">
-                    <img src="https://picsum.photos/350/150">
-                </div>
-                <div class="member-card-text flex-this column">
-                    <h3 class="darkteal-text">Title</h3>
-                    <p class="upper">Community</p>
-                </div>
-            </div>
-
-            <div class="member-card flex-this column white-bg">
-                <div class="member-card-img">
-                    <img src="https://picsum.photos/350/150">
-                </div>
-                <div class="member-card-text flex-this column">
-                    <h3 class="darkteal-text">Title</h3>
-                    <p class="upper">Community</p>
-                </div>
-            </div>
-
-            <div class="member-card flex-this column white-bg">
-                <div class="member-card-img">
-                    <img src="https://picsum.photos/350/150">
-                </div>
-                <div class="member-card-text flex-this column">
-                    <h3 class="darkteal-text">Title</h3>
-                    <p class="upper">Community</p>
-                </div>
-            </div>
+            {% include 'snippets/dashcard.html'%}
+            {% include 'snippets/dashcard.html'%}
+            {% include 'snippets/add-card.html'%}
 
         </div>
     </section>
 
 </div>
-
+{% include 'partials/_auth-footer.html' %}
 {% endblock %}

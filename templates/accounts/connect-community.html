@@ -1,6 +1,6 @@
-{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_header.html' %}
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_reg-header.html' %}
 
-<section id="registration-section" class="flex-this">
+<section class="flex-this gradient-section">
     <div id="reg-card" class="flex-this row">
 
         <div id="progress-container" class="orange-bg white-text flex-this column">
@@ -11,30 +11,24 @@
             <div id="progress-ul-container" class="flex-this">
                 <ul id="progress-ul" class="flex-this column">
                     <li>
-                        <div class="bullet">
-                            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false"><circle stroke="none" cx="16" cy="16" r="10"></circle></svg>
-                        </div>
-                        Register</li>
+                        {% include 'snippets/bullet.html'%}
+                        Register
+                    </li>
                     <li>
-                        <div class="bullet">
-                            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false"><circle stroke="none" cx="16" cy="16" r="10"></circle></svg>
-                        </div>
-                        Verify Email</li>
+                        {% include 'snippets/bullet.html'%}
+                        Verify Email
+                    </li>
                     <li>
-                        <div class="bullet">
-                            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false"><circle stroke="none" cx="16" cy="16" r="10"></circle></svg>
-                        </div>
-                        Create Your Profile</li>
+                        {% include 'snippets/bullet.html'%}
+                        Create Your Profile
+                    </li>
                     <li>
-                        <div class="bullet big">
-                            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false"><path d="M16 4c6.6 0 12 5.4 12 12s-5.4 12-12 12S4 22.6 4 16 9.4 4 16 4zm0-4C7.2 0 0 7.2 0 16s7.2 16 16 16 16-7.2 16-16S24.8 0 16 0z"></path><circle cx="16" cy="16" r="6"></circle></svg>
-                        </div>
+                        {% include 'snippets/bullet-big.html'%}
                         Connect or Create an Account</li>
                     <li>
-                        <div class="bullet">
-                            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false"><circle stroke="none" cx="16" cy="16" r="10"></circle></svg>
-                        </div>
-                        Start Creating Labels and Notices</li>
+                        {% include 'snippets/bullet.html'%}
+                        Start Creating Labels and Notices
+                    </li>
                 </ul>
             </div>
 
@@ -71,5 +65,5 @@
 </section>
 
 
-{% include 'partials/_footer.html' %}
+{% include 'partials/_reg-footer.html' %}
 {% endblock %}

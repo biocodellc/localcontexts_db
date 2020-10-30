@@ -72,6 +72,10 @@ a {
     line-height: 16.8px;
 }
 
+.bold {
+    font-weight: 500;
+}
+
 .upper {
     text-transform: uppercase;
 }
@@ -293,48 +297,6 @@ section h1 {
 #feature-btns button {
     min-width: 90%;
     padding: 2%;
-}
-
-/* FOOTER */
-#landing-footer-container {
-    margin-top: -24%;
-    background: url('../images/footer-bg.png') no-repeat center center scroll;
-    background-size: 100% 100%;
-    padding-bottom: 2%;
-}
-
-.footer-content {
-    width: 54%; 
-    height: 10%;
-    margin-top: 10%;
-    margin-left: 5%;
-    padding-left: 5%;
-}
-
-#landing-footer-container h1, h4 {
-    font-weight: 300;
-}
-
-#landing-footer-container p {
-    font-size: 12px;
-}
-
-#footer-btn {
-    cursor: pointer;
-    width: 150px;
-    border: 1px solid #fff;
-    border-radius: 20px;
-    padding: 5px;
-}
-
-#footer-logos {
-    justify-content: space-around;
-    align-items: flex-start;
-}
-
-#footer-logos img {
-    height: 70px;
-    padding: 10px;
 }
 
 @media only screen and (max-width: 820px) {
