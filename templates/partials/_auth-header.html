@@ -1,11 +1,9 @@
 {% load static %}
 
 <header id="auth-header" class="flex-this">
-    <div class="generic-logo-container">
-        <a href="{% url 'index' %}">
-            <img class="logo" src="{% static 'images/logos/logo.png' %}">
-        </a>
-    </div>
+
+    {% include 'snippets/header-logo.html' %}
+
     <nav class="generic-nav flex-this">
         {% if user.is_authenticated %}
         <ul class="flex-this generic-nav-ul">

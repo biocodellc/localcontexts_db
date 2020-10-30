@@ -38,35 +38,9 @@
     <section id="user-affiliation-container">
         <div id="user-affiliation-content" class="flex-this">
 
-            <div class="member-card flex-this column white-bg">
-                <div class="member-card-img">
-                    <img src="https://picsum.photos/350/150">
-                </div>
-                <div class="member-card-text flex-this column">
-                    <h3 class="darkteal-text">Title</h3>
-                    <p class="upper">Community</p>
-                </div>
-            </div>
-
-            <div class="member-card flex-this column white-bg">
-                <div class="member-card-img">
-                    <img src="https://picsum.photos/350/150">
-                </div>
-                <div class="member-card-text flex-this column">
-                    <h3 class="darkteal-text">Title</h3>
-                    <p class="upper">Community</p>
-                </div>
-            </div>
-
-            <div class="member-card flex-this column white-bg">
-                <div class="member-card-img">
-                    <img src="https://picsum.photos/350/150">
-                </div>
-                <div class="member-card-text flex-this column">
-                    <h3 class="darkteal-text">Title</h3>
-                    <p class="upper">Community</p>
-                </div>
-            </div>
+            {% include 'snippets/dashcard.html'%}
+            {% include 'snippets/dashcard.html'%}
+            {% include 'snippets/add-card.html'%}
 
         </div>
     </section>
