@@ -47,7 +47,7 @@
         </div>
     
         <div id="complete-form-container" class="flex-this column">
-            <div class="flex-this row top-right">
+            <div class="flex-this row top-right flex-end">
                     <p>Already a Member?<a href="{% url 'login' %}" class="darkteal-text"> Sign in</a></p>
             </div>
 
@@ -71,12 +71,16 @@
                             <input type="text" id="last_name" name="last_name">
                         </div>
                     </div>
-    
-                    <label for="username">Username</label><br>
-                    <input type="text" id="username" name="username" required><br>
-    
-                    <label for="email">Email Address</label><br>
-                    <input type="email" id="email" name="email" required><br>
+                    
+                    <div>
+                        <label for="username">Username</label><br>
+                        <input type="text" id="username" name="username" required><br>    
+                    </div>
+                    
+                    <div>
+                        <label for="email">Email Address</label><br>
+                        <input type="email" id="email" name="email" required><br>    
+                    </div>
     
                     <div class="flex-this form-elem-group">
                         <div class="one">
