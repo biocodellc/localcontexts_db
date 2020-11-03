@@ -175,11 +175,6 @@
     padding-right: 2%;
 }
 
-#checkbox input {
-    max-height: 15px;
-    min-height: 15px;
-}
-
 #checkbox-label {
     width: 90%;
 }

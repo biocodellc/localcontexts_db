@@ -52,12 +52,10 @@
     
                 <form action="{% url 'create-profile' %}" method="POST" enctype="multipart/form-data" class="flex-this column">
                     {% csrf_token %}
-                    <div class="flex-this form-elem-group column">
-                        <div class="one">   
-                            {{ user_form }}
-                        </div>
-                        <div class="one">
-                            {{ profile_form }}
+                    <div class="flex-this column">
+                        <div>   
+                            {{ user_form.as_p }}
+                            {{ profile_form.as_p }}
 
                             <label for="select">What is the reason for registering?</label><br>
                             <select>
