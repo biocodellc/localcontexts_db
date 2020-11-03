@@ -146,6 +146,30 @@ def create_profile(request):
     return render(request, 'accounts/create-profile.html', context)
 
 @login_required
+def update_profile(request):
+    #TODO: add a password reset form
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(
+            request.POST, 
+            request.FILES, 
+            instance=request.user.profile
+        )
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect('dashboard')
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form
+    }
+    return render(request, 'accounts/update-profile.html', context)
+
+@login_required
 def connect_institution(request):
     return render(request, 'accounts/connect-institution.html')
 

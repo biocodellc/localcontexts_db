@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_reg-header.html' %}
+
+{% if user.is_authenticated %}
+
+<section>
+    <div>
+        <form action="{% url 'update-profile' %}" method="POST" enctype="multipart/form-data" class="flex-this column">
+            {% csrf_token %}
+            {{ user_form }}
+            {{ profile_form }}
+            
+            <div>
+                <button class="white-text action-btn">Save</button>
+            </div>
+        </form>
+    </div>
+
+</section>
+
+{% endif %}
+
+{% include 'partials/_auth-footer.html' %}
+{% endblock %}
