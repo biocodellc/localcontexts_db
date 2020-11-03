@@ -5,7 +5,7 @@
     max-height: 550px;
     justify-content: center;
     background: linear-gradient(to bottom, #3876aa, #2876a5, #18769e, #087697, #007590, #00778d, #007989, #007b85, #008083, #008680, #008a7a, #058f73);
-    padding: 1%;
+    padding: 3% 1% 1% 1%;
 }
 
 /* The entire card */

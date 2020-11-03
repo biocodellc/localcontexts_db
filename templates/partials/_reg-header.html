@@ -1,3 +1,4 @@
+<!-- Header for the registration process -->
 {% load static %}
 <header id="reg-header" class="flex-this">
     <div class="generic-logo-container">
@@ -15,21 +16,24 @@
 
             {% if user.is_authenticated %}
 
-            <div id="btn-group" class="flex-this">
-                <li class="reg"><a class="white-text upper" href="{% url 'dashboard' %}">Account</a></li>
-                <li class="white-bg log reg"><a class="upper orange-text" href="javascript:{document.getElementById('logout').submit()}">Sign Out
-                    <form action="{% url 'logout' %}" method="POST" id="logout">
-                        {% csrf_token %}
-                        <input type="hidden">
-                    </form>
-                </a></li>
+            <li><a class="white-text upper" href="{% url 'dashboard' %}">Account</a></li>
+            <div>
+                <li class="flex-this column sign-out white-bg">
+                    <a class="upper orange-text" href="javascript:{document.getElementById('logout').submit()}">
+                        <form action="{% url 'logout' %}" method="POST" id="logout">
+                            {% csrf_token %}
+                            <input type="hidden">
+                        </form>
+                        <span class="nav-span">Sign Out</span>
+                    </a>
+                </li>
             </div>
 
             {% else %}
-            <div id="btn-group" class="flex-this">
-                <li class="reg"><a class="white-text upper" href="{% url 'register' %}">Register</a></li>
-                <li class="log orange-bg"><a class="upper white-text orange-bg" href="{% url 'login' %}">Sign In</a></li>
-            </div>
+                <li><a class="white-text upper" href="{% url 'register' %}">Register</a></li>
+                <div>
+                    <li class="orange-bg sign-in"><a class="upper white-text" href="{% url 'login' %}"><span class="nav-span">Sign In</span></a></li>
+                </div>
             {% endif %}
         </ul>
     </nav>

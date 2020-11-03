@@ -3,9 +3,9 @@
 
 {% block content %}
 
-    <header id="header-container" class="white-bg">
+    <header id="landing-header" class="white-bg">
         
-            <nav class="landing-nav-content upper">
+            <nav class="landing-nav-content flex-this upper">
 
                 <div class="logo-container">
                     <a href="{% url 'index' %}">
@@ -13,7 +13,7 @@
                     </a>
                 </div>
 
-                <ul class="nav-links-ul">
+                <ul class="nav-links-ul flex-this flex-end">
                     {% if user.is_authenticated %}
                         <li><a class="white-text" href="{% url 'index' %}">Home</a></li>
                         <li><a class="white-text" href="{% url 'about' %}">About</a></li>
@@ -22,15 +22,16 @@
                         <li><a class="white-text" href="#">Licenses</a></li>
                         <li><a class="white-text" href="{% url 'contact' %}">Contact</a></li>  
                         <li><a class="white-text" href="{% url 'dashboard' %}">Account</a></li>   
-                        <li class="orange-bg log">
-                            <a class="white-text" href="javascript:{document.getElementById('logout').submit()}">
-                                Sign Out
-                            <form action="{% url 'logout' %}" method="POST" id="logout">
-                                {% csrf_token %}
-                                <input type="hidden">
-                            </form>
-                        </a>
-                    </li>
+                            <li class="flex-this column sign-out white-bg">
+                                <a class="upper orange-text" href="javascript:{document.getElementById('logout').submit()}">
+                                    <form action="{% url 'logout' %}" method="POST" id="logout">
+                                        {% csrf_token %}
+                                        <input type="hidden">
+                                    </form>
+                                    <span class="nav-span">Sign Out</span>
+                                </a>
+                            </li>
+
                     {% else %}
                         <li><a class="white-text" href="{% url 'index' %}">Home</a></li>
                         <li><a class="white-text" href="{% url 'about' %}">About</a></li>
@@ -38,15 +39,15 @@
                         <li><a class="white-text" href="#">Notices</a></li>
                         <li><a class="white-text" href="#">Licenses</a></li>
 
-                        <div id="column-btn" class="column">
-                            <li><a class="white-text" id="register" href="{% url 'register' %}">Register</a></li> 
+                        <div id="column-btn" class="column flex-this flex-end">
+                            <li class="pad-up"><a class="white-text" href="{% url 'register' %}">Register</a></li> 
                             <li><a class="white-text" href="#">TK Label Hub</a></li>
                         </div>  
                     </ul>
         
-                    <div id="btn-container" class="column">
-                        <a id="sign-in-btn" class="orange-bg white-text" href="{% url 'login' %}">Sign In</a>   
-                        <a id="contact-btn" class="white-bg orange-text" href="{% url 'contact' %}">Contact</a>     
+                    <div id="btn-container" class="column flex-this flex-end">
+                        <a class="orange-bg white-text" href="{% url 'login' %}">Sign In</a>   
+                        <a class="white-bg orange-text" href="{% url 'contact' %}">Contact</a>     
                     </div>
                     {% endif %}
             </nav>
