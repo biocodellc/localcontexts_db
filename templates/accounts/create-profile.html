@@ -46,18 +46,50 @@
     
         <div id="complete-form-container" class="flex-this column">
     
-            <div class="form-house flex-this column">
-                <h2 class="darkteal-text">Create your profile</h2>
-                <p>This information will be kept secure to protect your identity.</p>
+            <div class="form-container flex-this column w-90">
+                <div class="form-heading flex-this column w-100">
+                    <h2 class="darkteal-text">Create your profile</h2>
+                    <p>This information will be kept secure to protect your identity.</p>    
+                </div>
     
-                <form action="{% url 'create-profile' %}" method="POST" enctype="multipart/form-data" class="flex-this column">
+                <form action="{% url 'create-profile' %}" method="POST" enctype="multipart/form-data" class="flex-this column w-100">
                     {% csrf_token %}
-                    <div class="flex-this column">
-                        <div>   
-                            {{ user_form.as_p }}
-                            {{ profile_form.as_p }}
+                    <div class="flex-this column w-100">
 
-                            <label for="select">What is the reason for registering?</label><br>
+                        <div class="flex-this row w-100 space-between">
+                            <div class="w-50"> 
+                                <label for="username">Username </label>
+                                    {{ user_form.username }}
+    
+                                <label for="email">Email</label>
+                                    {{ user_form.email }}
+                            </div>
+    
+                            <div class="w-40">
+                                <label for="profile_pic">Profile Pic </label><br>
+                                {{ profile_form.profile_pic }}
+                            </div>
+                        </div>
+
+                        <div class="w-100">
+                            <label for="job_title">Job Title </label>
+                            {{ profile_form.job_title }}
+                        </div>
+
+                        <div class="w-100 flex-this row space-between">
+                            <div class="w-50 country-container">
+                                <label for="country">Country </label><br>
+                                {{ profile_form.country }}
+                            </div>
+    
+                            <div class="w-50 pad-left">
+                                <label for="city_or_town">City or Town </label>
+                                {{ profile_form.city_or_town }}
+                            </div>
+                        </div>
+
+                        <div class="w-100 flex-this column">
+                            <label class="reason-label" for="select">What is the reason for registering?</label><br>
                             <select>
                                 <option value=""></option>
                                 <option value="reg-community-acct">Register a Community Account</option>
@@ -66,35 +98,11 @@
                             </select> 
                         </div>
 
-                        <!-- <div class="one">
-                            <label for="full_name">Name</label><br>
-                            <input type="text" id="full_name" name="full_name">
                         </div>
-
-                        <div class="two">
-                            <label for="username">Username</label><br>
-                            <input type="text" id="username" name="username">
-                        </div>
-                    </div>
-    
-                    <label for="jobtitle">Job Title</label><br>
-                    <input type="text" id="job_title" name="job_title"><br>
-    
-    
-                    <div class="flex-this form-elem-group">
-                        <div class="one">
-                            <label for="country">Country</label><br>
-                            <input type="country" id="country" name="country"><br>
-                        </div>
-                        <div class="two">
-                            <label for="location">City, Town, or Provence</label><br>
-                            <input type="location" id="location" name="location">    
-                        </div>
-                    </div> -->
 
 
                     <div>
-                        <button id="continue" class="white-text action-btn">Continue</button>
+                        <button class="action-btn">Continue</button>
                     </div>
                 </form>
             </div>

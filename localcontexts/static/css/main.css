@@ -32,6 +32,10 @@ section h1 {
     font-weight: 400;
 }
 
+h2 {
+    font-weight: 500;
+}
+
 label {
     font-size: 14px;
     line-height: 16px;
@@ -132,8 +136,29 @@ input[type=checkbox]:checked {
     justify-content: flex-end;
 }
 
+.space-between {
+    justify-content: space-between;
+}
+
+.w-40 {
+    width: 40%;
+}
+
+.w-50 {
+    width: 50%;
+}
+
+.w-90 {
+    width: 90%;
+}
+
+.w-100 {
+    width: 100%;
+}
+
 /* ACTION Buttons / Register,Sign in, etc. */
 .action-btn {
+    color: #fff;
     cursor: pointer;
     margin-top: 2%;
     background-color: #007385;
