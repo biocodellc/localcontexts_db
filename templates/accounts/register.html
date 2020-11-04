@@ -47,43 +47,47 @@
         </div>
     
         <div id="complete-form-container" class="flex-this column">
-            <div class="flex-this row top-right">
+            <div class="flex-this row flex-end w-90">
                     <p>Already a Member?<a href="{% url 'login' %}" class="darkteal-text"> Sign in</a></p>
             </div>
 
             <!-- Alerts -->
             {% include 'partials/_alerts.html' %}
     
-            <div class="form-house flex-this column">
+            <div class="form-container flex-this column w-90">
                 <h2 class="darkteal-text">Register with Local Contexts</h2>
     
-                <form action="{% url 'register' %}" method="POST" class="flex-this column">
+                <form action="{% url 'register' %}" method="POST" class="flex-this column w-100">
                     {% csrf_token %}
-                    <div class="flex-this form-elem-group">
+                    <div class="flex-this w-100">
 
-                        <div class="one">
+                        <div class="pad-right w-50">
                             <label for="first_name">First name</label><br>
                             <input type="text" id="first_name" name="first_name">
                         </div>
 
-                        <div class="two">
+                        <div class="pad-left w-50">
                             <label for="last_name">Last name</label><br>
                             <input type="text" id="last_name" name="last_name">
                         </div>
                     </div>
+                    
+                    <div>
+                        <label for="username">Username</label><br>
+                        <input type="text" id="username" name="username" required><br>    
+                    </div>
+                    
+                    <div>
+                        <label for="email">Email Address</label><br>
+                        <input type="email" id="email" name="email" required><br>    
+                    </div>
     
-                    <label for="username">Username</label><br>
-                    <input type="text" id="username" name="username" required><br>
-    
-                    <label for="email">Email Address</label><br>
-                    <input type="email" id="email" name="email" required><br>
-    
-                    <div class="flex-this form-elem-group">
-                        <div class="one">
+                    <div class="flex-this w-100">
+                        <div class="pad-right w-50">
                             <label for="password">Password</label><br>
                             <input type="password" id="password" name="password" required>    
                         </div>
-                        <div class="two">
+                        <div class="pad-left w-50">
                             <label for="confirm-password">Confirm Password</label><br>
                             <input type="password" name="password2" required>        
                         </div>
@@ -101,7 +105,9 @@
                     </div>
 
                     <br>
-                    <button id="register-new-user-btn" class="white-text action-btn">Register</button>
+                    <div>
+                        <button class="action-btn">Register</button>
+                    </div>
                 </form>
             </div>
     

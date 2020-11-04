@@ -1,19 +1,19 @@
 /* Main container */
 .gradient-section {
     width: 100%;
-    min-height: 550px;
-    max-height: 550px;
     justify-content: center;
     background: linear-gradient(to bottom, #3876aa, #2876a5, #18769e, #087697, #007590, #00778d, #007989, #007b85, #008083, #008680, #008a7a, #058f73);
-    padding: 1%;
+    padding: 3% 1% 1% 1%;
 }
 
 /* The entire card */
 #reg-card {
     justify-content: center;
     border-radius: 5px 5px;
-    max-width: 1000px;
-    min-width: 1000px;
+    max-width: 1200px;
+    min-width: 1200px;
+    min-height: 550px;
+    max-height: 550px;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     background-color: #fff;
 }
@@ -45,7 +45,7 @@
 /* Card Logo */
 .mini-logo-container {
     width: 100%;
-    padding: 5%;
+    padding: 2%;
 }
 
 .mini-logo {
@@ -61,7 +61,7 @@
 #progress-ul {
     align-items: center;
     width: 100%;
-    padding: 2% 5% 3% 1%;
+    padding: 1% 1% 11% 6%;
 }
 
 #progress-ul li {
@@ -70,7 +70,7 @@
     position: relative;
     margin: 0;
     padding-bottom: 2em;
-    padding-left: 5%;
+    padding-left: 4.25%;
     width: 70%;
     font-weight: 400;
 }
@@ -120,53 +120,39 @@
 #progress-bottom-container h2 {
     font-weight: 400;
     text-align: center;
-    padding-top: 8%;
+    padding-top: 7%;
     padding-bottom: 2%;
 }
 
 /* Form Section */
 
-/* "Already a member? Sign in" DIV */
-.top-right {
-    justify-content: flex-end;
-    margin-top: 1%;
-}
-
-.top-right, .form-house {
-    width: 90%;
-}
-
 /* DIV that houses the h4, form and register button */
-.form-house {
+.form-container {
     justify-content: center;
-    padding-bottom: 10%;
 }
 
-.form-house h2 {
-    font-weight: 500;
+.form-heading {
+    padding-bottom: 1.5%;
+}
+
+.form-heading h2 {
+    margin-bottom: 0;
+}
+
+.form-heading p {
+    margin-top: 0;
 }
 
 /* THE FORM ITSELF */
-.form-house form {
+.form-container input {
     width: 100%;
 }
 
-.form-house input {
-    width: 100%;
-    height: 30px;
-}
-
-/* Grouped text-fields (Names, Passwords) */
-.form-elem-group  div {
-    width: 50%;
-    padding-bottom: 1%;
-}
-
-.one {
+.pad-right {
     padding-right: 1.5%;
 }
 
-.two {
+.pad-left {
     padding-left: 1.5%;
 }
 
@@ -180,11 +166,6 @@
 #checkbox {
     width: 5%;
     padding-right: 2%;
-}
-
-#checkbox input {
-    max-height: 15px;
-    min-height: 15px;
 }
 
 #checkbox-label {
@@ -210,4 +191,14 @@
     max-width: 130px;
     min-width: 130px;
     margin: 2% auto 2% auto;
+}
+
+/* Create Profile Page Country Select */
+.country-container select{
+    width: 100%;
+}
+
+/* Register Reason for Registering */
+.reason-label {
+    padding-top:2%;
 }

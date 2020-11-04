@@ -5,12 +5,12 @@
         <div id="user-info-content" class="flex-this column">
 
             <div class="profile-settings flex-this">
-                <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Profile Settings</a>
+                <a href="{% url 'update-profile' %}" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Profile Settings</a>
             </div>
 
             <div class="row flex-this">
-                <div id="user-icon-container">
-                    <img width="150px"
+                <div id="profile-pic-container">
+                    <img
                     {% if not user.profile.profile_pic %}
 
                     src="{% static 'images/profile-pic-placeholder.png' %}"

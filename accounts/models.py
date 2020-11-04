@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from phone_field import PhoneField
+from PIL import Image
 
 class Role(models.Model):
     ADMIN = 1
@@ -37,9 +38,19 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.user)
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        img = Image.open(self.profile_pic.path)
+
+        if img.height > 300 or img.width > 300:
+            output_size=(300, 300)
+            img.thumbnail(output_size)
+            img.save(self.profile_pic.path)
 
 
 class Community(models.Model):
+    image = models.ImageField(upload_to='photos/communities', blank=True, null=True)
     community_name = models.CharField(max_length=80)
     community_code = models.CharField(max_length=80)
     address = models.CharField(max_length=80)
@@ -56,6 +67,7 @@ class Community(models.Model):
         verbose_name_plural = 'Communities'
 
 class Institution(models.Model):
+    image = models.ImageField(upload_to='photos/institutions', blank=True, null=True)
     institution_name = models.CharField(max_length=80)
     institution_code = models.CharField(max_length=80)
     address = models.CharField(max_length=80)

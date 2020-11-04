@@ -6,17 +6,27 @@
 
 #user-info-container {
     margin: auto;
-    padding: 1%;
     max-width: 1280px;
     min-width: 1280px;
-    min-height: 200px;
-    max-height: 200px;
+    min-height: 220px;
+    max-height: 220px;
     border-radius: 10px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
-#user-icon-container {
-    padding-left: 1%;
+/* Profile Img */
+#profile-pic-container {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+#profile-pic-container img {
+    border: 2px solid #fff;
+}
+
+#profile-pic-container, #profile-pic-container img {
+    width: 150px;
+    height: 150px;
+    border-radius: 100px;
 }
 
 .profile-settings {
@@ -26,7 +36,7 @@
 
 .user-info {
     width:100%;
-    padding: 1%;
+    padding-left: 2%;
 }
 
 #user-affiliation-container {
@@ -80,15 +90,14 @@
 }
 
 .member-card-text {
-    padding: 1%;
+    padding: 1% 4% 1% 4%;
     width: 100%;
-    margin-bottom: 1%;
+    margin-bottom: 2%;
 }
 
 .member-card-text h3, .member-card-text p {
     width: 100%;
     margin: 0;
-    padding: 1%;
 }
 
 /* Add Workspace card */
@@ -105,5 +114,14 @@
     min-width: 264px;
     max-width: 264px;
     text-align: center;
-    top: 50px;
+    top: 90px;
+}
+
+/* Profile Settings page */
+.edit-profile-section {
+    align-items: center;
+}
+
+.edit-profile-section input {
+    width: 50%;
 }

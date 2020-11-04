@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 
 from django.contrib.auth.models import User
-from .models import Profile
 from django.views.generic import View
+from .models import Profile
+from .forms import UserUpdateForm, ProfileUpdateForm
 
+# Imports for sending emails
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.conf import settings
@@ -121,17 +123,51 @@ def dashboard(request):
 
 @login_required
 def create_profile(request):
-    # TODO: user profile creation: how to post data to current user's profile.
-    # if request.method == 'POST':
-        # full_name = request.GET[request.user.get_full_name()]
-        # job_title = request.POST['job_title']
-        # country = request.POST['country']
-        # city_or_town = request.POST['city_or_town']
+    if request.method == 'POST':
+        #TODO: add classes to input instances so it's easier to style
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, 
+                                         request.FILES, 
+                                         instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            # TODO: Change this based on what is selected in dropdown.
+            return redirect('dashboard')
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
 
-        # user = Profile.objects.create(job_title=job_title, country=country)
-        # request.user.profile.save()
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form
+    }
 
-    return render(request, 'accounts/create-profile.html')
+    return render(request, 'accounts/create-profile.html', context)
+
+@login_required
+def update_profile(request):
+    #TODO: add a password reset form
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(
+            request.POST, 
+            request.FILES, 
+            instance=request.user.profile
+        )
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect('update-profile')
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form
+    }
+    return render(request, 'accounts/update-profile.html', context)
 
 @login_required
 def connect_institution(request):

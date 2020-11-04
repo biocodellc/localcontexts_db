@@ -11,17 +11,17 @@
         </div>
     
         <div id="complete-form-container" class="flex-this column">
-            <div class="flex-this row top-right">
+            <div class="flex-this row flex-end w-90">
                     <p>Not a Member?<a href="{% url 'register' %}" class="darkteal-text"> Register</a></p>
             </div>
 
             <!-- Alerts -->
             {% include 'partials/_alerts.html' %}
     
-            <div class="form-house flex-this column">
+            <div class="form-container flex-this column w-90">
                 <h2 class="darkteal-text">Sign In with Local Contexts</h2>
     
-                <form action="{% url 'login' %}" method="POST" class="flex-this column">
+                <form action="{% url 'login' %}" method="POST" class="flex-this column w-100">
                     {% csrf_token %}
                     <div>
                         <label>Username</label>
@@ -31,7 +31,9 @@
                         <label>Password</label>
                         <input type="password" name="password" required>
                     </div>
-                    <button id="login-user-btn" class="white-text action-btn">Sign In</button>
+                    <div>
+                        <button class="action-btn">Sign In</button>
+                    </div>
 
                 </form>
             </div>

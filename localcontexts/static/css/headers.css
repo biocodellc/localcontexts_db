@@ -1,9 +1,11 @@
+/* SIGNED IN HEADER */
 #auth-header {
     background: linear-gradient(180.59deg, #016BA7 0.51%, #058F73 134.01%);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     width: 100%;
 }
 
+/* REGISTERING PROCESS HEADER */
 #reg-header {
     background-color: #3876aa;
     width: 100%;
@@ -22,49 +24,43 @@
 
 .generic-nav {
     width: 80%;
-    justify-content: flex-end;
-    padding-right: 1%;
+    justify-content: space-evenly;
 }
 
 .generic-nav-ul {
-    padding: 2%;
-    width: 100%;
-    justify-content: flex-start;
+    width: 90%;
+    justify-content: space-evenly;
     align-items: flex-end;
 }
 
 .generic-nav li {
-    padding: 2% 1% 0.2% 1%;
+    padding: 2% 1% 0 1%;
+    min-width: auto;
+    max-width: auto;
 }
 
 .generic-nav a {
     font-weight: 300;
 }
 
-#btn-group {
-    justify-content: flex-start;
-    min-width: 200px;
-    max-width: 200px;
+.nav-span {
+    font-weight: 600;
+    padding: 1%;
+    min-width: 100px;
+    max-width: 100px;
 }
 
-#btn-group li {
-    padding: 1%;
+.generic-nav div {
+    min-width: 90px;
+    max-width: 90px;
+}
+
+.sign-out, .sign-in {
+    border-radius: 25px;
     text-align: center;
+    padding: 0.5%;
 }
 
-#btn-group a {
-    font-weight: 400;
-}
-
-.reg {
-    width: 50%;
-}
-
-.log {
-    width: 40%;
-    padding: 1%;
-    border-radius: 31px;
-}
 
 @media only screen and (max-width: 820px) {
     #reg-header, .generic-nav-ul {
