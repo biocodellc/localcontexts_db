@@ -10,16 +10,7 @@
 
             <div class="row flex-this">
                 <div id="profile-pic-container">
-                    <img
-                    {% if not user.profile.profile_pic %}
-
-                    src="{% static 'images/profile-pic-placeholder.png' %}"
-                    
-                    {% else %}
-
-                    src="{{ user.profile.profile_pic.url }}" 
-                    {% endif %}
-                    >
+                    <img src="{{ user.profile.profile_pic.url }}" >
                 </div>
         
                 <div class="row user-info">
