@@ -90,15 +90,14 @@
 }
 
 .member-card-text {
-    padding: 1%;
+    padding: 1% 4% 1% 4%;
     width: 100%;
-    margin-bottom: 1%;
+    margin-bottom: 2%;
 }
 
 .member-card-text h3, .member-card-text p {
     width: 100%;
     margin: 0;
-    padding: 1%;
 }
 
 /* Add Workspace card */
@@ -115,5 +114,14 @@
     min-width: 264px;
     max-width: 264px;
     text-align: center;
-    top: 50px;
+    top: 90px;
+}
+
+/* Profile Settings page */
+.edit-profile-section {
+    align-items: center;
+}
+
+.edit-profile-section input {
+    width: 50%;
 }

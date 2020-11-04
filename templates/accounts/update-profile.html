@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
+
+{% if user.is_authenticated %}
+
+<section class="edit-profile-section flex-this column w-100">
+    <div class="flex-this column w-90">
+
+        <div class="form-heading flex-this column w-100">
+            <h2 class="darkteal-text">Update your profile</h2>
+        </div>
+
+        <form action="{% url 'update-profile' %}" method="POST" enctype="multipart/form-data" class="flex-this column w-100">
+            {% csrf_token %}
+
+                <div class="flex-this row w-100">
+                    <div class="w-50"> 
+                        <label for="username">Username </label><br>
+                            {{ user_form.username }}
+                            <br>
+
+                        <label for="email">Email</label><br>
+                            {{ user_form.email }}
+                    </div>
+
+                    <div class="w-40">
+                        <label for="profile_pic">Profile Pic </label><br>
+                        {{ profile_form.profile_pic }}
+                    </div>
+                </div>
+
+                <div>
+                    <label for="job_title">Job Title </label><br>
+                    {{ profile_form.job_title }}
+                </div>
+
+                <div class="flex-this row">
+                    <div class="country-container">
+                        <label for="country">Country </label><br>
+                        {{ profile_form.country }}
+                    </div>
+
+                    <div class="pad-left">
+                        <label for="city_or_town">City or Town </label><br>
+                        {{ profile_form.city_or_town }}
+                    </div>
+                </div>
+
+
+            <div>
+                <button class="white-text action-btn">Save</button>
+            </div>
+        </form>
+    </div>
+
+</section>
+
+{% endif %}
+
+{% include 'partials/_auth-footer.html' %}
+{% endblock %}

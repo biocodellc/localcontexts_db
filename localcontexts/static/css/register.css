@@ -126,40 +126,33 @@
 
 /* Form Section */
 
-/* "Already a member? Sign in" DIV */
-.top-right, .form-house {
-    width: 90%;
-}
-
 /* DIV that houses the h4, form and register button */
-.form-house {
+.form-container {
     justify-content: center;
 }
 
-.form-house h2 {
-    font-weight: 500;
+.form-heading {
+    padding-bottom: 1.5%;
+}
+
+.form-heading h2 {
+    margin-bottom: 0;
+}
+
+.form-heading p {
+    margin-top: 0;
 }
 
 /* THE FORM ITSELF */
-.form-house form, input {
+.form-container input {
     width: 100%;
 }
 
-.form-house input {
-    height: 30px;
-}
-
-/* Grouped text-fields (Names, Passwords) */
-.form-elem-group  div {
-    width: 50%;
-    padding-bottom: 1%;
-}
-
-.one {
+.pad-right {
     padding-right: 1.5%;
 }
 
-.two {
+.pad-left {
     padding-left: 1.5%;
 }
 
@@ -173,11 +166,6 @@
 #checkbox {
     width: 5%;
     padding-right: 2%;
-}
-
-#checkbox input {
-    max-height: 15px;
-    min-height: 15px;
 }
 
 #checkbox-label {
@@ -203,4 +191,14 @@
     max-width: 130px;
     min-width: 130px;
     margin: 2% auto 2% auto;
+}
+
+/* Create Profile Page Country Select */
+.country-container select{
+    width: 100%;
+}
+
+/* Register Reason for Registering */
+.reason-label {
+    padding-top:2%;
 }
