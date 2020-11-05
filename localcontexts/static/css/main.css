@@ -148,6 +148,10 @@ input[type=checkbox]:checked {
     width: 40%;
 }
 
+.w-60 {
+    width: 60%;
+}
+
 .w-50 {
     width: 50%;
 }
@@ -221,5 +225,15 @@ input[type=checkbox]:checked {
 
 .page-not-found-txt, .padded {
     padding: 3%;
+}
+
+.contact-form-container {
+    padding-left: 16%;
+}
+
+.contact-form-container input[type=text] {
+    max-width: 265px;
+    min-width: 265px;
+    border: none;
 }
 
