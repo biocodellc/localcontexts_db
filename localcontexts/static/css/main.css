@@ -219,8 +219,7 @@ input[type=checkbox]:checked {
     padding: 5%;
 }
 
-.page-not-found-txt {
+.page-not-found-txt, .padded {
     padding: 3%;
-
 }
 
