@@ -83,7 +83,7 @@ def login(request):
         if user is not None:
             if not user.last_login:
                 auth.login(request, user)
-                return render(request, 'accounts/create-profile.html')
+                return redirect('create-profile')
             else:
                 auth.login(request, user)
                 return redirect('dashboard')
