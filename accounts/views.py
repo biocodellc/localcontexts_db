@@ -168,11 +168,3 @@ def update_profile(request):
         'profile_form': profile_form
     }
     return render(request, 'accounts/update-profile.html', context)
-
-@login_required
-def connect_institution(request):
-    return render(request, 'accounts/connect-institution.html')
-
-@login_required
-def connect_community(request):
-    return render(request, 'accounts/connect-community.html')
