@@ -4,9 +4,8 @@
     <div id="reg-card" class="flex-this row">
 
         <div id="progress-container" class="orange-bg white-text flex-this column">
-            <div class="mini-logo-container">
-                <img class="mini-logo" src="{% static 'images/logos/lc-logo-mini.png' %}">
-            </div>
+            
+            {% include 'snippets/reg-mini-logo.html'%}
 
             <div id="progress-ul-container" class="flex-this">
                 <ul id="progress-ul" class="flex-this column">
