@@ -5,12 +5,12 @@ from django_countries.fields import CountryField
 
 class Institution(models.Model):
     image = models.ImageField(upload_to='photos/institutions', blank=True, null=True)
-    institution_name = models.CharField(max_length=80)
-    institution_code = models.CharField(max_length=80)
-    address = models.CharField(max_length=80)
-    contact_name = models.CharField(max_length=80)
-    contact_email = models.EmailField(max_length=254)
-    country = CountryField()
+    institution_name = models.CharField(max_length=80, blank=True, null=True)
+    institution_code = models.CharField(max_length=80, blank=True, null=True)
+    address = models.CharField(max_length=80, blank=True, null=True)
+    contact_name = models.CharField(max_length=80, blank=True, null=True)
+    contact_email = models.EmailField(max_length=254, blank=True, null=True)
+    country = CountryField(blank=True, null=True)
     members = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
@@ -21,12 +21,11 @@ class Institution(models.Model):
         verbose_name_plural = 'Institutions'
 
 class UserInstitution(models.Model):
-    name = models.CharField(max_length=10)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
     institution = models.ManyToManyField(Institution, blank=True)
 
     def __str__(self):
-        return self.name
+        return str(self.user)
 
     class Meta:
         verbose_name = 'User Institution'
