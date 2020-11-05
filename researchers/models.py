@@ -14,4 +14,4 @@ class Project(models.Model):
 
 class Researcher(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    project = models.ManyToManyField(Project)
+    project = models.ManyToManyField(Project, blank=True)

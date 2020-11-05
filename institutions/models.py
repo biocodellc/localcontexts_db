@@ -11,7 +11,7 @@ class Institution(models.Model):
     contact_name = models.CharField(max_length=80)
     contact_email = models.EmailField(max_length=254)
     country = CountryField()
-    members = models.ManyToManyField(User)
+    members = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
         return self.institution_name
@@ -23,8 +23,7 @@ class Institution(models.Model):
 class UserInstitution(models.Model):
     name = models.CharField(max_length=10)
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    institution = models.ManyToManyField(Institution)
-    # roles = models.ManyToManyField(Role)
+    institution = models.ManyToManyField(Institution, blank=True)
 
     def __str__(self):
         return self.name

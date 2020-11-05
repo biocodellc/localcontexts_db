@@ -10,7 +10,7 @@ class Community(models.Model):
     contact_name = models.CharField(max_length=80)
     contact_email = models.EmailField(max_length=254)
     country = CountryField()
-    members = models.ManyToManyField(User)
+    members = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
         return self.community_name
@@ -22,8 +22,7 @@ class Community(models.Model):
 class UserCommunity(models.Model):
     name = models.CharField(max_length=10, default='')
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    communities = models.ManyToManyField(Community)
-    # roles = models.ManyToManyField(Role)
+    communities = models.ManyToManyField(Community, blank=True)
 
     def __str__(self):
         return self.name
