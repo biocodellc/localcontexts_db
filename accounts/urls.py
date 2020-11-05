@@ -13,8 +13,6 @@ urlpatterns = [
     path('dashboard', views.dashboard, name='dashboard'),
     path('create-profile', views.create_profile, name='create-profile'),
     path('update-profile', views.update_profile, name='update-profile'),
-    path('connect-institution', views.connect_institution, name="connect-institution"),
-    path('connect-community', views.connect_community, name="connect-community"),
 
     path('reset-password/', 
         auth_views.PasswordResetView.as_view(template_name="accounts/password-reset.html"), 

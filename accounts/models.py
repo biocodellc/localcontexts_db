@@ -3,28 +3,8 @@ from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from phone_field import PhoneField
 from PIL import Image
-# from django.core.files.storage import default_storage as storage
 from django.core.files.storage import default_storage
 from io import BytesIO
-
-class Role(models.Model):
-    ADMIN = 1
-    APPROVER = 2
-    WRITER = 3
-    EDITOR = 4
-    IMPLEMENTOR = 5
-    ROLE_CHOICES = (
-        (ADMIN, 'admin'),
-        (APPROVER, 'approver'),
-        (WRITER, 'writer'),
-        (EDITOR, 'editor'),
-        (IMPLEMENTOR, 'implementor'),
-    )
-
-    id = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, primary_key=True)
-
-    def __str__(self):
-        return self.get_id_display()
 
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
@@ -56,76 +36,3 @@ class Profile(models.Model):
             default_storage.save(self.profile_pic.name, memfile)
             memfile.close()
             img.close()
-
-
-class Community(models.Model):
-    image = models.ImageField(upload_to='photos/communities', blank=True, null=True)
-    community_name = models.CharField(max_length=80)
-    community_code = models.CharField(max_length=80)
-    address = models.CharField(max_length=80)
-    contact_name = models.CharField(max_length=80)
-    contact_email = models.EmailField(max_length=254)
-    country = CountryField()
-    members = models.ManyToManyField(User)
-
-    def __str__(self):
-        return self.community_name
-
-    class Meta:
-        verbose_name = 'Community'
-        verbose_name_plural = 'Communities'
-
-class Institution(models.Model):
-    image = models.ImageField(upload_to='photos/institutions', blank=True, null=True)
-    institution_name = models.CharField(max_length=80)
-    institution_code = models.CharField(max_length=80)
-    address = models.CharField(max_length=80)
-    contact_name = models.CharField(max_length=80)
-    contact_email = models.EmailField(max_length=254)
-    country = CountryField()
-    members = models.ManyToManyField(User)
-
-    def __str__(self):
-        return self.institution_name
-
-    class Meta:
-        verbose_name = 'Institution'
-        verbose_name_plural = 'Institutions'
-
-class UserCommunity(models.Model):
-    name = models.CharField(max_length=10, default='')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    communities = models.ManyToManyField(Community)
-    roles = models.ManyToManyField(Role)
-
-    def __str__(self):
-        return self.name
-    
-    class Meta:
-        verbose_name = 'User Community'
-        verbose_name_plural = 'User Communities'
-
-class UserInstitution(models.Model):
-    name = models.CharField(max_length=10)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
-    institution = models.ManyToManyField(Institution)
-    roles = models.ManyToManyField(Role)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'User Institution'
-        verbose_name_plural = 'User Institutions'
-
-class Project(models.Model):
-    who = models.TextField()
-    when = models.TextField()
-    where = models.TextField()
-    what = models.TextField()
-    abstract = models.TextField()
-    target_species = models.TextField()
-
-    def __str__(self):
-        return self.who
-
