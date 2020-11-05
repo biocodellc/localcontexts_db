@@ -1,0 +1,25 @@
+{% load static %}
+
+<section class="grey-bg">
+
+    <div class="white-bg page-not-found-card content-card">
+
+        <div class="flex-this row page-not-found-content">
+
+            <div class="flex-this column page-not-found-img">
+                <img src="{% static 'images/logos/logo-404.png' %}">
+            </div>
+        
+            <div class="flex-this column page-not-found-txt">
+                <h1 class="orange-text bold">Ooops!</h1> 
+                <h2>We can't seem to find the page you are looking for.</h2>
+                <p>Error code: 404</p>
+        
+                <button class="action-btn" onclick="location.href='/'">Home</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
