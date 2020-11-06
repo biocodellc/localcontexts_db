@@ -1,7 +1,58 @@
 {% extends 'base.html' %} 
 {% block title %} | Contact {% endblock %}
-{% block content %}{% load static %} {% include 'partials/_reg-header.html' %}
+{% load static %}
+{% block content %} {% include 'partials/_reg-header.html' %}
 
-<h1>Contact</h1>
+<section class="grey-bg">
 
+    <div class="content-card white-bg flex-this">
+
+        <div class="orange-bg white-text w-40 padded flex-this justify-center">
+
+            <div class="contact-form-container w-100 flex-this column">
+                <h2>
+                    Say Hello!
+                </h2>
+    
+                <form method="POST">
+                    <!-- Create contact form here -->
+                    <label>Name</label><br>
+                    <input type="text"><br>
+    
+                    <label>Email address</label><br>
+                    <input type="text"><br>
+    
+                    <label>General Inquiry</label><br>
+                    <input type="text"><br>
+    
+                    <label>Message</label><br>
+                    <input type="text"><br>
+    
+                    <button class="action-btn">Send</button>
+
+                </form>
+            </div>
+
+        </div>
+
+        <div class="w-60 padded">
+            <div class="padded">
+                <h3 class="orange-text">Contact us</h3>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tincidunt tortor aliquam nulla facilisi cras fermentum. Purus viverra accumsan in nisl nisi scelerisque. Vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt ornare massa. Suspendisse sed nisi lacus sed viverra tellus in hac habitasse. Volutpat est velit egestas dui id ornare arcu. Sit amet nisl purus in mollis nunc sed id. Vestibulum morbi blandit cursus risus at ultrices mi tempus. 
+                </p>
+    
+                <h3 class="orange-text">Or email us at</h3>
+                <p>
+                    info@localcontexts.org
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% include 'partials/_auth-footer.html' %}
 {% endblock %}

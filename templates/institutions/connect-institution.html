@@ -4,9 +4,7 @@
     <div id="reg-card" class="flex-this row">
 
         <div id="progress-container" class="orange-bg white-text flex-this column">
-            <div class="mini-logo-container">
-                <img class="mini-logo" src="{% static 'images/logos/lc-logo-mini.png' %}">
-            </div>
+            {% include 'snippets/reg-mini-logo.html'%}
 
             <div id="progress-ul-container" class="flex-this">
                 <ul id="progress-ul" class="flex-this column">
@@ -43,20 +41,21 @@
         </div>
     
         <div id="complete-form-container" class="flex-this column">
-
     
             <div class="flex-this column centered-content">
                 <div>
                     <img src="{% static 'images/logos/welcome-logo.png' %}" width="209px">
                 </div>
+
                 <h2 class="darkteal-text">Hello Name, <br> Welcome to Local Contexts</h2>
                 <p>
-                    Before we start would you like to connect with an existing Community or create your own?<br>
+                    Before we start would you like to connect with an existing Institution or create your own?<br>
 
                     <button class="white-text action-btn">Search the Register</button><br>
-                    OR<br>
-                    <button class="white-text action-btn">Create a Community profile</button>
+                    OR <br>
+                    <button class="white-text action-btn">Create an Institution profile</button>
                 </p>
+    
             </div>
     
         </div>
