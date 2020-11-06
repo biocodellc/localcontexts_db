@@ -22,17 +22,17 @@ class Profile(models.Model):
     def __str__(self):
         return str(self.user)
     
-    def save(self, *args, **kwargs):
-        #run save of parent class above to save original image to disk
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     #run save of parent class above to save original image to disk
+    #     super().save(*args, **kwargs)
 
-        memfile = BytesIO()
+    #     memfile = BytesIO()
 
-        img = Image.open(self.profile_pic)
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size, Image.ANTIALIAS)
-            img.save(memfile, 'PNG', quality=95)
-            default_storage.save(self.profile_pic.name, memfile)
-            memfile.close()
-            img.close()
+    #     img = Image.open(self.profile_pic)
+    #     if img.height > 300 or img.width > 300:
+    #         output_size = (300, 300)
+    #         img.thumbnail(output_size, Image.ANTIALIAS)
+    #         img.save(memfile, 'PNG', quality=95)
+    #         default_storage.save(self.profile_pic.name, memfile)
+    #         memfile.close()
+    #         img.close()
