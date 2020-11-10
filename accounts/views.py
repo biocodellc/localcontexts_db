@@ -55,6 +55,7 @@ def register(request):
     
     return render(request, "accounts/register.html", { "form" : form })
 
+# LEAVE THIS FOR NOW
 # def register(request):
 #     if request.method == 'POST':
 #         #Get form values
