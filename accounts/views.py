@@ -146,7 +146,7 @@ class ActivateAccountView(View):
             user.save()
             messages.add_message(request, messages.INFO, 'Account activation successful. You may now log in.')
             return redirect('login')
-        return render(request, 'snippets/activate_failed.html', status=401)
+        return render(request, 'snippets/activate-failed.html', status=401)
 
 def verify(request):
     return render(request, 'accounts/verify.html')

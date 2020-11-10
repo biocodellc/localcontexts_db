@@ -79,24 +79,27 @@
                     <div>
                         <label for="username">Username</label><br>
                         {{form.username}}
+                        <small>{{form.username.help_text}}</small>
                     </div>
                     
                     <div>
                         <label for="email">Email Address</label><br>
                         {{form.email}}
-
                     </div>
     
                     <div class="flex-this w-100">
                         <div class="pad-right w-50">
                             <label for="password">Password</label><br>
                             {{form.password1}}
-
                         </div>
                         <div class="pad-left w-50">
                             <label for="confirm-password">Confirm Password</label><br>
                             {{form.password2}}
                         </div>
+                    </div>
+
+                    <div id="help-text-pw">
+                            <small>{{form.password1.help_text}}</small>
                     </div>
 
                     <div class="flex-this row checkbox-div">
@@ -105,7 +108,7 @@
                         </div>
                         <div id="checkbox-label">
                             <label for="terms-agreement">
-                                Creating an account means you agree with the <a href="#" class="darkteal-text">Term and Conditions</a> and <a href="#" class="darkteal-text">Data Sovereignty Agreement</a>.
+                                Creating an account means you agree with the <a href="#" class="darkteal-text">Terms and Conditions</a> and <a href="#" class="darkteal-text">Data Sovereignty Agreement</a>.
                             </label>
                         </div>
                     </div>
