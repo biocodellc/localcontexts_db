@@ -64,53 +64,49 @@
                     {% csrf_token %}
                     <div class="flex-this w-100">
 
-                        <!-- {{ form }} -->
                         <div class="pad-right w-50">
-                            <!-- <label for="first_name">First name</label><br> -->
+                            <label for="first_name">First name</label><br>
                             <!-- <input type="text" id="first_name" name="first_name"> -->
 
-                            <!-- {{form.first_name}} -->
+                            {{form.first_name}}
                         </div>
 
                         <div class="pad-left w-50">
-                            <!-- <label for="last_name">Last name</label><br> -->
+                            <label for="last_name">Last name</label><br>
                             <!-- <input type="text" id="last_name" name="last_name"> -->
-                            <!-- {{form.last_name}} -->
+                            {{form.last_name}}
 
                         </div>
                     </div>
                     
                     <div>
-                        <!-- <label for="username">Username</label><br> -->
+                        <label for="username">Username</label><br>
                         <!-- <input type="text" id="username" name="username" required><br>     -->
-                        <!-- {{form.username}} -->
-                        {{ form }}
-
+                        {{form.username}}
                     </div>
                     
                     <div>
-                        <!-- <label for="email">Email Address</label><br> -->
+                        <label for="email">Email Address</label><br>
                         <!-- <input type="email" id="email" name="email" required><br>    -->
-                        <!-- {{form.email}} -->
+                        {{form.email}}
 
                     </div>
     
                     <div class="flex-this w-100">
                         <div class="pad-right w-50">
-                            <!-- <label for="password">Password</label><br> -->
+                            <label for="password">Password</label><br>
                             <!-- <input type="password" id="password" name="password" required>     -->
-                            <!-- {{form.password1}} -->
+                            {{form.password1}}
 
                         </div>
                         <div class="pad-left w-50">
-                            <!-- <label for="confirm-password">Confirm Password</label><br> -->
+                            <label for="confirm-password">Confirm Password</label><br>
                             <!-- <input type="password" name="password2" required>         -->
-                            <!-- {{form.password2}} -->
-
+                            {{form.password2}}
                         </div>
                     </div>
 
-                    <!-- <div class="flex-this row checkbox-div">
+                    <div class="flex-this row checkbox-div">
                         <div id="checkbox">
                             <input type="checkbox" id="terms-agreement" name="terms-agreement" required>
                         </div>
@@ -119,7 +115,7 @@
                                 Creating an account means you agree with the <a href="#" class="darkteal-text">Term and Conditions</a> and <a href="#" class="darkteal-text">Data Sovereignty Agreement</a>.
                             </label>
                         </div>
-                    </div> -->
+                    </div>
 
                     <br>
                     <div>

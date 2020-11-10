@@ -5,13 +5,26 @@ from .models import Profile
 # from django.core.exceptions import ValidationError
 
 class RegistrationForm(UserCreationForm):
-    first_name = forms.CharField(label='First name', max_length=150)
-    last_name = forms.CharField(label='Last name', max_length=150)
-    email = forms.EmailField(max_length=200, help_text='Required')
+    first_name = forms.CharField(max_length=50, required=False)
+    last_name = forms.CharField(max_length=50, required=False)
+    email = forms.EmailField(required=True, max_length=150, help_text='Required')
 
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
+    
+    def save(self, commit=True):
+        user = super(RegistrationForm, self).save(commit=False)
+        # Cleans the data so nothing harmful can get passed though the form
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.email = self.cleaned_data['email']
+
+        #if we want to save
+        if commit:
+            user.save()
+
+        return user
 
 
 class UserUpdateForm(forms.ModelForm):

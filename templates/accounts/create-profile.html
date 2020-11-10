@@ -57,6 +57,13 @@
 
                         <div class="flex-this row w-100 space-between">
                             <div class="w-50"> 
+                                <label for="first_name">First Name </label>
+                                    {{ user_form.first_name }}
+    
+                                <label for="last_name">Last Name</label>
+                                    {{ user_form.last_name }}
+                            </div>
+                            <div class="w-50"> 
                                 <label for="username">Username </label>
                                     {{ user_form.username }}
     
@@ -68,6 +75,7 @@
                                 <label for="profile_pic">Profile Pic </label><br>
                                 {{ profile_form.profile_pic }}
                             </div>
+
                         </div>
 
                         <div class="w-100">
