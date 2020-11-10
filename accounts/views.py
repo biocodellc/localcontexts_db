@@ -4,7 +4,7 @@ from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.views.generic import View
 from .models import Profile
-from .forms import UserUpdateForm, ProfileUpdateForm, RegistrationForm
+from .forms import UserUpdateForm, ProfileUpdateForm, RegistrationForm, UserCreateProfile
 
 # Imports for sending emails
 from django.contrib.auth.decorators import login_required
@@ -165,7 +165,7 @@ def dashboard(request):
 def create_profile(request):
     if request.method == 'POST':
         #TODO: add classes to input instances so it's easier to style
-        user_form = UserUpdateForm(request.POST, instance=request.user)
+        user_form = UserCreateProfile(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST, 
                                          request.FILES, 
                                          instance=request.user.profile)
@@ -175,7 +175,7 @@ def create_profile(request):
             # TODO: Change this based on what is selected in dropdown.
             return redirect('dashboard')
     else:
-        user_form = UserUpdateForm(instance=request.user)
+        user_form = UserCreateProfile(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
 
     context = {

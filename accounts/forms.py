@@ -26,7 +26,14 @@ class RegistrationForm(UserCreationForm):
 
         return user
 
+#TODO: Find out if there is a better way to do this.
+#/accounts/create-profile
+class UserCreateProfile(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name']
 
+# updating user instance (same as above but includes email)
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
 
