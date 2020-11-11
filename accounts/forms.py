@@ -28,7 +28,7 @@ class RegistrationForm(UserCreationForm):
 
 #TODO: Find out if there is a better way to do this.
 #/accounts/create-profile
-class UserCreateProfile(forms.ModelForm):
+class UserCreateProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name']
@@ -46,3 +46,21 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['profile_pic', 'job_title', 'city_or_town', 'country']
+
+class RegistrationChoicesForm(forms.Form):
+    REASON = (
+        ('', ''),
+        ('community', 'Register a Community Account'),
+        ('institution', 'Register an Institution Account'),
+        ('research', 'Register a Research Account'),
+    )
+
+    choice_field = forms.ChoiceField(
+        required=True,
+        label='What is the reason for registering?',
+        label_suffix='>',
+        initial='none',
+        # help_text='Choose a reason',
+        error_messages={'required':'Please select the reason', 'invalid_choice': 'Please select a valid choice'},
+        choices=REASON,
+    )

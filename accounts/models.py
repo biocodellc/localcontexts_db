@@ -9,15 +9,14 @@ from io import BytesIO
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     profile_pic = models.ImageField(upload_to='photos/', blank=True, null=True, default='default.png')
-    is_researcher = models.BooleanField(default=False, null=True)
     phone = PhoneField(blank=True, help_text='Contact phone number')
     nationality = models.CharField(verbose_name='nationality', max_length=60, blank=True, null=True)
     country = CountryField(blank=True, null=True)
     city_or_town = models.CharField(verbose_name='city or town', max_length=80, blank=True, null=True)
     job_title = models.CharField(verbose_name='job title', max_length=80, blank=True, null=True)
     affiliation = models.CharField(verbose_name='affiliation', max_length=60, blank=True, null=True)
-    bio = models.TextField(verbose_name='bio', blank=True, null=True)
     community_member = models.BooleanField(default=False, null=True)
+    is_researcher = models.BooleanField(default=False, null=True)
 
     def __str__(self):
         return str(self.user)

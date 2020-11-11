@@ -65,17 +65,10 @@
                                 <label for="username">Username </label>
                                 {{ user_form.username }}
                             </div>
-                            <!-- <div class="w-50"> 
-                                <label for="username">Username </label>
-                                    {{ user_form.username }} -->
-    
-                                <!-- <label for="email">Email</label>
-                                    {{ user_form.email }} -->
-                            <!-- </div> -->
     
                             <div class="w-40">
                                 <label for="profile_pic">Profile Pic </label><br>
-                                {{ profile_form.profile_pic }}
+                                    {{ profile_form.profile_pic }}
                             </div>
 
                         </div>
@@ -98,13 +91,7 @@
                         </div>
 
                         <div class="w-100 flex-this column">
-                            <label class="reason-label" for="select">What is the reason for registering?</label><br>
-                            <select>
-                                <option value=""></option>
-                                <option value="reg-community-acct">Register a Community Account</option>
-                                <option value="reg-institution-acct">Register an Institution Account</option>
-                                <option value="reg-research-acct">Register a Research Account</option>
-                            </select> 
+                            {{ choice_form }}
                         </div>
 
                         </div>
