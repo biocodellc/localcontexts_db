@@ -44,25 +44,42 @@
         <div id="complete-form-container" class="flex-this column">
 
     
-            <div class="flex-this column centered-content">
+            <div class="flex-this column w-90">
                 <div>
-                    <img src="{% static 'images/logos/welcome-logo.png' %}" width="209px">
+                    <p>Indigenous Communities</p>
+                    <h2 class="darkteal-text">Create a Community Profile</h2>    
                 </div>
-                <h2 class="darkteal-text">Hello Name, <br> Welcome to Local Contexts</h2>
-                <p>
-                    Before we start would you like to connect with an existing Community or create your own?<br>
 
-                    <a class="white-text action-btn connect-btn" href="{% url 'community-registry' %}">Search the register</a><br>
-                    OR<br>
-                    <a class="white-text action-btn connect-btn" href="{% url 'create-community' %}">Create a Community profile</a>
-                </p>
+                <form action="{% url 'create-community' %}" method="POST" class="flex-this column w-100">
+                    {% csrf_token %}
+
+                    <label>Community Name</label>
+                    <input type="text" name="" id="">
+
+                    <label>Country (if different from personal country)</label>
+                    <input type="text" name="" id="">
+
+                    <div class="w-50">
+                        <label>Select a Role</label><br>
+                        <select name='role'>
+                            <option value=''></option>
+                            <option value='administrator'>Administrator</option>
+                            <option value='approver'>Approver</option>
+                            <option value='editor'>Editor</option>
+                            <option value='viewer'>Viewer</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <button class="action-btn default-btn">Continue</button>
+                    </div>
+                </form>
+
             </div>
     
         </div>
     </div>
 
 </section>
-
-
 {% include 'partials/_reg-footer.html' %}
 {% endblock %}
