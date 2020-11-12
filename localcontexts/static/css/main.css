@@ -174,10 +174,19 @@ input:focus {
     border: none;
     max-height: 30px;
     min-height: 30px;
-    max-width: 110px;
-    min-width: 110px;
     border-radius: 5px;
     font-size: 14px;
+}
+
+.default-btn {
+    max-width: 110px;
+    min-width: 110px;
+}
+
+/* Width for buttons on connect-researcher, community and institution pages */
+.connect-btn {
+    max-width: 250px;
+    min-width: 250px;
 }
 
 /* LANDING PAGE CONTENT BUTTONS */
