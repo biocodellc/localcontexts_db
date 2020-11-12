@@ -3,8 +3,9 @@ from django.contrib import messages, auth
 
 from django.contrib.auth.models import User
 from django.views.generic import View
+from communities.views import connect_community
 from .models import Profile
-from .forms import RegistrationForm, UserCreateProfileForm, UserUpdateForm, ProfileUpdateForm, RegistrationChoicesForm
+from .forms import RegistrationForm, UserCreateProfileForm, UserUpdateForm, ProfileUpdateForm
 
 # Imports for sending emails
 from django.contrib.auth.decorators import login_required
@@ -116,17 +117,23 @@ def create_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            # TODO: Change this based on what is selected in dropdown.
+
+            # Redirects based on what is selected in the dropdown
+            if request.POST.get('registration_reason') == 'community':
+                return redirect('connect-community')
+            elif request.POST.get('registration_reason') == 'institution':
+                return redirect('connect-institution')
+            elif request.POST.get('registration_reason') == 'researcher':
+                return redirect('connect-researcher')
+
             return redirect('dashboard')
     else:
         user_form = UserCreateProfileForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
-        choice_form = RegistrationChoicesForm()
 
     context = {
         'user_form': user_form,
         'profile_form': profile_form,
-        'choice_form': choice_form
     }
 
     return render(request, 'accounts/create-profile.html', context)
