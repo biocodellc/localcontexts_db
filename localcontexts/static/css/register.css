@@ -215,3 +215,9 @@
     max-width: 450px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
+
+.login-logo {
+    margin: auto;
+    padding: 5%;
+    max-width: 80%;
+}
