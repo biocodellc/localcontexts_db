@@ -144,16 +144,36 @@ input:focus {
     justify-content: center;
 }
 
+.w-10 {
+    width: 10%;
+}
+
+.w-20 {
+    width: 20%;
+}
+
+.w-30 {
+    width: 30%;
+}
+
 .w-40 {
     width: 40%;
+}
+
+.w-50 {
+    width: 50%;
 }
 
 .w-60 {
     width: 60%;
 }
 
-.w-50 {
-    width: 50%;
+.w-70 {
+    width: 70%;
+}
+
+.w-80 {
+    width: 80%;
 }
 
 .w-90 {
@@ -244,5 +264,87 @@ input:focus {
     max-width: 265px;
     min-width: 265px;
     border: none;
+}
+
+.registry-container {
+    /* border: 1px solid red; */
+    margin: auto;
+    width: 95%;
+}
+
+.logo-ahref {
+    /* border: 1px solid lime; */
+}
+
+.registry-title {
+    text-align: center;
+}
+
+.registry-title h2 {
+    margin: 0;
+}
+
+.registry-table-container {
+    margin: auto;
+    margin-top: 0.5%;
+   /* border: 1px solid #000;  */
+   border-top: 1px solid #000; 
+   border-bottom: 1px solid #000; 
+   min-width: 1078px;
+   max-width: 1078px;
+   padding: 1%;
+}
+
+.registry-table {
+    margin: auto;
+    display: block;
+    overflow: auto;
+    min-height: 275px;
+    max-height: 275px;
+    min-width: 1078px;
+    max-width: 1078px;
+    border-collapse: collapse;
+}
+
+.registry-table img {
+    border-radius: 5px;
+}
+
+.registry-table tr {
+    border-bottom: 1px solid black;
+    min-width: 1078px;
+    max-width: 1078px;
+}
+
+.registry-table tr:last-child {
+    border-bottom: none;
+}
+
+.registry-table td {
+     padding: 0.5%;
+     margin: auto;
+}
+
+.td-img {
+    text-align: center;
+    min-width: 210px;
+    max-width: 210px;
+}
+
+.td-name {
+    min-width: 650px;
+    max-width: 650px;
+}
+
+.td-btn {
+    text-align: center;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.td-btn button {
+    align-items: center;
+    min-width: 170px;
+    max-width: 170px;
 }
 

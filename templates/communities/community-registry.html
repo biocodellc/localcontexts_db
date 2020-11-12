@@ -1,8 +1,64 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_reg-header.html' %}
 
-<h1>
-    Community Registry
-</h1>
+<section class="flex-this gradient-section">
+    <div id="reg-card" class="flex-this column">
+
+        <div class="flex-this column registry-container">
+
+            <div class="flex-this row space-between logo-ahref">
+                <div class="w-30">
+                    <img src="{% static 'images/logos/sm-logo-registry.png' %}">
+                </div>
+               <div class="w-30">
+                    <a class="darkteal-text" href="{% url 'create-community' %}">Or create a Community Account</a>
+               </div>
+            </div>
+    
+            <div class="w-100 registry-title flex-this column">
+                <h2 class="darkteal-text">Community Registry</h2>
+                <p>This is a listing of all Indigenous Communities registered with Local Contexts</p>    
+            </div>
+<!-- TODO: Add search bar
+            <div class="w-100">
+                <input type="text" placeholder="Search">
+            </div> -->
+    
+            <div class="registry-table-container">
+                <table class="registry-table">
+                    <tr>
+                        <td class="td-img"><img src="https://picsum.photos/200/75"></td>
+                        <td class="td-name">Community Name One</td>
+                        <td class="td-btn"><button class="action-btn">Rend request to join</button></td>
+                    </tr>
+                    <tr>
+                        <td class="td-img"><img src="https://picsum.photos/200/75"></td>
+                        <td class="td-name">Community Name Two</td>
+                        <td class="td-btn"><button class="action-btn">Rend request to join</button></td>
+                    </tr>
+                    <tr>
+                        <td class="td-img"><img src="https://picsum.photos/200/75"></td>
+                        <td class="td-name">Community Name Three</td>
+                        <td class="td-btn"><button class="action-btn">Rend request to join</button></td>
+                    </tr>
+                    <tr>
+                        <td class="td-img"><img src="https://picsum.photos/200/75"></td>
+                        <td class="td-name">Community Name Four</td>
+                        <td class="td-btn"><button class="action-btn">Rend request to join</button></td>
+                    </tr>
+                    <tr>
+                        <td class="td-img"><img src="https://picsum.photos/200/75"></td>
+                        <td class="td-name">Community Name Five</td>
+                        <td class="td-btn"><button class="action-btn">Rend request to join</button></td>
+                    </tr>
+                </table>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
 
 {% include 'partials/_reg-footer.html' %}
 {% endblock %}
