@@ -10,6 +10,7 @@ class Community(models.Model):
     contact_name = models.CharField(max_length=80, blank=True, null=True)
     contact_email = models.EmailField(max_length=254, blank=True, null=True)
     country = CountryField(blank=True, null=True)
+    is_publicly_listed = models.BooleanField(default=True, null=True)
     members = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
