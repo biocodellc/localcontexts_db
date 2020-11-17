@@ -7,7 +7,7 @@
 }
 
 /* The entire card */
-#reg-card {
+.base-card {
     justify-content: center;
     border-radius: 5px 5px;
     max-width: 1200px;
