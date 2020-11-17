@@ -120,6 +120,14 @@ input:focus {
     text-transform: uppercase;
 }
 
+.center-text {
+    text-align: center;
+}
+
+.auto-margin {
+    margin: auto;
+}
+
 .flex-this {
     display: flex;
 }

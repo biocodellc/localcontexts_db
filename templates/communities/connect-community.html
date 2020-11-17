@@ -43,23 +43,29 @@
     
         <div id="complete-form-container" class="flex-this column">
 
-    
             <div class="flex-this column centered-content">
                 <div>
                     <img src="{% static 'images/logos/welcome-logo.png' %}" width="209px">
                 </div>
+
                 <h2 class="darkteal-text">Hello Name, <br> Welcome to Local Contexts</h2>
                 <p>
-                    Before we start would you like to connect with an existing Community or create your own?<br>
-
-                    <div>
-                        <a class="white-text action-btn connect-btn" href="{% url 'community-registry' %}">Search the register</a><br>
-                    </div>
-                    OR
-                    <div>
-                        <a class="white-text action-btn connect-btn" href="{% url 'create-community' %}">Create a Community profile</a>
-                    </div>
+                    Before we start would you like to connect with an existing Community or create your own?
                 </p>
+
+                <a class="white-text" href="{% url 'community-registry' %}">
+                    <div class="action-btn connect-btn auto-margin" style="padding-top: 5px;">
+                        Search the register
+                    </div>
+                </a>
+
+                OR
+
+                <a class="white-text" href="{% url 'create-community' %}">
+                    <div class="action-btn connect-btn auto-margin" style="padding-top: 5px;">
+                        Create a Community profile
+                    </div>
+                </a>
             </div>
     
         </div>
