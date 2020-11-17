@@ -54,10 +54,10 @@
                     {% csrf_token %}
 
                     <label>Community Name</label>
-                    <input type="text" name="" id="">
+                    {{ form.community_name }}
 
                     <label>Country (if different from personal country)</label>
-                    <input type="text" name="" id="">
+                    {{ form.country }}
 
                     <div class="w-50">
                         <label>Select a Role</label><br>

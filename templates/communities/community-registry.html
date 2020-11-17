@@ -25,31 +25,35 @@
     
             <div class="registry-table-container">
                 <table class="registry-table">
+                    {% if communities %}
+
+                        {% for community in communities %}
+                        <tr>
+                            <td class="td-img"><img src="https://picsum.photos/200/75"></td>
+                            <td class="td-name">{{community.community_name}}</td>
+                            <td class="td-btn"><button class="action-btn">Rend request to join</button></td>
+                        </tr>
+                        {% endfor %}
+
+                    {% else %}
+
                     <tr>
+                        <td class="td-name">No communities available to display at this time</td>
+                    </tr>
+
+                    {% endif %}
+
+                    <!--LEAVE TEMPORARILY FOR TESTING-->
+                    <!-- <tr>
                         <td class="td-img"><img src="https://picsum.photos/200/75"></td>
                         <td class="td-name">Community Name One</td>
                         <td class="td-btn"><button class="action-btn">Rend request to join</button></td>
                     </tr>
                     <tr>
                         <td class="td-img"><img src="https://picsum.photos/200/75"></td>
-                        <td class="td-name">Community Name Two</td>
-                        <td class="td-btn"><button class="action-btn">Rend request to join</button></td>
-                    </tr>
-                    <tr>
-                        <td class="td-img"><img src="https://picsum.photos/200/75"></td>
-                        <td class="td-name">Community Name Three</td>
-                        <td class="td-btn"><button class="action-btn">Rend request to join</button></td>
-                    </tr>
-                    <tr>
-                        <td class="td-img"><img src="https://picsum.photos/200/75"></td>
-                        <td class="td-name">Community Name Four</td>
-                        <td class="td-btn"><button class="action-btn">Rend request to join</button></td>
-                    </tr>
-                    <tr>
-                        <td class="td-img"><img src="https://picsum.photos/200/75"></td>
                         <td class="td-name">Community Name Five</td>
                         <td class="td-btn"><button class="action-btn">Rend request to join</button></td>
-                    </tr>
+                    </tr> -->
                 </table>
             </div>
 
