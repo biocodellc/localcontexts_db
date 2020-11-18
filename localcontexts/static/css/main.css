@@ -275,13 +275,8 @@ input:focus {
 }
 
 .registry-container {
-    /* border: 1px solid red; */
     margin: auto;
     width: 95%;
-}
-
-.logo-ahref {
-    /* border: 1px solid lime; */
 }
 
 .registry-title {
@@ -295,7 +290,6 @@ input:focus {
 .registry-table-container {
     margin: auto;
     margin-top: 0.5%;
-   /* border: 1px solid #000;  */
    border-top: 1px solid #000; 
    border-bottom: 1px solid #000; 
    min-width: 1078px;
