@@ -25,8 +25,10 @@ def create_community(request):
 def community_registry(request):
     communities = Community.objects.all()
 
-    context = {
-        'communities': communities
-    }
+    context = {'communities': communities}
     return render(request, 'communities/community-registry.html', context)
+
+@login_required
+def community_dashboard(request):
+    return render(request, 'communities/community.html')
 

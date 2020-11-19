@@ -1,0 +1,214 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
+    <section class="grey-bg">
+
+        <div class="content-card flex-this column white-bg">
+    
+            <div class="flex-this column stats-full-card">
+    
+                <div class="flex-this w-100 space-between">
+                    <div>
+                        <a href="#" class="darkteal-text">User</a> >> Community Name
+                    </div>
+                    <div>
+                        <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a>
+                    </div>
+                </div>
+    
+                <div class="flex-this stats-info-container">
+    
+                    <div class="w-30 stats-img-container">
+                        <img src="https://picsum.photos/350/150">
+                    </div>
+    
+                    <div class="flex-this column w-40">
+                        <h2 class="orange-text">Community Name</h2>
+                        <p>
+                            Account: <span>User Name - Role</span><br>
+                            Members: <span>00</span><br>
+                            Location: <span>Town, Country</span><br>
+                            Community ID: <span>LCCDMNGM-1820</span>
+                        </p>
+                    </div>
+    
+                    <div class="flex-this white-text w-30">
+                        <div class="orange-bg stats-card w-30">
+                            <h1>17</h1>
+                            <p>Labels</p>
+                        </div>
+    
+                        <div class="orange-bg stats-card w-30">
+                            <h1>04</h1>
+                            <p>Training</p>
+                        </div>
+    
+                        <div class="orange-bg stats-card w-30">
+                            <h1>02</h1>
+                            <p>Relationships</p>
+                        </div>
+                    </div>
+    
+                </div>
+    
+            </div>
+    
+        </div>
+    
+        <div class="content-card comm-nav flex-this column white-bg">
+    
+            <div class="comm-nav-links flex-this">
+                <div>
+                    <a href="#">Activity</a>
+                </div>
+                <div>
+                    <a href="#">Requests</a>
+                </div>
+                <div>
+                    <a href="#">Labels</a>
+                </div>
+                <div>
+                    <a href="#">Relationships</a>
+                </div>
+                <div>
+                    <a href="#">Members</a>
+                </div>
+                <div>
+                    <a href="#">Training</a>
+                </div>
+            </div>
+    
+        </div>
+
+        <div class="activity-card-container content-card flex-this column white-bg">
+            <div>
+                <h3 class="orange-text">Recent Activity</h3>
+            </div>
+
+            <div class="w-100 flex-this space-between">
+
+                <div class="w-30 flex-this recent-act-label-card  white-text">
+
+                    <div class="black-bg blk">
+                        Image
+                    </div>
+                    <div class="orange-bg org">
+                        <span>
+                            Tk Community Use Only (TK C)<br>
+                            Adopted by Miriame Barbarich
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="w-30 flex-this recent-act-label-card  white-text">
+
+                    <div class="black-bg blk">
+                        Image
+                    </div>
+                    <div class="orange-bg org">
+                        <span>
+                            BC Research Use (BC RU)<br>
+                            Adopted by Breila Barbarich
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="w-30 flex-this recent-act-label-card  white-text">
+
+                    <div class="black-bg blk">
+                        Image
+                    </div>
+                    <div class="orange-bg org">
+                        <span>
+                            Tk Community Use Only (TK C)<br>
+                            Adopted by Miriame Barbarich
+                        </span>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="notifications-card content-card flex-this column white-bg">
+            <div>
+                <h3 class="orange-text">Notifications</h3>
+            </div>
+
+            <div class="w-100 flex-this column space-between">
+
+                <div class="flex-this w-100 notification-content">
+                    <div class="w-10">
+                        <span>Requests</span>
+                    </div>
+                    <div class="w-80">
+                        <p>
+                            A BC notice has been placed by Dr.Libby Liggins
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex-this w-100 notification-content">
+                    <div class="w-10">
+                        <span>Labels</span>
+                    </div>
+                    <div class="w-80">
+                        <p>
+                            TK Outreach (TK O) label has been adapted
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex-this w-100 notification-content">
+                    <div class="w-10">
+                        <span>Labels</span>
+                    </div>
+                    <div class="w-80">
+                        <p>
+                            BC Research Use (BC RU) label has replaced a notice
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex-this w-100 notification-content">
+                    <div class="w-10">
+                        <span>Labels</span>
+                    </div>
+                    <div class="w-80">
+                        <p>
+                            TK Secret Sacred (TK SS) label has been edited
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex-this w-100 notification-content">
+                    <div class="w-10">
+                        <span>Relationships</span>
+                    </div>
+                    <div class="w-80">
+                        <p>
+                            A relationship has been created with Te Papa
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex-this w-100 notification-content">
+                    <div class="w-10">
+                        <span>Training</span>
+                    </div>
+                    <div class="w-80">
+                        <p>
+                            Labels 101 Workshop starts in two days
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+
+{% include 'partials/_auth-footer.html' %}
+{% endblock %}

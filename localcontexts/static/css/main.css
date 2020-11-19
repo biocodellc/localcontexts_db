@@ -274,6 +274,8 @@ input:focus {
     border: none;
 }
 
+/* COMMUNITY REGISTRY PAGE (LOGGED IN) */
+
 .registry-container {
     margin: auto;
     width: 95%;
@@ -348,5 +350,123 @@ input:focus {
     align-items: center;
     min-width: 170px;
     max-width: 170px;
+}
+
+/* COMMUNITY DASHBOARD */
+
+.stats-full-card, .activity-card-container, .notifications-card {
+    padding: 1.5%;
+}
+
+.stats-info-container {
+    max-height: 200px;
+    min-height: 200px;
+}
+
+.stats-info-container h1, h2 {
+    margin-bottom: 0;
+}
+
+.activity-card-container h3, .notifications-card h3 {
+    margin-top: 0;
+}
+
+.stats-info-container span {
+    font-weight: 500;
+}
+
+.stats-img-container {
+    margin: auto;
+    text-align: center;
+}
+
+.stats-img-container img {
+    border-radius: 5px;
+}
+
+/* Orange cards on community profiles */
+.stats-card {
+    border-radius: 5px;
+    max-height: 150px;
+    min-height: 150px;
+    min-width: 120px;
+    max-width: 120px;
+    margin: auto;
+    text-align: center;
+}
+
+.comm-nav, .activity-card-container, .notifications-card {
+    margin-top: 1.5%;
+}
+
+.comm-nav {
+    max-height: 60px;
+    min-height: 60px;
+}
+
+.comm-nav-links {
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 1%;
+}
+
+.comm-nav-links div {
+    margin-left: 12px;
+    /* border: 1px solid blue; */
+}
+
+.comm-nav-links a {
+    color: #A09D9D;
+}
+
+.activity-card-container {
+    max-height: 169px;
+    min-height: 169px;
+}
+
+/* recent activity notices */
+.recent-act-label-card {
+    max-width: 360px;
+    min-width: 360px;
+    min-height: 70px;
+    max-height: 70px;
+}
+
+.blk {
+    max-width: 91px;
+    min-width: 91px;
+    background-color: #000;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    text-align: center;
+}
+
+.org {
+    max-width: 270px;
+    min-width: 270px;
+    border-radius: 0px 5px 5px 0px;
+    padding: 2%;
+}
+
+.org span {
+    font-size: 14px;
+}
+
+/* Notifications card */
+.notifications-card {
+    min-height: 526px;
+    max-height: 526px;
+}
+
+.notification-content {
+    margin-bottom: 3%;
+}
+
+.notification-content span {
+    font-weight: 500;
+}
+
+.notification-content p {
+    margin: 0;
 }
 
