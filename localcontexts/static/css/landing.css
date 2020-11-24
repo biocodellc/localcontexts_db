@@ -159,6 +159,8 @@
 
 .card-img-container, .card-img-container img {
     width:100%;
+    min-height: 164px;
+    max-height: 164px;
 }
 
 .card-content h4 {
