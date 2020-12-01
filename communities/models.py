@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
+from django.conf import settings
 
 class Community(models.Model):
-    creator = models.OneToOneField(User, on_delete=models.DO_NOTHING, default=None)
+    community_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     image = models.ImageField(upload_to='photos/communities', blank=True, null=True)
     community_name = models.CharField(max_length=80, blank=True, null=True)
     community_code = models.CharField(max_length=80, blank=True, null=True)
@@ -24,6 +25,9 @@ class Community(models.Model):
 class CommunityMembers(models.Model):
     community = models.OneToOneField(Community, on_delete=models.CASCADE)
     members = models.ManyToManyField(User, blank=True)
+
+    def __str__(self):
+        return str(self.community)
 
 class UserCommunity(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)

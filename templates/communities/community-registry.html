@@ -30,7 +30,7 @@
                         {% for community in communities %}
                         <tr>
                             <td class="td-img"><img src="https://picsum.photos/200/75"></td>
-                            <td class="td-name">{{community.community_name}}</td>
+                            <td class="td-name">{{community.community_name}} {{community.id}}</td>
                             <td class="td-btn"><button class="action-btn">Send request to join</button></td>
                         </tr>
                         {% endfor %}

@@ -3,16 +3,16 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    path('login', views.login, name='login'),
-    path('register', views.register, name='register'),
-    path('logout', views.logout, name='logout'),
+    path('login/', views.login, name='login'),
+    path('register/', views.register, name='register'),
+    path('logout/', views.logout, name='logout'),
 
     path('activate/<uidb64>/<token>', views.ActivateAccountView.as_view(), name='activate'),
-    path('verify', views.verify, name='verify'),
+    path('verify/', views.verify, name='verify'),
 
-    path('dashboard', views.dashboard, name='dashboard'),
-    path('create-profile', views.create_profile, name='create-profile'),
-    path('update-profile', views.update_profile, name='update-profile'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('create-profile/', views.create_profile, name='create-profile'),
+    path('update-profile/', views.update_profile, name='update-profile'),
 
     path('reset-password/', 
         auth_views.PasswordResetView.as_view(template_name="accounts/password-reset.html"), 

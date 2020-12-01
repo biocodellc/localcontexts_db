@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import CreateCommunityForm
 from .models import Community
@@ -15,7 +15,10 @@ def create_community(request):
     if request.method == "POST":
         form = CreateCommunityForm(request.POST)
         if form.is_valid():
-            form.save()
+            obj = form.save(commit=False)
+            obj.community_creator = request.user
+            obj.save()
+            return redirect('community-registry')
 
     context = {'form': form}
     return render(request, 'communities/create-community.html', context)
@@ -31,11 +34,11 @@ def community_registry(request):
 @login_required
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
-    members = community.members.count()
+    # members = community.members.count()
 
     context = {
         'community': community,
-        'members': members,
+        # 'members': members,
     }
     return render(request, 'communities/community.html', context)
 
