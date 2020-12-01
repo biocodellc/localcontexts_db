@@ -13,7 +13,7 @@ class Community(models.Model):
     contact_email = models.EmailField(max_length=254, blank=True, null=True)
     country = CountryField(blank=True, null=True)
     is_publicly_listed = models.BooleanField(default=True, null=True)
-    # members = models.ManyToManyField(User, blank=True)
+    members = models.ManyToManyField(User, blank=True, related_name="members")
 
     def __str__(self):
         return self.community_name
@@ -21,17 +21,6 @@ class Community(models.Model):
     class Meta:
         verbose_name = 'Community'
         verbose_name_plural = 'Communities'
-
-class CommunityMembers(models.Model):
-    community = models.OneToOneField(Community, on_delete=models.CASCADE)
-    members = models.ManyToManyField(User, blank=True)
-
-    def __str__(self):
-        return str(self.community)
-    
-    class Meta:
-        verbose_name = 'Community Members'
-        verbose_name_plural = 'Community Members'
 
 class UserCommunity(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)

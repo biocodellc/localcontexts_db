@@ -34,11 +34,11 @@ def community_registry(request):
 @login_required
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
-    # members = community.members.count()
+    members = community.members.count()
 
     context = {
         'community': community,
-        # 'members': members,
+        'members': members,
     }
     return render(request, 'communities/community.html', context)
 
