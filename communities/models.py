@@ -3,15 +3,16 @@ from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 
 class Community(models.Model):
+    creator = models.OneToOneField(User, on_delete=models.DO_NOTHING, default=None)
     image = models.ImageField(upload_to='photos/communities', blank=True, null=True)
     community_name = models.CharField(max_length=80, blank=True, null=True)
     community_code = models.CharField(max_length=80, blank=True, null=True)
-    address = models.CharField(max_length=80, blank=True, null=True)
+    town = models.CharField(max_length=80, blank=True, null=True)
     contact_name = models.CharField(max_length=80, blank=True, null=True)
     contact_email = models.EmailField(max_length=254, blank=True, null=True)
     country = CountryField(blank=True, null=True)
     is_publicly_listed = models.BooleanField(default=True, null=True)
-    members = models.ManyToManyField(User, blank=True)
+    # members = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
         return self.community_name
@@ -19,6 +20,10 @@ class Community(models.Model):
     class Meta:
         verbose_name = 'Community'
         verbose_name_plural = 'Communities'
+
+class CommunityMembers(models.Model):
+    community = models.OneToOneField(Community, on_delete=models.CASCADE)
+    members = models.ManyToManyField(User, blank=True)
 
 class UserCommunity(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
