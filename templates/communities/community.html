@@ -7,7 +7,7 @@
     
                 <div class="flex-this w-100 space-between">
                     <div>
-                        <a href="#" class="darkteal-text">User</a> >> Community Name
+                        <a href="#" class="darkteal-text">User</a> >> {{ community.community_name }}
                     </div>
                     <div>
                         <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i>Settings</a>
@@ -21,11 +21,11 @@
                     </div>
     
                     <div class="flex-this column w-40">
-                        <h2 class="orange-text">Community Name</h2>
+                        <h2 class="orange-text">{{ community.community_name }} </h2>
                         <p>
                             Account: <span>User Name - Role</span><br>
-                            Members: <span>00</span><br>
-                            Location: <span>Town, Country</span><br>
+                            Members: <span>{{ members }}</span><br>
+                            Location: <span>Town, {{ community.country.name }} </span><br>
                             Community ID: <span>LCCDMNGM-1820</span>
                         </p>
                     </div>

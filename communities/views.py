@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from .forms import CreateCommunityForm
 from .models import Community
@@ -29,6 +29,13 @@ def community_registry(request):
     return render(request, 'communities/community-registry.html', context)
 
 @login_required
-def community_dashboard(request):
-    return render(request, 'communities/community.html')
+def community_dashboard(request, pk):
+    community = Community.objects.get(id=pk)
+    members = community.members.count()
+
+    context = {
+        'community': community,
+        'members': members,
+    }
+    return render(request, 'communities/community.html', context)
 
