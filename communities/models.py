@@ -28,6 +28,10 @@ class CommunityMembers(models.Model):
 
     def __str__(self):
         return str(self.community)
+    
+    class Meta:
+        verbose_name = 'Community Members'
+        verbose_name_plural = 'Community Members'
 
 class UserCommunity(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
