@@ -18,4 +18,3 @@ passwordField.addEventListener('focusin', (event) => {
 passwordField.addEventListener('focusout', (event) => {
     helpTextDiv.style.display = 'none' 
 })
-  

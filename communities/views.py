@@ -42,3 +42,14 @@ def community_dashboard(request, pk):
     }
     return render(request, 'communities/community.html', context)
 
+@login_required
+def community_members(request, pk):
+    community = Community.objects.get(id=pk)
+    members = community.members
+
+    context = {
+        'community': community,
+        'members': members,
+    }
+
+    return render(request, 'communities/members.html')
