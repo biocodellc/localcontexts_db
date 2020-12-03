@@ -153,11 +153,10 @@ def update_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.add_message(request, messages.INFO, 'Profile Updated!')
+            messages.add_message(request, messages.SUCCESS, 'Profile Updated!')
             return redirect('update-profile')
         else:
-            messages.add_message(request, messages.INFO, 'Something went wrong')
-            print(user_form.errors)
+            messages.add_message(request, messages.ERROR, 'Form was not validated')
             return redirect('update-profile')
     else:
         user_form = UserUpdateForm(instance=request.user)
