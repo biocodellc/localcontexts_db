@@ -14,6 +14,7 @@
     
                     <div class="flex-this row w-100">
                         <div class="w-50"> 
+                            <!-- {{ user_form }} -->
                             <label for="username">Username </label><br>
                                 {{ user_form.username }}
                                 <br>
@@ -29,18 +30,19 @@
                         </div>
     
                         <div class="w-40">
-                            <label for="profile_pic">Profile Pic </label><br>
-                            {{ profile_form.profile_pic }}
+                            <!-- <label for="profile_pic">Profile Pic </label><br>
+                            {{ profile_form.profile_pic }} -->
+                            {{ profile_form }}
                         </div>
                     </div>
     
-                    <div>
+                    <!-- <div>
     
                         <label for="job_title">Job Title </label><br>
                         {{ profile_form.job_title }}
-                    </div>
+                    </div> -->
     
-                    <div class="flex-this row">
+                    <!-- <div class="flex-this row">
                         <div class="country-container">
                             <label for="country">Country </label><br>
                             {{ profile_form.country }}
@@ -50,9 +52,10 @@
                             <label for="city_or_town">City or Town </label><br>
                             {{ profile_form.city_or_town }}
                         </div>
-                    </div>
+                    </div> -->
     
-    
+                    {% include 'partials/_alerts.html' %}
+
                 <div>
                     <button class="white-text action-btn default-btn">Save</button>
                 </div>

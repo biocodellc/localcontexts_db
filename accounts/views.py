@@ -111,9 +111,11 @@ def create_profile(request):
     if request.method == 'POST':
         #TODO: add classes to input instances so it's easier to style
         user_form = UserCreateProfileForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, 
-                                         request.FILES, 
-                                         instance=request.user.profile)
+        profile_form = ProfileUpdateForm(
+            request.POST, 
+            request.FILES, 
+            instance=request.user.profile
+        )
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -151,6 +153,11 @@ def update_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            messages.add_message(request, messages.INFO, 'Profile Updated!')
+            return redirect('update-profile')
+        else:
+            messages.add_message(request, messages.INFO, 'Something went wrong')
+            print(user_form.errors)
             return redirect('update-profile')
     else:
         user_form = UserUpdateForm(instance=request.user)
