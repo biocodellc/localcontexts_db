@@ -4,6 +4,8 @@ from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.views.generic import View
 from communities.views import connect_community
+from communities.models import UserCommunity
+
 from .models import Profile
 from .forms import RegistrationForm, UserCreateProfileForm, UserUpdateForm, ProfileUpdateForm
 
@@ -104,7 +106,20 @@ def logout(request):
 
 @login_required
 def dashboard(request):
-    return render(request, "accounts/dashboard.html")
+    user_has_community = UserCommunity.objects.filter(user=request.user).exists()
+
+    if user_has_community:
+        current_user = UserCommunity.objects.get(user=request.user)
+        user_communities = current_user.communities.all()
+
+        context = { 
+            'current_user': current_user,
+            'user_communities': user_communities,
+        }
+        return render(request, "accounts/dashboard.html", context)
+    else:
+        return render(request, "accounts/dashboard.html")
+
 
 @login_required
 def create_profile(request):

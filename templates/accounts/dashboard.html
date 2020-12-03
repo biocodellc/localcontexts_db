@@ -31,11 +31,24 @@
         </div>
     </section>
 
+
     <section id="user-affiliation-container">
         <div id="user-affiliation-content" class="flex-this">
 
-            {% include 'snippets/dashcard.html'%}
-            {% include 'snippets/dashcard.html'%}
+            {% if user_communities %}
+                {% for community in user_communities %}
+                <div class="member-card flex-this column white-bg">
+                    <div class="member-card-img">
+                        <img src="https://picsum.photos/350/150">
+                    </div>
+                    <div class="member-card-text flex-this column">
+                        <h3 class="darkteal-text">{{ community }}</h3>
+                        <p class="upper">Community</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+
             {% include 'snippets/add-card.html'%}
 
         </div>

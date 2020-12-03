@@ -23,8 +23,8 @@ class Community(models.Model):
         verbose_name_plural = 'Communities'
 
 class UserCommunity(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
-    communities = models.ManyToManyField(Community, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
+    communities = models.ManyToManyField(Community, blank=True, related_name="user_communities")
 
     def __str__(self):
         return str(self.user)
