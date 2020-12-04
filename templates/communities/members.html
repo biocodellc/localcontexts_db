@@ -82,15 +82,21 @@
                     </div>
             
                 {% endfor %}
-                <a href="#">
-                    <div class="flex-this add-member-card">
-                        <div class="w-100 add-member">
-                            <h4 class="darkteal-text bold">+ Add Member </h4>
+
+                {% if community.community_creator == request.user %}
+
+                    <a href="#">
+                        <div class="flex-this add-member-card">
+                            <div class="w-100 add-member">
+                                <h4 class="darkteal-text bold">+ Add Member </h4>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+
+                {% endif %}
 
             {% else %}
+            
             <a href="#">
                 <div class="flex-this add-member-card">
                     <div class="w-100 add-member">
