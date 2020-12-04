@@ -37,15 +37,17 @@
 
             {% if user_communities %}
                 {% for community in user_communities %}
-                <div class="member-card flex-this column white-bg">
-                    <div class="member-card-img">
-                        <img src="https://picsum.photos/350/150">
+                <a href="{% url 'community-dashboard' community.id %}">
+                    <div class="member-card flex-this column white-bg">
+                        <div class="member-card-img">
+                            <img src="https://picsum.photos/350/150">
+                        </div>
+                        <div class="member-card-text flex-this column">
+                            <h3 class="darkteal-text">{{ community }}</h3>
+                            <p class="upper black-text">Community</p>
+                        </div>
                     </div>
-                    <div class="member-card-text flex-this column">
-                        <h3 class="darkteal-text">{{ community }}</h3>
-                        <p class="upper">Community</p>
-                    </div>
-                </div>
+                </a>
                 {% endfor %}
             {% endif %}
 
