@@ -56,9 +56,8 @@
     </div>
 
     <div class="content-card comm-nav flex-this column white-bg">
-
         <div class="comm-nav-links flex-this">
-            <div><a href="#">Activity</button></div>
+            <div><a href="{% url 'community-dashboard' community.id %}">Activity</button></div>
             <div><a href="#">Requests</a></div>
             <div><a href="#">Labels</a></div>
             <div><a href="#">Relationships</a></div>
@@ -68,10 +67,20 @@
     </div>
 
     <div>
-        <div class="content-card white-bg">
             {% if all_members %}
                 {% for member in all_members %}
-                    {{ member.first_name }}
+
+                    <div class="content-card white-bg flex-this community-member-card">
+                        <div class="orange-bg color-section">
+                        </div>
+                        <div class="w-90 member-name">
+                            <h4 class="bold">{{ member.first_name }} {{ member.last_name }}</h4>
+                        </div>
+                        <div class="w-20 member-role">
+                            <h4>Member Role</h4>
+                        </div>
+                    </div>
+            
                 {% endfor %}
 
             {% else %}
