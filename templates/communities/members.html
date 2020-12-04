@@ -69,7 +69,17 @@
     </div>
 
     <div>
-        <h1>Members Page</h1>
+        <div class="content-card white-bg">
+            {% if all_members %}
+                {% for member in all_members %}
+                    {{ member.first_name }}
+                {% endfor %}
+
+            {% else %}
+
+                <h4>This community does not have any members yet.</h4>
+            {% endif %}
+        </div>
     </div>
     
 </section>

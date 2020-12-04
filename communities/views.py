@@ -27,7 +27,6 @@ def create_community(request):
 @login_required
 def community_registry(request):
     communities = Community.objects.all()
-
     context = {'communities': communities}
     return render(request, 'communities/community-registry.html', context)
 
@@ -45,11 +44,11 @@ def community_dashboard(request, pk):
 @login_required
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
-    members = community.members
+    all_members = community.members.all()
 
     context = {
         'community': community,
-        'members': members,
+        'all_members': all_members,
     }
 
-    return render(request, 'communities/members.html')
+    return render(request, 'communities/members.html', context)
