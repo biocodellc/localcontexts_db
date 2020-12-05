@@ -11,10 +11,13 @@ if (dismissBtn) {
 // Password fields in registration form
 const passwordField = document.getElementById('id_password1')
 const helpTextDiv = document.getElementById('help-text-pw')
-passwordField.addEventListener('focusin', (event) => {
-    helpTextDiv.style.display = 'block' 
-  })
 
-passwordField.addEventListener('focusout', (event) => {
-    helpTextDiv.style.display = 'none' 
-})
+if (passwordField ) {
+    passwordField.addEventListener('focusin', (event) => {
+        helpTextDiv.style.display = 'block' 
+      })
+    
+    passwordField.addEventListener('focusout', (event) => {
+        helpTextDiv.style.display = 'none' 
+    })
+}

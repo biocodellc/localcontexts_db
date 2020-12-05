@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import CreateCommunityForm
+from .forms import *
 from .models import Community
 
 @login_required
@@ -46,9 +46,12 @@ def community_members(request, pk):
     community = Community.objects.get(id=pk)
     all_members = community.members.all()
 
+    form = AddCommunityMember()
+
     context = {
         'community': community,
         'all_members': all_members,
+        'form': form,
     }
 
     return render(request, 'communities/members.html', context)
