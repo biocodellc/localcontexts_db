@@ -21,3 +21,19 @@ if (passwordField ) {
         helpTextDiv.style.display = 'none' 
     })
 }
+
+function addMemberModal() {
+    let x = document.getElementById("add-member-modal");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+
+    let c = document.getElementById('close-modal')
+    c.addEventListener('click', () => {
+        x.style.display = "none"
+    })
+}
+
+

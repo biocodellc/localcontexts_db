@@ -511,6 +511,41 @@ input:focus {
     min-width: 1280px;
     border-radius: 10px;
     text-align: center;
+    cursor: pointer;
 }
+
+.add-member-modal, .close-modal-btn {
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    overflow: auto;
+    background-color: #fff;
+    width: 800px;
+    height: 570px;
+    border-radius: 5px;
+}
+
+.add-member-modal-content {
+    background-color: #fefefe;
+    margin: 7% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+}
+
+.close-modal-btn {
+    text-align: right;
+}
+
+.mem-select select {
+    width: 100%;
+}
+
 
 
