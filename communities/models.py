@@ -26,6 +26,11 @@ class UserCommunity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
     communities = models.ManyToManyField(Community, blank=True, related_name="user_communities")
 
+    @classmethod
+    def create(cls, user):
+        obj = cls(user=user)
+        return obj
+
     def __str__(self):
         return str(self.user)
     

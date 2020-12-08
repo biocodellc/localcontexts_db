@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import *
-from .models import Community
+from .models import *
 
 @login_required
 def connect_community(request):

@@ -135,6 +135,10 @@ def create_profile(request):
             user_form.save()
             profile_form.save()
 
+            # Creates an instance of user community
+            x = UserCommunity.create(user=request.user)
+            x.save()
+
             # Redirects based on what is selected in the dropdown
             if request.POST.get('registration_reason') == 'community':
                 return redirect('connect-community')
