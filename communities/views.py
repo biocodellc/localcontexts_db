@@ -3,11 +3,11 @@ from django.contrib.auth.decorators import login_required
 from .forms import *
 from .models import *
 
-@login_required
+@login_required(login_url='login')
 def connect_community(request):
     return render(request, 'communities/connect-community.html')
 
-@login_required
+@login_required(login_url='login')
 def create_community(request):
 
     form = CreateCommunityForm()
@@ -24,13 +24,13 @@ def create_community(request):
     return render(request, 'communities/create-community.html', context)
 
 
-@login_required
+@login_required(login_url='login')
 def community_registry(request):
     communities = Community.objects.all()
     context = {'communities': communities}
     return render(request, 'communities/community-registry.html', context)
 
-@login_required
+@login_required(login_url='login')
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
 
@@ -44,7 +44,7 @@ def community_dashboard(request, pk):
     }
     return render(request, 'communities/community.html', context)
 
-@login_required
+@login_required(login_url='login')
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
 

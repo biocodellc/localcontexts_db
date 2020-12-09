@@ -98,13 +98,13 @@ class ActivateAccountView(View):
 def verify(request):
     return render(request, 'accounts/verify.html')
     
-@login_required
+@login_required(login_url='login')
 def logout(request):
     if request.method == 'POST':
         auth.logout(request)
         return redirect('index')
 
-@login_required
+@login_required(login_url='login')
 def dashboard(request):
     # Checks to see if the user has an instance of UserCommunity 
     # (which should have been auto-created in the create-profile view)
@@ -131,7 +131,7 @@ def dashboard(request):
     else:
         return render(request, "accounts/dashboard.html")
 
-@login_required
+@login_required(login_url='login')
 def users_view(request, pk):
     target_user = User.objects.get(id=pk)
     x = UserCommunity.objects.get(id=pk)  
@@ -143,7 +143,7 @@ def users_view(request, pk):
     }
     return render(request, 'accounts/users.html', context)
 
-@login_required
+@login_required(login_url='login')
 def create_profile(request):
     if request.method == 'POST':
         #TODO: add classes to input instances so it's easier to style
@@ -181,7 +181,7 @@ def create_profile(request):
 
     return render(request, 'accounts/create-profile.html', context)
 
-@login_required
+@login_required(login_url='login')
 def update_profile(request):
     #TODO: add a password reset form
     if request.method == 'POST':
