@@ -131,6 +131,17 @@ def dashboard(request):
     else:
         return render(request, "accounts/dashboard.html")
 
+@login_required
+def users_view(request, pk):
+    target_user = User.objects.get(id=pk)
+    x = UserCommunity.objects.get(id=pk)  
+    user_communities = x.communities.all()
+
+    context = {
+        'target_user': target_user,
+        'user_communities': user_communities,
+    }
+    return render(request, 'accounts/users.html', context)
 
 @login_required
 def create_profile(request):

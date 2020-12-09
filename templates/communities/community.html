@@ -7,7 +7,7 @@
     
                 <div class="flex-this w-100 space-between">
                     <div>
-                        <a href="#" class="darkteal-text">{{ community.community_creator.first_name }}</a> >> {{ community.community_name }}
+                        <a href="{% url 'users' community.community_creator.id %}" class="darkteal-text">{{ community.community_creator.first_name }}</a> >> {{ community.community_name }}
                     </div>
                     <div>
                         <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
