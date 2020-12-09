@@ -110,6 +110,14 @@ input:focus {
     background-color: #fff;
 }
 
+.darkteal-bg {
+    background-color: #007385;
+}
+
+.darkgreen-bg {
+    background-color: #058F73;
+}
+
 .landing-p {
     font-size: 15px;
     font-weight: 300;
