@@ -9,4 +9,4 @@ class CreateCommunityForm(forms.ModelForm):
 class AddCommunityMember(forms.ModelForm):
     class Meta:
         model = Community
-        fields = ['members']
+        fields = ['viewers', 'editors']

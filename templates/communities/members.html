@@ -24,9 +24,9 @@
                     <h2 class="orange-text">{{ community.community_name }} </h2>
                     <p>
                         Account: <span> 
-                            {{ community.community_creator.first_name }} | Role
+                            {{ administrator.first_name }} {{ administrator.last_name }} | Administrator
                         </span><br>
-                        Members: <span>{{ all_members.count }}</span><br>
+                        Members: <span>{{ total_members }}</span><br>
                         Location: <span>Town, {{ community.country.name }} </span><br>
                         Community ID: <span>LCCDMNGM-1820</span>
                     </p>
@@ -67,38 +67,9 @@
     </div>
 
     <div>
-            {% if all_members %}
-                {% for member in all_members %}
-
-                    <div class="content-card white-bg flex-this community-member-card">
-                        <div class="orange-bg color-section">
-                        </div>
-                        <div class="w-90 member-name">
-                            <h4 class="bold">{{ member.first_name }} {{ member.last_name }}</h4>
-                        </div>
-                        <div class="w-20 member-role">
-                            <h4>Member Role</h4>
-                        </div>
-                    </div>
-            
-                {% endfor %}
-
-            {% else %}
-
-                {% if community.community_creator == request.user %}
-
-                <a href="#">
-                    <div class="flex-this add-member-card">
-                        <div class="w-100 add-member">
-                            <h4 class="darkteal-text bold">+ Add Member </h4>
-                        </div>
-                    </div>
-                </a>
-
-                {% endif %}
 
                 <!--TODO:SET UP MODAL CODE TO ADD USERS IF CURRENT USER IS ADMIN-->
-                
+
             <!-- <a onclick='addMemberModal()'>
                 <div class="flex-this add-member-card">
                     <div class="w-100 add-member">
@@ -107,7 +78,54 @@
                 </div>
             </a> -->
 
-            {% endif %}
+            <div class="content-card white-bg flex-this community-member-card">
+                <div class="orange-bg color-section">
+                </div>
+                <div class="w-90 member-name">
+                    <h4 class="bold">{{ administrator.first_name }} {{ administrator.last_name }}</h4>
+                </div>
+                <div class="w-20 member-role">
+                    <h4>Administrator</h4>
+                </div>
+            </div>
+
+            {% for editor in all_editors %}
+                <div class="content-card white-bg flex-this community-member-card">
+                    <div class="orange-bg color-section">
+                    </div>
+                    <div class="w-90 member-name">
+                        <h4 class="bold">{{ editor.first_name }} {{ editor.last_name }}</h4>
+                    </div>
+                    <div class="w-20 member-role">
+                        <h4>Editor</h4>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% for viewer in all_viewers %}
+            <div class="content-card white-bg flex-this community-member-card">
+                <div class="orange-bg color-section">
+                </div>
+                <div class="w-90 member-name">
+                    <h4 class="bold">{{ viewer.first_name }} {{ viewer.last_name }}</h4>
+                </div>
+                <div class="w-20 member-role">
+                    <h4>Viewer</h4>
+                </div>
+            </div>
+        {% endfor %}
+
+        {% if administrator == request.user %}
+
+        <a href="#">
+            <div class="flex-this add-member-card">
+                <div class="w-100 add-member">
+                    <h4 class="darkteal-text bold">+ Add Member </h4>
+                </div>
+            </div>
+        </a>
+
+        {% endif %}
 
     </div>
 

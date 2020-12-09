@@ -13,7 +13,9 @@ class Community(models.Model):
     contact_email = models.EmailField(max_length=254, blank=True, null=True)
     country = CountryField(blank=True, null=True)
     is_publicly_listed = models.BooleanField(default=True, null=True)
-    members = models.ManyToManyField(User, blank=True, related_name="members")
+    editors = models.ManyToManyField(User, blank=True, related_name="editors")
+    viewers = models.ManyToManyField(User, blank=True, related_name="viewers")
+
 
     def __str__(self):
         return self.community_name

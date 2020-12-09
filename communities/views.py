@@ -33,24 +33,37 @@ def community_registry(request):
 @login_required
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
-    members = community.members.count()
+
+    editors = community.editors.count()
+    viewers = community.viewers.count()
+    total_members = editors + viewers + 1
 
     context = {
         'community': community,
-        'members': members,
+        'total_members': total_members,
     }
     return render(request, 'communities/community.html', context)
 
 @login_required
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
-    all_members = community.members.all()
+
+    administrator = community.community_creator
+    all_editors = community.editors.all()
+    all_viewers = community.viewers.all()
+
+    editors = community.editors.count()
+    viewers = community.viewers.count()
+    total_members = editors + viewers + 1
 
     form = AddCommunityMember()
 
     context = {
         'community': community,
-        'all_members': all_members,
+        'total_members': total_members,
+        'administrator': administrator,
+        'all_viewers': all_viewers,
+        'all_editors': all_editors,
         'form': form,
     }
 
