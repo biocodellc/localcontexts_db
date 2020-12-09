@@ -4,7 +4,7 @@ from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.views.generic import View
 from communities.views import connect_community
-from communities.models import UserCommunity
+from communities.models import Community, UserCommunity
 
 from .models import Profile
 from .forms import RegistrationForm, UserCreateProfileForm, UserUpdateForm, ProfileUpdateForm
@@ -106,7 +106,18 @@ def logout(request):
 
 @login_required
 def dashboard(request):
+    # Checks to see if the user has an instance of UserCommunity 
+    # (which should have been auto-created in the create-profile view)
     user_has_community = UserCommunity.objects.filter(user=request.user).exists()
+
+    # Checks to see if any communities have been created by the current user 
+    # and adds them to the UserCommunity instance
+    target_communitites = Community.objects.filter(community_creator=request.user)
+
+    for x in target_communitites:
+        target_user = UserCommunity.objects.get(user=request.user)
+        target_user.communities.add(x.id)
+        target_user.save()
 
     if user_has_community:
         current_user = UserCommunity.objects.get(user=request.user)
