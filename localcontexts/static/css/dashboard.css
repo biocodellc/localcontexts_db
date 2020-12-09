@@ -28,7 +28,7 @@
     padding-left: 2%;
 }
 
-#user-affiliation-container {    
+#user-affiliation-container { 
     margin: auto;
     min-width: 100%;
     max-width: 100%;
@@ -40,11 +40,17 @@
 
 #user-affiliation-content {
     flex-wrap: wrap;
-    min-width: 1280px;
-    max-width: 1280px;
-    justify-content: space-between;
+    min-width: 1305px;
+    max-width: 1305px;
     margin: auto;
     padding: 0;
+}
+
+.member-card-container {
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+    padding-bottom: 2%;
+    width: 33.3%;
 }
 
 /* Community member cards */
@@ -94,7 +100,7 @@
 
 /* Add Workspace card */
 .add-card {
-    margin-top: 6%;
+    margin-top: 2%;
     margin-bottom: 2%;
     border: 2px dashed #7d7d7d;
     position: relative;
