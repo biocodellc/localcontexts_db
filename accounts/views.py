@@ -6,6 +6,7 @@ from django.views.generic import View
 from communities.views import connect_community
 from communities.models import Community, UserCommunity
 
+from .decorators import *
 from .models import Profile
 from .forms import RegistrationForm, UserCreateProfileForm, UserUpdateForm, ProfileUpdateForm
 
@@ -19,7 +20,7 @@ from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeEr
 from .utils import generate_token
 from django.contrib.sites.shortcuts import get_current_site
 
-
+@unauthenticated_user
 def register(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)
@@ -58,6 +59,7 @@ def register(request):
     
     return render(request, "accounts/register.html", { "form" : form })
 
+@unauthenticated_user
 def login(request):
     if request.method == 'POST':
         # email = request.POST['email']
@@ -95,6 +97,7 @@ class ActivateAccountView(View):
             return redirect('login')
         return render(request, 'snippets/activate-failed.html', status=401)
 
+@unauthenticated_user
 def verify(request):
     return render(request, 'accounts/verify.html')
     
@@ -105,6 +108,8 @@ def logout(request):
         return redirect('index')
 
 @login_required(login_url='login')
+# Example of custom decorator to allow specific roles to view the dash
+# @allowed_users(allowed_roles=['admin', 'editor'])
 def dashboard(request):
     # Checks to see if the user has an instance of UserCommunity 
     # (which should have been auto-created in the create-profile view)
@@ -156,10 +161,6 @@ def create_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-
-            # Creates an instance of user community
-            x = UserCommunity.create(user=request.user)
-            x.save()
 
             # Redirects based on what is selected in the dropdown
             if request.POST.get('registration_reason') == 'community':

@@ -1,8 +1,6 @@
 {% extends 'base.html' %} {% load static %} {% block title %} | Login {% endblock %}
 {% block content %} {% include 'partials/_reg-header.html' %}
-{% if user.is_authenticated %}
-    <h1>You are already logged in.</h1>
-{% else %}
+
 <section class="flex-this gradient-section">
     <div class="base-card flex-this">
 
@@ -48,5 +46,4 @@
 </section>
 
 {% include 'partials/_reg-footer.html' %}
-{% endif %}
 {% endblock %}

@@ -1,7 +1,5 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_reg-header.html' %}
-{% if user.is_authenticated %}
-    <h1>You do not have access to this page. :)</h1>
-{% else %}
+
 <section class="flex-this gradient-section">
     <div class="base-card flex-this row">
 
@@ -64,5 +62,4 @@
 
 
 {% include 'partials/_reg-footer.html' %}
-{% endif%}
 {% endblock %}
