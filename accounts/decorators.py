@@ -1,8 +1,5 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect
- 
-# a function that takes in another function as a parameter 
-# and lets us add more functionality before the desired function is called.
 
 def unauthenticated_user(view_func):
     def wrapper_func(request, *args, **kwargs):

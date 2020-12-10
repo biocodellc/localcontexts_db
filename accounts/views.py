@@ -111,17 +111,13 @@ def logout(request):
 # Example of custom decorator to allow specific roles to view the dash
 # @allowed_users(allowed_roles=['admin', 'editor'])
 def dashboard(request):
-    # Checks to see if the user has an instance of UserCommunity 
-    # (which should have been auto-created in the create-profile view)
     user_has_community = UserCommunity.objects.filter(user=request.user).exists()
-
-    # Checks to see if any communities have been created by the current user 
-    # and adds them to the UserCommunity instance
     target_communitites = Community.objects.filter(community_creator=request.user)
 
+    # Checks to see if any communities have been created by the current user 
     for x in target_communitites:
         target_user = UserCommunity.objects.get(user=request.user)
-        target_user.communities.add(x.id)
+        target_user.communities.add(x.id)    # and adds them to the UserCommunity instance
         target_user.save()
 
     if user_has_community:
