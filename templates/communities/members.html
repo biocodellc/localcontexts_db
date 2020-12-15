@@ -68,16 +68,6 @@
 
     <div>
 
-                <!--TODO:SET UP MODAL CODE TO ADD USERS IF CURRENT USER IS ADMIN-->
-
-            <!-- <a onclick='addMemberModal()'>
-                <div class="flex-this add-member-card">
-                    <div class="w-100 add-member">
-                        <h4 class="darkteal-text bold">+ Add Member </h4>
-                    </div>
-                </div>
-            </a> -->
-
             <div class="content-card white-bg flex-this community-member-card">
                 <div class="orange-bg color-section">
                 </div>
@@ -117,13 +107,23 @@
 
         {% if administrator == request.user %}
 
-        <a href="#">
+        <!-- <a href="#">
             <div class="flex-this add-member-card">
                 <div class="w-100 add-member">
                     <h4 class="darkteal-text bold">+ Add Member </h4>
                 </div>
             </div>
-        </a>
+        </a> -->
+
+            <!--TODO:SET UP MODAL CODE TO ADD USERS IF CURRENT USER IS ADMIN-->
+
+            <a onclick='addMemberModal()'>
+                <div class="flex-this add-member-card">
+                    <div class="w-100 add-member">
+                        <h4 class="darkteal-text bold">+ Add Member </h4>
+                    </div>
+                </div>
+            </a>
 
         {% endif %}
 
@@ -138,7 +138,7 @@
           <h4 class="bold">Add Members to <span class="darkteal-text">{{community.community_name}}</span></h4>
       </div>
       <div class="w-100 member-modal-form flex-this column">
-        <form action="POST">
+        <!-- <form action="POST" action="{% url 'members' community.id %}">
             {% csrf_token %}
             
             <div>
@@ -157,9 +157,14 @@
             </div>
 
             <div> 
-                {{ form.members.label }} <br>
+                {{ form.editors.label }} <br>
                 <div class="mem-select">
-                    {{ form.members }}
+                    {{ form.editors }}
+                </div>
+
+                {{ form.viewers.label }} <br>
+                <div class="mem-select">
+                    {{ form.viewers }}
                 </div>
 
                 <p>- All members have access to create and manage the labels.</p>
@@ -168,7 +173,7 @@
             <div>
                 <button class="action-btn">Send Invitation </button>
             </div>
-          </form>
+          </form> -->
       </div>
 
   </div>
