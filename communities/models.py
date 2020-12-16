@@ -16,9 +16,20 @@ class Community(models.Model):
     editors = models.ManyToManyField(User, blank=True, related_name="editors")
     viewers = models.ManyToManyField(User, blank=True, related_name="viewers")
 
+    def get_member_count(self):
+        editors = self.editors.count()
+        viewers = self.viewers.count()
+        total_members = editors + viewers + 1
+        return total_members
+    
+    def get_editors(self):
+        return self.editors.all()
+    
+    def get_viewers(self):
+        return self.viewers.all()
 
     def __str__(self):
-        return self.community_name
+        return str(self.community_name)
 
     class Meta:
         verbose_name = 'Community'
@@ -40,4 +51,23 @@ class UserCommunity(models.Model):
         verbose_name = 'User Community'
         verbose_name_plural = 'User Communities'
 
+class InviteMember(models.Model):
+    STATUS_CHOICES = (
+        ('sent', 'sent'),
+        ('accepted', 'accepted'),
+    )
 
+    ROLES = (
+        ('editor', 'editor'),
+        ('viewer', 'viewer'),
+    )
+
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
+    role = models.CharField(max_length=8, choices=ROLES, null=True)
+    status = models.CharField(max_length=8, choices=STATUS_CHOICES)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.sender}-{self.receiver}-{self.status}"

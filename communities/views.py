@@ -33,15 +33,10 @@ def community_registry(request):
 @login_required(login_url='login')
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
-
     administrator = community.community_creator
-    editors = community.editors.count()
-    viewers = community.viewers.count()
-    total_members = editors + viewers + 1
 
     context = {
         'community': community,
-        'total_members': total_members,
         'administrator': administrator,
     }
     return render(request, 'communities/community.html', context)
@@ -49,23 +44,13 @@ def community_dashboard(request, pk):
 @login_required(login_url='login')
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
-
     administrator = community.community_creator
-    all_editors = community.editors.all()
-    all_viewers = community.viewers.all()
-
-    editors = community.editors.count()
-    viewers = community.viewers.count()
-    total_members = editors + viewers + 1
 
     form = AddCommunityMember()
 
     context = {
         'community': community,
-        'total_members': total_members,
         'administrator': administrator,
-        'all_viewers': all_viewers,
-        'all_editors': all_editors,
         'form': form,
     }
 

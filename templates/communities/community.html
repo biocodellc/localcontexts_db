@@ -26,7 +26,7 @@
                             Account: <span> 
                                 {{ administrator.first_name }} {{ administrator.last_name }} | Administrator
                             </span><br>
-                            Members: <span>{{ total_members }}</span><br>
+                            Members: <span>{{ community.get_member_count }}</span><br>
                             Location: <span>Town, {{ community.country.name }} </span><br>
                             Community ID: <span>LCCDMNGM-1820</span>
                         </p>
