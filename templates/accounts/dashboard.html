@@ -29,6 +29,18 @@
             </div>
 
         </div>
+
+    </section>
+
+    <section>
+        <div class="white-bg content-card padded">
+            {% if notifications.count > 0 %}
+                <h3>Notifications</h3>
+                {% for n in notifications %}
+                    <p><a href="{% url 'show' n.id %}">{{ n.title }}</a></p>
+                {% endfor %}
+            {% endif %}
+        </div>
     </section>
 
 

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.views.generic import View
 from communities.views import connect_community
 from communities.models import Community, UserCommunity
+from notifications.models import UserNotification
 
 from .decorators import *
 from .models import Profile
@@ -111,6 +112,8 @@ def logout(request):
 # Example of custom decorator to allow specific roles to view the dash
 # @allowed_users(allowed_roles=['admin', 'editor'])
 def dashboard(request):
+    n = UserNotification.objects.filter(user=request.user, viewed=False)
+
     user_has_community = UserCommunity.objects.filter(user=request.user).exists()
     target_communitites = Community.objects.filter(community_creator=request.user)
 
@@ -127,6 +130,7 @@ def dashboard(request):
         context = { 
             'current_user': current_user,
             'user_communities': user_communities,
+            'notifications': n,
         }
         return render(request, "accounts/dashboard.html", context)
     else:

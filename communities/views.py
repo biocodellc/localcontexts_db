@@ -34,15 +34,8 @@ def community_registry(request):
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
 
-    administrator = community.community_creator
-    editors = community.editors.count()
-    viewers = community.viewers.count()
-    total_members = editors + viewers + 1
-
     context = {
         'community': community,
-        'total_members': total_members,
-        'administrator': administrator,
     }
     return render(request, 'communities/community.html', context)
 
@@ -50,23 +43,29 @@ def community_dashboard(request, pk):
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
 
-    administrator = community.community_creator
-    all_editors = community.editors.all()
-    all_viewers = community.viewers.all()
-
-    editors = community.editors.count()
-    viewers = community.viewers.count()
-    total_members = editors + viewers + 1
-
-    form = AddCommunityMember()
-
     context = {
         'community': community,
-        'total_members': total_members,
-        'administrator': administrator,
-        'all_viewers': all_viewers,
-        'all_editors': all_editors,
-        'form': form,
     }
 
     return render(request, 'communities/members.html', context)
+
+@login_required(login_url='login')
+def add_members(request, pk):
+    community = Community.objects.get(id=pk)
+    form = InviteMemberForm()
+
+    if request.method == "POST":
+        form = InviteMemberForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.sender = request.user
+            obj.status = 'sent'
+            obj.community = community
+            obj.save()
+            return redirect('dashboard')
+
+    context = {
+        'form': form,
+        'community': community,
+    }
+    return render(request, 'communities/add-member.html', context)
