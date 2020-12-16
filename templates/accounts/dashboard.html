@@ -32,16 +32,17 @@
 
     </section>
 
-    <section>
-        <div class="white-bg content-card padded">
-            {% if notifications.count > 0 %}
-                <h3>Notifications</h3>
-                {% for n in notifications %}
-                    <p><a href="{% url 'show' n.id %}">{{ n.title }}</a></p>
-                {% endfor %}
-            {% endif %}
-        </div>
-    </section>
+    {% if notifications.count > 0 %}
+        <section>
+            <div class="white-bg content-card padded">
+                
+                    <h3 class="orange-text">Notifications</h3>
+                    {% for n in notifications %}
+                        <p><a href="{% url 'show' n.id %}">{{ n.title }}</a></p>
+                    {% endfor %}
+            </div>
+        </section>
+    {% endif %}
 
 
     <section id="user-affiliation-container">
