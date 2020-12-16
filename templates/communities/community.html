@@ -24,7 +24,7 @@
                         <h2 class="orange-text">{{ community.community_name }} </h2>
                         <p>
                             Account: <span> 
-                                {{ administrator.first_name }} {{ administrator.last_name }} | Administrator
+                                {{ community.community_creator.first_name }} {{ community.community_creator.last_name }} | Administrator
                             </span><br>
                             Members: <span>{{ community.get_member_count }}</span><br>
                             Location: <span>Town, {{ community.country.name }} </span><br>

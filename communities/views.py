@@ -33,22 +33,22 @@ def community_registry(request):
 @login_required(login_url='login')
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
-    administrator = community.community_creator
+    # administrator = community.community_creator
 
     context = {
         'community': community,
-        'administrator': administrator,
+        # 'administrator': administrator,
     }
     return render(request, 'communities/community.html', context)
 
 @login_required(login_url='login')
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
-    administrator = community.community_creator
+    # administrator = community.community_creator
 
     context = {
         'community': community,
-        'administrator': administrator,
+        # 'administrator': administrator,
     }
 
     return render(request, 'communities/members.html', context)

@@ -13,15 +13,20 @@ class Community(models.Model):
     contact_email = models.EmailField(max_length=254, blank=True, null=True)
     country = CountryField(blank=True, null=True)
     is_publicly_listed = models.BooleanField(default=True, null=True)
+    admins = models.ManyToManyField(User, blank=True, related_name="admins")
     editors = models.ManyToManyField(User, blank=True, related_name="editors")
     viewers = models.ManyToManyField(User, blank=True, related_name="viewers")
 
     def get_member_count(self):
+        admins = self.admins.count()
         editors = self.editors.count()
         viewers = self.viewers.count()
-        total_members = editors + viewers + 1
+        total_members = admins + editors + viewers + 1
         return total_members
-    
+        
+    def get_admins(self):
+        return self.admins.all()
+
     def get_editors(self):
         return self.editors.all()
     
