@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>{{ notification.title }}</h3>
+<p>{{ notification.message }}</p>
+<p><a href="{% url 'delete' notification.id %}">Mark as Read</a></p>
+
+{% endblock %}

@@ -30,17 +30,21 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1', 'localcontexts.herokuapp.com']
 # Application definition
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
+    'notifications.apps.NotificationsConfig',
+
     'pages',
     'communities',
     'institutions',
     'researchers',
-    'django_countries',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django_countries',
     'phone_field',
     'django_cleanup',
     'storages',
