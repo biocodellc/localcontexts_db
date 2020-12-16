@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
+
+<form action="POST" action="{% url 'add-members' community.id %}">
+    {% csrf_token %}
+
+    {{ form }}
+    
+    <!-- <div>
+        <label>Email Address</label><br>
+        <input type="text" class="w-100">
+    </div>
+
+    <div>
+        <label>Select Their Role</label><br>
+        <input type="email" class="w-100">
+    </div>
+
+    <div>
+        <label>Output Message</label><br>
+        <input type="text"  class="w-100"> <br>
+    </div> -->
+
+    <div> 
+        <p>- All members have access to create and manage the labels.</p>
+    </div>
+    
+    <div>
+        <button class="action-btn">Send Invitation </button>
+    </div>
+  </form>
+
+  {% include 'partials/_auth-footer.html' %}
+{% endblock %}

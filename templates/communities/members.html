@@ -107,77 +107,27 @@
 
         {% if administrator == request.user %}
 
-        <!-- <a href="#">
+        <a href="{% url 'add-members' community.id %}">
             <div class="flex-this add-member-card">
                 <div class="w-100 add-member">
                     <h4 class="darkteal-text bold">+ Add Member </h4>
                 </div>
             </div>
-        </a> -->
+        </a>
 
             <!--TODO:SET UP MODAL CODE TO ADD USERS IF CURRENT USER IS ADMIN-->
 
-            <a onclick='addMemberModal()'>
+            <!-- <a onclick='addMemberModal()'>
                 <div class="flex-this add-member-card">
                     <div class="w-100 add-member">
                         <h4 class="darkteal-text bold">+ Add Member </h4>
                     </div>
                 </div>
-            </a>
+            </a> -->
 
         {% endif %}
 
     </div>
-
-<div id="add-member-modal" class="modal">
-
-  <div class="add-member-modal-content flex-this column w-100">
-
-      <div id="close-modal" class="close-modal-btn w-100 upper">Close <span>&times;</span></div>
-      <div>
-          <h4 class="bold">Add Members to <span class="darkteal-text">{{community.community_name}}</span></h4>
-      </div>
-      <div class="w-100 member-modal-form flex-this column">
-        <!-- <form action="POST" action="{% url 'members' community.id %}">
-            {% csrf_token %}
-            
-            <div>
-                <label>Email Address</label><br>
-                <input type="text" class="w-100">
-            </div>
-
-            <div>
-                <label>Select Their Role</label><br>
-                <input type="email" class="w-100">
-            </div>
-
-            <div>
-                <label>Output Message</label><br>
-                <input type="text"  class="w-100"> <br>
-            </div>
-
-            <div> 
-                {{ form.editors.label }} <br>
-                <div class="mem-select">
-                    {{ form.editors }}
-                </div>
-
-                {{ form.viewers.label }} <br>
-                <div class="mem-select">
-                    {{ form.viewers }}
-                </div>
-
-                <p>- All members have access to create and manage the labels.</p>
-            </div>
-            
-            <div>
-                <button class="action-btn">Send Invitation </button>
-            </div>
-          </form> -->
-      </div>
-
-  </div>
-</div>
     
 </section>
 

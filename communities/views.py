@@ -46,12 +46,30 @@ def community_members(request, pk):
     community = Community.objects.get(id=pk)
     administrator = community.community_creator
 
-    form = AddCommunityMember()
-
     context = {
         'community': community,
         'administrator': administrator,
-        'form': form,
     }
 
     return render(request, 'communities/members.html', context)
+
+@login_required(login_url='login')
+def add_members(request, pk):
+    community = Community.objects.get(id=pk)
+    form = InviteMemberForm()
+
+    if request.method == "POST":
+        form = InviteMemberForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.sender = request.user
+            obj.status = 'sent'
+            obj.community = community.community_name
+            obj.save()
+            return redirect('add-members')
+
+    context = {
+        'form': form,
+        'community': community,
+    }
+    return render(request, 'communities/add-member.html', context)

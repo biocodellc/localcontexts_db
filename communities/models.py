@@ -64,6 +64,7 @@ class InviteMember(models.Model):
 
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community', null=True)
     role = models.CharField(max_length=8, choices=ROLES, null=True)
     status = models.CharField(max_length=8, choices=STATUS_CHOICES)
     updated = models.DateTimeField(auto_now=True)
