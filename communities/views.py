@@ -64,9 +64,9 @@ def add_members(request, pk):
             obj = form.save(commit=False)
             obj.sender = request.user
             obj.status = 'sent'
-            obj.community = community.community_name
+            obj.community = community
             obj.save()
-            return redirect('add-members')
+            return redirect('dashboard')
 
     context = {
         'form': form,

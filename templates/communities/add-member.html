@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
 
-<form action="POST" action="{% url 'add-members' community.id %}">
+<form method="POST" action="{% url 'add-members' community.id %}">
     {% csrf_token %}
 
     {{ form }}
