@@ -10,15 +10,14 @@ def create_welcome_message(sender, instance, created, **kwargs):
     if created:
         UserNotification.objects.create(user=instance, title="Welcome", message="You have joined")
 
-post_save.connect(create_welcome_message, sender=User)
-
 # When the instance of invite member form is saved, send target user a notification
 @receiver(post_save, sender=InviteMember)
 def send_community_invite(sender, instance, created, **kwargs):
     sender_ = instance.sender
     receiver_ = instance.receiver
+    title = "You've been invited by " + str(sender_.get_full_name()) + " to join " + str(instance.community) + "!"
 
-    UserNotification.objects.create(user=receiver_, title="You've been invited to join a community!", message="Join our community.")
+    UserNotification.objects.create(user=receiver_, title=title, message="Join our community.")
 
 
 #TODO: reference
