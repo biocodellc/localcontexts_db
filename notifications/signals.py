@@ -8,7 +8,7 @@ from .models import *
 @receiver(post_save, sender=User)
 def create_welcome_message(sender, instance, created, **kwargs):
     if created:
-        UserNotification.objects.create(user=instance, title="Welcome", message="You have joined")
+        UserNotification.objects.create(to_user=instance, title="Welcome", message="You have joined", notification_type="welcome")
 
 # When the instance of invite member form is saved, send target user a notification
 @receiver(post_save, sender=InviteMember)
@@ -17,11 +17,12 @@ def send_community_invite(sender, instance, created, **kwargs):
         sender_ = instance.sender
         receiver_ = instance.receiver
         role = instance.role
+        community = instance.community
 
-        title = "You've been invited by " + str(sender_.get_full_name()) + " to join " + str(instance.community) + "!"
-        message= "Join our Community! " + str(instance.community) + "with the role of " + str(role)
+        title = "You've been invited by " + str(sender_.get_full_name()) + " to join " + str(community) + "!"
+        message= "Join our Community! " + str(community) + "with the role of " + str(role)
 
-        UserNotification.objects.create(user=receiver_, title=title, message=message)
+        UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="invitation", community=community)
 
 @receiver(post_save, sender=InviteMember)
 def accept_community_invite(sender, instance, **kwargs):
@@ -29,16 +30,18 @@ def accept_community_invite(sender, instance, **kwargs):
         sender_ = instance.sender
         receiver_ = instance.receiver
         role = instance.role
+        community = instance.community
 
         u = UserCommunity.objects.get(user=receiver_)
-        u.communities.add(instance.community)
+        u.communities.add(community)
         u.save()
 
-        title = "You are now a member of " + str(instance.community) + "!"
+        title = "You are now a member of " + str(community) + "!"
         message = "Congrats"
-        UserNotification.objects.create(user=receiver_, title=title, message=message)
+        
+        UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="accept", community=community)
 
-        c = Community.objects.get(id=instance.community.id)
+        c = Community.objects.get(id=community.id)
 
         if role == 'editor':
             c.editors.add(receiver_)
@@ -52,4 +55,8 @@ def send_user_join_request(sender, instance, created, **kwargs):
     if created:
         receiver_ = instance.user_to
         sender_ = instance.user_from
-        UserNotification.objects.create(user=receiver_, title="User wishes to join", message="This user wants to join community")
+        community = instance.target_community
+        title = str(sender_.get_full_name()) + " wishes to join " + str(community)
+        message = "let them join it"
+
+        UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="request", community=community)

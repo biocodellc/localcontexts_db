@@ -112,7 +112,7 @@ def logout(request):
 # Example of custom decorator to allow specific roles to view the dash
 # @allowed_users(allowed_roles=['admin', 'editor'])
 def dashboard(request):
-    n = UserNotification.objects.filter(user=request.user, viewed=False)
+    n = UserNotification.objects.filter(to_user=request.user, viewed=False)
 
     user_has_community = UserCommunity.objects.filter(user=request.user).exists()
     target_communitites = Community.objects.filter(community_creator=request.user)

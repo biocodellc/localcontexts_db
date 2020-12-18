@@ -1,7 +1,51 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<!-- TODO: Dry this up -->
+
+{% if notification.notification_type == 'welcome' %}
     <h3>{{ notification.title }}</h3>
     <p>{{ notification.message }}</p>
+
     <p><a href="{% url 'delete' notification.id %}">Mark as Read</a></p>
+{% endif %}
+
+{% if notification.notification_type == 'invitation' %}
+    <h3>{{ notification.title }}</h3>
+    <p>{{ notification.message }}</p>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <input type="hidden">
+        <button class="action-btn">Accept Invitation</button>
+    </form>
+    <p><a href="{% url 'delete' notification.id %}">Mark as Read</a></p>
+{% endif %}
+
+{% if notification.notification_type == 'request' %}
+    <h3>{{ notification.title }}</h3>
+    <p>{{ notification.message }}</p>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <input type="hidden">
+        <button class="action-btn">Add User To Community</button>
+    </form>
+    <p><a href="{% url 'delete' notification.id %}">Mark as Read</a></p>
+{% endif %}
+
+{% if notification.notification_type == 'approval' %}
+    <h3>{{ notification.title }}</h3>
+    <p>{{ notification.message }}</p>
+
+    <p><a href="{% url 'delete' notification.id %}">Mark as Read</a></p>
+{% endif %}
+
+{% if notification.notification_type == 'accept' %}
+    <h3>{{ notification.title }}</h3>
+    <p>{{ notification.message }}</p>
+
+    <p><a href="{% url 'delete' notification.id %}">Mark as Read</a></p>
+{% endif %}
+
+
 
 {% endblock %}
