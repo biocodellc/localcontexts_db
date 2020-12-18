@@ -7,7 +7,14 @@
     
                 <div class="flex-this w-100 space-between">
                     <div>
-                        <a href="{% url 'users' community.community_creator.id %}" class="darkteal-text">{{ community.community_creator.first_name }}</a> >> {{ community.community_name }}
+                        <a href="{% url 'users' community.community_creator.id %}" class="darkteal-text">
+                            {% if community.community_creator.first_name %}
+                                {{ community.community_creator.first_name }}
+                            {% else %}
+                                {{ community.community_creator }}
+                            {% endif %}
+                        </a> 
+                        >> {{ community.community_name }}
                     </div>
                     <div>
                         <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
@@ -24,7 +31,12 @@
                         <h2 class="orange-text">{{ community.community_name }} </h2>
                         <p>
                             Account: <span> 
-                                {{ community.community_creator.first_name }} {{ community.community_creator.last_name }} | Administrator
+                                {% if community.community_creator.get_full_name %}
+                                    {{ community.community_creator.get_full_name }} 
+                                {% else %}
+                                    {{ community.community_creator }} 
+                                {% endif %}                                
+                                | Administrator
                             </span><br>
                             Members: <span>{{ community.get_member_count }}</span><br>
                             Location: <span>Town, {{ community.country.name }} </span><br>

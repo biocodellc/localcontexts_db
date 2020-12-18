@@ -7,7 +7,14 @@
 
             <div class="flex-this w-100 space-between">
                 <div>
-                    <a href="{% url 'users' community.community_creator.id %}" class="darkteal-text">{{ community.community_creator.first_name }}</a> >> {{ community.community_name }}
+                    <a href="{% url 'users' community.community_creator.id %}" class="darkteal-text">
+                        {% if community.community_creator.first_name %}
+                            {{ community.community_creator.first_name }}
+                        {% else %}
+                            {{ community.community_creator }}
+                        {% endif %}
+                    </a> 
+                    >> {{ community.community_name }}                
                 </div>
                 <div>
                     <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
@@ -24,7 +31,12 @@
                     <h2 class="orange-text">{{ community.community_name }} </h2>
                     <p>
                         Account: <span> 
-                            {{ community.community_creator.first_name }} {{ community.community_creator.last_name }} | Administrator
+                            {% if community.community_creator.get_full_name %}
+                                {{ community.community_creator.get_full_name }} 
+                            {% else %}
+                                {{ community.community_creator }} 
+                            {% endif %}
+                            | Administrator
                         </span><br>
                         Members: <span>{{ community.get_member_count }}</span><br>
                         Location: <span>Town, {{ community.country.name }} </span><br>
@@ -72,7 +84,13 @@
                 <div class="orange-bg color-section">
                 </div>
                 <div class="w-90 member-name">
-                    <h4 class="bold">{{ community.community_creator.first_name }} {{ community.community_creator.last_name }}</h4>
+                    <h4 class="bold">
+                        {% if community.community_creator.get_full_name %}
+                            {{ community.community_creator.get_full_name }}
+                        {% else %}
+                            {{ community.community_creator }}
+                        {% endif %}
+                    </h4>
                 </div>
                 <div class="w-20 member-role">
                     <h4>Administrator</h4>
@@ -85,7 +103,13 @@
                     <div class="orange-bg color-section">
                     </div>
                     <div class="w-90 member-name">
-                        <h4 class="bold">{{ admin.first_name }} {{ admin.last_name }}</h4>
+                        <h4 class="bold">
+                            {% if admin.get_full_name %}
+                                {{ admin.get_full_name }}
+                            {% else %}
+                                {{ admin }}
+                            {% endif %}
+                        </h4>
                     </div>
                     <div class="w-20 member-role">
                         <h4>Administrator</h4>
@@ -99,7 +123,13 @@
                     <div class="darkgreen-bg color-section">
                     </div>
                     <div class="w-90 member-name">
-                        <h4 class="bold">{{ editor.first_name }} {{ editor.last_name }}</h4>
+                        <h4 class="bold">
+                            {% if editor.get_full_name %}
+                                {{ editor.get_full_name }}
+                            {% else %}
+                                {{ editor }}
+                            {% endif %}                        
+                        </h4>
                     </div>
                     <div class="w-20 member-role">
                         <h4>Editor</h4>
@@ -112,8 +142,13 @@
                     <div class="darkteal-bg color-section">
                     </div>
                     <div class="w-90 member-name">
-                        <h4 class="bold">{{ viewer.first_name }} {{ viewer.last_name }}</h4>
-                    </div>
+                        <h4 class="bold">
+                            {% if viewer.get_full_name %}
+                                {{ viewer.get_full_name }}
+                            {% else %}
+                                {{ viewer }}
+                            {% endif %}                        
+                        </h4>                    </div>
                     <div class="w-20 member-role">
                         <h4>Viewer</h4>
                     </div>
