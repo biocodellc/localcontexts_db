@@ -90,10 +90,11 @@ class CommunityJoinRequest(models.Model):
     user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_from')
     user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_to')
     target_community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='target_community', null=True)
+    status = models.CharField(max_length=8, choices=STATUS_CHOICES)
     date_sent = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user_from}-{self.user_to}-{self.target_community}"
+        return f"{self.user_from}-{self.user_to}-{self.target_community}-{self.status}"
 
     class Meta:
         verbose_name = 'Member Join Request'
