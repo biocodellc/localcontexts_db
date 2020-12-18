@@ -28,6 +28,7 @@ def accept_community_invite(sender, instance, **kwargs):
     if instance.status == 'accepted':
         sender_ = instance.sender
         receiver_ = instance.receiver
+        role = instance.role
 
         u = UserCommunity.objects.get(user=receiver_)
         u.communities.add(instance.community)
@@ -37,11 +38,14 @@ def accept_community_invite(sender, instance, **kwargs):
         message = "Congrats"
         UserNotification.objects.create(user=receiver_, title=title, message=message)
 
-        
-        # c = Community.objects.get(community_name=instance.community)
-        #If
-        # c.role = role
-        # c.save()
+        c = Community.objects.get(id=instance.community.id)
+
+        if role == 'editor':
+            c.editors.add(receiver_)
+        elif role == 'viewer':
+            c.viewers.add(receiver_)
+
+        c.save()
 
 
 #TODO: reference
