@@ -46,3 +46,10 @@ def accept_community_invite(sender, instance, **kwargs):
             c.viewers.add(receiver_)
 
         c.save()
+
+@receiver(post_save, sender=CommunityJoinRequest)
+def send_user_join_request(sender, instance, created, **kwargs):
+    if created:
+        receiver_ = instance.user_to
+        sender_ = instance.user_from
+        UserNotification.objects.create(user=receiver_, title="User wishes to join", message="This user wants to join community")

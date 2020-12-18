@@ -77,3 +77,24 @@ class InviteMember(models.Model):
 
     def __str__(self):
         return f"{self.sender}-{self.receiver}-{self.status}"
+    
+    class Meta:
+        verbose_name = 'Member Invitation'
+        verbose_name_plural = 'Member Invitations'
+
+class CommunityJoinRequest(models.Model):
+    STATUS_CHOICES = (
+        ('sent', 'sent'),
+        ('accepted', 'accepted'),
+    )
+    user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_from')
+    user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_to')
+    target_community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='target_community', null=True)
+    date_sent = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user_from}-{self.user_to}-{self.target_community}"
+
+    class Meta:
+        verbose_name = 'Member Join Request'
+        verbose_name_plural = 'Member Join Requests'
