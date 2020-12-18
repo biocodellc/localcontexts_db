@@ -69,11 +69,3 @@ def add_members(request, pk):
         'community': community,
     }
     return render(request, 'communities/add-member.html', context)
-
-# @login_required(login_url='login')
-# def accept_invitation(request, pk):
-#     invite = InviteMember.objects.filter(id=pk)
-#     invite.status = 'accepted'
-#     invite.save()
-
-#     return render(request, 'partials/accept-invite.html')
