@@ -16,8 +16,9 @@ def send_community_invite(sender, instance, created, **kwargs):
     sender_ = instance.sender
     receiver_ = instance.receiver
     title = "You've been invited by " + str(sender_.get_full_name()) + " to join " + str(instance.community) + "!"
+    message= "Join our Community! " + str(instance.community)
 
-    UserNotification.objects.create(user=receiver_, title=title, message="Join our community.")
+    UserNotification.objects.create(user=receiver_, title=title, message=message)
 
 
 #TODO: reference

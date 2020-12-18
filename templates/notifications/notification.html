@@ -2,6 +2,7 @@
 {% block content %}
     <h3>{{ notification.title }}</h3>
     <p>{{ notification.message }}</p>
+    <!-- {% include 'partials/accept-invite.html' %} -->
     <p><a href="{% url 'delete' notification.id %}">Mark as Read</a></p>
 
 {% endblock %}
