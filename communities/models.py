@@ -71,7 +71,7 @@ class InviteMember(models.Model):
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community', null=True)
     role = models.CharField(max_length=8, choices=ROLES, null=True)
-    status = models.CharField(max_length=8, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent')
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -90,7 +90,7 @@ class CommunityJoinRequest(models.Model):
     user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_from')
     user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_to')
     target_community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='target_community', null=True)
-    status = models.CharField(max_length=8, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent')
     date_sent = models.DateTimeField(auto_now=True)
 
     def __str__(self):
