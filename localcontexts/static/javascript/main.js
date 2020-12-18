@@ -22,6 +22,7 @@ if (passwordField ) {
     })
 }
 
+// Modal for adding a community member
 function addMemberModal() {
     let x = document.getElementById("add-member-modal");
     if (x.style.display === "none") {
@@ -35,5 +36,4 @@ function addMemberModal() {
         x.style.display = "none"
     })
 }
-
 

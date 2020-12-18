@@ -35,7 +35,7 @@
                                     <td class="td-img"><img src="https://picsum.photos/200/75"></td>
                                     <td class="td-name"><a href="{% url 'community-dashboard' community.id %}" class="black-text">{{community.community_name}}</a></td>
                                     <input type="hidden" value="{{ community.id }}" name="commid">
-                                    <td class="td-btn"><button class="action-btn">Send request to join</button></td>
+                                    <td class="td-btn"><button id="btn-{{ community.id }}" class="action-btn">Send request to join</button></td>
                                 </tr>
                         </form>
                         {% endfor %}
