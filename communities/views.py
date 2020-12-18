@@ -29,17 +29,14 @@ def community_registry(request):
     communities = Community.objects.all()
 
     if request.method == 'POST':
-        # Create a notification that will send to community_creator of target community.
-        # Change the button 
+        # TODO: Change the button so the user can only submit a request once.
         buttonid = request.POST.get('commid')
-        # print('THE BUTTON ID IS ' + str(buttonid))
-
         target_community = Community.objects.get(id=buttonid)
-        # print(str(target_community.community_name))
-
         main_admin = target_community.community_creator
+
         req = CommunityJoinRequest.objects.create(user_from=request.user, target_community=target_community, user_to=main_admin)
         req.save()
+
         return redirect('community-registry')
 
     context = {'communities': communities}
