@@ -54,16 +54,6 @@ def community_dashboard(request, pk):
 @login_required(login_url='login')
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
-
-    context = {
-        'community': community,
-    }
-
-    return render(request, 'communities/members.html', context)
-
-@login_required(login_url='login')
-def add_members(request, pk):
-    community = Community.objects.get(id=pk)
     form = InviteMemberForm()
 
     if request.method == "POST":
@@ -74,10 +64,10 @@ def add_members(request, pk):
             obj.status = 'sent'
             obj.community = community
             obj.save()
-            return redirect('dashboard')
 
     context = {
-        'form': form,
         'community': community,
+        'form': form,
     }
-    return render(request, 'communities/add-member.html', context)
+
+    return render(request, 'communities/members.html', context)
