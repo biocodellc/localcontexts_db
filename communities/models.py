@@ -6,16 +6,18 @@ from django.conf import settings
 class Community(models.Model):
     community_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     image = models.ImageField(upload_to='photos/communities', blank=True, null=True)
-    community_name = models.CharField(max_length=80, blank=True, null=True)
+    community_name = models.CharField(max_length=80, null=True)
     community_code = models.CharField(max_length=80, blank=True, null=True)
-    town = models.CharField(max_length=80, blank=True, null=True)
     contact_name = models.CharField(max_length=80, blank=True, null=True)
     contact_email = models.EmailField(max_length=254, blank=True, null=True)
+    town = models.CharField(max_length=80, blank=True, null=True)
     country = CountryField(blank=True, null=True)
-    is_publicly_listed = models.BooleanField(default=True, null=True)
     admins = models.ManyToManyField(User, blank=True, related_name="admins")
     editors = models.ManyToManyField(User, blank=True, related_name="editors")
     viewers = models.ManyToManyField(User, blank=True, related_name="viewers")
+    is_publicly_listed = models.BooleanField(default=True, null=True)
+    is_approved = models.BooleanField(default=False, null=True)
+
 
     def get_member_count(self):
         admins = self.admins.count()
