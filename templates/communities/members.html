@@ -157,9 +157,6 @@
 
             {% if community.community_creator == request.user %}
 
-                <!-- TODO: set up modal code to invite members to join a community if current user is admin or editor. 
-                    Right now it uses add-members.html to take users to a new page. -->
-
                 <a onclick='addMemberModal()'>
                     <div class="flex-this add-member-card">
                         <div class="w-100 add-member">
@@ -196,10 +193,7 @@
                               </div> -->
                   
                               <div> 
-                                  <!-- {{ form.members.label }} <br>
-                                  <div class="mem-select">
-                                      {{ form.members }}
-                                  </div> -->
+
                                   {{ form }}
                   
                                   <p>- All members have access to create and manage the labels.</p>

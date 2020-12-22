@@ -9,7 +9,6 @@ def connect_community(request):
 
 @login_required(login_url='login')
 def create_community(request):
-
     form = CreateCommunityForm()
 
     if request.method == "POST":

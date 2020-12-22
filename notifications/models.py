@@ -9,6 +9,7 @@ class UserNotification(models.Model):
         ('request', 'request'),
         ('approval', 'approval'),
         ('accept', 'accept'),
+        ('create', 'create'),
     )
     title = models.CharField(max_length=200)
     message = models.TextField()
