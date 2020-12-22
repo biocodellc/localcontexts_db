@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .forms import *
 from .models import *
 
@@ -57,12 +58,25 @@ def community_members(request, pk):
 
     if request.method == "POST":
         form = InviteMemberForm(request.POST)
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.sender = request.user
-            obj.status = 'sent'
-            obj.community = community
-            obj.save()
+        receiver = request.POST.get('receiver')
+
+        u = UserCommunity.objects.get(user=receiver)
+        comm_list = u.communities.all()
+
+        # If user is already a member, display message, else create an invitation
+        if community in comm_list:
+            #TODO: get this message to show up without the modal closing.
+            messages.add_message(request, messages.INFO, 'This user is already a member')
+            print('****************   this user is already a member     ***************')
+        else:
+            if form.is_valid():
+                obj = form.save(commit=False)
+                obj.sender = request.user
+                obj.status = 'sent'
+                obj.community = community
+                obj.save()
+
+                messages.add_message(request, messages.INFO, 'Invitation Sent!')
 
     context = {
         'community': community,
