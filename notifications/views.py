@@ -22,10 +22,15 @@ def show_notification(request, pk):
             u.communities.add(comm)
             u.save()
 
-            # Add member as viewer to community
+            # Add user as target role to community.
             c = Community.objects.get(id=comm)
-            c.viewers.add(n.to_user)
-            u.save()
+            if n.role == 'viewer':
+                c.viewers.add(n.to_user)
+            elif n.role == 'admin':
+                c.admins.add(n.to_user)
+            elif n.role == 'editor':
+                c.editors.add(n.to_user)
+            c.save()
 
             return render(request, 'notifications/notification.html', {'notification': n})
         
@@ -39,10 +44,16 @@ def show_notification(request, pk):
             u.communities.add(comm)
             u.save()
 
-            # Add member as viewer to community
             c = Community.objects.get(id=comm)
-            c.viewers.add(n.from_user)
-            u.save()
+            radio_value = request.POST.get('role')
+            
+            if radio_value == 'admin':
+                c.admins.add(n.from_user)
+            elif radio_value == 'editor':
+                c.editors.add(n.from_user)
+            elif radio_value == 'viewer':
+                c.viewers.add(n.from_user)
+            c.save()
 
             return render(request, 'notifications/notification.html', {'notification': n})
         

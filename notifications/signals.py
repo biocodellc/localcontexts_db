@@ -27,7 +27,7 @@ def send_community_invite(sender, instance, created, **kwargs):
         title = "You've been invited by " + str(name) + " to join " + str(community) + "!"
         message= "Join our Community! " + str(community) + " with the role of " + str(role)
 
-        UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="invitation", community=community, reference_id=ref)
+        UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="invitation", community=community, reference_id=ref, role=role)
 
 # When an invitation to a community is accepted, send target a notification
 @receiver(post_save, sender=InviteMember)
