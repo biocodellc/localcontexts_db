@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import *
-from communities.models import UserCommunity, Community
+from communities.models import *
 
 @login_required(login_url='login')
 def show_notification(request, pk):
@@ -15,6 +15,10 @@ def show_notification(request, pk):
         # Notify other user that an invitation has been accepted
         
         if n.notification_type == 'invitation':
+            i = InviteMember.objects.get(id=n.reference_id)
+            i.status = 'accepted'
+            i.save()
+
             # Add community to UserCommunity
             u = UserCommunity.objects.get(user=n.to_user)
             u.communities.add(comm)
@@ -25,11 +29,13 @@ def show_notification(request, pk):
             c.viewers.add(n.to_user)
             u.save()
 
-            #Target member invitation // change status to accepted
-
             return render(request, 'notifications/notification.html', {'notification': n})
         
         elif n.notification_type == 'request':
+            j = CommunityJoinRequest.objects.get(id=n.reference_id)
+            j.status = 'accepted'
+            j.save()
+            
             # Add community to UserCommunity
             u = UserCommunity.objects.get(user=n.from_user)
             u.communities.add(comm)
