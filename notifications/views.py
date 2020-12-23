@@ -9,8 +9,6 @@ def show_notification(request, pk):
 
     if request.method == 'POST':
         comm = n.community.id
-
-        # TODO: Accommodate other roles besides just viewer
         
         if n.notification_type == 'invitation':
             i = InviteMember.objects.get(id=n.reference_id)
@@ -46,7 +44,7 @@ def show_notification(request, pk):
 
             c = Community.objects.get(id=comm)
             radio_value = request.POST.get('role')
-            
+
             if radio_value == 'admin':
                 c.admins.add(n.from_user)
             elif radio_value == 'editor':
