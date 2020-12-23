@@ -28,6 +28,7 @@ def send_community_invite(sender, instance, created, **kwargs):
 
         UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="invitation", community=community)
 
+# When an invitation to a community is accepted, send target a notification
 @receiver(post_save, sender=InviteMember)
 def accept_community_invite(sender, instance, **kwargs):
     if instance.status == 'accepted':
@@ -40,19 +41,21 @@ def accept_community_invite(sender, instance, **kwargs):
         u.communities.add(community)
         u.save()
 
-        title = "You are now a member of " + str(community) + "!"
-        message = "Congrats"
-        
-        UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="accept", community=community)
-
         c = Community.objects.get(id=community.id)
 
-        if role == 'editor':
+        if role == 'admin':
+            c.admins.add(receiver_)
+        elif role == 'editor':
             c.editors.add(receiver_)
         elif role == 'viewer':
             c.viewers.add(receiver_)
 
         c.save()
+
+        title = "You are now a member of " + str(community) + "!"
+        message = "Congrats"
+        
+        UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="accept", community=community)
 
 @receiver(post_save, sender=CommunityJoinRequest)
 def send_user_join_request(sender, instance, created, **kwargs):
