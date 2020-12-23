@@ -1,5 +1,9 @@
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
 from django.contrib import messages
 from .forms import *
 from .models import *
@@ -18,6 +22,16 @@ def create_community(request):
             obj = form.save(commit=False)
             obj.community_creator = request.user
             obj.save()
+
+            # Send email to site admin
+            template = render_to_string('snippets/community-application.html', { 'obj' : obj })
+            send_mail(
+                'New Community Application', 
+                template, 
+                settings.EMAIL_HOST_USER, 
+                ['dianalovette90@gmail.com'], 
+                fail_silently=False)
+
             return redirect('community-registry')
 
     context = {'form': form}
