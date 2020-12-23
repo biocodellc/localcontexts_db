@@ -26,6 +26,7 @@
 
 {% if notification.notification_type == 'approval' %}
     <p> This is an approval</p>
+
 {% endif %}
 
 {% if notification.notification_type == 'accept' %}
@@ -34,6 +35,11 @@
 
 {% if notification.notification_type == 'create' %}
     <p>This is a create notification type.</p>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <input type="hidden">
+        <button class="action-btn">Approve Community</button>
+    </form>
 {% endif %}
 
 <p><a href="{% url 'delete' notification.id %}">Mark as Read</a></p>

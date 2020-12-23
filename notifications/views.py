@@ -10,9 +10,7 @@ def show_notification(request, pk):
     if request.method == 'POST':
         comm = n.community.id
 
-        # TODO: Accommodate other roles,
-        # Mark member request as accepted,
-        # Notify other user that an invitation has been accepted
+        # TODO: Accommodate other roles besides just viewer
         
         if n.notification_type == 'invitation':
             i = InviteMember.objects.get(id=n.reference_id)
@@ -35,7 +33,7 @@ def show_notification(request, pk):
             j = CommunityJoinRequest.objects.get(id=n.reference_id)
             j.status = 'accepted'
             j.save()
-            
+
             # Add community to UserCommunity
             u = UserCommunity.objects.get(user=n.from_user)
             u.communities.add(comm)
@@ -47,6 +45,14 @@ def show_notification(request, pk):
             u.save()
 
             return render(request, 'notifications/notification.html', {'notification': n})
+        
+        elif n.notification_type == 'create':
+            new_community = Community.objects.get(id=comm)
+            new_community.is_approved = True
+            new_community.save()
+
+            return render(request, 'notifications/notification.html', {'notification': n})
+
 
     context = {
         'notification': n,

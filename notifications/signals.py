@@ -102,3 +102,13 @@ def community_application(sender, instance, created, **kwargs):
     if created:
         UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="create", community=instance)
 
+@receiver(post_save, sender=Community)
+def accept_community_application(sender, instance, **kwargs):
+    if instance.is_approved == True:
+        sender_ = User.objects.get(username="dianalovette")
+        receiver_ = instance.community_creator
+
+        title = "Your community application for "  +  str(instance.community_name) + " was approved!"
+        message = "You may now export your labels."
+
+        UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="approval", community=instance)
