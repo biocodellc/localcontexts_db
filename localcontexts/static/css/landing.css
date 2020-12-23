@@ -46,6 +46,16 @@
     /* border: 1px solid lime; */
 }
 
+/* Everything except the last element */
+.nav-links-ul li:not(:last-child) {
+    margin-bottom: 4px;
+}
+
+/* Only the last element */
+.nav-links-ul li:last-child {
+    margin-left: 5px;
+}
+
 /* NAV LIST ITEMS COLUMN */
 #column-btn {
     height: 60%;
