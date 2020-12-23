@@ -30,7 +30,6 @@ def community_registry(request):
 
     if request.method == 'POST':
         # TODO: Change the button so the user can only submit a request once.
-        #TODO: Prevent user from sending a request if they are already a member
         buttonid = request.POST.get('commid')
         target_community = Community.objects.get(id=buttonid)
         main_admin = target_community.community_creator
