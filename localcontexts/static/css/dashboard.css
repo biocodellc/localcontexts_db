@@ -40,21 +40,25 @@
 
 #user-affiliation-content {
     flex-wrap: wrap;
-    min-width: 1305px;
-    max-width: 1305px;
+    max-width: 1320px;
+    min-width: 1320px;
     margin: auto;
     padding: 0;
 }
 
 .member-card-container {
-    padding-left: 1.5%;
-    padding-right: 1.5%;
     padding-bottom: 2%;
-    width: 33.3%;
+    width: 437px;
+}
+
+/* Every third element starting with the second */
+.member-card-container:nth-child(3n + 2) {
+    margin-right: 7px;
 }
 
 /* Community member cards */
 .member-card, .add-card {
+    margin: auto;
     min-height: 265px;
     max-height: 265px;
     min-width: 400px;
