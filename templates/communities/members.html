@@ -16,9 +16,11 @@
                     </a> 
                     >> {{ community.community_name }}                
                 </div>
-                <div>
-                    <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
-                </div>
+                {% if request.user == community.community_creator %}
+                    <div>
+                        <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
+                    </div>
+                {% endif %}
             </div>
 
             <div class="flex-this stats-info-container">
