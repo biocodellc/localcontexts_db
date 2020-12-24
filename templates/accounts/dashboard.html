@@ -34,11 +34,25 @@
 
     {% if notifications.count > 0 %}
         <section>
-            <div class="white-bg content-card padded">
+            <div class="white-bg content-card noti-card">
                 
                     <h3 class="orange-text">Notifications</h3>
                     {% for n in notifications %}
-                        <p><a href="{% url 'show' n.id %}">{{ n.title }}</a></p>
+                        <a href="{% url 'show' n.id %}">
+                            <div class="noti-container flex-this row">
+
+                                <div>
+                                    <p class="orange-text">
+                                        {% if n.viewed == False %}
+                                            <i class="fa fa-bell" aria-hidden="true"></i>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <div><strong><p>{{ n.notification_type }}</p></strong></div>
+                                <div><p>{{ n.title }}</p></div>
+                                
+                            </div>
+                        </a>
                     {% endfor %}
             </div>
         </section>

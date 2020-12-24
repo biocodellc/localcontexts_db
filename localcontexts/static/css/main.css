@@ -569,5 +569,29 @@ input:focus {
     width: 100%;
 }
 
+/* NOTIFICATIONS */
+.noti-card {
+    padding: 2%;
+}
+
+.noti-card a {
+    color: black;
+}
+
+.noti-container {
+    width: 100%;
+}
+
+.noti-container div:first-child {
+    width: 3%;
+}
+
+.noti-container div:nth-child(2) {
+    width: 10%;
+}
+
+.noti-container div:last-child {
+    width: 87%;
+}
 
 
