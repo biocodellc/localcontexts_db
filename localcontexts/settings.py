@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'communities',
     'institutions',
     'researchers',
-    # 'bclabels',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,6 +49,8 @@ INSTALLED_APPS = [
     'phone_field',
     'django_cleanup',
     'storages',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
