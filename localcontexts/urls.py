@@ -26,6 +26,7 @@ urlpatterns = [
     path('institutions/', include('institutions.urls')),
     path('researchers/', include('researchers.urls')),
     path('bclabels/', include('bclabels.urls')),
+    path('api/', include('api.urls')),
 
     path('notifications/', include('notifications.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

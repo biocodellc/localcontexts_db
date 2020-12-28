@@ -15,6 +15,7 @@ class BCLabel(models.Model):
     name = models.CharField(verbose_name='label name', max_length=90, null=True)
     default_text = models.TextField(null=True, blank=True)
     modified_text = models.TextField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return str(self.label_type) + ' ' + str(self.name)
