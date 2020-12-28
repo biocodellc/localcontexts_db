@@ -1,14 +1,24 @@
 {% load static %}
-<!-- <div id="footer-logos" class="flex-this">
-    <img src="../../static/images/logos/logo.png" alt="local contexts logo">
-    <img src="../../static/images/logos/neh-logo.png" alt="national endowment for the humanities logo">
-    <img src="../../static/images/logos/nyu-logo.png" alt="new york university logo">
-    <img src="../../static/images/logos/wsu-logo.png" alt="washington state university logo">
-</div> -->
 
-<div id="footer-logos" class="flex-this">
-    <img src="{% static 'images/logos/logo.png' %}" alt="local contexts logo">
-    <img src="{% static 'images/logos/neh-logo.png' %}" alt="national endowment for the humanities logo">
-    <img src="{% static 'images/logos/nyu-logo.png' %}" alt="new york university logo">
-    <img src="{% static 'images/logos/wsu-logo.png' %} " alt="washington state university logo">
+<div id="footer-logos-wrapper" class="flex-this">
+    <div class="footer-logo-container flex-this row">
+        <div>
+            <img src="{% static 'images/footer/Local-Contexts-Logo-White.png' %}" alt="local contexts logo">
+        </div>
+        <div>
+            <img src="{% static 'images/footer/NEH-Preferred-Seal-Transparent820.png' %}" alt="national endowment for the humanities logo">
+        </div>
+        <div>
+            <img src="{% static 'images/footer/nyu_short_white.png' %}" alt="new york university logo">
+        </div>
+        <div>
+            <img src="{% static 'images/footer/WSU-Logo.png' %} " alt="washington state university logo">
+        </div>
+        <div>
+            <img src="{% static 'images/footer/IDIA_Website_Logo.png' %} " alt="IDIA logo">
+        </div>
+        <div>
+            <img src="{% static 'images/footer/Enrich_without_text.png' %} " alt="IDIA logo">    
+        </div>
+    </div>
 </div>
