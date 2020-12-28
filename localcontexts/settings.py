@@ -31,11 +31,13 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1', 'localcontexts.herokuapp.com']
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'notifications.apps.NotificationsConfig',
+    'bclabels.apps.BclabelsConfig',
 
     'pages',
     'communities',
     'institutions',
     'researchers',
+    # 'bclabels',
 
     'django.contrib.admin',
     'django.contrib.auth',
