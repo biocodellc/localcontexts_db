@@ -31,11 +31,13 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1', 'localcontexts.herokuapp.com']
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'notifications.apps.NotificationsConfig',
+    'bclabels.apps.BclabelsConfig',
 
     'pages',
     'communities',
     'institutions',
     'researchers',
+    'api',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,6 +50,8 @@ INSTALLED_APPS = [
     'phone_field',
     'django_cleanup',
     'storages',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -195,3 +199,8 @@ else:
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'localcontexts/static')
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
