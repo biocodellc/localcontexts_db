@@ -1,11 +1,48 @@
 <!-- Header for the registration process -->
 {% load static %}
 <header id="reg-header" class="flex-this">
+    {% if user.is_authenticated %}
+
+    <div class="generic-logo-container flex-this">
+        <div>
+            <a href="{% url 'index' %}">
+                <img class="logo" src="{% static 'images/logos/logo.png' %}">
+            </a>
+        </div>
+
+        <div class="mini-nav flex-this">
+            <div class="flex-this badge-container">
+                <div>
+                    <a href="{% url 'create-community' %}" class="white-text">
+                        <div class="badge">C</div>
+                    </a>
+                </div>
+                <div>   
+                    <a href="#" class="white-text">
+                        <div class="badge">R</div>
+                    </a>
+                </div>
+
+                <div>   
+                    <a href="#" class="white-text">
+                        <div class="badge">I</div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    {% else %}
+
     <div class="generic-logo-container">
         <a href="{% url 'index' %}">
             <img class="logo" src="{% static 'images/logos/logo.png' %}">
         </a>
     </div>
+
+    {% endif %}
     <nav class="generic-nav flex-this">
         <ul class="flex-this generic-nav-ul">
             <li><a class="white-text upper" href="#">Labels</a></li>
