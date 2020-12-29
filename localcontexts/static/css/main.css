@@ -258,6 +258,10 @@ input:focus {
     background-color: #f1f4f5;
 }
 
+.pad-top-8 {
+    padding-top: 8%;
+}
+
 /* 404 Page snippet */
 .page-not-found-card {
     min-height: 600px;
