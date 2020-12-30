@@ -7,6 +7,20 @@
     z-index: 1;
 }
 
+/* Active nav link */
+#active-link {
+    font-weight: 600;
+}
+
+#active-link:after {
+    content: '';
+    display: block;
+    margin: -3px auto;
+    width: 10px;
+    text-align: center;
+    border-bottom: 5px solid #EF6C00;
+}
+
 .mini-nav {
     width: 40%;
     padding: 2% 2% 2% 2%;

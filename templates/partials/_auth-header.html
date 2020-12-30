@@ -42,9 +42,19 @@
             <li><a class="white-text upper" href="{% url 'community-registry' %}">Communities</a></li>
             <li><a class="white-text upper" href="#">Institutions & Researchers</a></li>
             <li><a class="white-text upper" href="#">Notices</a></li>
-            <li><a class="white-text upper" href="{% url 'about' %}">About</a></li>
 
-            <li><a class="white-text upper" href="{% url 'dashboard' %}">Account</a></li>
+            {% if request.get_full_path == "/about/" %}
+                <li><a id="active-link" class="white-text upper" href="{% url 'about' %}">About</a></li>
+            {% else %}
+                <li><a class="white-text upper" href="{% url 'about' %}">About</a></li>
+            {% endif %}
+
+            {% if request.get_full_path == "/accounts/dashboard/" %}
+                <li><a id="active-link" class="white-text upper" href="{% url 'dashboard' %}">Account</a></li>
+            {% else %}
+                <li><a class="white-text upper" href="{% url 'dashboard' %}">Account</a></li>
+            {% endif %}
+
             <div>
                 <li class="flex-this column sign-out white-bg">
                     <a class="upper orange-text" href="javascript:{document.getElementById('logout').submit()}">
