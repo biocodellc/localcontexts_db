@@ -47,7 +47,7 @@
         <ul class="flex-this generic-nav-ul">
             <li><a class="white-text upper" href="#">Labels</a></li>
 
-            {% if request.get_full_path == "/communities/community-registry/" %}
+            {% if request.get_full_path == "/communities/community-registry/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/communities/connect-community/" %}
                 <li><a id="active-link" class="white-text upper" href="{% url 'community-registry' %}">Communities</a></li>
             {% else %}
                 <li><a class="white-text upper" href="{% url 'community-registry' %}">Communities</a></li>
