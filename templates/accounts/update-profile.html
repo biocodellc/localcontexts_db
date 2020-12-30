@@ -3,66 +3,68 @@
 {% if user.is_authenticated %}
 
 <section class="edit-profile-section flex-this column w-100 grey-bg">
-    <div class="flex-this column content-card white-bg">
+    <div class="pad-top-8">
+        <div class="flex-this column content-card white-bg">
 
 
-        <div class="padded">
-            <h2 class="orange-text">Settings</h2>
-
-            <form action="{% url 'update-profile' %}" method="POST" enctype="multipart/form-data" class="flex-this column w-100">
-                {% csrf_token %}
+            <div class="padded">
+                <h2 class="orange-text">Settings</h2>
     
-                    <div class="flex-this row w-100">
-                        <div class="w-50"> 
-                            <!-- {{ user_form }} -->
-                            <label for="username">Username </label><br>
-                                {{ user_form.username }}
-                                <br>
-    
-                            <label for="email">Email</label><br>
-                                {{ user_form.email }}<br>
-    
-                            <label for="first_name">First Name </label><br>
-                            {{ user_form.first_name }}<br>
-            
-                            <label for="last_name">Last Name </label><br>
-                            {{ user_form.last_name }}<br>
+                <form action="" method="POST" enctype="multipart/form-data" class="flex-this column w-100">
+                    {% csrf_token %}
+        
+                        <div class="flex-this row w-100">
+                            <div class="w-50"> 
+                                <!-- {{ user_form }} -->
+                                <label for="username">Username </label><br>
+                                    {{ user_form.username }}
+                                    <br>
+        
+                                <label for="email">Email</label><br>
+                                    {{ user_form.email }}<br>
+        
+                                <label for="first_name">First Name </label><br>
+                                {{ user_form.first_name }}<br>
+                
+                                <label for="last_name">Last Name </label><br>
+                                {{ user_form.last_name }}<br>
+                            </div>
+        
+                            <div class="w-40">
+                                <label for="profile_pic">Profile Pic </label><br>
+                                {{ profile_form.profile_pic }}
+                            </div>
                         </div>
-    
-                        <div class="w-40">
-                            <!-- <label for="profile_pic">Profile Pic </label><br>
-                            {{ profile_form.profile_pic }} -->
-                            {{ profile_form }}
+        
+                        <div>
+        
+                            <label for="job_title">Job Title </label><br>
+                            {{ profile_form.job_title }}
                         </div>
+        
+                        <div class="flex-this row">
+                            <div class="country-container">
+                                <label for="country">Country </label><br>
+                                {{ profile_form.country }}
+                            </div>
+        
+                            <div class="pad-left">
+                                <label for="city_or_town">City or Town </label><br>
+                                {{ profile_form.city_or_town }}
+                            </div>
+                        </div>
+        
+                        {% include 'partials/_alerts.html' %}
+    
+                    <div>
+                        <button class="white-text action-btn default-btn">Save</button>
                     </div>
+                </form>
+            </div>
     
-                    <!-- <div>
-    
-                        <label for="job_title">Job Title </label><br>
-                        {{ profile_form.job_title }}
-                    </div> -->
-    
-                    <!-- <div class="flex-this row">
-                        <div class="country-container">
-                            <label for="country">Country </label><br>
-                            {{ profile_form.country }}
-                        </div>
-    
-                        <div class="pad-left">
-                            <label for="city_or_town">City or Town </label><br>
-                            {{ profile_form.city_or_town }}
-                        </div>
-                    </div> -->
-    
-                    {% include 'partials/_alerts.html' %}
-
-                <div>
-                    <button class="white-text action-btn default-btn">Save</button>
-                </div>
-            </form>
         </div>
-
     </div>
+
 
 </section>
 
