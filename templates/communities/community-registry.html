@@ -28,7 +28,6 @@
                     {% if communities %}
 
                         {% for community in communities %}
-                            {% if community.is_approved %}
                                 <form method="POST" action="">
 
                                         {% csrf_token %}
@@ -39,7 +38,6 @@
                                             <td class="td-btn"><button id="btn-{{ community.id }}" class="action-btn">Send request to join</button></td>
                                         </tr>
                                 </form>
-                                {% endif %}
                         {% endfor %}
 
                     {% else %}
