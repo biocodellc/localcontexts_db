@@ -49,7 +49,7 @@
                 <li><a class="white-text upper" href="{% url 'about' %}">About</a></li>
             {% endif %}
 
-            {% if request.get_full_path == "/accounts/dashboard/" %}
+            {% if request.get_full_path == "/accounts/dashboard/" or request.get_full_path == "/accounts/update-profile/" %}
                 <li><a id="active-link" class="white-text upper" href="{% url 'dashboard' %}">Account</a></li>
             {% else %}
                 <li><a class="white-text upper" href="{% url 'dashboard' %}">Account</a></li>
