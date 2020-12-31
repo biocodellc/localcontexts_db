@@ -586,6 +586,10 @@ input:focus {
     width: 100%;
 }
 
+.noti-container:hover {
+    background: rgba(56, 116, 171, 0.1);
+}
+
 .noti-container div:first-child {
     width: 3%;
 }
