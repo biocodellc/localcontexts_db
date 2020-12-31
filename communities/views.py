@@ -38,9 +38,8 @@ def create_community(request):
     return render(request, 'communities/create-community.html', context)
 
 
-@login_required(login_url='login')
 def community_registry(request):
-    communities = Community.objects.filter(is_approved=True)
+    communities = Community.objects.filter(is_approved=True, is_publicly_listed=True)
 
     if request.method == 'POST':
         # TODO: Change the button so the user can only submit a request once.

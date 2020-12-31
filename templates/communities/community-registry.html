@@ -28,8 +28,9 @@
                     {% if communities %}
 
                         {% for community in communities %}
-                                <form method="POST" action="">
+                            {% if user.is_authenticated %}
 
+                                <form method="POST" action="">
                                         {% csrf_token %}
                                         <tr>
                                             <td class="td-img"><img src="https://picsum.photos/200/75"></td>
@@ -38,6 +39,14 @@
                                             <td class="td-btn"><button id="btn-{{ community.id }}" class="action-btn">Send request to join</button></td>
                                         </tr>
                                 </form>
+
+                                {% else %}
+                                    <tr>
+                                        <td class="td-img"><img src="https://picsum.photos/200/75"></td>
+                                        <td class="td-name">{{community.community_name}}</td>
+                                        <td class="td-btn"></td>
+                                    </tr>
+                                {% endif %}
                         {% endfor %}
 
                     {% else %}
