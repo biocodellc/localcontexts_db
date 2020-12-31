@@ -78,7 +78,11 @@
             </div>
 
             {% else %}
-                <li><a class="white-text upper" href="{% url 'register' %}">Register</a></li>
+                {% if request.get_full_path == "/accounts/register/" %}
+                    <li><a id="active-link" class="white-text upper" href="{% url 'register' %}">Register</a></li>
+                {% else %}
+                    <li><a class="white-text upper" href="{% url 'register' %}">Register</a></li>
+                {% endif %}
                 <div>
                     <li class="orange-bg sign-in"><a class="upper white-text" href="{% url 'login' %}"><span class="nav-span">Sign In</span></a></li>
                 </div>
