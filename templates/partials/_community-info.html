@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 <div class="pad-top-8">
 
-    <div class="content-card flex-this column white-bg">
+    <div class="content-card content-card-space flex-this column white-bg">
     
         <div class="flex-this column stats-full-card">
     
@@ -19,7 +19,7 @@
     
                 {% if request.user == community.community_creator %}
                     <div>
-                        <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
+                        <a href="{% url 'update-community' community.id %}" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
                     </div>
                 {% endif %}
                 

@@ -25,7 +25,7 @@
 
 .user-info {
     width:100%;
-    padding-left: 2%;
+    padding-left: 1.5%;
 }
 
 #user-affiliation-container { 
@@ -129,8 +129,4 @@
 
 .edit-profile-section input {
     width: 50%;
-}
-
-.update-profile-card {
-    margin-top: 3%;
 }

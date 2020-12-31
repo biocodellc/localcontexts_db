@@ -71,6 +71,16 @@ def community_dashboard(request, pk):
     return render(request, 'communities/community.html', context)
 
 @login_required(login_url='login')
+def update_community(request, pk):
+    community = Community.objects.get(id=pk)
+
+    context = {
+        'community': community,
+    }
+    return render(request, 'communities/update-community.html', context)
+
+
+@login_required(login_url='login')
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
     form = InviteMemberForm()

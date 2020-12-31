@@ -5,8 +5,7 @@
     {% include 'partials/_user-info.html' %}
 
     {% if notifications.count > 0 %}
-        <section>
-            <div class="white-bg content-card noti-card">
+            <div class="white-bg content-card content-card-space noti-card">
                 
                     <h3 class="orange-text">Notifications</h3>
                     {% for n in notifications %}
@@ -27,7 +26,6 @@
                         </a>
                     {% endfor %}
             </div>
-        </section>
     {% endif %}
 
 
