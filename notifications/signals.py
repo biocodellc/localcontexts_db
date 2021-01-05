@@ -102,6 +102,7 @@ def community_application(sender, instance, created, **kwargs):
     if created:
         UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="create", community=instance)
 
+#TODO: Fix this, it sends a notification any time user edits then saves anything in the community 
 @receiver(post_save, sender=Community)
 def accept_community_application(sender, instance, **kwargs):
     if instance.is_approved == True:
