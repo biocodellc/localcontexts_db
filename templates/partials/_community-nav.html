@@ -1,10 +1,12 @@
 <div class="content-card content-card-space comm-nav flex-this column white-bg">
     <div class="comm-nav-links flex-this">
         <div><a href="{% url 'community-dashboard' community.id %}">Activity</button></div>
-        <div><a href="#">Requests</a></div>
-        <div><a href="#">Labels</a></div>
-        <div><a href="#">Relationships</a></div>
-        <div><a href="{% url 'members' community.id %}">Members</button></div>
-        <div><a href="#">Training</a></div>
+        <div><a href="{% url 'community-requests' community.id %}">Requests</a></div>
+        <div><a href="{% url 'community-labels' community.id %}">Labels</a></div>
+        <div><a href="{% url 'community-relationships' community.id %}">Relationships</a></div>
+        <div><a href="{% url 'members' community.id %}">Members</a></div>
+
+        <!-- For future iterations -->
+        <!-- <div><a href="#">Training</a></div> -->
     </div>
 </div>

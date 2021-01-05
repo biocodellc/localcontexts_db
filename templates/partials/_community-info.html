@@ -44,7 +44,6 @@
                         </span><br>
                         Members: <span>{{ community.get_member_count }}</span><br>
                         Location: <span>Town, {{ community.country.name }} </span><br>
-                        Community ID: <span>LCCDMNGM-1820</span>
                     </p>
                 </div>
     
@@ -55,8 +54,13 @@
                     </div>
     
                     <div class="orange-bg stats-card w-30">
-                        <h1>04</h1>
-                        <p>Training</p>
+                        <h1>{% if community.get_member_count < 10 %}
+                                0{{ community.get_member_count }}
+                            {% else %}
+                                {{ community.get_member_count }}
+                            {% endif %}
+                        </h1>
+                        <p>Members</p>
                     </div>
     
                     <div class="orange-bg stats-card w-30">

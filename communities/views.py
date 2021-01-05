@@ -113,3 +113,26 @@ def community_members(request, pk):
     }
 
     return render(request, 'communities/members.html', context)
+
+@login_required(login_url='login')
+def community_requests(request, pk):
+    community = Community.objects.get(id=pk)
+    context = {
+        'community': community,
+    }
+    return render(request, 'communities/requests.html', context)
+
+@login_required(login_url='login')
+def community_labels(request, pk):
+    community = Community.objects.get(id=pk)
+    context = {
+        'community': community,
+    }
+    return render(request, 'communities/labels.html', context)
+
+def community_relationships(request, pk):
+    community = Community.objects.get(id=pk)
+    context = {
+        'community': community,
+    }
+    return render(request, 'communities/relationships.html', context)
