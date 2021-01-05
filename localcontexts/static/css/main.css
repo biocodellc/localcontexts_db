@@ -594,4 +594,22 @@ input:focus {
     width: 87%;
 }
 
+/* Community dashboard: labels page */
+.bc-label-container {
+    padding: 1%;
+    flex-wrap: wrap;
+}
+
+.bc-label-container > div {
+    margin-right: 1.6%;
+}
+
+.proj-section-info {
+    /* border: 1px solid red; */
+}
+
+.additional-proj-info {
+    /* border: 1px solid blue; */
+    text-align: right;
+}
 
