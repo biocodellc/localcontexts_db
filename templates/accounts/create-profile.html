@@ -92,7 +92,12 @@
 
                         <div class="w-100 flex-this column">
                             <label class="reason-label" for="select">What is the reason for registering?</label><br>
-                            {{ profile_form.registration_reason }}
+                            <select name="registration_reason">
+                                <option value=""></option>
+                                <option value="community">Register a Community Account</option>
+                                <option value="institution">Register an Institution Account</option>
+                                <option value="researcher">Register a Research Account</option>
+                            </select>
                         </div>
 
                         </div>

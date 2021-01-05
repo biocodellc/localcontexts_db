@@ -7,12 +7,6 @@ from django.core.files.storage import default_storage
 from io import BytesIO
 
 class Profile(models.Model):
-    REASON = (
-        ('', ''),
-        ('community', 'Register a Community Account'),
-        ('institution', 'Register an Institution Account'),
-        ('researcher', 'Register a Research Account'),
-    )
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     profile_pic = models.ImageField(upload_to='photos/', blank=True, null=True, default='default.png')
     phone = PhoneField(blank=True, help_text='Contact phone number')
@@ -23,7 +17,6 @@ class Profile(models.Model):
     affiliation = models.CharField(verbose_name='affiliation', max_length=60, blank=True, null=True)
     community_member = models.BooleanField(default=False, null=True)
     is_researcher = models.BooleanField(default=False, null=True)
-    registration_reason = models.CharField(max_length=12, null=True, choices=REASON)
 
     def __str__(self):
         return str(self.user)
