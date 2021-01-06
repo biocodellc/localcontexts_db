@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import *
 from communities.models import *
+from .utils import send_community_approval_notification
 
 @login_required(login_url='login')
 def show_notification(request, pk):
@@ -59,6 +60,8 @@ def show_notification(request, pk):
             new_community = Community.objects.get(id=comm)
             new_community.is_approved = True
             new_community.save()
+
+            send_community_approval_notification(new_community.community_creator, new_community)
 
             return render(request, 'notifications/notification.html', {'notification': n})
 

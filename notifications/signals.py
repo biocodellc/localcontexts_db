@@ -1,5 +1,5 @@
 from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.dispatch import receiver, Signal
 from django.contrib.auth.models import User
 from communities.models import *
 from .models import *
@@ -91,25 +91,13 @@ def accept_user_join_request(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Community)
 def community_application(sender, instance, created, **kwargs):
-    sender_= instance.community_creator
-    receiver_= User.objects.get(username="dianalovette")
+    creator = instance.community_creator
+    site_admin = User.objects.get(username="dianalovette")
 
-    name = check_full_name(sender_)
+    name = check_full_name(creator)
 
     title = str(name) + " wants to create a community: " + str(instance.community_name)
     message = "Community application."
 
     if created:
-        UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="create", community=instance)
-
-#TODO: Fix this, it sends a notification any time user edits then saves anything in the community 
-@receiver(post_save, sender=Community)
-def accept_community_application(sender, instance, **kwargs):
-    if instance.is_approved == True:
-        sender_ = User.objects.get(username="dianalovette")
-        receiver_ = instance.community_creator
-
-        title = "Your community application for "  +  str(instance.community_name) + " was approved!"
-        message = "You may now export your labels."
-
-        UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="approval", community=instance)
+        UserNotification.objects.create(to_user=site_admin, from_user=creator, title=title, message=message, notification_type="create", community=instance)
