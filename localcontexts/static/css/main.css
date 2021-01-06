@@ -124,8 +124,12 @@ input:focus {
     line-height: 16.8px;
 }
 
-.bold {
-    font-weight: 500;
+.weight-500 {
+    font-weight: 500;  
+}
+
+.weight-600 {
+    font-weight: 600;
 }
 
 .upper {
@@ -295,7 +299,7 @@ input:focus {
     border: none;
 }
 
-/* COMMUNITY REGISTRY PAGE (LOGGED IN) */
+/* COMMUNITY REGISTRY PAGE */
 
 .registry-container {
     margin: auto;
@@ -481,7 +485,7 @@ input:focus {
     margin: 0;
 }
 
-/* Community Member Listing */
+/* COMMUNITY DASHBOARD: MEMBERS PAGE */
 .community-member-card, .add-member-card {
     max-height: 75px;
     min-height: 75px;
@@ -594,7 +598,7 @@ input:focus {
     width: 87%;
 }
 
-/* Community dashboard: labels page */
+/* COMMUNITY DASHBOARD: LABELS PAGE */
 .bc-label-container {
     padding: 1%;
     flex-wrap: wrap;
@@ -605,11 +609,11 @@ input:focus {
 }
 
 .proj-section-info {
-    /* border: 1px solid red; */
+    border: 1px solid red;
 }
 
 .additional-proj-info {
-    /* border: 1px solid blue; */
+    border: 1px solid blue;
     text-align: right;
 }
 

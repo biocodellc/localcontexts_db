@@ -9,7 +9,7 @@
                 <div class="orange-bg color-section">
                 </div>
                 <div class="w-90 member-name">
-                    <h4 class="bold">
+                    <h4 class="weight-500">
                         {% if community.community_creator.get_full_name %}
                             {{ community.community_creator.get_full_name }}
                         {% else %}
@@ -28,7 +28,7 @@
                     <div class="orange-bg color-section">
                     </div>
                     <div class="w-90 member-name">
-                        <h4 class="bold">
+                        <h4 class="weight-500">
                             {% if admin.get_full_name %}
                                 {{ admin.get_full_name }}
                             {% else %}
@@ -48,7 +48,7 @@
                     <div class="darkgreen-bg color-section">
                     </div>
                     <div class="w-90 member-name">
-                        <h4 class="bold">
+                        <h4 class="weight-500">
                             {% if editor.get_full_name %}
                                 {{ editor.get_full_name }}
                             {% else %}
@@ -67,7 +67,7 @@
                     <div class="darkteal-bg color-section">
                     </div>
                     <div class="w-90 member-name">
-                        <h4 class="bold">
+                        <h4 class="weight-500">
                             {% if viewer.get_full_name %}
                                 {{ viewer.get_full_name }}
                             {% else %}
@@ -85,7 +85,7 @@
                 <a onclick='addMemberModal()'>
                     <div class="flex-this add-member-card">
                         <div class="w-100 add-member">
-                            <h4 class="darkteal-text bold">+ Add Members </h4>
+                            <h4 class="darkteal-text weight-500">+ Add Members </h4>
                         </div>
                     </div>
                 </a>
@@ -97,7 +97,7 @@
                         <div id="close-modal" class="close-modal-btn w-100"> <span>&times;</span></div>
                         <div class="add-member-modal-content">
                             <div>
-                                <h4 class="bold">Add Members to <span class="darkteal-text">{{community.community_name}}</span></h4>
+                                <h4 class="weight-500">Add Members to <span class="darkteal-text">{{community.community_name}}</span></h4>
                             </div>
                             <div class="w-100 member-modal-form flex-this column">
                               <form method="POST" action="">
