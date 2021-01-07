@@ -7,6 +7,11 @@ class CreateCommunityForm(forms.ModelForm):
         model = Community
         fields = ['community_name', 'country']
 
+class UpdateCommunityForm(forms.ModelForm):
+    class Meta:
+        model = Community
+        fields = ['community_name', 'contact_name', 'contact_email', 'town', 'country', 'is_publicly_listed']
+
 class InviteMemberForm(forms.ModelForm):
     class Meta:
         model = InviteMember

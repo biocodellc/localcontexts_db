@@ -73,13 +73,23 @@ def community_dashboard(request, pk):
         'community': community,
     }
     return render(request, 'communities/community.html', context)
-
+    
+# TODO: Permissions: Admins only
 @login_required(login_url='login')
 def update_community(request, pk):
     community = Community.objects.get(id=pk)
+    update_form = UpdateCommunityForm(instance=community)
+
+    if request.method == "POST":
+        update_form = UpdateCommunityForm(request.POST, instance=community)
+        if update_form.is_valid():
+            update_form.save()
+        else:
+            update_form = UpdateCommunityForm(instance=community)
 
     context = {
         'community': community,
+        'update_form': update_form,
     }
     return render(request, 'communities/update-community.html', context)
 

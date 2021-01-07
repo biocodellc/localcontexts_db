@@ -7,6 +7,17 @@
     <div class="content-card content-card-space white-bg flex-this column">
         <div>
             <h3 class="orange-text">Settings</h3>
+
+            <div>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div>
+                        {{ update_form }}
+                    </div>
+                    <button class="action-btn">Save</button>
+                </form>
+            </div>
+
         </div>
     </div>
 
