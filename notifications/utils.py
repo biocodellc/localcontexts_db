@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from notifications.models import UserNotification
 
 def check_full_name(user):
@@ -11,11 +11,12 @@ def check_full_name(user):
     return user
 
 def send_community_approval_notification(to_user, community):
-    site_admin = User.objects.get(username="dianalovette")
+    site_admins = User.objects.filter(groups__name='Site Administrator')
 
     title = "Your community application for "  +  str(community.community_name) + " was approved!"
     message = "You may now export your labels."
 
-    UserNotification.objects.create(to_user=to_user, from_user=site_admin, title=title, message=message, notification_type="approval", community=community)
+    for admin in site_admins:
+        UserNotification.objects.create(to_user=to_user, from_user=admin, title=title, message=message, notification_type="approval", community=community)
 
 

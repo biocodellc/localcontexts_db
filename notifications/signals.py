@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver, Signal
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from communities.models import *
 from .models import *
 from .utils import *
@@ -92,7 +92,8 @@ def accept_user_join_request(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Community)
 def community_application(sender, instance, created, **kwargs):
     creator = instance.community_creator
-    site_admin = User.objects.get(username="dianalovette")
+    # site_admin = User.objects.get(username="dianalovette")
+    site_admins = User.objects.filter(groups__name='Site Administrator')
 
     name = check_full_name(creator)
 
@@ -100,4 +101,5 @@ def community_application(sender, instance, created, **kwargs):
     message = "Community application."
 
     if created:
-        UserNotification.objects.create(to_user=site_admin, from_user=creator, title=title, message=message, notification_type="create", community=instance)
+        for admin in site_admins:
+            UserNotification.objects.create(to_user=admin, from_user=creator, title=title, message=message, notification_type="create", community=instance)

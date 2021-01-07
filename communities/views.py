@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from .forms import *
 from .models import *
-from .utils import checkif_community_in_user_community, checkif_invite_exists
+from .utils import get_site_admin_email, checkif_community_in_user_community, checkif_invite_exists
 
 
 @login_required(login_url='login')
@@ -25,13 +25,15 @@ def create_community(request):
             obj.community_creator = request.user
             obj.save()
 
+            site_admin_email = get_site_admin_email()
+
             # Send email to site admin
             template = render_to_string('snippets/community-application.html', { 'obj' : obj })
             send_mail(
                 'New Community Application', 
                 template, 
                 settings.EMAIL_HOST_USER, 
-                ['dianalovette90@gmail.com'], 
+                site_admin_email, 
                 fail_silently=False)
 
             return redirect('community-registry')
