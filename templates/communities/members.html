@@ -95,12 +95,12 @@
                     <div class="add-member-modal-wrapper flex-this column w-100">
                   
                         <div id="close-modal" class="close-modal-btn w-100"> <span>&times;</span></div>
-                        <div class="add-member-modal-content">
+                        <div class="add-member-modal-content w-100">
                             <div>
                                 <h4 class="weight-500">Add Members to <span class="darkteal-text">{{community.community_name}}</span></h4>
                             </div>
                             <div class="w-100 member-modal-form flex-this column">
-                              <form method="POST" action="">
+                              <form method="POST" action="{% url 'members' community.id %}">
                                   {% csrf_token %}
                       
                                   <!-- <div>
@@ -119,8 +119,17 @@
                                   </div> -->
                       
                                   <div> 
-    
-                                      {{ form }}
+                                    {{ form.receiver.label }} <br>
+                                    {{ form.receiver }} <br>
+                                    {{ form.role.label }} <br>
+                                    {{ form.role }}
+                                    
+                                        {% if form.errors %}
+                                        <script>
+                                            document.getElementById("add-member-modal").addMemberModal();
+                                        </script>
+                                        {% endif %}
+                                    
                       
                                       <p>- Admins and Editors have access to create and manage labels.</p>
                                   </div>
@@ -129,7 +138,7 @@
                                     <!-- Alerts -->
                                     {% include 'partials/_alerts.html' %}
 
-                                      <button class="action-btn">Send Invitation </button>
+                                      <button id="test-btn" class="action-btn">Send Invitation </button>
                                   </div>
                                 </form>
                             </div>

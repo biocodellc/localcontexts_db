@@ -577,13 +577,8 @@ input:focus {
 }
 
 .add-member-modal-content {
-    width: 100%;
     padding-left: 40px;
     padding-right: 40px;
-}
-
-.mem-select select {
-    width: 100%;
 }
 
 /* NOTIFICATIONS */

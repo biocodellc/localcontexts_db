@@ -25,10 +25,14 @@ if (passwordField ) {
 // Modal for adding a community member
 function addMemberModal() {
     let x = document.getElementById("add-member-modal");
+    // let btn = document.getElementById("test-btn")
     if (x.style.display === "none") {
-      x.style.display = "block";
+      x.style.display = "block"
+    //   btn.addEventListener('click', (evt) => {
+    //       evt.preventDefault()
+    //   })
     } else {
-      x.style.display = "none";
+      x.style.display = "none"
     }
 
     let c = document.getElementById('close-modal')
@@ -37,6 +41,7 @@ function addMemberModal() {
     })
 }
 
+// Expand project details in community/labels/projects
 function showMore() {
     let div = document.getElementById('proj-expand')
 

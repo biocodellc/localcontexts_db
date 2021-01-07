@@ -7,6 +7,8 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from .forms import *
 from .models import *
+from .utils import checkif_community_in_user_community, checkif_invite_exists
+
 
 @login_required(login_url='login')
 def connect_community(request):
@@ -86,26 +88,28 @@ def community_members(request, pk):
     form = InviteMemberForm()
 
     if request.method == "POST":
-        form = InviteMemberForm(request.POST)
+        form = InviteMemberForm(request.POST or None)
         receiver = request.POST.get('receiver')
 
-        u = UserCommunity.objects.get(user=receiver)
-        comm_list = u.communities.all()
+        user_check = checkif_community_in_user_community(receiver, community)
+        
+        if user_check == False: # If user is not community member
+            check_invitation = checkif_invite_exists(receiver, community) # Check to see if invitation already exists
 
-        # If user is already a member, display message, else create an invitation
-        if community in comm_list:
-            #TODO: get this message to show up without the modal closing.
-            messages.add_message(request, messages.INFO, 'This user is already a member')
-            print('****************   this user is already a member     ***************')
+            if check_invitation == False: # If invitation does not exist, save form.
+                if form.is_valid():
+                    obj = form.save(commit=False)
+                    obj.sender = request.user
+                    obj.status = 'sent'
+                    obj.community = community
+                    obj.save()
+
+                    messages.add_message(request, messages.INFO, 'Invitation Sent!')
+            else: 
+                messages.add_message(request, messages.INFO, 'This user has already been invited to this community!')
         else:
-            if form.is_valid():
-                obj = form.save(commit=False)
-                obj.sender = request.user
-                obj.status = 'sent'
-                obj.community = community
-                obj.save()
+            messages.add_message(request, messages.ERROR, 'User Already A Member')
 
-                messages.add_message(request, messages.INFO, 'Invitation Sent!')
 
     context = {
         'community': community,
