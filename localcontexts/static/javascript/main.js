@@ -37,3 +37,14 @@ function addMemberModal() {
     })
 }
 
+function showMore() {
+    let div = document.getElementById('proj-expand')
+
+    if (div.style.height === "0px") {
+        div.style.height = "300px"
+        div.style.transition = "height 0.5s"
+    } else {
+        div.style.height = "0px"
+    }
+}
+

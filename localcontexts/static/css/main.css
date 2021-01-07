@@ -222,6 +222,20 @@ input:focus {
     font-size: 14px;
 }
 
+/* TODO: consolidate this so it does not repeat */
+.green-action-btn {
+    color: #fff;
+    cursor: pointer;
+    margin-top: 2%;
+    background-color: #058F73;
+    box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.25);
+    border: none;
+    max-height: 30px;
+    min-height: 30px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
 .default-btn {
     max-width: 110px;
     min-width: 110px;
@@ -623,9 +637,10 @@ input:focus {
 
 .proj-title-container h2 {
     font-size: 40px;
+    cursor: pointer;
 }
 
-.additional-proj-info img {
+.additional-proj-info img, .proj-label-summary img {
     width: 90.3px;
     height: 70px;
 }
@@ -634,3 +649,49 @@ input:focus {
     margin-left: 3%;
 }
 
+/* COMMUNITY DASHBOARD: LABELS EXPANDABLE CONTENT */
+
+/* SAVE FOR NOW: REFERENCE */
+/* label::before {
+    font-size: 40px;
+    content: "+";
+    vertical-align: text-top;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 3px;
+} */
+
+
+/* #toggle:checked ~ label::before {
+    content: "-";
+} */
+
+#proj-expand {
+    height: 0px;
+    overflow: auto;
+}
+
+.proj-btns {
+    text-align: right;
+}
+
+.proj-btns button {
+    min-width: 119px;
+    max-width: 119px;
+}
+
+.w-200px {
+    max-width: 200px;
+    min-width: 200px;
+}
+
+.proj-label-summary h4 {
+    margin: 0;
+    padding: 0;
+    font-weight: 500;
+}
+
+.margin-left-1 {
+    margin-left: 1%;
+}
