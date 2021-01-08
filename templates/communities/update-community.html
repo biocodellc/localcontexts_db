@@ -5,20 +5,79 @@
     {% include 'partials/_community-nav.html' %}
 
     <div class="content-card content-card-space white-bg flex-this column">
-        <div>
-            <h3 class="orange-text">Settings</h3>
+        <h3 class="orange-text">Settings</h3>
 
-            <div>
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <div>
-                        {{ update_form }}
-                    </div>
-                    <button class="action-btn">Save</button>
-                </form>
+        <div class="flex-this w-100">
+
+            <div class="flex-this w-20 set-nav">
+                <div class="w-20">
+                    <img src="{% static 'images/profile-icon.png' %}">
+                </div>
+    
+                <div class="w-80">
+                    <p>
+                        <strong>Community Account</strong><br>
+                        Contact name, email, location
+                    </p>
+                </div>
             </div>
+    
+            <div class="flex-this column w-80 border-left">
+    
+                    <div>
+                        <h3>Workspace Settings</h3>
+                    </div>
+    
+                    <div>
+                        <form method="POST" action="">
+                            {% csrf_token %}
 
+                                <div class="w-100 flex-this form-one">
+                                    <div class="w-30">
+                                        {{ update_form.community_name.label }} <br>
+                                        {{ update_form.community_name }}
+                                    </div>
+                                    <div class="w-30">
+                                        {{ update_form.town.label }} <br>
+                                        {{ update_form.town }}
+                                    </div>
+                                    <div class="w-30">
+                                        {{ update_form.country.label }} <br>
+                                        {{ update_form.country }}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div>
+                                        <h3>Contact Person</h3>
+                                    </div>
+                                    <div class="flex-this w-100 form-one">
+                                        <div class="w-30">
+                                            <label for="contact_name"> Name </label><br>                                           
+                                            {{ update_form.contact_name }}
+                                        </div>
+                                        <div class="w-30">
+                                            <label for="contact_email"> Email </label><br>                                       
+                                            {{ update_form.contact_email }}
+                                        </div>
+                                        <div class="w-30">
+                                            <label for="is_publicly_listed"> Make Public </label><br>
+                                            {{ update_form.is_publicly_listed }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% include 'partials/_alerts.html' %}
+
+                            <div>
+                                <button class="action-btn default-btn">Save</button>
+                            </div>
+                        </form>
+                    </div>
+    
+                </div>
         </div>
+
     </div>
 
 

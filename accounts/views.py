@@ -109,8 +109,6 @@ def logout(request):
         return redirect('index')
 
 @login_required(login_url='login')
-# Example of custom decorator to allow specific roles to view the dash
-# @allowed_users(allowed_roles=['admin', 'editor'])
 def dashboard(request):
     n = UserNotification.objects.filter(to_user=request.user, viewed=False)
 

@@ -690,3 +690,23 @@ input:focus {
 .margin-left-1 {
     margin-left: 1%;
 }
+
+/* COMMUNITY DASHBOARD: SETTINGS */
+.set-nav {
+    max-height: 80px;
+    min-height: 80px;
+}
+
+.set-nav p, .border-left h3 {
+    margin: 0;
+}
+
+.border-left{
+    border-left: 1px solid #000;
+    padding-left: 2%;
+}
+
+.form-one {
+    margin-top: 1%;
+    margin-bottom: 2%;
+}
