@@ -103,41 +103,33 @@
                               <form method="POST" action="{% url 'members' community.id %}">
                                   {% csrf_token %}
                       
-                                  <!-- <div>
-                                      <label>Email Address</label><br>
-                                      <input type="text" class="w-100">
-                                  </div>
-                      
-                                  <div>
-                                      <label>Select Their Role</label><br>
-                                      <input type="email" class="w-100">
-                                  </div>
-                      
-                                  <div>
-                                      <label>Output Message</label><br>
-                                      <input type="text"  class="w-100"> <br>
-                                  </div> -->
-                      
                                   <div> 
-                                    {{ form.receiver.label }} <br>
-                                    {{ form.receiver }} <br>
-                                    {{ form.role.label }} <br>
-                                    {{ form.role }}
-                                    
-                                        {% if form.errors %}
-                                        <script>
-                                            document.getElementById("add-member-modal").addMemberModal();
-                                        </script>
-                                        {% endif %}
-                                    
-                      
-                                      <p>- Admins and Editors have access to create and manage labels.</p>
+                                      <div>
+                                        <div> 
+                                            {{ form.receiver.label }} <br>
+                                            {{ form.receiver }} 
+                                          </div>
+                                          <div>
+                                            {{ form.role.label }} <br>
+                                            {{ form.role }} 
+                                          </div>
+                                      </div>
+
+
+                                      <div>
+                                        <!-- <div>
+                                            {{ form.message.label }}<br>
+                                            {{ form.message }}
+                                        </div> -->
+                                      </div>
                                   </div>
                       
                                   <div>
                                     <!-- Alerts -->
                                     {% include 'partials/_alerts.html' %}
-
+                                        <div>
+                                            <p>- Admins and Editors have access to create and manage labels.</p>
+                                        </div>
                                       <button id="test-btn" class="action-btn">Send Invitation </button>
                                   </div>
                                 </form>

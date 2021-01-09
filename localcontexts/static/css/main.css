@@ -560,16 +560,27 @@ input:focus {
 
 .add-member-modal-wrapper {
     background-color: #fefefe;
-    margin: 15% auto;
+    margin: 10% auto;
     padding: 20px;
     border-radius: 5px;
     width: 70%;
     height: 420px;
 }
 
+.add-member-modal-wrapper h4 {
+    /* border: 1px solid blue; */
+    margin-top:0;
+}
+
+/* .member-modal-form {
+    border: 1px solid red;
+} */
+
 .close-modal-btn {
+    /* border: 1px solid red; */
     text-align: right;
     padding-right: 10px;
+    margin-bottom: 0;
 }
 
 .close-modal-btn span {

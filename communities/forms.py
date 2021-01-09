@@ -15,7 +15,7 @@ class UpdateCommunityForm(forms.ModelForm):
 class InviteMemberForm(forms.ModelForm):
     class Meta:
         model = InviteMember
-        fields = ['receiver', 'role']
+        fields = ['receiver', 'role', 'message']
     
     def __init__(self, *args, **kwargs):
         super(InviteMemberForm, self).__init__(*args, **kwargs)

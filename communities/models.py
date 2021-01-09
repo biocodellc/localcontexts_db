@@ -74,6 +74,7 @@ class InviteMember(models.Model):
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community', null=True)
     role = models.CharField(max_length=8, choices=ROLES, null=True)
+    message = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent')
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
