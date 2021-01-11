@@ -402,6 +402,14 @@ input:focus {
     margin-bottom: 0;
 }
 
+.loc {
+    padding-left: 1%;
+}
+
+.community-title {
+    margin-top: 16px;
+}
+
 .activity-card-container h3, .notifications-card h3 {
     margin-top: 0;
 }
@@ -568,16 +576,10 @@ input:focus {
 }
 
 .add-member-modal-wrapper h4 {
-    /* border: 1px solid blue; */
     margin-top:0;
 }
 
-/* .member-modal-form {
-    border: 1px solid red;
-} */
-
 .close-modal-btn {
-    /* border: 1px solid red; */
     text-align: right;
     padding-right: 10px;
     margin-bottom: 0;

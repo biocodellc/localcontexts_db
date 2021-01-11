@@ -3,10 +3,10 @@
 
     <div class="content-card content-card-space flex-this column white-bg">
     
-        <div class="flex-this column stats-full-card">
+        <div class="flex-this column">
     
             <div class="flex-this w-100 space-between">
-                <div>
+                <div class="loc">
                     <a href="{% url 'users' community.community_creator.id %}" class="darkteal-text">
                         {% if community.community_creator.first_name %}
                             {{ community.community_creator.first_name }}
@@ -32,7 +32,7 @@
                 </div>
     
                 <div class="flex-this column w-40">
-                    <h2 class="orange-text">{{ community.community_name }} </h2>
+                    <h2 class="orange-text community-title">{{ community.community_name }} </h2>
                     <p>
                         Account: <span> 
                             {% if community.community_creator.get_full_name %}

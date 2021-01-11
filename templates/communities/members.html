@@ -103,8 +103,8 @@
                               <form method="POST" action="{% url 'members' community.id %}">
                                   {% csrf_token %}
                       
-                                  <div> 
-                                      <div>
+                                  <div class="flex-this"> 
+                                      <div class="w-50">
                                         <div> 
                                             {{ form.receiver.label }} <br>
                                             {{ form.receiver }} 
@@ -116,20 +116,18 @@
                                       </div>
 
 
-                                      <div>
-                                        <!-- <div>
+                                      <div class="w-50">
+                                        <div>
                                             {{ form.message.label }}<br>
                                             {{ form.message }}
-                                        </div> -->
+                                        </div>
                                       </div>
                                   </div>
                       
                                   <div>
                                     <!-- Alerts -->
                                     {% include 'partials/_alerts.html' %}
-                                        <div>
                                             <p>- Admins and Editors have access to create and manage labels.</p>
-                                        </div>
                                       <button id="test-btn" class="action-btn">Send Invitation </button>
                                   </div>
                                 </form>
