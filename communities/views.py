@@ -79,9 +79,6 @@ def community_dashboard(request, pk):
         }
         return render(request, 'communities/community.html', context)
 
-# TODO: Permissions: Admins only
-# Example of custom decorator to allow specific roles to view the dash
-# @allowed_users(allowed_roles=['admin', 'editor'])
 @login_required(login_url='login')
 def update_community(request, pk):
     community = Community.objects.get(id=pk)
@@ -92,7 +89,7 @@ def update_community(request, pk):
     
     else:
         update_form = UpdateCommunityForm(instance=community)
-        if member_role == 'admin':
+        if member_role == 'admin': # Only admins can change the form 
             if request.method == "POST":
                 update_form = UpdateCommunityForm(request.POST, instance=community)
                 if update_form.is_valid():
