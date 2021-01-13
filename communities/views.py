@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -7,7 +8,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from .forms import *
 from .models import *
-from .utils import get_site_admin_email, checkif_community_in_user_community, checkif_invite_exists
+from .utils import *
 
 
 @login_required(login_url='login')
@@ -69,10 +70,14 @@ def community_registry(request):
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
 
-    context = {
-        'community': community,
-    }
-    return render(request, 'communities/community.html', context)
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        context = {
+            'community': community,
+        }
+        return render(request, 'communities/community.html', context)
 
 # TODO: Permissions: Admins only
 # Example of custom decorator to allow specific roles to view the dash
@@ -80,21 +85,27 @@ def community_dashboard(request, pk):
 @login_required(login_url='login')
 def update_community(request, pk):
     community = Community.objects.get(id=pk)
-    update_form = UpdateCommunityForm(instance=community)
 
-    if request.method == "POST":
-        update_form = UpdateCommunityForm(request.POST, instance=community)
-        if update_form.is_valid():
-            update_form.save()
-            messages.add_message(request, messages.SUCCESS, 'Info Updated!')
-        else:
-            update_form = UpdateCommunityForm(instance=community)
+    member_role = check_member_role(request.user, community)
+    if member_role == False or member_role == 'editor' or member_role == 'viewer': # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    
+    else:
+        update_form = UpdateCommunityForm(instance=community)
+        if member_role == 'admin':
+            if request.method == "POST":
+                update_form = UpdateCommunityForm(request.POST, instance=community)
+                if update_form.is_valid():
+                    update_form.save()
+                    messages.add_message(request, messages.SUCCESS, 'Info Updated!')
+                else:
+                    update_form = UpdateCommunityForm(instance=community)
 
-    context = {
-        'community': community,
-        'update_form': update_form,
-    }
-    return render(request, 'communities/update-community.html', context)
+        context = {
+            'community': community,
+            'update_form': update_form,
+        }
+        return render(request, 'communities/update-community.html', context)
 
 
 @login_required(login_url='login')
@@ -102,28 +113,32 @@ def community_members(request, pk):
     community = Community.objects.get(id=pk)
     form = InviteMemberForm()
 
-    if request.method == "POST":
-        form = InviteMemberForm(request.POST or None)
-        receiver = request.POST.get('receiver')
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
 
-        user_check = checkif_community_in_user_community(receiver, community)
-        
-        if user_check == False: # If user is not community member
-            check_invitation = checkif_invite_exists(receiver, community) # Check to see if invitation already exists
+    else:
+        if request.method == "POST":
+            form = InviteMemberForm(request.POST or None)
+            receiver = request.POST.get('receiver')
+            user_check = checkif_community_in_user_community(receiver, community)
+            
+            if user_check == False: # If user is not community member
+                check_invitation = checkif_invite_exists(receiver, community) # Check to see if invitation already exists
 
-            if check_invitation == False: # If invitation does not exist, save form.
-                if form.is_valid():
-                    obj = form.save(commit=False)
-                    obj.sender = request.user
-                    obj.status = 'sent'
-                    obj.community = community
-                    obj.save()
+                if check_invitation == False: # If invitation does not exist, save form.
+                    if form.is_valid():
+                        obj = form.save(commit=False)
+                        obj.sender = request.user
+                        obj.status = 'sent'
+                        obj.community = community
+                        obj.save()
 
-                    messages.add_message(request, messages.INFO, 'Invitation Sent!')
-            else: 
-                messages.add_message(request, messages.INFO, 'This user has already been invited to this community!')
-        else:
-            messages.add_message(request, messages.ERROR, 'User Already A Member')
+                        messages.add_message(request, messages.INFO, 'Invitation Sent!')
+                else: 
+                    messages.add_message(request, messages.INFO, 'This user has already been invited to this community!')
+            else:
+                messages.add_message(request, messages.ERROR, 'User Already A Member')
 
 
     context = {
@@ -136,22 +151,43 @@ def community_members(request, pk):
 @login_required(login_url='login')
 def community_requests(request, pk):
     community = Community.objects.get(id=pk)
-    context = {
-        'community': community,
-    }
-    return render(request, 'communities/requests.html', context)
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        context = {
+            'community': community,
+        }
+        return render(request, 'communities/requests.html', context)
 
 @login_required(login_url='login')
 def community_labels(request, pk):
     community = Community.objects.get(id=pk)
-    context = {
-        'community': community,
-    }
-    return render(request, 'communities/labels.html', context)
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else: 
+        context = {
+            'community': community,
+        }
+        return render(request, 'communities/labels.html', context)
 
 def community_relationships(request, pk):
     community = Community.objects.get(id=pk)
-    context = {
-        'community': community,
-    }
-    return render(request, 'communities/relationships.html', context)
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        context = {
+            'community': community,
+        }
+        return render(request, 'communities/relationships.html', context)
+
+def restricted_view(request, pk):
+    community = Community.objects.get(id=pk)
+    return render(request, 'communities/restricted.html', {'community': community})
+
+

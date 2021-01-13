@@ -1,4 +1,4 @@
-from communities.models import UserCommunity, InviteMember
+from communities.models import UserCommunity, InviteMember, Community
 from django.contrib.auth.models import Group
 
 def checkif_community_in_user_community(user, community):
@@ -7,6 +7,30 @@ def checkif_community_in_user_community(user, community):
 
     if community in community_list:
         return print('################# USER ALREADY A MEMBER ########################')
+    else:
+        return False
+
+def check_member_role(user, community):
+    u = UserCommunity.objects.get(user=user)
+    community_list = u.communities.all()
+
+    if community in community_list:
+        c = Community.objects.get(community_name=community)
+
+        admins = c.get_admins()
+        editors = c.get_editors()
+        viewers = c.get_viewers()
+
+        if user in admins or user == c.community_creator:
+            return 'admin'
+
+        elif user in editors:
+            return 'editor'
+
+        elif user in viewers:
+            return 'viewer'
+        else:
+            print('something went wrong, user does not have a role.')
     else:
         return False
 

@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
+<section class="grey-bg">
+
+    {% include 'partials/_community-info.html' %}
+    {% include 'partials/_community-nav.html' %}
+
+    <div class="content-card content-card-space white-bg">
+        <div>
+            <h4>You do not have permissions to view this page.</h4>
+        </div>
+    </div>
+
+</section>
+
+{% include 'partials/_auth-footer.html' %}
+{% endblock %}

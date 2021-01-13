@@ -14,4 +14,5 @@ urlpatterns = [
     path('community/labels/<str:pk>/', views.community_labels, name="community-labels"),
     path('community/relationships/<str:pk>/', views.community_relationships, name="community-relationships"),
 
+    path('community/restricted/<str:pk>/', views.restricted_view, name="restricted"),
 ]
