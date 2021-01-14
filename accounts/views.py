@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from django.contrib import messages, auth
 
 from django.contrib.auth.models import User
@@ -9,10 +10,11 @@ from notifications.models import UserNotification
 
 from .decorators import *
 from .models import Profile
-from .forms import RegistrationForm, UserCreateProfileForm, UserUpdateForm, ProfileUpdateForm
+from .forms import *
 
 # Imports for sending emails
 from django.contrib.auth.decorators import login_required
+from django.core import signing
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -100,7 +102,37 @@ class ActivateAccountView(View):
 
 @unauthenticated_user
 def verify(request):
-    return render(request, 'accounts/verify.html')
+    if not request.user.is_anonymous:
+        return HttpResponseRedirect('/accounts/dashboard/')
+
+    if request.method == 'POST':
+        form = ResendEmailActivationForm(request.POST)
+        if form.is_valid():
+            active_users = User._default_manager.filter(**{
+                '%s__iexact' % User.get_email_field_name(): form.cleaned_data['email'],
+                'is_active': False,
+            })
+
+            if active_users:
+                current_site = get_current_site(request)
+                email_template = 'snippets/activate.html'
+                email_subject = 'Activate Your Account'
+                message = render_to_string(email_template, {
+                    'user': active_users[0],
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(active_users[0].pk)),
+                    'token': generate_token.make_token(active_users[0]),
+                })
+                active_users[0].email_user(email_subject, message)
+                messages.add_message(request, messages.INFO, 'Activation Email Sent!')
+                return redirect('verify')
+
+            else:
+                messages.add_message(request, messages.ERROR, 'Email did not match any registration email.')
+                return redirect('verify')
+    else:
+        form = ResendEmailActivationForm()
+    return render(request, 'accounts/verify.html', {'form': form})
     
 @login_required(login_url='login')
 def logout(request):
@@ -196,7 +228,7 @@ def update_profile(request):
             messages.add_message(request, messages.SUCCESS, 'Profile Updated!')
             return redirect('update-profile')
         else:
-            messages.add_message(request, messages.ERROR, 'Form was not validated')
+            messages.add_message(request, messages.ERROR, 'Something went wrong.')
             return redirect('update-profile')
     else:
         user_form = UserUpdateForm(instance=request.user)

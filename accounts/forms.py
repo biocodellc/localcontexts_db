@@ -1,8 +1,8 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Profile
-# from django.core.exceptions import ValidationError
 
 class RegistrationForm(UserCreationForm):
     first_name = forms.CharField(max_length=50, required=False)
@@ -26,8 +26,6 @@ class RegistrationForm(UserCreationForm):
 
         return user
 
-#TODO: Find out if there is a better way to do this.
-#/accounts/create-profile
 class UserCreateProfileForm(forms.ModelForm):
     class Meta:
         model = User
@@ -46,3 +44,6 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['profile_pic', 'job_title', 'city_or_town', 'country']
+
+class ResendEmailActivationForm(forms.Form):
+    email = forms.EmailField(label=_('Email'), required=True)
