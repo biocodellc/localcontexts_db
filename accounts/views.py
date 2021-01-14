@@ -4,12 +4,11 @@ from django.contrib import messages, auth
 
 from django.contrib.auth.models import User
 from django.views.generic import View
-from communities.views import connect_community
-from communities.models import Community, UserCommunity
+from communities.models import Community
 from notifications.models import UserNotification
 
 from .decorators import *
-from .models import Profile
+from .models import *
 from .forms import *
 
 # Imports for sending emails

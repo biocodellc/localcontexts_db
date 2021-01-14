@@ -1,4 +1,5 @@
-from communities.models import UserCommunity, InviteMember, Community
+from communities.models import InviteMember, Community
+from accounts.models import UserCommunity
 from django.contrib.auth.models import Group
 
 def checkif_community_in_user_community(user, community):

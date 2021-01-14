@@ -42,22 +42,6 @@ class Community(models.Model):
         verbose_name = 'Community'
         verbose_name_plural = 'Communities'
 
-class UserCommunity(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
-    communities = models.ManyToManyField(Community, blank=True, related_name="user_communities")
-
-    @classmethod
-    def create(cls, user):
-        obj = cls(user=user)
-        return obj
-
-    def __str__(self):
-        return str(self.user)
-    
-    class Meta:
-        verbose_name = 'User Community'
-        verbose_name_plural = 'User Communities'
-
 class InviteMember(models.Model):
     STATUS_CHOICES = (
         ('sent', 'sent'),

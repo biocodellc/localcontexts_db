@@ -22,14 +22,3 @@ class Institution(models.Model):
     class Meta:
         verbose_name = 'Institution'
         verbose_name_plural = 'Institutions'
-
-class UserInstitution(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
-    institutions = models.ManyToManyField(Institution, blank=True)
-
-    def __str__(self):
-        return str(self.user)
-
-    class Meta:
-        verbose_name = 'User Institution'
-        verbose_name_plural = 'User Institutions'

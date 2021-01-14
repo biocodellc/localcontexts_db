@@ -6,6 +6,9 @@ from PIL import Image
 from django.core.files.storage import default_storage
 from io import BytesIO
 
+from communities.models import Community
+from institutions.models import Institution
+
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     profile_pic = models.ImageField(upload_to='photos/', blank=True, null=True, default='default.png')
@@ -35,3 +38,30 @@ class Profile(models.Model):
     #         default_storage.save(self.profile_pic.name, memfile)
     #         memfile.close()
     #         img.close()
+
+class UserInstitution(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
+    institutions = models.ManyToManyField(Institution, blank=True)
+
+    def __str__(self):
+        return str(self.user)
+
+    class Meta:
+        verbose_name = 'User Institution'
+        verbose_name_plural = 'User Institutions'
+
+class UserCommunity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
+    communities = models.ManyToManyField(Community, blank=True, related_name="user_communities")
+
+    @classmethod
+    def create(cls, user):
+        obj = cls(user=user)
+        return obj
+
+    def __str__(self):
+        return str(self.user)
+    
+    class Meta:
+        verbose_name = 'User Community'
+        verbose_name_plural = 'User Communities'
