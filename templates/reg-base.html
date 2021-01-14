@@ -10,19 +10,35 @@
             <div id="progress-ul-container" class="flex-this">
                 <ul id="progress-ul" class="flex-this column">
                     <li>
-                        {% include 'snippets/bullet.html'%}
+                        {% if request.get_full_path == "/accounts/register/" %}
+                            {% include 'snippets/bullet-big.html'%}
+                        {% else %}
+                            {% include 'snippets/bullet.html'%}
+                        {% endif %}
                         Register
                     </li>
                     <li>
-                        {% include 'snippets/bullet.html'%}
-                        Verify Email
+                        {% if request.get_full_path == "/accounts/verify/" %}
+                            {% include 'snippets/bullet-big.html'%}
+                        {% else %}
+                            {% include 'snippets/bullet.html'%}
+                        {% endif %}
+                            Verify Email
                     </li>
                     <li>
-                        {% include 'snippets/bullet.html'%}
+                        {% if request.get_full_path == "/accounts/create-profile/" %}
+                            {% include 'snippets/bullet-big.html'%}
+                        {% else %}
+                            {% include 'snippets/bullet.html'%}
+                        {% endif %}
                         Create Your Profile
                     </li>
                     <li>
+                    {% if request.get_full_path == "/communities/connect-community/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/connect-institution/"%}
                         {% include 'snippets/bullet-big.html'%}
+                    {% else %}
+                        {% include 'snippets/bullet.html'%}
+                    {% endif %}
                         Connect or Create an Account</li>
                     <li>
                         {% include 'snippets/bullet.html'%}
