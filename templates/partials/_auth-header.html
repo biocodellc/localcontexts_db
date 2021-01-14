@@ -40,7 +40,7 @@
         <ul class="flex-this generic-nav-ul">
             <li><a class="white-text upper" href="#">Labels</a></li>
             <li><a class="white-text upper" href="{% url 'community-registry' %}">Communities</a></li>
-            <li><a class="white-text upper" href="#">Institutions & Researchers</a></li>
+            <li><a class="white-text upper" href="{% url 'institution-registry' %}">Institutions</a></li>
             <li><a class="white-text upper" href="#">Notices</a></li>
 
             {% if request.get_full_path == "/about/" %}

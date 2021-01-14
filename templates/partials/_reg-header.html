@@ -53,7 +53,12 @@
                 <li><a class="white-text upper" href="{% url 'community-registry' %}">Communities</a></li>
             {% endif %}
 
-            <li><a class="white-text upper" href="#">Institutions & Researchers</a></li>
+            {% if request.get_full_path == "/institutions/institution-registry/" or request.get_full_path == "/institutions/create-institution/" or request.get_full_path == "/institutions/connect-institution/" %}
+                <li><a id="active-link" class="white-text upper" href="{% url 'institution-registry' %}">Institutions</a></li>
+            {% else %}
+                <li><a class="white-text upper" href="{% url 'institution-registry' %}">Institutions</a></li>
+            {% endif %}
+
             <li><a class="white-text upper" href="#">Notices</a></li>
 
             {% if request.get_full_path == "/about/" %}

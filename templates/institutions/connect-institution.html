@@ -8,11 +8,21 @@
     <h2 class="darkteal-text">Hello Name, <br> Welcome to Local Contexts</h2>
     <p>
         Before we start would you like to connect with an existing Institution or create your own?<br>
-
-        <button class="white-text action-btn connect-btn">Search the Register</button><br>
-        OR <br>
-        <button class="white-text action-btn connect-btn">Create an Institution profile</button>
     </p>
+
+    <a class="white-text" href="{% url 'institution-registry' %}">
+        <div class="action-btn connect-btn auto-margin" style="padding-top: 5px;">
+            Search the register
+        </div>
+    </a>
+
+    OR
+
+    <a class="white-text" href="{% url 'create-institution' %}">
+        <div class="action-btn connect-btn auto-margin" style="padding-top: 5px;">
+            Create an Institution profile
+        </div>
+    </a>
 
 </div>
 

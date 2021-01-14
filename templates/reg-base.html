@@ -34,7 +34,7 @@
                         Create Your Profile
                     </li>
                     <li>
-                    {% if request.get_full_path == "/communities/connect-community/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/connect-institution/"%}
+                    {% if request.get_full_path == "/communities/connect-community/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/connect-institution/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/create-institution/"%}
                         {% include 'snippets/bullet-big.html'%}
                     {% else %}
                         {% include 'snippets/bullet.html'%}
