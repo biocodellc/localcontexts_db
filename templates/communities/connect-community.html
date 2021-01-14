@@ -1,78 +1,27 @@
-{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_reg-header.html' %}
+{% extends 'reg-base.html' %} {% load static %} {% block card %}
 
-<section class="flex-this gradient-section">
-    <div class="base-card flex-this row">
-
-        <div id="progress-container" class="orange-bg white-text flex-this column">
-            
-            {% include 'snippets/reg-mini-logo.html'%}
-
-            <div id="progress-ul-container" class="flex-this">
-                <ul id="progress-ul" class="flex-this column">
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Register
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Verify Email
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Create Your Profile
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet-big.html'%}
-                        Connect or Create an Account</li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Start Creating Labels and Notices
-                    </li>
-                </ul>
-            </div>
-
-            <div id="progress-bottom-container">
-                <div>
-                    <h2>
-                        Because Local Contexts Matters
-                    </h2>
-                </div>
-            </div>
-
-        </div>
-    
-        <div id="complete-form-container" class="flex-this column">
-
-            <div class="flex-this column centered-content">
-                <div>
-                    <img src="{% static 'images/logos/welcome-logo.png' %}" width="209px">
-                </div>
-
-                <h2 class="darkteal-text">Hello Name, <br> Welcome to Local Contexts</h2>
-                <p>
-                    Before we start would you like to connect with an existing Community or create your own?
-                </p>
-
-                <a class="white-text" href="{% url 'community-registry' %}">
-                    <div class="action-btn connect-btn auto-margin" style="padding-top: 5px;">
-                        Search the register
-                    </div>
-                </a>
-
-                OR
-
-                <a class="white-text" href="{% url 'create-community' %}">
-                    <div class="action-btn connect-btn auto-margin" style="padding-top: 5px;">
-                        Create a Community profile
-                    </div>
-                </a>
-            </div>
-    
-        </div>
+<div class="flex-this column centered-content">
+    <div>
+        <img src="{% static 'images/logos/welcome-logo.png' %}" width="209px">
     </div>
 
-</section>
+    <h2 class="darkteal-text">Hello Name, <br> Welcome to Local Contexts</h2>
+    <p>
+        Before we start would you like to connect with an existing Community or create your own?
+    </p>
 
+    <a class="white-text" href="{% url 'community-registry' %}">
+        <div class="action-btn connect-btn auto-margin" style="padding-top: 5px;">
+            Search the register
+        </div>
+    </a>
 
-{% include 'partials/_reg-footer.html' %}
+    OR
+
+    <a class="white-text" href="{% url 'create-community' %}">
+        <div class="action-btn connect-btn auto-margin" style="padding-top: 5px;">
+            Create a Community profile
+        </div>
+    </a>
+</div>
 {% endblock %}

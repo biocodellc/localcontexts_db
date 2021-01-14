@@ -1,71 +1,19 @@
-{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_reg-header.html' %}
+{% extends 'reg-base.html' %} {% load static %} {% block card %}
 
-<section class="flex-this gradient-section">
-    <div class="base-card flex-this row">
+<div class="flex-this column centered-content">
 
-        <div id="progress-container" class="orange-bg white-text flex-this column">
-            
-            {% include 'snippets/reg-mini-logo.html'%}
+    <h2 class="darkteal-text">Verify Your Email</h2>
+    <p>Thank you for registering with Local Contexts. <br><br>
+    Check your email for a verification link or enter the email you used at registration to send it again.</p>
+        
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form.email }} <br>
 
-            <div id="progress-ul-container" class="flex-this">
-                <ul id="progress-ul" class="flex-this column">
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Register
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet-big.html'%}
-                        Verify Email
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Create Your Profile
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Connect or Create an Account
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Start Creating Labels and Notices
-                    </li>
-                </ul>
-            </div>
+        <button id="resend-email-btn" class="white-bg darkteal-text">Resend Email</button>    
+    </form>
 
-            <div id="progress-bottom-container">
-                <div>
-                    <h2>
-                        Because Local Contexts Matters
-                    </h2>
-                </div>
-            </div>
-
-        </div>
-    
-        <div id="complete-form-container" class="flex-this column">
-    
-            <div class="flex-this column centered-content">
-
-                    <h2 class="darkteal-text">Verify Your Email</h2>
-                    <p>Thank you for registering with Local Contexts. <br><br>
-                    Check your email for a verification link or enter the email you used at registration to send it again.</p>
-                        
-                    <form method="POST" action="">
-                        {% csrf_token %}
-                        {{ form.email }} <br>
-
-                        <button id="resend-email-btn" class="white-bg darkteal-text">Resend Email</button>    
-                    </form>
-
-                    <!-- Alerts -->
-                    {% include 'partials/_alerts.html' %}
-            </div>
-    
-        </div>
-    </div>
-
-</section>
-
-
-{% include 'partials/_reg-footer.html' %}
+    <!-- Alerts -->
+    {% include 'partials/_alerts.html' %}
+</div>
 {% endblock %}

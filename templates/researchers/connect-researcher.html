@@ -1,3 +1,27 @@
-<h1>
-    Connect Researcher page
-</h1>
+{% extends 'reg-base.html' %} {% load static %} {% block card %}
+    
+<div class="flex-this column w-90">
+    <div>
+        <h2 class="darkteal-text">Create a Researcher Profile</h2>    
+    </div>
+
+    <form action="" method="POST" class="flex-this column w-100">
+        {% csrf_token %}
+
+        <label>Orcid ID</label>
+        <input type="text">
+
+        <label>Town</label>
+        <input type="text">
+
+        <label>Country</label>
+        <input type="text">
+
+        <div>
+            <button class="action-btn default-btn">Continue</button>
+        </div>
+    </form>
+
+</div>
+
+{% endblock %}

@@ -1,123 +1,72 @@
-{% extends 'base.html' %} {% load static %} {% block title %} | Register {% endblock %}
-{% block content %} {% include 'partials/_reg-header.html' %}
+{% extends 'reg-base.html' %} {% load static %} {% block card %}
+<div class="flex-this row flex-end w-90">
+    <p>Already a Member?<a href="{% url 'login' %}" class="darkteal-text"> Sign in</a></p>
+</div>
 
-<section class="flex-this gradient-section">
-    <div class="base-card flex-this row">
+<!-- Alerts -->
+{% include 'partials/_alerts.html' %}
 
-        <div id="progress-container" class="orange-bg white-text flex-this column">
-            
-            {% include 'snippets/reg-mini-logo.html'%}
+<div class="form-container flex-this column w-90">
+<h2 class="darkteal-text">Register with Local Contexts</h2>
 
-            <div id="progress-ul-container" class="flex-this">
-                <ul id="progress-ul" class="flex-this column">
-                    <li>
-                        {% include 'snippets/bullet-big.html'%}
-                        Register
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Verify Email
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Create Your Profile
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Connect or Create an Account
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Start Creating Labels and Notices
-                    </li>
-                </ul>
-            </div>
+<form action="{% url 'register' %}" method="POST" class="flex-this column w-100">
+    {% csrf_token %}
+    <div class="flex-this w-100">
 
-            <div id="progress-bottom-container">
-                <div>
-                    <h2>
-                        Because Local Contexts Matters
-                    </h2>
-                </div>
-            </div>
+        <div class="pad-right w-50">
+            <label for="first_name">First name</label><br>
+            {{form.first_name}}
+        </div>
+
+        <div class="pad-left w-50">
+            <label for="last_name">Last name</label><br>
+            {{form.last_name}}
 
         </div>
+    </div>
     
-        <div id="complete-form-container" class="flex-this column">
-            <div class="flex-this row flex-end w-90">
-                    <p>Already a Member?<a href="{% url 'login' %}" class="darkteal-text"> Sign in</a></p>
-            </div>
-
-            <!-- Alerts -->
-            {% include 'partials/_alerts.html' %}
+    <div>
+        <label for="username">Username</label><br>
+        {{form.username}}
+        <small>{{form.username.help_text}}</small>
+    </div>
     
-            <div class="form-container flex-this column w-90">
-                <h2 class="darkteal-text">Register with Local Contexts</h2>
-    
-                <form action="{% url 'register' %}" method="POST" class="flex-this column w-100">
-                    {% csrf_token %}
-                    <div class="flex-this w-100">
+    <div>
+        <label for="email">Email Address</label><br>
+        {{form.email}}
+    </div>
 
-                        <div class="pad-right w-50">
-                            <label for="first_name">First name</label><br>
-                            {{form.first_name}}
-                        </div>
-
-                        <div class="pad-left w-50">
-                            <label for="last_name">Last name</label><br>
-                            {{form.last_name}}
-
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label for="username">Username</label><br>
-                        {{form.username}}
-                        <small>{{form.username.help_text}}</small>
-                    </div>
-                    
-                    <div>
-                        <label for="email">Email Address</label><br>
-                        {{form.email}}
-                    </div>
-    
-                    <div class="flex-this w-100">
-                        <div class="pad-right w-50">
-                            <label for="password">Password</label><br>
-                            {{form.password1}}
-                        </div>
-                        <div class="pad-left w-50">
-                            <label for="confirm-password">Confirm Password</label><br>
-                            {{form.password2}}
-                        </div>
-                    </div>
-
-                    <div id="help-text-pw">
-                            <small>{{form.password1.help_text}}</small>
-                    </div>
-
-                    <div class="flex-this row checkbox-div">
-                        <div id="checkbox">
-                            <input type="checkbox" id="terms-agreement" name="terms-agreement" required>
-                        </div>
-                        <div id="checkbox-label">
-                            <label for="terms-agreement">
-                                Creating an account means you agree with the <a href="#" class="darkteal-text">Terms and Conditions</a> and <a href="#" class="darkteal-text">Data Sovereignty Agreement</a>.
-                            </label>
-                        </div>
-                    </div>
-
-                    <br>
-                    <div>
-                        <button class="action-btn default-btn">Register</button>
-                    </div>
-                </form>
-            </div>
-    
+    <div class="flex-this w-100">
+        <div class="pad-right w-50">
+            <label for="password">Password</label><br>
+            {{form.password1}}
+        </div>
+        <div class="pad-left w-50">
+            <label for="confirm-password">Confirm Password</label><br>
+            {{form.password2}}
         </div>
     </div>
 
-</section>
+    <div id="help-text-pw">
+            <small>{{form.password1.help_text}}</small>
+    </div>
 
-{% include 'partials/_reg-footer.html' %}
+    <div class="flex-this row checkbox-div">
+        <div id="checkbox">
+            <input type="checkbox" id="terms-agreement" name="terms-agreement" required>
+        </div>
+        <div id="checkbox-label">
+            <label for="terms-agreement">
+                Creating an account means you agree with the <a href="#" class="darkteal-text">Terms and Conditions</a> and <a href="#" class="darkteal-text">Data Sovereignty Agreement</a>.
+            </label>
+        </div>
+    </div>
+
+    <br>
+    <div>
+        <button class="action-btn default-btn">Register</button>
+    </div>
+</form>
+</div>
+
 {% endblock %}

@@ -1,121 +1,69 @@
-{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_reg-header.html' %}
-
+{% extends 'reg-base.html' %} {% load static %} {% block card %}
 {% if user.is_authenticated %}
 
-<section class="flex-this gradient-section">
-    <div class="base-card flex-this row">
-
-        <div id="progress-container" class="orange-bg white-text flex-this column">
-
-            {% include 'snippets/reg-mini-logo.html'%}
-
-            <div id="progress-ul-container" class="flex-this">
-                <ul id="progress-ul" class="flex-this column">
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Register
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Verify Email
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet-big.html'%}
-                        Create Your Profile</li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Connect or Create an Account
-                    </li>
-                    <li>
-                        {% include 'snippets/bullet.html'%}
-                        Start Creating Labels and Notices
-                    </li>
-                </ul>
-            </div>
-
-            <div id="progress-bottom-container">
-                <div>
-                    <h2>
-                        Because Local Contexts Matters
-                    </h2>
-                </div>
-            </div>
-
-        </div>
-    
-        <div id="complete-form-container" class="flex-this column">
-    
-            <div class="form-container flex-this column w-90">
-                <div class="form-heading flex-this column w-100">
-                    <h2 class="darkteal-text">Create your profile</h2>
-                    <p>This information will be kept secure to protect your identity.</p>    
-                </div>
-    
-                <form action="{% url 'create-profile' %}" method="POST" enctype="multipart/form-data" class="flex-this column w-100">
-                    {% csrf_token %}
-                    <div class="flex-this column w-100">
-
-                        <div class="flex-this row w-100 space-between">
-                            <div class="w-50"> 
-                                <label for="first_name">First Name </label>
-                                    {{ user_form.first_name }}
-    
-                                <label for="last_name">Last Name</label>
-                                    {{ user_form.last_name }}
-                                <label for="username">Username </label>
-                                {{ user_form.username }}
-                            </div>
-    
-                            <div class="w-40">
-                                <label for="profile_pic">Profile Pic </label><br>
-                                    {{ profile_form.profile_pic }}
-                            </div>
-
-                        </div>
-
-                        <div class="w-100">
-                            <label for="job_title">Job Title </label>
-                            {{ profile_form.job_title }}
-                        </div>
-
-                        <div class="w-100 flex-this row space-between">
-                            <div class="w-50 country-container">
-                                <label for="country">Country </label><br>
-                                {{ profile_form.country }}
-                            </div>
-    
-                            <div class="w-50 pad-left">
-                                <label for="city_or_town">City or Town </label>
-                                {{ profile_form.city_or_town }}
-                            </div>
-                        </div>
-
-                        <div class="w-100 flex-this column">
-                            <label class="reason-label" for="select">What is the reason for registering?</label><br>
-                            <select name="registration_reason">
-                                <option value=""></option>
-                                <option value="community">Register a Community Account</option>
-                                <option value="institution">Register an Institution Account</option>
-                                <option value="researcher">Register a Research Account</option>
-                            </select>
-                        </div>
-
-                        </div>
-
-
-                    <div>
-                        <button class="action-btn default-btn">Continue</button>
-                    </div>
-                </form>
-            </div>
-    
-        </div>
-    
-        </div>
+<div class="form-container flex-this column w-90">
+    <div class="form-heading flex-this column w-100">
+        <h2 class="darkteal-text">Create your profile</h2>
+        <p>This information will be kept secure to protect your identity.</p>    
     </div>
 
-</section>
+    <form action="{% url 'create-profile' %}" method="POST" enctype="multipart/form-data" class="flex-this column w-100">
+        {% csrf_token %}
+        <div class="flex-this column w-100">
+
+            <div class="flex-this row w-100 space-between">
+                <div class="w-50"> 
+                    <label for="first_name">First Name </label>
+                        {{ user_form.first_name }}
+
+                    <label for="last_name">Last Name</label>
+                        {{ user_form.last_name }}
+                    <label for="username">Username </label>
+                    {{ user_form.username }}
+                </div>
+
+                <div class="w-40">
+                    <label for="profile_pic">Profile Pic </label><br>
+                        {{ profile_form.profile_pic }}
+                </div>
+
+            </div>
+
+            <div class="w-100">
+                <label for="job_title">Job Title </label>
+                {{ profile_form.job_title }}
+            </div>
+
+            <div class="w-100 flex-this row space-between">
+                <div class="w-50 country-container">
+                    <label for="country">Country </label><br>
+                    {{ profile_form.country }}
+                </div>
+
+                <div class="w-50 pad-left">
+                    <label for="city_or_town">City or Town </label>
+                    {{ profile_form.city_or_town }}
+                </div>
+            </div>
+
+            <div class="w-100 flex-this column">
+                <label class="reason-label" for="select">What is the reason for registering?</label><br>
+                <select name="registration_reason">
+                    <option value=""></option>
+                    <option value="community">Register a Community Account</option>
+                    <option value="institution">Register an Institution Account</option>
+                    <option value="researcher">Register a Research Account</option>
+                </select>
+            </div>
+
+            </div>
+
+
+        <div>
+            <button class="action-btn default-btn">Continue</button>
+        </div>
+    </form>
+</div>
 {% endif %}
 
-{% include 'partials/_reg-footer.html' %}
 {% endblock %}
