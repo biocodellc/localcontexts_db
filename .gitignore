@@ -1,4 +1,8 @@
 envi/
+
+setupHeroku.sh
+setupLocal.sh
+
 .vscode/
 
 staticfiles
@@ -93,7 +97,3 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
-
-setupHeroku.sh
-setupLocal.sh
-setupNewDB.sh
