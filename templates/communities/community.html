@@ -1,8 +1,4 @@
-{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
-    <section class="grey-bg">
-
-        {% include 'partials/_community-info.html' %}
-        {% include 'partials/_community-nav.html' %}
+{% extends 'comm-base.html' %} {% load static %} {% block community_content %}
 
         <div class="activity-card-container content-card content-card-space flex-this column white-bg">
             <div>
@@ -135,6 +131,4 @@
 
     </section>
 
-
-{% include 'partials/_auth-footer.html' %}
 {% endblock %}
