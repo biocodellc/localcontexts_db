@@ -168,8 +168,16 @@ input:focus {
     justify-content: center;
 }
 
+.w-5 {
+    width: 5%;
+}
+
 .w-10 {
     width: 10%;
+}
+
+.w-15 {
+    width: 15%;
 }
 
 .w-20 {
@@ -270,7 +278,7 @@ input:focus {
 }
 
 .content-card-space {
-    padding: 1.5%;
+    padding: 1%;
     margin-top: 1.5%;
 }
 
@@ -675,6 +683,10 @@ input:focus {
     content: "-";
 } */
 
+.proj-label-summary h4, .set-nav p, .border-left h3, .reqs, .notice-top p, .notice-card h4 {
+    margin: 0;
+}
+
 #proj-expand {
     height: 0px;
     overflow: auto;
@@ -695,7 +707,6 @@ input:focus {
 }
 
 .proj-label-summary h4 {
-    margin: 0;
     padding: 0;
     font-weight: 500;
 }
@@ -710,10 +721,6 @@ input:focus {
     min-height: 80px;
 }
 
-.set-nav p, .border-left h3 {
-    margin: 0;
-}
-
 .border-left{
     border-left: 1px solid #000;
     padding-left: 2%;
@@ -722,4 +729,27 @@ input:focus {
 .form-one {
     margin-top: 1%;
     margin-bottom: 2%;
+}
+
+/* COMMUNITY DASHBOARD: REQUESTS */
+
+.notice-top span {
+    transform: rotate(45deg);
+    font-size: 36px;
+}
+
+.notice-btns button, .notice-btns img {
+    width: 119px;
+}
+
+.notice-info, .notice-msg {
+    padding-left: 1%;
+}
+
+.notice-msg {
+    background: rgba(56, 116, 171, 0.1);
+}
+
+.notice-card h4 {
+    padding: 0;
 }
