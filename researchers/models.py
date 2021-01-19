@@ -11,12 +11,12 @@ class Project(models.Model):
     source = models.TextField(blank=True, null=True)
     url = models.TextField(blank=True, null=True)
     publication_date = models.TextField(blank=True, null=True)
-    date_added = models.TextField(blank=True, null=True)
-    date_modified = models.TextField(blank=True, null=True)
+    date_added = models.DateTimeField(auto_now_add=True, null=True)
+    date_modified = models.DateTimeField(auto_now=True, null=True)
     is_public = models.BooleanField(default=True, null=True)
 
     def __str__(self):
-        return self.who
+        return self.title
 
 class Researcher(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)

@@ -4,7 +4,7 @@
         <h3 class="orange-text reqs">Requests</h3>
     </div>
     
-    <div class="content-card content-card-space white-bg">
+    <!-- <div class="content-card content-card-space white-bg">
 
         <div class="flex-this w-100 notice-top">
             <div class="w-70">
@@ -79,6 +79,75 @@
             </div>
         </div>
 
-    </div>
+    </div> -->
+
+    {% if notices %}
+        {% for notice in notices %}
+        <div class="content-card content-card-space white-bg">
+
+            <div class="flex-this w-100 notice-top">
+                <div class="w-70">
+                    <p>A BC notice has been placed by <a href="#" class="darkteal-text">{{ notice.placed_by_institution.institution_name }}</a></p>
+                </div>
+    
+                <div class="w-10 auto-margin flex-this flex-end">
+                    <button class="action-btn">Label Pending</button>
+                </div>
+                <div class="w-15 auto-margin flex-this flex-end">
+                    <a href="#" class="darkteal-text">Notice Acknowledged</a>
+                </div>
+                <div class="w-5 auto-margin flex-this flex-end">
+                    <span class="darkteal-text weight-500">+</span>
+                </div>
+            </div>
+    
+    
+            <div class="flex-this notice-card">
+    
+                <div class="flex-this column w-10 notice-btns">
+                    <div>
+                        <img src="{% static 'images/notices/bc-notice.png' %}">
+                    </div>
+                    <div>
+                        <button class="action-btn">Attach Labels</button>
+                    </div>
+                    <div>
+                        <button class="green-action-btn">View on GEOME </button>   
+                    </div>
+                    <div>
+                        <button class="green-action-btn">View on ORCiD</button>    
+                    </div>
+                </div>
+        
+                <div class="w-40 notice-info">
+                    <a href="#"><h4 class="darkteal-text weight-500">{{ notice.project.title}}</h4></a>
+        
+                    <p>
+                        Expedition<br>
+                        {{ notice.created.date }}<br>
+                        Source: NIWA via GEOME<br>
+                    </p>
+                    <p>
+                        <span class="weight-500">Contact Us:</span><br>
+                        Website: www.niwa.co.nz<br>
+                        Email: enquiries@niwa.co.nz<br>
+                        Postal Address: Private Bag 99940, Newmarket, Auckland 1149<br>
+                        Phone: +64 9 375 2050<br>
+                    </p>
+                </div>
+        
+                <div class="w-50 notice-msg">
+                    <h4 class="weight-500">Message Sent by <a href="#" class="darkteal-text">{{ notice.placed_by_institution.institution_name }}</a>:</h4>
+                    <p>
+                        {{ notice.message|linebreaks }}
+                    </p>
+                </div>
+            </div>
+    
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No notices to display at this time</p>
+    {% endif %}
 
 {% endblock %}

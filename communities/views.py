@@ -11,6 +11,8 @@ from .forms import *
 from .models import *
 from .utils import *
 
+from bclabels.models import BCNotice
+
 
 @login_required(login_url='login')
 def connect_community(request):
@@ -154,7 +156,9 @@ def community_requests(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        notices = BCNotice.objects.filter(communities=community)
         context = {
+            'notices': notices,
             'community': community,
         }
         return render(request, 'communities/requests.html', context)
