@@ -78,7 +78,7 @@
 
             {% if community.community_creator == request.user %}
 
-                <a onclick='addMemberModal()'>
+                <a id="testbtn" onclick='addMemberModal()'>
                     <div class="flex-this add-member-card">
                         <div class="w-100 add-member">
                             <h4 class="darkteal-text weight-500">+ Add Members </h4>
@@ -86,7 +86,7 @@
                     </div>
                 </a>
 
-                <div id="add-member-modal" class="modal">
+                <div id="add-member-modal" class="modal" style="display: none;">
 
                     <div class="add-member-modal-wrapper flex-this column w-100">
                   

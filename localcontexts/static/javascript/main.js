@@ -1,6 +1,6 @@
 // Dismiss Registration Error Message
-let dismissBtn = document.getElementById('close-btn')
-let messageDiv = document.getElementById('registration-message')
+var dismissBtn = document.getElementById('close-btn')
+var messageDiv = document.getElementById('registration-message')
 
 if (dismissBtn) {
     dismissBtn.addEventListener('click', () => {
@@ -9,8 +9,8 @@ if (dismissBtn) {
 }
 
 // Password fields in registration form
-const passwordField = document.getElementById('id_password1')
-const helpTextDiv = document.getElementById('help-text-pw')
+var passwordField = document.getElementById('id_password1')
+var helpTextDiv = document.getElementById('help-text-pw')
 
 if (passwordField ) {
     passwordField.addEventListener('focusin', (event) => {
@@ -25,12 +25,8 @@ if (passwordField ) {
 // Modal for adding a community member
 function addMemberModal() {
     let x = document.getElementById("add-member-modal");
-    // let btn = document.getElementById("test-btn")
-    if (x.style.display === "none") {
+    if (x.style.display == "none" || x.style.display == '') {
       x.style.display = "block"
-    //   btn.addEventListener('click', (evt) => {
-    //       evt.preventDefault()
-    //   })
     } else {
       x.style.display = "none"
     }
@@ -45,7 +41,7 @@ function addMemberModal() {
 function showMore() {
     let div = document.getElementById('proj-expand')
 
-    if (div.style.height === "0px") {
+    if (div.style.height == "0px") {
         div.style.height = "300px"
         div.style.transition = "height 0.5s"
     } else {

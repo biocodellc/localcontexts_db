@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import *
 from communities.models import *
+from accounts.models import UserCommunity
 from .utils import send_community_approval_notification
 
 @login_required(login_url='login')

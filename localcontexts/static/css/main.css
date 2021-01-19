@@ -560,7 +560,6 @@ input:focus {
 }
 
 .modal {
-    display: none;
     position: fixed;
     z-index: 1;
     left: 0;
@@ -688,7 +687,6 @@ input:focus {
 }
 
 #proj-expand {
-    height: 0px;
     overflow: auto;
 }
 
