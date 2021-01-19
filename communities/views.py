@@ -48,25 +48,27 @@ def create_community(request):
 
 def community_registry(request):
     communities = Community.objects.filter(is_approved=True, is_publicly_listed=True)
+    current_user = UserCommunity.objects.get(user=request.user)
+    user_communities = current_user.communities.all()
+    # all_requests = CommunityJoinRequest.objects.all()
 
     if request.method == 'POST':
         # TODO: Change the button so the user can only submit a request once.
+        # Check if CommunityJoinRequest exists
         buttonid = request.POST.get('commid')
         target_community = Community.objects.get(id=buttonid)
         main_admin = target_community.community_creator
 
-        current_user = UserCommunity.objects.get(user=request.user)
-        user_communities = current_user.communities.all()
-
-        if target_community in user_communities:
-            print('#########  YOU ARE ALREADY A MEMBER OF THIS COMMUNITY ###########')
-        else:
-            req = CommunityJoinRequest.objects.create(user_from=request.user, target_community=target_community, user_to=main_admin)
-            req.save()
+        req = CommunityJoinRequest.objects.create(user_from=request.user, target_community=target_community, user_to=main_admin)
+        req.save()
 
         return redirect('community-registry')
 
-    context = {'communities': communities}
+    context = {
+        'communities': communities,
+        'user_communities': user_communities,
+        # 'all_requests': all_requests,
+    }
     return render(request, 'communities/community-registry.html', context)
 
 @login_required(login_url='login')

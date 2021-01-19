@@ -22,27 +22,6 @@ if (passwordField ) {
     })
 }
 
-// Modal for adding a community member
-function addMemberModal() {
-    let modal = document.getElementById("add-member-modal");
-    if (modal.style.display == "none" || modal.style.display == '') {
-      modal.style.display = "block"
-    } else {
-      modal.style.display = "none"
-    }
-
-    let c = document.getElementById('close-modal')
-    c.addEventListener('click', () => {
-        modal.style.display = "none"
-    })
-
-    window.onclick = (e) => {
-        if(e.target == modal) {
-            modal.style.display = "none"
-        }
-    }
-}
-
 // Expand project details in community/labels/projects
 function showMore() {
     let div = document.getElementById('proj-expand')

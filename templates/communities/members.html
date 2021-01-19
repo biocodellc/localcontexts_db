@@ -78,14 +78,6 @@
 
             {% if community.community_creator == request.user %}
 
-                <!-- <a onclick='addMemberModal()'>
-                    <div class="flex-this add-member-card">
-                        <div class="w-100 add-member">
-                            <h4 class="darkteal-text weight-500">+ Add Members </h4>
-                        </div>
-                    </div>
-                </a> -->
-
                 <a href="{% url 'add-member' community.id %}">
                     <div class="flex-this add-member-card">
                         <div class="w-100 add-member">
