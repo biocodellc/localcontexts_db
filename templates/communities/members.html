@@ -78,7 +78,7 @@
 
             {% if community.community_creator == request.user %}
 
-                <a id="testbtn" onclick='addMemberModal()'>
+                <a onclick='addMemberModal()'>
                     <div class="flex-this add-member-card">
                         <div class="w-100 add-member">
                             <h4 class="darkteal-text weight-500">+ Add Members </h4>
@@ -96,7 +96,7 @@
                                 <h4 class="weight-500">Add Members to <span class="darkteal-text">{{community.community_name}}</span></h4>
                             </div>
                             <div class="w-100 member-modal-form flex-this column">
-                              <form method="POST" action="{% url 'members' community.id %}">
+                              <form method="POST" action="">
                                   {% csrf_token %}
                       
                                   <div class="flex-this"> 
@@ -124,7 +124,7 @@
                                     <!-- Alerts -->
                                     {% include 'partials/_alerts.html' %}
                                             <p>- Admins and Editors have access to create and manage labels.</p>
-                                      <button id="test-btn" class="action-btn">Send Invitation </button>
+                                      <button class="action-btn" type="submit">Send Invitation </button>
                                   </div>
                                 </form>
                             </div>

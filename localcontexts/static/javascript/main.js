@@ -24,17 +24,23 @@ if (passwordField ) {
 
 // Modal for adding a community member
 function addMemberModal() {
-    let x = document.getElementById("add-member-modal");
-    if (x.style.display == "none" || x.style.display == '') {
-      x.style.display = "block"
+    let modal = document.getElementById("add-member-modal");
+    if (modal.style.display == "none" || modal.style.display == '') {
+      modal.style.display = "block"
     } else {
-      x.style.display = "none"
+      modal.style.display = "none"
     }
 
     let c = document.getElementById('close-modal')
     c.addEventListener('click', () => {
-        x.style.display = "none"
+        modal.style.display = "none"
     })
+
+    window.onclick = (e) => {
+        if(e.target == modal) {
+            modal.style.display = "none"
+        }
+    }
 }
 
 // Expand project details in community/labels/projects

@@ -138,7 +138,7 @@ def community_members(request, pk):
                 else: 
                     messages.add_message(request, messages.INFO, 'This user has already been invited to this community!')
             else:
-                messages.add_message(request, messages.ERROR, 'User Already A Member')
+                messages.add_message(request, messages.ERROR, 'This user is already a member.')
 
 
     context = {

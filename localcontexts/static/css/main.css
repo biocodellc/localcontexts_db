@@ -545,6 +545,8 @@ input:focus {
     padding-right: 2%;
 }
 
+/* ADD MEMBER MODAL */
+
 .add-member-card {
     border: 2px dashed rgba(0, 115, 133, 0.2);
     margin: 1% auto 1% auto;
