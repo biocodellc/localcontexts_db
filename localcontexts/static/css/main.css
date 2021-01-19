@@ -666,22 +666,6 @@ input:focus {
 
 /* COMMUNITY DASHBOARD: LABELS EXPANDABLE CONTENT */
 
-/* SAVE FOR NOW: REFERENCE */
-/* label::before {
-    font-size: 40px;
-    content: "+";
-    vertical-align: text-top;
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin-right: 3px;
-} */
-
-
-/* #toggle:checked ~ label::before {
-    content: "-";
-} */
-
 .proj-label-summary h4, .set-nav p, .border-left h3, .reqs, .notice-top p, .notice-card h4 {
     margin: 0;
 }

@@ -40,12 +40,15 @@ function addMemberModal() {
 // Expand project details in community/labels/projects
 function showMore() {
     let div = document.getElementById('proj-expand')
+    let span = document.getElementById('plus-minus')
 
-    if (div.style.height == "0px") {
+    if (div.style.height == "0px" && span.textContent == "+") {
         div.style.height = "300px"
         div.style.transition = "height 0.5s"
+        span.textContent = "-"
     } else {
         div.style.height = "0px"
+        span.textContent = "+"
     }
 }
 
