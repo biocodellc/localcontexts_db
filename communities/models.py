@@ -85,5 +85,5 @@ class CommunityJoinRequest(models.Model):
         return f"{self.user_from}-{self.user_to}-{self.target_community}-{self.status}"
 
     class Meta:
-        verbose_name = 'Member Join Request'
-        verbose_name_plural = 'Member Join Requests'
+        verbose_name = 'Community Join Request'
+        verbose_name_plural = 'Community Join Requests'
