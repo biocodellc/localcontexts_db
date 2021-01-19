@@ -78,7 +78,15 @@
 
             {% if community.community_creator == request.user %}
 
-                <a onclick='addMemberModal()'>
+                <!-- <a onclick='addMemberModal()'>
+                    <div class="flex-this add-member-card">
+                        <div class="w-100 add-member">
+                            <h4 class="darkteal-text weight-500">+ Add Members </h4>
+                        </div>
+                    </div>
+                </a> -->
+
+                <a href="{% url 'add-member' community.id %}">
                     <div class="flex-this add-member-card">
                         <div class="w-100 add-member">
                             <h4 class="darkteal-text weight-500">+ Add Members </h4>
@@ -86,53 +94,6 @@
                     </div>
                 </a>
 
-                <div id="add-member-modal" class="modal" style="display: none;">
-
-                    <div class="add-member-modal-wrapper flex-this column w-100">
-                  
-                        <div id="close-modal" class="close-modal-btn w-100"> <span>&times;</span></div>
-                        <div class="add-member-modal-content w-100">
-                            <div>
-                                <h4 class="weight-500">Add Members to <span class="darkteal-text">{{community.community_name}}</span></h4>
-                            </div>
-                            <div class="w-100 member-modal-form flex-this column">
-                              <form method="POST" action="">
-                                  {% csrf_token %}
-                      
-                                  <div class="flex-this"> 
-                                      <div class="w-50">
-                                        <div> 
-                                            {{ form.receiver.label }} <br>
-                                            {{ form.receiver }} 
-                                          </div>
-                                          <div>
-                                            {{ form.role.label }} <br>
-                                            {{ form.role }} 
-                                          </div>
-                                      </div>
-
-
-                                      <div class="w-50">
-                                        <div>
-                                            {{ form.message.label }}<br>
-                                            {{ form.message }}
-                                        </div>
-                                      </div>
-                                  </div>
-                      
-                                  <div>
-                                    <!-- Alerts -->
-                                    {% include 'partials/_alerts.html' %}
-                                            <p>- Admins and Editors have access to create and manage labels.</p>
-                                      <button class="action-btn" type="submit">Send Invitation </button>
-                                  </div>
-                                </form>
-                            </div>
-                        </div>
-
-                  
-                    </div>
-                  </div>
             {% endif %}
 
     </div>

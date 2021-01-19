@@ -97,7 +97,7 @@ def update_community(request, pk):
                 update_form = UpdateCommunityForm(request.POST, instance=community)
                 if update_form.is_valid():
                     update_form.save()
-                    messages.add_message(request, messages.SUCCESS, 'Info Updated!')
+                    messages.add_message(request, messages.SUCCESS, 'Updated!')
                 else:
                     update_form = UpdateCommunityForm(instance=community)
 
@@ -111,10 +111,15 @@ def update_community(request, pk):
 @login_required(login_url='login')
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
+    return render(request, 'communities/members.html', {'community': community,})
+
+@login_required(login_url='login')
+def add_member(request, pk):
+    community = Community.objects.get(id=pk)
     form = InviteMemberForm()
 
     member_role = check_member_role(request.user, community)
-    if member_role == False: # If user is not a member / does not have a role.
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
 
     else:
@@ -135,18 +140,20 @@ def community_members(request, pk):
                         obj.save()
 
                         messages.add_message(request, messages.INFO, 'Invitation Sent!')
+                        return render(request, 'communities/members.html', {'community': community,})
+
                 else: 
                     messages.add_message(request, messages.INFO, 'This user has already been invited to this community!')
+                    return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
             else:
                 messages.add_message(request, messages.ERROR, 'This user is already a member.')
-
+                return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
 
     context = {
         'community': community,
         'form': form,
     }
-
-    return render(request, 'communities/members.html', context)
+    return render(request, 'communities/add-member.html', context)
 
 @login_required(login_url='login')
 def community_requests(request, pk):

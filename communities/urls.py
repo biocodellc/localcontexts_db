@@ -10,6 +10,8 @@ urlpatterns = [
     path('community/update/<str:pk>/', views.update_community, name="update-community"),
 
     path('community/members/<str:pk>/', views.community_members, name="members"),
+    path('community/members/add/<str:pk>/', views.add_member, name="add-member"),
+    
     path('community/requests/<str:pk>/', views.community_requests, name="community-requests"),
     path('community/labels/<str:pk>/', views.community_labels, name="community-labels"),
     path('community/relationships/<str:pk>/', views.community_relationships, name="community-relationships"),
