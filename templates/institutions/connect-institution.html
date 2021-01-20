@@ -5,7 +5,13 @@
         <img src="{% static 'images/logos/welcome-logo.png' %}" width="209px">
     </div>
 
-    <h2 class="darkteal-text">Hello Name, <br> Welcome to Local Contexts</h2>
+    <h2 class="darkteal-text">
+        Hello {% if request.user.first_name %} 
+                {{ request.user.first_name }},
+              {% else %}
+                {{ request.user.username }},
+              {% endif %} <br> 
+        Welcome to Local Contexts</h2>
     <p>
         Before we start would you like to connect with an existing Institution or create your own?<br>
     </p>
