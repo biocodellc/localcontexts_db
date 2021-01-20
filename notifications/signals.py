@@ -20,12 +20,16 @@ def send_community_invite(sender, instance, created, **kwargs):
         role = instance.role
         community = instance.community
         ref = instance.id
+        msg = instance.message
 
         name = check_full_name(sender_)
 
-
         title = "You've been invited by " + str(name) + " to join " + str(community) + "!"
-        message= "Join our Community! " + str(community) + " with the role of " + str(role)
+
+        if msg:
+            message = msg
+        else:
+            message= "Join our Community! " + str(community) + " with the role of " + str(role)
 
         UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="invitation", community=community, reference_id=ref, role=role)
 
@@ -51,7 +55,7 @@ def accept_community_invite(sender, instance, **kwargs):
         
         UserNotification.objects.create(to_user=sender_, from_user=receiver_, title=title2, message=message2, notification_type="accept", community=community, reference_id=ref)
 
-
+# Send notification when user wishes to join a community
 @receiver(post_save, sender=CommunityJoinRequest)
 def send_user_join_request(sender, instance, created, **kwargs):
     if created:
@@ -67,6 +71,7 @@ def send_user_join_request(sender, instance, created, **kwargs):
 
         UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="request", community=community, reference_id=ref)
 
+# Send notification when a user's join request has been accepted and they are now part of a community.
 @receiver(post_save, sender=CommunityJoinRequest)
 def accept_user_join_request(sender, instance, created, **kwargs):
     if instance.status == 'accepted':
@@ -87,8 +92,8 @@ def accept_user_join_request(sender, instance, created, **kwargs):
 
         UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title2, message=message2, notification_type="accept", community=community, reference_id=ref)
 
-
-
+# Sends Site admin notifiation with request to create community
+#TODO: Test this when there is more than one site admin
 @receiver(post_save, sender=Community)
 def community_application(sender, instance, created, **kwargs):
     creator = instance.community_creator

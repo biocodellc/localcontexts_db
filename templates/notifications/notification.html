@@ -1,54 +1,65 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h3>{{ notification.title }}</h3>
-<p>{{ notification.message }}</p>
+{% include 'partials/_auth-header.html' %}
 
-{% if notification.notification_type == 'welcome' %}
-    <p>This is a welcome</p>
-{% endif %}
+    <section class="grey-bg">
+        <div class="pad-top-8"></div>
+        <div class="content-card content-card-space white-bg">
+            <h3 class="darkteal-text">{{ notification.title }}</h3>
+            <p>{{ notification.message }}</p>
 
-{% if notification.notification_type == 'invitation' %}
-    <form method="POST" action="">
-        {% csrf_token %}
-        <input type="hidden">
-        <button class="action-btn">Accept Invitation</button>
-    </form>
-{% endif %}
+            {% if notification.notification_type == 'welcome' %}
+                <p>This is a welcome</p>
+            {% endif %}
 
-{% if notification.notification_type == 'request' %}
-    <form method="POST" action="">
-        {% csrf_token %}
-        <input type="hidden">
-        <p>Please select role for the user:</p>
-        <input type="radio" name="role" value="admin"><label for="admin">Admin</label>
-        <input type="radio" name="role" value="editor"><label for="editor">Editor</label>
-        <input type="radio" name="role" value="viewer"><label for="viewer">Viewer</label>
-        <br>
+            {% if notification.notification_type == 'invitation' %}
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <input type="hidden">
+                    <button class="action-btn">Accept Invitation</button>
+                </form>
+            {% endif %}
 
-        <button class="action-btn">Add User To Community</button>
-    </form>
-{% endif %}
+            {% if notification.notification_type == 'request' %}
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <input type="hidden">
+                    <p>Please select role for the user:</p>
+                    <input type="radio" name="role" value="admin"><label for="admin">Admin</label>
+                    <input type="radio" name="role" value="editor"><label for="editor">Editor</label>
+                    <input type="radio" name="role" value="viewer"><label for="viewer">Viewer</label>
+                    <br>
 
-{% if notification.notification_type == 'approval' %}
-    <p> This is an approval</p>
+                    <button class="action-btn">Add User To Community</button>
+                </form>
+            {% endif %}
 
-{% endif %}
+            {% if notification.notification_type == 'approval' %}
+                <p> This is an approval</p>
 
-{% if notification.notification_type == 'accept' %}
-    <p> This is an accept type</p>
-{% endif %}
+            {% endif %}
 
-{% if notification.notification_type == 'create' %}
-    <p>This is a create notification type.</p>
-    <form method="POST" action="">
-        {% csrf_token %}
-        <input type="hidden">
-        <button class="action-btn">Approve Community</button>
-    </form>
-{% endif %}
+            {% if notification.notification_type == 'accept' %}
+                <p> This is an accept type</p>
+            {% endif %}
 
-<p><a href="{% url 'delete' notification.id %}">Mark as Read</a></p>
-<p><a href="{% url 'dashboard' %}">Back to Dashboard</a></p>
+            {% if notification.notification_type == 'create' %}
+                <p>This is a create notification type.</p>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <input type="hidden">
+                    <button class="action-btn">Approve Community</button>
+                </form>
+            {% endif %}
+
+            <p><a href="{% url 'delete' notification.id %}">Mark as Read</a></p>
+            <p><a href="{% url 'dashboard' %}">Back to Dashboard</a></p>
+        </div>
+
+    </section>
+
+    {% include 'partials/_auth-footer.html' %}
+
 
 {% endblock %}
