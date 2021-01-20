@@ -14,7 +14,7 @@ from .forms import *
 # Imports for sending emails
 from django.contrib.auth.decorators import login_required
 from django.core import signing
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -238,3 +238,31 @@ def update_profile(request):
         'profile_form': profile_form
     }
     return render(request, 'accounts/update-profile.html', context)
+
+@login_required(login_url='login')
+def invite_user(request):
+    invite_form = SignUpInvitationForm()
+
+    if request.method == "POST":
+        invite_form = SignUpInvitationForm(request.POST or None)
+        if invite_form.is_valid():
+            obj = invite_form.save(commit=False)
+            obj.sender = request.user
+            obj.save()
+
+            messages.add_message(request, messages.SUCCESS, 'Invitation Sent!')
+            current_site=get_current_site(request)
+            template = render_to_string('snippets/invite-new-user.html', { 
+                'obj': obj, 
+                'domain': current_site.domain, 
+            })
+
+            send_mail(
+                "You've been invited to join the Local Contexts Hub",
+                template,
+                settings.EMAIL_HOST_USER,
+                [obj.email],
+                fail_silently=False)
+            return redirect('invite')
+
+    return render(request, 'accounts/invite.html', {'invite_form': invite_form})

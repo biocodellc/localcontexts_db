@@ -10,6 +10,8 @@ urlpatterns = [
     path('activate/<uidb64>/<token>', views.ActivateAccountView.as_view(), name='activate'),
     path('verify/', views.verify, name='verify'),
 
+    path('invite/', views.invite_user, name='invite'),
+
     path('dashboard/', views.dashboard, name='dashboard'),
     path('create-profile/', views.create_profile, name='create-profile'),
     path('update-profile/', views.update_profile, name='update-profile'),

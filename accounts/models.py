@@ -65,3 +65,13 @@ class UserCommunity(models.Model):
     class Meta:
         verbose_name = 'User Community'
         verbose_name_plural = 'User Communities'
+
+class SignUpInvitation(models.Model):
+    email = models.EmailField(null=True)
+    message = models.TextField(max_length=120, null=True, blank=True)
+    sender = models.ForeignKey(User, default=None, null=True, on_delete=models.DO_NOTHING)
+    date_sent = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Sign Up Invitation"        
+        verbose_name_plural = "Sign Up Invitations"

@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, SignUpInvitation
 
 class RegistrationForm(UserCreationForm):
     first_name = forms.CharField(max_length=50, required=False)
@@ -47,3 +47,8 @@ class ProfileUpdateForm(forms.ModelForm):
 
 class ResendEmailActivationForm(forms.Form):
     email = forms.EmailField(label=_('Email'), required=True)
+
+class SignUpInvitationForm(forms.ModelForm):
+    class Meta:
+        model = SignUpInvitation
+        fields = ['email', 'message']
