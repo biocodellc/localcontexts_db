@@ -219,11 +219,6 @@
 
 #help-text-pw {
     display: none;
-    position: absolute;
-    bottom: 70px;
-    right: 100px;
-    z-index:1;
-    transition: 0.3s;
     background-color: #f1f1f1;
     min-width: 450px;
     max-width: 450px;
