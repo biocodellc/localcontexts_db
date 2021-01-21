@@ -79,7 +79,7 @@ def login(request):
                 auth.login(request, user)
                 return redirect('dashboard')
         else:
-            messages.error(request, 'Invalid Credentials')
+            messages.error(request, 'Your username or password does not match an account')
             return redirect('login')
     else:
         return render(request, "accounts/login.html")
@@ -227,7 +227,7 @@ def update_profile(request):
             messages.add_message(request, messages.SUCCESS, 'Profile Updated!')
             return redirect('update-profile')
         else:
-            messages.add_message(request, messages.ERROR, 'Something went wrong.')
+            messages.add_message(request, messages.ERROR, 'Something went wrong')
             return redirect('update-profile')
     else:
         user_form = UserUpdateForm(instance=request.user)
@@ -251,7 +251,7 @@ def invite_user(request):
             check_email = email_exists(obj.email)
 
             if check_email == True:
-                messages.add_message(request, messages.INFO, 'This email is already in use.')
+                messages.add_message(request, messages.INFO, 'This email is already in use')
                 return redirect('invite')
             else: 
                 obj.save()

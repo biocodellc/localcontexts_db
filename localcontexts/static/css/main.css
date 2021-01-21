@@ -256,31 +256,29 @@ input:focus {
 }
 
 /* ALERTS / MESSAGES */
-.msg-red, .msg-green, .msg-blue {
+#alert-message small{
     padding: 5px;
-    border-radius: 4px;
+    margin: auto;
+}
+
+.msg-red, .msg-green, .msg-blue {
+    margin: 10px;
 }
 
 .msg-red {
-    color: #A94442;
-    background-color: #f2dede;
-    border: 1px solid #ebccd1;
+    color: #ff0000;
 }
 
 .msg-green {
-    color: 1px solid #3c763d;
-    background-color: #dff0d8;
-    border: 1px solid #d6e9c6;
+    color: #3c763d;
 }
 
 .msg-blue {
     color: #31708f;
-    background-color: #d9edf7;
-    border: 1px solid #bce8f1;
 }
 
 #close-btn {
-    padding-left: 15px;
+    margin: auto;
     cursor: pointer;
     font-size: 20px;
 }

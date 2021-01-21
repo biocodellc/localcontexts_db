@@ -6,7 +6,6 @@
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
                         <div class="msg-red">
                             <small>{{ message }}</small>
-                            <span id="close-btn" class="close" aria-label="close">&times;</span>
                         </div>
                     {% endif %}
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
