@@ -37,14 +37,21 @@
     </div>
 
     <div class="flex-this w-100">
+
         <div class="pad-right w-50">
             <label for="password">Password</label><br>
-            {{form.password1}}
+            <div class="flex-this pass-field">
+                {{form.password1}}<i id="toggle-password" class="fa fa-eye" aria-hidden="true"></i>
+            </div>
         </div>
+
         <div class="pad-left w-50">
             <label for="confirm-password">Confirm Password</label><br>
-            {{form.password2}}
+            <div class="flex-this pass-field">
+                {{form.password2}}<i id="toggle-password2" class="fa fa-eye" aria-hidden="true"></i>
+            </div>
         </div>
+
     </div>
 
     <div id="help-text-pw">
