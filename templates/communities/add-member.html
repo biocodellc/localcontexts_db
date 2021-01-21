@@ -80,7 +80,7 @@
 
     <div class="add-member-modal-wrapper flex-this column w-100">
   
-        <div id="close-modal" class="close-modal-btn w-100"> <a href="{% url 'members' community.id %}"><span>&times;</span></a></div>
+        <div id="close-modal" class="close-modal-btn w-100"> <a class="darkteal-text" href="{% url 'members' community.id %}"><span>&times;</span></a></div>
         <div class="add-member-modal-content w-100">
             <div>
                 <h4 class="weight-500">Add Members to <span class="darkteal-text">{{community.community_name}}</span></h4>
@@ -109,13 +109,24 @@
                         </div>
                       </div>
                   </div>
-      
-                  <div>
-                    <!-- Alerts -->
-                    {% include 'partials/_alerts.html' %}
-                            <p>- Admins and Editors have access to create and manage labels.</p>
-                      <button class="action-btn" type="submit">Send Invitation </button>
-                  </div>
+
+                  <p>- Only Admins and Editors have access to create and manage labels.<br></p>
+
+                  
+                <div class="flex-this w-100">
+                    <div class="w-30">
+                        <!-- Alerts -->
+                        {% include 'partials/_alerts.html' %}
+                        <button class="action-btn" type="submit">Send Invitation </button>
+                    </div>
+
+                    <div class="w-70">
+                            <small>
+                                Looking for someone who isn't on this list? <a href="{% url 'invite' %}">Invite them</a>.
+                            </small>
+                    </div>
+                </div>
+
                 </form>
             </div>
         </div>
