@@ -1,17 +1,26 @@
 {% load static %}
 {% if messages %}
     {% for message in messages %}
-        <div id="registration-message">
-            <div class="{{ message.tags }}">
-                <button id="close-btn" type="button" class="close"><span aria-hidden="true">&times;</span></button>
-                <strong>
+        <div id="alert-message">
+            <div class="{{ message.tags }} flex-this">
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                        Error:
-                    {% else %}
-                        {{message.tags|title}}
+                        <div class="msg-red">
+                            <small>{{ message }}</small>
+                            <span id="close-btn" class="close" aria-label="close">&times;</span>
+                        </div>
                     {% endif %}
-                </strong>
-                {{ message }}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                        <div class="msg-blue">
+                            <small>{{ message }}</small>
+                            <span id="close-btn" class="close" aria-label="close">&times;</span>
+                        </div>
+                    {% endif %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                        <div class="msg-green">
+                            <small>{{ message }}</small>
+                            <span id="close-btn" class="close" aria-label="close">&times;</span>
+                        </div>
+                    {% endif %}
             </div>
         </div>
     {% endfor %}

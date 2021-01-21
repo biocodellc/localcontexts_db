@@ -136,7 +136,9 @@ USE_TZ = True
 # Messages
 from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
-    messages.ERROR: 'danger'
+    messages.ERROR: 'error-msg',
+    messages.SUCCESS: 'success-msg',
+    messages.INFO: 'info-msg',
 }
 
 # Config for sending out emails

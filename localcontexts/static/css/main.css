@@ -255,6 +255,36 @@ input:focus {
     min-width: 250px;
 }
 
+/* ALERTS / MESSAGES */
+.msg-red, .msg-green, .msg-blue {
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.msg-red {
+    color: #A94442;
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+}
+
+.msg-green {
+    color: 1px solid #3c763d;
+    background-color: #dff0d8;
+    border: 1px solid #d6e9c6;
+}
+
+.msg-blue {
+    color: #31708f;
+    background-color: #d9edf7;
+    border: 1px solid #bce8f1;
+}
+
+#close-btn {
+    padding-left: 15px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
 /* LANDING PAGE CONTENT BUTTONS */
 .landing-btn {
     cursor: pointer;

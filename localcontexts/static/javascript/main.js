@@ -1,6 +1,6 @@
-// Dismiss Registration Error Message
+// Dismiss Messages
 var dismissBtn = document.getElementById('close-btn')
-var messageDiv = document.getElementById('registration-message')
+var messageDiv = document.getElementById('alert-message')
 
 if (dismissBtn) {
     dismissBtn.addEventListener('click', () => {

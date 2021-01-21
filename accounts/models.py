@@ -72,6 +72,9 @@ class SignUpInvitation(models.Model):
     sender = models.ForeignKey(User, default=None, null=True, on_delete=models.DO_NOTHING)
     date_sent = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return str(self.email)
+
     class Meta:
         verbose_name = "Sign Up Invitation"        
         verbose_name_plural = "Sign Up Invitations"
