@@ -19,7 +19,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
-from .utils import generate_token
+from .utils import generate_token, email_exists
 from django.contrib.sites.shortcuts import get_current_site
 
 @unauthenticated_user
@@ -248,21 +248,27 @@ def invite_user(request):
         if invite_form.is_valid():
             obj = invite_form.save(commit=False)
             obj.sender = request.user
-            obj.save()
+            check_email = email_exists(obj.email)
 
-            messages.add_message(request, messages.SUCCESS, 'Invitation Sent!')
-            current_site=get_current_site(request)
-            template = render_to_string('snippets/invite-new-user.html', { 
-                'obj': obj, 
-                'domain': current_site.domain, 
-            })
+            if check_email == True:
+                messages.add_message(request, messages.INFO, 'This email is already in use.')
+                return redirect('invite')
+            else: 
+                obj.save()
 
-            send_mail(
-                "You've been invited to join the Local Contexts Hub",
-                template,
-                settings.EMAIL_HOST_USER,
-                [obj.email],
-                fail_silently=False)
-            return redirect('invite')
+                messages.add_message(request, messages.SUCCESS, 'Invitation Sent!')
+                current_site=get_current_site(request)
+                template = render_to_string('snippets/invite-new-user.html', { 
+                    'obj': obj, 
+                    'domain': current_site.domain, 
+                })
+
+                send_mail(
+                    "You've been invited to join the Local Contexts Hub",
+                    template,
+                    settings.EMAIL_HOST_USER,
+                    [obj.email],
+                    fail_silently=False)
+                return redirect('invite')
 
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
