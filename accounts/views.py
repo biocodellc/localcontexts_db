@@ -254,8 +254,6 @@ def invite_user(request):
                 messages.add_message(request, messages.INFO, 'This email is already in use')
                 return redirect('invite')
             else: 
-                obj.save()
-
                 messages.add_message(request, messages.SUCCESS, 'Invitation Sent!')
                 current_site=get_current_site(request)
                 template = render_to_string('snippets/invite-new-user.html', { 
@@ -269,6 +267,7 @@ def invite_user(request):
                     settings.EMAIL_HOST_USER,
                     [obj.email],
                     fail_silently=False)
+                
                 return redirect('invite')
 
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})

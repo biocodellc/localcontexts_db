@@ -52,3 +52,7 @@ class SignUpInvitationForm(forms.ModelForm):
     class Meta:
         model = SignUpInvitation
         fields = ['email', 'message']
+        widgets = {
+            'message': forms.Textarea(attrs={'rows': 4, 'cols': 65}),
+            'email': forms.TextInput(attrs={'size': 65}),
+        }

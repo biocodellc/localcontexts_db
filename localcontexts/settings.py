@@ -26,6 +26,12 @@ DEBUG = os.environ['DEBUG_VALUE']
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1', 'localcontexts.herokuapp.com']
 
+# https://docs.djangoproject.com/en/3.1/ref/settings/#std:setting-ADMINS
+# For when DEBUG = FALSE, sends emails with site errors
+SITE_ADMIN_NAME = os.environ['SITE_ADMIN_NAME']
+SITE_ADMIN_EMAIL = os.environ['SITE_ADMIN_EMAIL']
+ADMINS = [(SITE_ADMIN_NAME, SITE_ADMIN_EMAIL)]
+
 
 # Application definition
 INSTALLED_APPS = [
