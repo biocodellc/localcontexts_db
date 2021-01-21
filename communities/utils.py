@@ -1,9 +1,9 @@
 from communities.models import InviteMember, Community
-from accounts.models import UserCommunity
+from accounts.models import UserAffiliation
 from django.contrib.auth.models import Group
 
 def checkif_community_in_user_community(user, community):
-    u = UserCommunity.objects.get(user=user)
+    u = UserAffiliation.objects.get(user=user)
     community_list = u.communities.all()
 
     if community in community_list:
@@ -12,7 +12,7 @@ def checkif_community_in_user_community(user, community):
         return False
 
 def check_member_role(user, community):
-    u = UserCommunity.objects.get(user=user)
+    u = UserAffiliation.objects.get(user=user)
     community_list = u.communities.all()
 
     if community in community_list:

@@ -5,6 +5,7 @@ from django.contrib import messages, auth
 from django.contrib.auth.models import User
 from django.views.generic import View
 from communities.models import Community
+from institutions.models import Institution
 from notifications.models import UserNotification
 
 from .decorators import *
@@ -143,22 +144,30 @@ def logout(request):
 def dashboard(request):
     n = UserNotification.objects.filter(to_user=request.user, viewed=False)
 
-    user_has_community = UserCommunity.objects.filter(user=request.user).exists()
+    user_has_community = UserAffiliation.objects.filter(user=request.user).exists()
     target_communitites = Community.objects.filter(community_creator=request.user)
+    target_institutions = Institution.objects.filter(institution_creator=request.user)
+
+    target_user = UserAffiliation.objects.get(user=request.user)
 
     # Checks to see if any communities have been created by the current user 
     for x in target_communitites:
-        target_user = UserCommunity.objects.get(user=request.user)
-        target_user.communities.add(x.id)    # and adds them to the UserCommunity instance
+        target_user.communities.add(x.id)    # and adds them to the UserAffiliation instance
+        target_user.save()
+    
+    for y in target_institutions:
+        target_user.institutions.add(y.id)
         target_user.save()
 
     if user_has_community:
-        current_user = UserCommunity.objects.get(user=request.user)
+        current_user = UserAffiliation.objects.get(user=request.user)
         user_communities = current_user.communities.all()
+        user_institutions = current_user.institutions.all()
 
         context = { 
             'current_user': current_user,
             'user_communities': user_communities,
+            'user_institutions': user_institutions,
             'notifications': n,
         }
         return render(request, "accounts/dashboard.html", context)
@@ -168,7 +177,7 @@ def dashboard(request):
 @login_required(login_url='login')
 def users_view(request, pk):
     target_user = User.objects.get(id=pk)
-    x = UserCommunity.objects.get(id=pk)  
+    x = UserAffiliation.objects.get(id=pk)  
     user_communities = x.communities.all()
 
     context = {

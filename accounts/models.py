@@ -39,20 +39,10 @@ class Profile(models.Model):
     #         memfile.close()
     #         img.close()
 
-class UserInstitution(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
-    institutions = models.ManyToManyField(Institution, blank=True)
-
-    def __str__(self):
-        return str(self.user)
-
-    class Meta:
-        verbose_name = 'User Institution'
-        verbose_name_plural = 'User Institutions'
-
-class UserCommunity(models.Model):
+class UserAffiliation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
     communities = models.ManyToManyField(Community, blank=True, related_name="user_communities")
+    institutions = models.ManyToManyField(Institution, blank=True, related_name="user_institutions")
 
     @classmethod
     def create(cls, user):
@@ -63,8 +53,8 @@ class UserCommunity(models.Model):
         return str(self.user)
     
     class Meta:
-        verbose_name = 'User Community'
-        verbose_name_plural = 'User Communities'
+        verbose_name = 'User Affiliation'
+        verbose_name_plural = 'User Affiliations'
 
 class SignUpInvitation(models.Model):
     email = models.EmailField(null=True)

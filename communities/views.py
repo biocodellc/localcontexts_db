@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from django.contrib import messages
-from accounts.models import UserCommunity
+from accounts.models import UserAffiliation
 from .forms import *
 from .models import *
 from .utils import *
@@ -48,7 +48,7 @@ def create_community(request):
 
 def community_registry(request):
     communities = Community.objects.filter(is_approved=True, is_publicly_listed=True)
-    current_user = UserCommunity.objects.get(user=request.user)
+    current_user = UserAffiliation.objects.get(user=request.user)
     user_communities = current_user.communities.all()
     # all_requests = CommunityJoinRequest.objects.all()
 

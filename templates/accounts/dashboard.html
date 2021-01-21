@@ -50,6 +50,24 @@
                 {% endfor %}
             {% endif %}
 
+            {% if user_institutions %}
+            {% for institution in user_institutions %}
+            <div class="member-card-container">
+                <a href="#">
+                    <div class="member-card flex-this column white-bg">
+                        <div class="member-card-img">
+                            <img src="https://picsum.photos/350/150">
+                        </div>
+                        <div class="member-card-text flex-this column">
+                            <h3 class="darkteal-text">{{ institution }}</h3>
+                            <p class="upper black-text">Institution</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        {% endif %}
+
             {% include 'snippets/add-card.html'%}
 
         </div>

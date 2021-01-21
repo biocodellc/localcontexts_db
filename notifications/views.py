@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import *
 from communities.models import *
-from accounts.models import UserCommunity
+from accounts.models import UserAffiliation
 from .utils import send_community_approval_notification
 
 @login_required(login_url='login')
@@ -17,8 +17,8 @@ def show_notification(request, pk):
             i.status = 'accepted'
             i.save()
 
-            # Add community to UserCommunity
-            u = UserCommunity.objects.get(user=n.to_user)
+            # Add community to UserAffiliation
+            u = UserAffiliation.objects.get(user=n.to_user)
             u.communities.add(comm)
             u.save()
 
@@ -39,8 +39,8 @@ def show_notification(request, pk):
             j.status = 'accepted'
             j.save()
 
-            # Add community to UserCommunity
-            u = UserCommunity.objects.get(user=n.from_user)
+            # Add community to UserAffiliation
+            u = UserAffiliation.objects.get(user=n.from_user)
             u.communities.add(comm)
             u.save()
 
