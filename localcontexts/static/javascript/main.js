@@ -24,22 +24,22 @@ if (passwordField ) {
 
 // Registration Page
 // Toggle Password Visibility
-const togglePassword = document.querySelector('#toggle-password')
-const password = document.querySelector('#id_password1')
+var togglePassword = document.querySelector('#toggle-password')
+var password = document.querySelector('#id_password1')
 
 togglePassword.addEventListener('click', (e) => {
-    const type = password.getAttribute('type') === 'password' ? 'text' : 'password'
+    var type = password.getAttribute('type') === 'password' ? 'text' : 'password'
     password.setAttribute('type', type)
 
     togglePassword.classList.toggle('fa-eye-slash')
 })
 
 // Toggle Confirm Password Visibility
-const togglePassword2 = document.querySelector('#toggle-password2')
-const password2 = document.querySelector('#id_password2')
+var togglePassword2 = document.querySelector('#toggle-password2')
+var password2 = document.querySelector('#id_password2')
 
 togglePassword2.addEventListener('click', (e) => {
-    const type = password2.getAttribute('type') === 'password' ? 'text' : 'password'
+    var type = password2.getAttribute('type') === 'password' ? 'text' : 'password'
     password2.setAttribute('type', type)
 
     togglePassword2.classList.toggle('fa-eye-slash')
