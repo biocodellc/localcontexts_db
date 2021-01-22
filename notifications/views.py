@@ -93,6 +93,20 @@ def show_notification_community(request, cid, pk):
     }
     return render(request, 'notifications/community-notification.html', context)
 
+@login_required(login_url='login')
+def read_notification_community(request, cid, pk):
+    n = CommunityNotification.objects.get(id=pk)
+    community = Community.objects.get(id=cid)
+    n.viewed = True
+    n.save()
+    
+    context = {
+        'n': n,
+        'community':community,
+    }
+    return render(request, 'notifications/comm-read.html', context)
+
+
 # TODO: Do we need to be able to delete requests/ community notifications?
 # @login_required(login_url='login')
 # def delete_notification_community(request, pk):

@@ -75,8 +75,7 @@ def community_registry(request):
 @login_required(login_url='login')
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
-
-    n = CommunityNotification.objects.filter(community=community, viewed=False)
+    n = CommunityNotification.objects.filter(community=community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.

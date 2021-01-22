@@ -53,7 +53,7 @@
             </div>
         </div>
 
-        {% if notifications.count > 0 %}
+        {% if notifications %}
         <div class="white-bg content-card content-card-space noti-card">
             
                 <h3 class="orange-text">Notifications</h3>
@@ -66,6 +66,7 @@
                                 <div><strong><p>{{ n.notification_type }}</p></strong></div>
                                 <div><p>{{ n.title }}</p></div>
                             {% else %}
+                                <div><p></p></div>
                                 <div><strong><p>{{ n.notification_type }}</p></strong></div>
                                 <div><p>{{ n.title }}</p></div>
                             {% endif %}
