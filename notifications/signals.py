@@ -94,6 +94,7 @@ def accept_user_join_request(sender, instance, created, **kwargs):
         message2 = "Woot"
 
         UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title2, message=message2, notification_type="accept", community=community, reference_id=ref)
+        instance.delete() # Deletes the request when it has been accepted
 
 # Sends Site admin notifiation with request to create community
 #TODO: Test this when there is more than one site admin
