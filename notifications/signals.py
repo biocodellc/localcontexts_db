@@ -1,7 +1,8 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver, Signal
 from django.contrib.auth.models import User, Group
 from communities.models import *
+from bclabels.models import BCNotice
 from .models import *
 from .utils import *
 
@@ -108,3 +109,13 @@ def community_application(sender, instance, created, **kwargs):
     if created:
         for admin in site_admins:
             UserNotification.objects.create(to_user=admin, from_user=creator, title=title, message=message, notification_type="create", community=instance)
+
+#TODO: Figure out the signal for sending a community a notification when a BC Label is created.
+# @receiver(m2m_changed, sender=BCNotice.communities.through)
+# def notice_placed(sender, instance, created, **kwargs):
+#     if created:
+        # Get all communities of the notice
+        
+        # Send a notification to each of them
+        # CommunityNotification.objects.create(community=community.id, title="A notice was placed", notification_type="requests")
+
