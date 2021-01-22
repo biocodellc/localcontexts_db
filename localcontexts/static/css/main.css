@@ -446,7 +446,7 @@ input:focus {
     margin-top: 16px;
 }
 
-.activity-card-container h3, .notifications-card h3 {
+.activity-card-container h3 {
     margin-top: 0;
 }
 
@@ -523,24 +523,6 @@ input:focus {
 
 .org span {
     font-size: 14px;
-}
-
-/* Notifications card */
-.notifications-card {
-    min-height: 526px;
-    max-height: 526px;
-}
-
-.notification-content {
-    margin-bottom: 3%;
-}
-
-.notification-content span {
-    font-weight: 500;
-}
-
-.notification-content p {
-    margin: 0;
 }
 
 /* COMMUNITY DASHBOARD: MEMBERS PAGE */

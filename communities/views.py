@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 
 from django.contrib import messages
 from accounts.models import UserAffiliation
+from notifications.models import CommunityNotification
 from .forms import *
 from .models import *
 from .utils import *
@@ -75,12 +76,15 @@ def community_registry(request):
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
 
+    n = CommunityNotification.objects.filter(community=community, viewed=False)
+
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         context = {
             'community': community,
+            'notifications': n,
         }
         return render(request, 'communities/community.html', context)
 

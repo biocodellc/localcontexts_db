@@ -53,82 +53,28 @@
             </div>
         </div>
 
-        <div class="notifications-card content-card content-card-space flex-this column white-bg">
-            <div>
+        {% if notifications.count > 0 %}
+        <div class="white-bg content-card content-card-space noti-card">
+            
                 <h3 class="orange-text">Notifications</h3>
-            </div>
+                {% for n in notifications %}
+                    <a href="{% url 'show-comm' n.id %}">
+                        <div class="noti-container flex-this row">
 
-            <div class="w-100 flex-this column space-between">
+                            {% if n.viewed == False %}
+                                <div><p class="orange-text"><i class="fa fa-bell" aria-hidden="true"></i></p></div>
+                                <div><strong><p>{{ n.notification_type }}</p></strong></div>
+                                <div><p>{{ n.title }}</p></div>
+                            {% else %}
+                                <div><strong><p>{{ n.notification_type }}</p></strong></div>
+                                <div><p>{{ n.title }}</p></div>
+                            {% endif %}
 
-                <div class="flex-this w-100 notification-content">
-                    <div class="w-10">
-                        <span>Requests</span>
-                    </div>
-                    <div class="w-80">
-                        <p>
-                            A BC notice has been placed by Dr.Libby Liggins
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex-this w-100 notification-content">
-                    <div class="w-10">
-                        <span>Labels</span>
-                    </div>
-                    <div class="w-80">
-                        <p>
-                            TK Outreach (TK O) label has been adapted
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex-this w-100 notification-content">
-                    <div class="w-10">
-                        <span>Labels</span>
-                    </div>
-                    <div class="w-80">
-                        <p>
-                            BC Research Use (BC RU) label has replaced a notice
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex-this w-100 notification-content">
-                    <div class="w-10">
-                        <span>Labels</span>
-                    </div>
-                    <div class="w-80">
-                        <p>
-                            TK Secret Sacred (TK SS) label has been edited
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex-this w-100 notification-content">
-                    <div class="w-10">
-                        <span>Relationships</span>
-                    </div>
-                    <div class="w-80">
-                        <p>
-                            A relationship has been created with Te Papa
-                        </p>
-                    </div>
-                </div>
-
-                <div class="flex-this w-100 notification-content">
-                    <div class="w-10">
-                        <span>Training</span>
-                    </div>
-                    <div class="w-80">
-                        <p>
-                            Labels 101 Workshop starts in two days
-                        </p>
-                    </div>
-                </div>
-
-            </div>
+                            
+                        </div>
+                    </a>
+                {% endfor %}
         </div>
-
-    </section>
+{% endif %}
 
 {% endblock %}

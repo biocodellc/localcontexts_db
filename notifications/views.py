@@ -79,3 +79,13 @@ def delete_notification(request, pk):
     n.viewed = True
     n.save()
     return redirect('dashboard')
+
+@login_required(login_url='login')
+def show_notification_community(request, pk):
+    n = CommunityNotification.objects.get(id=pk)
+    return render(request, 'notifications/community-notification.html', { 'n': n })
+
+@login_required(login_url='login')
+def delete_notification_community(request, pk):
+    n = CommunityNotification.objects.get(id=pk)
+    return render(request, 'notifications/community-notification.html', { 'n': n })

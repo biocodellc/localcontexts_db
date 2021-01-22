@@ -4,18 +4,18 @@ from communities.models import Community
 
 class UserNotification(models.Model):
     TYPES = (
-        ('welcome', 'welcome'),
-        ('invitation', 'invitation'),
-        ('request', 'request'),
-        ('approval', 'approval'),
-        ('accept', 'accept'),
-        ('create', 'create'),
+        ('Welcome', 'welcome'),
+        ('Invitation', 'invitation'),
+        ('Request', 'request'),
+        ('Approval', 'approval'),
+        ('Accept', 'accept'),
+        ('Create', 'create'),
     )
 
     ROLES = (
-        ('admin', 'admin'),
-        ('editor', 'editor'),
-        ('viewer', 'viewer'),
+        ('Admin', 'admin'),
+        ('Editor', 'editor'),
+        ('Viewer', 'viewer'),
     )
 
     title = models.CharField(max_length=200)
@@ -37,19 +37,19 @@ class UserNotification(models.Model):
 
 class CommunityNotification(models.Model):
     TYPES = (
-        ('requests', 'Requests'),
-        ('labels', 'Labels'),
-        ('relationships', 'relationships'),
+        ('Requests', 'requests'),
+        ('Labels', 'labels'),
+        ('Relationships', 'relationships'),
     )
 
     title = models.CharField(max_length=200)
     notification_type = models.CharField(max_length=20, choices=TYPES, null=True)
-    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, blank=True)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True)
     reference_id = models.CharField(max_length=10, null=True, blank=True)
     viewed = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.notification_type}-{self.title}"
+        return f"{self.notification_type} - {self.title} - {self.community.community_name}"
 
     class Meta:
         verbose_name = 'Community Notification'
