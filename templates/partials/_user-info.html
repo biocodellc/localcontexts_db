@@ -10,10 +10,9 @@
         <div class="row flex-this">
             <div id="profile-pic-container">
                 {% if user.profile.profile_pic %}
-                    <img src="{{ user.profile.profile_pic.url }}" >
+                    <img src="{{ user.profile.profile_pic.url }}" alt="user profile image">
                 {% else %}
-                    <!-- <img src="../static/images/default.png"> -->
-                    <img src="{% static '/images/default.png' %}">
+                    <img src="{% static '/images/default.png' %}" alt="default user profile image">
                 {% endif %}
             </div>
     

@@ -46,7 +46,7 @@
                     <a href="{% url 'community-dashboard' community.id %}">
                         <div class="member-card flex-this column white-bg">
                             <div class="member-card-img">
-                                <img src="https://picsum.photos/350/150">
+                                <img src="https://picsum.photos/350/150" alt="{{ community.community_name }} image">
                             </div>
                             <div class="member-card-text flex-this column">
                                 <h3 class="darkteal-text">{{ community }}</h3>
@@ -64,7 +64,7 @@
                 <a href="#">
                     <div class="member-card flex-this column white-bg">
                         <div class="member-card-img">
-                            <img src="https://picsum.photos/350/150">
+                            <img src="https://picsum.photos/350/150" alt="{{ institution.institution_name }} image">
                         </div>
                         <div class="member-card-text flex-this column">
                             <h3 class="darkteal-text">{{ institution }}</h3>

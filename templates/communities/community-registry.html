@@ -7,7 +7,7 @@
 
             <div class="flex-this row space-between">
                 <div class="w-30">
-                    <img src="{% static 'images/logos/sm-logo-registry.png' %}">
+                    <img src="{% static 'images/logos/sm-logo-registry.png' %}" alt="Local Contexts logo">
                 </div>
                <div class="w-30 flex-this flex-end">
                     <a class="darkteal-text" href="{% url 'create-community' %}">Or create a Community Account</a>
@@ -33,7 +33,7 @@
                                 <form method="POST" action="">
                                         {% csrf_token %}
                                         <tr>
-                                            <td class="td-img"><img src="https://picsum.photos/200/75"></td>
+                                            <td class="td-img"><img src="https://picsum.photos/200/75" alt="{{ community.community_name }} image"></td>
                                             <td class="td-name"><a href="{% url 'community-dashboard' community.id %}" class="black-text">{{community.community_name}}</a></td>
                                             <input type="hidden" value="{{ community.id }}" name="commid">
                                             <td class="td-btn">
