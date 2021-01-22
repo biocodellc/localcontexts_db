@@ -13,7 +13,7 @@ def show_notification(request, pk):
         comm = n.community.id
         
         if n.notification_type == 'invitation':
-            i = InviteMember.objects.get(id=n.reference_id)
+            i = InviteMember.objects.get(id=n.reference_id) #Use reference id to find id of Invite Member instance
             i.status = 'accepted'
             i.save()
 
@@ -32,7 +32,8 @@ def show_notification(request, pk):
                 c.editors.add(n.to_user)
             c.save()
 
-            return render(request, 'notifications/notification.html', {'notification': n})
+            return render(request, 'notifications/read.html', {'notification': n})
+
         
         elif n.notification_type == 'request':
             j = CommunityJoinRequest.objects.get(id=n.reference_id)
@@ -55,8 +56,8 @@ def show_notification(request, pk):
                 c.viewers.add(n.from_user)
             c.save()
 
-            return render(request, 'notifications/notification.html', {'notification': n})
-        
+            return render(request, 'notifications/read.html', {'notification': n})
+
         elif n.notification_type == 'create':
             new_community = Community.objects.get(id=comm)
             new_community.is_approved = True
@@ -64,20 +65,22 @@ def show_notification(request, pk):
 
             send_community_approval_notification(new_community.community_creator, new_community)
 
-            return render(request, 'notifications/notification.html', {'notification': n})
+            return render(request, 'notifications/read.html', {'notification': n})
+        
+    return render(request, 'notifications/notification.html', { 'notification': n })
 
+@login_required(login_url='login')
+def read_notification(request, pk):
+    n = UserNotification.objects.get(id=pk)
+    n.viewed = True
+    n.save()
+    return render(request, 'notifications/read.html', {'notification': n})
 
-    context = {
-        'notification': n,
-    }
-
-    return render(request, 'notifications/notification.html', context)
 
 @login_required(login_url='login')
 def delete_notification(request, pk):
     n = UserNotification.objects.get(id=pk)
-    n.viewed = True
-    n.save()
+    n.delete()
     return redirect('dashboard')
 
 @login_required(login_url='login')

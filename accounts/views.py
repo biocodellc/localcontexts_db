@@ -142,7 +142,7 @@ def logout(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-    n = UserNotification.objects.filter(to_user=request.user, viewed=False)
+    n = UserNotification.objects.filter(to_user=request.user)
 
     user_has_community = UserAffiliation.objects.filter(user=request.user).exists()
     target_communitites = Community.objects.filter(community_creator=request.user)

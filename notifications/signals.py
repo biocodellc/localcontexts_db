@@ -70,7 +70,7 @@ def send_user_join_request(sender, instance, created, **kwargs):
         name = check_full_name(sender_)
 
         title = str(name) + " wishes to join " + str(community)
-        message = "let them join it"
+        message = "You can add " + str(name) + " to " + str(community)
 
         UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="request", community=community, reference_id=ref)
 
@@ -85,7 +85,7 @@ def accept_user_join_request(sender, instance, created, **kwargs):
 
         # Message to user requesting to join after request has been approved.
         title = " You are now a member of " + str(community)
-        message = "Yay!"
+        message = "Your role is " + str(instance.role)
 
         UserNotification.objects.create(to_user=sender_, from_user=receiver_, title=title, message=message, notification_type="accept", community=community, reference_id=ref)
 

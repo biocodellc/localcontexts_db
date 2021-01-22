@@ -53,8 +53,12 @@
                 </form>
             {% endif %}
 
-            <p><a href="{% url 'delete' notification.id %}">Mark as Read</a></p>
-            <p><a href="{% url 'dashboard' %}">Back to Dashboard</a></p>
+            <div class="flex-this space-between">
+                <p><a class="darkteal-text" href="{% url 'dashboard' %}">Back to Dashboard</a></p>    
+                <p><a class="darkteal-text" href="{% url 'read' notification.id %}">Mark as Read</a></p>
+                <p><a class="darkteal-text" href="{% url 'delete' notification.id %}">Delete</a></p>
+            </div>
+
         </div>
 
     </section>
