@@ -58,7 +58,7 @@
             
                 <h3 class="orange-text">Notifications</h3>
                 {% for n in notifications %}
-                    <a href="{% url 'show-comm' n.id %}">
+                    <a href="{% url 'comm-show' community.id n.id %}">
                         <div class="noti-container flex-this row">
 
                             {% if n.viewed == False %}

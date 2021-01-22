@@ -189,7 +189,6 @@ def users_view(request, pk):
 @login_required(login_url='login')
 def create_profile(request):
     if request.method == 'POST':
-        #TODO: add classes to input instances so it's easier to style
         user_form = UserCreateProfileForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(
             request.POST, 
