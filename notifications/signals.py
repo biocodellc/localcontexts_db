@@ -56,6 +56,8 @@ def accept_community_invite(sender, instance, **kwargs):
         
         UserNotification.objects.create(to_user=sender_, from_user=receiver_, title=title2, message=message2, notification_type="accept", community=community, reference_id=ref)
 
+        instance.delete() # Deletes the invitation after it has been accepted
+
 # Send notification when user wishes to join a community
 @receiver(post_save, sender=CommunityJoinRequest)
 def send_user_join_request(sender, instance, created, **kwargs):
