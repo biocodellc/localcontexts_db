@@ -24,3 +24,15 @@ def researcher_dashboard(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
     return render(request, 'researchers/dashboard.html', {'researcher': researcher})
+
+@login_required(login_url='login')
+def researcher_notices(request, pk):
+    researcher = Researcher.objects.get(id=pk)
+
+    return render(request, 'researchers/notices.html', {'researcher': researcher})
+
+@login_required(login_url='login')
+def researcher_relationships(request, pk):
+    researcher = Researcher.objects.get(id=pk)
+
+    return render(request, 'researchers/relationships.html', {'researcher': researcher})
