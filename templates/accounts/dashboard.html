@@ -74,7 +74,23 @@
                 </a>
             </div>
             {% endfor %}
-        {% endif %}
+            {% endif %}
+
+            {% if researcher %}
+                <div class="member-card-container">
+                    <a href="{% url 'researcher-dashboard' researcher.id %}">
+                        <div class="member-card flex-this column white-bg">
+                            <div class="member-card-img">
+                                <img src="https://picsum.photos/350/150" alt="researcher image">
+                            </div>
+                            <div class="member-card-text flex-this column">
+                                <h3 class="darkteal-text">{{ user.get_full_name }}</h3>
+                                <p class="upper black-text">Researcher</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
 
             {% include 'snippets/add-card.html'%}
 

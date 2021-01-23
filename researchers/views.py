@@ -19,6 +19,8 @@ def connect_researcher(request):
     return render(request, 'researchers/connect-researcher.html', {'form': form})
 
 @login_required(login_url='login')
-def researcher_dashboard(request):
+def researcher_dashboard(request, pk):
+    # is current user a researcher?
+    researcher = Researcher.objects.get(id=pk)
 
-    return render(request, 'researchers/dashboard.html')
+    return render(request, 'researchers/dashboard.html', {'researcher': researcher})

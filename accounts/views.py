@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.views.generic import View
 from communities.models import Community
 from institutions.models import Institution
+from researchers.models import Researcher
 from notifications.models import UserNotification
 
 from .decorators import *
@@ -148,6 +149,10 @@ def dashboard(request):
     target_communitites = Community.objects.filter(community_creator=request.user)
     target_institutions = Institution.objects.filter(institution_creator=request.user)
 
+    is_user_researcher = Researcher.objects.filter(user=request.user).exists()
+    if is_user_researcher:
+        researcher = Researcher.objects.get(user=request.user)
+
     target_user = UserAffiliation.objects.get(user=request.user)
 
     # Checks to see if any communities have been created by the current user 
@@ -168,6 +173,7 @@ def dashboard(request):
             'current_user': current_user,
             'user_communities': user_communities,
             'user_institutions': user_institutions,
+            'researcher': researcher,
             'notifications': n,
         }
         return render(request, "accounts/dashboard.html", context)

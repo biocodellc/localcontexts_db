@@ -7,9 +7,9 @@
             <div class="flex-this w-100 space-between">
                 <div class="loc">
                     <a href="#" class="darkteal-text">
-                        Name
+                        {{ researcher.user.get_full_name }}
                     </a> 
-                    >> Researcher Name
+                    >> {{ researcher.user.get_full_name }}
                 </div>
     
                     <div>
@@ -25,11 +25,11 @@
                 </div>
     
                 <div class="flex-this column w-40">
-                    <h2 class="orange-text community-title">Researcher Name</h2>
+                    <h2 class="orange-text community-title">{{ researcher.user.get_full_name }}</h2>
                     <p>
-                        Job Title: <br>
-                        Location: <span>Town, Country </span><br>
-                        Orcid: <span>000000000000</span>
+                        Job Title: {{ researcher.user.profile.job_title }} <br>
+                        Location: <span>{{ researcher.user.profile.city_or_town }}, {{ researcher.user.profile.country.name }} </span><br>
+                        Orcid: <span>{{ researcher.orcid }}</span>
                     </p>
                 </div>
     
