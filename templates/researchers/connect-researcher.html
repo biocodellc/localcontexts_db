@@ -5,11 +5,11 @@
         <h2 class="darkteal-text">Create a Researcher Profile</h2>    
     </div>
 
-    <form action="" method="POST" class="flex-this column w-100">
+    <form action="{% url 'connect-researcher' %}" method="POST" class="flex-this column w-100">
         {% csrf_token %}
 
         <label>Orcid ID</label>
-        <input type="text">
+        {{ form.orcid }}
 
         <label>Town</label>
         <input type="text">

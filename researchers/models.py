@@ -20,7 +20,7 @@ class Project(models.Model):
 
 class Researcher(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    # Note: for now orcid is not required
+    # Note: for now orcid is not required, add unique = true later
     orcid = models.CharField(max_length=16, blank=True, null=True)
     projects = models.ManyToManyField(Project, blank=True)
 
