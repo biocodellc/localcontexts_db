@@ -1,8 +1,144 @@
 {% extends 'research-base.html' %} {% load static %}{% block researcher_content %}
 
 <div class="white-bg content-card content-card-space noti-card">
+        <h3 class="orange-text">Projects</h3>
+
+        <hr>
+
+        <div class="flex-this space-between column">
+            
+                <div class="flex-this w-100 proj-title-container">
     
-        <h3 class="orange-text">Projects (Notices)</h3>
+                    <div class="w-50">
+                        <h4 class="darkteal-text weight-600">Natural history footage provides new reef fish biodiversity information for a pristine but rarely visited archipelago</h4>
+                    </div>
+    
+                    <div class="w-50 flex-this flex-end">
+                        
+                            <h2>
+                                <a onclick='showMore()'>
+                                    <span id="plus-minus" class="darkteal-text">+</span>
+                                </a>
+                            </h2>
+    
+                    </div>
+    
+                </div> 
+    
+                <div class="w-100 flex-this proj-info-container">
+                    <div class="w-50"> 
+                            <p>
+                                Publication<br>
+                                01/01/2020<br>
+                                Source: Dr. Libby Liggins via Geome <br>
+                            </p>
+                    </div>
+        
+                    <div class="w-50 additional-proj-info flex-this column">
+        
+                        <div>
+                            <p>Relationship with <a href="#" class="darkteal-text">Tainui</a></p>
+                        </div>
+    
+                        <div class="flex-this flex-end mini-label-container">
+                            <div>
+                                <img src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+                            </div>
+                            <div>
+                                <img src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+                            </div>
+                        </div>
+    
+                    </div>
+    
+                </div>
+    
+                <!-- Expandable content -->
+                <div id="proj-expand" style="height: 0px;">
+                    <hr>
+                        <div class="flex-this w-100">
+    
+                            <div class="flex-this column w-70">
+          
+                              <div class="flex-this">
+                                <div class="w-200px">
+
+                                </div>
+
+                                    <div>
+                                        <span class="weight-500">Project Description</span><br>
+
+                                        <p>
+                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                                                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
+                                                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                        </p>
+                                    </div>
+
+                              </div>
+    
+                            </div>
+          
+                            <div class="flex-this column w-30 proj-btns">
+                                <div>
+                                  <button class="action-btn">Edit Notice</button>
+                                </div>
+                                <div>
+                                  <button class="green-action-btn">View on GEOME</button>
+                                </div>
+                                <div>
+                                  <button class="green-action-btn">View on ORCiD</button>
+                                </div>
+                            </div>
+    
+                        </div>
+                    <hr>
+    
+                    <div class="flex-this w-100 proj-label-summary">
+                        <div>
+                            <img src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+                        </div>
+    
+                        <div class="margin-left-1">
+                            <h4>(BC P) Provenance | Ka Rata Pea Kia Whakapakahi</h4>
+                            <p class="darkteal-text">
+                                <span class="weight-500">Label ID: IO09097809</span><br>
+                                This label is being used to indicate that this material traditionally and usually is heard and/or utilized at a particular time of year and in response to specific seasonal changes and conditions....
+                            </p>
+                        </div>
+                    </div>
+    
+                    <hr>
+    
+                    <div class="flex-this w-100 proj-label-summary">
+                        <div>
+                            <img src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+                        </div>
+    
+                        <div class="margin-left-1">
+                            <h4>(BC CV) Consent Verified | Whakaaetanga Manatoko</h4>
+                            <p class="darkteal-text">
+                                <span class="weight-500">Label ID: IO09097809</span><br>
+                                This label is being used to indicate that this material traditionally and usually is heard and/or utilized at a particular time of year and in response to specific seasonal changes and conditions....
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <hr>
+        <a href="#">
+        <div class="flex-this">
+                <div class="add-notice-btn flex-this justify-center">
+                        <span>+</span>
+                </div>
+                <div class="add-notice-text">
+                        <h4 class="weight-500">
+                            Add new notice
+                        </h4>
+                </div>
+        </div>
+        </a>
 
 </div>
 

@@ -747,3 +747,26 @@ input:focus {
 .notice-card h4 {
     padding: 0;
 }
+
+/* RESEARCHER PAGE */
+
+.add-notice-btn {
+    margin-right: 1%;
+    margin-top: 1%;
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    border: 2px dashed #A09D9D;
+    color: #A09D9D;
+}
+
+.add-notice-btn span {
+    font-size: 40px;
+    margin: auto;
+}
+
+.add-notice-text {
+    color: #A09D9D;
+    padding-top: 2.3%;
+    padding-left: 1%;
+}
