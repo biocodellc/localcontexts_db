@@ -1,0 +1,104 @@
+{% extends 'research-base.html' %} {% load static %}{% block researcher_content %}
+
+<div class="white-bg content-card content-card-space noti-card">
+    
+        <p><a href="{% url 'researcher-notices' researcher.id %}"><span class="darkteal-text">Notices</span></a> >> Add Notice</p>
+
+        <div>
+
+            <ol>
+                <li>
+                    <p>Project Overview</p>
+                    <ul>
+                        <li>
+                            <div>
+                                <p>
+                                    Select a notice*
+                                </p>
+                                <div class="flex-this">
+                                    <div>
+                                        <img src="{% static 'images/notices/bc-notice.png' %}" width="68px">
+                                    </div>
+                                    <div>
+                                        <p>
+                                            This Notice should be used to recognize the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with traditional lands, waters, and territories. It acknowledges the importance of cultural protocols and recognizes that appropriate permissions may need to be sought for future use of this material.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <p>
+                                Project Title*
+                            </p>
+                            <input type="text">
+                        </li>
+                        <li>
+                            <p>
+                                Contributors*
+                            </p>
+                            <input type="text">
+                        </li>
+                        <li>
+                            <p>
+                                What are you applying the notice to?
+                            </p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <p>Project Details</p>
+                    <ul>
+                        <li>
+                            <div class="flex-this">
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                                <div>
+                                    <p>
+                                        Public Project?<br>
+                                        <small>If a project is public, non project members will be able to query the data. You are able to change the privacy status always.</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <p>
+                                Project Summary*
+                            </p>
+                            <label for="date">Date</label><br>
+                            <input type="text"><br>
+
+                            <label for="date">Source</label><br>
+                            <input type="text"><br>
+
+                        </li>
+                        <li>
+                            <p>
+                                Project Description*
+                            </p>
+
+                            <label for="description">Brief summary of research</label><br>
+                            <input type="text">
+                        </li>
+                    </ul>
+
+
+                </li>
+                <li>
+                    <p>Project Metadata</p>
+
+                </li>
+                <li>
+                    <p>Project Module</p>
+
+                </li>
+                <li>
+                    <button class="action-btn">Save</button>
+                </li>
+            </ol>
+        </div>
+
+</div>
+
+{% endblock %}

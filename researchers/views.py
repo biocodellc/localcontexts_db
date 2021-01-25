@@ -36,3 +36,9 @@ def researcher_relationships(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
     return render(request, 'researchers/relationships.html', {'researcher': researcher})
+
+@login_required(login_url='login')
+def add_notice(request, pk):
+    researcher = Researcher.objects.get(id=pk)
+
+    return render(request, 'researchers/add-notice.html', {'researcher': researcher})
