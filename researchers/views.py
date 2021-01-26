@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .models import Researcher
-from .forms import ConnectResearcherForm
+from .forms import ConnectResearcherForm, CreateProjectForm
 
 @login_required(login_url='login')
 def connect_researcher(request):
@@ -40,5 +40,18 @@ def researcher_relationships(request, pk):
 @login_required(login_url='login')
 def add_notice(request, pk):
     researcher = Researcher.objects.get(id=pk)
+    form = CreateProjectForm()
 
-    return render(request, 'researchers/add-notice.html', {'researcher': researcher})
+    if request.method == 'POST':
+        form = CreateProjectForm(request.POST)
+
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+    
+    context = {
+        'researcher': researcher,
+        'form': form,
+    }
+
+    return render(request, 'researchers/add-notice.html', context)

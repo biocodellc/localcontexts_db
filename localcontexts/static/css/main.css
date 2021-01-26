@@ -53,6 +53,12 @@ input[type=text], input[type=email], input[type=password], input[type=username],
     font-weight: 300;
 }
 
+textarea {
+    border-radius: 5px;
+    border: 1px solid #000;
+    background-color: #fff;
+}
+
 input[type=checkbox] {
     border: 2px solid #A09D9D;
     border-radius: 5px;

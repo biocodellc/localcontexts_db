@@ -38,11 +38,11 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'notifications.apps.NotificationsConfig',
     'bclabels.apps.BclabelsConfig',
+    'researchers.apps.ResearchersConfig',
 
     'pages',
     'communities',
     'institutions',
-    'researchers',
     'api',
 
     'django.contrib.admin',
