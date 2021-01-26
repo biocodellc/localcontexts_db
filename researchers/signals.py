@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from communities.models import Community
 from bclabels.models import BCNotice
-from .models import Project
+from .models import Project, Researcher
 
 # Creates a notice when a Project is created
 @receiver(post_save, sender=Project)

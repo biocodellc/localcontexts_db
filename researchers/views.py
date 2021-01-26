@@ -29,6 +29,9 @@ def researcher_dashboard(request, pk):
 def researcher_notices(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
+    projects = researcher.projects.all()
+    print(projects)
+
     return render(request, 'researchers/notices.html', {'researcher': researcher})
 
 @login_required(login_url='login')
@@ -48,6 +51,10 @@ def add_notice(request, pk):
         if form.is_valid():
             obj = form.save(commit=False)
             obj.save()
+
+            # Saves project to researcher's list of projects
+            researcher = Researcher.objects.get(user=request.user)
+            researcher.projects.add(obj)
     
     context = {
         'researcher': researcher,
