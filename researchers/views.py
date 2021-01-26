@@ -55,10 +55,13 @@ def add_notice(request, pk):
             # Saves project to researcher's list of projects
             researcher = Researcher.objects.get(user=request.user)
             researcher.projects.add(obj)
+
+            projects = researcher.projects.all()
     
     context = {
         'researcher': researcher,
         'form': form,
+        'projects': projects,
     }
 
     return render(request, 'researchers/add-notice.html', context)
