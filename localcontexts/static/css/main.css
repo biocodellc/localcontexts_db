@@ -688,7 +688,7 @@ input:focus {
     margin: 0;
 }
 
-#proj-expand {
+.proj-expand, #proj-expand {
     overflow: auto;
 }
 

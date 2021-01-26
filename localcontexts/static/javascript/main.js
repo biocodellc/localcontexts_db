@@ -45,9 +45,30 @@ togglePassword2.addEventListener('click', (e) => {
     togglePassword2.classList.toggle('fa-eye-slash')
 })
 
-// Expand project details in community/labels/projects
-function showMore() {
-    let div = document.getElementById('proj-expand')
+// Expand project details in researcher:notices
+function showMore(elem) {
+    let targetId = elem.firstChild.nextSibling.id
+    // console.log(targetId)
+
+    let matches = targetId.match(/(\d+)/)
+    let targetNum = matches[0]
+    // console.log(targetNum)
+
+    let div = document.getElementById(`proj-expand-${targetNum}`)
+    let span = document.getElementById(targetId)
+
+    if (div.style.height == "0px" && span.textContent == "+") {
+        div.style.height = "300px"
+        div.style.transition = "height 0.5s"
+        span.textContent = "-"
+    } else {
+        div.style.height = "0px"
+        span.textContent = "+"
+    }
+}
+
+function showMoreTemporary() {
+    let div = document.getElementById(`proj-expand`)
     let span = document.getElementById('plus-minus')
 
     if (div.style.height == "0px" && span.textContent == "+") {
