@@ -30,15 +30,13 @@ def researcher_notices(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
     projects = researcher.projects.all()
-    print(projects)
 
-    return render(request, 'researchers/notices.html', {'researcher': researcher})
+    context = {
+        'researcher':researcher,
+        'projects': projects,
+    }
 
-@login_required(login_url='login')
-def researcher_relationships(request, pk):
-    researcher = Researcher.objects.get(id=pk)
-
-    return render(request, 'researchers/relationships.html', {'researcher': researcher})
+    return render(request, 'researchers/notices.html', context)
 
 @login_required(login_url='login')
 def add_notice(request, pk):
@@ -55,13 +53,24 @@ def add_notice(request, pk):
             # Saves project to researcher's list of projects
             researcher = Researcher.objects.get(user=request.user)
             researcher.projects.add(obj)
-
-            projects = researcher.projects.all()
     
+            context = {
+                'researcher': researcher,
+                'form': form,
+            }
+
+            return render(request, 'researchers/add-notice.html', context)
+    
+        
     context = {
         'researcher': researcher,
         'form': form,
-        'projects': projects,
     }
 
     return render(request, 'researchers/add-notice.html', context)
+
+@login_required(login_url='login')
+def researcher_relationships(request, pk):
+    researcher = Researcher.objects.get(id=pk)
+
+    return render(request, 'researchers/relationships.html', {'researcher': researcher})
