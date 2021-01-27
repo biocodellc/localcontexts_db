@@ -35,10 +35,11 @@
                                 {{ proj_form.title }}
                             </li>
                             <li>
-                                <p>
-                                    Contributors*
-                                </p>
-                                {{ contrib_form }}
+                                <p>Contributors*</p>
+                                {{ contrib_form.community }}
+
+                                <p>Add optional message to contributors</p>
+                                <textarea name="contrib-message"></textarea>
                             </li>
                             <li>
                                 <p>
