@@ -32,13 +32,13 @@
                                 <p>
                                     Project Title*
                                 </p>
-                                {{ form.title }}
+                                {{ proj_form.title }}
                             </li>
                             <li>
                                 <p>
                                     Contributors*
                                 </p>
-                                {{ form.contributor }}
+                                {{ contrib_form }}
                             </li>
                             <li>
                                 <p>
@@ -60,7 +60,7 @@
                             <li>
                                 <div class="flex-this">
                                     <div>
-                                        {{ form.is_public }}
+                                        {{ proj_form.is_public }}
                                     </div>
                                     <div>
                                         <p>
@@ -75,10 +75,10 @@
                                     Project Summary*
                                 </p>
                                 <label for="date">Date</label><br>
-                                {{ form.publication_date }}<br>
+                                {{ proj_form.publication_date }}<br>
 
                                 <label for="date">Source</label><br>
-                                {{ form.source }}
+                                {{ proj_form.source }}
                             </li>
                             <li>
                                 <p>
@@ -86,7 +86,7 @@
                                 </p>
     
                                 <label for="description">Brief summary of research</label><br>
-                               {{ form.description }}
+                               {{ proj_form.description }}
                             </li>
                         </ul>
     

@@ -6,8 +6,8 @@ from institutions.models import Institution
 class BCNotice(models.Model):
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
     communities = models.ManyToManyField(Community, blank=True, related_name="bcnotice_communities")
-    placed_by_researcher = models.OneToOneField(Researcher, null=True, on_delete=models.CASCADE, blank=True)
-    placed_by_institution = models.OneToOneField(Institution, null=True, on_delete=models.CASCADE, blank=True)
+    placed_by_researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True)
+    placed_by_institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True)
     message = models.TextField(max_length=1500, null=True, blank=True) #250 word limit on message
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
