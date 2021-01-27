@@ -8,55 +8,72 @@
             <form method="POST" action="">
                 {% csrf_token %}
                 <ol>
+
                     <li>
-                        <p>Project Overview</p>
+                        <p class="proj-steps">Project Overview</p>
+
                         <ul>
                             <li>
-                                <div>
-                                    <p>
-                                        Select a notice*
-                                    </p>
+                                <div class="flex-this column">
+                                    <p>Select a notice*</p>
+
                                     <div class="flex-this">
-                                        <div>
+                                        <div class="select-notice">
                                             <img src="{% static 'images/notices/bc-notice.png' %}" width="68px">
                                         </div>
+                                        <div class="select-notice">
+                                            <img src="{% static 'images/notices/tk-notice-grey.png' %}" width="68px">
+                                        </div>
                                         <div>
-                                            <p>
+                                            <p class="dashed-border">
                                                 This Notice should be used to recognize the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with traditional lands, waters, and territories. It acknowledges the importance of cultural protocols and recognizes that appropriate permissions may need to be sought for future use of this material.
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                             </li>
-                            <li>
-                                <p>
-                                    Project Title*
-                                </p>
-                                {{ proj_form.title }}
-                            </li>
-                            <li>
-                                <p>Contributors*</p>
-                                {{ contrib_form.community }}
 
-                                <p>Add optional message to contributors</p>
-                                <textarea name="contrib-message"></textarea>
-                            </li>
                             <li>
-                                <p>
-                                    What are you applying the notice to?
-                                </p>
-                                <select>
-                                    <option></option>
-                                    <option>Item</option>
-                                    <option>Collection</option>
-                                    <option>Expedition</option>
-                                    <option>Publication</option>
-                                </select>
+                                <div>
+                                    <p class="no-bottom-margin">Project Title*</p>
+                                    {{ proj_form.title }}
+                                </div>
                             </li>
+
+                            <li>
+                                <div>
+                                    <div>
+                                        <p class="no-bottom-margin">Contributors*</p>
+                                        {{ contrib_form.community }}
+                                        <a href="{% url 'invite' %}"><span class="darkteal-text">Or email a non-registered - Community or Institution</span></a>
+
+                                    </div>
+                                    <div>
+                                        <p class="no-bottom-margin">Add optional message to contributors</p>
+                                        <textarea class="contrib-msg" name="contrib-message"></textarea>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div>   
+                                    <p class="no-bottom-margin">What are you applying the notice to?</p>
+                                    <select class="expedition-select">
+                                        <option>---------</option>
+                                        <option>Item</option>
+                                        <option>Collection</option>
+                                        <option>Expedition</option>
+                                        <option>Publication</option>
+                                    </select>
+                                </div>
+                            </li>
+
                         </ul>
+
                     </li>
+
                     <li>
-                        <p>Project Details</p>
+                        <p class="proj-steps">Project Details</p>
                         <ul>
                             <li>
                                 <div class="flex-this">
@@ -64,7 +81,7 @@
                                         {{ proj_form.is_public }}
                                     </div>
                                     <div>
-                                        <p>
+                                        <p class="no-top-margin">
                                             Public Project?<br>
                                             <small>If a project is public, non project members will be able to query the data. You are able to change the privacy status always.</small>
                                         </p>
@@ -90,20 +107,23 @@
                                {{ proj_form.description }}
                             </li>
                         </ul>
-    
-    
+
                     </li>
+
                     <li>
-                        <p>Project Metadata</p>
+                        <p class="proj-steps">Project Metadata</p>
     
                     </li>
+
                     <li>
-                        <p>Project Module</p>
+                        <p class="proj-steps">Project Module</p>
     
                     </li>
+
                     <li>
-                        <button class="action-btn">Save</button>
+                        <button class="action-btn default-btn">Save</button>
                     </li>
+
                 </ol>
             </form>
         </div>

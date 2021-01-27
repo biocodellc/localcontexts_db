@@ -20,6 +20,7 @@ class CreateProjectForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'rows': 4, 'cols':65}),
             'source': forms.Textarea(attrs={'rows': 1, 'cols':65}),
             'publication_date': forms.Textarea(attrs={'rows': 1, 'cols':65}),
+            'is_public': forms.CheckboxInput(attrs={'class':'is-public-checkbox', 'style': 'width:20px;height:20px;'}),
         }
 
 class ProjectContributorsForm(forms.ModelForm):

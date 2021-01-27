@@ -754,7 +754,7 @@ input:focus {
     padding: 0;
 }
 
-/* RESEARCHER PAGE */
+/* RESEARCHER PAGE: NOTICES */
 
 .add-notice-btn {
     margin-right: 1%;
@@ -775,4 +775,45 @@ input:focus {
     color: #A09D9D;
     padding-top: 2.3%;
     padding-left: 1%;
+}
+
+/* Add project */
+
+.select-notice {
+    margin-right: 15px;
+    margin-top: 15px;
+}
+
+.dashed-border {
+    border: 1px dashed #000;
+    border-radius: 5px;
+    margin: 0 1% 0 2%;
+    padding: 10px;
+    font-size: 14px;
+    width: 822px;
+}
+
+.proj-steps {
+    font-weight: 500;
+}
+
+.contrib-msg {
+    width: 500px;
+    height: 50px;
+}
+
+.expedition-select {
+    width: 163px;
+}
+
+.no-bottom-margin {
+    margin-bottom: 0;
+}
+
+.no-top-margin {
+    margin-top: 0;
+}
+
+.is-public-checkbox {
+    margin-right: 10px;
 }
