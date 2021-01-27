@@ -12,8 +12,6 @@ from institutions.models import Institution
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     profile_pic = models.ImageField(upload_to='photos/', blank=True, null=True, default='default.png')
-    phone = PhoneField(blank=True, help_text='Contact phone number')
-    nationality = models.CharField(verbose_name='nationality', max_length=60, blank=True, null=True)
     country = CountryField(blank=True, null=True)
     city_or_town = models.CharField(verbose_name='city or town', max_length=80, blank=True, null=True)
     job_title = models.CharField(verbose_name='job title', max_length=80, blank=True, null=True)

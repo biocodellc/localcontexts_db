@@ -29,9 +29,12 @@ class Project(models.Model):
         return self.title
 
 class Researcher(models.Model):
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     # Note: for now orcid is not required, add unique = true later
     orcid = models.CharField(max_length=16, blank=True, null=True)
+    contact_email = models.EmailField(blank=True, null=True)
+    contact_number = models.CharField(max_length=15, null=True, blank=True)
+    website = models.URLField(max_length=150, blank=True, null=True)
     projects = models.ManyToManyField(Project, blank=True)
 
     def __str__(self):
