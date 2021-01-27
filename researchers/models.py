@@ -14,6 +14,14 @@ class Project(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     date_modified = models.DateTimeField(auto_now=True, null=True)
     is_public = models.BooleanField(default=True, null=True)
+    bclabels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_labels")
+
+    def has_labels(self):
+        bc_labels = self.bclabels.count()
+        if bc_labels > 0:
+            return True
+        else:
+            return False
 
     def __str__(self):
         return self.title

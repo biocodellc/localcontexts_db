@@ -12,7 +12,7 @@ from .forms import *
 from .models import *
 from .utils import *
 
-from bclabels.models import BCNotice
+from bclabels.models import BCNotice, BCLabel
 
 
 @login_required(login_url='login')
@@ -179,17 +179,28 @@ def community_requests(request, pk):
             'community': community,
         }
         return render(request, 'communities/requests.html', context)
-
+        
+#TODO: figure out how to display projects that labels have been applied to / approved
 @login_required(login_url='login')
 def community_labels(request, pk):
     community = Community.objects.get(id=pk)
+    bclabels = BCLabel.objects.filter(community=community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else: 
+        # all_notices = BCNotice.objects.all()
+        # for notice in all_notices:
+        #     notice_communities = notice.communities.all()
+
+        # if notice_communities.filter(pk=community.pk).exists(): # Check to see if community associated with any notice
+        #     if notice.project.has_labels:
+        #         project_bclabels = notice.project.bclabels.all()
+            
         context = {
             'community': community,
+            'bclabels': bclabels,
         }
         return render(request, 'communities/labels.html', context)
 
