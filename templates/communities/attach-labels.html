@@ -45,22 +45,22 @@
                             <li>
                                 <p class="weight-500">Attach Labels</p>
                                 <div class="label-margin">
-                                    <img src="{% static 'images/bc-labels/bc-provenance.png' %}" width="150px">
-                                    <img src="{% static 'images/bc-labels/bc-multiple-community.png' %}" width="150px">
-                                    <img src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" width="150px"><br>
-                                    <img src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" width="150px">
-                                    <img src="{% static 'images/bc-labels/bc-research-use.png' %}" width="150px">
-                                    <img src="{% static 'images/bc-labels/bc-consent-verified.png' %}" width="150px">
+                                    <img id="bc-provenance-label-img" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-provenance.png' %}" width="150px">
+                                    <img id="bc-multiple-community-img" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" width="150px">
+                                    <img id="bc-open-to-collaboration-img" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" width="150px"><br>
+                                    <img id="bc-open-to-commercialization-img" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" width="150px">
+                                    <img id="bc-research-use-img" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-research-use.png' %}" width="150px">
+                                    <img id="bc-consent-verified" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" width="150px">
                                 </div>
                             </li>
                             <li>
                                 <p class="weight-500 border-bottom-grey">Confirm Labels</p>
                                 <div class="flex-this">
-                                    <div><img src="{% static 'images/bc-labels/bc-provenance.png' %}" width="150px"></div>
+                                    <div><img id="chosen-label-img" src="{% static 'images/bc-labels/bc-provenance.png' %}" width="150px"></div>
                                     <div class="margin-left-1">
                                         <h4 class="weight-500">(BC P) Provenance | Ka Rata Pea Kia Whakapakahi</h4>
-                                        <small>
-                                            This Label is being used to affirm an inherent interest Indigenous people have in the scientific collections and data about communities, peoples, and the biodiversity found within traditional lands, waters and territories. [Community name or authorizing party] has permissioned the use of this collection and associated data for research purposes, and retains the right to be named and associated with it into the future. This association reflects a significant relationship and responsibility to [the species or biological entity] and associated scientific collections and data.   
+                                        <small id="bc-label-default-txt">
+                                            This Label is being used to affirm an inherent interest Indigenous people have in the scientific collections and data about communities, peoples, and the biodiversity found within traditional lands, waters and territories. [Community name or authorizing party] has permissioned the use of this collection and associated data for research purposes, and retains the right to be named and associated with it into the future. This association reflects a significant relationship and responsibility to [the species or biological entity] and associated scientific collections and data.
                                         </small>
                                     </div>
                                     <div>
