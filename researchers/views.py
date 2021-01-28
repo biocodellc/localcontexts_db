@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from bclabels.models import BCNotice
+from notifications.models import CommunityNotification
 
 from .models import Researcher
 from .forms import *
@@ -65,6 +66,10 @@ def add_notice(request, pk):
 
             if contrib.community:
                 created_notice.communities.add(contrib.community)
+
+            # Send community notification
+            title = "A BC notice has been placed by " + str(researcher)
+            CommunityNotification.objects.create(community=contrib.community, notification_type='Requests', title=title)
                 
             context = {
                 'researcher': researcher,

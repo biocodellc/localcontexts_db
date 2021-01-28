@@ -9,11 +9,11 @@
             <h3 class="darkteal-text">{{ notification.title }}</h3>
             <p>{{ notification.message }}</p>
 
-            {% if notification.notification_type == 'welcome' %}
+            {% if notification.notification_type == 'Welcome' %}
                 <p>This is a welcome</p>
             {% endif %}
 
-            {% if notification.notification_type == 'invitation' %}
+            {% if notification.notification_type == 'Invitation' %}
                 <form method="POST" action="">
                     {% csrf_token %}
                     <input type="hidden">
@@ -21,7 +21,7 @@
                 </form>
             {% endif %}
 
-            {% if notification.notification_type == 'request' %}
+            {% if notification.notification_type == 'Request' %}
                 <form method="POST" action="">
                     {% csrf_token %}
                     <input type="hidden">
@@ -35,16 +35,16 @@
                 </form>
             {% endif %}
 
-            {% if notification.notification_type == 'approval' %}
+            {% if notification.notification_type == 'Approval' %}
                 <p> This is an approval</p>
 
             {% endif %}
 
-            {% if notification.notification_type == 'accept' %}
+            {% if notification.notification_type == 'Accept' %}
                 <p> This is an accept type</p>
             {% endif %}
 
-            {% if notification.notification_type == 'create' %}
+            {% if notification.notification_type == 'Create' %}
                 <p>This is a create notification type.</p>
                 <form method="POST" action="">
                     {% csrf_token %}

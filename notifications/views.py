@@ -12,7 +12,7 @@ def show_notification(request, pk):
     if request.method == 'POST':
         comm = n.community.id
         
-        if n.notification_type == 'invitation':
+        if n.notification_type == 'Invitation':
             i = InviteMember.objects.get(id=n.reference_id) #Use reference id to find id of Invite Member instance
             i.status = 'accepted'
             i.save()
@@ -35,7 +35,7 @@ def show_notification(request, pk):
             return render(request, 'notifications/read.html', {'notification': n})
 
         
-        elif n.notification_type == 'request':
+        elif n.notification_type == 'Request':
             j = CommunityJoinRequest.objects.get(id=n.reference_id)
             j.status = 'accepted'
             j.save()
@@ -58,7 +58,7 @@ def show_notification(request, pk):
 
             return render(request, 'notifications/read.html', {'notification': n})
 
-        elif n.notification_type == 'create':
+        elif n.notification_type == 'Create':
             new_community = Community.objects.get(id=comm)
             new_community.is_approved = True
             new_community.save()
