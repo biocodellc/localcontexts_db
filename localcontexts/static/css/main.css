@@ -36,6 +36,8 @@ h2 {
     font-weight: 500;
 }
 
+/* FORM INPUTS */
+
 label {
     font-size: 14px;
     line-height: 16px;
@@ -78,6 +80,8 @@ input:focus {
     box-shadow: 0px 0px 1px 0.5px #007385;
 }
 
+/* TEXT COLORS */
+
 .orange-h1 {
     color: #EF6C00;
     font-weight: 400;
@@ -108,6 +112,8 @@ input:focus {
     color: #EF6C00;
 }
 
+/* BACKGROUND COLORS */
+
 .orange-bg {
     background-color: #EF6C00;
 }
@@ -123,6 +129,8 @@ input:focus {
 .darkgreen-bg {
     background-color: #058F73;
 }
+
+/* TEXT */
 
 .landing-p {
     font-size: 15px;
@@ -146,10 +154,50 @@ input:focus {
     text-align: center;
 }
 
+/* MARGIN & PADDING */
+
+.margin-bottom-2 {
+    margin-bottom: 2%;
+}
+
 .auto-margin {
     margin: auto;
 }
 
+.no-top-margin {
+    margin-top: 0;
+}
+
+.no-bottom-margin {
+    margin-bottom: 0;
+}
+
+.padding-bottom-1 {
+    padding-bottom: 1%;
+}
+
+.padding-bottom-2 {
+    padding-bottom: 2%;
+}
+
+.no-left-padding {
+    padding-left: 0;
+}
+
+.pad-top-8 {
+    padding-top: 6%;
+}
+
+/* BORDER */
+.border-bottom-blk {
+    border-bottom: 1px solid #000000;
+}
+
+.border-bottom-grey {
+    border-bottom: 1px solid #A09D9D;
+}
+
+/* FLEX */
 .flex-this {
     display: flex;
 }
@@ -174,6 +222,7 @@ input:focus {
     justify-content: center;
 }
 
+/* WIDTHS */
 .w-5 {
     width: 5%;
 }
@@ -321,10 +370,6 @@ input:focus {
     margin: 0;
     padding-top: 3%;
     background-color: #f1f4f5;
-}
-
-.pad-top-8 {
-    padding-top: 6%;
 }
 
 /* 404 Page snippet */
@@ -743,7 +788,7 @@ input:focus {
 }
 
 .notice-info, .notice-msg {
-    padding-left: 1%;
+    margin-left: 1%;
 }
 
 .notice-msg {
@@ -793,10 +838,6 @@ input:focus {
     width: 822px;
 }
 
-.proj-steps {
-    font-weight: 500;
-}
-
 .contrib-msg {
     width: 500px;
     height: 50px;
@@ -806,19 +847,18 @@ input:focus {
     width: 163px;
 }
 
-.no-bottom-margin {
-    margin-bottom: 0;
-}
-
-.no-top-margin {
-    margin-top: 0;
-}
-
 .is-public-checkbox {
     margin-right: 10px;
 }
 
 /* Attach Labels */
-.border-bottom {
-    border-bottom: 1px solid #000000;
+.implement-labels-div {
+    width: 1041px;
+    height: 218px;
+    border: 1px dashed #000000;
+}
+
+.label-margin img {
+    margin-right: 2%;
+    margin-bottom: 2%;
 }

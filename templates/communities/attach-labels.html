@@ -2,6 +2,8 @@
 
 <div class="content-card content-card-space white-bg">
     <div class="flex-this column notice-card">
+        <div class="padding-bottom-2"><small>Requests >> <a href="#"><span class="darkteal-text">Attach Labels</span></a></small></div>
+
 
         <div class="flex-this">
 
@@ -11,10 +13,10 @@
                         <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
                     </div>
                     <div>
-                        <button class="green-action-btn">View on GEOME </button>   
+                        <button class="green-action-btn margin-bottom-2">View on GEOME </button>   
                     </div>
                     <div>
-                        <button class="green-action-btn">View on ORCiD</button>    
+                        <button class="green-action-btn margin-bottom-2">View on ORCiD</button>    
                     </div>
                     <div>
                         <button class="green-action-btn">Download</button>    
@@ -23,7 +25,7 @@
             </div>
     
             <div class="w-90 flex-this column">
-                <div class="notice-info border-bottom">
+                <div class="notice-info border-bottom-blk padding-bottom-2">
                     <a href="#"><h4 class="darkteal-text weight-500">{{ notice.project.title}}</h4></a>
                     <p>
                         Expedition<br>
@@ -31,7 +33,7 @@
                         Source: {{ notice.project.source }}<br>
                     </p>
         
-                    <p>{{ notice.project.description }}</p>
+                    <small>{{ notice.project.description }}</small>
                 </div>
 
                 <div class="notice-info">
@@ -39,15 +41,39 @@
                         <p>Replace the notice with the labels you believe are relevant to the project</p>
                     </div>
                     <div>
-                        <ol>
+                        <ol class="no-left-padding">
                             <li>
                                 <p class="weight-500">Attach Labels</p>
+                                <div class="label-margin">
+                                    <img src="{% static 'images/bc-labels/bc-provenance.png' %}" width="150px">
+                                    <img src="{% static 'images/bc-labels/bc-multiple-community.png' %}" width="150px">
+                                    <img src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" width="150px"><br>
+                                    <img src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" width="150px">
+                                    <img src="{% static 'images/bc-labels/bc-research-use.png' %}" width="150px">
+                                    <img src="{% static 'images/bc-labels/bc-consent-verified.png' %}" width="150px">
+                                </div>
                             </li>
                             <li>
-                                <p class="weight-500">Confirm Labels</p>
+                                <p class="weight-500 border-bottom-grey">Confirm Labels</p>
+                                <div class="flex-this">
+                                    <div><img src="{% static 'images/bc-labels/bc-provenance.png' %}" width="150px"></div>
+                                    <div class="margin-left-1">
+                                        <h4 class="weight-500">(BC P) Provenance | Ka Rata Pea Kia Whakapakahi</h4>
+                                        <small>
+                                            This Label is being used to affirm an inherent interest Indigenous people have in the scientific collections and data about communities, peoples, and the biodiversity found within traditional lands, waters and territories. [Community name or authorizing party] has permissioned the use of this collection and associated data for research purposes, and retains the right to be named and associated with it into the future. This association reflects a significant relationship and responsibility to [the species or biological entity] and associated scientific collections and data.   
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <button class="green-action-btn default-btn">Edit Label</button>
+                                    </div>
+                                </div>
                             </li>
                             <li>
                                 <p class="weight-500">Implement Labels</p>
+
+                                <textarea class="implement-labels-div">
+
+                                </textarea>
                             </li>
                             <li>
                                 <button class="action-btn default-btn">Place Labels</button>
