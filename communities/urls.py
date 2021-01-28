@@ -13,7 +13,10 @@ urlpatterns = [
     path('community/members/add/<str:pk>/', views.add_member, name="add-member"),
     
     path('community/requests/<str:pk>/', views.community_requests, name="community-requests"),
+
     path('community/labels/<str:pk>/', views.community_labels, name="community-labels"),
+    path('community/labels/add/<str:pk>/<str:notice_id>', views.community_add_labels, name="community-add-labels"),
+
     path('community/relationships/<str:pk>/', views.community_relationships, name="community-relationships"),
 
     path('community/restricted/<str:pk>/', views.restricted_view, name="restricted"),

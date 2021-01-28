@@ -115,7 +115,9 @@
                         <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
                     </div>
                     <div>
-                        <button class="action-btn">Attach Labels</button>
+                        <a href="{% url 'community-add-labels' community.id notice.id %}">
+                            <button class="action-btn">Attach Labels</button>
+                        </a>
                     </div>
                     <div>
                         <button class="green-action-btn">View on GEOME </button>   

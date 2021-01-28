@@ -1,0 +1,67 @@
+{% extends 'comm-base.html' %} {% load static %} {% block community_content %}
+
+<div class="content-card content-card-space white-bg">
+    <div class="flex-this column notice-card">
+
+        <div class="flex-this">
+
+            <div class="w-10">
+                <div class="flex-this column notice-btns">
+                    <div>
+                        <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
+                    </div>
+                    <div>
+                        <button class="green-action-btn">View on GEOME </button>   
+                    </div>
+                    <div>
+                        <button class="green-action-btn">View on ORCiD</button>    
+                    </div>
+                    <div>
+                        <button class="green-action-btn">Download</button>    
+                    </div>
+                </div>
+            </div>
+    
+            <div class="w-90 flex-this column">
+                <div class="notice-info border-bottom">
+                    <a href="#"><h4 class="darkteal-text weight-500">{{ notice.project.title}}</h4></a>
+                    <p>
+                        Expedition<br>
+                        Notice Applied: {{ notice.created.date }}<br>
+                        Source: {{ notice.project.source }}<br>
+                    </p>
+        
+                    <p>{{ notice.project.description }}</p>
+                </div>
+
+                <div class="notice-info">
+                    <div>
+                        <p>Replace the notice with the labels you believe are relevant to the project</p>
+                    </div>
+                    <div>
+                        <ol>
+                            <li>
+                                <p class="weight-500">Attach Labels</p>
+                            </li>
+                            <li>
+                                <p class="weight-500">Confirm Labels</p>
+                            </li>
+                            <li>
+                                <p class="weight-500">Implement Labels</p>
+                            </li>
+                            <li>
+                                <button class="action-btn default-btn">Place Labels</button>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+{% endblock %}

@@ -221,3 +221,12 @@ def restricted_view(request, pk):
     return render(request, 'communities/restricted.html', {'community': community})
 
 
+def community_add_labels(request, pk, notice_id):
+    community = Community.objects.get(id=pk)
+    notice = BCNotice.objects.get(id=notice_id)
+
+    context = {
+        'community': community,
+        'notice': notice,
+    }
+    return render(request, 'communities/attach-labels.html', context)
