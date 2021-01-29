@@ -852,9 +852,17 @@ input:focus {
 }
 
 /* Attach Labels */
-.implement-labels-div {
+.implement-labels-textarea {
     width: 1041px;
     height: 218px;
+}
+
+.default-label-textarea {
+    width: 752px;
+    height: 131px;
+}
+
+.default-label-textarea, .implement-labels-textarea {
     border: 1px dashed #000000;
 }
 

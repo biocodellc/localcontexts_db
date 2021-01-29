@@ -6,13 +6,15 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from django.contrib import messages
+
 from accounts.models import UserAffiliation
 from notifications.models import CommunityNotification
+from bclabels.models import BCNotice, BCLabel
+from bclabels.forms import AttachLabelForm
+
 from .forms import *
 from .models import *
 from .utils import *
-
-from bclabels.models import BCNotice, BCLabel
 
 
 @login_required(login_url='login')
@@ -190,13 +192,6 @@ def community_labels(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else: 
-        # all_notices = BCNotice.objects.all()
-        # for notice in all_notices:
-        #     notice_communities = notice.communities.all()
-
-        # if notice_communities.filter(pk=community.pk).exists(): # Check to see if community associated with any notice
-        #     if notice.project.has_labels:
-        #         project_bclabels = notice.project.bclabels.all()
             
         context = {
             'community': community,
@@ -204,6 +199,7 @@ def community_labels(request, pk):
         }
         return render(request, 'communities/labels.html', context)
 
+@login_required(login_url='login')
 def community_relationships(request, pk):
     community = Community.objects.get(id=pk)
 
@@ -220,13 +216,37 @@ def restricted_view(request, pk):
     community = Community.objects.get(id=pk)
     return render(request, 'communities/restricted.html', {'community': community})
 
-
+@login_required(login_url='login')
 def community_add_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
     notice = BCNotice.objects.get(id=notice_id)
+    label_form = AttachLabelForm()
+
+    if request.method == 'POST':
+        label_form = AttachLabelForm(request.POST)
+        label_name = request.POST.get('label-name')
+        label_type = request.POST.get('label-type')
+
+        if label_form.is_valid():
+            obj = label_form.save(commit=False)
+            obj.community = community
+            obj.bc_notice = notice
+            obj.name = label_name
+            obj.label_type = label_type
+            obj.save()
+
+            context = {
+                'community': community,
+                'notice': notice,
+                'label_form': label_form,
+            }
+
+            return render (request, 'communities/attach-labels.html', context )
+
 
     context = {
         'community': community,
         'notice': notice,
+        'label_form': label_form,
     }
     return render(request, 'communities/attach-labels.html', context)
