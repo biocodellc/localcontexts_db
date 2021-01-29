@@ -209,9 +209,7 @@ def community_relationships(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        context = {
-            'community': community,
-        }
+        context = {'community': community,}
         return render(request, 'communities/relationships.html', context)
 
 def restricted_view(request, pk):
@@ -222,29 +220,23 @@ def restricted_view(request, pk):
 def community_add_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
     notice = BCNotice.objects.get(id=notice_id)
-    label_form = AttachLabelForm()
+
+    new_label = None
 
     if request.method == 'POST':
-        label_form = AttachLabelForm(request.POST)
+        label_form = AttachLabelForm(data=request.POST)
         label_name = request.POST.get('label-name')
         label_type = request.POST.get('label-type')
 
         if label_form.is_valid():
-            obj = label_form.save(commit=False)
-            obj.community = community
-            obj.bc_notice = notice
-            obj.name = label_name
-            obj.label_type = label_type
-            obj.save()
-
-            context = {
-                'community': community,
-                'notice': notice,
-                'label_form': label_form,
-            }
-
-            return render (request, 'communities/attach-labels.html', context )
-
+            new_label = label_form.save(commit=False)
+            new_label.community = community
+            new_label.bc_notice = notice
+            new_label.name = label_name
+            new_label.label_type = label_type
+            new_label.save()
+    else:
+        label_form = AttachLabelForm()
 
     context = {
         'community': community,
