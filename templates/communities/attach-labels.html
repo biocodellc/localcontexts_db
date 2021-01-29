@@ -53,31 +53,45 @@
                                     <img id="bc-consent-verified" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" width="150px">
                                 </div>
                             </li>
+
+                            <form method="POST" action="{% url 'community-add-labels' community.id notice.id %}">
+                                {% csrf_token %}
+
                             <li>
                                 <p class="weight-500 border-bottom-grey">Confirm Labels</p>
                                 <div class="flex-this">
                                     <div><img id="chosen-label-img" src="{% static 'images/bc-labels/bc-provenance.png' %}" width="150px"></div>
                                     <div class="margin-left-1">
-                                        <h4 class="weight-500">(BC P) Provenance | Ka Rata Pea Kia Whakapakahi</h4>
-                                        <small id="bc-label-default-txt">
+
+                                        <input id="pass-name" type="hidden" value="" name="label-name">
+                                        <input id="pass-type" type="hidden" value="" name="label-type">
+
+                                        <h4 id="bc-label-name-h4" class="weight-500"></h4>
+                                        {{ label_form.default_text }}
+                                        <!-- <small id="bc-label-default-txt">
                                             This Label is being used to affirm an inherent interest Indigenous people have in the scientific collections and data about communities, peoples, and the biodiversity found within traditional lands, waters and territories. [Community name or authorizing party] has permissioned the use of this collection and associated data for research purposes, and retains the right to be named and associated with it into the future. This association reflects a significant relationship and responsibility to [the species or biological entity] and associated scientific collections and data.
-                                        </small>
+                                        </small> -->
                                     </div>
                                     <div>
                                         <button class="green-action-btn default-btn">Edit Label</button>
                                     </div>
                                 </div>
                             </li>
+
                             <li>
                                 <p class="weight-500">Implement Labels</p>
 
-                                <textarea class="implement-labels-div">
+                                {{ label_form.modified_text }}
+                            </li>
 
-                                </textarea>
-                            </li>
                             <li>
-                                <button class="action-btn default-btn">Place Labels</button>
+                                <div>
+                                    <button class="action-btn default-btn">Place Labels</button>
+                                </div>
                             </li>
+
+                        </form>
+
                         </ol>
                     </div>
                 </div>

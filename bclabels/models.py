@@ -23,12 +23,12 @@ class BCNotice(models.Model):
 
 class BCLabel(models.Model):
     TYPES = (
-        ('provenance', 'Provenance BC Label (BC P)'),
-        ('commercialization', 'Open to Commercialization BC Label (BC C)'),
-        ('collaboration', 'Open to Collaboration BC Label (BC OC)'),
-        ('consent_verified', 'Consent Verified BC Label (BC CV)'),
-        ('multiple_community', 'Multiple Community BC Label (BC MC)'),
-        ('research', 'Research Use BC Label (BC R)'),  
+        ('provenance', 'provenance'),
+        ('commercialization', 'commercialization'),
+        ('collaboration', 'collaboration'),
+        ('consent_verified', 'consent_verified'),
+        ('multiple_community', 'multiple_community'),
+        ('research', 'research'),  
     )
     label_type = models.CharField(max_length=20, null=True, choices=TYPES)
     community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE)

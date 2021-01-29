@@ -88,48 +88,75 @@ function showMoreTemporary() {
 
 // Default label text
 function setDefaultText(img) {
-    let defaultText = document.getElementById('bc-label-default-txt')
-    let defaultImg = document.getElementById('chosen-label-img')
-    let targetImg = img.id
-    let source = defaultImg.src
+    let defaultText = document.getElementById('id_default_text')
+    let displayImage = document.getElementById('chosen-label-img')
+    let labelHeader = document.getElementById('bc-label-name-h4')
+    let hiddenInputName = document.getElementById('pass-name')
+    let hiddenInputType = document.getElementById('pass-type')
 
+    let targetImg = img.id
+    let source = displayImage.src
+
+    // Find everything in the url after 'bc-labels/bc-' and get the match
     let matches = source.match(/(?<=bc-labels\/bc-).*/)
     let targetStr = matches[0]
-    console.log(source)
-    console.log(targetStr)
 
+    const provenanceName = '(BC P) Provenance | Ahunga Taketake'
+    const multipleCommunityName = '(BC MC) Multiple Community BC Label | Hāpori Maha'
+    const openToCollabName = '(BC OC) Open to Collaboration BC Label | Ka Rata Pea Kia Mahitahi'
+    const openToCommercializationName = '(BC C) Open to Commercialization BC Label | Ka Rata Pea Kia Whakapakahi'
+    const researchUseName = '(BC R) Research Use BC Label | Hei Rangahau'
+    const consentVerifiedName = '(BC CV) Consent Verified BC Label | Whakaaetanga Manatoko'
 
     const provenanceText = 'This Label is being used to affirm an inherent interest Indigenous people have in the scientific collections and data about communities, peoples, and the biodiversity found within traditional lands, waters and territories. [Community name or authorizing party] has permissioned the use of this collection and associated data for research purposes, and retains the right to be named and associated with it into the future. This association reflects a significant relationship and responsibility to [the species or biological entity] and associated scientific collections and data.'
     const multipleCommunityText = 'This Label is being used to affirm responsibility and ownership over this information, collection, data and digital sequence information is spread across several distinct communities. Use will be dependent upon discussion and negotiation with multiple communities.'
     const openToCollabText = 'This Label is being used to make clear [community name or authorizing body] is open to future engagement, collaboration, and partnership around research and outreach opportunities.'
     const openToCommercializationText = 'This Label is being used to indicate that [community name or authorizing party] is open to commercialization opportunities that might derive from any information, collections, data and DSI to which this Label is connected. As a primary party in any partnership and collaboration opportunities that emerge from the use of these resources, we retain an express interest in any future negotiations.'
     const researchUseText = 'This Label is being used by [community name or authorizing body] to allow this information, collection, data and digital sequence information to be used for unspecified research purposes. This Label does not provide permission for commercialization activities.  [Optional return of research results statement].'
-    const consentVerified = 'This Label is being used to verify that [community name or authorizing party] have consent conditions in place for the use of this information, collections, data and digital sequence information.'
+    const consentVerifiedText = 'This Label is being used to verify that [community name or authorizing party] have consent conditions in place for the use of this information, collections, data and digital sequence information.'
 
     switch (targetImg) {
         case 'bc-research-use-img':
+            hiddenInputType.value = 'research'
+            hiddenInputName.value = researchUseName
+            labelHeader.textContent = researchUseName
             defaultText.textContent = researchUseText
-            defaultImg.src = source.replace(targetStr, 'research-use.png')
+            displayImage.src = source.replace(targetStr, 'research-use.png')
             break;
         case 'bc-consent-verified':
-            defaultText.textContent = consentVerified
-            defaultImg.src = source.replace(targetStr, 'consent-verified.png')
+            hiddenInputType.value = 'consent_verified'
+            hiddenInputName.value = consentVerifiedName
+            labelHeader.textContent = consentVerifiedName
+            defaultText.textContent = consentVerifiedText
+            displayImage.src = source.replace(targetStr, 'consent-verified.png')
             break;
         case 'bc-open-to-commercialization-img':
+            hiddenInputType.value = 'commercialization'
+            hiddenInputName.value = openToCommercializationName
+            labelHeader.textContent = openToCommercializationName
             defaultText.textContent = openToCommercializationText
-            defaultImg.src = source.replace(targetStr, 'open-to-commercialization.png')
+            displayImage.src = source.replace(targetStr, 'open-to-commercialization.png')
             break;
         case 'bc-open-to-collaboration-img':
+            hiddenInputType.value = 'collaboration'
+            hiddenInputName.value = openToCollabName
+            labelHeader.textContent = openToCollabName
             defaultText.textContent = openToCollabText
-            defaultImg.src = source.replace(targetStr, 'open-to-collaboration.png')
+            displayImage.src = source.replace(targetStr, 'open-to-collaboration.png')
             break;
         case 'bc-multiple-community-img':
+            hiddenInputType.value = 'multiple_community'
+            hiddenInputName.value = multipleCommunityName
+            labelHeader.textContent = multipleCommunityName
             defaultText.textContent = multipleCommunityText
-            defaultImg.src = source.replace(targetStr, 'multiple-community.png')
+            displayImage.src = source.replace(targetStr, 'multiple-community.png')
             break;
         case 'bc-provenance-label-img':
+            hiddenInputType.value = 'provenance'
+            hiddenInputName.value = provenanceName
+            labelHeader.textContent = provenanceName
             defaultText.textContent = provenanceText
-            defaultImg.src = source.replace(targetStr, 'provenance.png')
+            displayImage.src = source.replace(targetStr, 'provenance.png')
             break;
     }
 }
