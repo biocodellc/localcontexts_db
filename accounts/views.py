@@ -255,8 +255,6 @@ def update_profile(request):
 
 @login_required(login_url='login')
 def invite_user(request):
-    invite_form = SignUpInvitationForm()
-
     if request.method == "POST":
         invite_form = SignUpInvitationForm(request.POST or None)
         if invite_form.is_valid():
@@ -283,5 +281,7 @@ def invite_user(request):
                     fail_silently=False)
                 
                 return redirect('invite')
+    else:
+        invite_form = SignUpInvitationForm()
 
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
