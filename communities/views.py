@@ -11,6 +11,7 @@ from accounts.models import UserAffiliation
 from notifications.models import CommunityNotification
 from bclabels.models import BCNotice, BCLabel
 from bclabels.forms import AttachLabelForm
+from researchers.models import ProjectContributors
 
 from .forms import *
 from .models import *
@@ -190,6 +191,11 @@ def community_labels(request, pk):
     community = Community.objects.get(id=pk)
     bclabels = BCLabel.objects.filter(community=community)
 
+    for bclabel in bclabels:
+        project = bclabel.bc_notice.project
+        contribs = ProjectContributors.objects.get(project=project)
+        notice = bclabel.bc_notice
+
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
@@ -198,6 +204,9 @@ def community_labels(request, pk):
         context = {
             'community': community,
             'bclabels': bclabels,
+            'project': project,
+            'contribs': contribs,
+            'notice': notice,
         }
         return render(request, 'communities/labels.html', context)
 
