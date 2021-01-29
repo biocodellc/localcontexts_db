@@ -66,3 +66,4 @@ class SignUpInvitation(models.Model):
     class Meta:
         verbose_name = "Sign Up Invitation"        
         verbose_name_plural = "Sign Up Invitations"
+        ordering = ('-date_sent',)

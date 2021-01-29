@@ -27,6 +27,9 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+    
+    class Meta:
+        ordering = ('-date_added',)
 
 class Researcher(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)

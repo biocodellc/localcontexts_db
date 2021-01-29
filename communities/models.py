@@ -69,6 +69,7 @@ class InviteMember(models.Model):
     class Meta:
         verbose_name = 'Member Invitation'
         verbose_name_plural = 'Member Invitations'
+        ordering = ('-created',)
 
 class CommunityJoinRequest(models.Model):
     STATUS_CHOICES = (
@@ -87,3 +88,4 @@ class CommunityJoinRequest(models.Model):
     class Meta:
         verbose_name = 'Community Join Request'
         verbose_name_plural = 'Community Join Requests'
+        ordering = ('-date_sent',)

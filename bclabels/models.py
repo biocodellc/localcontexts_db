@@ -18,6 +18,7 @@ class BCNotice(models.Model):
     class Meta:
         verbose_name = 'BC Notice'
         verbose_name_plural = 'BC Notices'
+        ordering = ('-created',)
 
 
 class BCLabel(models.Model):
@@ -45,3 +46,4 @@ class BCLabel(models.Model):
     class Meta:
         verbose_name = 'BC Label'
         verbose_name_plural = 'BC Labels'
+        ordering = ('-created',)

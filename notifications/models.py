@@ -27,6 +27,7 @@ class UserNotification(models.Model):
     role = models.CharField(max_length=8, choices=ROLES, null=True, blank=True)
     reference_id = models.CharField(max_length=20, null=True, blank=True)
     viewed = models.BooleanField(default=False)
+    created = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):
         return f"{self.notification_type}-{self.title}"
@@ -34,6 +35,7 @@ class UserNotification(models.Model):
     class Meta:
         verbose_name = 'User Notification'
         verbose_name_plural = 'User Notifications'
+        ordering = ('-created',)
 
 class CommunityNotification(models.Model):
     TYPES = (
@@ -47,6 +49,7 @@ class CommunityNotification(models.Model):
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True)
     reference_id = models.CharField(max_length=10, null=True, blank=True)
     viewed = models.BooleanField(default=False)
+    created = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):
         return f"{self.notification_type} - {self.title} - {self.community.community_name}"
@@ -54,4 +57,5 @@ class CommunityNotification(models.Model):
     class Meta:
         verbose_name = 'Community Notification'
         verbose_name_plural = 'Community Notifications'
+        ordering = ('-created',)
 
