@@ -234,6 +234,7 @@ def community_add_labels(request, pk, notice_id):
             new_label.label_type = label_type
             new_label.save()
 
+            #TODO: only add label if it has been approved by community
             notice.project.bclabels.add(new_label)    #Add labels to project
     else:
         label_form = AttachLabelForm()
