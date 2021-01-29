@@ -7,10 +7,10 @@
         <div class="pad-top-8"></div>
         <div class="content-card content-card-space white-bg">
             <h3 class="darkteal-text">{{ notification.title }}</h3>
-            <p>{{ notification.message }}</p>
+            <p>Message: <br>{{ notification.message }}</p>
 
             {% if notification.notification_type == 'Welcome' %}
-                <p>This is a welcome</p>
+                
             {% endif %}
 
             {% if notification.notification_type == 'Invitation' %}
@@ -36,16 +36,13 @@
             {% endif %}
 
             {% if notification.notification_type == 'Approval' %}
-                <p> This is an approval</p>
 
             {% endif %}
 
             {% if notification.notification_type == 'Accept' %}
-                <p> This is an accept type</p>
             {% endif %}
 
             {% if notification.notification_type == 'Create' %}
-                <p>This is a create notification type.</p>
                 <form method="POST" action="">
                     {% csrf_token %}
                     <input type="hidden">

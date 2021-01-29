@@ -23,7 +23,6 @@ def connect_community(request):
 
 @login_required(login_url='login')
 def create_community(request):
-    form = CreateCommunityForm()
 
     if request.method == "POST":
         form = CreateCommunityForm(request.POST)
@@ -44,6 +43,8 @@ def create_community(request):
                 fail_silently=False)
 
             return redirect('community-registry')
+    else:
+        form = CreateCommunityForm()
 
     context = {'form': form}
     return render(request, 'communities/create-community.html', context)
@@ -128,7 +129,6 @@ def community_members(request, pk):
 @login_required(login_url='login')
 def add_member(request, pk):
     community = Community.objects.get(id=pk)
-    form = InviteMemberForm()
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -152,7 +152,7 @@ def add_member(request, pk):
                         obj.save()
 
                         messages.add_message(request, messages.INFO, 'Invitation Sent!')
-                        return render(request, 'communities/members.html', {'community': community,})
+                        return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
 
                 else: 
                     messages.add_message(request, messages.INFO, 'This user has already been invited to this community!')
@@ -160,6 +160,8 @@ def add_member(request, pk):
             else:
                 messages.add_message(request, messages.ERROR, 'This user is already a member.')
                 return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
+        else:
+            form = InviteMemberForm()
 
     context = {
         'community': community,

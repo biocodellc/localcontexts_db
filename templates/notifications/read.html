@@ -7,7 +7,7 @@
 
             <div class="white-bg content-card content-card-space">
                 <h3 class="darkteal-text">{{ notification.title }}</h3>
-                <p>{{ notification.message }}</p>
+                <p>Message: <br> {{ notification.message }}</p>
 
             {% if notification.notification_type == 'invitation' %}
                 <p>Invitation accepted! </p>

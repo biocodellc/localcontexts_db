@@ -154,6 +154,10 @@ input:focus {
     text-align: center;
 }
 
+.right-text {
+    text-align: right;
+}
+
 /* MARGIN & PADDING */
 
 .margin-bottom-2 {
@@ -170,6 +174,14 @@ input:focus {
 
 .no-bottom-margin {
     margin-bottom: 0;
+}
+
+.pad-top-1-5 {
+    padding-top: 1.5%;
+}
+
+.pad-left-2 {
+    padding-left: 2%;
 }
 
 .padding-bottom-1 {
