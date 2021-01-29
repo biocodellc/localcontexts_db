@@ -221,8 +221,6 @@ def community_add_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
     notice = BCNotice.objects.get(id=notice_id)
 
-    new_label = None
-
     if request.method == 'POST':
         label_form = AttachLabelForm(data=request.POST)
         label_name = request.POST.get('label-name')
@@ -235,6 +233,8 @@ def community_add_labels(request, pk, notice_id):
             new_label.name = label_name
             new_label.label_type = label_type
             new_label.save()
+
+            notice.project.bclabels.add(new_label)    #Add labels to project
     else:
         label_form = AttachLabelForm()
 
