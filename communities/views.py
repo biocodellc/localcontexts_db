@@ -190,6 +190,7 @@ def community_requests(request, pk):
 def community_labels(request, pk):
     community = Community.objects.get(id=pk)
     notices = community.bcnotice_communities.all()
+    contribs = ProjectContributors(community=community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -199,6 +200,7 @@ def community_labels(request, pk):
         context = {
             'community': community,
             'notices': notices,
+            'contribs': contribs,
         }
         return render(request, 'communities/labels.html', context)
 

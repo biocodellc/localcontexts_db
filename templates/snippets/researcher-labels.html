@@ -1,0 +1,43 @@
+{% load static %}
+<!-- List of Labels for Researcher : Notices : Detail slide  -->
+
+{% for bclabel in project.bclabels.all %}
+<div class="flex-this w-100 proj-label-summary">
+    <div>
+        {% if bclabel.label_type == 'commercialization' %}
+            <img src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
+        {% endif %}
+
+        {% if bclabel.label_type == 'provenance' %}
+            <img src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+        {% endif %}
+
+        {% if bclabel.label_type == 'collaboration' %}
+            <img src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
+        {% endif %}
+
+        {% if bclabel.label_type == 'consent_verified' %}
+            <img src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+        {% endif %}
+
+        {% if bclabel.label_type == 'multiple_community' %}
+            <img src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
+        {% endif %}
+
+        {% if bclabel.label_type == 'research' %}
+            <img src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
+        {% endif %}
+    </div>
+    
+    <div class="margin-left-1">
+        <h4>{{ bclabel.name }}</h4>
+        <p class="darkteal-text">
+            <span class="weight-500">Label ID: IO09097809</span><br>
+            {{ bclabel.default_text }}
+        </p>
+    </div>
+</div>
+
+<hr>
+
+{% endfor %}

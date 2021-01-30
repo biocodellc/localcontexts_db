@@ -44,12 +44,11 @@
                         </div>
     
                         <div class="flex-this flex-end mini-label-container">
-                            <div>
-                                <img src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
-                            </div>
-                            <div>
-                                <img src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
-                            </div>
+                            {% if project.has_labels %}
+                                {% include 'snippets/researcher-mini.html' %}
+                            {% else %}
+                                <div><small>No labels applied yet</small></div>
+                            {% endif %}
                         </div>
     
                     </div>
@@ -94,36 +93,11 @@
     
                         </div>
                     <hr>
-    
-                    <div class="flex-this w-100 proj-label-summary">
-                        <div>
-                            <img src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
-                        </div>
-    
-                        <div class="margin-left-1">
-                            <h4>(BC P) Provenance | Ka Rata Pea Kia Whakapakahi</h4>
-                            <p class="darkteal-text">
-                                <span class="weight-500">Label ID: IO09097809</span><br>
-                                This label is being used to indicate that this material traditionally and usually is heard and/or utilized at a particular time of year and in response to specific seasonal changes and conditions....
-                            </p>
-                        </div>
-                    </div>
-    
-                    <hr>
-    
-                    <div class="flex-this w-100 proj-label-summary">
-                        <div>
-                            <img src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
-                        </div>
-    
-                        <div class="margin-left-1">
-                            <h4>(BC CV) Consent Verified | Whakaaetanga Manatoko</h4>
-                            <p class="darkteal-text">
-                                <span class="weight-500">Label ID: IO09097809</span><br>
-                                This label is being used to indicate that this material traditionally and usually is heard and/or utilized at a particular time of year and in response to specific seasonal changes and conditions....
-                            </p>
-                        </div>
-                    </div>
+
+                    {% if project.has_labels %}
+                        {% include 'snippets/researcher-labels.html' %}
+                    {% endif %}
+
                 </div>
         </div>
     
