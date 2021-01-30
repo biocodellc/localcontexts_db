@@ -189,41 +189,19 @@ def community_requests(request, pk):
 @login_required(login_url='login')
 def community_labels(request, pk):
     community = Community.objects.get(id=pk)
-    bclabels = BCLabel.objects.filter(community=community)
-
-    for bclabel in bclabels:
-        project = bclabel.bc_notice.project
-        contribs = ProjectContributors.objects.get(project=project)
-        notice = bclabel.bc_notice
-
-    member_role = check_member_role(request.user, community)
-    if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
-    else: 
-            
-        context = {
-            'community': community,
-            'bclabels': bclabels,
-            'project': project,
-            'contribs': contribs,
-            'notice': notice,
-        }
-        return render(request, 'communities/labels.html', context)
-
-@login_required(login_url='login')
-def community_relationships(request, pk):
-    community = Community.objects.get(id=pk)
+    notices = community.bcnotice_communities.all()
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        context = {'community': community,}
-        return render(request, 'communities/relationships.html', context)
 
-def restricted_view(request, pk):
-    community = Community.objects.get(id=pk)
-    return render(request, 'communities/restricted.html', {'community': community})
+        context = {
+            'community': community,
+            'notices': notices,
+        }
+        return render(request, 'communities/labels.html', context)
+
 
 @login_required(login_url='login')
 def community_add_labels(request, pk, notice_id):
@@ -254,3 +232,19 @@ def community_add_labels(request, pk, notice_id):
         'label_form': label_form,
     }
     return render(request, 'communities/attach-labels.html', context)
+
+
+@login_required(login_url='login')
+def community_relationships(request, pk):
+    community = Community.objects.get(id=pk)
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        context = {'community': community,}
+        return render(request, 'communities/relationships.html', context)
+
+def restricted_view(request, pk):
+    community = Community.objects.get(id=pk)
+    return render(request, 'communities/restricted.html', {'community': community})
