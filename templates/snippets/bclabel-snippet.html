@@ -1,6 +1,6 @@
 {% load static %}
 
-{% for bclabel in project.bclabels.all %}
+{% for bclabel in notice.project.bclabels.all %}
 <div class="flex-this w-100 proj-label-summary">
     <div>
         {% if bclabel.label_type == 'commercialization' %}
