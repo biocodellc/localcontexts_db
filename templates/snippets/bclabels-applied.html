@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% for bclabel in project.bclabels.all %}
+{% for bclabel in notice.project.bclabels.all %}
     <div>
         {% if bclabel.label_type == 'commercialization' %}
             <img src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
