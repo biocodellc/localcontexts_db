@@ -16,7 +16,7 @@ def check_member_role(user, community):
     community_list = u.communities.all()
 
     if community in community_list:
-        c = Community.objects.get(community_name=community)
+        c = Community.objects.get(id=community.id)
 
         admins = c.get_admins()
         editors = c.get_editors()

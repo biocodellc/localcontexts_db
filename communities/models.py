@@ -6,7 +6,7 @@ from django.conf import settings
 class Community(models.Model):
     community_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     image = models.ImageField(upload_to='photos/communities', blank=True, null=True)
-    community_name = models.CharField(max_length=80, null=True)
+    community_name = models.CharField(max_length=80, null=True, unique=True)
     community_code = models.CharField(max_length=80, blank=True, null=True)
     contact_name = models.CharField(max_length=80, blank=True, null=True)
     contact_email = models.EmailField(max_length=254, blank=True, null=True)

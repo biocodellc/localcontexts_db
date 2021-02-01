@@ -6,9 +6,12 @@ from institutions.models import Institution
 # Note: Right now all these fields are not required.
 class Project(models.Model):
     title = models.TextField(blank=True, null=True)
-    # contributor = models.TextField(blank=True, null=True)
     location = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
+    principal_investigator = models.CharField(max_length=100, blank=True, null=True)
+    principal_investigator_affiliation = models.CharField(max_length=100, blank=True, null=True)
+    project_contact = models.CharField(max_length=100, blank=True, null=True)
+    project_contact_email = models.CharField(max_length=100, blank=True, null=True)
     target_species = models.TextField(blank=True, null=True)
     source = models.TextField(blank=True, null=True)
     url = models.TextField(blank=True, null=True)

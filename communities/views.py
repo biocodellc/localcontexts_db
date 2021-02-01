@@ -43,7 +43,7 @@ def create_community(request):
                 site_admin_email, 
                 fail_silently=False)
 
-            return redirect('community-registry')
+            return redirect('dashboard')
     else:
         form = CreateCommunityForm()
 
