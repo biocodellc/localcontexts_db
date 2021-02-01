@@ -28,6 +28,7 @@ def researcher_dashboard(request, pk):
 
     return render(request, 'researchers/dashboard.html', {'researcher': researcher})
 
+# TODO: display labels only if they have been approved by community
 @login_required(login_url='login')
 def researcher_notices(request, pk):
     researcher = Researcher.objects.get(id=pk)

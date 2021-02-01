@@ -76,7 +76,7 @@
                 </div>
             {% endfor %}
 
-            {% if community.community_creator == request.user %}
+            {% if role == 'admin' or role == 'editor' %}
 
                 <a href="{% url 'add-member' community.id %}">
                     <div class="flex-this add-member-card">

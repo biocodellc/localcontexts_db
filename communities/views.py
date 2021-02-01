@@ -125,7 +125,8 @@ def update_community(request, pk):
 @login_required(login_url='login')
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
-    return render(request, 'communities/members.html', {'community': community,})
+    role = check_member_role(request.user, community)
+    return render(request, 'communities/members.html', {'community': community, 'role': role,})
 
 @login_required(login_url='login')
 def add_member(request, pk):
@@ -223,7 +224,8 @@ def community_add_labels(request, pk, notice_id):
             new_label.label_type = label_type
             new_label.save()
 
-            #TODO: only add label if it has been approved by community
+            #TODO: label approval process and
+            # only add label if it has been approved by community
             notice.project.bclabels.add(new_label)    #Add labels to project
     else:
         label_form = AttachLabelForm()
