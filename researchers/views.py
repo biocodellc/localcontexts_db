@@ -71,25 +71,19 @@ def add_notice(request, pk):
             # Send community notification
             title = "A BC notice has been placed by " + str(researcher)
             CommunityNotification.objects.create(community=contrib.community, notification_type='Requests', title=title)
-                
-            context = {
-                'researcher': researcher,
-                'proj_form': proj_form,
-                'contrib_form': contrib_form,
-            }
 
-            return render(request, 'researchers/add-notice.html', context)
+            return redirect('researcher-notices', researcher.id)
     else:
         proj_form = CreateProjectForm()
         contrib_form = ProjectContributorsForm()
         
-        context = {
-            'researcher': researcher,
-            'proj_form': proj_form,
-            'contrib_form': contrib_form,
-        }
+    context = {
+        'researcher': researcher,
+        'proj_form': proj_form,
+        'contrib_form': contrib_form,
+    }
 
-        return render(request, 'researchers/add-notice.html', context)
+    return render(request, 'researchers/add-notice.html', context)
 
 @login_required(login_url='login')
 def researcher_relationships(request, pk):
