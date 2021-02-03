@@ -152,6 +152,8 @@ def dashboard(request):
     is_user_researcher = Researcher.objects.filter(user=request.user).exists()
     if is_user_researcher:
         researcher = Researcher.objects.get(user=request.user)
+    else:
+        researcher = False
 
     target_user = UserAffiliation.objects.get(user=request.user)
 
