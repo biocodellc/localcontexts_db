@@ -139,7 +139,7 @@ def verify(request):
 def logout(request):
     if request.method == 'POST':
         auth.logout(request)
-        return redirect('index')
+        return redirect('login')
 
 @login_required(login_url='login')
 def dashboard(request):

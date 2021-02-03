@@ -5,7 +5,7 @@
 
     <div class="generic-logo-container flex-this">
         <div>
-            <a href="{% url 'index' %}">
+            <a href="#">
                 <img class="logo" src="{% static 'images/logos/logo.png' %}" alt="Local Contexts logo">
             </a>
         </div>
@@ -37,7 +37,7 @@
     {% else %}
 
     <div class="generic-logo-container">
-        <a href="{% url 'index' %}">
+        <a href="#">
             <img class="logo" src="{% static 'images/logos/logo.png' %}" alt="Local Contexts logo">
         </a>
     </div>
@@ -60,12 +60,6 @@
             {% endif %}
 
             <li><a class="white-text upper" href="#">Notices</a></li>
-
-            {% if request.get_full_path == "/about/" %}
-                <li><a id="active-link" class="white-text upper" href="{% url 'about' %}">About</a></li>
-            {% else %}
-                <li><a class="white-text upper" href="{% url 'about' %}">About</a></li>
-            {% endif %}
 
             {% if user.is_authenticated %}
 
