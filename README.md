@@ -41,8 +41,13 @@ python manage.py createsuperuser # so you can start using database)
 Once in virtualenv, in the project root run:
 ```pip install -r requirements.txt```
 
-To run the app:
+To run the app in dev:
 ```python manage.py runserver```
+
+The app will start on port 8000, go to `8000/accounts/login` or `8000/accounts/register` to see the application.
+
+** Note:
+If creating a database for the first time, log into `/admin` as superuser and create a Group called `Site Administrator`, then go to `Users` and select user that has a valid email to add to this group.
 
 Configuration can be found in the `settings.py` file.
 Database models are located in `apps/accounts/models.py`.
