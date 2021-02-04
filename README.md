@@ -56,4 +56,24 @@ Database models are located in `apps/accounts/models.py`.
 ```source setupHeroku.sh``` sets up environment variables for heroku hosted database
 ```source setupLocal.sh``` sets up environment variables for locally hosted database
 
+# GCP Deployment
 
+## Prerequisites
+
+1. Install [`gcloud`][gcloud] utility and login user appropriate account: `gcloud auth login --update-adc`.
+
+2. Configure the default GCP project: `gcloud set project <projectId>`.
+
+3. Download [Cloud SQL proxy][csql-proxy].
+
+4. Start the proxy: `cloud_sql_proxy --instances=<cloud-sql-connection-name>=tcp:5432`.
+
+   You can find the connection name at the Cloud SQL instance overview page.
+   It has the following structure: `<gcp-project>:<region>:<instance-name>` e.g. 
+   `biocode-localcontests-db:us-central1:biocode-db`.
+
+Now you're able to start the local env but point to the Cloud DB. This may be useful 
+if migrations should be applied.
+
+[gcloud]: https://cloud.google.com/sdk/docs/install
+[csql-proxy]: https://cloud.google.com/sql/docs/postgres/quickstart-proxy-test#install-proxy
