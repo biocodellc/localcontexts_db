@@ -24,7 +24,12 @@ SECRET_KEY = os.environ['PROD_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['DEBUG_VALUE']
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1', 'localcontexts.herokuapp.com']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'localcontexts.herokuapp.com',
+    'biocode-localcontests-db-stage.uc.r.appspot.com'
+]
 
 # https://docs.djangoproject.com/en/3.1/ref/settings/#std:setting-ADMINS
 # For when DEBUG = FALSE, sends emails with site errors
