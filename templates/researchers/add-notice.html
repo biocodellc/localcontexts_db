@@ -92,7 +92,7 @@
                                 <p>
                                     Project Summary*
                                 </p>
-                                <label for="date">Date</label><br>
+                                <label for="date">Publication Date</label><br>
                                 {{ proj_form.publication_date }}<br>
 
                                 <label for="date">Source</label><br>
@@ -106,18 +106,41 @@
                                 <label for="description">Brief summary of research</label><br>
                                {{ proj_form.description }}
                             </li>
+                            <li>
+                                <label for="principal_investigator">Principal Investigator</label><br>             
+                                {{ proj_form.principal_investigator }}
+                            </li>
+                            <li>
+                                <label for="principal_investigator">Principal Investigator Affiliation</label><br>             
+                                {{ proj_form.principal_investigator_affiliation }}
+                            </li>
+                            <li>
+                                <label for="principal_investigator">Project Contact Name</label><br>             
+                                {{ proj_form.project_contact }}
+                            </li>
+                            <li>
+                                <label for="principal_investigator">Project Contact Email</label><br>             
+                                {{ proj_form.project_contact_email }}
+                            </li>
+                            <li>
+                                <label for="principal_investigator">Publication DOI</label><br>             
+                                {{ proj_form.publication_doi }}
+                            </li>
+                            <li>
+                                <label for="principal_investigator">Project Data GUID</label><br>             
+                                {{ proj_form.project_data_guid }}
+                            </li>
+                            <li>
+                                <label for="principal_investigator">Recommended Citation</label><br>             
+                                {{ proj_form.recommended_citation }}
+                            </li>
+                            <li>
+                                <label for="principal_investigator">Project URL</label><br>             
+                                {{ proj_form.url }}
+                            </li>
+                            
                         </ul>
 
-                    </li>
-
-                    <li>
-                        <p class="weight-500">Project Metadata</p>
-    
-                    </li>
-
-                    <li>
-                        <p class="weight-500">Project Module</p>
-    
                     </li>
 
                     <li>
