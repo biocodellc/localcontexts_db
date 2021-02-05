@@ -21,7 +21,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
-from .utils import generate_token, email_exists
+from .utils import generate_token, email_exists, is_user_researcher
 from django.contrib.sites.shortcuts import get_current_site
 
 @unauthenticated_user
@@ -149,11 +149,7 @@ def dashboard(request):
     target_communitites = Community.objects.filter(community_creator=request.user)
     target_institutions = Institution.objects.filter(institution_creator=request.user)
 
-    is_user_researcher = Researcher.objects.filter(user=request.user).exists()
-    if is_user_researcher:
-        researcher = Researcher.objects.get(user=request.user)
-    else:
-        researcher = False
+    researcher = is_user_researcher(request.user)
 
     target_user = UserAffiliation.objects.get(user=request.user)
 
@@ -187,6 +183,7 @@ def users_view(request, pk):
     target_user = User.objects.get(id=pk)
     x = UserAffiliation.objects.get(user=target_user) 
     user_communities = x.communities.all()
+    researcher = is_user_researcher(target_user)
 
     if request.user == target_user:
         return redirect('dashboard')
@@ -194,6 +191,7 @@ def users_view(request, pk):
         context = {
             'target_user': target_user,
             'user_communities': user_communities,
+            'researcher': researcher,
         }
         return render(request, 'accounts/users.html', context)
 
