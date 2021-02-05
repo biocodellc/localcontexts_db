@@ -185,7 +185,7 @@ def dashboard(request):
 @login_required(login_url='login')
 def users_view(request, pk):
     target_user = User.objects.get(id=pk)
-    x = UserAffiliation.objects.get(id=pk)  
+    x = UserAffiliation.objects.get(user=target_user) 
     user_communities = x.communities.all()
 
     context = {

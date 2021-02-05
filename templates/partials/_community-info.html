@@ -44,6 +44,11 @@
                         </span><br>
                         Members: <span>{{ community.get_member_count }}</span><br>
                         Location: <span>{{ community.town }}, {{ community.country.name }} </span><br>
+                        {% if request.user == community.community_creator and community.is_approved == False %}
+                            <small>Your community application is being reviewed and <br> has not been approved yet.</small>
+                        {% else %}
+                            <small>Your community application has been approved.</small>
+                        {% endif %}
                     </p>
                 </div>
     
