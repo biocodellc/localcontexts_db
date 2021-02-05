@@ -55,7 +55,7 @@
                                 </div>
                             </li>
 
-                            <li>
+                            <!-- <li>
                                 <div>   
                                     <p class="no-bottom-margin">What are you applying the notice to?</p>
                                     <select class="expedition-select">
@@ -66,7 +66,7 @@
                                         <option>Publication</option>
                                     </select>
                                 </div>
-                            </li>
+                            </li> -->
 
                         </ul>
 
@@ -111,32 +111,36 @@
                                 {{ proj_form.principal_investigator }}
                             </li>
                             <li>
-                                <label for="principal_investigator">Principal Investigator Affiliation</label><br>             
+                                <label for="principal_investigator_affiliation">Principal Investigator Affiliation</label><br>             
                                 {{ proj_form.principal_investigator_affiliation }}
                             </li>
                             <li>
-                                <label for="principal_investigator">Project Contact Name</label><br>             
+                                <label for="project_contact">Project Contact Name</label><br>             
                                 {{ proj_form.project_contact }}
                             </li>
                             <li>
-                                <label for="principal_investigator">Project Contact Email</label><br>             
+                                <label for="project_contact_email">Project Contact Email</label><br>             
                                 {{ proj_form.project_contact_email }}
                             </li>
                             <li>
-                                <label for="principal_investigator">Publication DOI</label><br>             
+                                <label for="publication_doi">Publication DOI</label><br>             
                                 {{ proj_form.publication_doi }}
                             </li>
                             <li>
-                                <label for="principal_investigator">Project Data GUID</label><br>             
+                                <label for="project_data_guid">Project Data GUID</label><br>             
                                 {{ proj_form.project_data_guid }}
                             </li>
                             <li>
-                                <label for="principal_investigator">Recommended Citation</label><br>             
+                                <label for="recommended-citation">Recommended Citation</label><br>             
                                 {{ proj_form.recommended_citation }}
                             </li>
                             <li>
-                                <label for="principal_investigator">Project URL</label><br>             
+                                <label for="url">Project URL</label><br>             
                                 {{ proj_form.url }}
+                            </li>
+                            <li>
+                                <label for="geome_project_id">GEOME Project ID</label><br>             
+                                {{ proj_form.geome_project_id }}
                             </li>
                             
                         </ul>
