@@ -1,6 +1,5 @@
 {% extends 'comm-base.html' %} {% load static %} {% block community_content %}
-
-        <div class="activity-card-container content-card content-card-space flex-this column white-bg">
+        <!-- <div class="activity-card-container content-card content-card-space flex-this column white-bg">
             <div>
                 <h3 class="orange-text">Recent Activity</h3>
             </div>
@@ -48,10 +47,8 @@
                     </div>
 
                 </div>
-
-
             </div>
-        </div>
+        </div> -->
 
         {% if notifications %}
             <div class="white-bg content-card content-card-space noti-card">
@@ -71,11 +68,20 @@
                                     <div><p>{{ n.title }}</p></div>
                                 {% endif %}
 
-                                
                             </div>
                         </a>
                     {% endfor %}
             </div>
+        
+        {% else %}
+
+        <div class="content-card content-card-space white-bg">
+            <div>
+                <h3 class="orange-text">Recent Activity</h3>
+            </div>
+            <p>No recent activity</p>
+        </div>
+
         {% endif %}
 
 {% endblock %}

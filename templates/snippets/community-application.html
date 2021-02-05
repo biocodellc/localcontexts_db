@@ -2,7 +2,9 @@
 {{ obj.community_creator.get_full_name }} has applied to create a community.
 
 Community Name: {{ obj.community_name }}
-Contact Name: {{ obj.community_creator.get_full_name }}
-Contact Email: {{ obj.community_creator.email }}
+Town: {{ obj.town }}
+Country: {{ obj.country.name }}
+Contact Name: {{ obj.contact_name }}
+Contact Email: {{ obj.contact_email }}
 
 {% endautoescape %}

@@ -24,7 +24,6 @@ def connect_community(request):
 
 @login_required(login_url='login')
 def create_community(request):
-
     if request.method == "POST":
         form = CreateCommunityForm(request.POST)
         if form.is_valid():
@@ -34,7 +33,6 @@ def create_community(request):
 
             site_admin_email = get_site_admin_email()
 
-            # Send email to site admin
             template = render_to_string('snippets/community-application.html', { 'obj' : obj })
             send_mail(
                 'New Community Application', 
