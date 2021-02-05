@@ -188,11 +188,14 @@ def users_view(request, pk):
     x = UserAffiliation.objects.get(user=target_user) 
     user_communities = x.communities.all()
 
-    context = {
-        'target_user': target_user,
-        'user_communities': user_communities,
-    }
-    return render(request, 'accounts/users.html', context)
+    if request.user == target_user:
+        return redirect('dashboard')
+    else:
+        context = {
+            'target_user': target_user,
+            'user_communities': user_communities,
+        }
+        return render(request, 'accounts/users.html', context)
 
 @login_required(login_url='login')
 def create_profile(request):
