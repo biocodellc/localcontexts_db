@@ -13,7 +13,7 @@
                 </div>
     
                     <div>
-                        <a href="#" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
+                        <a href="{% url 'researcher-update' researcher.id %}" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
                     </div>
                 
             </div>
@@ -29,7 +29,10 @@
                     <p>
                         Job Title: {{ researcher.user.profile.job_title }} <br>
                         Location: <span>{{ researcher.user.profile.city_or_town }}, {{ researcher.user.profile.country.name }} </span><br>
-                        Orcid: <span>{{ researcher.orcid }}</span>
+                        Orcid ID: <span>{{ researcher.orcid }}</span><br>
+                        {% if researcher.website %}
+                        Website: <span>{{ researcher.website }}</span>
+                        {% endif %}
                     </p>
                 </div>
     

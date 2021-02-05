@@ -15,7 +15,7 @@ def email_exists(email):
 
 def is_user_researcher(user):
     target_user = Researcher.objects.filter(user=user).exists()
-    if is_user_researcher:
-         return Researcher.objects.get(user=user)
+    if target_user:
+        return Researcher.objects.get(user=user)
     else:
         return False

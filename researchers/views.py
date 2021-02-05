@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+from accounts.utils import is_user_researcher
 
 from bclabels.models import BCNotice
 from notifications.models import CommunityNotification
@@ -9,17 +12,28 @@ from .forms import *
 
 @login_required(login_url='login')
 def connect_researcher(request):
-    form = ConnectResearcherForm()
+    researcher = is_user_researcher(request.user)
+    
+    if researcher == False:
+        if request.method == "POST":
+            form = ConnectResearcherForm(request.POST)
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.user = request.user
 
-    if request.method == "POST":
-        form = ConnectResearcherForm(request.POST)
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.user = request.user
-            obj.save()
-            return redirect('researcher-dashboard')
+                if '-' in data.orcid:
+                    data.save()
+                else:
+                    data.orcid = '-'.join([data.orcid[i:i+4] for i in range(0, len(data.orcid), 4)])
+                    data.save()
 
-    return render(request, 'researchers/connect-researcher.html', {'form': form})
+                return redirect('dashboard')
+        else:
+            form = ConnectResearcherForm()
+
+        return render(request, 'researchers/connect-researcher.html', {'form': form})
+    else:
+        return redirect('researcher-dashboard', researcher.id)
 
 @login_required(login_url='login')
 def researcher_dashboard(request, pk):
@@ -27,6 +41,32 @@ def researcher_dashboard(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
     return render(request, 'researchers/dashboard.html', {'researcher': researcher})
+
+@login_required(login_url='login')
+def update_researcher(request, pk):
+    researcher = Researcher.objects.get(id=pk)
+
+    if request.method == 'POST':
+        update_form = UpdateResearcherForm(request.POST, instance=researcher)
+
+        if update_form.is_valid():
+            data = update_form.save(commit=False)
+            if '-' in data.orcid:
+                data.save()
+            else: 
+                data.orcid = '-'.join([data.orcid[i:i+4] for i in range(0, len(data.orcid), 4)])
+                data.save()
+
+            messages.add_message(request, messages.SUCCESS, 'Updated!')
+            return redirect('researcher-update', researcher.id)
+    else:
+        update_form = UpdateResearcherForm(instance=researcher)
+    
+    context = {
+        'update_form': update_form,
+        'researcher': researcher,
+    }
+    return render(request, 'researchers/update-researcher.html', context)
 
 # TODO: display labels only if they have been approved by community
 @login_required(login_url='login')

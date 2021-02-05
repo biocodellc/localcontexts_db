@@ -27,3 +27,14 @@ class ProjectContributorsForm(forms.ModelForm):
     class Meta:
         model = ProjectContributors
         fields = ['community']
+
+class UpdateResearcherForm(forms.ModelForm):
+    class Meta:
+        model = Researcher
+        fields = ['orcid', 'contact_email', 'contact_number', 'website']
+        widgets = {
+            'orcid': forms.TextInput(attrs={'size': 40}),
+            'contact_email': forms.TextInput(attrs={'size': 40}),
+            'contact_number': forms.TextInput(attrs={'size': 40}),
+            'website': forms.TextInput(attrs={'size': 40}),
+        }
