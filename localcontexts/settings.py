@@ -22,9 +22,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['PROD_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ['DEBUG_VALUE']
+DEBUG = os.environ['DEBUG_VALUE'] == 'True'
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1', 'localcontexts.herokuapp.com']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'localcontexts.herokuapp.com',
+    'biocode-localcontests-db-stage.uc.r.appspot.com',
+    'default.biocode-localcontests-db-stage.appspot.com',
+    'biocode-localcontests-db-stage.appspot.com'
+]
 
 # https://docs.djangoproject.com/en/3.1/ref/settings/#std:setting-ADMINS
 # For when DEBUG = FALSE, sends emails with site errors
@@ -94,18 +101,27 @@ WSGI_APPLICATION = 'localcontexts.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT')
+if os.getenv('GAE_APPLICATION', None):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASS'),
+            'HOST': '/cloudsql/' + os.environ.get('DB_HOST')
+        }
     }
-}
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASS'),
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': os.environ.get('DB_PORT')
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -166,14 +182,14 @@ if USE_S3:
 
     AWS_LOCATION = 'static'
     AWS_S3_CUSTOM_DOMAIN='%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-    AWS_S3_OBJECT_PARAMETERS = {    
+    AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
     STATIC_LOCATION = 'static'
     STATIC_URL='https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
     ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
-    STATICFILES_FINDERS = ( 
-        'django.contrib.staticfiles.finders.FileSystemFinder',    
+    STATICFILES_FINDERS = (
+        'django.contrib.staticfiles.finders.FileSystemFinder',
         'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     )
 

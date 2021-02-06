@@ -97,3 +97,8 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+# Environment setup scripts.
+env.ps1
+env.sh
+env.bat
