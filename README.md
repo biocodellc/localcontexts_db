@@ -99,7 +99,51 @@ configure the GCP project.
    export REGION="us-central1"
    gcloud app create --region="${REGION}"
    ```
-
-3. Create Cloud SQL postgres instance.
-
    
+   One may also create a new App via the web console UI [here](https://console.cloud.google.com/appengine).
+
+3. Create a new Cloud SQL Postgres instance.
+
+   In order to create a new SQL instance it is recommended to use the web UI wizard 
+   [here](https://console.cloud.google.com/sql/create-instance-postgres).
+   
+   The wizard default should cover some more-or-less generic workloads, but it may be a good
+   idea to check out all the configuration options.
+   
+   After the instance creation navigate to the instance dashboard and copy the connection name.
+
+4. Create Postgres DB.
+
+   In order to create a new DB one may use the following command, or the Cloud SQL web UI.
+
+   ```bash
+   export DB_NAME="localcontextsdb"
+   export INSTANCE="biocode-localcontests-db-stage:us-central1:biocode-db" # Change to real instance name
+   gcloud sql databases create "${DB_NAME}" --instances="${INSTANCE}"
+   ```
+   
+5. Migrate the DB.
+
+   When the infrastructure is up it should be a good idea to roll out all the Django DB migrations
+   as well as to create a Django superuser.
+   
+   To roll out the migrations do the following.
+
+   * Start the Cloud SQL proxy: `cloud_sql_proxy --instances=<cloud-sql-connection-name>=tcp:5432`.
+   * Make the migrations: `python manage.py makemigrations`.
+   * Apply the migrations: `python manage.py migrate`
+
+   To create a superuser run: `python manage.py createsuperuser`.   
+
+## Deploying the app
+
+When the initial setup is done the app can be deployed with a single command: `gcloud app deploy`.
+
+By default, the deployment promotes the newly deployed version and routes all the traffic to it.
+
+In order to perform a deployment without routing the traffic add `--no-promote` option to the 
+deployment command: `gcloud app deploy --no-promote`.
+
+App Engine creates a new version for each deployment. The version name is the deployment date
+and time. In order to supply a custom version name use `--version` option:
+`gcloud app deploy --version="2021-02-06-v14"`.
