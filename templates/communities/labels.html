@@ -68,7 +68,17 @@
                 <div class="w-50 additional-proj-info flex-this column">
     
                     <div>
-                        <p>Relationship with <a href="#" class="darkteal-text">Dr. Libby Liggins</a></p>
+                        <p>Relationship with <a href="#" class="darkteal-text">
+                        {% if notice.placed_by_researcher %}
+                            {{ notice.placed_by_researcher.user.get_full_name}}<br>
+                        {% endif %}
+                        {% if notice.placed_by_institution %}
+                            {{ notice.placed_by_institution.institution_name}}<br>
+                        {% endif %}
+                        {% if contribs.institution%}
+                            {{contribs.institution}}<br>
+                        {% endif %}
+                        </a></p>
                     </div>
 
                     <div class="flex-this flex-end mini-label-container">
@@ -128,11 +138,13 @@
                             <div>
                             <button class="action-btn">Edit Labels</button>
                             </div>
+                            {% if notice.project.geome_project_id %}
                             <div>
                             <button class="green-action-btn">View on GEOME</button>
                             </div>
+                            {% endif %}
                             <div>
-                            <button class="green-action-btn">View on ORCiD</button>
+                            <button class="green-action-btn">View ORCiD</button>
                             </div>
                         </div>
 

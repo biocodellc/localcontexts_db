@@ -37,7 +37,7 @@ def connect_researcher(request):
 
 @login_required(login_url='login')
 def researcher_dashboard(request, pk):
-    # is current user a researcher?
+    # TODO: is current user a researcher?
     researcher = Researcher.objects.get(id=pk)
 
     return render(request, 'researchers/dashboard.html', {'researcher': researcher})

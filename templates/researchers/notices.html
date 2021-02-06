@@ -40,7 +40,7 @@
                     <div class="w-50 additional-proj-info flex-this column">
         
                         <div>
-                            <p>Relationship with <a href="#" class="darkteal-text">Tainui</a></p>
+                            <p>Relationship with <a href="#" class="darkteal-text">Community Name</a></p>
                         </div>
     
                         <div class="flex-this flex-end mini-label-container">
@@ -83,11 +83,13 @@
                                 <div>
                                   <button class="action-btn">Edit Notice</button>
                                 </div>
+                                {% if project.geome_project_id %}
+                                    <div>
+                                    <button class="green-action-btn">View on GEOME</button>
+                                    </div>
+                                {% endif %}
                                 <div>
-                                  <button class="green-action-btn">View on GEOME</button>
-                                </div>
-                                <div>
-                                  <button class="green-action-btn">View on ORCiD</button>
+                                  <button class="green-action-btn">View ORCiD</button>
                                 </div>
                             </div>
     

@@ -52,7 +52,7 @@ class CommunityNotification(models.Model):
     created = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return f"{self.notification_type} - {self.title} - {self.community.community_name}"
+        return f"{self.notification_type} - {self.title}"
 
     class Meta:
         verbose_name = 'Community Notification'

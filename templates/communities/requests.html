@@ -42,11 +42,13 @@
                             <button class="action-btn">Attach Labels</button>
                         </a>
                     </div>
+                    {% if notice.project.geome_project_id %}
+                        <div>
+                            <button class="green-action-btn">View on GEOME </button>   
+                        </div>
+                    {% endif %}
                     <div>
-                        <button class="green-action-btn">View on GEOME </button>   
-                    </div>
-                    <div>
-                        <button class="green-action-btn">View on ORCiD</button>    
+                        <button class="green-action-btn">View ORCiD</button>    
                     </div>
                 </div>
         
