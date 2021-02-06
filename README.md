@@ -77,3 +77,29 @@ if migrations should be applied.
 
 [gcloud]: https://cloud.google.com/sdk/docs/install
 [csql-proxy]: https://cloud.google.com/sql/docs/postgres/quickstart-proxy-test#install-proxy
+
+## Configuring GCP environment
+
+The application is deployed into App Engine Standard serverless platform and uses managed
+Postgres database via Cloud SQL deployment.
+
+Prior to deploying the app one must go over the following steps in order to set up and 
+configure the GCP project.
+
+1. Configure the GCP project ID to be used by the `gcloud`: `gcloud config set <project-id>`.
+
+2. Create App Engine app within the current GCP project and region.
+
+   There may be only one app per GCP project and only inside one region so pick the app region 
+   wisely. You will not be able to change it afterwards.
+   
+   You may use `gcloud app regions list` to list all the available App Engine regions.
+   
+   ```bash
+   export REGION="us-central1"
+   gcloud app create --region="${REGION}"
+   ```
+
+3. Create Cloud SQL postgres instance.
+
+   
