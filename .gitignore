@@ -1,4 +1,5 @@
 envi/
+.env.sh
 
 setupHeroku.sh
 setupLocal.sh

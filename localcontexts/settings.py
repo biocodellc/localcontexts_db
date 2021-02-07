@@ -30,7 +30,10 @@ ALLOWED_HOSTS = [
     'localcontexts.herokuapp.com',
     'biocode-localcontests-db-stage.uc.r.appspot.com',
     'default.biocode-localcontests-db-stage.appspot.com',
-    'biocode-localcontests-db-stage.appspot.com'
+    'biocode-localcontests-db-stage.appspot.com',
+    'anth-ja77-local-contexts-8985.uc.r.appspot.com',
+    'default.anth-ja77-local-contexts-8985.appspot.com',
+    'anth-ja77-local-contexts-8985.appspot.com',
 ]
 
 # https://docs.djangoproject.com/en/3.1/ref/settings/#std:setting-ADMINS
