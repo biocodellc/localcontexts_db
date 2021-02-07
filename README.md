@@ -133,7 +133,7 @@ configure the GCP project.
    * Make the migrations: `python manage.py makemigrations`.
    * Apply the migrations: `python manage.py migrate`
 
-   To create a superuser run: `python manage.py createsuperuser`.   
+   To create a superuser run: `python manage.py createsuperuser`.
 
 ## Deploying the app
 
