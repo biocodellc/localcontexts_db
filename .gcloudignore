@@ -108,6 +108,9 @@ celerybeat.pid
 
 # Environments
 .env
+env.bat-example
+env.ps1-example
+env.sh-example
 env.bat
 env.ps1
 .venv
