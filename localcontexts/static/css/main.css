@@ -45,20 +45,9 @@ label {
     font-weight: 400;
 }
 
-/* input[type=text], input[type=email], input[type=password], input[type=username], select {
-    max-height: 30px;
-    min-height: 30px;
-    background-color: #fff;
-    border: 1px solid #000;
-    border-radius: 5px;
-    font-size: 14px;
-    line-height: 16px;
-    font-weight: 300;
-} */
-
 input[type=text], input[type=email], input[type=password], input[type=username], select {
-    max-height: 30px;
-    min-height: 30px;
+    max-height: 44px;
+    min-height: 44px;
     background-color: #fff;
     border: 2px solid #007385;
     border-radius: 5px;
@@ -143,12 +132,6 @@ input:focus {
 }
 
 /* TEXT */
-
-/* .landing-p {
-    font-size: 15px;
-    font-weight: 300;
-    line-height: 16.8px;
-} */
 
 .weight-500 {
     font-weight: 500;  
