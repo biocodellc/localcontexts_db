@@ -167,7 +167,7 @@
     left: 285px;
     top: 5px;
     font-size: 20px;
-    color: grey;
+    color: #7d7d7d;
 }
 
 /* Checkbox */
@@ -182,8 +182,12 @@
     padding-right: 2%;
 }
 
-#checkbox-label {
-    width: 90%;
+.checkbox-label p {
+    margin: 0;
+}
+
+.checkbox-label span {
+    color: #7d7d7d;
 }
 
 /* For validate and connect pages */
