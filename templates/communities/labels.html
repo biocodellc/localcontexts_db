@@ -1,7 +1,8 @@
 {% extends 'comm-base.html' %} {% load static %} {% block community_content %}
 
-    <div class="content-card content-card-space white-bg">
-        <h3 class="orange-text">Labels</h3>
+<!-- if customised labels exist: -->
+    <!-- <div class="content-card content-card-space white-bg">
+        <h2 class="orange-text weight-600">Labels</h2>
         <div class="flex-this bc-label-container">
             <div>
                 <img src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
@@ -22,152 +23,180 @@
                 <img src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <div class="content-card content-card-space white-bg">
-        <h3 class="orange-text">Projects</h3>
-
-        <hr>
-
-        {% if notices %}
+    {% if notices %}
         {% for notice in notices %}
 
-        {% if notice.project.has_labels %}
-        {% if notice.project.bclabels %}
+            {% if notice.project.has_labels %}
+                {% if notice.project.bclabels %}
 
-        <div class="flex-this space-between column">
-            
-            <div class="flex-this w-100 proj-title-container">
+                    <div class="content-card content-card-space white-bg">
+                        <h2 class="orange-text weight-600">Projects</h2>
 
-                <div class="w-50">
-                    <h4 class="darkteal-text weight-600">{{notice.project.title}}</h4>
-                </div>
+                        <hr>
 
-                <div class="w-50 flex-this flex-end">
-                        <h2 class="darkteal-text">
-                            <!-- <a onclick='showMoreTemporary()'>
-                                <span id="plus-minus">+</span>
-                            </a> -->
-                            <a onclick='showMore(this)'>
-                                <span id="plus-minus-{{notice.project.id}}" class="darkteal-text">+</span>
-                            </a>
-                        </h2>
-                </div>
+                        <div class="flex-this space-between column">
+                            
+                            <div class="flex-this w-100 proj-title-container">
 
-            </div> 
+                                <div class="w-50">
+                                    <h4 class="darkteal-text weight-600">{{notice.project.title}}</h4>
+                                </div>
 
-            <div class="w-100 flex-this proj-info-container">
-                <div class="w-50"> 
-                        <p>
-                            Publication<br>
-                            {{notice.project.publication_date}}<br>
-                            Source: {{ notice.project.source }} <br>
-                        </p>
-                </div>
-    
-                <div class="w-50 additional-proj-info flex-this column">
-    
-                    <div>
-                        <p>Relationship with <a href="#" class="darkteal-text">
-                        {% if notice.placed_by_researcher %}
-                            {{ notice.placed_by_researcher.user.get_full_name}}<br>
-                        {% endif %}
-                        {% if notice.placed_by_institution %}
-                            {{ notice.placed_by_institution.institution_name}}<br>
-                        {% endif %}
-                        {% if contribs.institution%}
-                            {{contribs.institution}}<br>
-                        {% endif %}
-                        </a></p>
-                    </div>
+                                <div class="w-50 flex-this flex-end">
+                                        <h2 class="darkteal-text">
+                                            <!-- <a onclick='showMoreTemporary()'>
+                                                <span id="plus-minus">+</span>
+                                            </a> -->
+                                            <a onclick='showMore(this)'>
+                                                <span id="plus-minus-{{notice.project.id}}" class="darkteal-text">+</span>
+                                            </a>
+                                        </h2>
+                                </div>
 
-                    <div class="flex-this flex-end mini-label-container">
-                            {% include 'snippets/bclabels-applied.html'%}
-                    </div>
+                            </div> 
 
-                </div>
+                            <div class="w-100 flex-this proj-info-container">
+                                <div class="w-50"> 
+                                        <p>
+                                            Publication<br>
+                                            {{notice.project.publication_date}}<br>
+                                            Source: {{ notice.project.source }} <br>
+                                        </p>
+                                </div>
+                    
+                                <div class="w-50 additional-proj-info flex-this column">
+                    
+                                    <div>
+                                        <p>Relationship with <a href="#" class="darkteal-text">
+                                        {% if notice.placed_by_researcher %}
+                                            {{ notice.placed_by_researcher.user.get_full_name}}<br>
+                                        {% endif %}
+                                        {% if notice.placed_by_institution %}
+                                            {{ notice.placed_by_institution.institution_name}}<br>
+                                        {% endif %}
+                                        {% if contribs.institution%}
+                                            {{contribs.institution}}<br>
+                                        {% endif %}
+                                        </a></p>
+                                    </div>
 
-            </div>
+                                    <div class="flex-this flex-end mini-label-container">
+                                            {% include 'snippets/bclabels-applied.html'%}
+                                    </div>
 
-            <!-- Expandable content -->
-            <div id="proj-expand-{{notice.project.id}}" class="proj-expand" style="height: 0px;">
-                <hr>
-                    <div class="flex-this w-100">
+                                </div>
 
-                        <div class="flex-this column w-70">
-
-                            <div>
-                                <span class="weight-500">URL</span> {{ notice.project.url }}
                             </div>
-    
-                        <div class="flex-this">
-                            <div class="w-200px">
-                                <p>
-                                    <span class="weight-500">Contributors</span><br>
-                                    {% if notice.placed_by_researcher %}
-                                        {{ notice.placed_by_researcher.user.get_full_name}}<br>
-                                    {% endif %}
-                                    {% if notice.placed_by_institution %}
-                                        {{ notice.placed_by_institution.institution_name}}<br>
-                                    {% endif %}
-                                    {% if contribs.community %}
-                                        {{contribs.community}} <br>
-                                    {% endif %}
-                                    {% if contribs.institution%}
-                                        {{contribs.institution}}<br>
-                                    {% endif %}
-                                </p>
-                            </div>
-                            <div class="w-200px">
-                                <p>
-                                    <span class="weight-500">Added</span><br>
-                                    2020-06-08 <br>
-                                </p>
-                            </div>
-                            <div class="w-200px">
-                                <p>
-                                    <span class="weight-500">Last Modified</span><br>
-                                    2020-06-08 <br>
-                                </p>
+
+                            <!-- Expandable content -->
+                            <div id="proj-expand-{{notice.project.id}}" class="proj-expand" style="height: 0px;">
+                                <hr>
+                                    <div class="flex-this w-100">
+
+                                        <div class="flex-this column w-70">
+
+                                            <div>
+                                                <span class="weight-500">URL</span> {{ notice.project.url }}
+                                            </div>
+                    
+                                        <div class="flex-this">
+                                            <div class="w-200px">
+                                                <p>
+                                                    <span class="weight-500">Contributors</span><br>
+                                                    {% if notice.placed_by_researcher %}
+                                                        {{ notice.placed_by_researcher.user.get_full_name}}<br>
+                                                    {% endif %}
+                                                    {% if notice.placed_by_institution %}
+                                                        {{ notice.placed_by_institution.institution_name}}<br>
+                                                    {% endif %}
+                                                    {% if contribs.community %}
+                                                        {{contribs.community}} <br>
+                                                    {% endif %}
+                                                    {% if contribs.institution%}
+                                                        {{contribs.institution}}<br>
+                                                    {% endif %}
+                                                </p>
+                                            </div>
+                                            <div class="w-200px">
+                                                <p>
+                                                    <span class="weight-500">Added</span><br>
+                                                    2020-06-08 <br>
+                                                </p>
+                                            </div>
+                                            <div class="w-200px">
+                                                <p>
+                                                    <span class="weight-500">Last Modified</span><br>
+                                                    2020-06-08 <br>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        </div>
+                    
+                                        <div class="flex-this column w-30 proj-btns">
+                                            <div>
+                                            <button class="action-btn">Edit Labels</button>
+                                            </div>
+                                            {% if notice.project.geome_project_id %}
+                                            <div>
+                                            <button class="green-action-btn">View on GEOME</button>
+                                            </div>
+                                            {% endif %}
+                                            <div>
+                                            <button class="green-action-btn">View ORCiD</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                <hr>
+
+                                    {% include 'snippets/bclabel-snippet.html' %}
+
                             </div>
                         </div>
-
-                        </div>
-    
-                        <div class="flex-this column w-30 proj-btns">
-                            <div>
-                            <button class="action-btn">Edit Labels</button>
-                            </div>
-                            {% if notice.project.geome_project_id %}
-                            <div>
-                            <button class="green-action-btn">View on GEOME</button>
-                            </div>
-                            {% endif %}
-                            <div>
-                            <button class="green-action-btn">View ORCiD</button>
-                            </div>
-                        </div>
-
+                        <hr>
                     </div>
-                <hr>
-
-                    {% include 'snippets/bclabel-snippet.html' %}
-
-            </div>
-        </div>
-        <hr>
-        {% endif %}    
-        {% endif %}
+                {% endif %}    
+            {% endif %}
 
         {% endfor %}
 
-        {% else %}
+    {% endif %}
 
-            <p>No labels have been applied yet</p>
+    <div class="content-card content-card-space white-bg">
 
-        {% endif %}
-
+        <div class="flex-this space-between">
+            <div>
+                <h2 class="orange-text weight-600">Labels</h2>
+                <p class="darkteal-text">You currently have no labels customised</p>
+            </div>
+            <div class="flex-this align-center">
+                <a class="action-btn" href="{% url 'create-label' community.id %}">
+                    Create a custom label     <i class="fa fa-long-arrow-right"></i>
+                </a>
+            </div>
+        </div>
 
     </div>
+
+    <div class="content-card content-card-space white-bg">
+
+        <div class="flex-this space-between">
+            <div>
+                <h2 class="orange-text weight-600">Projects</h2>
+                <p class="darkteal-text">You currently have no projects</p>
+            </div>
+    
+            <div class="flex-this align-center">
+                <a class="action-btn" href="{% url 'create-project' community.id %}">
+                    Create a project     <i class="fa fa-long-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
 
 {% endblock %}

@@ -4,6 +4,28 @@
         <h3 class="orange-text reqs">Requests</h3>
     </div>
 
+    <!-- TODO: clarify this flow -->
+    <!-- <div class="content-card content-card-space white-bg">
+        <div class="flex-this">
+            <div class="w-15">
+                <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
+            </div>
+
+            <div class="w-80">
+                <p>
+                    <span class="darkteal-text weight-600">Project Name</span><br>
+                    Project Date <br>
+                    Project Type <br>
+                    Project Contributors
+                </p>
+            </div>
+            <div class="w-10">
+                <a href="#" class="darkteal-text">Show More</a>
+                <i class="fa fa-angle-down darkteal-text" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div> -->
+
     {% if notices %}
         {% for notice in notices %}
         <div class="content-card content-card-space white-bg">
@@ -19,7 +41,7 @@
                     </a></p>
                 </div>
     
-                <div class="w-10 auto-margin flex-this flex-end">
+                <div class="w-15 auto-margin flex-this flex-end">
                     <button class="action-btn">Label Pending</button>
                 </div>
                 <div class="w-15 auto-margin flex-this flex-end">
@@ -33,7 +55,7 @@
     
             <div class="flex-this notice-card">
     
-                <div class="flex-this column w-10 notice-btns">
+                <div class="flex-this column w-15 notice-btns">
                     <div>
                         <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
                     </div>

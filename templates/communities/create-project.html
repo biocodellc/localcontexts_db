@@ -1,0 +1,81 @@
+{% extends 'comm-base.html' %} {% load static %} {% block community_content %}
+
+<div class="content-card content-card-space white-bg">
+    <div>
+        <small><a class="darkteal-text" href="#">Labels</a> <span style="color:#A09D9D;"> >> Create New Project</span></small>
+    </div>
+
+    <div>
+        <h2 class="orange-text weight-700">Create a project</h2>
+        <h4 class="weight-600 darkteal-text">Either sync an existing project or create a new one</h4>
+    </div>
+
+    <div class="flex-this bottom-dashed">
+        <div class="w-20">
+            <label class="darkteal-text">Import project from</label><br>
+            <select>
+                <option>Murkutu</option>
+            </select>
+        </div>
+        <div class="w-20">
+            <label class="darkteal-text">Project Link</label><br>
+            <input type="text">
+        </div>
+    </div>
+
+    <div class="bottom-dashed">
+        <div>
+            <label class="darkteal-text">Project Name</label><br>
+            <input type="text">
+        </div>
+        <div>
+            <label class="darkteal-text">Date Created</label><br>
+            <input type="text">
+        </div>
+        <div>
+            <label class="darkteal-text">Contributor(s)</label><br>
+            <input type="text">
+        </div>
+        <div>
+            <label class="darkteal-text">Project Description</label><br>
+            <input type="text">
+        </div>
+
+        <div class="flex-this">
+            <div class="w-15">
+                <label class="darkteal-text">Source of project</label><br>
+                <select>
+                    <option>
+                        Geome
+                    </option>
+                </select>
+
+            </div>
+            <div class="w-15">
+                <label class="darkteal-text">Access Link</label><br>
+                <input type="text">
+            </div>
+
+        </div>
+    </div>
+
+    <div>
+        <div>
+            <h4 class="weight-600 darkteal-text">Attach Labels to this project</h4>
+        </div>
+
+        <div>
+            <p class="darkteal-text">
+                1. Attach Labels<br>
+                2. View Label Descriptions
+            </p>
+        </div>
+
+        <div>
+            <button class="action-btn">Place Labels</button>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

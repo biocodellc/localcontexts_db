@@ -203,6 +203,17 @@ def community_labels(request, pk):
         }
         return render(request, 'communities/labels.html', context)
 
+@login_required(login_url='login')
+def create_label(request, pk):
+    community = Community.objects.get(id=pk)
+    return render(request, 'communities/create-label.html', {'community': community,})
+
+
+@login_required(login_url='login')
+def create_project(request, pk):
+    community = Community.objects.get(id=pk)
+    return render(request, 'communities/create-project.html', {'community': community,})
+
 
 @login_required(login_url='login')
 def community_add_labels(request, pk, notice_id):
