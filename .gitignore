@@ -1,8 +1,8 @@
 envi/
-.env.sh
 
 setupHeroku.sh
 setupLocal.sh
+setupGCP.sh
 
 .vscode/
 
