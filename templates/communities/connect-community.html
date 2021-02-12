@@ -16,18 +16,14 @@
         Before we start would you like to connect with an existing Community or create your own?
     </p>
 
-    <a class="white-text" href="{% url 'community-registry' %}">
-        <div class="action-btn connect-btn auto-margin" style="padding-top: 5px;">
-            Search the register
-        </div>
+    <a class="white-text action-btn connect-btn auto-margin" href="{% url 'community-registry' %}">
+        Search the register
     </a>
 
     OR
 
-    <a class="white-text" href="{% url 'create-community' %}">
-        <div class="action-btn connect-btn auto-margin" style="padding-top: 5px;">
+    <a class="white-text action-btn connect-btn auto-margin" href="{% url 'create-community' %}">
             Create a Community profile
-        </div>
     </a>
 </div>
 {% endblock %}

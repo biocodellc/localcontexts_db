@@ -33,7 +33,7 @@
                                 <form method="POST" action="">
                                         {% csrf_token %}
                                         <tr>
-                                            <td class="td-img"><img src="https://picsum.photos/200/75"></td>
+                                            <td class="td-img"><img src="{% static 'images/placeholders/institution-place.jpg' %}"></td>
                                             <td class="td-name"><a href="#" class="black-text">{{ institution.institution_name }}</a></td>
                                             <input type="hidden" value="{{ institution.id }}" name="instid">
                                             <td class="td-btn"><button id="btn-{{ institution.id }}" class="action-btn">Send request to join</button></td>
@@ -42,7 +42,7 @@
 
                                 {% else %}
                                     <tr>
-                                        <td class="td-img"><img src="https://picsum.photos/200/75"></td>
+                                        <td class="td-img"><img src="{% static 'images/placeholders/institution-place.jpg' %}"></td>
                                         <td class="td-name">{{ institution.institution_name }}</td>
                                         <td class="td-btn"></td>
                                     </tr>
