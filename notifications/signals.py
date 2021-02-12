@@ -5,6 +5,7 @@ from communities.models import *
 from bclabels.models import BCNotice
 from .models import *
 from .utils import *
+from django.conf import settings
 
 # Sends welcome notification to user that just registered
 @receiver(post_save, sender=User)
@@ -97,12 +98,10 @@ def accept_user_join_request(sender, instance, created, **kwargs):
         instance.delete() # Deletes the request when it has been accepted
 
 # Sends Site admin notifiation with request to create community
-#TODO: Test this when there is more than one site admin
 @receiver(post_save, sender=Community)
 def community_application(sender, instance, created, **kwargs):
     creator = instance.community_creator
-    # site_admin = User.objects.get(username="dianalovette")
-    site_admins = User.objects.filter(groups__name='Site Administrator')
+    admin = User.objects.get(email=settings.SITE_ADMIN_EMAIL)
 
     name = check_full_name(creator)
 
@@ -110,5 +109,4 @@ def community_application(sender, instance, created, **kwargs):
     message = "Community application."
 
     if created:
-        for admin in site_admins:
-            UserNotification.objects.create(to_user=admin, from_user=creator, title=title, message=message, notification_type="Create", community=instance)
+        UserNotification.objects.create(to_user=admin, from_user=creator, title=title, message=message, notification_type="Create", community=instance)

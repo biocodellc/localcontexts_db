@@ -31,14 +31,12 @@ def create_community(request):
             obj.community_creator = request.user
             obj.save()
 
-            site_admin_email = get_site_admin_email()
-
             template = render_to_string('snippets/community-application.html', { 'obj' : obj })
             send_mail(
                 'New Community Application', 
                 template, 
                 settings.EMAIL_HOST_USER, 
-                site_admin_email, 
+                [settings.SITE_ADMIN_EMAIL], 
                 fail_silently=False)
 
             return redirect('dashboard')

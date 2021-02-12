@@ -42,14 +42,4 @@ def checkif_invite_exists(user, community):
         print(" #########   INVITATION ALREADY EXISTS  ######### ")
     else:
         return False
-
-def get_site_admin_email():
-    group = Group.objects.get(name="Site Administrator")
-    users = group.user_set.all()
-    emails = []
-
-    for user in users:
-        emails.append(user.email)
-
-    return emails
     

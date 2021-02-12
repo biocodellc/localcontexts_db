@@ -37,6 +37,9 @@ python manage.py migrate # sets up database
 python manage.py createsuperuser # so you can start using database)
 ```
 
+** Note:
+If creating a database for the first time, **the superuser's email** has to match the `SITE_ADMIN_EMAIL` in `settings.py` in order for some of the emailing / notification functionality to work.
+
 ### Installing Dependencies
 Once in virtualenv, in the project root run:
 ```pip install -r requirements.txt```
@@ -44,10 +47,7 @@ Once in virtualenv, in the project root run:
 To run the app in dev:
 ```python manage.py runserver```
 
-The app will start on port 8000, go to `8000/accounts/login` or `8000/accounts/register` to see the application.
-
-** Note:
-If creating a database for the first time, log into `/admin` as superuser and create a Group called `Site Administrator`, then go to `Users` and select user that has a valid email to add to this group.
+Locally, the app will start on port 8000, go to `8000/accounts/login` or `8000/accounts/register` to see the application.
 
 Configuration can be found in the `settings.py` file.
 Database models are located in `apps/accounts/models.py`.
