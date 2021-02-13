@@ -234,3 +234,28 @@
     padding: 5%;
     max-width: 80%;
 }
+
+/* Why are you registering page */
+.registration-card-space {
+    padding: 70px;
+}
+
+.registration-card-space span {
+    color: grey;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.reason-radio input{
+    width: 20px;
+    height: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+
+}
+
+.radio-group {
+    margin-bottom: 30px;
+}

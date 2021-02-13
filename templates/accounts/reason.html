@@ -1,0 +1,48 @@
+{% extends 'reg-base.html' %} {% load static %} {% block card %}
+
+<div class="flex-this column">
+    <div class="registration-card-space">
+
+        <h2 class="darkteal-text">Why Are You Registering?</h2>
+        <p class="darkteal-text">Please choose one account to register with.</p>
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            
+            <div class="flex-this radio-group">
+                <div class="reason-radio">
+                    <input type="radio" value="community" id="community-radio" name="reason">
+                </div>
+                <div>
+                    <label for="community-radio">Community Account: </label> <span>A community account can be used by first nations, 
+                        native and indigenous communities</span> <br>
+                </div>
+            </div>
+
+            <div class="flex-this radio-group">
+                <div class="reason-radio">
+                    <input type="radio" value="institution" id="institution-radio" name="reason">
+                </div>
+                <div>
+                    <label for="institution-radio">Institution Account:  </label><span>An institution account can be used by cultural and research institutions that hold and research indigneous culture</span><br>
+                </div>
+            </div>
+
+            <div class="flex-this radio-group">
+                <div class="reason-radio">
+                    <input type="radio" value="researcher" id="researcher-radio" name="reason">
+                </div>
+                <div>
+                    <label for="researcher-radio">Researcher Account: </label><span>A researcher account is for independant researchers
+                        that are not tied to an institution</span><br>
+                </div>
+            </div>
+
+            <div class="text-align-right">
+                <button class="action-btn">Continue <i class="fa fa-long-arrow-right"></i></button>
+            </div>
+            
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -142,6 +142,18 @@ def logout(request):
         return redirect('login')
 
 @login_required(login_url='login')
+def registration_reason(request):
+    # Redirects based on what is selected radio input
+    if request.method == 'POST':
+        if request.POST.get('reason') == 'community':
+            return redirect('connect-community')
+        elif request.POST.get('reason') == 'institution':
+            return redirect('connect-institution')
+        elif request.POST.get('reason') == 'researcher':
+            return redirect('connect-researcher')
+    return render(request, 'accounts/reason.html')
+
+@login_required(login_url='login')
 def dashboard(request):
     n = UserNotification.objects.filter(to_user=request.user)
 
@@ -208,15 +220,7 @@ def create_profile(request):
             user_form.save()
             profile_form.save()
 
-            # Redirects based on what is selected in the dropdown
-            if request.POST.get('registration_reason') == 'community':
-                return redirect('connect-community')
-            elif request.POST.get('registration_reason') == 'institution':
-                return redirect('connect-institution')
-            elif request.POST.get('registration_reason') == 'researcher':
-                return redirect('connect-researcher')
-
-            return redirect('dashboard')
+            return redirect('registration-reason')
     else:
         user_form = UserCreateProfileForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)

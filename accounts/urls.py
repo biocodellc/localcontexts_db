@@ -16,6 +16,8 @@ urlpatterns = [
     path('create-profile/', views.create_profile, name='create-profile'),
     path('update-profile/', views.update_profile, name='update-profile'),
 
+    path('reason/', views.registration_reason, name='registration-reason'),
+
     path('users/<str:pk>/', views.users_view, name='users'),
 
     path('reset-password/', 
