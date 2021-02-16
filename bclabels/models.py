@@ -41,7 +41,7 @@ class BCLabel(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.label_type) + ' ' + str(self.name)
+        return str(self.community) + ' ' + str(self.label_type) + ' ' + str(self.name)
     
     class Meta:
         verbose_name = 'BC Label'

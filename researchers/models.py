@@ -4,6 +4,13 @@ from communities.models import Community
 from institutions.models import Institution
 
 class Project(models.Model):
+    TYPES = (
+        ('Item', 'Item'),
+        ('Collection', 'Collection'),
+        ('Expedition', 'Expedition'),
+        ('Publication', 'Publication'),
+    )
+    project_type = models.CharField(max_length=20, null=True, choices=TYPES)
     title = models.TextField(null=True)
     description = models.TextField(null=True)
     principal_investigator = models.CharField(max_length=100, blank=True, null=True)

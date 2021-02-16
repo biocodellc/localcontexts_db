@@ -14,7 +14,7 @@ class ConnectResearcherForm(forms.ModelForm):
 class CreateProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['title', 'is_public', 'description', 'source', 'url', 'publication_date', 'principal_investigator', 'principal_investigator_affiliation', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation', 'geome_project_id']
+        fields = ['title', 'is_public', 'project_type', 'description', 'source', 'url', 'publication_date', 'principal_investigator', 'principal_investigator_affiliation', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation', 'geome_project_id']
         widgets = {
             'title': forms.Textarea(attrs={'rows': 1, 'cols':65}),
             'description': forms.Textarea(attrs={'rows': 4, 'cols':65}),
