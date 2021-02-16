@@ -53,7 +53,7 @@ steps:
       - "-c"
       - |
         source .env.sh
-        gcloud app deplo
+        gcloud app deploy
     waitFor: ["collect-statics"]
 
 #substitutions:
