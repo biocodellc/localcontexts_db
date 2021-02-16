@@ -28,11 +28,11 @@
                 <div class="flex-this column w-40">
                     <h2 class="orange-text community-title">{{ researcher.user.get_full_name }}</h2>
                     <p>
-                        Job Title: {{ researcher.user.profile.job_title }} <br>
-                        Location: <span>{{ researcher.user.profile.city_or_town }}, {{ researcher.user.profile.country.name }} </span><br>
-                        Orcid ID: <span>{{ researcher.orcid }}</span><br>
+                        <span>Job Title:</span> {{ researcher.user.profile.job_title }} <br>
+                        <span>Location:</span> {{ researcher.user.profile.city_or_town }}, {{ researcher.user.profile.country.name }}<br>
+                        <span>ORCiD:</span> {{ researcher.orcid }}<br>
                         {% if researcher.website %}
-                        Website: <span>{{ researcher.website }}</span>
+                        <span>Website:</span> {{ researcher.website }}
                         {% endif %}
                     </p>
                 </div>

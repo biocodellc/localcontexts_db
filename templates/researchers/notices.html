@@ -31,7 +31,7 @@
                 <div class="w-100 flex-this proj-info-container">
                     <div class="w-50"> 
                             <p>
-                                Publication<br>
+                                {{ project.project_type }}<br>
                                 {{ project.publication_date }}<br>
                                 Source: {{ project.source }} <br>
                             </p>
@@ -40,7 +40,7 @@
                     <div class="w-50 additional-proj-info flex-this column">
         
                         <div>
-                            <p>Relationship with <a href="#" class="darkteal-text">Community Name</a></p>
+                            <p>Relationship with <a href="#"><span class="darkteal-text">Community Name</span></a></p>
                         </div>
     
                         <div class="flex-this flex-end mini-label-container">
