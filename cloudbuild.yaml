@@ -18,7 +18,7 @@ steps:
     args:
       - "-c"
       - |
-        source .evn.sh
+        source .env.sh
         python3 ./manage.py collectstatic --noinput
 
 availableSecrets:
