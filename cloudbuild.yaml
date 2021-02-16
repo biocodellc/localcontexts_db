@@ -14,8 +14,12 @@ steps:
     args: ["-m", "pip", "install", "-r", "requirements.txt", "--user"]
   - name: "python:3.8-slim-buster"
     id: "Collect Statics"
-    entrypoint: "python3"
-    args: ["./manage.py", "collectstatic", "--noinput"]
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        source .evn.sh
+        python3 ./manage.py collectstatic --noinput
 
 availableSecrets:
   secretManager:
