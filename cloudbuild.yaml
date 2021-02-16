@@ -1,0 +1,22 @@
+steps:
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+    id: "Setup App Engine envs"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        printf "%s" "$$APP_ENGINE_ENVS" > .env.sh
+        sudo chmod +x .env.sh
+    secretEnv: ['APP_ENGINE_ENVS']
+  - name: "python:3.8-slim-buster"
+    id: "Install Dependencies"
+    entrypoint: "python3"
+    args: ["-m", "pip", "install", "-r", "requirements.txt", "--user"]
+  - name: "python:3.8-slim-buster"
+    id: "Collect Statics"
+    entrypoint: "python3"
+    args: ["./manage.py", "collectstatic", "--noinput"]
+
+availableSecrets:
+  - versionName: "projects/$PROJECT_ID/secrets/APP_ENGINE_ENVS/versions/1"
+    env: "APP_ENGINE_ENVS"
