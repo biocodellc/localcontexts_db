@@ -6,7 +6,7 @@ steps:
       - "-c"
       - |
         printf "%s" "$$APP_ENGINE_ENVS" > .env.sh
-        sudo chmod +x .env.sh
+        chmod +x .env.sh
     secretEnv: ['APP_ENGINE_ENVS']
   - name: "python:3.8-slim-buster"
     id: "Install Dependencies"
