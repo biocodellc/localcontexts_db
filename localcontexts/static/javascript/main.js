@@ -162,4 +162,22 @@ function setDefaultText(img) {
 }
 
 
+function showBCLabelInfo() {
+    let div = document.getElementById('expand-bclabels')
+    let span = document.getElementById('show-more-down')
+    let card = document.getElementById('collapsed-card')
+
+    if (div.style.height == "0px" && span.textContent == "∨") {
+        card.style.height = "500px"
+        div.style.height = "500px"
+        card.style.transition = "height 0.5s"
+        span.textContent = "∧"
+    } else {
+        card.style.height = "113px"
+        div.style.height = "0px"
+        card.style.transition = "height 0.5s"
+        span.textContent = "∨"
+    }
+}
+
 

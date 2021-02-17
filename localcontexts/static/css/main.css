@@ -898,3 +898,20 @@ input:focus {
     padding-bottom: 2%;
     padding-top: 1%;
 }
+
+/* Community: Labels */
+#collapsed-card {
+    height: 113px;
+}
+
+.vertical-center {
+    margin: auto 0;
+}
+
+#expand-bclabels {
+    overflow: hidden;
+}
+
+.pointer {
+    cursor: pointer;
+}
