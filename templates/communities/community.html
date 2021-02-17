@@ -1,0 +1,87 @@
+{% extends 'comm-base.html' %} {% load static %} {% block community_content %}
+        <!-- <div class="activity-card-container content-card content-card-space flex-this column white-bg">
+            <div>
+                <h3 class="orange-text">Recent Activity</h3>
+            </div>
+
+            <div class="w-100 flex-this space-between">
+
+                <div class="w-30 flex-this recent-act-label-card  white-text">
+
+                    <div class="black-bg blk">
+                        Image
+                    </div>
+                    <div class="orange-bg org">
+                        <span>
+                            Tk Community Use Only (TK C)<br>
+                            Adopted by Miriame Barbarich
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="w-30 flex-this recent-act-label-card  white-text">
+
+                    <div class="black-bg blk">
+                        Image
+                    </div>
+                    <div class="orange-bg org">
+                        <span>
+                            BC Research Use (BC RU)<br>
+                            Adopted by Breila Barbarich
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="w-30 flex-this recent-act-label-card  white-text">
+
+                    <div class="black-bg blk">
+                        Image
+                    </div>
+                    <div class="orange-bg org">
+                        <span>
+                            Tk Community Use Only (TK C)<br>
+                            Adopted by Miriame Barbarich
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </div> -->
+
+        {% if notifications %}
+            <div class="white-bg content-card content-card-space noti-card">
+                
+                    <h3 class="orange-text">Notifications</h3>
+                    {% for n in notifications %}
+                        <a href="{% url 'comm-show' community.id n.id %}">
+                            <div class="noti-container flex-this row">
+
+                                {% if n.viewed == False %}
+                                    <div><p class="orange-text"><i class="fa fa-bell" aria-hidden="true"></i></p></div>
+                                    <div><strong><p>{{ n.notification_type }}</p></strong></div>
+                                    <div><p>{{ n.title }}</p></div>
+                                {% else %}
+                                    <div><p></p></div>
+                                    <div><strong><p>{{ n.notification_type }}</p></strong></div>
+                                    <div><p>{{ n.title }}</p></div>
+                                {% endif %}
+
+                            </div>
+                        </a>
+                    {% endfor %}
+            </div>
+        
+        {% else %}
+
+        <div class="content-card content-card-space white-bg">
+            <div>
+                <h3 class="orange-text">Recent Activity</h3>
+            </div>
+            <p>No recent activity</p>
+        </div>
+
+        {% endif %}
+
+{% endblock %}

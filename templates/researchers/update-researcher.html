@@ -1,0 +1,17 @@
+{% extends 'research-base.html' %} {% load static %}{% block researcher_content %}
+
+    <div class="white-bg content-card content-card-space noti-card">
+        <h3 class="orange-text">Settings</h3>
+        <div>
+            <form method="POST" action="{% url 'researcher-update' researcher.id %}">
+                {% csrf_token %}
+                {{ update_form.as_p }}
+            
+                {% include 'partials/_alerts.html' %}
+                <button class="default-btn action-btn">Save</button>
+            
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

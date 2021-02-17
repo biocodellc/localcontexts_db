@@ -1,0 +1,59 @@
+{% extends 'reg-base.html' %} {% load static %} {% block card %}
+{% if user.is_authenticated %}
+
+<div class="form-container flex-this column w-90">
+    <div class="form-heading flex-this column w-100">
+        <h2 class="darkteal-text">Create your profile</h2>
+        <p>This information will be kept secure to protect your identity.</p>    
+    </div>
+
+    <form action="{% url 'create-profile' %}" method="POST" enctype="multipart/form-data" class="flex-this column w-100">
+        {% csrf_token %}
+        <div class="flex-this column w-100">
+
+            <div class="flex-this row w-100 space-between">
+                <div class="w-50"> 
+                    <label for="first_name">First Name </label>
+                        {{ user_form.first_name }}
+
+                    <label for="last_name">Last Name</label>
+                        {{ user_form.last_name }}
+                    <label for="username">Username </label>
+                    {{ user_form.username }}
+                </div>
+
+                <div class="w-40">
+                    <label for="profile_pic">Profile Pic </label><br>
+                        {{ profile_form.profile_pic }}
+                </div>
+
+            </div>
+
+            <div class="w-100">
+                <label for="job_title">Job Title </label>
+                {{ profile_form.job_title }}
+            </div>
+
+            <div class="w-100 flex-this row space-between">
+                <div class="w-50 country-container">
+                    <label for="country">Country </label><br>
+                    {{ profile_form.country }}
+                </div>
+
+                <div class="w-50 pad-left">
+                    <label for="city_or_town">City or Town </label>
+                    {{ profile_form.city_or_town }}
+                </div>
+            </div>
+
+            </div>
+
+
+        <div class="text-align-right">
+            <button class="action-btn default-btn">Continue <i class="fa fa-long-arrow-right"></i></button>
+        </div>
+    </form>
+</div>
+{% endif %}
+
+{% endblock %}

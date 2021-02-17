@@ -1,0 +1,103 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
+<div class="grey-bg">
+<div class="pad-top-8">
+
+    {% include 'partials/_user-info.html' %}
+
+    {% if notifications %}
+            <div class="white-bg content-card content-card-space noti-card">
+                
+                    <h3 class="orange-text">Notifications</h3>
+                    {% for n in notifications %}
+
+                        {% if n.viewed == False %}
+                            <a href="{% url 'show' n.id %}">
+
+                                <div class="noti-container flex-this row">
+                                        <div><p class="orange-text"><i class="fa fa-bell" aria-hidden="true"></i></p></div>
+                                        <div><strong><p>{{ n.notification_type }}</p></strong></div>
+                                        <div><p>{{ n.title }}</p></div>
+                                </div>
+                            </a>
+                        {% endif %}
+                        {% if n.viewed == True %}
+                            <a href="{% url 'read' n.id %}">
+                                <div class="noti-container flex-this row">
+                                        <div><p></p></div>
+                                        <div><strong><p>{{ n.notification_type }}</p></strong></div>
+                                        <div><p>{{ n.title }}</p></div>
+                                </div>
+
+                            </a>
+                        {% endif %}
+
+
+                    {% endfor %}
+            </div>
+    {% endif %}
+
+
+    <section id="user-affiliation-container">
+        <div id="user-affiliation-content" class="flex-this">
+
+            {% if user_communities %}
+                {% for community in user_communities %}
+                <div class="member-card-container">
+                    <a href="{% url 'community-dashboard' community.id %}">
+                        <div class="member-card flex-this column white-bg">
+                            <div class="member-card-img">
+                                <img src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image">
+                            </div>
+                            <div class="member-card-text flex-this column">
+                                <h3 class="darkteal-text">{{ community }}</h3>
+                                <p class="upper black-text">Community</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if user_institutions %}
+            {% for institution in user_institutions %}
+            <div class="member-card-container">
+                <a href="#">
+                    <div class="member-card flex-this column white-bg">
+                        <div class="member-card-img">
+                            <img src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">
+                        </div>
+                        <div class="member-card-text flex-this column">
+                            <h3 class="darkteal-text">{{ institution }}</h3>
+                            <p class="upper black-text">Institution</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            {% if researcher %}
+                <div class="member-card-container">
+                    <a href="{% url 'researcher-dashboard' researcher.id %}">
+                        <div class="member-card flex-this column white-bg">
+                            <div class="member-card-img">
+                                <img src="{% static 'images/placeholders/researcher-place.jpg' %}" alt="researcher image">
+                            </div>
+                            <div class="member-card-text flex-this column">
+                                <h3 class="darkteal-text">{{ user.get_full_name }}</h3>
+                                <p class="upper black-text">Researcher</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+
+            {% include 'snippets/add-card.html'%}
+
+        </div>
+    </section>
+
+</div>
+</div>
+{% include 'partials/_auth-footer.html' %}
+{% endblock %}

@@ -1,0 +1,10 @@
+<div class="content-card content-card-space comm-nav flex-this column white-bg">
+    <div class="comm-nav-links flex-this">
+        <div><a href="{% url 'researcher-dashboard' researcher.id %}">Activity</button></div>
+        <div><a href="{% url 'researcher-notices' researcher.id %}">Notices</a></div>
+        <div><a href="{% url 'researcher-relationships' researcher.id %}">Relationships</a></div>
+
+        <!-- For future iterations -->
+        <!-- <div><a href="#">Training</a></div> -->
+    </div>
+</div>

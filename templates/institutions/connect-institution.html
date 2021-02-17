@@ -1,0 +1,31 @@
+{% extends 'reg-base.html' %} {% load static %} {% block card %}
+    
+<div class="flex-this column centered-content">
+    <div>
+        <img src="{% static 'images/logos/welcome-logo.png' %}" width="209px" alt="Local Contexts logo">
+    </div>
+
+    <h2 class="darkteal-text">
+        Hello {% if request.user.first_name %} 
+                {{ request.user.first_name }},
+              {% else %}
+                {{ request.user.username }},
+              {% endif %} <br> 
+        Welcome to Local Contexts</h2>
+    <p>
+        Before we start would you like to connect with an existing Institution or create your own?<br>
+    </p>
+
+    <a class="white-text action-btn connect-btn auto-margin" href="{% url 'institution-registry' %}">
+            Search the register
+    </a>
+
+    OR
+
+    <a class="white-text action-btn connect-btn auto-margin" href="{% url 'create-institution' %}">
+            Create an Institution profile
+    </a>
+
+</div>
+
+{% endblock %}

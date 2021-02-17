@@ -1,0 +1,19 @@
+{% extends 'reg-base.html' %} {% load static %} {% block card %}
+
+<div class="flex-this column centered-content">
+
+    <h2 class="darkteal-text">Verify Your Email</h2>
+    <p>Thank you for registering with Local Contexts. <br><br>
+    Check your email for a verification link or enter the email you used at registration to send it again.</p>
+        
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form.email }} <br>
+
+        <button id="resend-email-btn" class="white-bg darkteal-text">Resend Email</button>    
+    </form>
+
+    <!-- Alerts -->
+    {% include 'partials/_alerts.html' %}
+</div>
+{% endblock %}

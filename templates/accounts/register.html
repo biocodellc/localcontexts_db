@@ -1,0 +1,79 @@
+{% extends 'reg-base.html' %} {% load static %} {% block card %}
+<div class="flex-this row flex-end w-90">
+    <p>Already a Member?<a href="{% url 'login' %}" class="darkteal-text"> Sign in</a></p>
+</div>
+
+<!-- Alerts -->
+{% include 'partials/_alerts.html' %}
+
+<div class="form-container flex-this column w-90">
+<h2 class="darkteal-text">Register with Local Contexts</h2>
+
+<form action="{% url 'register' %}" method="POST" class="flex-this column w-100">
+    {% csrf_token %}
+    <div class="flex-this w-100">
+
+        <div class="pad-right w-50">
+            <label for="first_name">First name</label><br>
+            {{form.first_name}}
+        </div>
+
+        <div class="pad-left w-50">
+            <label for="last_name">Last name</label><br>
+            {{form.last_name}}
+
+        </div>
+    </div>
+    
+    <div>
+        <label for="username">Username</label><br>
+        {{form.username}}
+        <small>{{form.username.help_text}}</small>
+    </div>
+    
+    <div>
+        <label for="email">Email Address</label><br>
+        {{form.email}}
+    </div>
+
+    <div class="flex-this w-100">
+
+        <div class="pad-right w-50">
+            <label for="password">Password</label><br>
+            <div class="flex-this pass-field">
+                {{form.password1}}<i id="toggle-password" class="fa fa-eye" aria-hidden="true"></i>
+            </div>
+        </div>
+
+        <div class="pad-left w-50">
+            <label for="confirm-password">Confirm Password</label><br>
+            <div class="flex-this pass-field">
+                {{form.password2}}<i id="toggle-password2" class="fa fa-eye" aria-hidden="true"></i>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="help-text-pw">
+            <small>{{form.password1.help_text}}</small>
+    </div>
+
+    <div class="flex-this row checkbox-div">
+        <div id="checkbox">
+            <input type="checkbox" id="terms-agreement" name="terms-agreement" required>
+        </div>
+        <div class="checkbox-label w-80">
+            <p>
+                <span>Creating an account means you agree with the</span> <a href="#" class="darkteal-text">Terms and Conditions</a> <span>and</span> <a href="#" class="darkteal-text">Data Sovereignty Agreement</a>.
+            </p>
+        </div>
+    </div>
+
+    <br>
+    <div class="text-align-right">
+        <button class="action-btn">Continue <i class="fa fa-long-arrow-right"></i></button>
+    </div>
+</form>
+</div>
+
+{% endblock %}

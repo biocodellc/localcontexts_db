@@ -1,0 +1,70 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_reg-header.html' %}
+
+<section class="flex-this gradient-section">
+    <div class="base-card flex-this row">
+
+        <div id="progress-container" class="orange-bg white-text flex-this column">
+            
+            {% include 'snippets/reg-mini-logo.html'%}
+
+            <div id="progress-ul-container" class="flex-this">
+                <ul id="progress-ul" class="flex-this column">
+                    <li>
+                        {% if request.get_full_path == "/accounts/register/" %}
+                            {% include 'snippets/bullet-big.html'%}
+                        {% else %}
+                            {% include 'snippets/bullet.html'%}
+                        {% endif %}
+                        Register
+                    </li>
+                    <li>
+                        {% if request.get_full_path == "/accounts/verify/" %}
+                            {% include 'snippets/bullet-big.html'%}
+                        {% else %}
+                            {% include 'snippets/bullet.html'%}
+                        {% endif %}
+                            Verify Email
+                    </li>
+                    <li>
+                        {% if request.get_full_path == "/accounts/create-profile/" or request.get_full_path == "/accounts/reason/" %}
+                            {% include 'snippets/bullet-big.html'%}
+                        {% else %}
+                            {% include 'snippets/bullet.html'%}
+                        {% endif %}
+                        Create Your Profile
+                    </li>
+                    <li>
+                    {% if request.get_full_path == "/communities/connect-community/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/connect-institution/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/create-institution/"%}
+                        {% include 'snippets/bullet-big.html'%}
+                    {% else %}
+                        {% include 'snippets/bullet.html'%}
+                    {% endif %}
+                        Connect or Create an Account</li>
+                    <li>
+                        {% include 'snippets/bullet.html'%}
+                        Start Creating Labels and Notices
+                    </li>
+                </ul>
+            </div>
+
+            <div id="progress-bottom-container">
+                <div>
+                    <h2>
+                        Because Local Contexts Matters
+                    </h2>
+                </div>
+            </div>
+
+        </div>
+    
+        <div id="complete-form-container" class="flex-this column">
+
+            {% block card %} 
+
+            {% endblock %}    
+        </div>
+    </div>
+
+</section>
+{% include 'partials/_reg-footer.html' %}
+{% endblock %}

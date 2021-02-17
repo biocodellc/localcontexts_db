@@ -1,0 +1,45 @@
+{% extends 'reg-base.html' %} {% load static %} {% block card %}
+    
+<div class="flex-this column w-90">
+    <div>
+        <p>Indigenous Communities</p>
+        <h2 class="darkteal-text">Create a Community Profile</h2>    
+    </div>
+
+    <form action="{% url 'create-community' %}" method="POST" class="flex-this column w-100">
+        {% csrf_token %}
+
+        <div class="flex-this column">
+            <label class="pad-top-1-5" for="community_name">Community Name</label>
+            {{ form.community_name }}
+    
+            <label class="pad-top-1-5" for="town">Town</label>
+            {{ form.town}}
+    
+            <label class="pad-top-1-5" for="country">Country (if different from personal country)</label>
+            {{ form.country }}
+        </div>
+
+        <div class="w-100 flex-this">
+            <div class="w-50 pad-top-1-5">
+                <label for="contact_name">Contact Name</label><br>
+                {{ form.contact_name }}
+            </div>
+
+            <div class="w-50 pad-top-1-5">
+                <label for="contact_email">Contact Email</label><br>
+                {{ form.contact_email }}
+            </div>
+        </div>
+
+
+        {% include 'partials/_alerts.html' %}
+
+        <div>
+            <button class="action-btn default-btn">Continue</button>
+        </div>
+    </form>
+
+</div>
+
+{% endblock %}

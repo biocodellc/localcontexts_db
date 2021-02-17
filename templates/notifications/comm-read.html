@@ -1,0 +1,23 @@
+{% extends 'comm-base.html' %}
+{% block content %}
+
+{% include 'partials/_auth-header.html' %}
+
+<section class="grey-bg">
+    <div class="pad-top-8"></div>
+
+    <div class="content-card content-card-space white-bg">
+
+        <h3 class="darkteal-text">{{ n.title }}</h3>
+        <p>This notification has been read</p>
+
+        <div class="flex-this space-between">
+            <p><a class="darkteal-text" href="{% url 'community-dashboard' community.id %}">Back to {{ community.community_name }} </a></p>    
+        </div>
+
+    </div>
+</section>
+
+{% include 'partials/_auth-footer.html' %}
+
+{% endblock %}

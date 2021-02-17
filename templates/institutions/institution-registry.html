@@ -1,0 +1,71 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_reg-header.html' %}
+
+<section class="flex-this gradient-section">
+    <div class="base-card flex-this column">
+
+        <div class="flex-this column registry-container">
+
+            <div class="flex-this row space-between">
+                <div class="w-30">
+                    <img src="{% static 'images/logos/sm-logo-registry.png' %}">
+                </div>
+               <div class="w-30 flex-this flex-end">
+                    <a class="darkteal-text" href="{% url 'create-institution' %}">Or create an Institution Profile</a>
+               </div>
+            </div>
+    
+            <div class="w-100 registry-title flex-this column">
+                <h2 class="darkteal-text">Institution Registry</h2>
+                <p>This is a listing of all Institutions registered with Local Contexts</p>    
+            </div>
+<!-- TODO: Add search bar
+            <div class="w-100">
+                <input type="text" placeholder="Search">
+            </div> -->
+    
+            <div class="registry-table-container">
+                <table class="registry-table">
+                    {% if institutions %}
+
+                        {% for institution in institutions %}
+                            {% if user.is_authenticated %}
+
+                                <form method="POST" action="">
+                                        {% csrf_token %}
+                                        <tr>
+                                            <td class="td-img"><img src="{% static 'images/placeholders/institution-place.jpg' %}"></td>
+                                            <td class="td-name"><a href="#" class="black-text">{{ institution.institution_name }}</a></td>
+                                            <input type="hidden" value="{{ institution.id }}" name="instid">
+                                            <td class="td-btn"><button id="btn-{{ institution.id }}" class="action-btn">Send request to join</button></td>
+                                        </tr>
+                                </form>
+
+                                {% else %}
+                                    <tr>
+                                        <td class="td-img"><img src="{% static 'images/placeholders/institution-place.jpg' %}"></td>
+                                        <td class="td-name">{{ institution.institution_name }}</td>
+                                        <td class="td-btn"></td>
+                                    </tr>
+                                {% endif %}
+                        {% endfor %}
+
+                    {% else %}
+
+                    <tr>
+                        <td class="td-name">No institutions available to display at this time</td>
+                    </tr>
+
+                    {% endif %}
+
+                </table>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+{% include 'partials/_reg-footer.html' %}
+{% endblock %}

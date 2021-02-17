@@ -1,0 +1,8 @@
+{% autoescape off %}
+Hello {{user.first_name}}! 
+Thank you for registering with Local Contexts.
+Please click the link below to activate your account.
+
+http://{{domain}}{% url 'activate' uidb64=uid token=token %}
+
+{% endautoescape %}

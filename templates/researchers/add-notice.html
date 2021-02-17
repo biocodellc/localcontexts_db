@@ -1,0 +1,154 @@
+{% extends 'research-base.html' %} {% load static %}{% block researcher_content %}
+
+<div class="white-bg content-card content-card-space noti-card">
+    
+        <p><a href="{% url 'researcher-notices' researcher.id %}"><span class="darkteal-text">Notices</span></a> >> Add Notice</p>
+
+        <div>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <ol>
+
+                    <li>
+                        <p class="weight-500">Project Overview</p>
+
+                        <ul>
+                            <li>
+                                <div class="flex-this column">
+                                    <p>Select a notice*</p>
+
+                                    <div class="flex-this">
+                                        <div class="select-notice">
+                                            <img src="{% static 'images/notices/bc-notice.png' %}" width="68px">
+                                        </div>
+                                        <div class="select-notice">
+                                            <img src="{% static 'images/notices/tk-notice-grey.png' %}" width="68px">
+                                        </div>
+                                        <div>
+                                            <p class="dashed-border">
+                                                This Notice should be used to recognize the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with traditional lands, waters, and territories. It acknowledges the importance of cultural protocols and recognizes that appropriate permissions may need to be sought for future use of this material.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div>
+                                    <p class="no-bottom-margin">Project Title*</p>
+                                    {{ proj_form.title }}
+                                </div>
+                            </li>
+
+                            <li>
+                                <div>
+                                    <div>
+                                        <p class="no-bottom-margin">Contributors*</p>
+                                        {{ contrib_form.community }}
+                                        <a href="{% url 'invite' %}"><span class="darkteal-text">Or email a non-registered - Community or Institution</span></a>
+
+                                    </div>
+                                    <div>
+                                        <p class="no-bottom-margin">Add optional message to contributors</p>
+                                        <textarea class="contrib-msg" name="contrib-message"></textarea>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div>   
+                                    <p class="no-bottom-margin">What are you applying the notice to?</p>
+                                    {{ proj_form.project_type }}
+                                </div>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                    <li>
+                        <p class="weight-500">Project Details</p>
+                        <ul>
+                            <li>
+                                <div class="flex-this">
+                                    <div>
+                                        {{ proj_form.is_public }}
+                                    </div>
+                                    <div>
+                                        <p class="no-top-margin">
+                                            Public Project?<br>
+                                            <small>If a project is public, non project members will be able to query the data. You are able to change the privacy status always.</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <p>
+                                    Project Summary*
+                                </p>
+                                <label for="date">Publication Date</label><br>
+                                {{ proj_form.publication_date }}<br>
+
+                                <label for="date">Source</label><br>
+                                {{ proj_form.source }}
+                            </li>
+                            <li>
+                                <p>
+                                    Project Description*
+                                </p>
+    
+                                <label for="description">Brief summary of research</label><br>
+                               {{ proj_form.description }}
+                            </li>
+                            <li>
+                                <label for="principal_investigator">Principal Investigator</label><br>             
+                                {{ proj_form.principal_investigator }}
+                            </li>
+                            <li>
+                                <label for="principal_investigator_affiliation">Principal Investigator Affiliation</label><br>             
+                                {{ proj_form.principal_investigator_affiliation }}
+                            </li>
+                            <li>
+                                <label for="project_contact">Project Contact Name</label><br>             
+                                {{ proj_form.project_contact }}
+                            </li>
+                            <li>
+                                <label for="project_contact_email">Project Contact Email</label><br>             
+                                {{ proj_form.project_contact_email }}
+                            </li>
+                            <li>
+                                <label for="publication_doi">Publication DOI</label><br>             
+                                {{ proj_form.publication_doi }}
+                            </li>
+                            <li>
+                                <label for="project_data_guid">Project Data GUID</label><br>             
+                                {{ proj_form.project_data_guid }}
+                            </li>
+                            <li>
+                                <label for="recommended-citation">Recommended Citation</label><br>             
+                                {{ proj_form.recommended_citation }}
+                            </li>
+                            <li>
+                                <label for="url">Project URL</label><br>             
+                                {{ proj_form.url }}
+                            </li>
+                            <li>
+                                <label for="geome_project_id">GEOME Project ID</label><br>             
+                                {{ proj_form.geome_project_id }}
+                            </li>
+                            
+                        </ul>
+
+                    </li>
+
+                    <li>
+                        <button class="action-btn default-btn">Save</button>
+                    </li>
+
+                </ol>
+            </form>
+        </div>
+
+</div>
+
+{% endblock %}

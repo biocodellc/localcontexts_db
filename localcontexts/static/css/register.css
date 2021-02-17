@@ -1,0 +1,261 @@
+/* Main container */
+.gradient-section {
+    width: 100%;
+    justify-content: center;
+    background: linear-gradient(to bottom, #3876aa, #2876a5, #18769e, #087697, #007590, #00778d, #007989, #007b85, #008083, #008680, #008a7a, #058f73);
+    padding: 3% 1% 1% 1%;
+}
+
+/* The entire card */
+.base-card {
+    justify-content: center;
+    border-radius: 5px 5px;
+    max-width: 1200px;
+    min-width: 1200px;
+    min-height: 550px;
+    max-height: 550px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    background-color: #fff;
+}
+
+/* Progress List and Registration form containers */
+#progress-container, #complete-form-container {
+    align-items: center;
+}
+
+/* Progress Container || THE ORANGE PART */
+#progress-container {
+    max-width: 40%;
+    min-width: 40%;
+    border-radius: 5px 0px 0px 5px;
+    font-weight: 600;
+    font-size: 14px;
+} 
+
+/* Form Container || THE WHITE PART */
+#complete-form-container {
+    justify-content: center;
+    max-width: 60%;
+    min-width: 60%;
+    border-radius: 0px 5px 5px 0px;
+    font-weight: 300;
+    font-size: 14px;
+}
+
+/* Card Logo */
+.mini-logo-container {
+    width: 100%;
+    padding: 2%;
+}
+
+.mini-logo {
+    padding: 1%;
+}
+
+/* Progress Container */
+#progress-ul-container {
+    width: 100%;
+    justify-content: center;
+}
+
+#progress-ul {
+    align-items: center;
+    width: 100%;
+    padding: 1% 1% 11% 6%;
+}
+
+#progress-ul li {
+      /* Turn on relative positioning so the line is placed relative to the item rather than absolutely on the page */
+      /* Use padding to space things out rather than margins as the line would get broken up otherwise */
+    position: relative;
+    margin: 0;
+    padding-bottom: 2em;
+    padding-left: 4.25%;
+    width: 70%;
+    font-weight: 400;
+}
+
+#progress-ul li:before {
+    background-color: #fff;
+    width: 2px;
+    content: '';
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 5px; 
+}
+
+/* Start the line further down on the first list item */
+#progress-ul li:first-child:before { 
+    top: 15px;  
+}
+
+/* Stop the line short on the final list item */
+#progress-ul li:last-child:before { 
+    height: 6px; 
+}
+    
+/* SVG bullet points */
+.bullet { 
+    margin-left: -23px; 
+    width: 30px; 
+    fill: #fff; 
+    float: left; 
+    padding-right: 10px 
+}
+
+.bullet.big { 
+    width: 30px; 
+    margin-left: -24px; 
+    padding-right: 8px 
+}
+
+#progress-bottom-container {
+    border-top: 2px solid #fff;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+#progress-bottom-container h2 {
+    font-weight: 400;
+    text-align: center;
+    padding-top: 7%;
+    padding-bottom: 2%;
+}
+
+/* Form Section */
+
+/* DIV that houses the h4, form and register button */
+.form-container {
+    justify-content: center;
+}
+
+.form-heading {
+    padding-bottom: 1.5%;
+}
+
+.form-heading h2 {
+    margin-bottom: 0;
+}
+
+.form-heading p {
+    margin-top: 0;
+}
+
+/* THE FORM ITSELF */
+.form-container input {
+    width: 100%;
+}
+
+.pad-right {
+    padding-right: 1.5%;
+}
+
+.pad-left {
+    padding-left: 1.5%;
+}
+
+.pass-field {
+    position: relative;
+}
+
+/* Icons in the password fields */
+.pass-field i {
+    cursor: pointer;
+    position: absolute;
+    left: 285px;
+    top: 11px;
+    font-size: 20px;
+    color: #7d7d7d;
+}
+
+/* Checkbox */
+.checkbox-div {
+    justify-content: flex-start;
+    width: 100%;
+    padding-top: 2%;
+}
+
+#checkbox {
+    width: 5%;
+    padding-right: 2%;
+}
+
+.checkbox-label p {
+    margin: 0;
+}
+
+.checkbox-label span {
+    color: #7d7d7d;
+}
+
+/* For validate and connect pages */
+.centered-content {
+    padding-top: 2%;
+    padding-bottom: 2%;
+    width: 70%;
+    text-align: center;
+}
+
+/* Verify Buttons */
+#verify-email-btn {
+    margin: 1% auto 2% auto;
+    font-size: 14px;
+}
+
+#resend-email-btn {
+    border: none;
+    max-width: 130px;
+    min-width: 130px;
+    margin: 2% auto 2% auto;
+}
+
+/* Create Profile Page Country Select */
+.country-container select{
+    width: 100%;
+}
+
+/* Register Reason for Registering */
+.reason-label {
+    padding-top:2%;
+}
+
+#help-text-pw {
+    display: none;
+    background-color: #f1f1f1;
+    min-width: 450px;
+    max-width: 450px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.login-logo {
+    margin: auto;
+    padding: 5%;
+    max-width: 80%;
+}
+
+/* Why are you registering page */
+.registration-card-space {
+    padding: 70px;
+}
+
+.registration-card-space span {
+    color: grey;
+}
+
+.text-align-right {
+    text-align: right;
+}
+
+.reason-radio input{
+    width: 20px;
+    height: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+
+}
+
+.radio-group {
+    margin-bottom: 30px;
+}

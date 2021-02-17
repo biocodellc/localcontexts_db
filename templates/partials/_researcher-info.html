@@ -1,0 +1,64 @@
+{% load static %}
+<div class="pad-top-8">
+
+    <div class="content-card content-card-space flex-this column white-bg">
+    
+        <div class="flex-this column">
+    
+            <div class="flex-this w-100 space-between">
+                <div class="loc">
+                    <a href="{% url 'users' researcher.user.id %}" class="darkteal-text">
+                        {{ researcher.user.get_full_name }}
+                    </a> 
+                    >> {{ researcher.user.get_full_name }}
+                </div>
+    
+                    <div>
+                        <a href="{% url 'researcher-update' researcher.id %}" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
+                    </div>
+                
+            </div>
+    
+            <div class="flex-this stats-info-container">
+    
+                <div class="w-30 stats-img-container">
+                    <img src="{% static 'images/placeholders/researcher-place.jpg' %}" alt="researcher image">
+                </div>
+    
+                <div class="flex-this column w-40">
+                    <h2 class="orange-text community-title">{{ researcher.user.get_full_name }}</h2>
+                    <p>
+                        <span>Job Title:</span> {{ researcher.user.profile.job_title }} <br>
+                        <span>Location:</span> {{ researcher.user.profile.city_or_town }}, {{ researcher.user.profile.country.name }}<br>
+                        <span>ORCiD:</span> {{ researcher.orcid }}<br>
+                        {% if researcher.website %}
+                        <span>Website:</span> {{ researcher.website }}
+                        {% endif %}
+                    </p>
+                </div>
+    
+                <div class="flex-this white-text w-30">
+                    <div class="orange-bg stats-card w-30">
+                        <h1>03</h1>
+                        <p>Notices</p>
+                    </div>
+    
+                    <div class="orange-bg stats-card w-30">
+                        <h1>
+                            04
+                        </h1>
+                        <p>Training</p>
+                    </div>
+    
+                    <div class="orange-bg stats-card w-30">
+                        <h1>02</h1>
+                        <p>Relationships</p>
+                    </div>
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    </div>
+</div>

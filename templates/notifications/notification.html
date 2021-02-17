@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% include 'partials/_auth-header.html' %}
+
+    <section class="grey-bg">
+        <div class="pad-top-8"></div>
+        <div class="content-card content-card-space white-bg">
+            <h3 class="darkteal-text">{{ notification.title }}</h3>
+            <p>Message: <br>{{ notification.message }}</p>
+
+            {% if notification.notification_type == 'Welcome' %}
+                
+            {% endif %}
+
+            {% if notification.notification_type == 'Invitation' %}
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <input type="hidden">
+                    <button class="action-btn">Accept Invitation</button>
+                </form>
+            {% endif %}
+
+            {% if notification.notification_type == 'Request' %}
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <input type="hidden">
+                    <p>Please select role for the user:</p>
+                    <input type="radio" name="role" value="admin"><label for="admin">Admin</label>
+                    <input type="radio" name="role" value="editor"><label for="editor">Editor</label>
+                    <input type="radio" name="role" value="viewer"><label for="viewer">Viewer</label>
+                    <br>
+
+                    <button class="action-btn">Add User To Community</button>
+                </form>
+            {% endif %}
+
+            {% if notification.notification_type == 'Approval' %}
+
+            {% endif %}
+
+            {% if notification.notification_type == 'Accept' %}
+            {% endif %}
+
+            {% if notification.notification_type == 'Create' %}
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <input type="hidden">
+                    <button class="action-btn">Approve Community</button>
+                </form>
+            {% endif %}
+
+            <div class="flex-this space-between">
+                <p><a class="darkteal-text" href="{% url 'dashboard' %}">Back to Dashboard</a></p>    
+                <p><a class="darkteal-text" href="{% url 'read' notification.id %}">Mark as Read</a></p>
+                <p><a class="darkteal-text" href="{% url 'delete' notification.id %}">Delete</a></p>
+            </div>
+
+        </div>
+
+    </section>
+
+    {% include 'partials/_auth-footer.html' %}
+
+
+{% endblock %}

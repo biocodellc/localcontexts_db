@@ -1,0 +1,77 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_reg-header.html' %}
+
+<section class="flex-this gradient-section">
+    <div class="base-card flex-this column">
+
+        <div class="flex-this column registry-container">
+
+            <div class="flex-this row space-between">
+                <div class="w-30">
+                    <img src="{% static 'images/logos/sm-logo-registry.png' %}" alt="Local Contexts logo">
+                </div>
+               <div class="w-30 flex-this flex-end">
+                    <a class="darkteal-text" href="{% url 'create-community' %}">Or create a Community Account</a>
+               </div>
+            </div>
+    
+            <div class="w-100 registry-title flex-this column">
+                <h2 class="darkteal-text">Community Registry</h2>
+                <p>This is a listing of all Indigenous Communities registered with Local Contexts</p>    
+            </div>
+<!-- TODO: Add search bar
+            <div class="w-100">
+                <input type="text" placeholder="Search">
+            </div> -->
+    
+            <div class="registry-table-container">
+                <table class="registry-table">
+                    {% if communities %}
+
+                        {% for community in communities %}
+                            {% if user.is_authenticated %}
+
+                                <form method="POST" action="">
+                                        {% csrf_token %}
+                                        <tr>
+                                            <td class="td-img"><img src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image"></td>
+                                            <td class="td-name"><a href="{% url 'community-dashboard' community.id %}" class="black-text">{{community.community_name}}</a></td>
+                                            <input type="hidden" value="{{ community.id }}" name="commid">
+                                            <td class="td-btn">
+                                                {% if community in user_communities %}
+                                                    <p class="darkteal-text">Already a member</p>
+                                                {% else %}
+                                                    <button id="btn-{{ community.id }}" class="action-btn">Send request to join</button>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                </form>
+
+                                {% else %}
+                                    <tr>
+                                        <td class="td-img"><img src="{% static 'images/placeholders/community-place.jpg' %}"></td>
+                                        <td class="td-name">{{community.community_name}}</td>
+                                        <td class="td-btn"></td>
+                                    </tr>
+                                {% endif %}
+                        {% endfor %}
+
+                    {% else %}
+
+                    <tr>
+                        <td class="td-name">No communities available to display at this time</td>
+                    </tr>
+
+                    {% endif %}
+
+                </table>
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+{% include 'partials/_reg-footer.html' %}
+{% endblock %}

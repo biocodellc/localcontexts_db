@@ -1,0 +1,128 @@
+/* SIGNED IN HEADER */
+#auth-header {
+    background: linear-gradient(180.59deg, #016BA7 0.51%, #058F73 134.01%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+}
+
+/* Active nav link */
+#active-link {
+    font-weight: 600;
+}
+
+#active-link:after {
+    content: '';
+    display: block;
+    margin: -3px auto;
+    width: 10px;
+    text-align: center;
+    border-bottom: 5px solid #EF6C00;
+}
+
+/* Round buttons on the nav  */
+.mini-nav {
+    width: 40%;
+    padding: 2% 2% 2% 2%;
+}
+
+.badge-container {
+    width: 100%;
+    height: 100%;
+    align-items: flex-end;
+}
+
+.badge-container div {
+    margin-left: 8%;
+    margin-bottom: 4%;
+}
+
+
+.badge {
+    background-color: #c4c4c4;
+    border-radius: 50%;
+    min-width: 20px;
+    max-width: 20px;
+    min-height: 20px;
+    max-height: 20px;
+    text-align: center;
+}
+
+.badge-container a {
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+}
+
+/* REGISTERING PROCESS HEADER */
+#reg-header {
+    background-color: #3876aa;
+    width: 100%;
+}
+
+.generic-logo-container {
+    width: 40%;
+    padding: 1% 1% 1% 4%;
+}
+
+.logo {
+    min-width: 200px;
+    max-width: 200px;
+    padding: 1% 2% 1% 4%;
+}
+
+.generic-nav {
+    width: 70%;
+    justify-content: center;
+}
+
+.generic-nav-ul {
+    width: 90%;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.generic-nav li {
+    min-width: auto;
+    max-width: auto;
+}
+
+.generic-nav a {
+    font-weight: 300;
+}
+
+.nav-span {
+    font-weight: 600;
+    padding: 1%;
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.generic-nav div {
+    min-width: 90px;
+    max-width: 90px;
+}
+
+.sign-out, .sign-in {
+    border-radius: 25px;
+    text-align: center;
+    padding: 0.5%;
+}
+
+
+@media only screen and (max-width: 820px) {
+    #reg-header, .generic-nav-ul {
+        flex-direction: column;
+    }
+
+    .generic-logo-container, .generic-nav, .generic-nav li, #btn-group {
+        width: 100%;
+        text-align: center;
+    }
+
+    #btn-group {
+        max-width: 50%;
+        margin: auto;
+    }
+}
