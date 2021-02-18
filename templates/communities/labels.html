@@ -202,7 +202,7 @@
 
     <div id="collapsed-card" class="content-card content-card-space white-bg flex-this column">
 
-        <div class="vertical-center">
+        <div id="bclabels-title-vertical" style="margin:auto 0;">
             <div class="flex-this space-between">
                 <div>
                     <h2 class="orange-text weight-600">Biocultural (BC) Labels</h2>
@@ -229,7 +229,7 @@
             <div class="flex-this" style="justify-content: space-evenly;">
                 <div class="center-text">
                     <div>
-                        <img class="default-label-img" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+                        <img id="bccv" onclick="expandBCLabel(this)" class="default-label-img" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
                     </div>
                     <div><p class="darkteal-text">Consent Verified <br> (BC CV) </p></div>
                 </div>
@@ -269,6 +269,23 @@
                     <div><p class="darkteal-text">Research Use <br> (BC R) </p></div>
                 </div>
             </div>
+
+            <div id="bclabel-info" class="flex-this" style="height:0px;">
+                <div class="w-50 use-txt">
+                    <div>
+                        <p class="darkteal-text">
+                            <span class="weight-600">Why use this label?</span><br>
+                            Indigenous peoples have the right to permission the use of information, biological collections, data and digital sequence information (DSI) that derives from associated lands, waters and territories. This Label verifies that there are consent conditions in place for uses of information, collections, data and digital sequence information.                        </p>
+                    </div>
+                </div>
+                <div class="w-50 template-txt">
+                    <p class="darkteal-text">
+                        <span class="weight-600">Template Text</span><br>
+                        This Label is being used to verify that [community name or authorizing party] have consent conditions in place for the use of this information, collections, data and digital sequence information.
+                    </p>
+                </div>
+            </div>
+            
         </div>
 
     </div>

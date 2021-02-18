@@ -86,7 +86,7 @@ function showMoreTemporary() {
     }
 }
 
-// Default label text
+// Default label text -- Attach Labels
 function setDefaultText(img) {
     let defaultText = document.getElementById('id_default_text')
     let displayImage = document.getElementById('chosen-label-img')
@@ -161,23 +161,47 @@ function setDefaultText(img) {
     }
 }
 
-
+// Expand BC Labels Card in Community / Labels
 function showBCLabelInfo() {
     let div = document.getElementById('expand-bclabels')
     let span = document.getElementById('show-more-down')
     let card = document.getElementById('collapsed-card')
+    let header = document.getElementById('bclabels-title-vertical')
 
     if (div.style.height == "0px" && span.textContent == "∨") {
-        card.style.height = "500px"
-        div.style.height = "500px"
+        header.style.margin = "0"
+        card.style.height = "460px"
+        div.style.height = "460px"
         card.style.transition = "height 0.5s"
         span.textContent = "∧"
     } else {
+        header.style.margin = "auto 0"
         card.style.height = "113px"
         div.style.height = "0px"
         card.style.transition = "height 0.5s"
         span.textContent = "∨"
     }
+}
+
+// See more info about each label
+function expandBCLabel(img) {
+    // let targetImg = img.id
+    // console.log(targetImg)
+    let div = document.getElementById('bclabel-info')
+    let card = document.getElementById('collapsed-card')
+    let imgContainer = document.getElementById('expand-bclabels')
+
+
+    if (div.style.height == "0px") {
+        imgContainer.style.height = "720px"
+        div.style.height = "280px"
+        card.style.height = "790px"
+    } else {
+        imgContainer.style.height = "460px"
+        div.style.height = "0px"
+        card.style.height = "460px"
+    }
+
 }
 
 

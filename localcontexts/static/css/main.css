@@ -904,14 +904,26 @@ input:focus {
     height: 113px;
 }
 
-.vertical-center {
-    margin: auto 0;
-}
-
 #expand-bclabels {
     overflow: hidden;
 }
 
 .pointer {
     cursor: pointer;
+}
+
+#expand-bclabels {
+    /* border: 1px solid green; */
+}
+
+#bclabel-info {
+    /* border: 1px solid red; */
+}
+
+.use-txt {
+    margin-right: 15px;
+}
+
+.template-txt {
+    margin-left: 15px;
 }
