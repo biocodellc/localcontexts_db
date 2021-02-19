@@ -176,18 +176,18 @@ function showBCLabelInfo() {
     let card = document.getElementById('collapsed-card')
     let header = document.getElementById('bclabels-title-vertical')
 
-    if (div.style.height == "0px" && span.textContent == "∨") {
+    if (div.style.height == "0px" && span.innerHTML == `<i class="fa fa-angle-down" aria-hidden="true"></i>`) {
         header.style.margin = "0"
         card.style.height = "460px"
         div.style.height = "460px"
         card.style.transition = "height 0.5s"
-        span.textContent = "∧"
+        span.innerHTML = `<i class="fa fa-angle-up" aria-hidden="true"></i>`
     } else {
         header.style.margin = "auto 0"
         card.style.height = "113px"
         div.style.height = "0px"
         card.style.transition = "height 0.5s"
-        span.textContent = "∨"
+        span.innerHTML = `<i class="fa fa-angle-down" aria-hidden="true"></i>`
     }
 }
 
