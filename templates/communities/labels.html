@@ -76,9 +76,6 @@
                                         {% if notice.placed_by_institution %}
                                             {{ notice.placed_by_institution.institution_name}}<br>
                                         {% endif %}
-                                        {% if contribs.institution%}
-                                            {{contribs.institution}}<br>
-                                        {% endif %}
                                         </a></p>
                                     </div>
 
@@ -110,12 +107,6 @@
                                                     {% endif %}
                                                     {% if notice.placed_by_institution %}
                                                         {{ notice.placed_by_institution.institution_name}}<br>
-                                                    {% endif %}
-                                                    {% if contribs.community %}
-                                                        {{contribs.community}} <br>
-                                                    {% endif %}
-                                                    {% if contribs.institution%}
-                                                        {{contribs.institution}}<br>
                                                     {% endif %}
                                                 </p>
                                             </div>
