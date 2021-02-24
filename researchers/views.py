@@ -6,6 +6,7 @@ from accounts.utils import is_user_researcher
 
 from bclabels.models import BCNotice
 from notifications.models import CommunityNotification
+from projects.models import ProjectContributors
 
 from .models import Researcher
 from .forms import *
@@ -72,15 +73,16 @@ def update_researcher(request, pk):
 @login_required(login_url='login')
 def researcher_notices(request, pk):
     researcher = Researcher.objects.get(id=pk)
-    projects = researcher.projects.all()
+    contribs = ProjectContributors.objects.filter(researcher=researcher)
 
     context = {
         'researcher': researcher,
-        'projects': projects,
+        'contribs': contribs,
     }
 
     return render(request, 'researchers/notices.html', context)
 
+#TODO: Fix this view
 @login_required(login_url='login')
 def add_notice(request, pk):
     researcher = Researcher.objects.get(id=pk)
@@ -91,26 +93,20 @@ def add_notice(request, pk):
 
         if proj_form.is_valid() and contrib_form.is_valid():            
             proj = proj_form.save(commit=False)
-            contrib = contrib_form.save(commit=False)
-            contrib.project = proj
-
+            contrib_data = contrib_form.save(commit=False)
             proj.save()
-            contrib.save()
+            contrib_data.save()
 
-            # Saves project to researcher's list of projects
-            researcher = Researcher.objects.get(user=request.user)
-            researcher.projects.add(proj)
-
-            message = request.POST.get('contrib-message') # Get value of message
+            # researcher = Researcher.objects.get(user=request.user)
+            contrib = ProjectContributors.objects.create(project=proj, researcher=researcher, community=contrib_data.community)
             
+            message = request.POST.get('contrib-message') # Get value of message
             created_notice = BCNotice.objects.create(project=proj, placed_by_researcher=researcher, message=message)
-
-            if contrib.community:
-                created_notice.communities.add(contrib.community)
+            created_notice.communities.add(contrib_data.community)
 
             # Send community notification
             title = "A BC notice has been placed by " + str(researcher)
-            CommunityNotification.objects.create(community=contrib.community, notification_type='Requests', title=title)
+            CommunityNotification.objects.create(community=contrib_data.community, notification_type='Requests', title=title)
 
             return redirect('researcher-notices', researcher.id)
     else:
@@ -120,7 +116,7 @@ def add_notice(request, pk):
     context = {
         'researcher': researcher,
         'proj_form': proj_form,
-        'contrib_form': contrib_form,
+        'contrib_form':contrib_form,
     }
 
     return render(request, 'researchers/add-notice.html', context)

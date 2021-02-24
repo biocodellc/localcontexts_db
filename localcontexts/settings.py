@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'notifications.apps.NotificationsConfig',
     'bclabels.apps.BclabelsConfig',
     'researchers.apps.ResearchersConfig',
+    'projects.apps.ProjectsConfig',
 
     'pages',
     'communities',

@@ -1,7 +1,8 @@
 from django.db import models
 from communities.models import Community
-from researchers.models import Project, Researcher
+from researchers.models import Researcher
 from institutions.models import Institution
+from projects.models import Project
 
 class BCNotice(models.Model):
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
