@@ -5,22 +5,22 @@
     
         <hr>
 
-        {% if projects %}
-            {% for project in projects %}
+        {% if contribs %}
+            {% for c in contribs %}
 
             <div class="flex-this space-between column">
             
                 <div class="flex-this w-100 proj-title-container">
     
                     <div class="w-50">
-                        <h4 class="darkteal-text weight-600">{{ project.title }}</h4>
+                        <h4 class="darkteal-text weight-600">{{ c.project.title }}</h4>
                     </div>
     
                     <div class="w-50 flex-this flex-end">
                         
                             <h2>
                                 <a onclick='showMore(this)'>
-                                    <span id="plus-minus-{{project.id}}" class="darkteal-text">+</span>
+                                    <span id="plus-minus-{{c.project.id}}" class="darkteal-text">+</span>
                                 </a>
                             </h2>
     
@@ -31,9 +31,9 @@
                 <div class="w-100 flex-this proj-info-container">
                     <div class="w-50"> 
                             <p>
-                                {{ project.project_type }}<br>
-                                {{ project.publication_date }}<br>
-                                Source: {{ project.source }} <br>
+                                {{ c.project.project_type }}<br>
+                                {{ c.project.publication_date }}<br>
+                                Source: {{ c.project.source }} <br>
                             </p>
                     </div>
         
@@ -44,7 +44,7 @@
                         </div>
     
                         <div class="flex-this flex-end mini-label-container">
-                            {% if project.has_labels %}
+                            {% if c.project.has_labels %}
                                 {% include 'snippets/researcher-mini.html' %}
                             {% else %}
                                 <div><small>No labels applied yet</small></div>
@@ -56,7 +56,7 @@
                 </div>
     
                 <!-- Expandable content -->
-                <div id="proj-expand-{{project.id}}" class="proj-expand" style="height: 0px;">
+                <div id="proj-expand-{{c.project.id}}" class="proj-expand" style="height: 0px;">
                     <hr>
                         <div class="flex-this w-100">
     
@@ -71,7 +71,7 @@
                                         <span class="weight-500">Project Description</span><br>
 
                                         <p>
-                                            {{ project.description }}
+                                            {{ c.project.description }}
                                         </p>
                                     </div>
 
@@ -83,7 +83,7 @@
                                 <div>
                                   <button class="action-btn">Edit Notice</button>
                                 </div>
-                                {% if project.geome_project_id %}
+                                {% if c.project.geome_project_id %}
                                     <div>
                                     <button class="green-action-btn">View on GEOME</button>
                                     </div>
@@ -96,7 +96,7 @@
                         </div>
                     <hr>
 
-                    {% if project.has_labels %}
+                    {% if c.project.has_labels %}
                         {% include 'snippets/researcher-labels.html' %}
                     {% endif %}
 

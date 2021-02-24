@@ -2,6 +2,7 @@ from django import forms
 from .models import Researcher
 from projects.models import Project
 from bclabels.models import BCNotice
+from projects.models import ProjectContributors
 
 class ConnectResearcherForm(forms.ModelForm):
     class Meta:
@@ -43,3 +44,8 @@ class UpdateResearcherForm(forms.ModelForm):
             'contact_number': forms.TextInput(attrs={'size': 40}),
             'website': forms.TextInput(attrs={'size': 40}),
         }
+
+class ProjectContributorsForm(forms.ModelForm):
+    class Meta:
+        model = ProjectContributors
+        fields = ['community']

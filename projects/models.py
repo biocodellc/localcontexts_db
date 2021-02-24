@@ -3,24 +3,6 @@ from institutions.models import Institution
 from communities.models import Community
 from researchers.models import Researcher
 
-class ProjectContributors(models.Model):
-    institution = models.ForeignKey(Institution, null=True, blank=True, on_delete=models.DO_NOTHING)
-    community = models.ForeignKey(Community, null=True, blank=True, on_delete=models.DO_NOTHING)
-    researcher = models.ForeignKey(Researcher, null=True, blank=True, on_delete=models.DO_NOTHING)
-
-    def __str__(self):
-        if self.institution:
-            return str(self.institution)
-        if self.researcher:
-            return str(self.researcher)
-        if self.community:
-            return str(self.community)
-
-    class Meta:
-        verbose_name = 'Project Contributors'
-        verbose_name_plural = 'Project Contributors'
-
-
 class Project(models.Model):
     TYPES = (
         ('Item', 'Item'),
@@ -31,7 +13,6 @@ class Project(models.Model):
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
     title = models.TextField(null=True)
     description = models.TextField(null=True)
-    contributors = models.ForeignKey(ProjectContributors, null=True, blank=True, on_delete=models.DO_NOTHING)
     principal_investigator = models.CharField(max_length=100, blank=True, null=True)
     principal_investigator_affiliation = models.CharField(max_length=100, blank=True, null=True)
     project_contact = models.CharField(max_length=100, blank=True, null=True)
@@ -60,3 +41,17 @@ class Project(models.Model):
     
     class Meta:
         ordering = ('-date_added',)
+
+class ProjectContributors(models.Model):
+    project = models.OneToOneField(Project, null=True, on_delete=models.CASCADE)
+    institution = models.ForeignKey(Institution, null=True, blank=True, on_delete=models.DO_NOTHING)
+    community = models.ForeignKey(Community, null=True, blank=True, on_delete=models.DO_NOTHING)
+    researcher = models.ForeignKey(Researcher, null=True, blank=True, on_delete=models.DO_NOTHING)
+
+    def __str__(self):
+        return str(self.project) + ' ' + str(self.community) + ' ' + str(self.researcher)
+
+    class Meta:
+        verbose_name = 'Project Contributors'
+        verbose_name_plural = 'Project Contributors'
+
