@@ -213,12 +213,22 @@ def create_label(request, pk):
 @login_required(login_url='login')
 def projects(request, pk):
     community = Community.objects.get(id=pk)
-    return render(request, 'communities/projects.html', {'community': community,})
+    
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        return render(request, 'communities/projects.html', {'community': community, 'member_role': member_role,})
 
 @login_required(login_url='login')
 def create_project(request, pk):
     community = Community.objects.get(id=pk)
-    return render(request, 'communities/create-project.html', {'community': community,})
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        return render(request, 'communities/create-project.html', {'community': community, 'member_role': member_role,})
 
 #TODO: add roles that have access to this page
 @login_required(login_url='login')
