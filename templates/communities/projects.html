@@ -1,0 +1,20 @@
+{% extends 'comm-base.html' %} {% load static %} {% block community_content %}
+
+    <div class="content-card content-card-space white-bg">
+
+        <div class="flex-this space-between">
+            <div>
+                <h2 class="orange-text weight-600">Projects</h2>
+                <p class="darkteal-text">You currently have no projects</p>
+            </div>
+    
+            <div class="flex-this align-center">
+                <a class="action-btn" href="{% url 'create-project' community.id %}">
+                    Create a project     <i class="fa fa-long-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
