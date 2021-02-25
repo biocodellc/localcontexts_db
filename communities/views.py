@@ -89,6 +89,7 @@ def community_dashboard(request, pk):
         context = {
             'community': community,
             'notifications': n,
+            'member_role': member_role,
         }
         return render(request, 'communities/community.html', context)
 
@@ -114,6 +115,7 @@ def update_community(request, pk):
         context = {
             'community': community,
             'update_form': update_form,
+            'member_role': member_role,
         }
         return render(request, 'communities/update-community.html', context)
 
@@ -121,8 +123,8 @@ def update_community(request, pk):
 @login_required(login_url='login')
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
-    role = check_member_role(request.user, community)
-    return render(request, 'communities/members.html', {'community': community, 'role': role,})
+    member_role = check_member_role(request.user, community)
+    return render(request, 'communities/members.html', {'community': community, 'member_role': member_role,})
 
 @login_required(login_url='login')
 def add_member(request, pk):
@@ -164,6 +166,7 @@ def add_member(request, pk):
     context = {
         'community': community,
         'form': form,
+        'member_role': member_role,
     }
     return render(request, 'communities/add-member.html', context)
 
@@ -179,6 +182,7 @@ def community_requests(request, pk):
         context = {
             'notices': notices,
             'community': community,
+            'member_role': member_role,
         }
         return render(request, 'communities/requests.html', context)
         
@@ -193,11 +197,11 @@ def community_labels(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-
         context = {
             'community': community,
             'notices': notices,
             # 'contribs': contribs,
+            'member_role': member_role,
         }
         return render(request, 'communities/labels.html', context)
 
@@ -212,7 +216,7 @@ def create_project(request, pk):
     community = Community.objects.get(id=pk)
     return render(request, 'communities/create-project.html', {'community': community,})
 
-
+#TODO: add roles that have access to this page
 @login_required(login_url='login')
 def community_add_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
@@ -254,7 +258,10 @@ def community_relationships(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        context = {'community': community,}
+        context = {
+            'community': community,
+            'member_role': member_role,
+        }
         return render(request, 'communities/relationships.html', context)
 
 def restricted_view(request, pk):

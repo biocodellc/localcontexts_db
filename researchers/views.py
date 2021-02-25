@@ -82,7 +82,6 @@ def researcher_notices(request, pk):
 
     return render(request, 'researchers/notices.html', context)
 
-#TODO: Fix this view
 @login_required(login_url='login')
 def add_notice(request, pk):
     researcher = Researcher.objects.get(id=pk)
@@ -97,7 +96,6 @@ def add_notice(request, pk):
             proj.save()
             contrib_data.save()
 
-            # researcher = Researcher.objects.get(user=request.user)
             contrib = ProjectContributors.objects.create(project=proj, researcher=researcher, community=contrib_data.community)
             
             message = request.POST.get('contrib-message') # Get value of message
