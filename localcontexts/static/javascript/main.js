@@ -214,37 +214,49 @@ function expandBCLabel(img) {
 
     switch (targetImg) {
         case 'bcr':
+            whichImgClicked('bcr')
             title.textContent = researchUseName
             templateText.textContent = researchUseText
             whyUseLabelText.textContent = researchUse
             break;
         case 'bccv':
+            whichImgClicked('bccv')
             title.textContent = consentVerifiedName
             templateText.textContent = consentVerifiedText
             whyUseLabelText.textContent = consentVerifiedUse
             break;
         case 'bcocomm':
+            whichImgClicked('bcocomm')
             title.textContent = openToCommercializationName
             templateText.textContent = openToCommercializationText
             whyUseLabelText.textContent = openToCommUse
             break;
         case 'bcocoll':
+            whichImgClicked('bcocoll')
             title.textContent = openToCollabName
             templateText.textContent = openToCollabText
             whyUseLabelText.textContent = openToCollabUse
             break;
         case 'bcmc':
+            whichImgClicked('bcmc')
             title.textContent = multipleCommunityName
             templateText.textContent = multipleCommunityText
             whyUseLabelText.textContent = multipleCommUse
             break;
         case 'bcp':
+            whichImgClicked('bcp')
             title.textContent = provenanceName
             templateText.textContent = provenanceText
             whyUseLabelText.textContent = provenanceUse
             break;
     }
 
+}
+
+//  Assign input value based on which image is selected in Community: Labels
+function whichImgClicked(val) {
+    var input = document.getElementById('label-value-type')
+    input.value = val
 }
 
 

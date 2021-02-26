@@ -198,6 +198,10 @@ def community_labels(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        if request.method == "POST":
+            passing_variable = request.POST.get('testing-variable')
+            return redirect('customise-label', community.id, passing_variable)
+
         context = {
             'community': community,
             'notices': notices,
@@ -206,10 +210,16 @@ def community_labels(request, pk):
         return render(request, 'communities/labels.html', context)
 
 @login_required(login_url='login')
-def customise_label(request, pk):
+def customise_label(request, pk, label_type):
     community = Community.objects.get(id=pk)
-    #TODO: create label based on what was selected in previous page (labels)
-    return render(request, 'communities/customise-label.html', {'community': community,})
+    print(label_type + " CUSTOMISE LABEL VARIABLE")
+
+    context = {
+        'community': community,
+        'label_type': label_type,
+    }
+   
+    return render(request, 'communities/customise-label.html', context)
 
 @login_required(login_url='login')
 def projects(request, pk):

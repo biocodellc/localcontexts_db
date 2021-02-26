@@ -4,6 +4,30 @@
     <h2 class="orange-text">Labels</h2>
     <p class="darkteal-text">You currently have 1 label customised</p>
 
+    {% if label_type == 'bcr' %}
+        <p>Research Use Label</p>
+    {% endif %}
+
+    {% if label_type == 'bccv' %}
+        <p>Consent Verified Label</p>
+    {% endif %}
+
+    {% if label_type == 'bcocomm' %}
+        <p>Open to Commercialization Label</p>
+    {% endif %}
+
+    {% if label_type == 'bcocoll' %}
+        <p>Open to Collaboration Label</p>
+    {% endif %}
+
+    {% if label_type == 'bcmc' %}
+        <p>Multiple Community Label</p>
+    {% endif %}
+
+    {% if label_type == 'bcp' %}
+        <p>Provenance Label</p>
+    {% endif %}
+
 </div>
 
 {% endblock %}
