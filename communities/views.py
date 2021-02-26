@@ -191,7 +191,8 @@ def community_requests(request, pk):
 def community_labels(request, pk):
     community = Community.objects.get(id=pk)
     notices = community.bcnotice_communities.all()
-    # contribs = ProjectContributors(community=community)
+
+    #Get id of what which label was clicked last and store in session variable
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -200,15 +201,15 @@ def community_labels(request, pk):
         context = {
             'community': community,
             'notices': notices,
-            # 'contribs': contribs,
             'member_role': member_role,
         }
         return render(request, 'communities/labels.html', context)
 
 @login_required(login_url='login')
-def create_label(request, pk):
+def customise_label(request, pk):
     community = Community.objects.get(id=pk)
-    return render(request, 'communities/create-label.html', {'community': community,})
+    #TODO: create label based on what was selected in previous page (labels)
+    return render(request, 'communities/customise-label.html', {'community': community,})
 
 @login_required(login_url='login')
 def projects(request, pk):

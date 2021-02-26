@@ -86,12 +86,12 @@ function showMoreTemporary() {
     }
 }
 
-var provenanceName = '(BC P) Provenance | Ahunga Taketake'
-var multipleCommunityName = '(BC MC) Multiple Community BC Label | Hāpori Maha'
-var openToCollabName = '(BC OC) Open to Collaboration BC Label | Ka Rata Pea Kia Mahitahi'
-var openToCommercializationName = '(BC C) Open to Commercialization BC Label | Ka Rata Pea Kia Whakapakahi'
-var researchUseName = '(BC R) Research Use BC Label | Hei Rangahau'
-var consentVerifiedName = '(BC CV) Consent Verified BC Label | Whakaaetanga Manatoko'
+var provenanceName = 'BC Provenance (BC P)'
+var multipleCommunityName = 'BC Multiple Community (BC MC)'
+var openToCollabName = 'BC Open to Collaboration BC Label (BC OC)'
+var openToCommercializationName = 'Open to Commercialization (BC C)'
+var researchUseName = 'BC Research Use BC Label (BC R)'
+var consentVerifiedName = 'Consent Verified BC Label (BC CV)'
 
 var provenanceUse = "Indigenous peoples have the right to make decisions about the future use of information, biological collections, data and digital sequence information (DSI) that derives from associated lands, waters and territories. This Label supports the practice of proper and appropriate acknowledgement into the future."
 var multipleCommUse = "This Label should be used to indicate that multiple communities have responsibility, custodianship and/or ownership over the geographic regions where this species or biological entity originates/is found. This Label recognizes that whilst one community might exert specific authority, other communities also have rights and responsibilities for use and care."
@@ -199,7 +199,7 @@ function expandBCLabel(img) {
 
     if (div.style.height == "0px") {
         imgContainer.style.height = "720px"
-        div.style.height = "280px"
+        div.style.height = "300px"
         card.style.height = "790px"
     } else {
         imgContainer.style.height = "460px"
@@ -208,31 +208,38 @@ function expandBCLabel(img) {
     }
 
     let targetImg = img.id
+    let title = document.getElementById('bc-label-title')
     let templateText = document.getElementById('label-template-text')
     let whyUseLabelText = document.getElementById('why-use-this-label')
 
     switch (targetImg) {
         case 'bcr':
+            title.textContent = researchUseName
             templateText.textContent = researchUseText
             whyUseLabelText.textContent = researchUse
             break;
         case 'bccv':
+            title.textContent = consentVerifiedName
             templateText.textContent = consentVerifiedText
             whyUseLabelText.textContent = consentVerifiedUse
             break;
         case 'bcocomm':
+            title.textContent = openToCommercializationName
             templateText.textContent = openToCommercializationText
             whyUseLabelText.textContent = openToCommUse
             break;
         case 'bcocoll':
+            title.textContent = openToCollabName
             templateText.textContent = openToCollabText
             whyUseLabelText.textContent = openToCollabUse
             break;
         case 'bcmc':
+            title.textContent = multipleCommunityName
             templateText.textContent = multipleCommunityText
             whyUseLabelText.textContent = multipleCommUse
             break;
         case 'bcp':
+            title.textContent = provenanceName
             templateText.textContent = provenanceText
             whyUseLabelText.textContent = provenanceUse
             break;

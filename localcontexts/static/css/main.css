@@ -918,6 +918,9 @@ input:focus {
 
 #bclabel-info {
     /* border: 1px solid red; */
+    background-color: rgba(0, 115, 133, 0.04);
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 .use-txt {
