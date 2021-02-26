@@ -912,9 +912,9 @@ input:focus {
     cursor: pointer;
 }
 
-#expand-bclabels {
-    /* border: 1px solid green; */
-}
+/* #expand-bclabels {
+    border: 1px solid green;
+} */
 
 #bclabel-info {
     /* border: 1px solid red; */
@@ -929,4 +929,8 @@ input:focus {
 
 .template-txt {
     margin-left: 15px;
+}
+
+.opacity-4 {
+    opacity: 0.4;
 }

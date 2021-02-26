@@ -5,27 +5,45 @@
     <p class="darkteal-text">You currently have 1 label customised</p>
 
     {% if label_type == 'bcr' %}
-        <p>Research Use Label</p>
+        <div>
+            <img class="opacity-4" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
+        </div>
+        <p class="darkteal-text">Research Use <br> (BC R)</p>
     {% endif %}
 
     {% if label_type == 'bccv' %}
-        <p>Consent Verified Label</p>
+        <div>
+            <img class="opacity-4" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+        </div>
+        <p class="darkteal-text">Consent Verified <br> (BC CV)</p>
     {% endif %}
 
     {% if label_type == 'bcocomm' %}
-        <p>Open to Commercialization Label</p>
+        <div>
+            <img class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
+        </div>
+        <p class="darkteal-text">Open to <br> Commercialization <br> (BC OC)</p>
     {% endif %}
 
     {% if label_type == 'bcocoll' %}
-        <p>Open to Collaboration Label</p>
+        <div>
+            <img class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
+        </div>
+        <p class="darkteal-text">Open to <br> Collaboration <br> (BC OC)</p>
     {% endif %}
 
     {% if label_type == 'bcmc' %}
-        <p>Multiple Community Label</p>
+        <div>
+            <img class="opacity-4" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
+        </div>
+        <p class="darkteal-text">Multiple Community <br> (BC MC)</p>
     {% endif %}
 
     {% if label_type == 'bcp' %}
-        <p>Provenance Label</p>
+        <div>
+            <img class="opacity-4" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+        </div>
+        <p class="darkteal-text">Provenance <br> (BC P)</p>
     {% endif %}
 
 </div>

@@ -199,8 +199,8 @@ def community_labels(request, pk):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         if request.method == "POST":
-            passing_variable = request.POST.get('testing-variable')
-            return redirect('customise-label', community.id, passing_variable)
+            label_type = request.POST.get('testing-variable')
+            return redirect('customise-label', community.id, label_type)
 
         context = {
             'community': community,
@@ -212,14 +212,16 @@ def community_labels(request, pk):
 @login_required(login_url='login')
 def customise_label(request, pk, label_type):
     community = Community.objects.get(id=pk)
-    print(label_type + " CUSTOMISE LABEL VARIABLE")
 
-    context = {
-        'community': community,
-        'label_type': label_type,
-    }
-   
-    return render(request, 'communities/customise-label.html', context)
+    member_role = check_member_role(request.user, community)
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        context = {
+            'community': community,
+            'label_type': label_type,
+        }
+        return render(request, 'communities/customise-label.html', context)
 
 @login_required(login_url='login')
 def projects(request, pk):
@@ -236,7 +238,7 @@ def create_project(request, pk):
     community = Community.objects.get(id=pk)
 
     member_role = check_member_role(request.user, community)
-    if member_role == False: # If user is not a member / does not have a role.
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         return render(request, 'communities/create-project.html', {'community': community, 'member_role': member_role,})
