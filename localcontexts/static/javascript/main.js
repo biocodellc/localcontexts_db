@@ -88,10 +88,10 @@ function showMoreTemporary() {
 
 var provenanceName = 'BC Provenance (BC P)'
 var multipleCommunityName = 'BC Multiple Community (BC MC)'
-var openToCollabName = 'BC Open to Collaboration BC Label (BC OC)'
-var openToCommercializationName = 'Open to Commercialization (BC C)'
-var researchUseName = 'BC Research Use BC Label (BC R)'
-var consentVerifiedName = 'Consent Verified BC Label (BC CV)'
+var openToCollabName = 'BC Open to Collaboration (BC OC)'
+var openToCommercializationName = ' BC Open to Commercialization (BC C)'
+var researchUseName = 'BC Research Use (BC R)'
+var consentVerifiedName = 'BC Consent Verified(BC CV)'
 
 var provenanceUse = "Indigenous peoples have the right to make decisions about the future use of information, biological collections, data and digital sequence information (DSI) that derives from associated lands, waters and territories. This Label supports the practice of proper and appropriate acknowledgement into the future."
 var multipleCommUse = "This Label should be used to indicate that multiple communities have responsibility, custodianship and/or ownership over the geographic regions where this species or biological entity originates/is found. This Label recognizes that whilst one community might exert specific authority, other communities also have rights and responsibilities for use and care."
@@ -171,40 +171,40 @@ function setDefaultText(img) {
 
 // Expand BC Labels Card in Community / Labels
 function showBCLabelInfo() {
-    let div = document.getElementById('expand-bclabels')
+    let labelContainer = document.getElementById('expand-bclabels')
     let span = document.getElementById('show-more-down')
-    let card = document.getElementById('collapsed-card')
+    let fullCard = document.getElementById('collapsed-card')
     let header = document.getElementById('bclabels-title-vertical')
 
-    if (div.style.height == "0px" && span.innerHTML == `<i class="fa fa-angle-down" aria-hidden="true"></i>`) {
+    if (labelContainer.style.height == "0px" && span.innerHTML == `<i class="fa fa-angle-down" aria-hidden="true"></i>`) {
         header.style.margin = "0"
-        card.style.height = "460px"
-        div.style.height = "460px"
-        card.style.transition = "height 0.5s"
+        fullCard.style.height = "460px"
+        fullCard.style.transition = "height 0.5s"
+        labelContainer.style.height = "460px"
         span.innerHTML = `<i class="fa fa-angle-up" aria-hidden="true"></i>`
     } else {
         header.style.margin = "auto 0"
-        card.style.height = "113px"
-        div.style.height = "0px"
-        card.style.transition = "height 0.5s"
+        fullCard.style.height = "113px"
+        fullCard.style.transition = "height 0.5s"
+        labelContainer.style.height = "0px"
         span.innerHTML = `<i class="fa fa-angle-down" aria-hidden="true"></i>`
     }
 }
 
 // See more info about each label
 function expandBCLabel(img) {
-    let div = document.getElementById('bclabel-info')
-    let card = document.getElementById('collapsed-card')
-    let imgContainer = document.getElementById('expand-bclabels')
+    let info = document.getElementById('bclabel-info')
+    let fullCard = document.getElementById('collapsed-card')
+    let labelContainer = document.getElementById('expand-bclabels')
 
-    if (div.style.height == "0px") {
-        imgContainer.style.height = "720px"
-        div.style.height = "300px"
-        card.style.height = "790px"
+    if (info.style.height == "0px") {
+        labelContainer.style.height = "830px"
+        info.style.height = "370px"
+        fullCard.style.height = "850px"
     } else {
-        imgContainer.style.height = "460px"
-        div.style.height = "0px"
-        card.style.height = "460px"
+        labelContainer.style.height = "460px"
+        info.style.height = "0px"
+        fullCard.style.height = "460px"
     }
 
     let targetImg = img.id

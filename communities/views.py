@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
@@ -10,7 +10,8 @@ from django.contrib import messages
 from accounts.models import UserAffiliation
 from notifications.models import CommunityNotification
 from bclabels.models import BCNotice, BCLabel
-from bclabels.forms import AttachLabelForm
+from bclabels.forms import AttachLabelForm, CustomiseLabelForm
+from bclabels.utils import check_bclabel_type
 # from researchers.models import ProjectContributors
 
 from .forms import *
@@ -191,6 +192,7 @@ def community_requests(request, pk):
 def community_labels(request, pk):
     community = Community.objects.get(id=pk)
     notices = community.bcnotice_communities.all()
+    bclabels = BCLabel.objects.filter(community=community)
 
     #Get id of what which label was clicked last and store in session variable
 
@@ -206,20 +208,35 @@ def community_labels(request, pk):
             'community': community,
             'notices': notices,
             'member_role': member_role,
+            'bclabels': bclabels,
         }
         return render(request, 'communities/labels.html', context)
 
 @login_required(login_url='login')
 def customise_label(request, pk, label_type):
     community = Community.objects.get(id=pk)
+    bc_type = check_bclabel_type(label_type)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        if request.method == "POST":
+            form = CustomiseLabelForm(request.POST)
+            if form.is_valid():
+                label_form = form.save(commit=False)
+                label_form.label_type = bc_type
+                label_form.community = community
+                label_form.is_approved = False
+                label_form.save()
+                return redirect('community-labels', community.id)
+        else:
+            form = CustomiseLabelForm()
+
         context = {
             'community': community,
             'label_type': label_type,
+            'form': form,
         }
         return render(request, 'communities/customise-label.html', context)
 

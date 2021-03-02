@@ -916,19 +916,16 @@ input:focus {
     border: 1px solid green;
 } */
 
+/* #collapsed-card {
+    border: 1px solid lime;
+} */
+
 #bclabel-info {
     /* border: 1px solid red; */
     background-color: rgba(0, 115, 133, 0.04);
     padding-right: 10px;
     padding-left: 10px;
-}
-
-.use-txt {
-    margin-right: 15px;
-}
-
-.template-txt {
-    margin-left: 15px;
+    padding-bottom: 10px;
 }
 
 .opacity-4 {
