@@ -191,10 +191,7 @@ def community_requests(request, pk):
 @login_required(login_url='login')
 def community_labels(request, pk):
     community = Community.objects.get(id=pk)
-    notices = community.bcnotice_communities.all()
     bclabels = BCLabel.objects.filter(community=community)
-
-    #Get id of what which label was clicked last and store in session variable
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -206,7 +203,6 @@ def community_labels(request, pk):
 
         context = {
             'community': community,
-            'notices': notices,
             'member_role': member_role,
             'bclabels': bclabels,
         }
@@ -248,7 +244,14 @@ def projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        return render(request, 'communities/projects.html', {'community': community, 'member_role': member_role,})
+        notices = community.bcnotice_communities.all()
+
+        context = {
+            'community': community, 
+            'member_role': member_role,
+            'notices': notices,
+        }
+        return render(request, 'communities/projects.html', context)
 
 @login_required(login_url='login')
 def create_project(request, pk):
