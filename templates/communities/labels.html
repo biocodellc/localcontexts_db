@@ -3,13 +3,10 @@
     <div class="content-card content-card-space white-bg">
 
         <div class="flex-this space-between">
+            {% if bclabels %}
             <div>
                 <h2 class="orange-text weight-600">Labels</h2>
-                {% if bclabels %}
-                    <p class="darkteal-text">You currently have {{ bclabels.count }} labels customised</p>
-                {% else %}
-                    <p class="darkteal-text">You currently have no labels customised</p>
-                {% endif %}
+                <p class="darkteal-text">You currently have {{ bclabels.count }} labels customised</p>
             </div>
             <div class="flex-this align-center">
                 {% if member_role == 'viewer' %}
@@ -20,26 +17,7 @@
                 </a>
                 {% endif %}
             </div>
-        </div>
-        
-        {% if bclabels %}
-            <div class="flex-this">
-
-                {% for bclabel in bclabels %}
-                    <div class="w-20">
-                        {% if bclabel.is_approved == False %}
-                            <p class="darkteal-text">Waiting approval*</p>
-                        {% endif %}
-
-                        {% include 'snippets/which-label.html' %}
-                        {{ bclabel.name }}
-                    </div>
-
-                {% endfor %}
-            </div>
-        {% else %}
-
-            <div class="flex-this space-between">
+            {% else %}
                 <div>
                     <h2 class="orange-text weight-600">Labels</h2>
                     <p class="darkteal-text">You currently have no labels customised</p>
@@ -53,6 +31,24 @@
                     </a>
                     {% endif %}
                 </div>
+
+            {% endif %}
+        </div>
+        
+        {% if bclabels %}
+            <div class="flex-this">
+
+                {% for bclabel in bclabels %}
+                    <div class="w-20" style="border: 1px solid red;">
+                        {% if bclabel.is_approved == False %}
+                            <p class="darkteal-text">Waiting approval*</p>
+                        {% endif %}
+
+                        {% include 'snippets/which-label.html' %}
+                        {{ bclabel.name }}
+                    </div>
+
+                {% endfor %}
             </div>
 
         {% endif %}

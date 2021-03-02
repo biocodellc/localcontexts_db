@@ -87,11 +87,11 @@ function showMoreTemporary() {
 }
 
 var provenanceName = 'BC Provenance (BC P)'
-var multipleCommunityName = 'BC Multiple Community (BC MC)'
+var multipleCommunityName = 'BC Multiple Communities (BC MC)'
 var openToCollabName = 'BC Open to Collaboration (BC OC)'
 var openToCommercializationName = ' BC Open to Commercialization (BC C)'
 var researchUseName = 'BC Research Use (BC R)'
-var consentVerifiedName = 'BC Consent Verified(BC CV)'
+var consentVerifiedName = 'BC Consent Verified (BC CV)'
 
 var provenanceUse = "Indigenous peoples have the right to make decisions about the future use of information, biological collections, data and digital sequence information (DSI) that derives from associated lands, waters and territories. This Label supports the practice of proper and appropriate acknowledgement into the future."
 var multipleCommUse = "This Label should be used to indicate that multiple communities have responsibility, custodianship and/or ownership over the geographic regions where this species or biological entity originates/is found. This Label recognizes that whilst one community might exert specific authority, other communities also have rights and responsibilities for use and care."
