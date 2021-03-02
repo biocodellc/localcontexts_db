@@ -158,26 +158,42 @@
     
 
     <div class="content-card content-card-space white-bg">
-        {% if bclabels %}
-            {% for bclabel in bclabels %}
-            <div class="flex-this space-between">
-                <div>
-                    <h2 class="orange-text weight-600">Labels</h2>
-                    <p class="darkteal-text">You currently have 1 label customised</p>
-                    {{ bclabel.name }}
-                </div>
-                <div class="flex-this align-center">
-                    {% if member_role == 'viewer' %}
 
-                    {% else %}
-                    <a class="action-btn" href="#">
-                        Customise a Label     <i class="fa fa-long-arrow-right"></i>
-                    </a>
-                    {% endif %}
-                </div>
+        <div class="flex-this space-between">
+            <div>
+                <h2 class="orange-text weight-600">Labels</h2>
+                {% if bclabels %}
+                    <p class="darkteal-text">You currently have {{ bclabels.count }} labels customised</p>
+                {% else %}
+                    <p class="darkteal-text">You currently have no labels customised</p>
+                {% endif %}
             </div>
-            {% endfor %}
+            <div class="flex-this align-center">
+                {% if member_role == 'viewer' %}
 
+                {% else %}
+                <a class="darkteal-text" href="#">
+                    Customise a Label     <i class="fa fa-long-arrow-right"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if bclabels %}
+            <div class="flex-this">
+
+                {% for bclabel in bclabels %}
+                    <div class="w-20">
+                        {% if bclabel.is_approved == False %}
+                            <p class="darkteal-text">Waiting approval*</p>
+                        {% endif %}
+
+                        {% include 'snippets/which-label.html' %}
+                        {{ bclabel.name }}
+                    </div>
+
+                {% endfor %}
+            </div>
         {% else %}
 
             <div class="flex-this space-between">
