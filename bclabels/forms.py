@@ -15,6 +15,6 @@ class CustomiseLabelForm(forms.ModelForm):
         model = BCLabel
         fields = ['name', 'default_text']
         widgets = {
-            'name': forms.TextInput(attrs={'size': 40}),
-            'default_text': forms.Textarea(attrs={'class':'default-label-textarea','rows': 4, 'cols':70}),
+            'name': forms.TextInput(attrs={'size': 40, 'id': 'bclabel-title'}),
+            'default_text': forms.Textarea(attrs={'rows': 4, 'cols': 204, 'id': 'bclabel-template'}),
         }

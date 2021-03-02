@@ -233,6 +233,7 @@ def customise_label(request, pk, label_type):
             'community': community,
             'label_type': label_type,
             'form': form,
+            'member_role': member_role,
         }
         return render(request, 'communities/customise-label.html', context)
 

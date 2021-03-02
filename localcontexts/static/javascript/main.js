@@ -260,3 +260,43 @@ function whichImgClicked(val) {
 }
 
 
+// Community: Customise labels -- populate default text
+var parentDiv = document.getElementById('target-img-div')
+var image = parentDiv.firstChild.nextSibling
+console.log(image.id)
+populateTemplate(image.id)
+
+function populateTemplate(id) {
+    let title = document.getElementById('bclabel-title')
+    let templateText = document.getElementById('bclabel-template')
+
+    switch (id) {
+        case 'bcr':
+            title.value = researchUseName
+            templateText.textContent = researchUseText
+            break;
+        case 'bccv':
+            title.value = consentVerifiedName
+            templateText.textContent = consentVerifiedText
+            break;
+        case 'bcocomm':
+            title.value = openToCommercializationName
+            templateText.textContent = openToCommercializationText
+            break;
+        case 'bcocoll':
+            title.value = openToCollabName
+            templateText.textContent = openToCollabText
+            break;
+        case 'bcmc':
+            title.value = multipleCommunityName
+            templateText.textContent = multipleCommunityText
+            break;
+        case 'bcp':
+            title.value = provenanceName
+            templateText.textContent = provenanceText
+            break;
+    }
+
+}
+
+

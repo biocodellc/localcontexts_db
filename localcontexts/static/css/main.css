@@ -81,6 +81,17 @@ input:focus {
     box-shadow: 0px 0px 1px 0.5px #007385;
 }
 
+/* OPACITY */
+
+.opacity-4 {
+    opacity: 0.4;
+}
+
+/* CURSOR */
+.pointer {
+    cursor: pointer;
+}
+
 /* TEXT COLORS */
 
 .orange-h1 {
@@ -129,6 +140,10 @@ input:focus {
 
 .darkgreen-bg {
     background-color: #058F73;
+}
+
+.text-background-blue {
+    background-color: rgba(0, 115, 133, 0.04);
 }
 
 /* TEXT */
@@ -908,10 +923,6 @@ input:focus {
     overflow: hidden;
 }
 
-.pointer {
-    cursor: pointer;
-}
-
 /* #expand-bclabels {
     border: 1px solid green;
 } */
@@ -922,12 +933,7 @@ input:focus {
 
 #bclabel-info {
     /* border: 1px solid red; */
-    background-color: rgba(0, 115, 133, 0.04);
     padding-right: 10px;
     padding-left: 10px;
     padding-bottom: 10px;
-}
-
-.opacity-4 {
-    opacity: 0.4;
 }
