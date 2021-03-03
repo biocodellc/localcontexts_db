@@ -41,11 +41,28 @@
                 {% for bclabel in bclabels %}
                     <div class="w-20" style="border: 1px solid red;">
                         {% if bclabel.is_approved == False %}
-                            <p class="darkteal-text">Waiting approval*</p>
+
+                            {% if bclabel.created_by == request.user or member_role == 'viewer' %}
+                                <p class="darkteal-text">Waiting approval*</p>
+
+                                {% include 'snippets/which-label.html' %}
+                                {{ bclabel.name }}
+                            {% else %}
+
+                                <a class="darkteal-text" href="{% url 'approve-label' community.id bclabel.id %}">
+                                    <p class="darkteal-text">Waiting approval*</p>
+
+                                    {% include 'snippets/which-label.html' %}
+                                    {{ bclabel.name }}
+                                </a>
+                            {% endif %}
+                        {% else %}
+
+                            {% include 'snippets/which-label.html' %}
+                            {{ bclabel.name }}
+                            
                         {% endif %}
 
-                        {% include 'snippets/which-label.html' %}
-                        {{ bclabel.name }}
                     </div>
 
                 {% endfor %}

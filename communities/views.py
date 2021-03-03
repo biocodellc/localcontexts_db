@@ -10,7 +10,7 @@ from django.contrib import messages
 from accounts.models import UserAffiliation
 from notifications.models import CommunityNotification
 from bclabels.models import BCNotice, BCLabel
-from bclabels.forms import AttachLabelForm, CustomiseLabelForm
+from bclabels.forms import AttachLabelForm, CustomiseLabelForm, ApproveAndEditLabelForm
 from bclabels.utils import check_bclabel_type
 # from researchers.models import ProjectContributors
 
@@ -223,6 +223,7 @@ def customise_label(request, pk, label_type):
                 label_form = form.save(commit=False)
                 label_form.label_type = bc_type
                 label_form.community = community
+                label_form.created_by = request.user
                 label_form.is_approved = False
                 label_form.save()
                 return redirect('community-labels', community.id)
@@ -236,6 +237,34 @@ def customise_label(request, pk, label_type):
             'member_role': member_role,
         }
         return render(request, 'communities/customise-label.html', context)
+
+@login_required(login_url='login')
+def approve_label(request, pk, label_id):
+    community = Community.objects.get(id=pk)
+    bclabel = BCLabel.objects.get(id=label_id)
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        form = ApproveAndEditLabelForm(instance=bclabel)
+        if request.method == "POST":
+            form = ApproveAndEditLabelForm(request.POST, instance=bclabel)
+            if form.is_valid():
+                label_form = form.save(commit=False)
+                label_form.is_approved = True
+                label_form.save()
+                return redirect('community-labels', community.id)
+        else:
+            form = ApproveAndEditLabelForm(instance=bclabel)
+
+        context = {
+            'community': community,
+            'bclabel': bclabel,
+            'member_role': member_role,
+            'form': form,
+        }
+        return render(request, 'communities/approve-label.html', context)
 
 @login_required(login_url='login')
 def projects(request, pk):
