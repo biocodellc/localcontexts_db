@@ -836,6 +836,19 @@ input:focus {
     color: #A09D9D;
 }
 
+.notice-btns {
+    padding: 5px;
+}
+
+.notice-btns a {
+    display: block;
+    width: 174px;
+}
+
+.notice-btns i {
+    font-size: 18px;
+}
+
 /* RESEARCHER PAGE: NOTICES */
 
 .add-notice-btn {

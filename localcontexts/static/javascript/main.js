@@ -299,4 +299,19 @@ function populateTemplate(id) {
 
 }
 
+// Community: Requests
+function showMoreNotice(elem) {
+    let noticeID = elem.id
+    let expandDiv = document.getElementById(`expand-notice-${noticeID}`)
+    let contentCard = document.getElementById(`full-notice-card-${noticeID}`)
+
+    if (expandDiv.style.height == "0px") {
+        expandDiv.style.height = "auto"
+        contentCard.style.height = "auto"
+    } else {
+        expandDiv.style.height = "0"
+        contentCard.style.height = "201px"
+    }
+}
+
 
