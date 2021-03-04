@@ -35,57 +35,58 @@
             {% endif %}
         </div>
         
-        {% if bclabels %}
-            <div class="flex-this" style="border: 1px solid red;">
+        <div class="flex-this">
+            {% if bclabels %}
 
-                {% for bclabel in bclabels %}
+            {% for bclabel in bclabels %}
+                    {% if bclabel.is_approved == False %}
+                        {% if bclabel.created_by == request.user or member_role == 'viewer' %}
+                            <div class="w-20">
+                                <div class="center-text">
 
-                        {% if bclabel.is_approved == False %}
-                            {% if bclabel.created_by == request.user or member_role == 'viewer' %}
-                                <div style="border: 1px solid blue;">
-                                    <div class="w-20 center-text">
-
-                                        <p class="darkteal-text no-top-margin no-bottom-margin">Waiting approval*</p>
-        
-                                        <div>
-                                            {% include 'snippets/which-label.html' %}
-                                            {{ bclabel.name }}
-                                        </div>
+                                    <p class="darkteal-text no-top-margin no-bottom-margin">Waiting approval*</p>
+    
+                                    <div>
+                                        {% include 'snippets/which-label.html' %}
+                                        <p class="darkteal-text">{{ bclabel.name }}</p>
                                     </div>
-                                </div>
-                            {% else %}
-                                <div>
-                                    <div class="w-20 center-text">
-                                        <p class="darkteal-text">Waiting approval*</p>
-                                        <a class="darkteal-text" href="{% url 'approve-label' community.id bclabel.id %}">
-                                            <div>
-                                                {% include 'snippets/which-label.html' %}
-                                                {{ bclabel.name }}
-                                            </div>
-                                        </a>    
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% else %}
-                            <div style="border: 1px solid lime;">
-                                <div class="w-20 center-text">
-                                    {% include 'snippets/which-label.html' %}
-                                    {{ bclabel.name }}
                                 </div>
                             </div>
-
-                            <div>
-                                <div>
-                                    <h3 class="darkteal-text">{{ bclabel.name }}</h3>
-                                    <p>{{ bclabel.default_text }}</p>
+                        {% else %}
+                            <div class="w-20">
+                                <div class=" center-text">
+                                    <p class="darkteal-text">Waiting approval*</p>
+                                    <a class="darkteal-text" href="{% url 'approve-label' community.id bclabel.id %}">
+                                        <div>
+                                            {% include 'snippets/which-label.html' %}
+                                            <p class="darkteal-text">{{ bclabel.name }}</p>
+                                        </div>
+                                    </a>    
                                 </div>
                             </div>
                         {% endif %}
+                    {% else %}
+                        <div class="w-20">
+                            <div class=" center-text">
+                                {% include 'snippets/which-label.html' %}
+                                <p class="darkteal-text">{{ bclabel.name }}</p>
+                            </div>
+                        </div>
 
-                {% endfor %}
-            </div>
+                        <!-- TODO: Where to display this -->
+                        <!-- <div>
+                            <div>
+                                <h3 class="darkteal-text">{{ bclabel.name }}</h3>
+                                <p>{{ bclabel.default_text }}</p>
+                            </div>
+                        </div> -->
+                    {% endif %}
+            {% endfor %}
+    {% endif %}
         </div>
-        {% endif %}
+
+    </div>
+
 
     <div id="collapsed-card" class="content-card content-card-space white-bg flex-this column">
 

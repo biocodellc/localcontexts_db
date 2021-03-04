@@ -831,6 +831,11 @@ input:focus {
     padding: 0;
 }
 
+.notice-date {
+    font-style: italic;
+    color: #A09D9D;
+}
+
 /* RESEARCHER PAGE: NOTICES */
 
 .add-notice-btn {
