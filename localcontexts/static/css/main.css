@@ -815,10 +815,6 @@ input:focus {
     font-size: 36px;
 }
 
-.notice-btns button, .notice-btns img {
-    width: 135px;
-}
-
 .notice-info, .notice-msg {
     margin-left: 1%;
 }

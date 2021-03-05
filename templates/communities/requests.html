@@ -5,69 +5,73 @@
     </div>
 
     {% if notices %}
-    {% for notice in notices %}
+        {% for notice in notices %}
+                {% if notice.project.has_labels == False %}
 
-    <!-- new figma card -->
-    <div id="full-notice-card-{{ notice.id }}" class="content-card content-card-space white-bg">
-        <div class="flex-this space-between">
-            <div>
-                <p class="no-top-margin notice-date">
-                    Date Sent: {{ notice.created|date:'m/d/Y' }}
-                </p>
-            </div>
-    
-            <div>
-                <a id="{{ notice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
-                    Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
-                </a>
-            </div>
-        </div>
+                    <!-- new figma card -->
+                    <div id="full-notice-card-{{ notice.id }}" class="content-card content-card-space white-bg">
+                        <div class="flex-this space-between">
+                            <div>
+                                <p class="no-top-margin notice-date">
+                                    Date Sent: {{ notice.created|date:'m/d/Y' }}
+                                </p>
+                            </div>
+                    
+                            <div>
+                                <a id="{{ notice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
+                                    Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
 
-        <div class="flex-this">
+                        <div class="flex-this">
 
-            <div class="w-10">
-                <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
-            </div>
+                            <div class="w-10">
+                                <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
+                            </div>
 
-            <div class="w-90 pad-left-2">
-                <p>
-                    <span class="darkteal-text weight-600">{{ notice.project.title}}</span><br>
-                    {{ notice.project.publication_date }} <br>
-                    {{ notice.project.project_type }} <br>
-                    {% for contributor in notice.communities.all %}
-                        {{ contributor.community_name }}
-                    {% endfor %}, 
-                    {% if notice.placed_by_institution %}
-                        {{ notice.placed_by_institution.institution_name }}
-                    {% else %}
-                        {{ notice.placed_by_researcher.user.get_full_name}}
-                    {% endif %}
-                </p>
-            </div>
-        </div>
+                            <div class="w-90 pad-left-2">
+                                <p>
+                                    <span class="darkteal-text weight-600">{{ notice.project.title}}</span><br>
+                                    {{ notice.project.publication_date }} <br>
+                                    {{ notice.project.project_type }} <br>
+                                    {% for contributor in notice.communities.all %}
+                                        {{ contributor.community_name }}
+                                    {% endfor %}, 
+                                    {% if notice.placed_by_institution %}
+                                        {{ notice.placed_by_institution.institution_name }}
+                                    {% else %}
+                                        {{ notice.placed_by_researcher.user.get_full_name}}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
 
-        <div id="expand-notice-{{notice.id}}" style="height: 0; overflow:hidden;" class="flex-this space-between">
-            <div class="w-80">
-                <p><span class="weight-500">Description:</span> {{ notice.project.description }}</p>
-            </div>
+                        <div id="expand-notice-{{notice.id}}" style="height: 0; overflow:hidden;" class="flex-this space-between">
+                            <div class="w-80">
+                                <p><span class="weight-500">Description:</span> {{ notice.project.description }}</p>
+                            </div>
 
-            <div class="flex-this column w-15">
-                <div class="notice-btns">
-                    <a href="{% url 'community-add-labels' community.id notice.id %}" class="action-btn">Apply Labels</a>
-                </div>
-                <div class="notice-btns">
-                    <a class="action-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
-                </div>
-            </div>
-        </div>
+                            <div class="flex-this column w-15">
+                                <div class="notice-btns">
+                                    <a href="{% url 'community-add-labels' community.id notice.id %}" class="action-btn">Apply Labels</a>
+                                </div>
+                                <div class="notice-btns">
+                                    <a class="action-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
 
-    </div>
+                    </div>
 
-        {% endfor %}
+                {% endif %}
+            {% endfor %}
     {% else %}
+
         <div class="content-card content-card-space white-bg">
             <p>No notices to display at this time</p>
         </div>
+
     {% endif %}
 
 {% endblock %}

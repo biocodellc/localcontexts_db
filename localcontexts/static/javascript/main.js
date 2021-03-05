@@ -72,19 +72,19 @@ function showMore(elem) {
     }
 }
 
-function showMoreTemporary() {
-    let div = document.getElementById('proj-expand')
-    let span = document.getElementById('plus-minus')
+// function showMoreTemporary() {
+//     let div = document.getElementById('proj-expand')
+//     let span = document.getElementById('plus-minus')
 
-    if (div.style.height == "0px" && span.textContent == "+") {
-        div.style.height = "300px"
-        div.style.transition = "height 0.5s"
-        span.textContent = "-"
-    } else {
-        div.style.height = "0px"
-        span.textContent = "+"
-    }
-}
+//     if (div.style.height == "0px" && span.textContent == "+") {
+//         div.style.height = "300px"
+//         div.style.transition = "height 0.5s"
+//         span.textContent = "-"
+//     } else {
+//         div.style.height = "0px"
+//         span.textContent = "+"
+//     }
+// }
 
 var provenanceName = 'BC Provenance (BC P)'
 var multipleCommunityName = 'BC Multiple Communities (BC MC)'
@@ -107,67 +107,6 @@ var openToCommercializationText = 'This Label is being used to indicate that [co
 var researchUseText = 'This Label is being used by [community name or authorizing body] to allow this information, collection, data and digital sequence information to be used for unspecified research purposes. This Label does not provide permission for commercialization activities.  [Optional return of research results statement].'
 var consentVerifiedText = 'This Label is being used to verify that [community name or authorizing party] have consent conditions in place for the use of this information, collections, data and digital sequence information.'
 
-
-// Default label text -- Attach Labels
-function setDefaultText(img) {
-    let defaultText = document.getElementById('id_default_text')
-    let displayImage = document.getElementById('chosen-label-img')
-    let labelHeader = document.getElementById('bc-label-name-h4')
-    let hiddenInputName = document.getElementById('pass-name')
-    let hiddenInputType = document.getElementById('pass-type')
-
-    let targetImg = img.id
-    let source = displayImage.src
-
-    // Find everything in the url after 'bc-labels/bc-' and get the match
-    let matches = source.match(/(?<=bc-labels\/bc-).*/)
-    let targetStr = matches[0]
-
-    switch (targetImg) {
-        case 'bc-research-use-img':
-            hiddenInputType.value = 'research'
-            hiddenInputName.value = researchUseName
-            labelHeader.textContent = researchUseName
-            defaultText.textContent = researchUseText
-            displayImage.src = source.replace(targetStr, 'research-use.png')
-            break;
-        case 'bc-consent-verified':
-            hiddenInputType.value = 'consent_verified'
-            hiddenInputName.value = consentVerifiedName
-            labelHeader.textContent = consentVerifiedName
-            defaultText.textContent = consentVerifiedText
-            displayImage.src = source.replace(targetStr, 'consent-verified.png')
-            break;
-        case 'bc-open-to-commercialization-img':
-            hiddenInputType.value = 'commercialization'
-            hiddenInputName.value = openToCommercializationName
-            labelHeader.textContent = openToCommercializationName
-            defaultText.textContent = openToCommercializationText
-            displayImage.src = source.replace(targetStr, 'open-to-commercialization.png')
-            break;
-        case 'bc-open-to-collaboration-img':
-            hiddenInputType.value = 'collaboration'
-            hiddenInputName.value = openToCollabName
-            labelHeader.textContent = openToCollabName
-            defaultText.textContent = openToCollabText
-            displayImage.src = source.replace(targetStr, 'open-to-collaboration.png')
-            break;
-        case 'bc-multiple-community-img':
-            hiddenInputType.value = 'multiple_community'
-            hiddenInputName.value = multipleCommunityName
-            labelHeader.textContent = multipleCommunityName
-            defaultText.textContent = multipleCommunityText
-            displayImage.src = source.replace(targetStr, 'multiple-community.png')
-            break;
-        case 'bc-provenance-label-img':
-            hiddenInputType.value = 'provenance'
-            hiddenInputName.value = provenanceName
-            labelHeader.textContent = provenanceName
-            defaultText.textContent = provenanceText
-            displayImage.src = source.replace(targetStr, 'provenance.png')
-            break;
-    }
-}
 
 // Expand BC Labels Card in Community / Labels
 function showBCLabelInfo() {

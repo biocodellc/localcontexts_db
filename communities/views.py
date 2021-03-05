@@ -10,7 +10,7 @@ from django.contrib import messages
 from accounts.models import UserAffiliation
 from notifications.models import CommunityNotification
 from bclabels.models import BCNotice, BCLabel
-from bclabels.forms import AttachLabelForm, CustomiseLabelForm, ApproveAndEditLabelForm
+from bclabels.forms import CustomiseLabelForm, ApproveAndEditLabelForm
 from bclabels.utils import check_bclabel_type
 # from researchers.models import ProjectContributors
 
@@ -298,31 +298,21 @@ def create_project(request, pk):
 def community_add_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
     notice = BCNotice.objects.get(id=notice_id)
+    bclabels = BCLabel.objects.filter(community=community)
 
-    if request.method == 'POST':
-        label_form = AttachLabelForm(data=request.POST)
-        label_name = request.POST.get('label-name')
-        label_type = request.POST.get('label-type')
-
-        if label_form.is_valid():
-            new_label = label_form.save(commit=False)
-            new_label.community = community
-            new_label.bc_notice = notice
-            new_label.name = label_name
-            new_label.label_type = label_type
-            new_label.save()
-
-            #TODO: label approval process and
-            # only add label if it has been approved by community
-            notice.project.bclabels.add(new_label)    #Add labels to project
-            return redirect('community-labels', community.id)
-    else:
-        label_form = AttachLabelForm()
-
+    if request.method == "POST":
+        label_selected = request.POST.getlist('checkbox-label')
+        print(label_selected)
+        for choice in label_selected:
+            print(choice)
+            label = BCLabel.objects.get(id=choice)
+            notice.project.bclabels.add(label)
+        return redirect('community-projects', community.id)
+    
     context = {
         'community': community,
         'notice': notice,
-        'label_form': label_form,
+        'bclabels': bclabels,
     }
     return render(request, 'communities/attach-labels.html', context)
 
