@@ -293,28 +293,33 @@ def create_project(request, pk):
     else:
         return render(request, 'communities/create-project.html', {'community': community, 'member_role': member_role,})
 
-#TODO: add roles that have access to this page
+
 @login_required(login_url='login')
 def community_add_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
     notice = BCNotice.objects.get(id=notice_id)
     bclabels = BCLabel.objects.filter(community=community)
 
-    if request.method == "POST":
-        label_selected = request.POST.getlist('checkbox-label')
-        print(label_selected)
-        for choice in label_selected:
-            print(choice)
-            label = BCLabel.objects.get(id=choice)
-            notice.project.bclabels.add(label)
-        return redirect('community-projects', community.id)
-    
-    context = {
-        'community': community,
-        'notice': notice,
-        'bclabels': bclabels,
-    }
-    return render(request, 'communities/attach-labels.html', context)
+    member_role = check_member_role(request.user, community)
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        if request.method == "POST":
+            label_selected = request.POST.getlist('checkbox-label')
+            print(label_selected)
+            for choice in label_selected:
+                print(choice)
+                label = BCLabel.objects.get(id=choice)
+                notice.project.bclabels.add(label)
+            return redirect('community-projects', community.id)
+        
+        context = {
+            'community': community,
+            'notice': notice,
+            'bclabels': bclabels,
+            'member_role': member_role,
+        }
+        return render(request, 'communities/attach-labels.html', context)
 
 
 @login_required(login_url='login')
