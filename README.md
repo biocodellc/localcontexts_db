@@ -30,7 +30,7 @@ Activate virtualenvironment:
 source /Users/jdeck/.pyenv/versions/envi/bin/activate
 ```
 
-## Instal or Update Dependencies
+## Install or Update Dependencies
 Once in virtualenv, in the project root run:
 ```pip install -r requirements.txt```
 
