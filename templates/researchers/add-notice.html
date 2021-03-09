@@ -89,8 +89,6 @@
                                 <label for="date">Publication Date</label><br>
                                 {{ proj_form.publication_date }}<br>
 
-                                <label for="date">Source</label><br>
-                                {{ proj_form.source }}
                             </li>
                             <li>
                                 <p>
@@ -99,14 +97,6 @@
     
                                 <label for="description">Brief summary of research</label><br>
                                {{ proj_form.description }}
-                            </li>
-                            <li>
-                                <label for="principal_investigator">Principal Investigator</label><br>             
-                                {{ proj_form.principal_investigator }}
-                            </li>
-                            <li>
-                                <label for="principal_investigator_affiliation">Principal Investigator Affiliation</label><br>             
-                                {{ proj_form.principal_investigator_affiliation }}
                             </li>
                             <li>
                                 <label for="project_contact">Project Contact Name</label><br>             
@@ -142,6 +132,7 @@
                     </li>
 
                     <li>
+                        {{ proj_form.errors }}
                         <button class="action-btn default-btn">Save</button>
                     </li>
 

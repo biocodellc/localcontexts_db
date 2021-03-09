@@ -147,6 +147,9 @@ input:focus {
 }
 
 /* TEXT */
+.weight-400 {
+    font-weight: 400;  
+}
 
 .weight-500 {
     font-weight: 500;  
@@ -843,6 +846,13 @@ input:focus {
 
 .notice-btns i {
     font-size: 18px;
+}
+
+.orange-btn {
+    background-color: #EF6C00;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
 }
 
 /* RESEARCHER PAGE: NOTICES */

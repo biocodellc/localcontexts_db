@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'researchers.apps.ResearchersConfig',
     'projects.apps.ProjectsConfig',
 
-    'pages',
     'communities',
     'institutions',
     'api',
