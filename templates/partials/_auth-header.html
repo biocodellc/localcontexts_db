@@ -11,7 +11,8 @@
             </a>
         </div>
 
-        <div class="mini-nav flex-this">
+        <!-- Keep for now, might need later -->
+        <!-- <div class="mini-nav flex-this">
             <div class="flex-this badge-container">
                 <div>
                     <a href="{% url 'create-community' %}" class="white-text">
@@ -31,17 +32,17 @@
                 </div>
 
             </div>
-        </div>
+        </div> -->
 
     </div>
 
 
     <nav class="generic-nav flex-this">
         <ul class="flex-this generic-nav-ul">
-            <li><a class="white-text upper" href="#">Labels</a></li>
+            <!-- <li><a class="white-text upper" href="#">Labels</a></li> -->
             <li><a class="white-text upper" href="{% url 'community-registry' %}">Communities</a></li>
             <li><a class="white-text upper" href="{% url 'institution-registry' %}">Institutions</a></li>
-            <li><a class="white-text upper" href="#">Notices</a></li>
+            <!-- <li><a class="white-text upper" href="#">Notices</a></li> -->
 
             {% if request.get_full_path == "/accounts/dashboard/" or request.get_full_path == "/accounts/update-profile/" %}
                 <li><a id="active-link" class="white-text upper" href="{% url 'dashboard' %}">Account</a></li>

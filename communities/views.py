@@ -12,7 +12,8 @@ from notifications.models import CommunityNotification
 from bclabels.models import BCNotice, BCLabel
 from bclabels.forms import CustomiseLabelForm, ApproveAndEditLabelForm
 from bclabels.utils import check_bclabel_type
-# from researchers.models import ProjectContributors
+from projects.models import ProjectContributors
+from projects.forms import CreateProjectForm
 
 from .forms import *
 from .models import *
@@ -275,23 +276,44 @@ def projects(request, pk):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         notices = community.bcnotice_communities.all()
+        contribs = ProjectContributors.objects.filter(community=community)
 
         context = {
             'community': community, 
             'member_role': member_role,
             'notices': notices,
+            'contribs': contribs,
         }
         return render(request, 'communities/projects.html', context)
 
 @login_required(login_url='login')
 def create_project(request, pk):
     community = Community.objects.get(id=pk)
+    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        return render(request, 'communities/create-project.html', {'community': community, 'member_role': member_role,})
+        if request.method == 'POST':
+            form = CreateProjectForm(request.POST)
+            if form.is_valid():
+                obj = form.save(commit=False)
+                obj.save()
+
+                ProjectContributors.objects.create(project=obj, community=community)
+                return redirect('community-projects', community.id)
+        else:
+            form = CreateProjectForm()
+        
+        context = {
+            'community': community,
+            'member_role': member_role,
+            'form': form,
+            'bclabels': bclabels,
+        }
+
+        return render(request, 'communities/create-project.html', context)
 
 
 @login_required(login_url='login')

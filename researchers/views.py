@@ -7,6 +7,7 @@ from accounts.utils import is_user_researcher
 from bclabels.models import BCNotice
 from notifications.models import CommunityNotification
 from projects.models import ProjectContributors
+from projects.forms import CreateProjectForm, ProjectContributorsForm
 
 from .models import Researcher
 from .forms import *
