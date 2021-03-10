@@ -50,17 +50,29 @@
         </div>
 
         <div>
-            <p class="darkteal-text">
-                <span class="weight-500">1. Attach Labels</span><br>
+            <span class="weight-500 darkteal-text">1. Attach Labels</span><br>
+            <div class="flex-this">
+
                 {% if bclabels %}
                     {% for bclabel in bclabels %}
-                        {{ bclabel.name }}
+
+                            <div class="w-20 wrap center-text">
+                                <div>
+                                    <input type="checkbox">
+                                </div>
+                                {% include 'snippets/which-label.html' %}
+                                <span class="darkteal-text">{{ bclabel.name }}</span>
+                            </div>
+
                     {% endfor%}
                 {% else %}
-                    You have no labels customised
+                    <p>You have no labels customised</p>
                 {% endif %}
-                <br><span class="weight-500">2. View Label Descriptions</span>
-            </p>
+
+            </div>
+
+            <p class="weight-500 darkteal-text">2. View Label Descriptions</p>
+
         </div>
 
         <div>
