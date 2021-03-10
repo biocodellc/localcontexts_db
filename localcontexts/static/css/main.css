@@ -251,6 +251,10 @@ input:focus {
     align-items:center;
 }
 
+.wrap {
+    flex-wrap: wrap;
+}
+
 /* WIDTHS */
 .w-5 {
     width: 5%;
@@ -967,4 +971,13 @@ input:focus {
 .small-label img {
     height: 70px;
     width: 90.3px;
+}
+
+.custom-labels {
+    padding-right: 12px;
+    padding-left: 12px;
+}
+
+.approved-label {
+    padding-top: 25px;
 }
