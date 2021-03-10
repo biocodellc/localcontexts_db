@@ -1,0 +1,111 @@
+{% extends 'comm-base.html' %} {% load static %} {% block community_content %}
+
+<div id="collapsed-card" class="content-card content-card-space white-bg flex-this column">
+
+    <div id="bclabels-title-vertical" style="margin:auto 0;">
+        <div class="flex-this space-between">
+            <div>
+                <h2 class="orange-text weight-600">Biocultural (BC) Labels</h2>
+            </div>
+            <div>
+                <a onclick='showBCLabelInfo()' class="darkteal-text pointer">Show More <span id="show-more-down"><i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
+            </div>
+        </div>
+    </div>
+
+    <div id="expand-bclabels" style="height:0px;">
+        <div>
+            <p class="darkteal-text">
+                Click on a Label to view more information*<br><br>
+
+                The BC Label text is intended to be customized by each community – giving the Labels specificity and context. 
+                The title of each BC Label can be translated into one or more languages and displayed in addition to the default Label title. 
+                The BC Label icons are not to be altered.  This is to ensure national and international recognition and integrity across content and collection management systems, 
+                online repositories, websites, and physical exhibits. 
+                Learn more about <a href="#">BC Labels</a>.
+            </p>
+        </div>
+
+        <div class="flex-this" style="justify-content: space-evenly;">
+            <div class="center-text">
+                <div>
+                    <img id="bccv" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+                </div>
+                <div><p class="darkteal-text">Consent Verified <br> (BC CV) </p></div>
+            </div>
+    
+            <div class="center-text">
+                <div>
+                    <img id="bcmc" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
+                </div>
+                <div><p class="darkteal-text">Multiple Communities <br> (BC MC)</p></div>
+            </div>
+    
+            <div class="center-text">
+                <div>
+                    <img id="bcocoll" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
+                </div>
+                <div><p class="darkteal-text">Open to <br>Collaboration <br> (BC OC) </p></div>
+            </div>
+    
+            <div class="center-text">
+                <div>
+                    <img id="bcocomm" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
+                </div>
+                <div><p class="darkteal-text">Open to <br>Commercialization <br> (BC OC)</p></div>
+            </div>
+    
+            <div class="center-text">
+                <div>
+                    <img id="bcp" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+                </div>
+                <div><p class="darkteal-text"> Provenance <br> (BC P)</p></div>
+            </div>
+    
+            <div class="center-text">
+                <div>
+                    <img id="bcr" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
+                </div>
+                <div><p class="darkteal-text">Research Use <br> (BC R) </p></div>
+            </div>
+        </div>
+
+        <div id="bclabel-info" class="flex-this column text-background-blue" style="height:0px;">
+
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="flex-this">
+
+                    <input id="label-value-type" type="hidden" value="placeholder" name="label-type">
+                    <div class="w-50">
+                            <h3 class="weight-600 darkteal-text" id="bc-label-title" name="bc-label-title"></h3><br>
+                        </div>
+                        <div class="w-50 right-text">
+                            {% if member_role == 'viewer' %}
+
+                            {% else %}
+                                <button class="action-btn">Customise Label <i class="fa fa-long-arrow-right"></i></button>
+                            {% endif %}
+                        </div>
+
+                </div>
+            </form>
+
+            <div class="flex-this column">
+                <div>
+                    <span class="weight-600 darkteal-text">Why use this label?</span><br>
+                    <p id="why-use-this-label"></p>
+                </div>
+                <div>
+                    <span class="weight-600 darkteal-text">Template Text</span><br>
+                    <p id="label-template-text"></p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
