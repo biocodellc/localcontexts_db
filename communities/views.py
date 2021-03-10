@@ -313,7 +313,12 @@ def create_project(request, pk):
             form = CreateProjectForm(request.POST)
             if form.is_valid():
                 obj = form.save(commit=False)
+                labels_selected = request.POST.getlist('checked-labels')
                 obj.save()
+
+                for choice in labels_selected:
+                    label = BCLabel.objects.get(id=choice)
+                    obj.bclabels.add(label)
 
                 ProjectContributors.objects.create(project=obj, community=community)
                 return redirect('community-projects', community.id)
@@ -342,9 +347,8 @@ def community_add_labels(request, pk, notice_id):
     else:
         if request.method == "POST":
             label_selected = request.POST.getlist('checkbox-label')
-            print(label_selected)
+
             for choice in label_selected:
-                print(choice)
                 label = BCLabel.objects.get(id=choice)
                 notice.project.bclabels.add(label)
             return redirect('community-projects', community.id)
