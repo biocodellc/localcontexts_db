@@ -60,5 +60,5 @@ steps:
 #  _SQL_DB: ""
 availableSecrets:
   secretManager:
-    - versionName: "projects/anth-ja77-local-contexts-8985/secrets/APP_ENGINE_ENVS/versions/1"
+    - versionName: "projects/anth-ja77-local-contexts-8985/secrets/APP_ENGINE_ENVS/versions/latest"
       env: "APP_ENGINE_ENVS"
