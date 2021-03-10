@@ -108,7 +108,7 @@ var researchUseText = 'This Label is being used by [community name or authorizin
 var consentVerifiedText = 'This Label is being used to verify that [community name or authorizing party] have consent conditions in place for the use of this information, collections, data and digital sequence information.'
 
 
-// Expand BC Labels Card in Community / Labels
+// Expand BC Labels Card in Community: Labels
 function showBCLabelInfo() {
     let labelContainer = document.getElementById('expand-bclabels')
     let span = document.getElementById('show-more-down')
@@ -130,7 +130,7 @@ function showBCLabelInfo() {
     }
 }
 
-// See more info about each label
+// See more info about each label (Community:Labels)
 function expandBCLabel(img) {
     let info = document.getElementById('bclabel-info')
     let fullCard = document.getElementById('collapsed-card')
@@ -250,6 +250,21 @@ function showMoreNotice(elem) {
     } else {
         expandDiv.style.height = "0"
         contentCard.style.height = "201px"
+    }
+}
+
+// Community: Projects
+function showMoreProject(elem) {
+    let contribID = elem.id
+    let expandDiv = document.getElementById(`expand-contrib-${contribID}`)
+    let contentCard = document.getElementById(`full-contrib-card-${contribID}`)
+
+    if (expandDiv.style.height == "0px") {
+        expandDiv.style.height = "auto"
+        contentCard.style.height = "auto"
+    } else {
+        expandDiv.style.height = "0"
+        contentCard.style.height = "auto"
     }
 }
 

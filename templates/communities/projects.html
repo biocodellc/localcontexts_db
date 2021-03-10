@@ -20,7 +20,8 @@
         {% for contrib in contribs %}
             {% if contrib.project.has_labels %}
             <div class="content-card content-card-space white-bg">
-                <div class="flex-this space-between">
+
+                <div id="full-contrib-card-{{ contrib.id }}" class="flex-this space-between">
                     <div>
                         <p class="no-top-margin no-bottom-margin">
                             <span class="darkteal-text weight-500">
@@ -36,9 +37,52 @@
                         </p>
                     </div>
                     <div>
-                        <a href="#" class="darkteal-text">Show More</a>
+                        <a id="{{ contrib.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More</a>
                     </div>
                 </div>
+
+                <div id="expand-contrib-{{ contrib.id }}" style="height: 0px; overflow:hidden;">
+
+                    <div class="flex-this space-between">
+                        <div class="w-80">
+                            <p>{{ contrib.project.description }}</p>
+                        </div>
+    
+                        <div class="flex-this column w-15">
+                            <div class="notice-btns center-text">
+                                <a href="#" class="action-btn">Edit Project <i class="fa fa-pencil"></i></a>
+                            </div>
+                            <div class="notice-btns center-text">
+                                <a href="#" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-this column">
+                        <div>
+                            <p class="weight-500">Labels attched to this project</p>
+                        </div>
+                            {% for bclabel in contrib.project.bclabels.all %}
+
+                                <div class="flex-this">
+                                    <div class="small-label">
+                                        {% include 'snippets/which-label.html' %}
+                                    </div>
+                                    <div class="pad-left-2">
+                                        <p class="darkteal-text no-top-margin">Label shared by {{ contrib.community.community_name }} </p>
+                                        <p class="weight-500"> {{ bclabel.name }} </p>
+                                        <p>
+                                            {{ bclabel.default_text}}
+                                        </p>
+                                        <hr>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                    </div>
+
+                </div>
+
             </div>
             {% endif %}
         {% endfor %}
