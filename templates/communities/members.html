@@ -76,7 +76,7 @@
                 </div>
             {% endfor %}
 
-            {% if role == 'admin' or role == 'editor' %}
+            {% if member_role == 'admin' or member_role == 'editor' %}
 
                 <a href="{% url 'add-member' community.id %}">
                     <div class="flex-this add-member-card">

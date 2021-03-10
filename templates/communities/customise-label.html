@@ -1,0 +1,74 @@
+{% extends 'comm-base.html' %} {% load static %} {% block community_content %}
+
+<div class="content-card content-card-space white-bg">
+    <div>
+        <h2 class="orange-text">Labels</h2>
+        <p class="darkteal-text">You currently have 1 label customised</p>
+    
+        {% if label_type == 'bcr' %}
+            <div id="target-img-div">
+                <img id="bcr" class="opacity-4" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
+            </div>
+            <p class="darkteal-text">Research Use <br> (BC R)</p>
+        {% endif %}
+    
+        {% if label_type == 'bccv' %}
+            <div id="target-img-div">
+                <img id="bccv" class="opacity-4" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+            </div>
+            <p class="darkteal-text">Consent Verified <br> (BC CV)</p>
+        {% endif %}
+    
+        {% if label_type == 'bcocomm' %}
+            <div id="target-img-div">
+                <img id="bcocomm" class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
+            </div>
+            <p class="darkteal-text">Open to <br> Commercialization <br> (BC OC)</p>
+        {% endif %}
+    
+        {% if label_type == 'bcocoll' %}
+            <div id="target-img-div">
+                <img id="bcocoll" class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
+            </div>
+            <p class="darkteal-text">Open to <br> Collaboration <br> (BC OC)</p>
+        {% endif %}
+    
+        {% if label_type == 'bcmc' %}
+            <div id="target-img-div">
+                <img id="bcmc" class="opacity-4" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
+            </div>
+            <p class="darkteal-text">Multiple Community <br> (BC MC)</p>
+        {% endif %}
+    
+        {% if label_type == 'bcp' %}
+            <div id="target-img-div">
+                <img id="bcp" class="opacity-4" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+            </div>
+            <p class="darkteal-text">Provenance <br> (BC P)</p>
+        {% endif %}
+    </div>
+
+    <div class="flex-this column text-background-blue">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="flex-this space-between">
+                <div>
+                    <h3 class="darkteal-text weight-600">Customise Label</h3>
+                </div>
+                <div>
+                    <button class="action-btn">Save as draft</button> 
+                    <!-- <button class="white-bg darkteal-text">Cancel</button> -->
+                </div>
+            </div>
+            <div>
+                <p class="darkteal-text">Each description is written to be flexible for use in multiple projects. <br>This text is written in English but you are welcome to add another language to this label.</p>
+                    {{ form.name }}<br>
+                    {{ form.default_text }}
+            </div>
+    </form>
+    </div>
+
+</div>
+
+{% endblock %}
+

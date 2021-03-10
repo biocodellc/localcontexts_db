@@ -2,24 +2,15 @@
 
 <div class="content-card content-card-space white-bg">
     <div class="flex-this column notice-card">
-        <div class="padding-bottom-2"><small>Requests >> <a href="#"><span class="darkteal-text">Attach Labels</span></a></small></div>
+        <div class="padding-bottom-2"><small><a href="{% url 'community-requests' community.id %}"><span class="darkteal-text">Requests</span></a> >> Apply Labels</small></div>
 
 
         <div class="flex-this">
 
             <div class="w-10">
-                <div class="flex-this column notice-btns">
+                <div class="flex-this column">
                     <div>
                         <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
-                    </div>
-                    <div>
-                        <button class="green-action-btn margin-bottom-2">View on GEOME </button>   
-                    </div>
-                    <div>
-                        <button class="green-action-btn margin-bottom-2">View on ORCiD</button>    
-                    </div>
-                    <div>
-                        <button class="green-action-btn">Download</button>    
                     </div>
                 </div>
             </div>
@@ -28,9 +19,9 @@
                 <div class="notice-info border-bottom-blk padding-bottom-2">
                     <a href="#"><h4 class="darkteal-text weight-500">{{ notice.project.title}}</h4></a>
                     <p>
-                        Expedition<br>
-                        Notice Applied: {{ notice.created.date }}<br>
-                        Source: {{ notice.project.source }}<br>
+                        {{ notice.project.project_type }}<br>
+                        {{ notice.project.publication_date }}<br>
+                        Project Contributors<br>
                     </p>
         
                     <small>{{ notice.project.description }}</small>
@@ -42,53 +33,34 @@
                     </div>
                     <div>
                         <ol class="no-left-padding">
-                            <li>
-                                <p class="weight-500">Attach Labels</p>
-                                <div class="label-margin">
-                                    <img id="bc-provenance-label-img" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-provenance.png' %}" width="150px">
-                                    <img id="bc-multiple-community-img" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" width="150px">
-                                    <img id="bc-open-to-collaboration-img" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" width="150px"><br>
-                                    <img id="bc-open-to-commercialization-img" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" width="150px">
-                                    <img id="bc-research-use-img" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-research-use.png' %}" width="150px">
-                                    <img id="bc-consent-verified" onclick="setDefaultText(this)" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" width="150px">
-                                </div>
-                            </li>
-
-                            <form method="POST" action="{% url 'community-add-labels' community.id notice.id %}">
+                            <form method="POST" action="">
                                 {% csrf_token %}
 
-                            <li>
-                                <p class="weight-500 border-bottom-grey">Confirm Labels</p>
-                                <div class="flex-this">
-                                    <div><img id="chosen-label-img" src="{% static 'images/bc-labels/bc-provenance.png' %}" width="150px"></div>
-                                    <div class="margin-left-1">
-
-                                        <input id="pass-name" type="hidden" value="" name="label-name">
-                                        <input id="pass-type" type="hidden" value="" name="label-type">
-
-                                        <h4 id="bc-label-name-h4" class="weight-500"></h4>
-                                        {{ label_form.default_text }}
-                                        <!-- <small id="bc-label-default-txt">
-                                            This Label is being used to affirm an inherent interest Indigenous people have in the scientific collections and data about communities, peoples, and the biodiversity found within traditional lands, waters and territories. [Community name or authorizing party] has permissioned the use of this collection and associated data for research purposes, and retains the right to be named and associated with it into the future. This association reflects a significant relationship and responsibility to [the species or biological entity] and associated scientific collections and data.
-                                        </small> -->
+                                <li class="darkteal-text">
+                                    <p class="weight-500 darkteal-text">Select a Label</p>
+                                    <div class="flex-this">
+                                        {% if bclabels %}
+                                        {% for bclabel in bclabels %}
+                                            {% if bclabel.is_approved == True %}
+                                            <div>
+                                                <input value="{{ bclabel.id }}" type="checkbox" name="checkbox-label">
+                                            </div>
+                                                <div class="label-margin">
+                                                    {% include 'snippets/which-label.html' %}
+                                                    {{ bclabel.name }}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% endif %}
                                     </div>
+                                </li>
+
+                                <li class="darkteal-text">
+                                    <p class="weight-500 darkteal-text">View Label Description</p>
                                     <div>
-                                        <button class="green-action-btn default-btn">Edit Label</button>
+                                        <button class="action-btn">Apply Label(s) to project</button>
                                     </div>
-                                </div>
-                            </li>
-
-                            <li>
-                                <p class="weight-500">Implement Labels</p>
-
-                                {{ label_form.modified_text }}
-                            </li>
-
-                            <li>
-                                <div>
-                                    <button class="action-btn default-btn">Place Labels</button>
-                                </div>
-                            </li>
+                                </li>
 
                         </form>
 

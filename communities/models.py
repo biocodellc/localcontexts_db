@@ -18,7 +18,6 @@ class Community(models.Model):
     is_publicly_listed = models.BooleanField(default=True, null=True)
     is_approved = models.BooleanField(default=False, null=True)
 
-
     def get_member_count(self):
         admins = self.admins.count()
         editors = self.editors.count()

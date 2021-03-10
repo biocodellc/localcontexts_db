@@ -4,119 +4,74 @@
         <h3 class="orange-text reqs">Requests</h3>
     </div>
 
-    <!-- TODO: clarify this flow -->
-    <!-- <div class="content-card content-card-space white-bg">
-        <div class="flex-this">
-            <div class="w-15">
-                <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
-            </div>
-
-            <div class="w-80">
-                <p>
-                    <span class="darkteal-text weight-600">Project Name</span><br>
-                    Project Date <br>
-                    Project Type <br>
-                    Project Contributors
-                </p>
-            </div>
-            <div class="w-10">
-                <a href="#" class="darkteal-text">Show More</a>
-                <i class="fa fa-angle-down darkteal-text" aria-hidden="true"></i>
-            </div>
-        </div>
-    </div> -->
-
     {% if notices %}
         {% for notice in notices %}
-        <div class="content-card content-card-space white-bg">
+                {% if notice.project.has_labels == False %}
 
-            <div class="flex-this w-100 notice-top">
-                <div class="w-70">
-                    <p>A BC notice has been placed by <a href="#" class="darkteal-text">
-                        {% if notice.placed_by_institution %}
-                            {{ notice.placed_by_institution.institution_name }}
-                        {% else %}
-                            {{ notice.placed_by_researcher.user.get_full_name}}
-                        {% endif %}
-                    </a></p>
-                </div>
-    
-                <div class="w-15 auto-margin flex-this flex-end">
-                    <button class="action-btn">Label Pending</button>
-                </div>
-                <div class="w-15 auto-margin flex-this flex-end">
-                    <a href="#" class="darkteal-text">Notice Acknowledged</a>
-                </div>
-                <div class="w-5 auto-margin flex-this flex-end">
-                    <span class="darkteal-text weight-500">+</span>
-                </div>
-            </div>
-    
-    
-            <div class="flex-this notice-card">
-    
-                <div class="flex-this column w-15 notice-btns">
-                    <div>
-                        <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
-                    </div>
-                    <div>
-                        <a href="{% url 'community-add-labels' community.id notice.id %}">
-                            <button class="action-btn">Attach Labels</button>
-                        </a>
-                    </div>
-                    {% if notice.project.geome_project_id %}
-                        <div>
-                            <button class="green-action-btn">View on GEOME </button>   
+                    <!-- new figma card -->
+                    <div id="full-notice-card-{{ notice.id }}" class="content-card content-card-space white-bg">
+                        <div class="flex-this space-between">
+                            <div>
+                                <p class="no-top-margin notice-date">
+                                    Date Sent: {{ notice.created|date:'m/d/Y' }}
+                                </p>
+                            </div>
+                    
+                            <div>
+                                <a id="{{ notice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
+                                    Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                </a>
+                            </div>
                         </div>
-                    {% endif %}
-                    <div>
-                        <button class="green-action-btn">View ORCiD</button>    
+
+                        <div class="flex-this">
+
+                            <div class="w-10">
+                                <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
+                            </div>
+
+                            <div class="w-90 pad-left-2">
+                                <p>
+                                    <span class="darkteal-text weight-600">{{ notice.project.title}}</span><br>
+                                    {{ notice.project.publication_date }} <br>
+                                    {{ notice.project.project_type }} <br>
+                                    {% for contributor in notice.communities.all %}
+                                        {{ contributor.community_name }}
+                                    {% endfor %}, 
+                                    {% if notice.placed_by_institution %}
+                                        {{ notice.placed_by_institution.institution_name }}
+                                    {% else %}
+                                        {{ notice.placed_by_researcher.user.get_full_name}}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div id="expand-notice-{{notice.id}}" style="height: 0; overflow:hidden;" class="flex-this space-between">
+                            <div class="w-80">
+                                <p><span class="weight-500">Description:</span> {{ notice.project.description }}</p>
+                            </div>
+
+                            <div class="flex-this column w-15">
+                                <div class="notice-btns center-text">
+                                    <a href="{% url 'community-add-labels' community.id notice.id %}" class="action-btn">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
+                                </div>
+                                <div class="notice-btns center-text">
+                                    <a href="#" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-        
-                <div class="w-40 notice-info">
-                    <a href="#"><h4 class="darkteal-text weight-500">{{ notice.project.title}}</h4></a>
-        
-                    <p>
-                        Expedition<br>
-                        Notice Applied: {{ notice.created.date }}<br>
-                        Source: NIWA via GEOME<br>
-                    </p>
-                    <p>
-                        <span class="weight-500">Contact Us:</span><br>
-                    {% if notice.placed_by_institution %}
-                        Website: {{ notice.placed_by_institution.website }}<br>
-                        Email: {{ notice.placed_by_institution.contact_email }}<br>
-                        Postal Address: {{ notice.placed_by_institution.address }}<br>
-                        Phone: {{ notice.placed_by_institution.contact_number }}<br>
-                    {% else %}
-                        Website: {{ notice.placed_by_researcher.website }}<br>
-                        Email: {{ notice.placed_by_researcher.contact_email }}<br>
-                        Phone: {{ notice.placed_by_researcher.contact_number }}<br>
-                    {% endif %}
-                    </p>
-                </div>
-        
-                <div class="w-50 notice-msg">
-                    <h4 class="weight-500">Message Sent by <a href="#" class="darkteal-text">
-                    {% if notice.placed_by_institution %}
-                        {{ notice.placed_by_institution.institution_name }}
-                    {% else %}
-                        {{ notice.placed_by_researcher.user.get_full_name}}
-                    {% endif %}
-                    </a>:</h4>
-                    <p>
-                        {{ notice.message|linebreaks }}
-                    </p>
-                </div>
-            </div>
-    
-        </div>
-        {% endfor %}
+
+                {% endif %}
+            {% endfor %}
     {% else %}
+
         <div class="content-card content-card-space white-bg">
             <p>No notices to display at this time</p>
         </div>
+
     {% endif %}
 
 {% endblock %}

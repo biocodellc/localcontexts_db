@@ -34,14 +34,7 @@
                 <div class="flex-this column w-40">
                     <h2 class="orange-text community-title">{{ community.community_name }} </h2>
                     <p>
-                        Account: <span> 
-                            {% if community.community_creator.get_full_name %}
-                                {{ community.community_creator.get_full_name }} 
-                            {% else %}
-                                {{ community.community_creator }} 
-                            {% endif %}                                
-                            | Administrator
-                        </span><br>
+                        Role: <span> {{ member_role }}</span><br>
                         Members: <span>{{ community.get_member_count }}</span><br>
                         Location: <span>{{ community.town }}, {{ community.country.name }} </span><br>
                         {% if request.user == community.community_creator and community.is_approved == False %}

@@ -57,7 +57,7 @@
 }
 
 /* Community member cards */
-.member-card, .add-card {
+.member-card {
     margin: auto;
     min-height: 265px;
     max-height: 265px;
@@ -100,26 +100,6 @@
 .member-card-text h3, .member-card-text p {
     width: 100%;
     margin: 0;
-}
-
-/* Add Workspace card */
-.add-card {
-    margin-top: 2%;
-    margin-bottom: 2%;
-    border: 2px dashed #7d7d7d;
-    position: relative;
-    z-index: 0;
-}
-
-.add-card h2 {
-    position: absolute;
-    color: #A09D9D;
-    min-height: 36px;
-    max-height: 36px;
-    min-width: 264px;
-    max-width: 264px;
-    text-align: center;
-    top: 90px;
 }
 
 /* Profile Settings page */
