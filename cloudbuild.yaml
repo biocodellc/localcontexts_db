@@ -5,8 +5,8 @@ steps:
     args:
       - "-c"
       - |
-        printf "%s" "$$APP_ENGINE_ENVS" > .env.sh
-        chmod +x .env.sh
+        printf "%s" "$$APP_ENGINE_ENVS" > ./env.sh
+        chmod +x ./env.sh
     secretEnv: ["APP_ENGINE_ENVS"]
     waitFor: ["-"]
   - name: "python:3.8-slim-buster"
@@ -20,7 +20,7 @@ steps:
     args:
       - "-c"
       - |
-        source .env.sh
+        source ./env.sh
         python3 ./manage.py collectstatic --noinput
     waitFor: ["setup-envs", "install-deps"]
 
@@ -52,7 +52,7 @@ steps:
     args:
       - "-c"
       - |
-        source .env.sh
+        source ./env.sh
         gcloud app deploy
     waitFor: ["collect-statics"]
 
@@ -60,5 +60,5 @@ steps:
 #  _SQL_DB: ""
 availableSecrets:
   secretManager:
-    - versionName: "projects/anth-ja77-local-contexts-8985/secrets/APP_ENGINE_ENVS/versions/1"
+    - versionName: "projects/anth-ja77-local-contexts-8985/secrets/APP_ENGINE_ENVS/versions/latest"
       env: "APP_ENGINE_ENVS"
