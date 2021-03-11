@@ -83,6 +83,7 @@ def community_registry(request):
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
     n = CommunityNotification.objects.filter(community=community)
+    bcnotices = BCNotice.objects.filter(communities=community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -92,6 +93,7 @@ def community_dashboard(request, pk):
             'community': community,
             'notifications': n,
             'member_role': member_role,
+            'bcnotices': bcnotices,
         }
         return render(request, 'communities/community.html', context)
 
