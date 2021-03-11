@@ -50,6 +50,40 @@
             </div>
         </div> -->
 
+        <div class="flex-this space-between w-100 half-card-container">
+
+            <div class="half-card">
+                <h3 class="orange-text">Notifications</h3>
+
+                <div class="activity-card">
+                    <p class="pad-left-2">
+                        <span class="darkteal-text weight-500">Page Type: Labels or Relationships etc</span><br>
+                        Date and Time <br>
+                        Activity Contributor<br>
+                        Activity Description
+                    </p>
+                </div>
+            </div>
+            <div class="half-card">
+                <h3 class="orange-text">Requests</h3>
+
+                <div class="activity-card flex-this">
+                    <div class="pad-left-2 shift-down">
+                        <img src="{% static 'images/notices/bc-notice.png' %}" height="105px" width="108px">
+                    </div>
+                    <div class="pad-left-2">
+                        <p>
+                            <span class="darkteal-text weight-500">Project Name</span><br>
+                            Project Date <br>
+                            Project Type<br>
+                            Project Contributors
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
         {% if notifications %}
             <div class="white-bg content-card content-card-space noti-card">
                 

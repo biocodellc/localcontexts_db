@@ -372,19 +372,6 @@ input:focus {
     font-size: 20px;
 }
 
-/* LANDING PAGE CONTENT BUTTONS */
-.landing-btn {
-    cursor: pointer;
-    min-width: 200px;
-    max-width: 200px;
-    padding: 1%;
-    color: #EF6C00;
-    background-color: transparent;
-    border: 1px solid #EF6C00;
-    border-radius: 20px;
-    font-size: 16px;
-}
-
 /* Standard with content card (user info on dash, 404 page, etc) */
 .content-card {
     margin: auto;
@@ -952,22 +939,13 @@ input:focus {
     overflow: hidden;
 }
 
-/* #expand-bclabels {
-    border: 1px solid green;
-} */
-
-/* #collapsed-card {
-    border: 1px solid lime;
-} */
-
 #bclabel-info {
-    /* border: 1px solid red; */
     padding-right: 10px;
     padding-left: 10px;
     padding-bottom: 10px;
 }
 
-/* Community: project */
+/* COMMUNITY: PROJECT */
 .small-label img {
     height: 70px;
     width: 90.3px;
@@ -980,4 +958,39 @@ input:focus {
 
 .approved-label {
     padding-top: 25px;
+}
+
+/* COMMUNITY: ACTIVITY */
+
+.half-card-container {
+    margin: auto;
+    max-width: 1280px;
+    min-width: 1280px;
+    margin-top: 15px;
+    align-items: flex-start;
+}
+
+.half-card {
+    border-radius: 5px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+    background-color: #fff;
+    width: 49.5%;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.activity-card {
+    border: 1px solid #007385;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.shift-down {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.shift-down img {
+    padding-top: 5px;
 }
