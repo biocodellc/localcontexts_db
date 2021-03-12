@@ -8,7 +8,6 @@
         {% for notice in notices %}
                 {% if notice.project.has_labels == False %}
 
-                    <!-- new figma card -->
                     <div id="full-notice-card-{{ notice.id }}" class="content-card content-card-space white-bg">
                         <div class="flex-this space-between">
                             <div>
@@ -49,15 +48,22 @@
 
                         <div id="expand-notice-{{notice.id}}" style="height: 0; overflow:hidden;" class="flex-this space-between">
                             <div class="w-80">
+                                <p>What would you like to do with this notice? 
+                                    <select>
+                                        <option> Acknowledge Notice </option>
+                                    </select>
+                                </p>
                                 <p><span class="weight-500">Description:</span> {{ notice.project.description }}</p>
                             </div>
 
                             <div class="flex-this column w-15">
+                                {% if notice.project.url %}
+                                    <div class="notice-btns center-text">
+                                        <a href="{{ notice.project.url }}" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                    </div>
+                                {% endif %}
                                 <div class="notice-btns center-text">
                                     <a href="{% url 'community-add-labels' community.id notice.id %}" class="action-btn">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
-                                </div>
-                                <div class="notice-btns center-text">
-                                    <a href="#" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                         </div>

@@ -115,18 +115,18 @@ function showBCLabelInfo() {
     let fullCard = document.getElementById('collapsed-card')
     let header = document.getElementById('bclabels-title-vertical')
 
-    if (labelContainer.style.height == "0px" && span.innerHTML == `<i class="fa fa-angle-down" aria-hidden="true"></i>`) {
+    if (labelContainer.style.height == "0px") {
         header.style.margin = "0"
         fullCard.style.height = "460px"
         fullCard.style.transition = "height 0.5s"
         labelContainer.style.height = "460px"
-        span.innerHTML = `<i class="fa fa-angle-up" aria-hidden="true"></i>`
+        span.innerHTML = `Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>`
     } else {
         header.style.margin = "auto 0"
         fullCard.style.height = "113px"
         fullCard.style.transition = "height 0.5s"
         labelContainer.style.height = "0px"
-        span.innerHTML = `<i class="fa fa-angle-down" aria-hidden="true"></i>`
+        span.innerHTML = `Show More <i class="fa fa-angle-down" aria-hidden="true"></i>`
     }
 }
 
@@ -245,9 +245,11 @@ function showMoreNotice(elem) {
     let contentCard = document.getElementById(`full-notice-card-${noticeID}`)
 
     if (expandDiv.style.height == "0px") {
+        elem.innerHTML = 'Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>'
         expandDiv.style.height = "auto"
         contentCard.style.height = "auto"
     } else {
+        elem.innerHTML = 'Show More <i class="fa fa-angle-down" aria-hidden="true"></i>'
         expandDiv.style.height = "0"
         contentCard.style.height = "201px"
     }
@@ -260,9 +262,11 @@ function showMoreProject(elem) {
     let contentCard = document.getElementById(`full-contrib-card-${contribID}`)
 
     if (expandDiv.style.height == "0px") {
+        elem.innerHTML = 'Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>'
         expandDiv.style.height = "auto"
         contentCard.style.height = "auto"
     } else {
+        elem.innerHTML = 'Show More <i class="fa fa-angle-down" aria-hidden="true"></i>'
         expandDiv.style.height = "0"
         contentCard.style.height = "auto"
     }

@@ -4,19 +4,20 @@
 
         <div class="flex-this space-between">
             {% if bclabels %}
-            <div>
-                <h2 class="orange-text weight-600">Labels</h2>
-                <p class="darkteal-text">You currently have {{ bclabels.count }} labels customised</p>
-            </div>
-            <div class="flex-this align-center">
-                {% if member_role == 'viewer' %}
 
-                {% else %}
-                <a class="action-btn" href="{% url 'select-label' community.id %}">
-                    Customise a Label     <i class="fa fa-long-arrow-right"></i>
-                </a>
-                {% endif %}
-            </div>
+                <div>
+                    <h2 class="orange-text weight-600">Labels</h2>
+                    <p class="darkteal-text">You currently have {{ bclabels.count }} labels customised</p>
+                </div>
+                <div class="flex-this align-center">
+                    {% if member_role == 'viewer' %}
+
+                    {% else %}
+                    <a class="darkteal-text" href="{% url 'select-label' community.id %}">
+                        Customise another Label     <i class="fa fa-long-arrow-right"></i>
+                    </a>
+                    {% endif %}
+                </div>
             {% else %}
                 <div>
                     <h2 class="orange-text weight-600">Labels</h2>
@@ -38,7 +39,7 @@
         <div class="flex-this wrap">
             {% if bclabels %}
 
-            {% for bclabel in bclabels %}
+                {% for bclabel in bclabels %}
                     {% if bclabel.is_approved == False %}
                         {% if bclabel.created_by == request.user or member_role == 'viewer' %}
                             <div class="w-20 custom-labels">
@@ -81,8 +82,8 @@
                             </div>
                         </div> -->
                     {% endif %}
-            {% endfor %}
-    {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
 
     </div>
