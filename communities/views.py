@@ -341,7 +341,7 @@ def create_project(request, pk):
 def community_add_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
     notice = BCNotice.objects.get(id=notice_id)
-    bclabels = BCLabel.objects.filter(community=community)
+    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.

@@ -40,21 +40,19 @@
                                     <p class="weight-500 darkteal-text">Select a Label</p>
                                     <div class="flex-this">
                                         {% if bclabels %}
-                                        {% for bclabel in bclabels %}
-                                            {% if bclabel.is_approved == True %}
-                                            <div class="w-20 wrap center-text">
+                                            {% for bclabel in bclabels %}
+                                                <div class="w-20 wrap center-text">
 
-                                                <div>
-                                                    <input id="checked-label-{{ bclabel.id }}" onclick="displayDefaultText(this)" value="{{ bclabel.id }}" type="checkbox" name="checkbox-label">
+                                                    <div>
+                                                        <input id="checked-label-{{ bclabel.id }}" onclick="displayDefaultText(this)" value="{{ bclabel.id }}" type="checkbox" name="checkbox-label">
+                                                    </div>
+                                                    <div class="label-margin">
+                                                        {% include 'snippets/which-label.html' %}
+                                                        <span id="label-name-{{ bclabel.id }}" class="grey-text">{{ bclabel.name }}</span>
+                                                    </div>
                                                 </div>
-                                                <div class="label-margin">
-                                                    {% include 'snippets/which-label.html' %}
-                                                    <span id="label-name-{{ bclabel.id }}" class="grey-text">{{ bclabel.name }}</span>
-                                                </div>
-                                            </div>
 
-                                            {% endif %}
-                                        {% endfor %}
+                                            {% endfor %}
                                         {% endif %}
                                     </div>
                                 </li>
