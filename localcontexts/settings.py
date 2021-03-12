@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_countries',
-    'phone_field',
     'django_cleanup',
     'storages',
 

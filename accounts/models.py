@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
-from phone_field import PhoneField
 from PIL import Image
 from django.core.files.storage import default_storage
 from io import BytesIO
