@@ -16,7 +16,7 @@
             </div>
     
             <div class="w-90 flex-this column">
-                <div class="notice-info border-bottom-blk padding-bottom-2">
+                <div class="notice-info border-bottom-dash-teal padding-bottom-2">
                     <a href="#"><h4 class="darkteal-text weight-500">{{ notice.project.title}}</h4></a>
                     <p>
                         {{ notice.project.project_type }}<br>
@@ -42,13 +42,17 @@
                                         {% if bclabels %}
                                         {% for bclabel in bclabels %}
                                             {% if bclabel.is_approved == True %}
-                                            <div>
-                                                <input id="checked-label-{{ bclabel.id }}" onclick="displayDefaultText(this)" value="{{ bclabel.id }}" type="checkbox" name="checkbox-label">
-                                            </div>
+                                            <div class="w-20 wrap center-text">
+
+                                                <div>
+                                                    <input id="checked-label-{{ bclabel.id }}" onclick="displayDefaultText(this)" value="{{ bclabel.id }}" type="checkbox" name="checkbox-label">
+                                                </div>
                                                 <div class="label-margin">
                                                     {% include 'snippets/which-label.html' %}
                                                     {{ bclabel.name }}
                                                 </div>
+                                            </div>
+
                                             {% endif %}
                                         {% endfor %}
                                         {% endif %}
@@ -60,20 +64,20 @@
 
                                     {% if bclabels %}
                                     {% for bclabel in bclabels %}
-                                        <div id="open-default-text-{{ bclabel.id }}" style="height: 0; overflow: hidden;" class="flex-this">
-                    
-                                            <div class="small-label">
-                                                {% include 'snippets/which-label.html' %}
+                                        <div id="open-default-text-{{ bclabel.id }}" style="height: 0; overflow: hidden;">
+                                            <div class="flex-this">
+                                                <div class="small-label">
+                                                    {% include 'snippets/which-label.html' %}
+                                                </div>
+                                                <div class="pad-left-2">
+                                                    <p class="darkteal-text no-top-margin">Label shared by {{ bclabel.community.community_name }} </p>
+                                                    <p class="weight-500"> {{ bclabel.name }} </p>
+                                                    <p>
+                                                        {{ bclabel.default_text}}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div class="pad-left-2">
-                                                <p class="darkteal-text no-top-margin">Label shared by {{ bclabel.community.community_name }} </p>
-                                                <p class="weight-500"> {{ bclabel.name }} </p>
-                                                <p>
-                                                    {{ bclabel.default_text}}
-                                                </p>
-                                                <hr>
-                                            </div>
-                    
+                                            <div class="border-bottom-solid-teal"></div>
                                         </div>
                                     {% endfor %}
                                 {% endif %}

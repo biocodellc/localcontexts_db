@@ -222,6 +222,14 @@ input:focus {
     border-bottom: 1px solid #A09D9D;
 }
 
+.border-bottom-dash-teal {
+    border-bottom: 1px dashed #007385;
+}
+
+.border-bottom-solid-teal {
+    border-bottom: 1px solid #007385;  
+}
+
 /* FLEX */
 .flex-this {
     display: flex;
