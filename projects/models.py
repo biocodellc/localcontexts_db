@@ -11,7 +11,7 @@ class Project(models.Model):
         ('Publication', 'Publication'),
     )
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
-    title = models.TextField(null=True)
+    title = models.CharField(max_length=300, null=True)
     description = models.TextField(null=True)
     project_contact = models.CharField(max_length=100, null=True)
     project_contact_email = models.EmailField(max_length=100, null=True)
@@ -19,7 +19,7 @@ class Project(models.Model):
     project_data_guid = models.CharField(max_length=200, blank=True, null=True)
     recommended_citation = models.CharField(max_length=200, blank=True, null=True)
     geome_project_id = models.IntegerField(blank=True, null=True)
-    url = models.TextField(blank=True, null=True)
+    url = models.URLField(blank=True, null=True)
     publication_date = models.DateField(null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     date_modified = models.DateTimeField(auto_now=True, null=True)

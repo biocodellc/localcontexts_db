@@ -10,33 +10,29 @@
 
             <div class="flex-this space-between column">
             
-                <div class="flex-this w-100 proj-title-container">
     
-                    <div class="w-50">
-                        <h4 class="darkteal-text weight-600">{{ c.project.title }}</h4>
+                <div class="w-100 flex-this proj-info-container" style="border: 1px solid purple;">
+                    <div class="w-10" style="border: 1px solid red;">
+                        <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
                     </div>
-    
-                    <div class="w-50 flex-this flex-end">
-                        
-                            <h2>
-                                <a onclick='showMore(this)'>
-                                    <span id="plus-minus-{{c.project.id}}" class="darkteal-text">+</span>
-                                </a>
-                            </h2>
-    
-                    </div>
-    
-                </div> 
-    
-                <div class="w-100 flex-this proj-info-container">
-                    <div class="w-50"> 
-                            <p>
+                    <div class="w-50 pad-left-2" style="border: 1px solid lime;"> 
+                            <h4 class="darkteal-text weight-600 no-top-margin">{{ c.project.title }}</h4>
+
+                            <p class="no-top-margin">
                                 {{ c.project.project_type }}<br>
                                 {{ c.project.publication_date }}<br>
                             </p>
                     </div>
         
-                    <div class="w-50 additional-proj-info flex-this column">
+                    <div class="w-50 additional-proj-info flex-this column" style="border: 1px solid orange;">
+
+                        <div class="flex-this flex-end w-100 proj-title-container">
+                            <h2>
+                                <a onclick='showMore(this)'>
+                                    <span id="plus-minus-{{c.project.id}}" class="darkteal-text">+</span>
+                                </a>
+                            </h2>
+                        </div> 
         
                         <div>
                             <p>Relationship with <a href="#"><span class="darkteal-text">Community Name</span></a></p>
@@ -84,11 +80,11 @@
                                 </div>
                                 {% if c.project.geome_project_id %}
                                     <div>
-                                    <button class="green-action-btn">View on GEOME</button>
+                                    <button class="white-action-btn">View on GEOME</button>
                                     </div>
                                 {% endif %}
                                 <div>
-                                  <button class="green-action-btn">View ORCiD</button>
+                                  <button class="white-action-btn">View ORCiD</button>
                                 </div>
                             </div>
     

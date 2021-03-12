@@ -1,29 +1,13 @@
 {% load static %}
 
-<section id="user-info-container" class="white-bg content-card content-card-space">
-    <div id="user-info-content" class="flex-this column">
+<section class="white-bg content-card content-card-space">
+    <div class="flex-this space-between">
 
-        <div class="profile-settings flex-this">
-            <a href="{% url 'update-profile' %}" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Profile Settings</a>
+        <div>
+            <h2 class="orange-text weight-500">Welcome, {{ user.first_name }} </h2>
         </div>
-
-        <div class="row flex-this">
-            <div id="profile-pic-container">
-                {% if user.profile.profile_pic %}
-                    <img src="{{ user.profile.profile_pic.url }}" alt="user profile image">
-                {% else %}
-                    <img src="{% static '/images/default.png' %}" alt="default user profile image">
-                {% endif %}
-            </div>
-    
-            <div class="row user-info">
-                <h2 class="orange-text">Kia Ora, {{ user.first_name }}</h2>
-                <p>
-                    Username: {{ user.username }} <br>
-                    Job Title: {{ user.profile.job_title }} <br>
-                    Personal Location: {{ user.profile.city_or_town }} {{ user.profile.country.name }}    
-                </p>
-            </div>
+        <div>
+            <a href="{% url 'update-profile' %}" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
         </div>
 
     </div>

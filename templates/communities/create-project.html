@@ -5,6 +5,8 @@
         <small><a class="darkteal-text" href="{% url 'community-projects' community.id %}">Projects</a> <span style="color:#A09D9D;"> >> Create New Project</span></small>
     </div>
 
+    <form method="POST" action="">
+        {% csrf_token %}
     <div>
         <h2 class="orange-text weight-700">Create a project</h2>
     </div>
@@ -16,7 +18,7 @@
 
     <div>
         <div>
-            <label class="darkteal-text">Project Title*</label><br>
+        <label class="darkteal-text">Project Title*</label><br>
             {{ form.title }}
         </div>
         <div>
@@ -45,30 +47,64 @@
     </div>
 
     <div>
+
         <div>
             <h4 class="weight-500">Apply your custom Labels to this project</h4>
         </div>
-
+    
         <div>
-            <p class="darkteal-text">
-                <span class="weight-500">1. Attach Labels</span><br>
-                {% if bclabels %}
-                    {% for bclabel in bclabels %}
-                        {{ bclabel.name }}
-                    {% endfor%}
-                {% else %}
-                    You have no labels customised
-                {% endif %}
-                <br><span class="weight-500">2. View Label Descriptions</span>
-            </p>
-        </div>
+            <span class="weight-500 darkteal-text">1. Attach Labels</span><br>
+            <div class="flex-this">
+    
+            {% if bclabels %}
+                {% for bclabel in bclabels %}
+    
+                    <div class="w-20 wrap center-text">
+                        <div>
+                            <input id="checked-label-{{ bclabel.id }}" onclick="displayDefaultText(this)" value="{{ bclabel.id }}" type="checkbox" name="checked-labels">
+                        </div>
+                        {% include 'snippets/which-label.html' %}
+                        <span id="label-name-{{ bclabel.id }}" class="grey-text">{{ bclabel.name }}</span>
+                    </div>
+    
+                {% endfor %}
+            {% else %}
+                <p>You have no labels customised</p>
+            {% endif %}
+    
+            </div>
+    
+            <p class="weight-500 darkteal-text">2. View Label Descriptions</p>
 
+            {% if bclabels %}
+                {% for bclabel in bclabels %}
+                    <div id="open-default-text-{{ bclabel.id }}" style="height: 0; overflow: hidden;" class="flex-this">
+
+                        <div class="small-label">
+                            {% include 'snippets/which-label.html' %}
+                        </div>
+                        <div class="pad-left-2">
+                            <p class="darkteal-text no-top-margin">Label shared by {{ bclabel.community.community_name }} </p>
+                            <p class="weight-500"> {{ bclabel.name }} </p>
+                            <p>
+                                {{ bclabel.default_text}}
+                            </p>
+                            <hr>
+                        </div>
+
+                    </div>
+                {% endfor %}
+            {% endif %}
+    
+        </div>
+    
         <div>
             {{ form.errors }}
             <button class="action-btn">Apply Labels</button>
         </div>
-    </div>
 
+    </div>
+    </form>
 </div>
 
 {% endblock %}

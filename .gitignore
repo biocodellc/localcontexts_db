@@ -3,6 +3,8 @@ envi/
 setupHeroku.sh
 setupLocal.sh
 env.sh
+env-localprod.sh
+env-local.sh
 
 .vscode/
 

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}{% load static %}{% block content %} {% include 'partials/_reg-header.html' %}
+<div class="pad-top-8 grey-bg">
+    <section class="grey-bg">
+
+        <div class="white-bg page-not-found-card content-card">
+    
+            <div class="flex-this row page-not-found-content">
+    
+                <div class="flex-this column page-not-found-img">
+                    <img src="{% static 'images/logos/logo-404.png' %}" alt="404 Local Contexts round logo">
+                </div>
+            
+                <div class="flex-this column page-not-found-txt">
+                    <h1 class="orange-text weight-500">Sorry!</h1> 
+                    <h2>There is something wrong with this page. <br>
+                    Try to refresh this page or contact us if the problem persists on <a href="mailto:info@localcontexts.org" class="darkteal-text">info@localcontexts.org</a> </h2>
+                    <p>Error code: 500 Internal Server Error</p>
+            
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    </section>
+</div>
+
+
+{% include 'partials/_auth-footer.html' %}
+
+{% endblock %}

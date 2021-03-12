@@ -115,18 +115,18 @@ function showBCLabelInfo() {
     let fullCard = document.getElementById('collapsed-card')
     let header = document.getElementById('bclabels-title-vertical')
 
-    if (labelContainer.style.height == "0px" && span.innerHTML == `<i class="fa fa-angle-down" aria-hidden="true"></i>`) {
+    if (labelContainer.style.height == "0px") {
         header.style.margin = "0"
         fullCard.style.height = "460px"
         fullCard.style.transition = "height 0.5s"
         labelContainer.style.height = "460px"
-        span.innerHTML = `<i class="fa fa-angle-up" aria-hidden="true"></i>`
+        span.innerHTML = `Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>`
     } else {
         header.style.margin = "auto 0"
         fullCard.style.height = "113px"
         fullCard.style.transition = "height 0.5s"
         labelContainer.style.height = "0px"
-        span.innerHTML = `<i class="fa fa-angle-down" aria-hidden="true"></i>`
+        span.innerHTML = `Show More <i class="fa fa-angle-down" aria-hidden="true"></i>`
     }
 }
 
@@ -201,9 +201,11 @@ function whichImgClicked(val) {
 
 // Community: Customise labels -- populate default text
 var parentDiv = document.getElementById('target-img-div')
-var image = parentDiv.firstChild.nextSibling
-console.log(image.id)
-populateTemplate(image.id)
+if (parentDiv) {
+    var image = parentDiv.firstChild.nextSibling
+    // console.log(image.id)
+    populateTemplate(image.id)
+}
 
 function populateTemplate(id) {
     let title = document.getElementById('bclabel-title')
@@ -245,9 +247,11 @@ function showMoreNotice(elem) {
     let contentCard = document.getElementById(`full-notice-card-${noticeID}`)
 
     if (expandDiv.style.height == "0px") {
+        elem.innerHTML = 'Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>'
         expandDiv.style.height = "auto"
         contentCard.style.height = "auto"
     } else {
+        elem.innerHTML = 'Show More <i class="fa fa-angle-down" aria-hidden="true"></i>'
         expandDiv.style.height = "0"
         contentCard.style.height = "201px"
     }
@@ -260,12 +264,37 @@ function showMoreProject(elem) {
     let contentCard = document.getElementById(`full-contrib-card-${contribID}`)
 
     if (expandDiv.style.height == "0px") {
+        elem.innerHTML = 'Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>'
         expandDiv.style.height = "auto"
         contentCard.style.height = "auto"
     } else {
+        elem.innerHTML = 'Show More <i class="fa fa-angle-down" aria-hidden="true"></i>'
         expandDiv.style.height = "0"
         contentCard.style.height = "auto"
     }
 }
 
+// Community: create project
+// Community: requests : apply labels
+function displayDefaultText(elem) {
+    let isChecked = elem.checked
+    let labelID = elem.id
+
+    let matches = labelID.match(/(\d+)/)
+    let targetNum = matches[0]
+
+    let targetDiv = document.getElementById(`open-default-text-${targetNum}`)
+    let labelName = document.getElementById(`label-name-${targetNum}`)
+
+    if (isChecked) {
+        targetDiv.style.height = 'auto'
+        labelName.classList.remove('grey-text')
+        labelName.classList.add('darkteal-text')
+    } else {
+        targetDiv.style.height = '0'
+        labelName.classList.remove('darkteal-text')
+        labelName.classList.add('grey-text')
+    }
+
+}
 

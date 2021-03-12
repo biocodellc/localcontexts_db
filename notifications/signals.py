@@ -7,12 +7,6 @@ from .models import *
 from .utils import *
 from django.conf import settings
 
-# Sends welcome notification to user that just registered
-@receiver(post_save, sender=User)
-def create_welcome_message(sender, instance, created, **kwargs):
-    if created:
-        UserNotification.objects.create(to_user=instance, title="Welcome", message="You have joined", notification_type="Welcome")
-
 # When the instance of invite member form is saved, send target user a notification
 @receiver(post_save, sender=InviteMember)
 def send_community_invite(sender, instance, created, **kwargs):

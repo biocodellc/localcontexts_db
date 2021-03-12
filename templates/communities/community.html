@@ -50,38 +50,60 @@
             </div>
         </div> -->
 
-        {% if notifications %}
-            <div class="white-bg content-card content-card-space noti-card">
-                
-                    <h3 class="orange-text">Notifications</h3>
-                    {% for n in notifications %}
-                        <a href="{% url 'comm-show' community.id n.id %}">
-                            <div class="noti-container flex-this row">
+        <div class="flex-this space-between w-100 half-card-container">
 
-                                {% if n.viewed == False %}
-                                    <div><p class="orange-text"><i class="fa fa-bell" aria-hidden="true"></i></p></div>
-                                    <div><strong><p>{{ n.notification_type }}</p></strong></div>
-                                    <div><p>{{ n.title }}</p></div>
-                                {% else %}
-                                    <div><p></p></div>
-                                    <div><strong><p>{{ n.notification_type }}</p></strong></div>
-                                    <div><p>{{ n.title }}</p></div>
-                                {% endif %}
+            <div class="half-card">
+                <h3 class="orange-text">Notifications</h3>
+                {% if notifications %}
+                    {% for n in notifications %}
+
+                    <div class="activity-card">
+                        <p class="pad-left-2">
+                            <span class="darkteal-text weight-500">{{ n.notification_type }}</span><br>
+                            {{ n.created }} <br>
+                            Activity Contributor<br>
+                            {{ n.title }}
+                        </p>
+                    </div>
+
+                    {% endfor %}
+                {% else %}
+                    <p>No notifications yet</p>
+                {% endif %}
+            </div>
+
+            <div class="half-card">
+                <h3 class="orange-text">Requests</h3>
+
+                {% if bcnotices %}
+                    {% for bcnotice in bcnotices %}
+                        {% if bcnotice.project.has_labels %}
+
+                        {% else %}
+
+                            <div class="activity-card flex-this">
+
+                                <div class="pad-left-2 shift-down">
+                                    <img src="{% static 'images/notices/bc-notice.png' %}" height="105px" width="108px">
+                                </div>
+
+                                <div class="pad-left-2">
+                                    <p>
+                                        <span class="darkteal-text weight-500">{{ bcnotice.project.title }}</span><br>
+                                        {{ bcnotice.project.publication_date }} <br>
+                                        {{ bcnotice.project.project_type }}<br>
+                                        {{ bcnotice.placed_by_researcher.user.get_full_name }}
+                                    </p>
+                                </div>
 
                             </div>
-                        </a>
+                        {% endif %}
                     {% endfor %}
+                {% else %}
+                    <p>No requests yet</p>
+                {% endif %}
             </div>
-        
-        {% else %}
 
-        <div class="content-card content-card-space white-bg">
-            <div>
-                <h3 class="orange-text">Recent Activity</h3>
-            </div>
-            <p>No recent activity</p>
         </div>
-
-        {% endif %}
 
 {% endblock %}

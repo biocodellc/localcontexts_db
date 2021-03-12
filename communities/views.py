@@ -83,6 +83,7 @@ def community_registry(request):
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
     n = CommunityNotification.objects.filter(community=community)
+    bcnotices = BCNotice.objects.filter(communities=community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -92,6 +93,7 @@ def community_dashboard(request, pk):
             'community': community,
             'notifications': n,
             'member_role': member_role,
+            'bcnotices': bcnotices,
         }
         return render(request, 'communities/community.html', context)
 
@@ -188,7 +190,6 @@ def community_requests(request, pk):
         }
         return render(request, 'communities/requests.html', context)
         
-#TODO: figure out how to display projects that labels have been applied to / approved
 @login_required(login_url='login')
 def community_labels(request, pk):
     community = Community.objects.get(id=pk)
@@ -198,16 +199,31 @@ def community_labels(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        if request.method == "POST":
-            label_type = request.POST.get('testing-variable')
-            return redirect('customise-label', community.id, label_type)
-
         context = {
             'community': community,
             'member_role': member_role,
             'bclabels': bclabels,
         }
         return render(request, 'communities/labels.html', context)
+
+@login_required(login_url='login')
+def select_label(request, pk):
+    community = Community.objects.get(id=pk)
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        if request.method == "POST":
+            label_type = request.POST.get('label-type')
+            return redirect('customise-label', community.id, label_type)
+        
+        context = {
+            'community': community,
+            'member_role': member_role,
+        }
+
+        return render(request, 'communities/select-label.html', context)
 
 @login_required(login_url='login')
 def customise_label(request, pk, label_type):
@@ -299,7 +315,12 @@ def create_project(request, pk):
             form = CreateProjectForm(request.POST)
             if form.is_valid():
                 obj = form.save(commit=False)
+                labels_selected = request.POST.getlist('checked-labels')
                 obj.save()
+
+                for choice in labels_selected:
+                    label = BCLabel.objects.get(id=choice)
+                    obj.bclabels.add(label)
 
                 ProjectContributors.objects.create(project=obj, community=community)
                 return redirect('community-projects', community.id)
@@ -320,7 +341,7 @@ def create_project(request, pk):
 def community_add_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
     notice = BCNotice.objects.get(id=notice_id)
-    bclabels = BCLabel.objects.filter(community=community)
+    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -328,9 +349,8 @@ def community_add_labels(request, pk, notice_id):
     else:
         if request.method == "POST":
             label_selected = request.POST.getlist('checkbox-label')
-            print(label_selected)
+
             for choice in label_selected:
-                print(choice)
                 label = BCLabel.objects.get(id=choice)
                 notice.project.bclabels.add(label)
             return redirect('community-projects', community.id)

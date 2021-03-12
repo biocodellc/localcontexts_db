@@ -239,3 +239,6 @@ fabric.properties
 
 # The Git folder
 .git/
+
+env-localprod.sh
+env-local.sh

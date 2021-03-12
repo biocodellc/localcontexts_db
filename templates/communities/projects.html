@@ -19,7 +19,7 @@
     {% if contribs %}
         {% for contrib in contribs %}
             {% if contrib.project.has_labels %}
-            <div class="content-card content-card-space white-bg">
+            <div class="content-card-v2 white-bg">
 
                 <div id="full-contrib-card-{{ contrib.id }}" class="flex-this space-between">
                     <div>
@@ -37,7 +37,7 @@
                         </p>
                     </div>
                     <div>
-                        <a id="{{ contrib.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More</a>
+                        <a id="{{ contrib.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                     </div>
                 </div>
 
