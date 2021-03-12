@@ -201,9 +201,11 @@ function whichImgClicked(val) {
 
 // Community: Customise labels -- populate default text
 var parentDiv = document.getElementById('target-img-div')
-var image = parentDiv.firstChild.nextSibling
-console.log(image.id)
-populateTemplate(image.id)
+if (parentDiv) {
+    var image = parentDiv.firstChild.nextSibling
+    // console.log(image.id)
+    populateTemplate(image.id)
+}
 
 function populateTemplate(id) {
     let title = document.getElementById('bclabel-title')
@@ -272,4 +274,22 @@ function showMoreProject(elem) {
     }
 }
 
+// Community: create project
+// Community: requests : apply labels
+function displayDefaultText(elem) {
+    let isChecked = elem.checked
+    let labelID = elem.id
+
+    let matches = labelID.match(/(\d+)/)
+    let targetNum = matches[0]
+
+    let targetDiv = document.getElementById(`open-default-text-${targetNum}`)
+
+    if (isChecked) {
+        targetDiv.style.height = 'auto'
+    } else {
+        targetDiv.style.height = '0'
+    }
+
+}
 

@@ -36,14 +36,14 @@
                             <form method="POST" action="">
                                 {% csrf_token %}
 
-                                <li class="darkteal-text">
+                                <li>
                                     <p class="weight-500 darkteal-text">Select a Label</p>
                                     <div class="flex-this">
                                         {% if bclabels %}
                                         {% for bclabel in bclabels %}
                                             {% if bclabel.is_approved == True %}
                                             <div>
-                                                <input value="{{ bclabel.id }}" type="checkbox" name="checkbox-label">
+                                                <input id="checked-label-{{ bclabel.id }}" onclick="displayDefaultText(this)" value="{{ bclabel.id }}" type="checkbox" name="checkbox-label">
                                             </div>
                                                 <div class="label-margin">
                                                     {% include 'snippets/which-label.html' %}
@@ -55,8 +55,29 @@
                                     </div>
                                 </li>
 
-                                <li class="darkteal-text">
+                                <li>
                                     <p class="weight-500 darkteal-text">View Label Description</p>
+
+                                    {% if bclabels %}
+                                    {% for bclabel in bclabels %}
+                                        <div id="open-default-text-{{ bclabel.id }}" style="height: 0; overflow: hidden;" class="flex-this">
+                    
+                                            <div class="small-label">
+                                                {% include 'snippets/which-label.html' %}
+                                            </div>
+                                            <div class="pad-left-2">
+                                                <p class="darkteal-text no-top-margin">Label shared by {{ bclabel.community.community_name }} </p>
+                                                <p class="weight-500"> {{ bclabel.name }} </p>
+                                                <p>
+                                                    {{ bclabel.default_text}}
+                                                </p>
+                                                <hr>
+                                            </div>
+                    
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+
                                     <div>
                                         <button class="action-btn">Apply Label(s) to project</button>
                                     </div>

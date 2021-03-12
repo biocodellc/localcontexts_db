@@ -60,11 +60,11 @@
                 {% for bclabel in bclabels %}
     
                     <div class="w-20 wrap center-text">
-                    <div>
-                        <input value="{{ bclabel.id }}" type="checkbox" name="checked-labels">
-                    </div>
-                    {% include 'snippets/which-label.html' %}
-                    <span class="darkteal-text">{{ bclabel.name }}</span>
+                        <div>
+                            <input id="checked-label-{{ bclabel.id }}" onclick="displayDefaultText(this)" value="{{ bclabel.id }}" type="checkbox" name="checked-labels">
+                        </div>
+                        {% include 'snippets/which-label.html' %}
+                        <span class="darkteal-text">{{ bclabel.name }}</span>
                     </div>
     
                 {% endfor %}
@@ -75,6 +75,26 @@
             </div>
     
             <p class="weight-500 darkteal-text">2. View Label Descriptions</p>
+
+            {% if bclabels %}
+                {% for bclabel in bclabels %}
+                    <div id="open-default-text-{{ bclabel.id }}" style="height: 0; overflow: hidden;" class="flex-this">
+
+                        <div class="small-label">
+                            {% include 'snippets/which-label.html' %}
+                        </div>
+                        <div class="pad-left-2">
+                            <p class="darkteal-text no-top-margin">Label shared by {{ bclabel.community.community_name }} </p>
+                            <p class="weight-500"> {{ bclabel.name }} </p>
+                            <p>
+                                {{ bclabel.default_text}}
+                            </p>
+                            <hr>
+                        </div>
+
+                    </div>
+                {% endfor %}
+            {% endif %}
     
         </div>
     
