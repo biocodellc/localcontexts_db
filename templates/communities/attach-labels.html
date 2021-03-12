@@ -63,24 +63,26 @@
                                     <p class="weight-500 darkteal-text">View Label Description</p>
 
                                     {% if bclabels %}
-                                    {% for bclabel in bclabels %}
-                                        <div id="open-default-text-{{ bclabel.id }}" style="height: 0; overflow: hidden;">
-                                            <div class="flex-this">
-                                                <div class="small-label">
-                                                    {% include 'snippets/which-label.html' %}
+                                        {% for bclabel in bclabels %}
+
+                                            <div id="open-default-text-{{ bclabel.id }}" style="height: 0; overflow: hidden;">
+                                                <div class="flex-this">
+                                                    <div class="small-label pad-top-1-5">
+                                                        {% include 'snippets/which-label.html' %}
+                                                    </div>
+                                                    <div class="pad-left-2">
+                                                        <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
+                                                        <p class="weight-500"> {{ bclabel.name }} </p>
+                                                        <p>
+                                                            {{ bclabel.default_text}}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                                <div class="pad-left-2">
-                                                    <p class="darkteal-text no-top-margin">Label shared by {{ bclabel.community.community_name }} </p>
-                                                    <p class="weight-500"> {{ bclabel.name }} </p>
-                                                    <p>
-                                                        {{ bclabel.default_text}}
-                                                    </p>
-                                                </div>
+                                                <div class="border-bottom-solid-teal"></div>
                                             </div>
-                                            <div class="border-bottom-solid-teal"></div>
-                                        </div>
-                                    {% endfor %}
-                                {% endif %}
+
+                                        {% endfor %}
+                                    {% endif %}
 
                                     <div>
                                         <button class="action-btn">Apply Label(s) to project</button>
