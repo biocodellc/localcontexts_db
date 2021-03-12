@@ -11,11 +11,11 @@
             <div class="flex-this space-between column">
             
     
-                <div class="w-100 flex-this proj-info-container" style="border: 1px solid purple;">
-                    <div class="w-10" style="border: 1px solid red;">
-                        <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
+                <div class="w-100 flex-this proj-info-container">
+                    <div class="w-10 pad-top-1">
+                        <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle" width="100px" height="100px">
                     </div>
-                    <div class="w-50 pad-left-2" style="border: 1px solid lime;"> 
+                    <div class="w-50 pad-left-1-5 pad-top-1"> 
                             <h4 class="darkteal-text weight-600 no-top-margin">{{ c.project.title }}</h4>
 
                             <p class="no-top-margin">
@@ -24,7 +24,7 @@
                             </p>
                     </div>
         
-                    <div class="w-50 additional-proj-info flex-this column" style="border: 1px solid orange;">
+                    <div class="w-50 additional-proj-info flex-this column">
 
                         <div class="flex-this flex-end w-100 proj-title-container">
                             <h2>
@@ -35,16 +35,17 @@
                         </div> 
         
                         <div>
-                            <p>Relationship with <a href="#"><span class="darkteal-text">Community Name</span></a></p>
-                        </div>
-    
-                        <div class="flex-this flex-end mini-label-container">
                             {% if c.project.has_labels %}
-                                {% include 'snippets/researcher-mini.html' %}
+                                <p>Relationship with <a href="#"><span class="darkteal-text">{{c.community.community_name}}</span></a></p>
+                                {% for bclabel in c.project.bclabels.all %}
+                                    {% include 'snippets/researcher-mini.html' %}
+                                {% endfor %}
+
                             {% else %}
                                 <div><small>No labels applied yet</small></div>
                             {% endif %}
                         </div>
+
     
                     </div>
     
@@ -92,7 +93,9 @@
                     <hr>
 
                     {% if c.project.has_labels %}
-                        {% include 'snippets/researcher-labels.html' %}
+                        {% for bclabel in c.project.bclabels.all %}
+                            {% include 'snippets/researcher-labels.html' %}
+                        {% endfor %}
                     {% endif %}
 
                 </div>
