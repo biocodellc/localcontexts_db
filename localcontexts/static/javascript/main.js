@@ -284,11 +284,16 @@ function displayDefaultText(elem) {
     let targetNum = matches[0]
 
     let targetDiv = document.getElementById(`open-default-text-${targetNum}`)
+    let labelName = document.getElementById(`label-name-${targetNum}`)
 
     if (isChecked) {
         targetDiv.style.height = 'auto'
+        labelName.classList.remove('grey-text')
+        labelName.classList.add('darkteal-text')
     } else {
         targetDiv.style.height = '0'
+        labelName.classList.remove('darkteal-text')
+        labelName.classList.add('grey-text')
     }
 
 }

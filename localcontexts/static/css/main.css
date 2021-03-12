@@ -124,6 +124,10 @@ input:focus {
     color: #EF6C00;
 }
 
+.grey-text {
+    color: #A09D9D;
+}
+
 /* BACKGROUND COLORS */
 
 .orange-bg {
