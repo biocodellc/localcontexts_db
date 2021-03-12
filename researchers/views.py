@@ -75,10 +75,12 @@ def update_researcher(request, pk):
 def researcher_notices(request, pk):
     researcher = Researcher.objects.get(id=pk)
     contribs = ProjectContributors.objects.filter(researcher=researcher)
+    bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher)
 
     context = {
         'researcher': researcher,
         'contribs': contribs,
+        'bcnotices': bcnotices,
     }
 
     return render(request, 'researchers/notices.html', context)
