@@ -193,8 +193,16 @@ input:focus {
     margin-bottom: 0;
 }
 
+.pad-top-1 {
+    padding-top: 1%;
+}
+
 .pad-top-1-5 {
     padding-top: 1.5%;
+}
+
+.pad-left-1-5 {
+    padding-left: 1.5%;
 }
 
 .pad-left-2 {

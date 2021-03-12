@@ -1,7 +1,6 @@
 {% load static %}
 <!-- List of Labels for Researcher : Notices : Detail slide  -->
 
-{% for bclabel in project.bclabels.all %}
 <div class="flex-this w-100 proj-label-summary">
     <div>
         {% if bclabel.label_type == 'commercialization' %}
@@ -39,5 +38,3 @@
 </div>
 
 <hr>
-
-{% endfor %}
