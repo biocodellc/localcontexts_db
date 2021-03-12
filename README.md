@@ -42,7 +42,6 @@ This will set local environment variables accessible via PYTHON
 ```source env-local.sh``` sets up environment variables for locally hosted database
 ```source env-localprod.sh``` sets up environment variables for production database to access it locally
 
-
 ## Migration
 ```
 python manage.py makemigrations
@@ -51,6 +50,15 @@ python manage.py createsuperuser # so you can start using database)
   Username: <Fill in your username>
   Email address: *<INSERT SITE_ADMIN_EMAIL> that is specified in the previous step, 'Initialize Environment Variables'*
 ```
+
+## Production Deployment and Migration
+Every push to `master` will automatically trigger a new version build. Migrations should be done before pushing to `master`!!
+In order to make migrations or migrate the production database:
+1. `source env-localprod.sh`
+2. `cloud_sql_proxy --instances=anth-ja77-local-contexts-8985:us-west2:biocodedb=tcp:5431`
+3. `python manage.py makemigrations`
+4. `python manage.py migrate`
+5. Merge `develop` into `master`
 
 ## Running the Server
 ```python manage.py runserver```
