@@ -39,7 +39,9 @@ Set localcontexts Environment Variables using EXPORT Statements
 This will set local environment variables accessible via PYTHON
 
 ```source setupHeroku.sh``` sets up environment variables for heroku hosted database
-```source setupLocal.sh``` sets up environment variables for locally hosted database
+```source env-local.sh``` sets up environment variables for locally hosted database
+```source env-localprod.sh``` sets up environment variables for production database to access it locally
+
 
 ## Migration
 ```
