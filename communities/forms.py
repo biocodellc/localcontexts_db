@@ -7,8 +7,8 @@ class CreateCommunityForm(forms.ModelForm):
         model = Community
         fields = ['community_name', 'town', 'country', 'contact_name', 'contact_email']
         widgets = {
-            'contact_name': forms.TextInput(attrs={'size': 50}),
-            'contact_email': forms.EmailInput(attrs={'size': 50}),
+            'contact_name': forms.TextInput(attrs={'size': 22}),
+            'contact_email': forms.EmailInput(attrs={'size': 24}),
         }
 
 class UpdateCommunityForm(forms.ModelForm):
