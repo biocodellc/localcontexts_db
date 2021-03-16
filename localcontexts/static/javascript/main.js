@@ -287,6 +287,7 @@ function displayDefaultText(elem) {
 // Researchers : add project/notice
 function noticeToggle(img) {
     let imgID = img.id
+    let hiddenInupt = document.getElementById('which-notice')
     let bcNotice = document.getElementById('bc-notice-img')
     let tkNotice = document.getElementById('tk-notice-img')
     let p = document.getElementById('notice-text')
@@ -298,10 +299,12 @@ function noticeToggle(img) {
         tkNotice.classList.add('opacity-4')
         bcNotice.classList.remove('opacity-4')
         p.innerText = bcText
+        hiddenInupt.value = 'bc_notice'
     } else {
         bcNotice.classList.add('opacity-4')
         tkNotice.classList.remove('opacity-4')
         p.innerText = tkText
+        hiddenInupt.value = 'tk_notice'
     }
 }
 

@@ -12,6 +12,7 @@ from notifications.models import CommunityNotification
 from bclabels.models import BCNotice, BCLabel
 from bclabels.forms import CustomiseLabelForm, ApproveAndEditLabelForm
 from bclabels.utils import check_bclabel_type
+from tklabels.models import TKNotice, TKLabel
 from projects.models import ProjectContributors
 from projects.forms import CreateProjectForm
 
@@ -84,6 +85,7 @@ def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
     n = CommunityNotification.objects.filter(community=community)
     bcnotices = BCNotice.objects.filter(communities=community)
+    tknotices = TKNotice.objects.filter(communities=community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -94,6 +96,7 @@ def community_dashboard(request, pk):
             'notifications': n,
             'member_role': member_role,
             'bcnotices': bcnotices,
+            'tknotices': tknotices,
         }
         return render(request, 'communities/community.html', context)
 
