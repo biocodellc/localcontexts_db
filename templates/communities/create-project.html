@@ -63,7 +63,7 @@
                         <div>
                             <input id="checked-label-{{ bclabel.id }}" onclick="displayDefaultText(this)" value="{{ bclabel.id }}" type="checkbox" name="checked-labels">
                         </div>
-                        {% include 'snippets/which-label.html' %}
+                        {% include 'bclabels/which-label.html' %}
                         <span id="label-name-{{ bclabel.id }}" class="grey-text">{{ bclabel.name }}</span>
                     </div>
     
@@ -81,7 +81,7 @@
                     <div id="open-default-text-{{ bclabel.id }}" style="height: 0; overflow: hidden;" class="flex-this">
 
                         <div class="small-label">
-                            {% include 'snippets/which-label.html' %}
+                            {% include 'bclabels/which-label.html' %}
                         </div>
                         <div class="pad-left-2">
                             <p class="darkteal-text no-top-margin">Label shared by {{ bclabel.community.community_name }} </p>

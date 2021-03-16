@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'bclabels.apps.BclabelsConfig',
     'researchers.apps.ResearchersConfig',
     'projects.apps.ProjectsConfig',
+    'tklabels.apps.TklabelsConfig',
 
     'communities',
     'institutions',
