@@ -99,9 +99,11 @@ def add_notice(request, pk):
             proj.save()
             contrib_data.save()
 
-            contrib = ProjectContributors.objects.create(project=proj, researcher=researcher, community=contrib_data.community)
-            
+            contrib = ProjectContributors.objects.create(project=proj, researcher=researcher, community=contrib_data.community)            
             message = request.POST.get('contrib-message') # Get value of message
+
+            # TODO: Which notice was selected? Which notice to save
+
             created_notice = BCNotice.objects.create(project=proj, placed_by_researcher=researcher, message=message)
             created_notice.communities.add(contrib_data.community)
 

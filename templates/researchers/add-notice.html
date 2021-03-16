@@ -19,14 +19,14 @@
 
                                     <div class="flex-this">
                                         <div class="select-notice">
-                                            <img src="{% static 'images/notices/bc-notice.png' %}" width="68px">
+                                            <img id="bc-notice-img" onclick="noticeToggle(this)" src="{% static 'images/notices/bc-notice.png' %}" width="68px" class="pointer">
                                         </div>
                                         <div class="select-notice">
-                                            <img src="{% static 'images/notices/tk-notice-grey.png' %}" width="68px">
+                                            <img id="tk-notice-img" onclick="noticeToggle(this)" src="{% static 'images/notices/tk-notice.png' %}" width="68px" class="opacity-4 pointer">
                                         </div>
                                         <div>
-                                            <p class="dashed-border">
-                                                This Notice should be used to recognize the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with traditional lands, waters, and territories. It acknowledges the importance of cultural protocols and recognizes that appropriate permissions may need to be sought for future use of this material.
+                                            <p id="notice-text" class="dashed-border">
+                                                The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated.
                                             </p>
                                         </div>
                                     </div>
