@@ -29,7 +29,6 @@ class TKLabel(models.Model):
         ('family', 'family'),
         ('outreach', 'outreach'),
         ('tk_multiple_community', 'tk_multiple_community'),
-        ('outreach', 'outreach'),  
         ('non_verified', 'non_verified'),  
         ('verified', 'verified'),  
         ('non_commercial', 'non_commercial'),  

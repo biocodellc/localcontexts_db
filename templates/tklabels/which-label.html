@@ -2,51 +2,147 @@
 {% load static %}
 
     <div>
-        {% if tklabel.label_type == 'commercialization'%}
+        {% if tklabel.label_type == 'attribution'%}
             {% if tklabel.is_approved == False %}
-                <img class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-attribution.png' %}">
             {% else %}
-                <img src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
+                <img src="{% static 'images/tk-labels/tk-attribution.png' %}">
             {% endif %}
         {% endif %}
 
-        {% if tklabel.label_type == 'provenance' %}
+        {% if tklabel.label_type == 'clan' %}
             {% if tklabel.is_approved == False %}
-                <img class="opacity-4" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-clan.png' %}">
             {% else %}
-                <img src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+                <img src="{% static 'images/tk-labels/tk-clan.png' %}">
             {% endif %}
         {% endif %}
 
-        {% if tklabel.label_type == 'collaboration' %}
+        {% if tklabel.label_type == 'family' %}
             {% if tklabel.is_approved == False %}
-                <img class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-family.png' %}">
             {% else %}
-                <img src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
+                <img src="{% static 'images/tk-labels/tk-family.png' %}">
             {% endif %}
         {% endif %}
 
-        {% if tklabel.label_type == 'consent_verified' %}
+        {% if tklabel.label_type == 'outreach' %}
             {% if tklabel.is_approved == False %}
-                <img class="opacity-4" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-outreach.png' %}">
             {% else %}
-                <img src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+                <img src="{% static 'images/tk-labels/tk-outreach.png' %}">
             {% endif %}
         {% endif %}
 
-        {% if tklabel.label_type == 'multiple_community' %}
+        {% if tklabel.label_type == 'tk_multiple_community' %}
             {% if tklabel.is_approved == False %}
-                <img class="opacity-4" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-multiple-community.png' %}">
             {% else %}
-                <img src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
+                <img src="{% static 'images/tk-labels/tk-multiple-community.png' %}">
             {% endif %}
         {% endif %}
 
-        {% if tklabel.label_type == 'research' %}
+        {% if tklabel.label_type == 'non_verified' %}
             {% if tklabel.is_approved == False %}
-                <img class="opacity-4" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-non-verified.png' %}">
             {% else %}
-                <img src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
+                <img src="{% static 'images/tk-labels/tk-non-verified.png' %}">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'verified' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-verified.png' %}">
+            {% else %}
+                <img src="{% static 'images/tk-labels/tk-verified.png' %}">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'non_commercial' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-non-commercial.png' %}">
+            {% else %}
+                <img src="{% static 'images/tk-labels/tk-non-commercial.png' %}">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'commercial' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-commercial.png' %}">
+            {% else %}
+                <img src="{% static 'images/tk-labels/tk-commercial.png' %}">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'culturally_sensitive' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-culturally-sensitive.png' %}">
+            {% else %}
+                <img src="{% static 'images/tk-labels/tk-culturally-sensitive.png' %}">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'community_voice' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-community-voice.png' %}">
+            {% else %}
+                <img src="{% static 'images/tk-labels/tk-community-voice.png' %}">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'community_use_only' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-community-use-only.png' %}">
+            {% else %}
+                <img src="{% static 'images/tk-labels/tk-community-use-only.png' %}">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'seasonal' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-seasonal.png' %}">
+            {% else %}
+                <img src="{% static 'images/tk-labels/tk-seasonal.png' %}">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'women_general' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-women-general.png' %}">
+            {% else %}
+                <img src="{% static 'images/tk-labels/tk-women-general.png' %}">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'men_general' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-men-general.png' %}">
+            {% else %}
+                <img src="{% static 'images/tk-labels/tk-men-general.png' %}">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'men_restricted' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-men-restricted.png' %}">
+            {% else %}
+                <img src="{% static 'images/tk-labels/tk-men-restricted.png' %}">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'women_restricted' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-women-restricted.png' %}">
+            {% else %}
+                <img src="{% static 'images/tk-labels/tk-women-restricted.png' %}">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'secret_sacred' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/tk-labels/tk-secret-sacred.png' %}">
+            {% else %}
+                <img src="{% static 'images/tk-labels/tk-secret-sacred.png' %}">
             {% endif %}
         {% endif %}
 
