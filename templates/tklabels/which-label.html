@@ -1,0 +1,53 @@
+<!-- Community: Labels -->
+{% load static %}
+
+    <div>
+        {% if tklabel.label_type == 'commercialization'%}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
+            {% else %}
+                <img src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'provenance' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+            {% else %}
+                <img src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'collaboration' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
+            {% else %}
+                <img src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'consent_verified' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+            {% else %}
+                <img src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'multiple_community' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
+            {% else %}
+                <img src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
+            {% endif %}
+        {% endif %}
+
+        {% if tklabel.label_type == 'research' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
+            {% else %}
+                <img src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
+            {% endif %}
+        {% endif %}
+
+    </div>
