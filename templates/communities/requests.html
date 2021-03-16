@@ -4,20 +4,20 @@
         <h3 class="orange-text reqs">Requests</h3>
     </div>
 
-    {% if notices %}
-        {% for notice in notices %}
-                {% if notice.project.has_labels == False %}
+    {% if bcnotices %}
+        {% for bcnotice in bcnotices %}
+                {% if bcnotice.project.has_labels == False %}
 
-                    <div id="full-notice-card-{{ notice.id }}" class="content-card-v2 white-bg">
+                    <div id="full-notice-card-{{ bcnotice.id }}" class="content-card-v2 white-bg">
                         <div class="flex-this space-between">
                             <div>
                                 <p class="no-top-margin notice-date">
-                                    Date Sent: {{ notice.created|date:'m/d/Y' }}
+                                    Date Sent: {{ bcnotice.created|date:'m/d/Y' }}
                                 </p>
                             </div>
                     
                             <div>
-                                <a id="{{ notice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
+                                <a id="{{ bcnotice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
                                     Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -31,39 +31,39 @@
 
                             <div class="w-90 pad-left-2">
                                 <p>
-                                    <span class="darkteal-text weight-600">{{ notice.project.title}}</span><br>
-                                    {{ notice.project.publication_date }} <br>
-                                    {{ notice.project.project_type }} <br>
-                                    {% for contributor in notice.communities.all %}
+                                    <span class="darkteal-text weight-600">{{ bcnotice.project.title}}</span><br>
+                                    {{ bcnotice.project.publication_date }} <br>
+                                    {{ bcnotice.project.project_type }} <br>
+                                    {% for contributor in bcnotice.communities.all %}
                                         {{ contributor.community_name }}
                                     {% endfor %}, 
-                                    {% if notice.placed_by_institution %}
-                                        {{ notice.placed_by_institution.institution_name }}
+                                    {% if bcnotice.placed_by_institution %}
+                                        {{ bcnotice.placed_by_institution.institution_name }}
                                     {% else %}
-                                        {{ notice.placed_by_researcher.user.get_full_name}}
+                                        {{ bcnotice.placed_by_researcher.user.get_full_name}}
                                     {% endif %}
                                 </p>
                             </div>
                         </div>
 
-                        <div id="expand-notice-{{notice.id}}" style="height: 0; overflow:hidden;" class="flex-this space-between">
+                        <div id="expand-notice-{{ bcnotice.id }}" style="height: 0; overflow:hidden;" class="flex-this space-between">
                             <div class="w-80">
                                 <p>What would you like to do with this notice? 
                                     <select>
                                         <option> Acknowledge Notice </option>
                                     </select>
                                 </p>
-                                <p><span class="weight-500">Description:</span> {{ notice.project.description }}</p>
+                                <p><span class="weight-500">Description:</span> {{ bcnotice.project.description }}</p>
                             </div>
 
                             <div class="flex-this column w-15">
                                 {% if notice.project.url %}
                                     <div class="notice-btns center-text">
-                                        <a href="{{ notice.project.url }}" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                        <a href="{{ bcnotice.project.url }}" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
                                     </div>
                                 {% endif %}
                                 <div class="notice-btns center-text">
-                                    <a href="{% url 'community-add-labels' community.id notice.id %}" class="action-btn">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
+                                    <a href="{% url 'community-add-labels' community.id bcnotice.id %}" class="action-btn">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -79,5 +79,81 @@
         </div>
 
     {% endif %}
+
+    {% if tknotices %}
+    {% for tknotice in tknotices %}
+            {% if tknotice.project.has_labels == False %}
+
+                <div id="full-notice-card-{{ tknotice.id }}" class="content-card-v2 white-bg">
+                    <div class="flex-this space-between">
+                        <div>
+                            <p class="no-top-margin notice-date">
+                                Date Sent: {{ tknotice.created|date:'m/d/Y' }}
+                            </p>
+                        </div>
+                
+                        <div>
+                            <a id="{{ tknotice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
+                                Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="flex-this">
+
+                        <div class="w-10">
+                            <img src="{% static 'images/notices/tk-notice.png' %}" alt="TK Notice: a black square with white letters TK in the middle">
+                        </div>
+
+                        <div class="w-90 pad-left-2">
+                            <p>
+                                <span class="darkteal-text weight-600">{{ tknotice.project.title}}</span><br>
+                                {{ tknotice.project.publication_date }} <br>
+                                {{ tknotice.project.project_type }} <br>
+                                {% for contributor in tknotice.communities.all %}
+                                    {{ contributor.community_name }}
+                                {% endfor %}, 
+                                {% if tknotice.placed_by_institution %}
+                                    {{ tknotice.placed_by_institution.institution_name }}
+                                {% else %}
+                                    {{ tknotice.placed_by_researcher.user.get_full_name}}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="expand-notice-{{ tknotice.id }}" style="height: 0; overflow:hidden;" class="flex-this space-between">
+                        <div class="w-80">
+                            <p>What would you like to do with this notice? 
+                                <select>
+                                    <option> Acknowledge Notice </option>
+                                </select>
+                            </p>
+                            <p><span class="weight-500">Description:</span> {{ tknotice.project.description }}</p>
+                        </div>
+
+                        <div class="flex-this column w-15">
+                            {% if notice.project.url %}
+                                <div class="notice-btns center-text">
+                                    <a href="{{ tknotice.project.url }}" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                </div>
+                            {% endif %}
+                            <div class="notice-btns center-text">
+                                <a href="#" class="action-btn">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            {% endif %}
+        {% endfor %}
+{% else %}
+
+    <div class="content-card content-card-space white-bg">
+        <p>No notices to display at this time</p>
+    </div>
+
+{% endif %}
 
 {% endblock %}
