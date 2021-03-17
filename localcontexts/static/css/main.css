@@ -1025,3 +1025,17 @@ input:focus {
 .shift-down img {
     padding-top: 5px;
 }
+
+/* Requests: Apply labels */
+.add-label-mini-card {
+    margin-top: 35px;
+    border: 1px dashed #A09D9D;
+    border-radius: 5px;
+    width: 160px;
+    height: 101px;
+}
+
+.add-label-mini-card div {
+    margin: 20px 10px;
+    text-align: center;
+}
