@@ -15,7 +15,6 @@
 
                                 <div class="noti-container flex-this row">
                                         <div><p class="orange-text"><i class="fa fa-bell" aria-hidden="true"></i></p></div>
-                                        <div><strong><p>{{ n.notification_type }}</p></strong></div>
                                         <div><p>{{ n.title }}</p></div>
                                 </div>
                             </a>
@@ -24,7 +23,6 @@
                             <a href="{% url 'read' n.id %}">
                                 <div class="noti-container flex-this row">
                                         <div><p></p></div>
-                                        <div><strong><p>{{ n.notification_type }}</p></strong></div>
                                         <div><p>{{ n.title }}</p></div>
                                 </div>
 

@@ -102,6 +102,32 @@
                 {% else %}
                     <p>No requests yet</p>
                 {% endif %}
+
+                {% if tknotices %}
+                    {% for tknotice in tknotices %}
+                        {% if tknotice.project.has_labels %}
+
+                        {% else %}
+
+                        <div class="activity-card flex-this">
+
+                            <div class="pad-left-2 shift-down">
+                                <img src="{% static 'images/notices/tk-notice.png' %}" height="105px" width="108px">
+                            </div>
+
+                            <div class="pad-left-2">
+                                <p>
+                                    <span class="darkteal-text weight-500">{{ tknotice.project.title }}</span><br>
+                                    {{ tknotice.project.publication_date }} <br>
+                                    {{ tknotice.project.project_type }}<br>
+                                    {{ tknotice.placed_by_researcher.user.get_full_name }}
+                                </p>
+                            </div>
+
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             </div>
 
         </div>

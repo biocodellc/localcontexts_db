@@ -48,7 +48,7 @@
                                     <p class="darkteal-text no-top-margin no-bottom-margin">Waiting approval*</p>
     
                                     <div>
-                                        {% include 'snippets/which-label.html' %}
+                                        {% include 'bclabels/which-label.html' %}
                                         <p class="darkteal-text">{{ bclabel.name }}</p>
                                     </div>
                                 </div>
@@ -59,7 +59,7 @@
                                     <p class="darkteal-text">Waiting approval*</p>
                                     <a class="darkteal-text" href="{% url 'approve-label' community.id bclabel.id %}">
                                         <div>
-                                            {% include 'snippets/which-label.html' %}
+                                            {% include 'bclabels/which-label.html' %}
                                             <p class="darkteal-text">{{ bclabel.name }}</p>
                                         </div>
                                     </a>    
@@ -69,7 +69,7 @@
                     {% else %}
                         <div class="w-20 custom-labels">
                             <div class="approved-label center-text">
-                                {% include 'snippets/which-label.html' %}
+                                {% include 'bclabels/which-label.html' %}
                                 <p class="darkteal-text">{{ bclabel.name }}</p>
                             </div>
                         </div>

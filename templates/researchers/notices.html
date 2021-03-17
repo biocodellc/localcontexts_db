@@ -38,7 +38,7 @@
                             {% if c.project.has_labels %}
                                 <p>Relationship with <a href="#"><span class="darkteal-text">{{c.community.community_name}}</span></a></p>
                                 {% for bclabel in c.project.bclabels.all %}
-                                    {% include 'snippets/researcher-mini.html' %}
+                                    {% include 'bclabels/researcher-mini.html' %}
                                 {% endfor %}
 
                             {% else %}
@@ -94,7 +94,7 @@
 
                     {% if c.project.has_labels %}
                         {% for bclabel in c.project.bclabels.all %}
-                            {% include 'snippets/researcher-labels.html' %}
+                            {% include 'bclabels/researcher-labels.html' %}
                         {% endfor %}
                     {% endif %}
 

@@ -12,6 +12,7 @@ from notifications.models import CommunityNotification
 from bclabels.models import BCNotice, BCLabel
 from bclabels.forms import CustomiseLabelForm, ApproveAndEditLabelForm
 from bclabels.utils import check_bclabel_type
+from tklabels.models import TKNotice, TKLabel
 from projects.models import ProjectContributors
 from projects.forms import CreateProjectForm
 
@@ -84,6 +85,7 @@ def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
     n = CommunityNotification.objects.filter(community=community)
     bcnotices = BCNotice.objects.filter(communities=community)
+    tknotices = TKNotice.objects.filter(communities=community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -94,6 +96,7 @@ def community_dashboard(request, pk):
             'notifications': n,
             'member_role': member_role,
             'bcnotices': bcnotices,
+            'tknotices': tknotices,
         }
         return render(request, 'communities/community.html', context)
 
@@ -182,9 +185,12 @@ def community_requests(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        notices = BCNotice.objects.filter(communities=community)
+        bcnotices = BCNotice.objects.filter(communities=community)
+        tknotices = TKNotice.objects.filter(communities=community)
+
         context = {
-            'notices': notices,
+            'bcnotices': bcnotices,
+            'tknotices': tknotices,
             'community': community,
             'member_role': member_role,
         }
@@ -336,11 +342,11 @@ def create_project(request, pk):
 
         return render(request, 'communities/create-project.html', context)
 
-
+# TODO: Accommodate this to tk notices and being able to add tk labels.
 @login_required(login_url='login')
 def community_add_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
-    notice = BCNotice.objects.get(id=notice_id)
+    bcnotice = BCNotice.objects.get(id=notice_id)
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
 
     member_role = check_member_role(request.user, community)
@@ -352,12 +358,12 @@ def community_add_labels(request, pk, notice_id):
 
             for choice in label_selected:
                 label = BCLabel.objects.get(id=choice)
-                notice.project.bclabels.add(label)
+                bcnotice.project.bclabels.add(label)
             return redirect('community-projects', community.id)
         
         context = {
             'community': community,
-            'notice': notice,
+            'bcnotice': bcnotice,
             'bclabels': bclabels,
             'member_role': member_role,
         }
