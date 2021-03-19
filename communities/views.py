@@ -46,9 +46,7 @@ def create_community(request):
             return redirect('dashboard')
     else:
         form = CreateCommunityForm()
-
-    context = {'form': form}
-    return render(request, 'communities/create-community.html', context)
+        return render(request, 'communities/create-community.html', {'form': form})
 
 # Registry
 def community_registry(request):

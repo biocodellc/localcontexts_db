@@ -11,14 +11,13 @@ def connect_institution(request):
 
 @login_required(login_url='login')
 def create_institution(request):
-
     if request.method == 'POST':
         form = CreateInstitutionForm(request.POST)
         if form.is_valid():
             data = form.save(commit=False)
             data.institution_creator = request.user
             data.save()
-            return redirect('institution-dashboard', data.id)
+            return redirect('dashboard')
     else:
         form = CreateInstitutionForm()
         return render(request, 'institutions/create-institution.html', {'form': form})
