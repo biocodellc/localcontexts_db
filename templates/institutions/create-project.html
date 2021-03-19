@@ -1,0 +1,146 @@
+{% extends 'institution-base.html' %} {% load static %}{% block institution_content %}
+
+<div class="white-bg content-card content-card-space noti-card">
+    
+        <p><a href="{% url 'institution-projects' institution.id %}"><span class="darkteal-text">Projects</span></a> >> Add Project</p>
+
+        <div>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <ol>
+
+                    <li>
+                        <p class="weight-500">Project Overview</p>
+
+                        <ul>
+                            <li>
+                                <div class="flex-this column">
+                                    <p>Select a notice*</p>
+
+                                    <div class="flex-this">
+                                        <div class="select-notice">
+                                            <img id="bc-notice-img" onclick="noticeToggle(this)" src="{% static 'images/notices/bc-notice.png' %}" width="68px" class="pointer">
+                                        </div>
+                                        <div class="select-notice">
+                                            <img id="tk-notice-img" onclick="noticeToggle(this)" src="{% static 'images/notices/tk-notice.png' %}" width="68px" class="opacity-4 pointer">
+                                        </div>
+                                        <div>
+                                            <p id="notice-text" class="dashed-border">
+                                                The BC Notice serves as a visible notification that there is accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated.
+                                            </p>
+                                            <input type="hidden" value="bc_notice" name="which_notice" id="which-notice">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div>
+                                    <p class="no-bottom-margin">Project Title*</p>
+                                    Input
+                                </div>
+                            </li>
+
+                            <li>
+                                <div>
+                                    <div>
+                                        <p class="no-bottom-margin">Community*</p>
+                                        Input
+                                        <a href="{% url 'invite' %}"><span class="darkteal-text">Or email a non-registered - Community or Institution</span></a>
+
+                                    </div>
+                                    <div>
+                                        <p class="no-bottom-margin">Add optional message to contributors</p>
+                                        <textarea class="contrib-msg" name="contrib-message"></textarea>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div>   
+                                    <p class="no-bottom-margin">What are you applying the notice to?</p>
+                                    Input
+                                </div>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                    <li>
+                        <p class="weight-500">Project Details</p>
+                        <ul>
+                            <li>
+                                <div class="flex-this">
+                                    <div>
+                                        Input
+                                    </div>
+                                    <div>
+                                        <p class="no-top-margin">
+                                            Public Project?<br>
+                                            <small>If a project is public, non project members will be able to query the data. You are able to change the privacy status always.</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <p>
+                                    Project Summary*
+                                </p>
+                                <label for="date">Publication Date</label><br>
+                                Input
+
+                            </li>
+                            <li>
+                                <p>
+                                    Project Description*
+                                </p>
+    
+                                <label for="description">Brief summary of research</label><br>
+                                Input
+                            </li>
+                            <li>
+                                <label for="project_contact">Project Contact Name</label><br>             
+                                Input
+                            </li>
+                            <li>
+                                <label for="project_contact_email">Project Contact Email</label><br>             
+                                Input
+                            </li>
+                            <li>
+                                <label for="publication_doi">Publication DOI</label><br>             
+                                Input
+                            </li>
+                            <li>
+                                <label for="project_data_guid">Project Data GUID</label><br>             
+                                Input
+                            </li>
+                            <li>
+                                <label for="recommended-citation">Recommended Citation</label><br>             
+                                Input
+                            </li>
+                            <li>
+                                <label for="url">Project URL</label><br>             
+                                Input
+                            </li>
+                            <li>
+                                <label for="geome_project_id">GEOME Project ID</label><br>             
+                                Input
+                            </li>
+                            
+                        </ul>
+
+                    </li>
+
+                    <li>
+                        Form errors
+                        <button class="action-btn default-btn">Save</button>
+                    </li>
+
+                </ol>
+            </form>
+        </div>
+
+</div>
+
+{% endblock %}

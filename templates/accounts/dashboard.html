@@ -59,7 +59,7 @@
             {% if user_institutions %}
             {% for institution in user_institutions %}
             <div class="member-card-container">
-                <a href="#">
+                <a href="{% url 'institution-dashboard' institution.id %}">
                     <div class="member-card flex-this column white-bg">
                         <div class="member-card-img">
                             <img src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">

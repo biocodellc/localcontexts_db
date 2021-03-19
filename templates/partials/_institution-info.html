@@ -1,0 +1,60 @@
+{% load static %}
+<div class="pad-top-8">
+
+    <div class="content-card content-card-space flex-this column white-bg">
+    
+        <div class="flex-this column">
+    
+            <div class="flex-this w-100 space-between">
+                <div class="loc">
+                    <a href="#" class="darkteal-text">
+                        name
+                    </a> 
+                    >> {{ institution.institution_name }}
+                </div>
+    
+                    <div>
+                        <a href="{% url 'update-institution' institution.id%}" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
+                    </div>
+                
+            </div>
+    
+            <div class="flex-this stats-info-container">
+    
+                <div class="w-30 stats-img-container">
+                    <img src="{% static 'images/placeholders/institution-place.jpg' %}" alt="institution image">
+                </div>
+    
+                <div class="flex-this column w-40">
+                    <h2 class="orange-text community-title">Institution Name</h2>
+                    <p>
+                        <span>Members:</span> 09 <br>
+                        <span>Location:</span> Some place<br>
+                    </p>
+                </div>
+    
+                <div class="flex-this white-text w-30">
+                    <div class="orange-bg stats-card w-30">
+                        <h1>03</h1>
+                        <p>Labels</p>
+                    </div>
+    
+                    <div class="orange-bg stats-card w-30">
+                        <h1>
+                            04
+                        </h1>
+                        <p>Projects</p>
+                    </div>
+    
+                    <div class="orange-bg stats-card w-30">
+                        <h1>02</h1>
+                        <p>Relationships</p>
+                    </div>
+                </div>
+    
+            </div>
+    
+        </div>
+    
+    </div>
+</div>
