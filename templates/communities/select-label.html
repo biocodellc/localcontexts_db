@@ -108,4 +108,197 @@
 
 </div>
 
+<!-- TK Label Card -->
+<div id="collapsed-tkcard" class="content-card content-card-space white-bg flex-this column">
+
+    <div id="tklabels-title-vertical" style="margin:auto 0;">
+        <div class="flex-this space-between">
+            <div>
+                <h2 class="orange-text weight-600">Traditional Knowledge (TK) Labels</h2>
+            </div>
+            <div>
+                <a onclick='showTKLabelInfo()' class="darkteal-text pointer"> <span id="show-more-tk-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
+            </div>
+        </div>
+    </div>
+
+    <div id="expand-tklabels" style="height:0px; overflow:hidden;">
+            <div>
+            <p class="darkteal-text">
+                Click on a Label to view more information*<br><br>
+
+                The TK Label text is intended to be customized by each community – giving the Labels specificity and context. 
+                The title of each TK Label can be translated into one or more languages and displayed in addition to the default Label title. 
+                The TK Label icons are not to be altered.  This is to ensure national and international recognition and integrity across content 
+                and collection management systems, online repositories, websites, and physical exhibits, learn more about <a href="#">TK Labels</a>.
+
+            </p>
+        </div>
+
+        <div class="flex-this wrap" style="justify-content: space-evenly;">
+            <div class="center-text w-15">
+                <div>
+                    <img id="tka" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-attribution.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Attribution <br> (TK A) </p></div>
+            </div>
+    
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkcl" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-clan.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Clan <br> (TK CL)</p></div>
+            </div>
+    
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkf" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-family.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Family (TK F) </p></div>
+            </div>
+    
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkmc" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-multiple-community.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Multiple <br>Communities <br> (TK MC)</p></div>
+            </div>
+    
+            <div class="center-text w-15">
+                <div>
+                    <img id="tko" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-outreach.png' %}">
+                </div>
+                <div><p class="darkteal-text"> TK Outreach <br> (TK O)</p></div>
+            </div>
+    
+            <div class="center-text w-15">
+                <div>
+                    <img id="tknv" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-non-verified.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Non-Verified <br> (TK NV) </p></div>
+            </div>
+
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkv" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-verified.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Verified <br> (TK V) </p></div>
+            </div>
+
+            <div class="center-text w-15">
+                <div>
+                    <img id="tknc" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-non-commercial.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Non-Commercial <br> (TK NC) </p></div>
+            </div>
+
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkc" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-commercial.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Commercial <br> (TK C) </p></div>
+            </div>
+
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkcs" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-culturally-sensitive.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Culturally <br> Sensitive <br> (TK CS) </p></div>
+            </div>
+
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkcv" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-community-voice.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Community Voice <br> (TK CV) </p></div>
+            </div>
+
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkco" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-community-use-only.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Community Use <br> Only <br> (TK CO) </p></div>
+            </div>
+
+            <div class="center-text w-15">
+                <div>
+                    <img id="tks" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-seasonal.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Seasonal <br> (TK S) </p></div>
+            </div>
+
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkwg" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-women-general.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Women General <br> (TK WG) </p></div>
+            </div>
+
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkmg" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-men-general.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Men General <br> (TK MG) </p></div>
+            </div>
+
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkmr" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-men-restricted.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Men Restricted <br> (TK MR) </p></div>
+            </div>
+
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkwr" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-women-restricted.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Women Restricted <br> (TK WR) </p></div>
+            </div>
+
+            <div class="center-text w-15">
+                <div>
+                    <img id="tkss" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-secret-sacred.png' %}">
+                </div>
+                <div><p class="darkteal-text">TK Secret Sacred <br> (TK SS) </p></div>
+            </div>
+        </div>
+
+        <div id="tklabel-info" class="flex-this column text-background-blue" style="height:0px;">
+
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="flex-this">
+
+                    <input id="tk-label-value-type" type="hidden" value="placeholder" name="tk-label-type">
+                    <div class="w-50">
+                            <h3 class="weight-600 darkteal-text" id="tk-label-title" name="tk-label-title"></h3><br>
+                        </div>
+                        <div class="w-50 right-text">
+                            {% if member_role == 'viewer' %}
+
+                            {% else %}
+                                <button class="action-btn">Customise Label <i class="fa fa-long-arrow-right"></i></button>
+                            {% endif %}
+                        </div>
+
+                </div>
+            </form>
+
+            <div class="flex-this column">
+                <div>
+                    <span class="weight-600 darkteal-text">Why use this label?</span><br>
+                    <p id="why-use-this-label-tk"></p>
+                </div>
+                <div>
+                    <span class="weight-600 darkteal-text">Template Text</span><br>
+                    <p id="label-template-text-tk"></p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}
