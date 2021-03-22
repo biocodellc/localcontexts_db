@@ -1,8 +1,8 @@
 # localcontexts_db
 Branches:
-- Master: Final location and config of LocalContexts (Live Site)
+- [Master](https://anth-ja77-local-contexts-8985.uc.r.appspot.com/accounts/login/?next=/accounts/dashboard/) Final location and config of LocalContexts 
 - Develop: dev branch for pushing changes
-- heroku-demo: heroku config for live demo of [LocalContexts](https://localcontexts.herokuapp.com/)
+- [heroku-demo](https://localcontexts.herokuapp.com/) Heroku config for live demo of 
 
 ## Getting Started
 What you need to run this app:
