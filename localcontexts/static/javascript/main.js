@@ -139,37 +139,37 @@ function expandBCLabel(img) {
 
     switch (targetImg) {
         case 'bcr':
-            whichImgClicked('bcr')
+            whichBCImgClicked('bcr')
             title.textContent = researchUseName
             templateText.textContent = researchUseText
             whyUseLabelText.textContent = researchUse
             break;
         case 'bccv':
-            whichImgClicked('bccv')
+            whichBCImgClicked('bccv')
             title.textContent = consentVerifiedName
             templateText.textContent = consentVerifiedText
             whyUseLabelText.textContent = consentVerifiedUse
             break;
         case 'bcocomm':
-            whichImgClicked('bcocomm')
+            whichBCImgClicked('bcocomm')
             title.textContent = openToCommercializationName
             templateText.textContent = openToCommercializationText
             whyUseLabelText.textContent = openToCommUse
             break;
         case 'bcocoll':
-            whichImgClicked('bcocoll')
+            whichBCImgClicked('bcocoll')
             title.textContent = openToCollabName
             templateText.textContent = openToCollabText
             whyUseLabelText.textContent = openToCollabUse
             break;
         case 'bcmc':
-            whichImgClicked('bcmc')
+            whichBCImgClicked('bcmc')
             title.textContent = multipleCommunityName
             templateText.textContent = multipleCommunityText
             whyUseLabelText.textContent = multipleCommUse
             break;
         case 'bcp':
-            whichImgClicked('bcp')
+            whichBCImgClicked('bcp')
             title.textContent = provenanceName
             templateText.textContent = provenanceText
             whyUseLabelText.textContent = provenanceUse
@@ -178,9 +178,15 @@ function expandBCLabel(img) {
 
 }
 
-//  Assign input value based on which image is selected in Community: Labels
-function whichImgClicked(val) {
-    var input = document.getElementById('label-value-type')
+//  Assign input value based on which bc label image is selected in Community: select-abels
+function whichBCImgClicked(val) {
+    var input = document.getElementById('bc-label-value-type')
+    input.value = val
+}
+
+// Assign input value based on which bc label image is selected in Community: select-labels
+function whichTKImgClicked(val) {
+    var input = document.getElementById('tk-label-value-type')
     input.value = val
 }
 
@@ -410,103 +416,103 @@ function expandTKLabel(img) {
 
     switch (targetImg) {
         case 'tka':
-            // whichImgClicked('tka')
+            whichTKImgClicked('tka')
             title.textContent = tkAttributionName
             templateText.textContent = tkAttributionText
-            whyUseLabelText.textContent = tkAttribution
+            whyUseLabelText.textContent = tkAttributionUse
             break;
         case 'tkcl':
-            // whichImgClicked('tkcl')
+            whichTKImgClicked('tkcl')
             title.textContent = tkClanName
             templateText.textContent = tkClanText
             whyUseLabelText.textContent = tkClanUse
             break;
         case 'tkf':
-            // whichImgClicked('tkf')
+            whichTKImgClicked('tkf')
             title.textContent = tkFamilyName
             templateText.textContent = tkFamilyText
             whyUseLabelText.textContent = tkFamilyUse
             break;
         case 'tkmc':
-            // whichImgClicked('tkmc')
+            whichTKImgClicked('tkmc')
             title.textContent = tkMultipleCommunityName
             templateText.textContent = tkMultipleCommunityText
             whyUseLabelText.textContent = tkMultipleCommunityUse
             break;
         case 'tko':
-            // whichImgClicked('tko')
+            whichTKImgClicked('tko')
             title.textContent = tkOutreachName
             templateText.textContent = tkOutreachText
             whyUseLabelText.textContent = tkOutreachUse
             break;
         case 'tknv':
-            // whichImgClicked('tknv')
+            whichTKImgClicked('tknv')
             title.textContent = tkNonVerifiedName
             templateText.textContent = tkNonVerifiedText
             whyUseLabelText.textContent = tkNonVerifiedUse
             break;
         case 'tkv':
-            // whichImgClicked('tkv')
+            whichTKImgClicked('tkv')
             title.textContent = tkVerifiedName
             templateText.textContent = tkVerifiedText
             whyUseLabelText.textContent = tkVerifiedUse
             break;
         case 'tknc':
-            // whichImgClicked('tknc')
+            whichTKImgClicked('tknc')
             title.textContent = tkNonCommercialName
             templateText.textContent = tkNonCommercialText
             whyUseLabelText.textContent = tkNonCommercialUse
             break;
         case 'tkc':
-            // whichImgClicked('tkc')
+            whichTKImgClicked('tkc')
             title.textContent = tkCommercialName
             templateText.textContent = tkCommercialText
             whyUseLabelText.textContent = tkCommercialUse
             break;
         case 'tkcs':
-            // whichImgClicked('tkcs')
+            whichTKImgClicked('tkcs')
             title.textContent = tkCulturallySensitiveName
             templateText.textContent = tkCulturallySensitiveText
             whyUseLabelText.textContent = tkCulturallySensitiveUse
             break;
         case 'tkco':
-            // whichImgClicked('tkco')
+            whichTKImgClicked('tkco')
             title.textContent = tkCommunityUseOnlyName
             templateText.textContent = tkCommunityUseOnlyText
             whyUseLabelText.textContent = tkCommunityUseOnlyUse
             break;
         case 'tks':
-            // whichImgClicked('tks')
+            whichTKImgClicked('tks')
             title.textContent = tkSeasonalName
             templateText.textContent = tkSeasonalText
             whyUseLabelText.textContent = tkSeasonalUse
             break;
         case 'tkwg':
-            // whichImgClicked('tkmg')
+            whichTKImgClicked('tkmg')
             title.textContent = tkWomenGeneralName
             templateText.textContent = tkWomenGeneralText
             whyUseLabelText.textContent = tkWomenGeneralUse
             break;
         case 'tkmg':
-            // whichImgClicked('tkmg')
+            whichTKImgClicked('tkmg')
             title.textContent = tkMenGeneralName
             templateText.textContent = tkMenGeneralText
             whyUseLabelText.textContent = tkMenGeneralUse
             break;
         case 'tkmr':
-            // whichImgClicked('tkmr')
+            whichTKImgClicked('tkmr')
             title.textContent = tkMenRestrictedName
             templateText.textContent = tkMenRestrictedText
             whyUseLabelText.textContent = tkMenRestrictedUse
             break;
         case 'tkwr':
-            // whichImgClicked('tkwr')
+            whichTKImgClicked('tkwr')
             title.textContent = tkWomenRestrictedName
             templateText.textContent = tkWomenRestrictedText
             whyUseLabelText.textContent = tkWomenRestrictedUse
             break;
         case 'tkss':
-            // whichImgClicked('tkss')
+            whichTKImgClicked('tkss')
             title.textContent = tkSecretSacredName
             templateText.textContent = tkSecretSacredText
             whyUseLabelText.textContent = tkSecretSacredUse
