@@ -1,20 +1,22 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
-from django.contrib import messages
-
 from accounts.models import UserAffiliation
 from notifications.models import CommunityNotification
 from bclabels.models import BCNotice, BCLabel
-from bclabels.forms import CustomiseLabelForm, ApproveAndEditLabelForm
-from bclabels.utils import check_bclabel_type
 from tklabels.models import TKNotice, TKLabel
 from projects.models import ProjectContributors
+
+from bclabels.forms import CustomiseLabelForm, ApproveAndEditLabelForm
 from projects.forms import CreateProjectForm
+
+from bclabels.utils import check_bclabel_type
+from tklabels.utils import check_tklabel_type
 
 from .forms import *
 from .models import *
@@ -225,6 +227,7 @@ def select_label(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+            # TODO: Figure out logic for which label is clicked bc or tk?
         if request.method == "POST":
             label_type = request.POST.get('label-type')
             return redirect('customise-label', community.id, label_type)
@@ -241,7 +244,9 @@ def select_label(request, pk):
 def customise_label(request, pk, label_type):
     community = Community.objects.get(id=pk)
     bc_type = check_bclabel_type(label_type)
+    tk_type = check_tklabel_type(label_type)
 
+    # TODO: Customise either a TK or BC based on which label was selected in previous screen
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
