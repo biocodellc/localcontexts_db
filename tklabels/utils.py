@@ -22,7 +22,7 @@ def check_tklabel_type(label):
     if label == 'tkco':
         return 'community_use_only'
     if label == 'tks':
-        return 'season'
+        return 'seasonal'
     if label == 'tkwg':
         return 'women_general'
     if label == 'tkmg':
