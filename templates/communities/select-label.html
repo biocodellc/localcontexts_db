@@ -29,25 +29,32 @@
         <div class="flex-this" style="justify-content: space-evenly;">
             <div class="center-text">
                 <div>
+                    <img id="bcp" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+                </div>
+                <div><p class="darkteal-text"> Provenance <br> (BC P)</p></div>
+            </div>
+
+            <div class="center-text">
+                <div>
                     <img id="bccv" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
                 </div>
                 <div><p class="darkteal-text">Consent Verified <br> (BC CV) </p></div>
             </div>
-    
+
             <div class="center-text">
                 <div>
-                    <img id="bcmc" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
+                    <img id="bcr" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
                 </div>
-                <div><p class="darkteal-text">Multiple Communities <br> (BC MC)</p></div>
+                <div><p class="darkteal-text">Research Use <br> (BC R) </p></div>
             </div>
-    
+
             <div class="center-text">
                 <div>
                     <img id="bcocoll" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
                 </div>
                 <div><p class="darkteal-text">Open to <br>Collaboration <br> (BC OC) </p></div>
             </div>
-    
+
             <div class="center-text">
                 <div>
                     <img id="bcocomm" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
@@ -57,17 +64,11 @@
     
             <div class="center-text">
                 <div>
-                    <img id="bcp" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+                    <img id="bcmc" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
                 </div>
-                <div><p class="darkteal-text"> Provenance <br> (BC P)</p></div>
+                <div><p class="darkteal-text">Multiple Communities <br> (BC MC)</p></div>
             </div>
     
-            <div class="center-text">
-                <div>
-                    <img id="bcr" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
-                </div>
-                <div><p class="darkteal-text">Research Use <br> (BC R) </p></div>
-            </div>
         </div>
 
         <div id="bclabel-info" class="flex-this column text-background-blue" style="height:0px;">
