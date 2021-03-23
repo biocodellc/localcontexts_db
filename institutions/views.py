@@ -39,11 +39,11 @@ def update_institution(request, pk):
     institution = Institution.objects.get(id=pk)
     return render(request, 'institutions/update-institution.html', {'institution': institution})
 
-# Requests (Notices)
+# Notices
 @login_required(login_url='login')
-def institution_requests(request, pk):
+def institution_notices(request, pk):
     institution = Institution.objects.get(id=pk)
-    return render(request, 'institutions/requests.html', {'institution': institution})
+    return render(request, 'institutions/notices.html', {'institution': institution})
 
 # Projects
 @login_required(login_url='login')

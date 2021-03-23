@@ -536,3 +536,36 @@ function expandTKLabel(img) {
     }
 
 }
+
+// RESEARCHERS
+// Notices
+function expandNoticeText(img) {
+    console.log(img.id)
+    let bcTextDiv = document.getElementById('bc-notice-expand-txt')
+    let tkTextDiv = document.getElementById('tk-notice-expand-txt')
+    let topDiv = document.getElementById('border-bottom-div')
+
+    if (tkTextDiv.style.height == 'auto' || bcTextDiv.style.height == 'auto') {
+        topDiv.classList.add('border-bottom-dash-teal')
+    } else {
+        topDiv.classList.remove('border-bottom-dash-teal')
+    }
+
+    if (img.id == 'bc-notice') {
+        bcTextDiv.style.height = 'auto'
+        topDiv.classList.add('border-bottom-dash-teal')
+        bcTextDiv.classList.add('border-bottom-dash-teal')
+    } else {
+        bcTextDiv.style.height = '0px'
+        bcTextDiv.classList.remove('border-bottom-dash-teal')
+    }
+    
+    if (img.id == 'tk-notice') {
+        tkTextDiv.style.height = 'auto'
+        topDiv.classList.add('border-bottom-dash-teal')
+        tkTextDiv.classList.add('border-bottom-dash-teal')
+    } else {
+        tkTextDiv.style.height = '0px'
+        tkTextDiv.classList.remove('border-bottom-dash-teal')
+    }
+}
