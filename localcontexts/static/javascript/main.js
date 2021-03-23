@@ -591,7 +591,7 @@ function expandNoticeText(img) {
     } else {
         bcTextDiv.style.height = '0px'
         bcTextDiv.style.overflow = 'hidden'
-        // bcTextDiv.classList.remove('border-bottom-dash-teal')
+        bcTextDiv.classList.remove('border-bottom-dash-teal')
     }
     
     if (img.id == 'tk-notice') {
@@ -602,6 +602,6 @@ function expandNoticeText(img) {
     } else {
         tkTextDiv.style.height = '0px'
         tkTextDiv.style.overflow = 'hidden'
-        // tkTextDiv.classList.remove('border-bottom-dash-teal')
+        tkTextDiv.classList.remove('border-bottom-dash-teal')
     }
 }
