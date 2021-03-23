@@ -118,6 +118,21 @@ function showBCLabelInfo() {
 
 // See more info about each label (Community:Labels)
 function expandBCLabel(img) {
+
+    // Toggle selected Label color 
+    let txtDivs = Array.from(document.querySelectorAll('.toggle-txt-color'))
+    txtDivs.forEach(node => {
+        if (node == img.parentElement.nextElementSibling) {
+            node.classList.remove('grey-text')
+            node.classList.add('darkteal-text')
+ 
+        } else {
+            node.classList.remove('darkteal-text')
+            node.classList.add('grey-text')
+        }
+    })
+
+    // Expand full card
     let info = document.getElementById('bclabel-info')
     let fullCard = document.getElementById('collapsed-card')
     let labelContainer = document.getElementById('expand-bclabels')
@@ -132,6 +147,7 @@ function expandBCLabel(img) {
         fullCard.style.height = "460px"
     }
 
+    // Set content based on which Label was selected
     let targetImg = img.id
     let title = document.getElementById('bc-label-title')
     let templateText = document.getElementById('label-template-text')
