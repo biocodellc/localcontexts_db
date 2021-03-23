@@ -966,7 +966,7 @@ input:focus {
 }
 
 /* Community: Labels */
-#collapsed-card {
+#collapsed-card, #collapsed-tkcard {
     height: 113px;
 }
 
