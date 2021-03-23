@@ -413,7 +413,7 @@ function expandTKLabel(img) {
     let labelContainer = document.getElementById('expand-tklabels')
     let fullCard = document.getElementById('collapsed-tkcard')
     let info = document.getElementById('tklabel-info')
-    // console.log(img.id)
+    console.log(img.id)
 
     if (info.style.height == "0px") {
         labelContainer.style.height = "auto"
@@ -490,6 +490,12 @@ function expandTKLabel(img) {
             title.textContent = tkCulturallySensitiveName
             templateText.textContent = tkCulturallySensitiveText
             whyUseLabelText.textContent = tkCulturallySensitiveUse
+            break;
+        case 'tkcv':
+            whichTKImgClicked('tkcv')
+            title.textContent = tkCommunityVoiceName
+            templateText.textContent = tkCommunityVoiceText
+            whyUseLabelText.textContent = tkCommunityVoiceUse
             break;
         case 'tkco':
             whichTKImgClicked('tkco')
