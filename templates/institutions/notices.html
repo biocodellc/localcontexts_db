@@ -1,0 +1,77 @@
+{% extends 'institution-base.html' %} {% load static %} {% block institution_content %}
+
+<div class="content-card content-card-space white-bg">
+
+    <div class="flex-this space-between">
+        <div class="w-60">
+            <h2 class="orange-text weight-600">Notices</h2>
+            <p>
+                The Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data.
+            </p>
+        </div>
+
+        <div class="w-15 flex-this align-center">
+            <a class="action-btn" href="{% url 'inst-create-project' institution.id %}">
+                Create a project     <i class="fa fa-long-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<div id="expand-notice-card" class="content-card content-card-space white-bg">
+    <div class="flex-this space-between">
+        <div>
+            <h3 class="orange-text">Indigenous Data (ID) Notices</h3>
+        </div>
+        <div>
+            <a onclick="expandNotices()" class="darkteal-text pointer"><span id="show-more-notices">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
+        </div>
+    </div>
+
+    <div>
+        <div>
+            <p>Indigenous Data Notices are</p>
+        </div>
+
+        <div id="border-bottom-div" class="flex-this center-text">
+            <div class="w-10">
+                <img id="tk-notice" onclick="expandNoticeText(this)" class="pointer" src="{% static 'images/notices/tk-notice.png' %}" alt="black square with the letters TK in the middle in white">
+                <p class="darkteal-text">Traditional <br> Knowledge <br> Notice</p>
+            </div>
+    
+            <div class="w-10">
+                <img id="bc-notice" onclick="expandNoticeText(this)" class="pointer" src="{% static 'images/notices/bc-notice.png' %}" alt="black square with the letters BC in the middle in white">
+                <p class="darkteal-text">Biocultural <br>Notice</p>
+            </div>
+        </div>
+
+        <div id="tk-notice-expand-txt" style="height: 0; overflow:hidden;">
+            <h3 class="darkteal-text">Traditional Knowledge Notice</h3>
+            <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with the letters TK in the middle in white">
+            <p>
+                <span class="darkteal-text weight-500">Why Use this Notice?</span><br>
+                This Notice should be used to recognize that place-based knowledge carries accompanying cultural rights and responsibilities and that appropriate permissions may need to be sought for future use of this material.
+            </p>
+            <p>
+                <span class="darkteal-text weight-500">Template Text</span><br>
+                The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated. For more information about TK Notices click here.
+            </p>
+        </div>
+
+        <div id="bc-notice-expand-txt" style="height: 0; overflow:hidden;">
+            <h3 class="darkteal-text">Biocultural Notice</h3>
+            <img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with the letters BC in the middle in white">
+            <p>
+                <span class="darkteal-text weight-500">Why Use this Notice?</span><br>
+                The BC Notice should be used to recognize the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with their traditional lands, waters, and territories. It acknowledges the importance of cultural protocols and recognizes that appropriate permissions may need to be sought for future use of this material or data.            </p>
+            <p>
+                <span class="darkteal-text weight-500">Template Text</span><br>
+                The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated.            </p>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

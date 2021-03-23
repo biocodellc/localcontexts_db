@@ -11,3 +11,5 @@ def check_bclabel_type(label):
         return 'multiple_community'
     if label == 'bcp':
         return 'provenance'
+    if label == 'placeholder':
+        return False

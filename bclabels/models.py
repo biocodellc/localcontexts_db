@@ -15,7 +15,7 @@ class BCNotice(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.project)
+        return str(self.project.title)
     
     class Meta:
         verbose_name = 'BC Notice'

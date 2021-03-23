@@ -225,7 +225,7 @@ input:focus {
     padding-top: 6%;
 }
 
-/* BORDER */
+/* BORDERS */
 .border-bottom-blk {
     border-bottom: 1px solid #000000;
 }
@@ -236,6 +236,10 @@ input:focus {
 
 .border-bottom-dash-teal {
     border-bottom: 1px dashed #007385;
+}
+
+.border-top-dash-teal {
+    border-top: 1px dashed #007385;
 }
 
 .border-bottom-solid-teal {
@@ -962,7 +966,7 @@ input:focus {
 }
 
 /* Community: Labels */
-#collapsed-card {
+#collapsed-card, #collapsed-tkcard {
     height: 113px;
 }
 
@@ -1024,4 +1028,18 @@ input:focus {
 
 .shift-down img {
     padding-top: 5px;
+}
+
+/* Requests: Apply labels */
+.add-label-mini-card {
+    margin-top: 35px;
+    border: 1px dashed #A09D9D;
+    border-radius: 5px;
+    width: 160px;
+    height: 101px;
+}
+
+.add-label-mini-card div {
+    margin: 20px 10px;
+    text-align: center;
 }

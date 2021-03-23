@@ -1,30 +1,33 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
-from django.contrib import messages
-
 from accounts.models import UserAffiliation
 from notifications.models import CommunityNotification
 from bclabels.models import BCNotice, BCLabel
-from bclabels.forms import CustomiseLabelForm, ApproveAndEditLabelForm
-from bclabels.utils import check_bclabel_type
 from tklabels.models import TKNotice, TKLabel
 from projects.models import ProjectContributors
+
+from bclabels.forms import CustomiseLabelForm, ApproveAndEditLabelForm
 from projects.forms import CreateProjectForm
+
+from bclabels.utils import check_bclabel_type
+from tklabels.utils import check_tklabel_type
 
 from .forms import *
 from .models import *
 from .utils import *
 
-
+# Connect
 @login_required(login_url='login')
 def connect_community(request):
     return render(request, 'communities/connect-community.html')
 
+# Create Community
 @login_required(login_url='login')
 def create_community(request):
     if request.method == "POST":
@@ -45,11 +48,9 @@ def create_community(request):
             return redirect('dashboard')
     else:
         form = CreateCommunityForm()
+        return render(request, 'communities/create-community.html', {'form': form})
 
-    context = {'form': form}
-    return render(request, 'communities/create-community.html', context)
-
-
+# Registry
 def community_registry(request):
     communities = Community.objects.filter(is_approved=True, is_publicly_listed=True)
 
@@ -80,6 +81,7 @@ def community_registry(request):
     }
     return render(request, 'communities/community-registry.html', context)
 
+# Dashboard / Activity
 @login_required(login_url='login')
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
@@ -100,6 +102,7 @@ def community_dashboard(request, pk):
         }
         return render(request, 'communities/community.html', context)
 
+# Update Community / Settings
 @login_required(login_url='login')
 def update_community(request, pk):
     community = Community.objects.get(id=pk)
@@ -126,13 +129,14 @@ def update_community(request, pk):
         }
         return render(request, 'communities/update-community.html', context)
 
-
+# Members
 @login_required(login_url='login')
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
     member_role = check_member_role(request.user, community)
     return render(request, 'communities/members.html', {'community': community, 'member_role': member_role,})
 
+# Add member
 @login_required(login_url='login')
 def add_member(request, pk):
     community = Community.objects.get(id=pk)
@@ -177,6 +181,7 @@ def add_member(request, pk):
     }
     return render(request, 'communities/add-member.html', context)
 
+# Requests / Notices
 @login_required(login_url='login')
 def community_requests(request, pk):
     community = Community.objects.get(id=pk)
@@ -195,7 +200,8 @@ def community_requests(request, pk):
             'member_role': member_role,
         }
         return render(request, 'communities/requests.html', context)
-        
+
+# Labels Main
 @login_required(login_url='login')
 def community_labels(request, pk):
     community = Community.objects.get(id=pk)
@@ -212,6 +218,7 @@ def community_labels(request, pk):
         }
         return render(request, 'communities/labels.html', context)
 
+# Select Labels to Customise
 @login_required(login_url='login')
 def select_label(request, pk):
     community = Community.objects.get(id=pk)
@@ -220,6 +227,7 @@ def select_label(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+            # TODO: Figure out logic for which label is clicked bc or tk?
         if request.method == "POST":
             label_type = request.POST.get('label-type')
             return redirect('customise-label', community.id, label_type)
@@ -231,11 +239,14 @@ def select_label(request, pk):
 
         return render(request, 'communities/select-label.html', context)
 
+# Label customisation process
 @login_required(login_url='login')
 def customise_label(request, pk, label_type):
     community = Community.objects.get(id=pk)
     bc_type = check_bclabel_type(label_type)
+    tk_type = check_tklabel_type(label_type)
 
+    # TODO: Customise either a TK or BC based on which label was selected in previous screen
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
@@ -261,6 +272,7 @@ def customise_label(request, pk, label_type):
         }
         return render(request, 'communities/customise-label.html', context)
 
+# Approve Label
 @login_required(login_url='login')
 def approve_label(request, pk, label_id):
     community = Community.objects.get(id=pk)
@@ -289,6 +301,7 @@ def approve_label(request, pk, label_id):
         }
         return render(request, 'communities/approve-label.html', context)
 
+# Projects Main
 @login_required(login_url='login')
 def projects(request, pk):
     community = Community.objects.get(id=pk)
@@ -308,6 +321,7 @@ def projects(request, pk):
         }
         return render(request, 'communities/projects.html', context)
 
+# Create Project
 @login_required(login_url='login')
 def create_project(request, pk):
     community = Community.objects.get(id=pk)
@@ -342,6 +356,7 @@ def create_project(request, pk):
 
         return render(request, 'communities/create-project.html', context)
 
+# Appy Labels to Notices
 # TODO: Accommodate this to tk notices and being able to add tk labels.
 @login_required(login_url='login')
 def community_add_labels(request, pk, notice_id):
@@ -369,7 +384,7 @@ def community_add_labels(request, pk, notice_id):
         }
         return render(request, 'communities/attach-labels.html', context)
 
-
+# Relationships
 @login_required(login_url='login')
 def community_relationships(request, pk):
     community = Community.objects.get(id=pk)

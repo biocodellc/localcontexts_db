@@ -43,7 +43,7 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['profile_pic', 'job_title', 'city_or_town', 'country']
+        fields = ['job_title', 'city_or_town', 'country']
 
 class ResendEmailActivationForm(forms.Form):
     email = forms.EmailField(label=_('Email'), required=True)
