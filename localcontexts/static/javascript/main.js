@@ -413,7 +413,7 @@ function expandTKLabel(img) {
     let labelContainer = document.getElementById('expand-tklabels')
     let fullCard = document.getElementById('collapsed-tkcard')
     let info = document.getElementById('tklabel-info')
-    console.log(img.id)
+    // console.log(img.id)
 
     if (info.style.height == "0px") {
         labelContainer.style.height = "auto"
@@ -539,33 +539,69 @@ function expandTKLabel(img) {
 
 // RESEARCHERS
 // Notices
+
+function expandNotices() {
+    let showMoreSpan = document.getElementById('show-more-notices')
+    let fullCard = document.getElementById('expand-notice-card')
+    let tkDiv = document.getElementById('tk-notice-expand-txt')
+    let bcDiv = document.getElementById('bc-notice-expand-txt')
+    let topDiv = document.getElementById('border-bottom-div')
+    let bcTextDiv = document.getElementById('bc-notice-expand-txt')
+    let tkTextDiv = document.getElementById('tk-notice-expand-txt')
+
+
+    if (tkDiv.style.height == '0px' && bcDiv.style.height == '0px') {
+        showMoreSpan.innerHTML = `Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>`
+        tkDiv.style.height = 'auto'
+        fullCard.style.height = 'auto'
+        topDiv.classList.add('border-bottom-dash-teal')
+        tkTextDiv.classList.add('border-bottom-dash-teal')
+    } else {
+        showMoreSpan.innerHTML = `Show More <i class="fa fa-angle-down" aria-hidden="true"></i>`
+        fullCard.style.height = '385px'
+        tkDiv.style.height = '0px'
+        bcDiv.style.height = '0px'
+        topDiv.classList.remove('border-bottom-dash-teal')
+        bcTextDiv.classList.remove('border-bottom-dash-teal')
+        tkTextDiv.classList.remove('border-bottom-dash-teal')
+    }
+}
+
+
 function expandNoticeText(img) {
-    console.log(img.id)
     let bcTextDiv = document.getElementById('bc-notice-expand-txt')
     let tkTextDiv = document.getElementById('tk-notice-expand-txt')
     let topDiv = document.getElementById('border-bottom-div')
+    let showMoreSpan = document.getElementById('show-more-notices')
+    let fullCard = document.getElementById('expand-notice-card')
 
     if (tkTextDiv.style.height == 'auto' || bcTextDiv.style.height == 'auto') {
         topDiv.classList.add('border-bottom-dash-teal')
+        showMoreSpan.innerHTML = `Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>`
     } else {
         topDiv.classList.remove('border-bottom-dash-teal')
+        showMoreSpan.innerHTML = `Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>`
     }
 
     if (img.id == 'bc-notice') {
         bcTextDiv.style.height = 'auto'
+        fullCard.style.height = 'auto'
         topDiv.classList.add('border-bottom-dash-teal')
         bcTextDiv.classList.add('border-bottom-dash-teal')
     } else {
         bcTextDiv.style.height = '0px'
-        bcTextDiv.classList.remove('border-bottom-dash-teal')
+        bcTextDiv.style.overflow = 'hidden'
+        // bcTextDiv.classList.remove('border-bottom-dash-teal')
     }
     
     if (img.id == 'tk-notice') {
         tkTextDiv.style.height = 'auto'
+        fullCard.style.height = 'auto'
         topDiv.classList.add('border-bottom-dash-teal')
         tkTextDiv.classList.add('border-bottom-dash-teal')
     } else {
         tkTextDiv.style.height = '0px'
-        tkTextDiv.classList.remove('border-bottom-dash-teal')
+        tkTextDiv.style.overflow = 'hidden'
+        // tkTextDiv.classList.remove('border-bottom-dash-teal')
     }
 }
