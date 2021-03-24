@@ -193,6 +193,14 @@ input:focus {
     margin-bottom: 0;
 }
 
+.no-top-pad {
+    padding-top: 0;
+}
+
+.no-bottom-pad {
+    padding-bottom: 0px;
+}
+
 .pad-top-1 {
     padding-top: 1%;
 }
@@ -1042,4 +1050,18 @@ input:focus {
 .add-label-mini-card div {
     margin: 20px 10px;
     text-align: center;
+}
+
+/* Community: create project 'customise a new label' button */
+#grey-border-div {
+    width: 160px;
+    height: 101px;
+    border: 1px dashed #A09D9D;
+    border-radius: 5px;
+    margin-top: 30px;
+}
+
+#grey-border-div a {
+    display: inline-block;
+    margin-top: 23px;
 }
