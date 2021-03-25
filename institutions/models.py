@@ -19,7 +19,7 @@ class Institution(models.Model):
     researchers = models.ManyToManyField(Researcher, blank=True, related_name="institution_members")
 
     def __str__(self):
-        return self.institution_name
+        return str(self.institution_name)
 
     class Meta:
         verbose_name = 'Institution'
