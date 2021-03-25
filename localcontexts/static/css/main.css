@@ -251,6 +251,10 @@ input:focus {
 }
 
 .border-bottom-solid-teal {
+    border-top: 1px solid #007385;  
+}
+
+.border-top-solid-teal {
     border-bottom: 1px solid #007385;  
 }
 
