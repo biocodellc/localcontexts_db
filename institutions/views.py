@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Institution
 from researchers.models import Researcher
 from projects.models import Project, ProjectContributors
+from bclabels.models import BCNotice
+from tklabels.models import TKNotice
 
 from .forms import CreateInstitutionForm, UpdateInstitutionForm
 from projects.forms import CreateProjectForm
@@ -70,6 +72,16 @@ def create_project(request, pk):
         if form.is_valid():
             data = form.save(commit=False)
             data.save()
+
+            notices_selected = request.POST.getlist('checkbox-notice')
+            # if tknotice: create notice
+            # if bcnotice: create notice
+            # if both: create both
+            for notice in notices_selected:
+                if notice == 'bcnotice':
+                    BCNotice.objects.create(placed_by_institution=institution, project=data)
+                if notice == 'tknotice':
+                    TKNotice.objects.create(placed_by_institution=institution, project=data)
 
             ProjectContributors.objects.create(project=data, institution=institution)
             return redirect('institution-projects', institution.id)
