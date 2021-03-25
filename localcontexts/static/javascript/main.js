@@ -72,6 +72,34 @@ function showMore(elem) {
     }
 }
 
+// Show customised label text in community: labels
+function customText(imgDiv) {
+    let labelID = imgDiv.id
+    let divs = Array.from(document.querySelectorAll('.div-toggle'))
+
+    divs.forEach(div => {
+        if(div.id.includes(labelID) && div.style.height == '0px') {
+            div.style.height = 'auto'
+        } else {
+            div.style.height = '0px'
+        }
+    })
+
+
+    // Toggle text color based on what Label is selected
+    let pDivs = Array.from(document.querySelectorAll('.toggle-txt-color'))
+    pDivs.forEach(node => {
+        let nodeID = node.id
+        if (nodeID.includes(labelID)) {
+            node.classList.add('darkteal-text')
+            node.classList.remove('grey-text')
+        } else {
+            node.classList.remove('darkteal-text')
+            node.classList.add('grey-text')
+        }
+    })
+}
+
 var provenanceName = 'BC Provenance (BC P)'
 var multipleCommunityName = 'BC Multiple Communities (BC MC)'
 var openToCollabName = 'BC Open to Collaboration (BC OC)'
@@ -94,7 +122,7 @@ var researchUseText = 'This Label is being used by [community name or authorizin
 var consentVerifiedText = 'This Label is being used to verify that [community name or authorizing party] have consent conditions in place for the use of this information, collections, data and digital sequence information.'
 
 
-// Expand BC Labels Card in Community: Labels
+// Expand BC Labels Card in Community: Labels : select-labels
 function showBCLabelInfo() {
     let labelContainer = document.getElementById('expand-bclabels')
     let span = document.getElementById('show-more-down')
