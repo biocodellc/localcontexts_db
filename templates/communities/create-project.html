@@ -53,7 +53,7 @@
         </div>
     
         <div>
-            <span class="weight-500 darkteal-text">1. Attach Labels</span><br>
+            <span class="weight-500 darkteal-text">1. Select a Label</span><br>
             <div class="flex-this">
     
             {% if bclabels %}
@@ -68,13 +68,17 @@
                     </div>
     
                 {% endfor %}
-            {% else %}
-                <p>You have no labels customised</p>
             {% endif %}
+
+            <div id="grey-border-div" class="center-text">
+                <a href="{% url 'select-label' community.id %}">
+                    <span class="grey-text auto-margin">+ Customise a <br>new Label</span>
+                </a>
+            </div>
     
             </div>
     
-            <p class="weight-500 darkteal-text">2. View Label Descriptions</p>
+            <p class="weight-500 darkteal-text">2. View Label Description</p>
 
             {% if bclabels %}
                 {% for bclabel in bclabels %}

@@ -10,73 +10,90 @@
                 {% csrf_token %}
 
                 <label>What are you applying the notice to?</label><br>
-                <select>
-                    <option>Item</option>
-                    <option>Collection</option>
-                    <option>Expedition</option>
-                    <option>Sample</option>
-                </select>
+                {{ form.project_type }} <br>
 
                 <p class="weight-500">Project Overview</p>
 
                 <label>Project Title</label><br>
-                <input type="text"><br>
+                {{ form.title }} <br>
 
                 <label>Date Created</label><br>
-                <input type="text"><br>
+                {{ form.publication_date }} <br>
 
                 <label>Project Description</label><br>
-                <input type="text"><br>
+                {{ form.description }} <br>
 
                 <p class="weight-500">Project Metadata</p>
 
-                <label>Principal Investigator</label><br>
-                <input type="text"><br>
-
-                <label>Principal Investigator Affiliation</label><br>
-                <input type="text"><br>
-
                 <label>Project Contact Name* </label><br>
-                <input type="text"><br>
+                {{ form.project_contact }} <br>
 
                 <label>Project Contact Email*</label><br>
-                <input type="text"><br>
+                {{ form.project_contact_email }} <br>
 
                 <label>Project DOI</label><br>
-                <input type="text"><br>
+                {{ form.publication_doi }} <br>
 
                 <label>Project Data GUID</label><br>
-                <input type="text"><br>
+                {{ form.project_data_guid }} <br>
 
                 <label>Recommended Citation</label><br>
-                <input type="text"><br>
+                {{ form.recommended_citation }} <br>
 
                 <label>Project URL</label><br>
-                <input type="text"><br>
+                {{ form.url }} <br>
 
                 <label>GEOME Project ID</label><br>
-                <input type="text"><br>
+                {{ form.geome_project_id }} <br>
 
                 <p class="weight-500">Apply Notices</p>
-                <p>1. Select a Notice</p><br>
-
-                <input type="radio"> <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle">
-                <input type="radio"> <img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle">
-
-                <p>2. View Notice Description</p><br>
+                <p>1. Select Notices</p><br>
 
                 <div class="flex-this">
-                    <div class="w-15">
+                    
+                    <div class="flex-this column center-text">
+                        <div>
+                            <input type="checkbox"> 
+                        </div>
+                        <div>
+                            <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle">
+                        </div>
+                        <div>
+                            <p class="grey-text">Traditional<br> Knowledge<br> Notice</p>
+                        </div>
+                    </div>
+    
+                    <div class="flex-this column center-text pad-left-1-5">
+                        <div>
+                            <input type="checkbox"> 
+                        </div>
+                        <div>
+                            <img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle">
+                        </div>
+                        <div>
+                            <p class="grey-text">Biocultural<br> Notice</p>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <p>2. View Notice Description</p>
+
+                <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
+                    <div class="w-15 pad-top-1">
                         <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle">
                     </div>
 
-                    <div class="w-80">
-                        <h3 class="weight-400 no-top-margin">Traditional Knowledge Notice</h3>
+                    <div class="w-80 pad-top-1">
+                        <h3 class="weight-500 no-top-margin">Traditional Knowledge Notice</h3>
                         <p>
                             This Notice should be used to recognize the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with traditional lands, waters, and territories. It acknowledges the importance of cultural protocols and recognizes that appropriate permissions may need to be sought for future use of this material.
                         </p>
                     </div>
                 </div>
+
+                {{ form.errors }}
                 <button class="action-btn">Save Project <i class="fa fa-long-arrow-right"></i></button>
 
             </form>

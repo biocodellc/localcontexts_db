@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+
 from .models import Institution
 from researchers.models import Researcher
-from projects.models import Project
+from projects.models import Project, ProjectContributors
+
 from .forms import CreateInstitutionForm, UpdateInstitutionForm
+from projects.forms import CreateProjectForm
 
 @login_required(login_url='login')
 def connect_institution(request):
@@ -49,11 +52,33 @@ def institution_notices(request, pk):
 @login_required(login_url='login')
 def institution_projects(request, pk):
     institution = Institution.objects.get(id=pk)
-    return render(request, 'institutions/projects.html', {'institution': institution})
+    contribs = ProjectContributors.objects.filter(institution=institution)
 
-# Create Projects
+    context = {
+        'institution': institution,
+        'contribs': contribs,
+    }
+    return render(request, 'institutions/projects.html', context)
+
+# Create Project
 @login_required(login_url='login')
 def create_project(request, pk):
     institution = Institution.objects.get(id=pk)
-    return render(request, 'institutions/create-project.html', {'institution': institution})
+
+    if request.method == "POST":
+        form = CreateProjectForm(request.POST or None)
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.save()
+
+            ProjectContributors.objects.create(project=data, institution=institution)
+            return redirect('institution-projects', institution.id)
+    else:
+        form = CreateProjectForm()
+
+    context = {
+        'institution': institution,
+        'form': form,
+    }
+    return render(request, 'institutions/create-project.html', context)
 

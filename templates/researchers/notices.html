@@ -81,11 +81,13 @@
                                 </div>
                                 {% if c.project.geome_project_id %}
                                     <div>
-                                    <button class="white-action-btn">View on GEOME</button>
+                                        <a href="https://geome-db.org/workbench/project-overview?projectId={{ c.project.geome_project_id}}">
+                                            <button class="white-action-btn">View on GEOME</button>
+                                        </a>
                                     </div>
                                 {% endif %}
                                 <div>
-                                  <button class="white-action-btn">View ORCiD</button>
+                                  <a href="https://orcid.org/{{ c.researcher.orcid }}"><button class="white-action-btn">View ORCiD</button> </a>
                                 </div>
                             </div>
     

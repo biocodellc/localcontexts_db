@@ -30,10 +30,10 @@
                     <p>
                         <span>Job Title:</span> {{ researcher.user.profile.job_title }} <br>
                         <span>Location:</span> {{ researcher.user.profile.city_or_town }}, {{ researcher.user.profile.country.name }}<br>
-                        <span>ORCiD:</span> {{ researcher.orcid }}<br>
                         {% if researcher.website %}
                         <span>Website:</span> {{ researcher.website }}
                         {% endif %}
+                        <div itemscope itemtype="https://schema.org/Person"><a class="darkteal-text" itemprop="sameAs" content="https://orcid.org/{{ researcher.orcid }}" href="https://orcid.org/{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">https://orcid.org/{{ researcher.orcid }}</a></div>
                     </p>
                 </div>
     

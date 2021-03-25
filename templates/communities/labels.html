@@ -7,7 +7,7 @@
 
                 <div>
                     <h2 class="orange-text weight-600">Labels</h2>
-                    <p class="darkteal-text">You currently have {{ bclabels.count }} labels customised</p>
+                    <p>You currently have {{ bclabels.count }} labels customised</p>
                 </div>
                 <div class="flex-this align-center">
                     {% if member_role == 'viewer' %}
@@ -21,7 +21,7 @@
             {% else %}
                 <div>
                     <h2 class="orange-text weight-600">Labels</h2>
-                    <p class="darkteal-text">You currently have no labels customised</p>
+                    <p>You currently have no labels customised</p>
                 </div>
                 <div class="flex-this align-center">
                     {% if member_role == 'viewer' %}
@@ -43,24 +43,22 @@
                     {% if bclabel.is_approved == False %}
                         {% if bclabel.created_by == request.user or member_role == 'viewer' %}
                             <div class="w-20 custom-labels">
-                                <div class="center-text">
-
+                                <div id="{{ bclabel.id }}" onclick="customText(this)" class="center-text pointer">
                                     <p class="darkteal-text no-top-margin no-bottom-margin">Waiting approval*</p>
-    
                                     <div>
                                         {% include 'bclabels/which-label.html' %}
-                                        <p class="darkteal-text">{{ bclabel.name }}</p>
+                                        <p id="toggle-color-{{ bclabel.id }}" class="toggle-txt-color grey-text">{{ bclabel.name }}</p>
                                     </div>
                                 </div>
                             </div>
                         {% else %}
                             <div class="w-20 custom-labels">
-                                <div class=" center-text">
+                                <div id="{{ bclabel.id }}" onclick="customText(this)" class="center-text pointer">
                                     <p class="darkteal-text">Waiting approval*</p>
-                                    <a class="darkteal-text" href="{% url 'approve-label' community.id bclabel.id %}">
+                                    <a href="{% url 'approve-label' community.id bclabel.id %}">
                                         <div>
                                             {% include 'bclabels/which-label.html' %}
-                                            <p class="darkteal-text">{{ bclabel.name }}</p>
+                                            <p id="toggle-color-{{ bclabel.id }}" class="toggle-txt-color grey-text">{{ bclabel.name }}</p>
                                         </div>
                                     </a>    
                                 </div>
@@ -68,23 +66,28 @@
                         {% endif %}
                     {% else %}
                         <div class="w-20 custom-labels">
-                            <div class="approved-label center-text">
+                            <div id="{{ bclabel.id }}" onclick="customText(this)" class="approved-label center-text pointer">
                                 {% include 'bclabels/which-label.html' %}
-                                <p class="darkteal-text">{{ bclabel.name }}</p>
+                                <p id="toggle-color-{{ bclabel.id }}" class="toggle-txt-color grey-text">{{ bclabel.name }}</p>
                             </div>
                         </div>
 
-                        <!-- TODO: Where to display this -->
-                        <!-- <div>
-                            <div>
-                                <h3 class="darkteal-text">{{ bclabel.name }}</h3>
-                                <p>{{ bclabel.default_text }}</p>
-                            </div>
-                        </div> -->
                     {% endif %}
                 {% endfor %}
             {% endif %}
         </div>
+
+        {% if bclabels %}
+            {% for bclabel in bclabels %}
+                <div id="open-div-{{ bclabel.id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
+                    <div class="border-top-solid-teal border-bottom-solid-teal">
+                        <h3 class="darkteal-text">{{ bclabel.name }}</h3>
+                        <p>{{ bclabel.default_text }}</p>
+                    </div>
+                </div>
+
+            {% endfor %}
+        {% endif %}
 
     </div>
 

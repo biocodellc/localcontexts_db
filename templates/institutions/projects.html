@@ -16,5 +16,61 @@
 
     </div>
 
+    {% if contribs %}
+        {% for c in contribs %}
+            <div class="content-card content-card-space white-bg">
+
+                <div class="flex-this space-between column">
+            
+                    <div class="w-100 flex-this">
+
+                        <div class="w-50"> 
+                                <h4 class="darkteal-text weight-600 no-top-margin">{{ c.project.title }}</h4>
+                                <p class="no-top-margin">
+                                    Date Created: {{ c.project.date_added }}<br>
+                                    Project Type: {{ c.project.project_type }}<br>
+                                    Project Contributors: {{ c.institution.institution_name }} 
+
+                                    {% if c.researcher %}
+                                        , {{ c.researcher.user.get_full_name }}
+                                    {% endif %} 
+
+                                    {% if c.community %}
+                                        , {{ c.community.community_name }}
+                                    {% endif %}<br>
+                                </p>
+                        </div>
+            
+                        <div class="w-50 flex-this column">
+                            <div class="flex-this flex-end w-100">
+                                <!-- <span class="darkteal-text">Show More</span> -->
+                            </div> 
+                        </div>
+            
+                    </div>
+            
+                </div>
+
+                <div class="flex-this space-between">
+                    <div>
+                        {{ c.project.description }}
+                    </div>
+                    <div>
+                        <!-- <button class="action-btn">Notify Communities <i class="fa fa-users" aria-hidden="true"></i></button> -->
+                    </div>
+                </div>
+
+                <div>
+                    <p>
+                        Project Contact: {{ c.project.project_contact}} <br>
+                        Project Contact Email: {{ c.project.project_contact_email}} <br>
+                        Project URL: {{ c.project.url }}
+                    </p>
+                </div>
+
+            </div>
+        {% endfor %}
+    {% endif %}
+
 
 {% endblock %}
