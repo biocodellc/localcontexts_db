@@ -3,11 +3,11 @@
     <div class="content-card content-card-space white-bg">
 
         <div class="flex-this space-between">
-            {% if bclabels %}
+            {% if bclabels or tklabels %}
 
                 <div>
                     <h2 class="orange-text weight-600">Labels</h2>
-                    <p>You currently have {{ bclabels.count }} labels customised</p>
+                    <p>You currently have {{ bclabels.count }} BC Labels and {{ tklabels.count }} TK Labels customised</p>
                 </div>
                 <div class="flex-this align-center">
                     {% if member_role == 'viewer' %}
@@ -75,6 +75,46 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
+
+            {% if bclabels %}
+
+            {% for tklabel in tklabels %}
+                {% if tklabel.is_approved == False %}
+                    {% if tklabel.created_by == request.user or member_role == 'viewer' %}
+                        <div class="w-20 custom-labels">
+                            <div id="{{ tklabel.id }}" onclick="customText(this)" class="center-text pointer">
+                                <p class="darkteal-text no-top-margin no-bottom-margin">Waiting approval*</p>
+                                <div>
+                                    {% include 'tklabels/which-label.html' %}
+                                    <p id="toggle-color-{{ tklabel.id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="w-20 custom-labels">
+                            <div id="{{ tklabel.id }}" onclick="customText(this)" class="center-text pointer">
+                                <p class="darkteal-text">Waiting approval*</p>
+                                <a href="{% url 'approve-label' community.id tklabel.id %}">
+                                    <div>
+                                        {% include 'tklabels/which-label.html' %}
+                                        <p id="toggle-color-{{ tklabel.id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
+                                    </div>
+                                </a>    
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="w-20 custom-labels">
+                        <div id="{{ tklabel.id }}" onclick="customText(this)" class="approved-label center-text pointer">
+                            {% include 'tklabels/which-label.html' %}
+                            <p id="toggle-color-{{ tklabel.id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
+                        </div>
+                    </div>
+
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
         </div>
 
         {% if bclabels %}

@@ -207,6 +207,7 @@ def community_requests(request, pk):
 def community_labels(request, pk):
     community = Community.objects.get(id=pk)
     bclabels = BCLabel.objects.filter(community=community)
+    tklabels = TKLabel.objects.filter(community=community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -216,6 +217,7 @@ def community_labels(request, pk):
             'community': community,
             'member_role': member_role,
             'bclabels': bclabels,
+            'tklabels': tklabels,
         }
         return render(request, 'communities/labels.html', context)
 
