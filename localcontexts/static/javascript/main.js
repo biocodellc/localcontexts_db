@@ -182,7 +182,7 @@ var tkWomenRestrictedText = 'This material has specific gender restrictions on a
 var tkSecretSacredText = 'This label is being used to indicate that this material is traditionally and usually not publicly available because it contains important secret or sacred components. The label is correcting a misunderstanding about the significance of this material and therefore its circulation conditions. It is letting users know that because of its secret/sacred status it is not, and was never free, public and available for everyone at anytime. This label asks you to think about whether you should be using this material and to respect different cultural values and expectations about circulation and use.'
 
 
-// Expand BC Labels Card in Community: Labels : select-labels
+// Expand BC Labels Card in Community: Labels -> select-labels
 function showBCLabelInfo() {
     let labelContainer = document.getElementById('expand-bclabels')
     let span = document.getElementById('show-more-down')

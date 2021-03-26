@@ -129,6 +129,18 @@
             {% endfor %}
         {% endif %}
 
+        {% if tklabels %}
+        {% for tklabel in tklabels %}
+            <div id="open-div-{{ tklabel.id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
+                <div class="border-top-solid-teal border-bottom-solid-teal">
+                    <h3 class="darkteal-text">{{ tklabel.name }}</h3>
+                    <p>{{ tklabel.default_text }}</p>
+                </div>
+            </div>
+
+        {% endfor %}
+    {% endif %}
+
     </div>
 
 
