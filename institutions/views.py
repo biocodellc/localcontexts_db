@@ -50,6 +50,19 @@ def institution_notices(request, pk):
     institution = Institution.objects.get(id=pk)
     return render(request, 'institutions/notices.html', {'institution': institution})
 
+# Notices
+@login_required(login_url='login')
+def institution_requests(request, pk):
+    institution = Institution.objects.get(id=pk)
+    bcnotices = BCNotice.objects.filter(placed_by_institution=institution)
+    tknotices = TKNotice.objects.filter(placed_by_institution=institution)
+    context = {
+        'institution': institution,
+        'bcnotices': bcnotices,
+        'tknotices': tknotices,
+    }
+    return render(request, 'institutions/requests.html', context)
+
 # Projects
 @login_required(login_url='login')
 def institution_projects(request, pk):
