@@ -54,6 +54,23 @@
 
                                             {% endfor %}
                                         {% endif %}
+
+                                        {% if tklabels %}
+                                        {% for tklabel in tklabels %}
+                                            <div class="w-20 wrap center-text">
+
+                                                <div>
+                                                    <input id="checked-label-{{ tklabel.id }}" onclick="displayDefaultText(this)" value="{{ tklabel.id }}" type="checkbox" name="checkbox-label">
+                                                </div>
+                                                <div class="label-margin">
+                                                    {% include 'tklabels/which-label.html' %}
+                                                    <span id="label-name-{{ tklabel.id }}" class="grey-text">{{ tklabel.name }}</span>
+                                                </div>
+                                            </div>
+
+                                        {% endfor %}
+                                        {% endif %}
+
                                         <div class="w-20 wrap center-text add-label-mini-card">
                                             <a href="{% url 'select-label' community.id %}">
                                                 <div>
@@ -89,6 +106,28 @@
 
                                         {% endfor %}
                                     {% endif %}
+
+                                    {% if tklabels %}
+                                    {% for tklabel in tklabels %}
+
+                                        <div id="open-default-text-{{ tklabel.id }}" style="height: 0; overflow: hidden;">
+                                            <div class="flex-this">
+                                                <div class="small-label pad-top-1-5">
+                                                    {% include 'tklabels/which-label.html' %}
+                                                </div>
+                                                <div class="pad-left-2">
+                                                    <p class="darkteal-text">Label shared by {{ tklabel.community.community_name }} </p>
+                                                    <p class="weight-500"> {{ tklabel.name }} </p>
+                                                    <p>
+                                                        {{ tklabel.default_text}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="border-bottom-solid-teal"></div>
+                                        </div>
+
+                                    {% endfor %}
+                                {% endif %}
 
                                     <div>
                                         <button class="action-btn">Apply Label(s) to project</button>

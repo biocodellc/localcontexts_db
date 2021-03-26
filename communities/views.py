@@ -430,6 +430,7 @@ def community_add_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
     bcnotice = BCNotice.objects.get(id=notice_id)
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
+    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -447,6 +448,7 @@ def community_add_labels(request, pk, notice_id):
             'community': community,
             'bcnotice': bcnotice,
             'bclabels': bclabels,
+            'tklabels': tklabels,
             'member_role': member_role,
         }
         return render(request, 'communities/attach-labels.html', context)
