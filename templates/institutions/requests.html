@@ -46,32 +46,38 @@
                         </div>
                     </div>
 
-                    <div id="expand-notice-{{ bcnotice.id }}" style="height: 0; overflow:hidden;" class="flex-this space-between">
-                        <div class="w-80">
-                            <p><span class="weight-500">Description:</span> {{ bcnotice.project.description }}</p>
-                        </div>
-
-                        <div class="flex-this column w-15">
-                            {% if notice.project.url %}
+                    <div id="expand-notice-{{ bcnotice.id }}" style="height: 0; overflow:hidden;" class="flex-this column">
+                        <div class="flex-this space-between">
+                            <div class="w-80">
+                                <p><span class="weight-500">Description:</span> {{ bcnotice.project.description }}</p>
+                            </div>
+    
+                            <div class="flex-this column w-15">
+                                {% if bcnotice.project.url %}
+                                    <div class="notice-btns center-text">
+                                        <a href="{{ bcnotice.project.url }}" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                    </div>
+                                {% endif %}
                                 <div class="notice-btns center-text">
-                                    <a href="{{ bcnotice.project.url }}" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                    <a href="#" class="action-btn">View Project <i class="fa fa-long-arrow-right"></i></a>
                                 </div>
-                            {% endif %}
-                            <div class="notice-btns center-text">
-                                <a href="#" class="action-btn">View Project <i class="fa fa-long-arrow-right"></i></a>
                             </div>
                         </div>
+
+                        <div>
+                            <p>
+                                Project Contact: {{ bcnotice.project.project_contact }}<br>
+                                Project Contact Email: {{ bcnotice.project.project_contact_email }}<br>
+                                Project URL: {{ bcnotice.project.url }}<br>
+                            </p>
+                        </div>
+
                     </div>
 
                 </div>
 
             {% endif %}
         {% endfor %}
-{% else %}
-
-    <!-- <div class="content-card content-card-space white-bg">
-        <p>No notices to display at this time</p>
-    </div> -->
 
 {% endif %}
 
@@ -117,21 +123,32 @@
                     </div>
                 </div>
 
-                <div id="expand-notice-{{ tknotice.id }}" style="height: 0; overflow:hidden;" class="flex-this space-between">
-                    <div class="w-80">
-                        <p><span class="weight-500">Description:</span> {{ tknotice.project.description }}</p>
-                    </div>
-
-                    <div class="flex-this column w-15">
-                        {% if notice.project.url %}
+                <div id="expand-notice-{{ tknotice.id }}" style="height: 0; overflow:hidden;" class="flex-this column">
+                    <div class="flex-this space-between">
+                        <div class="w-80">
+                            <p><span class="weight-500">Description:</span> {{ tknotice.project.description }}</p>
+                        </div>
+    
+                        <div class="flex-this column w-15">
+                            {% if tknotice.project.url %}
+                                <div class="notice-btns center-text">
+                                    <a href="{{ tknotice.project.url }}" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                </div>
+                            {% endif %}
                             <div class="notice-btns center-text">
-                                <a href="{{ tknotice.project.url }}" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                <a href="#" class="action-btn">View Project <i class="fa fa-long-arrow-right"></i></a>
                             </div>
-                        {% endif %}
-                        <div class="notice-btns center-text">
-                            <a href="#" class="action-btn">View Project <i class="fa fa-long-arrow-right"></i></a>
                         </div>
                     </div>
+
+                    <div>
+                        <p>
+                            Project Contact: {{ tknotice.project.project_contact }}<br>
+                            Project Contact Email: {{ tknotice.project.project_contact_email }}<br>
+                            Project URL: {{ tknotice.project.url }}<br>
+                        </p>
+                    </div>
+
                 </div>
 
             </div>

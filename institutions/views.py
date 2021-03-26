@@ -87,9 +87,7 @@ def create_project(request, pk):
             data.save()
 
             notices_selected = request.POST.getlist('checkbox-notice')
-            # if tknotice: create notice
-            # if bcnotice: create notice
-            # if both: create both
+
             for notice in notices_selected:
                 if notice == 'bcnotice':
                     BCNotice.objects.create(placed_by_institution=institution, project=data)
@@ -97,7 +95,7 @@ def create_project(request, pk):
                     TKNotice.objects.create(placed_by_institution=institution, project=data)
 
             ProjectContributors.objects.create(project=data, institution=institution)
-            return redirect('institution-projects', institution.id)
+            return redirect('institution-requests', institution.id)
     else:
         form = CreateProjectForm()
 
