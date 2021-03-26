@@ -1069,3 +1069,10 @@ input:focus {
     display: inline-block;
     margin-top: 23px;
 }
+
+/* Customise TK Label page */
+
+.img-sizedown-151-116 {
+    width: 151px;
+    height: 116px;
+}

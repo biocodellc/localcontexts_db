@@ -1,13 +1,13 @@
 from django import forms
 from .models import *
 
-class CustomiseLabelForm(forms.ModelForm):
+class CustomiseBCLabelForm(forms.ModelForm):
     class Meta:
         model = BCLabel
         fields = ['name', 'default_text']
         widgets = {
-            'name': forms.TextInput(attrs={'size': 40, 'id': 'bclabel-title'}),
-            'default_text': forms.Textarea(attrs={'rows': 4, 'cols': 204, 'id': 'bclabel-template'}),
+            'name': forms.TextInput(attrs={'size': 40, 'id': 'label-title-name'}),
+            'default_text': forms.Textarea(attrs={'rows': 4, 'cols': 204, 'id': 'label-template-text'}),
         }
 
 class ApproveAndEditLabelForm(forms.ModelForm):

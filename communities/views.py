@@ -12,7 +12,8 @@ from bclabels.models import BCNotice, BCLabel
 from tklabels.models import TKNotice, TKLabel
 from projects.models import ProjectContributors
 
-from bclabels.forms import CustomiseLabelForm, ApproveAndEditLabelForm
+from bclabels.forms import CustomiseBCLabelForm, ApproveAndEditLabelForm
+from tklabels.forms import CustomiseTKLabelForm
 from projects.forms import CreateProjectForm
 
 from bclabels.utils import check_bclabel_type
@@ -229,8 +230,13 @@ def select_label(request, pk):
     else:
             # TODO: Figure out logic for which label is clicked bc or tk?
         if request.method == "POST":
-            label_type = request.POST.get('label-type')
-            return redirect('customise-label', community.id, label_type)
+            bclabel_type = request.POST.get('bclabel-type')
+            tklabel_type = request.POST.get('tk-label-type')
+
+            if bclabel_type:
+                return redirect('customise-bclabel', community.id, bclabel_type)
+            if tklabel_type:
+                return redirect('customise-tklabel', community.id, tklabel_type)
         
         context = {
             'community': community,
@@ -241,10 +247,9 @@ def select_label(request, pk):
 
 # Label customisation process
 @login_required(login_url='login')
-def customise_label(request, pk, label_type):
+def customise_bclabel(request, pk, label_type):
     community = Community.objects.get(id=pk)
     bc_type = check_bclabel_type(label_type)
-    tk_type = check_tklabel_type(label_type)
 
     # TODO: Customise either a TK or BC based on which label was selected in previous screen
     member_role = check_member_role(request.user, community)
@@ -252,7 +257,7 @@ def customise_label(request, pk, label_type):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         if request.method == "POST":
-            form = CustomiseLabelForm(request.POST)
+            form = CustomiseBCLabelForm(request.POST)
             if form.is_valid():
                 label_form = form.save(commit=False)
                 label_form.label_type = bc_type
@@ -262,7 +267,7 @@ def customise_label(request, pk, label_type):
                 label_form.save()
                 return redirect('community-labels', community.id)
         else:
-            form = CustomiseLabelForm()
+            form = CustomiseBCLabelForm()
 
         context = {
             'community': community,
@@ -270,7 +275,39 @@ def customise_label(request, pk, label_type):
             'form': form,
             'member_role': member_role,
         }
-        return render(request, 'communities/customise-label.html', context)
+        return render(request, 'communities/customise-bclabel.html', context)
+
+# Label customisation process
+@login_required(login_url='login')
+def customise_tklabel(request, pk, label_type):
+    community = Community.objects.get(id=pk)
+    tk_type = check_tklabel_type(label_type)
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        if request.method == "POST":
+            form = CustomiseTKLabelForm(request.POST)
+            if form.is_valid():
+                label_form = form.save(commit=False)
+                label_form.label_type = tk_type
+                label_form.community = community
+                label_form.created_by = request.user
+                label_form.is_approved = False
+                label_form.save()
+                return redirect('community-labels', community.id)
+        else:
+            form = CustomiseTKLabelForm()
+
+        context = {
+            'community': community,
+            'label_type': label_type,
+            'form': form,
+            'member_role': member_role,
+            'form': form,
+        }
+        return render(request, 'communities/customise-tklabel.html', context)
 
 # Approve Label
 @login_required(login_url='login')
