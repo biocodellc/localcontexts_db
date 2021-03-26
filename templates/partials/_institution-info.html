@@ -7,8 +7,8 @@
     
             <div class="flex-this w-100 space-between">
                 <div class="loc">
-                    <a href="#" class="darkteal-text">
-                        name
+                    <a href="{% url 'users' institution.institution_creator.id %}" class="darkteal-text">
+                        {{ institution.institution_creator.get_full_name}}
                     </a> 
                     >> {{ institution.institution_name }}
                 </div>
@@ -26,10 +26,10 @@
                 </div>
     
                 <div class="flex-this column w-40">
-                    <h2 class="orange-text community-title">Institution Name</h2>
+                    <h2 class="orange-text community-title">{{ institution.institution_name }}</h2>
                     <p>
                         <span>Members:</span> 00 <br>
-                        <span>Location:</span> Some place<br>
+                        <span>Location:</span> {{ institution.town_or_city }}, {{ institution.country.name }}<br>
                     </p>
                 </div>
     

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from .models import Institution
 from researchers.models import Researcher
@@ -42,7 +43,21 @@ def institution_dashboard(request, pk):
 @login_required(login_url='login')
 def update_institution(request, pk):
     institution = Institution.objects.get(id=pk)
-    return render(request, 'institutions/update-institution.html', {'institution': institution})
+    update_form = UpdateInstitutionForm(instance=institution)
+    
+    if request.method == "POST":
+        update_form = UpdateInstitutionForm(request.POST, instance=institution)
+        if update_form.is_valid():
+            update_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Updated!')
+        else:
+            update_form = UpdateInstitutionForm(instance=institution)
+    context = {
+        'institution': institution,
+        'update_form': update_form,
+    }
+
+    return render(request, 'institutions/update-institution.html', context)
 
 # Notices
 @login_required(login_url='login')
