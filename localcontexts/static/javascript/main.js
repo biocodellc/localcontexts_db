@@ -78,7 +78,11 @@ function customText(imgDiv) {
     let divs = Array.from(document.querySelectorAll('.div-toggle'))
 
     divs.forEach(div => {
-        if(div.id.includes(labelID) && div.style.height == '0px') {
+        let matches = labelID.match(/(\d+)/)
+        let targetNum = matches[0]
+
+        if(div.id == `open-div-${targetNum}` && div.style.height == '0px') {
+            console.log(targetNum)
             div.style.height = 'auto'
         } else {
             div.style.height = '0px'

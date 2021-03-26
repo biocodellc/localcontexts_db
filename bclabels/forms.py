@@ -10,7 +10,7 @@ class CustomiseBCLabelForm(forms.ModelForm):
             'default_text': forms.Textarea(attrs={'rows': 4, 'cols': 204, 'id': 'label-template-text'}),
         }
 
-class ApproveAndEditLabelForm(forms.ModelForm):
+class ApproveAndEditBCLabelForm(forms.ModelForm):
     class Meta:
         model = BCLabel
         fields = ['name', 'default_text']
