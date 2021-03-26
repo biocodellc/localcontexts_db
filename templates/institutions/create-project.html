@@ -53,7 +53,7 @@
                     
                     <div class="flex-this column center-text">
                         <div>
-                            <input type="checkbox"> 
+                            <input id="tk-notice" onclick="showDescription()" value="tknotice" type="checkbox" name="checkbox-notice">
                         </div>
                         <div>
                             <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle">
@@ -65,7 +65,7 @@
     
                     <div class="flex-this column center-text pad-left-1-5">
                         <div>
-                            <input type="checkbox"> 
+                            <input id="bc-notice" onclick="showDescription()" value="bcnotice" type="checkbox" name="checkbox-notice">
                         </div>
                         <div>
                             <img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle">
@@ -80,18 +80,35 @@
 
                 <p>2. View Notice Description</p>
 
-                <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                    <div class="w-15 pad-top-1">
-                        <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle">
-                    </div>
-
-                    <div class="w-80 pad-top-1">
-                        <h3 class="weight-500 no-top-margin">Traditional Knowledge Notice</h3>
-                        <p>
-                            This Notice should be used to recognize the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with traditional lands, waters, and territories. It acknowledges the importance of cultural protocols and recognizes that appropriate permissions may need to be sought for future use of this material.
-                        </p>
+                <div id="show-notice-description-tk" style="display: none;">
+                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
+                        <div class="w-15 pad-top-1">
+                            <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle">
+                        </div>
+    
+                        <div class="w-80 pad-top-1">
+                            <h3 class="weight-500 no-top-margin">Traditional Knowledge Notice</h3>
+                            <p>
+                                This Notice should be used to recognize the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with traditional lands, waters, and territories. It acknowledges the importance of cultural protocols and recognizes that appropriate permissions may need to be sought for future use of this material.
+                            </p>
+                        </div>
                     </div>
                 </div>
+
+                <div id="show-notice-description-bc" style="display: none;">
+                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
+                        <div class="w-15 pad-top-1">
+                            <img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle">
+                        </div>
+    
+                        <div class="w-80 pad-top-1">
+                            <h3 class="weight-500 no-top-margin">Biocultural Notice</h3>
+                            <p>
+                                The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated.                            </p>
+                        </div>
+                    </div>
+                </div>
+
 
                 {{ form.errors }}
                 <button class="action-btn">Save Project <i class="fa fa-long-arrow-right"></i></button>

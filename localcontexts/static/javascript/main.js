@@ -639,3 +639,41 @@ function expandNoticeText(img) {
         tkTextDiv.classList.remove('border-bottom-dash-teal')
     }
 }
+
+// Institutions: create-projects : show notice descriptions
+function showDescription() {
+    let bcInput = document.getElementById('bc-notice')
+    let tkInput = document.getElementById('tk-notice')
+    let tkDescriptionDiv = document.getElementById('show-notice-description-tk')
+    let bcDescriptionDiv = document.getElementById('show-notice-description-bc')
+
+    let tkTarget = tkInput.parentElement.nextElementSibling.nextElementSibling.firstElementChild
+    let bcTarget = bcInput.parentElement.nextElementSibling.nextElementSibling.firstElementChild
+
+    if (bcInput.checked && tkInput.checked) {
+        tkTarget.classList.add('darkteal-text')
+        tkTarget.classList.remove('grey-text')
+        bcTarget.classList.add('darkteal-text')
+        bcTarget.classList.remove('grey-text')
+        tkDescriptionDiv.style.display = "block"
+        bcDescriptionDiv.style.display = "block"
+    } else if (bcInput.checked) {
+        tkTarget.classList.add('grey-text')
+        bcTarget.classList.add('darkteal-text')
+        bcTarget.classList.remove('grey-text')
+        bcDescriptionDiv.style.display = "block"
+        tkDescriptionDiv.style.display = "none"
+    } else if (tkInput.checked) {
+        bcTarget.classList.add('grey-text')
+        tkTarget.classList.add('darkteal-text')
+        tkTarget.classList.remove('grey-text')
+        bcDescriptionDiv.style.display = "none"
+        tkDescriptionDiv.style.display = "block"
+    } else {
+        tkTarget.classList.add('grey-text')
+        bcTarget.classList.add('grey-text')
+        bcDescriptionDiv.style.display = "none"
+        tkDescriptionDiv.style.display = "none" 
+    }
+
+}
