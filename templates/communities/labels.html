@@ -41,29 +41,15 @@
 
                 {% for bclabel in bclabels %}
                     {% if bclabel.is_approved == False %}
-                        {% if bclabel.created_by == request.user or member_role == 'viewer' %}
-                            <div class="w-20 custom-labels">
-                                <div id="{{ bclabel.id }}" onclick="customText(this)" class="center-text pointer">
-                                    <p class="darkteal-text no-top-margin no-bottom-margin">Waiting approval*</p>
+                        <div class="w-20 custom-labels">
+                            <div id="{{ bclabel.id }}" onclick="customText(this)" class="center-text pointer">
+                                <p class="darkteal-text">Waiting approval*</p>
                                     <div>
                                         {% include 'bclabels/which-label.html' %}
                                         <p id="toggle-color-{{ bclabel.id }}" class="toggle-txt-color grey-text">{{ bclabel.name }}</p>
                                     </div>
-                                </div>
                             </div>
-                        {% else %}
-                            <div class="w-20 custom-labels">
-                                <div id="{{ bclabel.id }}" onclick="customText(this)" class="center-text pointer">
-                                    <p class="darkteal-text">Waiting approval*</p>
-                                    <a href="{% url 'approve-label' community.id bclabel.id %}">
-                                        <div>
-                                            {% include 'bclabels/which-label.html' %}
-                                            <p id="toggle-color-{{ bclabel.id }}" class="toggle-txt-color grey-text">{{ bclabel.name }}</p>
-                                        </div>
-                                    </a>    
-                                </div>
-                            </div>
-                        {% endif %}
+                        </div>
                     {% else %}
                         <div class="w-20 custom-labels">
                             <div id="{{ bclabel.id }}" onclick="customText(this)" class="approved-label center-text pointer">
@@ -80,27 +66,15 @@
 
             {% for tklabel in tklabels %}
                 {% if tklabel.is_approved == False %}
-                    {% if tklabel.created_by == request.user or member_role == 'viewer' %}
-                        <div class="w-20 custom-labels">
-                            <div id="{{ tklabel.id }}" onclick="customText(this)" class="center-text pointer">
-                                <p class="darkteal-text no-top-margin no-bottom-margin">Waiting approval*</p>
+                    <div class="w-20 custom-labels">
+                        <div id="{{ tklabel.id }}" onclick="customText(this)" class="center-text pointer">
+                            <p class="darkteal-text">Waiting approval*</p>
                                 <div>
                                     {% include 'tklabels/which-label.html' %}
                                     <p id="toggle-color-{{ tklabel.id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
-                                </div>
-                            </div>
+                                </div>  
                         </div>
-                    {% else %}
-                        <div class="w-20 custom-labels">
-                            <div id="{{ tklabel.id }}" onclick="customText(this)" class="center-text pointer">
-                                <p class="darkteal-text">Waiting approval*</p>
-                                    <div>
-                                        {% include 'tklabels/which-label.html' %}
-                                        <p id="toggle-color-{{ tklabel.id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
-                                    </div>  
-                            </div>
-                        </div>
-                    {% endif %}
+                    </div>
                 {% else %}
                     <div class="w-20 custom-labels">
                         <div id="{{ tklabel.id }}" onclick="customText(this)" class="approved-label center-text pointer">
@@ -127,11 +101,16 @@
                                 <div>
                                     <h3 class="darkteal-text">{{ bclabel.name }}</h3>
                                 </div>
-                                <div>
-                                    <a href="{% url 'approve-label' community.id bclabel.id %}">
-                                        <div class="action-btn">Review Label</div>
-                                    </a>
-                                </div>
+                                {% if bclabel.created_by == request.user or member_role == 'viewer' %}
+
+                                {% else %}
+                                    <div>
+                                        <a href="{% url 'approve-label' community.id bclabel.id %}">
+                                            <div class="action-btn">Review Label</div>
+                                        </a>
+                                    </div>
+                                {% endif %}
+
                             </div>
                             <div>
                                 <p>{{ bclabel.default_text }}</p>
@@ -154,11 +133,15 @@
                             <div>
                                 <h3 class="darkteal-text">{{ tklabel.name }}</h3>
                             </div>
-                            <div>
-                                <a href="{% url 'approve-tklabel' community.id tklabel.id %}">
-                                    <div class="action-btn">Review Label</div>
-                                </a>
-                            </div>
+                            {% if tklabel.created_by == request.user or member_role == 'viewer' %}
+
+                            {% else %}
+                                <div>
+                                    <a href="{% url 'approve-tklabel' community.id tklabel.id %}">
+                                        <div class="action-btn">Review Label</div>
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>
                         <div>
                             <p>{{ tklabel.default_text }}</p>
