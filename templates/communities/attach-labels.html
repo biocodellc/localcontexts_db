@@ -10,21 +10,41 @@
             <div class="w-10">
                 <div class="flex-this column">
                     <div>
-                        <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
+                        {% if bcnotice %}
+                            <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
+                        {% endif %}
+                        {% if tknotice %}
+                            <img src="{% static 'images/notices/tk-notice.png' %}" alt="TK Notice: a black square with white letters TK in the middle">
+                        {% endif %}
                     </div>
                 </div>
             </div>
     
             <div class="w-90 flex-this column">
                 <div class="notice-info border-bottom-dash-teal padding-bottom-2">
-                    <a href="#"><h4 class="darkteal-text weight-500">{{ bcnotice.project.title}}</h4></a>
-                    <p>
-                        {{ bcnotice.project.project_type }}<br>
-                        {{ bcnotice.project.publication_date }}<br>
-                        Project Contributors<br>
-                    </p>
-        
-                    <small>{{ bcnotice.project.description }}</small>
+
+                    {% if bcnotice %}
+                        <a href="#"><h4 class="darkteal-text weight-500">{{ bcnotice.project.title}}</h4></a>
+                        <p>
+                            {{ bcnotice.project.project_type }}<br>
+                            {{ bcnotice.project.publication_date }}<br>
+                            Project Contributors<br>
+                        </p>
+            
+                        <small>{{ bcnotice.project.description }}</small>
+                    {% endif %}
+
+                    {% if tknotice %}
+                        <a href="#"><h4 class="darkteal-text weight-500">{{ tknotice.project.title}}</h4></a>
+                        <p>
+                            {{ tknotice.project.project_type }}<br>
+                            {{ tknotice.project.publication_date }}<br>
+                            Project Contributors<br>
+                        </p>
+            
+                        <small>{{ tknotice.project.description }}</small>
+                    {% endif %}
+
                 </div>
 
                 <div class="notice-info">
@@ -54,6 +74,23 @@
 
                                             {% endfor %}
                                         {% endif %}
+
+                                        {% if tklabels %}
+                                        {% for tklabel in tklabels %}
+                                            <div class="w-20 wrap center-text">
+
+                                                <div>
+                                                    <input id="checked-label-{{ tklabel.id }}" onclick="displayDefaultText(this)" value="{{ tklabel.id }}" type="checkbox" name="checkbox-label">
+                                                </div>
+                                                <div class="label-margin">
+                                                    {% include 'tklabels/which-label.html' %}
+                                                    <span id="label-name-{{ tklabel.id }}" class="grey-text">{{ tklabel.name }}</span>
+                                                </div>
+                                            </div>
+
+                                        {% endfor %}
+                                        {% endif %}
+
                                         <div class="w-20 wrap center-text add-label-mini-card">
                                             <a href="{% url 'select-label' community.id %}">
                                                 <div>
@@ -89,6 +126,28 @@
 
                                         {% endfor %}
                                     {% endif %}
+
+                                    {% if tklabels %}
+                                    {% for tklabel in tklabels %}
+
+                                        <div id="open-default-text-{{ tklabel.id }}" style="height: 0; overflow: hidden;">
+                                            <div class="flex-this">
+                                                <div class="small-label pad-top-1-5">
+                                                    {% include 'tklabels/which-label.html' %}
+                                                </div>
+                                                <div class="pad-left-2">
+                                                    <p class="darkteal-text">Label shared by {{ tklabel.community.community_name }} </p>
+                                                    <p class="weight-500"> {{ tklabel.name }} </p>
+                                                    <p>
+                                                        {{ tklabel.default_text}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="border-bottom-solid-teal"></div>
+                                        </div>
+
+                                    {% endfor %}
+                                {% endif %}
 
                                     <div>
                                         <button class="action-btn">Apply Label(s) to project</button>

@@ -48,26 +48,25 @@
         {% endif %}
     </div>
 
-    <div class="flex-this column text-background-blue">
-        <form method="POST" action="">
-            {% csrf_token %}
-            <div class="flex-this space-between">
-                <div>
-                    <h3 class="darkteal-text weight-600">Customise Label</h3>
+        <div class="flex-this column text-background-blue">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="flex-this space-between">
+                    <div>
+                        <h3 class="darkteal-text weight-600">Customise Label</h3>
+                    </div>
+                    <div>
+                        <button class="action-btn">Save as draft</button> 
+                        <!-- <button class="white-bg darkteal-text">Cancel</button> -->
+                    </div>
                 </div>
                 <div>
-                    <button class="action-btn">Save as draft</button> 
-                    <!-- <button class="white-bg darkteal-text">Cancel</button> -->
+                    <p class="darkteal-text">Each description is written to be flexible for use in multiple projects. <br>This text is written in English but you are welcome to add another language to this label.</p>
+                        {{ form.name }}<br>
+                        {{ form.default_text }}
                 </div>
-            </div>
-            <div>
-                <p class="darkteal-text">Each description is written to be flexible for use in multiple projects. <br>This text is written in English but you are welcome to add another language to this label.</p>
-                    {{ form.name }}<br>
-                    {{ form.default_text }}
-            </div>
-    </form>
-    </div>
-
+            </form>
+        </div>
 </div>
 
 {% endblock %}

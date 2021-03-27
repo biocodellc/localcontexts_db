@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from .models import Institution
 from researchers.models import Researcher
@@ -42,13 +43,40 @@ def institution_dashboard(request, pk):
 @login_required(login_url='login')
 def update_institution(request, pk):
     institution = Institution.objects.get(id=pk)
-    return render(request, 'institutions/update-institution.html', {'institution': institution})
+    update_form = UpdateInstitutionForm(instance=institution)
+    
+    if request.method == "POST":
+        update_form = UpdateInstitutionForm(request.POST, instance=institution)
+        if update_form.is_valid():
+            update_form.save()
+            messages.add_message(request, messages.SUCCESS, 'Updated!')
+        else:
+            update_form = UpdateInstitutionForm(instance=institution)
+    context = {
+        'institution': institution,
+        'update_form': update_form,
+    }
+
+    return render(request, 'institutions/update-institution.html', context)
 
 # Notices
 @login_required(login_url='login')
 def institution_notices(request, pk):
     institution = Institution.objects.get(id=pk)
     return render(request, 'institutions/notices.html', {'institution': institution})
+
+# Notices
+@login_required(login_url='login')
+def institution_requests(request, pk):
+    institution = Institution.objects.get(id=pk)
+    bcnotices = BCNotice.objects.filter(placed_by_institution=institution)
+    tknotices = TKNotice.objects.filter(placed_by_institution=institution)
+    context = {
+        'institution': institution,
+        'bcnotices': bcnotices,
+        'tknotices': tknotices,
+    }
+    return render(request, 'institutions/requests.html', context)
 
 # Projects
 @login_required(login_url='login')
@@ -74,9 +102,7 @@ def create_project(request, pk):
             data.save()
 
             notices_selected = request.POST.getlist('checkbox-notice')
-            # if tknotice: create notice
-            # if bcnotice: create notice
-            # if both: create both
+
             for notice in notices_selected:
                 if notice == 'bcnotice':
                     BCNotice.objects.create(placed_by_institution=institution, project=data)
@@ -84,7 +110,7 @@ def create_project(request, pk):
                     TKNotice.objects.create(placed_by_institution=institution, project=data)
 
             ProjectContributors.objects.create(project=data, institution=institution)
-            return redirect('institution-projects', institution.id)
+            return redirect('institution-requests', institution.id)
     else:
         form = CreateProjectForm()
 
