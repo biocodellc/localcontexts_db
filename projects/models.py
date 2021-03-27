@@ -25,10 +25,12 @@ class Project(models.Model):
     date_modified = models.DateTimeField(auto_now=True, null=True)
     is_public = models.BooleanField(default=True, null=True)
     bclabels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_labels")
+    tklabels = models.ManyToManyField("tklabels.TKLabel", verbose_name="BC Labels", blank=True, related_name="project_tklabels")
 
     def has_labels(self):
         bc_labels = self.bclabels.count()
-        if bc_labels > 0:
+        tk_labels = self.tklabels.count()
+        if bc_labels + tk_labels > 0:
             return True
         else:
             return False

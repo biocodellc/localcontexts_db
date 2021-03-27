@@ -10,21 +10,41 @@
             <div class="w-10">
                 <div class="flex-this column">
                     <div>
-                        <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
+                        {% if bcnotice %}
+                            <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
+                        {% endif %}
+                        {% if tknotice %}
+                            <img src="{% static 'images/notices/tk-notice.png' %}" alt="TK Notice: a black square with white letters TK in the middle">
+                        {% endif %}
                     </div>
                 </div>
             </div>
     
             <div class="w-90 flex-this column">
                 <div class="notice-info border-bottom-dash-teal padding-bottom-2">
-                    <a href="#"><h4 class="darkteal-text weight-500">{{ bcnotice.project.title}}</h4></a>
-                    <p>
-                        {{ bcnotice.project.project_type }}<br>
-                        {{ bcnotice.project.publication_date }}<br>
-                        Project Contributors<br>
-                    </p>
-        
-                    <small>{{ bcnotice.project.description }}</small>
+
+                    {% if bcnotice %}
+                        <a href="#"><h4 class="darkteal-text weight-500">{{ bcnotice.project.title}}</h4></a>
+                        <p>
+                            {{ bcnotice.project.project_type }}<br>
+                            {{ bcnotice.project.publication_date }}<br>
+                            Project Contributors<br>
+                        </p>
+            
+                        <small>{{ bcnotice.project.description }}</small>
+                    {% endif %}
+
+                    {% if tknotice %}
+                        <a href="#"><h4 class="darkteal-text weight-500">{{ tknotice.project.title}}</h4></a>
+                        <p>
+                            {{ tknotice.project.project_type }}<br>
+                            {{ tknotice.project.publication_date }}<br>
+                            Project Contributors<br>
+                        </p>
+            
+                        <small>{{ tknotice.project.description }}</small>
+                    {% endif %}
+
                 </div>
 
                 <div class="notice-info">

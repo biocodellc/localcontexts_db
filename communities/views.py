@@ -424,11 +424,13 @@ def create_project(request, pk):
         return render(request, 'communities/create-project.html', context)
 
 # Appy Labels to Notices
-# TODO: Accommodate this to tk notices and being able to add tk labels.
 @login_required(login_url='login')
 def community_add_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
-    bcnotice = BCNotice.objects.get(id=notice_id)
+
+    bcnotice_exists = BCNotice.objects.filter(id=notice_id).exists()
+    tknotice_exists = TKNotice.objects.filter(id=notice_id).exists()
+
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
 
@@ -436,22 +438,59 @@ def community_add_labels(request, pk, notice_id):
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        if request.method == "POST":
-            label_selected = request.POST.getlist('checkbox-label')
+        if bcnotice_exists:
+            bcnotice = BCNotice.objects.get(id=notice_id)
+            if request.method == "POST":
+                # Gets ids of all checkboxes
+                label_selected = request.POST.getlist('checkbox-label')
 
-            for choice in label_selected:
-                label = BCLabel.objects.get(id=choice)
-                bcnotice.project.bclabels.add(label)
-            return redirect('community-projects', community.id)
+                for choice in label_selected:
+                    bclabel_exists = BCLabel.objects.filter(id=choice).exists()
+                    tklabel_exists = TKLabel.objects.filter(id=choice).exists()
+
+                    if bclabel_exists:
+                        bclabel = BCLabel.objects.get(id=choice)
+                        bcnotice.project.bclabels.add(bclabel)
+                    if tklabel_exists:
+                        tklabel = TKLabel.objects.get(id=choice)
+                        bcnotice.project.tklabels.add(tklabel)
+                return redirect('community-projects', community.id)
+            
+            context = {
+                'community': community,
+                'bcnotice': bcnotice,
+                'bclabels': bclabels,
+                'tklabels': tklabels,
+                'member_role': member_role,
+            }
+            return render(request, 'communities/attach-labels.html', context)
+
+        else:
+            tknotice = TKNotice.objects.get(id=notice_id)
+            if request.method == "POST":
+                # Gets ids of all checkboxes
+                label_selected = request.POST.getlist('checkbox-label')
+
+                for choice in label_selected:
+                    bclabel_exists = BCLabel.objects.filter(id=choice).exists()
+                    tklabel_exists = TKLabel.objects.filter(id=choice).exists()
+
+                    if bclabel_exists:
+                        bclabel = BCLabel.objects.get(id=choice)
+                        tknotice.project.bclabels.add(bclabel)
+                    if tklabel_exists:
+                        tklabel = TKLabel.objects.get(id=choice)
+                        tknotice.project.tklabels.add(tklabel)
+                return redirect('community-projects', community.id)
         
-        context = {
-            'community': community,
-            'bcnotice': bcnotice,
-            'bclabels': bclabels,
-            'tklabels': tklabels,
-            'member_role': member_role,
-        }
-        return render(request, 'communities/attach-labels.html', context)
+            context = {
+                'community': community,
+                'tknotice': tknotice,
+                'bclabels': bclabels,
+                'tklabels': tklabels,
+                'member_role': member_role,
+            }
+            return render(request, 'communities/attach-labels.html', context)
 
 # Relationships
 @login_required(login_url='login')
