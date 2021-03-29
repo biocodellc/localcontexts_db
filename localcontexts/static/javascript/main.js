@@ -472,30 +472,6 @@ function displayDefaultText(elem) {
 
 }
 
-// Researchers : add project/notice
-function noticeToggle(img) {
-    let imgID = img.id
-    let hiddenInupt = document.getElementById('which-notice')
-    let bcNotice = document.getElementById('bc-notice-img')
-    let tkNotice = document.getElementById('tk-notice-img')
-    let p = document.getElementById('notice-text')
-
-    let bcText = 'The BC Notice serves as a visible notification that there is accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated.'
-    let tkText = 'The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated.'
-
-    if (imgID == bcNotice.id) {
-        tkNotice.classList.add('opacity-4')
-        bcNotice.classList.remove('opacity-4')
-        p.innerText = bcText
-        hiddenInupt.value = 'bc_notice'
-    } else {
-        bcNotice.classList.add('opacity-4')
-        tkNotice.classList.remove('opacity-4')
-        p.innerText = tkText
-        hiddenInupt.value = 'tk_notice'
-    }
-}
-
 
 // TK Labels : community -> customise -> select labels
 function showTKLabelInfo() {

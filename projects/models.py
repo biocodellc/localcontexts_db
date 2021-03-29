@@ -9,6 +9,7 @@ class Project(models.Model):
         ('Collection', 'Collection'),
         ('Expedition', 'Expedition'),
         ('Publication', 'Publication'),
+        ('Sample', 'Sample'),
     )
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
     title = models.CharField(max_length=300, null=True)

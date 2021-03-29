@@ -52,11 +52,13 @@
                 </div>
 
                 <div class="flex-this space-between">
-                    <div>
+                    <div class="w-90">
                         {{ c.project.description }}
                     </div>
-                    <div>
-                        <!-- <button class="action-btn">Notify Communities <i class="fa fa-users" aria-hidden="true"></i></button> -->
+                    <div class="w-20">
+                        <a href="{% url 'notify-communities' institution.id c.project.id %}">
+                            <button class="action-btn">Notify Communities <i class="fa fa-users" aria-hidden="true"></i></button>
+                        </a>
                     </div>
                 </div>
 

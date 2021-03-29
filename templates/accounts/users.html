@@ -7,13 +7,6 @@
         <div id="user-info-content" class="flex-this column">
 
             <div class="row flex-this">
-                <div id="profile-pic-container">
-                    {% if target_user.profile.profile_pic %}
-                        <img src="{{ target_user.profile.profile_pic.url }}" alt="user profile image">
-                    {% else %}
-                        <img src="{% static '/images/default.png' %}" alt="default user profile image">
-                    {% endif %}
-                </div>
         
                 <div class="row user-info">
                     <h2 class="orange-text">{{ target_user.first_name }}'s Profile</h2>
@@ -28,47 +21,6 @@
         </div>
     </section>
 
-
-    <section id="user-affiliation-container">
-        <div id="user-affiliation-content" class="flex-this">
-
-            {% if user_communities %}
-                {% for community in user_communities %}
-                <div class="member-card-container">
-                    <a href="{% url 'community-dashboard' community.id %}">
-                        <div class="member-card flex-this column white-bg">
-                            <div class="member-card-img">
-                                <img src="https://picsum.photos/350/150">
-                            </div>
-                            <div class="member-card-text flex-this column">
-                                <h3 class="darkteal-text">{{ community }}</h3>
-                                <p class="upper black-text">Community</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                {% endfor %}
-            {% endif %}
-
-            {% if researcher %}
-                <div class="member-card-container">
-                    <a href="#">
-                        <div class="member-card flex-this column white-bg">
-                            <div class="member-card-img">
-                                <img src="https://picsum.photos/350/150">
-                            </div>
-                            <div class="member-card-text flex-this column">
-                                <h3 class="darkteal-text">{{ researcher.user.get_full_name }}</h3>
-                                <p class="upper black-text">Researcher</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            {% endif %}
-
-        </div>
-    </section>
 </div>
 </div>
 {% include 'partials/_auth-footer.html' %}

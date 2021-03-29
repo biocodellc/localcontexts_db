@@ -326,6 +326,7 @@ def approve_label(request, pk, label_id):
             if form.is_valid():
                 label_form = form.save(commit=False)
                 label_form.is_approved = True
+                label_form.approved_by = request.user
                 label_form.save()
                 return redirect('community-labels', community.id)
         else:
@@ -351,10 +352,11 @@ def approve_tklabel(request, pk, label_id):
     else:
         form = ApproveAndEditTKLabelForm(instance=tklabel)
         if request.method == "POST":
-            form = ApproveAndEditTKLabelForm(request.POST, instance=bclabel)
+            form = ApproveAndEditTKLabelForm(request.POST, instance=tklabel)
             if form.is_valid():
                 label_form = form.save(commit=False)
                 label_form.is_approved = True
+                label_form.approved_by = request.user
                 label_form.save()
                 return redirect('community-labels', community.id)
         else:
