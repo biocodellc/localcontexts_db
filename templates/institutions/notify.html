@@ -9,9 +9,16 @@
             <div class="w-50"> 
                     <h4 class="darkteal-text weight-600 no-top-margin">Project Title</h4>
                     <p class="no-top-margin">
-                        Date Created: <br>
-                        Project Type: <br>
-                        Project Contributors: <br>
+                        {{ project.date_added }} <br>
+                        {{ project.project_type }} <br>
+                        Project Contributors: {{ contribs.institution }}
+                        {% if contribs.community %}
+                            {{ contribs.community }},
+                        {% endif %}
+
+                        {% if contribs.researcher %}
+                            {{ contribs.researcher }},
+                        {% endif %}<br>
                     </p>
             </div>
 
@@ -27,7 +34,7 @@
 
     <div class="flex-this space-between">
         <div>
-            Description
+            {{ project.description }}
         </div>
         <div>
             <!-- <button class="action-btn">Notify Communities <i class="fa fa-users" aria-hidden="true"></i></button> -->
@@ -36,9 +43,9 @@
 
     <div>
         <p>
-            Project Contact:  <br>
-            Project Contact Email:  <br>
-            Project URL: 
+            Project Contact:  {{ project.project_contact }}<br>
+            Project Contact Email:  {{ project.project_contact_email }}<br>
+            Project URL: {{ project.url }}
         </p>
     </div>
 
@@ -46,37 +53,43 @@
     <h4 class="orange-text weight-600 no-top-margin">Send Requests</h4>
     <p>Once you have created a project, you can send this project to communities, institutions or researchers that could be interested in this project.</p>
 
-    <p>Do you know who you need to notify?<br>
+    <!-- TODO: Set this up  -->
+    <!-- <p>Do you know who you need to notify?<br>
         <input type="radio"> Yes <br>
         <input type="radio"> No
     </p>
-
 
     <p>
         How do you want to find others?<br>
         <input type="radio"> By our Local Contexts register <br>
         <input type="radio"> Invite entities that are not registered with us
-    </p>
+    </p> -->
 
-    <p>Please enter their details</p>
+    <!-- <p>Please enter their details</p> -->
 
-    <div class="flex-this">
-        <div>
-            <label>Contact Name</label><br>
-            <input type="text">
-        </div>    
-        <div>
-            <label>Email Address</label><br>
-            <input type="text">
+    <form method="POST" action="">
+        {% csrf_token %}
+
+        <!-- TODO: Set this up -->
+        <!-- <div class="flex-this">
+            <div>
+                <label>Contact Name</label><br>
+                <input type="text">
+            </div>    
+            <div>
+                <label>Email Address</label><br>
+                <input type="text">
+            </div>
         </div>
-    </div>
+    
+        <div>
+            <label>Send a supporting message with this request</label><br>
+            <textarea></textarea>
+        </div> -->
+    
+        <!-- <button class="action-btn">Notify <i class="fa fa-users" aria-hidden="true"></i></button> -->
 
-    <div>
-        <label>Send a supporting message with this request</label><br>
-        <textarea></textarea>
-    </div>
-
-    <button class="action-btn">Notify Others <i class="fa fa-users" aria-hidden="true"></i></button>
+    </form>
 
 
 

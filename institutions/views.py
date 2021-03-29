@@ -123,6 +123,14 @@ def create_project(request, pk):
 @login_required(login_url='login')
 def notify_communities(request, pk, proj_id):
     institution = Institution.objects.get(id=pk)
-    return render(request, 'institutions/notify.html', {'institution': institution})
+    project = Project.objects.get(id=proj_id)
+    contribs = ProjectContributors.objects.get(project=project, institution=institution)
+
+    context = {
+        'institution': institution,
+        'project': project,
+        'contribs': contribs,
+    }
+    return render(request, 'institutions/notify.html', context)
 
 
