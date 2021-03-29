@@ -103,23 +103,23 @@ def add_notice(request, pk):
             contrib = ProjectContributors.objects.create(project=proj, researcher=researcher, community=contrib_data.community)            
             message = request.POST.get('contrib-message') # Get value of message
 
-            selected_notice = request.POST.get('which_notice')
-            if selected_notice == 'bc_notice':
-                # Create BC Notice
-                bc_notice = BCNotice.objects.create(project=proj, placed_by_researcher=researcher, message=message)
-                bc_notice.communities.add(contrib_data.community)
+            notices_selected = request.POST.getlist('checkbox-notice')
 
-                # Send community notification
-                title = "A BC notice has been placed by " + str(researcher)
-                CommunityNotification.objects.create(community=contrib_data.community, notification_type='Requests', title=title)
-            
-            if selected_notice == 'tk_notice':
-                tk_notice = TKNotice.objects.create(project=proj, placed_by_researcher=researcher, message=message)
-                tk_notice.communities.add(contrib_data.community)
+            for notice in notices_selected:
+                if notice == 'bcnotice':
+                    bc_notice = BCNotice.objects.create(placed_by_researcher=researcher, project=proj)
+                    bc_notice.communities.add(contrib_data.community)
 
-                title = "A TK notice has been placed by " + str(researcher)
-                CommunityNotification.objects.create(community=contrib_data.community, notification_type='Requests', title=title)
+                    # Send community notification
+                    title = "A BC notice has been placed by " + str(researcher)
+                    CommunityNotification.objects.create(community=contrib_data.community, notification_type='Requests', title=title)
 
+                if notice == 'tknotice':
+                    tk_notice = TKNotice.objects.create(placed_by_researcher=researcher, project=proj)
+                    tk_notice.communities.add(contrib_data.community)
+
+                    title = "A TK notice has been placed by " + str(researcher)
+                    CommunityNotification.objects.create(community=contrib_data.community, notification_type='Requests', title=title)
 
             return redirect('researcher-notices', researcher.id)
     else:
