@@ -1,0 +1,86 @@
+{% extends 'institution-base.html' %} {% load static %} {% block institution_content %}
+
+<div class="content-card content-card-space white-bg">
+
+    <div class="flex-this space-between column">
+
+        <div class="w-100 flex-this">
+
+            <div class="w-50"> 
+                    <h4 class="darkteal-text weight-600 no-top-margin">Project Title</h4>
+                    <p class="no-top-margin">
+                        Date Created: <br>
+                        Project Type: <br>
+                        Project Contributors: <br>
+                    </p>
+            </div>
+
+            <div class="w-50 flex-this column">
+                <div class="flex-this flex-end w-100">
+                    <!-- <span class="darkteal-text">Show More</span> -->
+                </div> 
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="flex-this space-between">
+        <div>
+            Description
+        </div>
+        <div>
+            <!-- <button class="action-btn">Notify Communities <i class="fa fa-users" aria-hidden="true"></i></button> -->
+        </div>
+    </div>
+
+    <div>
+        <p>
+            Project Contact:  <br>
+            Project Contact Email:  <br>
+            Project URL: 
+        </p>
+    </div>
+
+    <hr>
+    <h4 class="orange-text weight-600 no-top-margin">Send Requests</h4>
+    <p>Once you have created a project, you can send this project to communities, institutions or researchers that could be interested in this project.</p>
+
+    <p>Do you know who you need to notify?<br>
+        <input type="radio"> Yes <br>
+        <input type="radio"> No
+    </p>
+
+
+    <p>
+        How do you want to find others?<br>
+        <input type="radio"> By our Local Contexts register <br>
+        <input type="radio"> Invite entities that are not registered with us
+    </p>
+
+    <p>Please enter their details</p>
+
+    <div class="flex-this">
+        <div>
+            <label>Contact Name</label><br>
+            <input type="text">
+        </div>    
+        <div>
+            <label>Email Address</label><br>
+            <input type="text">
+        </div>
+    </div>
+
+    <div>
+        <label>Send a supporting message with this request</label><br>
+        <textarea></textarea>
+    </div>
+
+    <button class="action-btn">Notify Others <i class="fa fa-users" aria-hidden="true"></i></button>
+
+
+
+
+</div>
+
+{% endblock %}

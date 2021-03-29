@@ -14,4 +14,5 @@ urlpatterns = [
 
     path('institution/projects/<str:pk>/', views.institution_projects, name="institution-projects"),
     path('institution/create-project/<str:pk>/', views.create_project, name="inst-create-project"),
+    path('institution/projects/notify/<str:pk>/<str:proj_id>/', views.notify_communities, name="notify-communities"),
 ]

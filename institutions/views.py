@@ -65,7 +65,7 @@ def institution_notices(request, pk):
     institution = Institution.objects.get(id=pk)
     return render(request, 'institutions/notices.html', {'institution': institution})
 
-# Notices
+# Requests
 @login_required(login_url='login')
 def institution_requests(request, pk):
     institution = Institution.objects.get(id=pk)
@@ -119,4 +119,10 @@ def create_project(request, pk):
         'form': form,
     }
     return render(request, 'institutions/create-project.html', context)
+
+@login_required(login_url='login')
+def notify_communities(request, pk, proj_id):
+    institution = Institution.objects.get(id=pk)
+    return render(request, 'institutions/notify.html', {'institution': institution})
+
 
