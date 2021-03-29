@@ -351,7 +351,7 @@ def approve_tklabel(request, pk, label_id):
     else:
         form = ApproveAndEditTKLabelForm(instance=tklabel)
         if request.method == "POST":
-            form = ApproveAndEditTKLabelForm(request.POST, instance=bclabel)
+            form = ApproveAndEditTKLabelForm(request.POST, instance=tklabel)
             if form.is_valid():
                 label_form = form.save(commit=False)
                 label_form.is_approved = True
