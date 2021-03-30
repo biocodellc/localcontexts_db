@@ -33,6 +33,9 @@
                             {% if contrib.researcher %}
                                 , {{ contrib.researcher.user.get_full_name}}
                             {% endif %}
+                            {% if contrib.institution %}
+                                , {{ contrib.institution.institution_name }}
+                            {% endif %}
 
                         </p>
                     </div>

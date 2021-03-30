@@ -443,6 +443,11 @@ def community_add_labels(request, pk, notice_id):
         if bcnotice_exists:
             bcnotice = BCNotice.objects.get(id=notice_id)
             if request.method == "POST":
+                # add community to project contributors
+                contrib = ProjectContributors.objects.get(project=bcnotice.project)
+                contrib.community = community
+                contrib.save()
+
                 # Gets ids of all checkboxes
                 label_selected = request.POST.getlist('checkbox-label')
 
@@ -470,6 +475,11 @@ def community_add_labels(request, pk, notice_id):
         else:
             tknotice = TKNotice.objects.get(id=notice_id)
             if request.method == "POST":
+                # add community to project contributors
+                contrib = ProjectContributors.objects.get(project=bcnotice.project)
+                contrib.community = community
+                contrib.save()
+                
                 # Gets ids of all checkboxes
                 label_selected = request.POST.getlist('checkbox-label')
 
