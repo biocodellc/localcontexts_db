@@ -18,3 +18,11 @@ class ApproveAndEditBCLabelForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'size': 40}),
             'default_text': forms.Textarea(attrs={'rows': 4, 'cols': 204}),
         }
+
+# class AddBCNoticeMessage(forms.ModelForm):
+#     class Meta:
+#         model = BCNotice
+#         fields = ['message']
+#         widgets = {
+#             'message': forms.Textarea(attrs={'rows': 4, 'cols': 204}),
+#         }

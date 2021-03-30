@@ -33,6 +33,9 @@
                             {% if contrib.researcher %}
                                 , {{ contrib.researcher.user.get_full_name}}
                             {% endif %}
+                            {% if contrib.institution %}
+                                , {{ contrib.institution.institution_name }}
+                            {% endif %}
 
                         </p>
                     </div>
@@ -60,7 +63,7 @@
 
                     <div class="flex-this column">
                         <div>
-                            <p class="weight-500">Labels attched to this project</p>
+                            <p class="weight-500">Labels attached to this project</p>
                         </div>
                             {% for bclabel in contrib.project.bclabels.all %}
 

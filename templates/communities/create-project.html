@@ -70,6 +70,20 @@
                 {% endfor %}
             {% endif %}
 
+            {% if tklabels %}
+            {% for tklabel in tklabels %}
+
+                <div class="w-20 wrap center-text">
+                    <div>
+                        <input id="checked-label-{{ tklabel.id }}" onclick="displayDefaultText(this)" value="{{ tklabel.id }}" type="checkbox" name="tk-checked-labels">
+                    </div>
+                    {% include 'tklabels/which-label.html' %}
+                    <span id="label-name-{{ tklabel.id }}" class="grey-text">{{ tklabel.name }}</span>
+                </div>
+
+            {% endfor %}
+        {% endif %}
+
             <div id="grey-border-div" class="center-text">
                 <a href="{% url 'select-label' community.id %}">
                     <span class="grey-text auto-margin">+ Customise a <br>new Label</span>
@@ -99,6 +113,26 @@
                     </div>
                 {% endfor %}
             {% endif %}
+
+            {% if tklabels %}
+            {% for tklabel in tklabels %}
+                <div id="open-default-text-{{ tklabel.id }}" style="height: 0; overflow: hidden;" class="flex-this">
+
+                    <div class="small-label">
+                        {% include 'tklabels/which-label.html' %}
+                    </div>
+                    <div class="pad-left-2">
+                        <p class="darkteal-text no-top-margin">Label shared by {{ tklabel.community.community_name }} </p>
+                        <p class="weight-500"> {{ tklabel.name }} </p>
+                        <p>
+                            {{ tklabel.default_text}}
+                        </p>
+                        <hr>
+                    </div>
+
+                </div>
+            {% endfor %}
+        {% endif %}
     
         </div>
     

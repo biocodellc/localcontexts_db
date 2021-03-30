@@ -733,3 +733,24 @@ function showDescription() {
     }
 
 }
+
+// Institutions: projects: notify communities
+function selectCommunities() {
+    let select = document.getElementById('communities-select')
+    let allOptionsArray = Array.from(select.options)
+    // Remove first element of options array
+    let allOptionsMinusFirst = allOptionsArray.slice(1)
+
+    allOptionsMinusFirst.forEach(option => {
+        let selectedCommunityDiv = document.getElementById(`selected-community-${option.id}`)
+        let div = document.getElementById(`comm-id-input-${option.id}`)
+
+        if (option.selected) {
+            console.log(option)
+            selectedCommunityDiv.style.height = "auto";
+            div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_communities">`
+        }
+
+
+    })
+}

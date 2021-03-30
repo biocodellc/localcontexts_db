@@ -7,7 +7,7 @@
         <div class="w-100 flex-this">
 
             <div class="w-50"> 
-                    <h4 class="darkteal-text weight-600 no-top-margin">Project Title</h4>
+                    <h4 class="darkteal-text weight-600 no-top-margin">{{ project.title }}</h4>
                     <p class="no-top-margin">
                         {{ project.date_added }} <br>
                         {{ project.project_type }} <br>
@@ -32,12 +32,9 @@
 
     </div>
 
-    <div class="flex-this space-between">
+    <div>
         <div>
             {{ project.description }}
-        </div>
-        <div>
-            <!-- <button class="action-btn">Notify Communities <i class="fa fa-users" aria-hidden="true"></i></button> -->
         </div>
     </div>
 
@@ -70,6 +67,21 @@
     <form method="POST" action="">
         {% csrf_token %}
 
+        {% if communities %}
+        <label>Search our register</label><br>
+            <select id="communities-select" onchange="selectCommunities()">
+                <option>Select a Community</option>
+                {% for community in communities %}
+                        <option id="{{ community.id }}">{{ community.community_name }}</option>
+                {% endfor %}
+            </select>
+    
+            {% for community in communities %}
+                <div id="selected-community-{{ community.id }}" style="height: 0px; overflow: hidden;">{{community.community_name}}</div>
+                <div id="comm-id-input-{{ community.id }}" style="display: none;"></div>
+            {% endfor %}
+        {% endif %}
+    
         <!-- TODO: Set this up -->
         <!-- <div class="flex-this">
             <div>
@@ -80,14 +92,14 @@
                 <label>Email Address</label><br>
                 <input type="text">
             </div>
-        </div>
+        </div> -->
     
         <div>
             <label>Send a supporting message with this request</label><br>
-            <textarea></textarea>
-        </div> -->
+            <textarea name="notice_message" style="width: 400px; height: 200px;"></textarea>
+        </div>
     
-        <!-- <button class="action-btn">Notify <i class="fa fa-users" aria-hidden="true"></i></button> -->
+        <button class="action-btn">Notify <i class="fa fa-users" aria-hidden="true"></i></button>
 
     </form>
 

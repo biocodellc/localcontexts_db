@@ -7,9 +7,13 @@ from researchers.models import Researcher
 from projects.models import Project, ProjectContributors
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
+from communities.models import Community
+from notifications.models import CommunityNotification
 
 from .forms import CreateInstitutionForm, UpdateInstitutionForm
 from projects.forms import CreateProjectForm
+# from bclabels.forms import AddBCNoticeMessage
+# from tklabels.forms import AddTKNoticeMessage
 
 @login_required(login_url='login')
 def connect_institution(request):
@@ -126,10 +130,46 @@ def notify_communities(request, pk, proj_id):
     project = Project.objects.get(id=proj_id)
     contribs = ProjectContributors.objects.get(project=project, institution=institution)
 
+    bcnotice_exists = BCNotice.objects.filter(project=project).exists()
+    tknotice_exists = TKNotice.objects.filter(project=project).exists()
+
+    communities = Community.objects.all()
+
+    if request.method == "POST":
+        communities_selected = request.POST.getlist('selected_communities')
+        message = request.POST.get('notice_message')
+
+        for community_id in communities_selected:
+            title = str(institution.institution_name) + " has placed a notice"
+
+            community = Community.objects.get(id=community_id)
+
+            # Create notification
+            CommunityNotification.objects.create(community=community, notification_type='Requests', title=title)
+            
+            # add community to bclabel instance
+            if bcnotice_exists:
+                bcnotices = BCNotice.objects.filter(project=project)
+                for bcnotice in bcnotices:
+                    bcnotice.communities.add(community)
+                    bcnotice.message = message
+                    bcnotice.save()
+            
+            # add community to tklabel instance
+            if tknotice_exists:
+                tknotices = TKNotice.objects.filter(project=project)
+                for tknotice in tknotices:
+                    tknotice.communities.add(community)
+                    tknotice.message = message
+                    tknotice.save()
+        
+        return redirect('institution-projects', institution.id)
+
     context = {
         'institution': institution,
         'project': project,
         'contribs': contribs,
+        'communities': communities,
     }
     return render(request, 'institutions/notify.html', context)
 
