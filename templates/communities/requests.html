@@ -81,6 +81,16 @@
                                             {{ bcnotice.message }}
                                         </p>
                                     {% endif %}
+
+                                    {% if bcnotice.placed_by_researcher %}
+                                        <span class="weight-500">{{ bcnotice.placed_by_researcher.user.get_full_name }}</span>
+                                        <span class="grey-text">{{ bcnotice.created|date:'m/d/Y' }}</span><br>
+
+                                        <p>
+                                            {{ bcnotice.message }}
+                                        </p>
+                                    {% endif %}
+
                                 </div>
                             {% endif %}
 
@@ -170,6 +180,15 @@
                                 <hr>
                                 {% if tknotice.placed_by_institution %}
                                     <span class="weight-500">{{ tknotice.placed_by_institution.institution_name }}</span>
+                                    <span class="grey-text">{{ tknotice.created|date:'m/d/Y' }}</span><br>
+
+                                    <p>
+                                        {{ tknotice.message }}
+                                    </p>
+                                {% endif %}
+
+                                {% if tknotice.placed_by_researcher %}
+                                    <span class="weight-500">{{ tknotice.placed_by_researcher.user.get_full_name }}</span>
                                     <span class="grey-text">{{ tknotice.created|date:'m/d/Y' }}</span><br>
 
                                     <p>
