@@ -395,6 +395,7 @@ def projects(request, pk):
 def create_project(request, pk):
     community = Community.objects.get(id=pk)
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
+    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -404,12 +405,17 @@ def create_project(request, pk):
             form = CreateProjectForm(request.POST)
             if form.is_valid():
                 obj = form.save(commit=False)
-                labels_selected = request.POST.getlist('checked-labels')
+                bclabels_selected = request.POST.getlist('checked-labels')
+                tklabels_selected = request.POST.getlist('tk-checked-labels')
                 obj.save()
 
-                for choice in labels_selected:
+                for choice in bclabels_selected:
                     label = BCLabel.objects.get(id=choice)
                     obj.bclabels.add(label)
+                
+                for tkchoice in tklabels_selected:
+                    tklabel = TKLabel.objects.get(id=tkchoice)
+                    obj.tklabels.add(tklabel)
 
                 ProjectContributors.objects.create(project=obj, community=community)
                 return redirect('community-projects', community.id)
@@ -421,6 +427,7 @@ def create_project(request, pk):
             'member_role': member_role,
             'form': form,
             'bclabels': bclabels,
+            'tklabels': tklabels,
         }
 
         return render(request, 'communities/create-project.html', context)
@@ -479,7 +486,7 @@ def community_add_labels(request, pk, notice_id):
                 contrib = ProjectContributors.objects.get(project=bcnotice.project)
                 contrib.community = community
                 contrib.save()
-                
+
                 # Gets ids of all checkboxes
                 label_selected = request.POST.getlist('checkbox-label')
 
