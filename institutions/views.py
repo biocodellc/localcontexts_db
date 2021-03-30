@@ -12,6 +12,8 @@ from notifications.models import CommunityNotification
 
 from .forms import CreateInstitutionForm, UpdateInstitutionForm
 from projects.forms import CreateProjectForm
+# from bclabels.forms import AddBCNoticeMessage
+# from tklabels.forms import AddTKNoticeMessage
 
 @login_required(login_url='login')
 def connect_institution(request):
@@ -135,10 +137,10 @@ def notify_communities(request, pk, proj_id):
 
     if request.method == "POST":
         communities_selected = request.POST.getlist('selected_communities')
+        message = request.POST.get('notice_message')
 
         for community_id in communities_selected:
             title = str(institution.institution_name) + " has placed a notice"
-            # message = request.POST.get('notice_message')
 
             community = Community.objects.get(id=community_id)
 
@@ -150,12 +152,16 @@ def notify_communities(request, pk, proj_id):
                 bcnotices = BCNotice.objects.filter(project=project)
                 for bcnotice in bcnotices:
                     bcnotice.communities.add(community)
+                    bcnotice.message = message
+                    bcnotice.save()
             
             # add community to tklabel instance
             if tknotice_exists:
                 tknotices = TKNotice.objects.filter(project=project)
                 for tknotice in tknotices:
                     tknotice.communities.add(community)
+                    tknotice.message = message
+                    tknotice.save()
         
         return redirect('institution-projects', institution.id)
 
