@@ -1,11 +1,6 @@
-<div class="content-card content-card-space comm-nav flex-this column white-bg">
+<div class="content-card comm-nav flex-this column white-bg">
     <div class="comm-nav-links flex-this">
-        <div><a href="{% url 'researcher-dashboard' researcher.id %}">Activity</button></div>
-        <div><a href="{% url 'researcher-notices' researcher.id %}">Projects</a></div>
-        <!-- Temporary removal -->
-        <!-- <div><a href="{% url 'researcher-relationships' researcher.id %}">Relationships</a></div> -->
-
-        <!-- For future iterations -->
-        <!-- <div><a href="#">Training</a></div> -->
+        <a href="{% url 'researcher-dashboard' researcher.id %}"><div class="active-nav">Activity</div></a>
+        <a href="{% url 'researcher-notices' researcher.id %}"><div>Projects</div></a>
     </div>
 </div>
