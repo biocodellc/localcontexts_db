@@ -6,8 +6,8 @@ urlpatterns = [
     path('create-community/', views.create_community, name="create-community"),
     path('community-registry/', views.community_registry, name="community-registry"),
 
-    path('community/<str:pk>/', views.community_dashboard, name="community-dashboard"),
-    path('community/update/<str:pk>/', views.update_community, name="update-community"),
+    path('community/dashboard/<str:pk>/', views.community_dashboard, name="community-dashboard"),
+    path('community/dashboard/update/<str:pk>/', views.update_community, name="update-community"),
 
     path('community/members/<str:pk>/', views.community_members, name="members"),
     path('community/members/add/<str:pk>/', views.add_member, name="add-member"),
@@ -26,7 +26,7 @@ urlpatterns = [
     path('community/labels/add/<str:pk>/<str:notice_id>', views.community_add_labels, name="community-add-labels"),
 
     path('community/projects/<str:pk>/', views.projects, name="community-projects"),
-    path('community/create-project/<str:pk>/', views.create_project, name="create-project"),
+    path('community/projects/create-project/<str:pk>/', views.create_project, name="create-project"),
 
     path('community/relationships/<str:pk>/', views.community_relationships, name="community-relationships"),
 
