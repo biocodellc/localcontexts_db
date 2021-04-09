@@ -1,6 +1,10 @@
 <div class="content-card comm-nav flex-this column white-bg">
     <div class="comm-nav-links flex-this">
-        <a href="{% url 'researcher-dashboard' researcher.id %}"><div class="active-nav">Activity</div></a>
-        <a href="{% url 'researcher-notices' researcher.id %}"><div>Projects</div></a>
+        <a href="{% url 'researcher-dashboard' researcher.id %}">
+            <div class="{% if 'dashboard' in request.path %} active-nav {% endif %}">Activity</div>
+        </a>
+        <a href="{% url 'researcher-notices' researcher.id %}">
+            <div class="{% if 'projects' in request.path %} active-nav {% endif %}">Projects</div>
+        </a>
     </div>
 </div>
