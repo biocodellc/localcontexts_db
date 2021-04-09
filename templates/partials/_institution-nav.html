@@ -1,13 +1,16 @@
-<div class="content-card content-card-space comm-nav flex-this column white-bg">
+<div class="content-card comm-nav flex-this column white-bg">
     <div class="comm-nav-links flex-this">
-        <div><a href="{% url 'institution-dashboard' institution.id %}">Activity</button></div>
-        <div><a href="{% url 'institution-notices' institution.id %}">Notices</a></div>
-        <div><a href="{% url 'institution-projects' institution.id %}">Projects</a></div>
-        <div><a href="{% url 'institution-requests' institution.id %}">Requests</a></div>
-        <!-- Temporary removal -->
-        <!-- <div><a href="#">Relationships</a></div> -->
+        <a href="{% url 'institution-dashboard' institution.id %}">
+            <div class="{% if 'dashboard' in request.path %} active-nav {% endif %}">Activity</div></a>
+        <a href="{% url 'institution-notices' institution.id %}">
+            <div class="{% if 'notices' in request.path %} active-nav {% endif %}">Notices</div></a>
+        <a href="{% url 'institution-projects' institution.id %}">
+            <div class="{% if 'projects' in request.path %} active-nav {% endif %}">Projects</div></a>
+        <a href="{% url 'institution-requests' institution.id %}">
+            <div class="{% if 'requests' in request.path %} active-nav {% endif %}">Requests</div></a>
 
-        <!-- For future iterations -->
-        <!-- <div><a href="#">Training</a></div> -->
+        <!-- Temporary Removal -->
+        <!-- <a href="#"><div>Relationships</div></a> -->
+
     </div>
 </div>

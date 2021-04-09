@@ -599,22 +599,34 @@ input:focus {
     text-align: center;
 }
 
+/* SUBNAV */
 .comm-nav {
+    margin-top: 1.5%;
     max-height: 60px;
     min-height: 60px;
 }
 
 .comm-nav-links {
-    margin-top: auto;
-    margin-bottom: auto;
+    height: 60px;
 }
 
 .comm-nav-links div {
     margin-left: 12px;
+    height: 100%;
+    margin: auto;
+    border-radius: 5px;
+    padding: 19px 20px;
 }
+
 
 .comm-nav-links a {
     color: #A09D9D;
+}
+
+/* SUBNAV: ACTIVE */
+.active-nav {
+    background-color: #007385;
+    color: #fff;
 }
 
 .activity-card-container {
