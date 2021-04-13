@@ -61,7 +61,7 @@
                         <p class="pad-left-2">
                             <span class="darkteal-text weight-500">{{ n.notification_type }}</span><br>
                             {{ n.created }} <br>
-                            Activity Contributor<br>
+                            {{ n.sender.get_full_name }}<br>
                             {{ n.title }}
                         </p>
                     </div>

@@ -87,7 +87,7 @@ def researcher_notices(request, pk):
     return render(request, 'researchers/notices.html', context)
 
 @login_required(login_url='login')
-def add_notice(request, pk):
+def create_project(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
     if request.method == 'POST':
@@ -96,6 +96,7 @@ def add_notice(request, pk):
 
         if proj_form.is_valid() and contrib_form.is_valid():            
             proj = proj_form.save(commit=False)
+            proj.project_creator = request.user
             contrib_data = contrib_form.save(commit=False)
             proj.save()
             contrib_data.save()
@@ -111,15 +112,15 @@ def add_notice(request, pk):
                     bc_notice.communities.add(contrib_data.community)
 
                     # Send community notification
-                    title = "A BC notice has been placed by " + str(researcher)
-                    CommunityNotification.objects.create(community=contrib_data.community, notification_type='Requests', title=title)
+                    title = "A BC notice has been placed by " + str(researcher.user.get_full_name())
+                    CommunityNotification.objects.create(community=contrib_data.community, sender=request.user, notification_type='Requests', title=title)
 
                 if notice == 'tknotice':
                     tk_notice = TKNotice.objects.create(placed_by_researcher=researcher, project=proj)
                     tk_notice.communities.add(contrib_data.community)
 
-                    title = "A TK notice has been placed by " + str(researcher)
-                    CommunityNotification.objects.create(community=contrib_data.community, notification_type='Requests', title=title)
+                    title = "A TK notice has been placed by " + str(rresearcher.user.get_full_name())
+                    CommunityNotification.objects.create(community=contrib_data.community, sender=request.user, notification_type='Requests', title=title)
 
             return redirect('researcher-notices', researcher.id)
     else:

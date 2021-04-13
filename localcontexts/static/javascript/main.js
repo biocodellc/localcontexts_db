@@ -82,7 +82,7 @@ function customText(imgDiv) {
         let targetNum = matches[0]
 
         if(div.id == `open-div-${targetNum}` && div.style.height == '0px') {
-            console.log(targetNum)
+            // console.log(targetNum)
             div.style.height = 'auto'
         } else {
             div.style.height = '0px'
@@ -497,7 +497,7 @@ function expandTKLabel(img) {
     let labelContainer = document.getElementById('expand-tklabels')
     let fullCard = document.getElementById('collapsed-tkcard')
     let info = document.getElementById('tklabel-info')
-    console.log(img.id)
+    // console.log(img.id)
 
     if (info.style.height == "0px") {
         labelContainer.style.height = "auto"
@@ -746,7 +746,7 @@ function selectCommunities() {
         let div = document.getElementById(`comm-id-input-${option.id}`)
 
         if (option.selected) {
-            console.log(option)
+            // console.log(option)
             selectedCommunityDiv.style.height = "auto";
             div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_communities">`
         }
@@ -754,3 +754,45 @@ function selectCommunities() {
 
     })
 }
+
+// TODO: Add ROR functionality
+// Create Institution
+// const endpoint = `http://api.ror.org/organizations`
+// const institutions = []
+// fetch(endpoint)
+//     .then(res => res.json())
+//     .then(data => institutions.push(...data.items))
+
+// function findMatches(wordToMatch, institutions) {
+//     return institutions.filter(org => {
+//         const regex = new RegExp(wordToMatch, 'gi')
+//         return org.name.match(regex)
+//     })
+// }
+
+// function displayMatches() {
+//     const matchArray = findMatches(this.value, institutions)
+//     const html = matchArray.map(org => {
+//         const regex = new RegExp(this.value, 'gi')
+//         const orgName = org.name.replace(regex, `<span class="hl">${this.value}</span>`)
+//         return `
+//             <li onmouseover="getOrgName(this)">
+//                 <span class="name">${orgName}</span>
+//             </li>
+//         `
+//     }).join('')
+//     suggestions.innerHTML = html
+// }
+
+// const searchInput = document.querySelector('.search')
+// const suggestions = document.querySelector('.suggestions')
+
+// searchInput.addEventListener('change', displayMatches);
+// searchInput.addEventListener('keyup', displayMatches);
+
+// function getOrgName(elem) {
+//     // console.log(elem.innerText)
+//     searchInput.value = elem.innerText
+//     let ul = document.getElementById('institution-suggestions')
+//     // console.log(searchInput)
+// }

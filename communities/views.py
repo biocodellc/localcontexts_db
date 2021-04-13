@@ -405,6 +405,7 @@ def create_project(request, pk):
             form = CreateProjectForm(request.POST)
             if form.is_valid():
                 obj = form.save(commit=False)
+                obj.project_creator = request.user
                 bclabels_selected = request.POST.getlist('checked-labels')
                 tklabels_selected = request.POST.getlist('tk-checked-labels')
                 obj.save()
@@ -483,7 +484,7 @@ def community_add_labels(request, pk, notice_id):
             tknotice = TKNotice.objects.get(id=notice_id)
             if request.method == "POST":
                 # add community to project contributors
-                contrib = ProjectContributors.objects.get(project=bcnotice.project)
+                contrib = ProjectContributors.objects.get(project=tknotice.project)
                 contrib.community = community
                 contrib.save()
 

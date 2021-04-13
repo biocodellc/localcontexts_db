@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from communities.models import Community
+from institutions.models import Institution
 
 class UserNotification(models.Model):
     TYPES = (
@@ -46,6 +47,7 @@ class CommunityNotification(models.Model):
 
     title = models.CharField(max_length=200)
     notification_type = models.CharField(max_length=20, choices=TYPES, null=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="community_noti_sender", blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True)
     reference_id = models.CharField(max_length=10, null=True, blank=True)
     viewed = models.BooleanField(default=False)
@@ -57,5 +59,28 @@ class CommunityNotification(models.Model):
     class Meta:
         verbose_name = 'Community Notification'
         verbose_name_plural = 'Community Notifications'
+        ordering = ('-created',)
+
+class InstitutionNotification(models.Model):
+    TYPES = (
+        ('Requests', 'requests'),
+        ('Labels', 'labels'),
+        ('Connections', 'Connections'),
+    )
+
+    title = models.CharField(max_length=200)
+    notification_type = models.CharField(max_length=20, choices=TYPES, null=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="institution_noti_sender", blank=True)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True)
+    reference_id = models.CharField(max_length=10, null=True, blank=True)
+    viewed = models.BooleanField(default=False)
+    created = models.DateField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return f"{self.notification_type} - {self.title}"
+
+    class Meta:
+        verbose_name = 'Institution Notification'
+        verbose_name_plural = 'Institution Notifications'
         ordering = ('-created',)
 
