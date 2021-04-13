@@ -112,15 +112,15 @@ def create_project(request, pk):
                     bc_notice.communities.add(contrib_data.community)
 
                     # Send community notification
-                    title = "A BC notice has been placed by " + str(researcher)
-                    CommunityNotification.objects.create(community=contrib_data.community, notification_type='Requests', title=title)
+                    title = "A BC notice has been placed by " + str(researcher.user.get_full_name())
+                    CommunityNotification.objects.create(community=contrib_data.community, sender=request.user, notification_type='Requests', title=title)
 
                 if notice == 'tknotice':
                     tk_notice = TKNotice.objects.create(placed_by_researcher=researcher, project=proj)
                     tk_notice.communities.add(contrib_data.community)
 
-                    title = "A TK notice has been placed by " + str(researcher)
-                    CommunityNotification.objects.create(community=contrib_data.community, notification_type='Requests', title=title)
+                    title = "A TK notice has been placed by " + str(rresearcher.user.get_full_name())
+                    CommunityNotification.objects.create(community=contrib_data.community, sender=request.user, notification_type='Requests', title=title)
 
             return redirect('researcher-notices', researcher.id)
     else:
