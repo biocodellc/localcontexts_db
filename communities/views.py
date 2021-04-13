@@ -484,7 +484,7 @@ def community_add_labels(request, pk, notice_id):
             tknotice = TKNotice.objects.get(id=notice_id)
             if request.method == "POST":
                 # add community to project contributors
-                contrib = ProjectContributors.objects.get(project=bcnotice.project)
+                contrib = ProjectContributors.objects.get(project=tknotice.project)
                 contrib.community = community
                 contrib.save()
 
