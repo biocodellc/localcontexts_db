@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from institutions.models import Institution
 from communities.models import Community
 from researchers.models import Researcher
@@ -11,6 +12,7 @@ class Project(models.Model):
         ('Publication', 'Publication'),
         ('Sample', 'Sample'),
     )
+    project_creator = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="project_creator")
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
     title = models.CharField(max_length=300, null=True)
     description = models.TextField(null=True)

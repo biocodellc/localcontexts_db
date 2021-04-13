@@ -405,6 +405,7 @@ def create_project(request, pk):
             form = CreateProjectForm(request.POST)
             if form.is_valid():
                 obj = form.save(commit=False)
+                obj.project_creator = request.user
                 bclabels_selected = request.POST.getlist('checked-labels')
                 tklabels_selected = request.POST.getlist('tk-checked-labels')
                 obj.save()

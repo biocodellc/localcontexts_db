@@ -103,6 +103,7 @@ def create_project(request, pk):
         form = CreateProjectForm(request.POST or None)
         if form.is_valid():
             data = form.save(commit=False)
+            data.project_creator = request.user
             data.save()
 
             notices_selected = request.POST.getlist('checkbox-notice')

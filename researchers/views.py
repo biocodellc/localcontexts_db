@@ -87,7 +87,7 @@ def researcher_notices(request, pk):
     return render(request, 'researchers/notices.html', context)
 
 @login_required(login_url='login')
-def add_notice(request, pk):
+def create_project(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
     if request.method == 'POST':
@@ -96,6 +96,7 @@ def add_notice(request, pk):
 
         if proj_form.is_valid() and contrib_form.is_valid():            
             proj = proj_form.save(commit=False)
+            proj.project_creator = request.user
             contrib_data = contrib_form.save(commit=False)
             proj.save()
             contrib_data.save()
