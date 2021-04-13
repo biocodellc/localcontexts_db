@@ -82,7 +82,7 @@ function customText(imgDiv) {
         let targetNum = matches[0]
 
         if(div.id == `open-div-${targetNum}` && div.style.height == '0px') {
-            console.log(targetNum)
+            // console.log(targetNum)
             div.style.height = 'auto'
         } else {
             div.style.height = '0px'
@@ -497,7 +497,7 @@ function expandTKLabel(img) {
     let labelContainer = document.getElementById('expand-tklabels')
     let fullCard = document.getElementById('collapsed-tkcard')
     let info = document.getElementById('tklabel-info')
-    console.log(img.id)
+    // console.log(img.id)
 
     if (info.style.height == "0px") {
         labelContainer.style.height = "auto"
@@ -746,7 +746,7 @@ function selectCommunities() {
         let div = document.getElementById(`comm-id-input-${option.id}`)
 
         if (option.selected) {
-            console.log(option)
+            // console.log(option)
             selectedCommunityDiv.style.height = "auto";
             div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_communities">`
         }

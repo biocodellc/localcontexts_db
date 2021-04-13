@@ -2,15 +2,15 @@
     <div class="comm-nav-links flex-this">
 
         <a href="{% url 'community-dashboard' community.id %}">
-            <div class="{% if 'dashboard' in request.path %} active-nav {% endif %}">Activity</div>
-        </a>
-
-        <a href="{% url 'community-requests' community.id %}">
-            <div class="{% if 'requests' in request.path %} active-nav {% endif %}">Requests</div>
+            <div class="{% if 'dashboard' in request.path %} active-nav {% endif %}">Notifications</div>
         </a>
 
         <a href="{% url 'community-labels' community.id %}">
             <div class="{% if 'labels' in request.path %} active-nav {% endif %}">Labels</div>
+        </a>
+
+        <a href="{% url 'community-requests' community.id %}">
+            <div class="{% if 'requests' in request.path %} active-nav {% endif %}">Requests</div>
         </a>
 
         <a href="{% url 'community-projects' community.id %}">
@@ -22,7 +22,7 @@
         </a>
 
         <!-- Temporary Removal -->
-        <!-- <a href="{% url 'community-relationships' community.id %}"><div>Relationships</div></a> -->
+        <!-- <a href="{% url 'community-relationships' community.id %}"><div>Connections</div></a> -->
 
     </div>
 </div>
