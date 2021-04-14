@@ -312,9 +312,9 @@ def customise_tklabel(request, pk, label_type):
 
 # Approve BC Label
 @login_required(login_url='login')
-def approve_label(request, pk, label_id):
+def approve_bclabel(request, pk, label_id):
     community = Community.objects.get(id=pk)
-    bclabel = BCLabel.objects.get(id=label_id)
+    bclabel = BCLabel.objects.get(unique_id=label_id)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -344,7 +344,7 @@ def approve_label(request, pk, label_id):
 @login_required(login_url='login')
 def approve_tklabel(request, pk, label_id):
     community = Community.objects.get(id=pk)
-    tklabel = TKLabel.objects.get(id=label_id)
+    tklabel = TKLabel.objects.get(unique_id=label_id)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -438,8 +438,8 @@ def create_project(request, pk):
 def community_add_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
 
-    bcnotice_exists = BCNotice.objects.filter(id=notice_id).exists()
-    tknotice_exists = TKNotice.objects.filter(id=notice_id).exists()
+    bcnotice_exists = BCNotice.objects.filter(unique_id=notice_id).exists()
+    tknotice_exists = TKNotice.objects.filter(unique_id=notice_id).exists()
 
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
@@ -449,7 +449,7 @@ def community_add_labels(request, pk, notice_id):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         if bcnotice_exists:
-            bcnotice = BCNotice.objects.get(id=notice_id)
+            bcnotice = BCNotice.objects.get(unique_id=notice_id)
             if request.method == "POST":
                 # add community to project contributors
                 contrib = ProjectContributors.objects.get(project=bcnotice.project)
@@ -481,7 +481,7 @@ def community_add_labels(request, pk, notice_id):
             return render(request, 'communities/attach-labels.html', context)
 
         else:
-            tknotice = TKNotice.objects.get(id=notice_id)
+            tknotice = TKNotice.objects.get(unique_id=notice_id)
             if request.method == "POST":
                 # add community to project contributors
                 contrib = ProjectContributors.objects.get(project=tknotice.project)
