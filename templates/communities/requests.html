@@ -8,7 +8,7 @@
         {% for bcnotice in bcnotices %}
                 {% if bcnotice.project.has_labels == False %}
 
-                    <div id="full-notice-card-{{ bcnotice.id }}" class="content-card-v2 white-bg">
+                    <div id="full-notice-card-{{ bcnotice.unique_id }}" class="content-card-v2 white-bg">
                         <div class="flex-this space-between">
                             <div>
                                 <p class="no-top-margin notice-date">
@@ -17,7 +17,7 @@
                             </div>
                     
                             <div>
-                                <a id="{{ bcnotice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
+                                <a id="{{ bcnotice.unique_id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
                                     Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -46,7 +46,7 @@
                             </div>
                         </div>
 
-                        <div id="expand-notice-{{ bcnotice.id }}" style="height: 0; overflow:hidden;" class="flex-this column">
+                        <div id="expand-notice-{{ bcnotice.unique_id }}" style="height: 0; overflow:hidden;" class="flex-this column">
                             <div class="flex-this space-between">
                                 <div class="w-80">
                                     <!-- <p>What would you like to do with this notice? 
@@ -64,7 +64,7 @@
                                         </div>
                                     {% endif %}
                                     <div class="notice-btns center-text">
-                                        <a href="{% url 'community-add-labels' community.id bcnotice.id %}" class="action-btn">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
+                                        <a href="{% url 'community-add-labels' community.id bcnotice.unique_id %}" class="action-btn">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -112,7 +112,7 @@
     {% for tknotice in tknotices %}
             {% if tknotice.project.has_labels == False %}
 
-                <div id="full-notice-card-{{ tknotice.id }}" class="content-card-v2 white-bg">
+                <div id="full-notice-card-{{ tknotice.unique_id }}" class="content-card-v2 white-bg">
                     <div class="flex-this space-between">
                         <div>
                             <p class="no-top-margin notice-date">
@@ -121,7 +121,7 @@
                         </div>
                 
                         <div>
-                            <a id="{{ tknotice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
+                            <a id="{{ tknotice.unique_id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
                                 Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
                             </a>
                         </div>
@@ -150,7 +150,7 @@
                         </div>
                     </div>
 
-                    <div id="expand-notice-{{ tknotice.id }}" style="height: 0; overflow:hidden;" class="flex-this column">
+                    <div id="expand-notice-{{ tknotice.unique_id }}" style="height: 0; overflow:hidden;" class="flex-this column">
                         <div class="flex-this space-between">
                             <div class="w-80">
                                 <!-- <p>What would you like to do with this notice? 
@@ -168,7 +168,7 @@
                                     </div>
                                 {% endif %}
                                 <div class="notice-btns center-text">
-                                    <a href="{% url 'community-add-labels' community.id tknotice.id %}" class="action-btn">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
+                                    <a href="{% url 'community-add-labels' community.id tknotice.unique_id %}" class="action-btn">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
 
