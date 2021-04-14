@@ -312,9 +312,9 @@ def customise_tklabel(request, pk, label_type):
 
 # Approve BC Label
 @login_required(login_url='login')
-def approve_label(request, pk, label_id):
+def approve_bclabel(request, pk, label_id):
     community = Community.objects.get(id=pk)
-    bclabel = BCLabel.objects.get(id=label_id)
+    bclabel = BCLabel.objects.get(unique_id=label_id)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -344,7 +344,7 @@ def approve_label(request, pk, label_id):
 @login_required(login_url='login')
 def approve_tklabel(request, pk, label_id):
     community = Community.objects.get(id=pk)
-    tklabel = TKLabel.objects.get(id=label_id)
+    tklabel = TKLabel.objects.get(unique_id=label_id)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.

@@ -76,13 +76,11 @@ function showMore(elem) {
 function customText(imgDiv) {
     let labelID = imgDiv.id
     let divs = Array.from(document.querySelectorAll('.div-toggle'))
+    // console.log(labelID)
 
     divs.forEach(div => {
-        let matches = labelID.match(/(\d+)/)
-        let targetNum = matches[0]
-
-        if(div.id == `open-div-${targetNum}` && div.style.height == '0px') {
-            // console.log(targetNum)
+        if (div.id.includes(labelID) && div.style.height == '0px') {
+            // console.log(div.id)
             div.style.height = 'auto'
         } else {
             div.style.height = '0px'
@@ -303,7 +301,6 @@ function whichTKImgClicked(val) {
 var parentDiv = document.getElementById('target-img-div')
 if (parentDiv) {
     var image = parentDiv.firstChild.nextSibling
-    // console.log(image.id)
     populateTemplate(image.id)
 }
 
@@ -497,7 +494,7 @@ function expandTKLabel(img) {
     let labelContainer = document.getElementById('expand-tklabels')
     let fullCard = document.getElementById('collapsed-tkcard')
     let info = document.getElementById('tklabel-info')
-    // console.log(img.id)
+    console.log(img.id)
 
     if (info.style.height == "0px") {
         labelContainer.style.height = "auto"
