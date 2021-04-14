@@ -52,7 +52,6 @@ class TKLabel(models.Model):
     name = models.CharField(verbose_name='label name', max_length=90, null=True)
     tk_notice = models.ForeignKey(TKNotice, null=True, on_delete=models.DO_NOTHING, blank=True)
     default_text = models.TextField(null=True, blank=True)
-    modified_text = models.TextField(null=True, blank=True)
     is_approved = models.BooleanField(default=False, null=True)
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, related_name="tklabel_approver")
     created = models.DateTimeField(auto_now_add=True, null=True)
