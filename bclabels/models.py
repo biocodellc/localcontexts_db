@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from communities.models import Community
 from researchers.models import Researcher
@@ -6,6 +7,7 @@ from projects.models import Project
 from django.contrib.auth.models import User
 
 class BCNotice(models.Model):
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
     communities = models.ManyToManyField(Community, blank=True, related_name="bcnotice_communities")
     placed_by_researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True)
@@ -32,13 +34,13 @@ class BCLabel(models.Model):
         ('multiple_community', 'multiple_community'),
         ('research', 'research'),  
     )
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.DO_NOTHING, related_name="bclabel_creator")
     label_type = models.CharField(max_length=20, null=True, choices=TYPES)
     community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='label name', max_length=90, null=True)
     bc_notice = models.ForeignKey(BCNotice, null=True, on_delete=models.DO_NOTHING, blank=True)
     default_text = models.TextField(null=True, blank=True)
-    modified_text = models.TextField(null=True, blank=True)
     is_approved = models.BooleanField(default=False, null=True)
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, related_name="bclabel_approver")
     created = models.DateTimeField(auto_now_add=True, null=True)
