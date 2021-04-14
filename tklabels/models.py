@@ -7,7 +7,7 @@ from projects.models import Project
 from django.contrib.auth.models import User
 
 class TKNotice(models.Model):
-    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
     communities = models.ManyToManyField(Community, blank=True, related_name="tknotice_communities")
     placed_by_researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True)
@@ -45,7 +45,7 @@ class TKLabel(models.Model):
         ('women_restricted', 'women_restricted'),  
         ('secret_sacred', 'secret_sacred'),  
     )
-    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.DO_NOTHING, related_name="tklabel_creator")
     label_type = models.CharField(max_length=50, null=True, choices=TYPES)
     community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE)
