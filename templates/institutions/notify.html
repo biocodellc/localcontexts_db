@@ -69,7 +69,7 @@
 
         {% if communities %}
         <label>Search our register</label><br>
-            <select id="communities-select" onchange="selectCommunities()">
+            <select id="communities-select" class="width-492" onchange="selectCommunities()">
                 <option>Select a Community</option>
                 {% for community in communities %}
                         <option id="{{ community.id }}">{{ community.community_name }}</option>
@@ -104,7 +104,7 @@
             </div>
         </div> -->
     
-        <div>
+        <div class="margin-top-1">
             <label>Send a supporting message with this request</label><br>
             <textarea name="notice_message" style="width: 400px; height: 200px;"></textarea>
         </div>

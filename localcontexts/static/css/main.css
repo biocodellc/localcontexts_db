@@ -182,6 +182,10 @@ input:focus {
 
 /* MARGIN & PADDING */
 
+.margin-top-1 {
+    margin-top: 1%;
+}
+
 .margin-bottom-2 {
     margin-bottom: 2%;
 }
@@ -343,6 +347,10 @@ input:focus {
 
 .w-100 {
     width: 100%;
+}
+
+.width-492 {
+    width: 492px;
 }
 
 /* ACTION Buttons / Register,Sign in, etc. */
