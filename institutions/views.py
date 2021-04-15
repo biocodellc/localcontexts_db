@@ -125,6 +125,7 @@ def create_project(request, pk):
     }
     return render(request, 'institutions/create-project.html', context)
 
+# Notify Communities of Project
 @login_required(login_url='login')
 def notify_communities(request, pk, proj_id):
     institution = Institution.objects.get(id=pk)

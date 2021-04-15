@@ -731,7 +731,7 @@ function showDescription() {
 
 }
 
-// Institutions: projects: notify communities
+// Institutions: projects: notify communities - select desired communities
 function selectCommunities() {
     let select = document.getElementById('communities-select')
     let allOptionsArray = Array.from(select.options)
@@ -747,9 +747,20 @@ function selectCommunities() {
             selectedCommunityDiv.style.height = "auto";
             div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_communities">`
         }
-
-
     })
+}
+
+// Institutions: projects: notify communities - close selected communities
+function cancelCommunitySelection(elem) {
+    let id = elem.id
+    let matches = id.match(/(\d+)/)
+    let targetNum = matches[0]
+
+    let divToClose = document.getElementById(`selected-community-${targetNum}`)
+    let inputDivToRemove = document.getElementById(`comm-id-input-${targetNum}`)
+
+    divToClose.style.height = '0'
+    inputDivToRemove.innerHTML = ``
 }
 
 // TODO: Add ROR functionality

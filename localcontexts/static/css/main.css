@@ -1104,3 +1104,24 @@ input:focus {
     cursor: pointer;
     margin-top: 78px;
 }
+
+/* Institution: Notify */
+.selected-community {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 19px;
+    border: 2px dashed #007385;
+    border-radius: 5px;
+    height: 67px;
+    width: 492px;
+}
+
+.center-name, .close-x {
+    margin: 0;
+    align-items: center;
+}
+
+.close-x {
+    color: #007385;
+    font-size: 1.2em;
+}
