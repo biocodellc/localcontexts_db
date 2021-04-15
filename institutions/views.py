@@ -142,7 +142,7 @@ def notify_communities(request, pk, proj_id):
         message = request.POST.get('notice_message')
 
         for community_id in communities_selected:
-            title = str(institution.institution_name) + " has placed a notice"
+            title = str(institution.institution_name) + " has placed a Notice"
 
             community = Community.objects.get(id=community_id)
 

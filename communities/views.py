@@ -328,6 +328,9 @@ def approve_bclabel(request, pk, label_id):
                 label_form.is_approved = True
                 label_form.approved_by = request.user
                 label_form.save()
+                title = "A BC Label was approved by " + request.user.get_full_name()
+                CommunityNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+                
                 return redirect('community-labels', community.id)
         else:
             form = ApproveAndEditBCLabelForm(instance=bclabel)
@@ -358,6 +361,10 @@ def approve_tklabel(request, pk, label_id):
                 label_form.is_approved = True
                 label_form.approved_by = request.user
                 label_form.save()
+
+                title = "A TK Label was approved by " + request.user.get_full_name()
+                CommunityNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+
                 return redirect('community-labels', community.id)
         else:
             form = ApproveAndEditTKLabelForm(instance=tklabel)
