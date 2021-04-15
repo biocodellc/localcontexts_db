@@ -147,7 +147,7 @@ def notify_communities(request, pk, proj_id):
             community = Community.objects.get(id=community_id)
 
             # Create notification
-            CommunityNotification.objects.create(community=community, notification_type='Requests', title=title)
+            CommunityNotification.objects.create(community=community, notification_type='Requests', sender=request.user, title=title)
             
             # add community to bcnotice instance
             if bcnotice_exists:
