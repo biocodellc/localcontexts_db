@@ -149,7 +149,7 @@ def notify_communities(request, pk, proj_id):
             # Create notification
             CommunityNotification.objects.create(community=community, notification_type='Requests', title=title)
             
-            # add community to bclabel instance
+            # add community to bcnotice instance
             if bcnotice_exists:
                 bcnotices = BCNotice.objects.filter(project=project)
                 for bcnotice in bcnotices:
@@ -157,7 +157,7 @@ def notify_communities(request, pk, proj_id):
                     bcnotice.message = message
                     bcnotice.save()
             
-            # add community to tklabel instance
+            # add community to tknotice instance
             if tknotice_exists:
                 tknotices = TKNotice.objects.filter(project=project)
                 for tknotice in tknotices:
