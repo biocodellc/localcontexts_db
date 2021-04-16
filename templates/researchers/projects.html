@@ -37,9 +37,15 @@
                         <div>
                             {% if c.project.has_labels %}
                                 <p>Relationship with <a href="#"><span class="darkteal-text">{{c.community.community_name}}</span></a></p>
-                                {% for bclabel in c.project.bclabels.all %}
-                                    {% include 'bclabels/researcher-mini.html' %}
-                                {% endfor %}
+                                <div class="flex-this flex-end">
+                                    {% for bclabel in c.project.bclabels.all %}
+                                            {% include 'bclabels/researcher-mini.html' %}
+                                    {% endfor %}
+
+                                    {% for tklabel in c.project.tklabels.all %}
+                                        {% include 'tklabels/researcher-mini.html' %}
+                                    {% endfor %}
+                                </div>
 
                             {% else %}
                                 <div><small>No labels applied yet</small></div>
@@ -97,6 +103,9 @@
                     {% if c.project.has_labels %}
                         {% for bclabel in c.project.bclabels.all %}
                             {% include 'bclabels/researcher-labels.html' %}
+                        {% endfor %}
+                        {% for tklabel in c.project.tklabels.all %}
+                            {% include 'tklabels/researcher-labels.html' %}
                         {% endfor %}
                     {% endif %}
 
