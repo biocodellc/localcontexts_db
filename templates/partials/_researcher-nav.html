@@ -1,10 +1,21 @@
 <div class="content-card comm-nav flex-this column white-bg">
     <div class="comm-nav-links flex-this">
+
         <a href="{% url 'researcher-dashboard' researcher.id %}">
             <div class="{% if 'dashboard' in request.path %} active-nav {% endif %}">Notifications</div>
         </a>
+
         <a href="{% url 'researcher-notices' researcher.id %}">
+            <div class="{% if 'notices' in request.path %} active-nav {% endif %}">Notices</div>
+        </a>
+
+        <a href="{% url 'researcher-requests' researcher.id %}">
+            <div class="{% if 'requests' in request.path %} active-nav {% endif %}">Requests</div>
+        </a>
+
+        <a href="{% url 'researcher-projects' researcher.id %}">
             <div class="{% if 'projects' in request.path %} active-nav {% endif %}">Projects</div>
         </a>
+
     </div>
 </div>

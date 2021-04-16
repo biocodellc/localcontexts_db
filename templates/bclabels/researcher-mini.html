@@ -1,29 +1,38 @@
 <!-- Mini Labels for Researcher:Notices  -->
 
 {% load static %}
-    <div>
         {% if bclabel.label_type == 'commercialization' %}
-            <img src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
+            <div class="pad-left-1-5">
+                <img src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
+            </div>
         {% endif %}
 
         {% if bclabel.label_type == 'provenance' %}
-            <img src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+            <div class="pad-left-1-5">
+                <img src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
+            </div>
         {% endif %}
 
         {% if bclabel.label_type == 'collaboration' %}
-            <img src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
+            <div class="pad-left-1-5">
+                <img src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
+            </div>
         {% endif %}
 
         {% if bclabel.label_type == 'consent_verified' %}
-            <img src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+            <div class="pad-left-1-5">
+                <img src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
+            </div>
         {% endif %}
 
         {% if bclabel.label_type == 'multiple_community' %}
-            <img src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
+            <div class="pad-left-1-5">
+                <img src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
+            </div>
         {% endif %}
 
         {% if bclabel.label_type == 'research' %}
-            <img src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
+            <div class="pad-left-1-5">
+                <img src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
+            </div>
         {% endif %}
-
-    </div>

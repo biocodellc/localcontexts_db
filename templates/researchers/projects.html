@@ -1,0 +1,137 @@
+{% extends 'research-base.html' %} {% load static %}{% block researcher_content %}
+
+<div class="white-bg content-card content-card-space noti-card">
+        <h3 class="orange-text">Projects</h3>
+    
+        <hr>
+
+        {% if contribs %}
+            {% for c in contribs %}
+
+            <div class="flex-this space-between column">
+            
+    
+                <div class="w-100 flex-this proj-info-container">
+                    <div class="w-10 pad-top-1">
+                        <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle" width="100px" height="100px">
+                    </div>
+                    <div class="w-50 pad-left-1-5 pad-top-1"> 
+                            <h4 class="darkteal-text weight-600 no-top-margin">{{ c.project.title }}</h4>
+
+                            <p class="no-top-margin">
+                                {{ c.project.project_type }}<br>
+                                {{ c.project.publication_date }}<br>
+                            </p>
+                    </div>
+        
+                    <div class="w-50 additional-proj-info flex-this column">
+
+                        <div class="flex-this flex-end w-100 proj-title-container">
+                            <h2>
+                                <a onclick='showMore(this)'>
+                                    <span id="plus-minus-{{c.project.id}}" class="darkteal-text">+</span>
+                                </a>
+                            </h2>
+                        </div> 
+        
+                        <div>
+                            {% if c.project.has_labels %}
+                                <p>Relationship with <a href="#"><span class="darkteal-text">{{c.community.community_name}}</span></a></p>
+                                <div class="flex-this flex-end">
+                                    {% for bclabel in c.project.bclabels.all %}
+                                            {% include 'bclabels/researcher-mini.html' %}
+                                    {% endfor %}
+
+                                    {% for tklabel in c.project.tklabels.all %}
+                                        {% include 'tklabels/researcher-mini.html' %}
+                                    {% endfor %}
+                                </div>
+
+                            {% else %}
+                                <div><small>No labels applied yet</small></div>
+                            {% endif %}
+                        </div>
+
+    
+                    </div>
+    
+                </div>
+    
+                <!-- Expandable content -->
+                <div id="proj-expand-{{c.project.id}}" class="proj-expand" style="height: 0px;">
+                    <hr>
+                        <div class="flex-this w-100">
+    
+                            <div class="flex-this column w-70">
+          
+                              <div class="flex-this">
+                                <div class="w-200px">
+
+                                </div>
+
+                                    <div>
+                                        <span class="weight-500">Project Description</span><br>
+
+                                        <p>
+                                            {{ c.project.description }}
+                                        </p>
+                                    </div>
+
+                              </div>
+    
+                            </div>
+          
+                            <div class="flex-this column w-30 proj-btns">
+                                <div>
+                                  <button class="action-btn">Edit Notice</button>
+                                </div>
+                                {% if c.project.geome_project_id %}
+                                    <div>
+                                        <a href="https://geome-db.org/workbench/project-overview?projectId={{ c.project.geome_project_id}}">
+                                            <button class="white-action-btn">View on GEOME</button>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                  <a href="https://orcid.org/{{ c.researcher.orcid }}" target="_blank"><button class="white-action-btn">View ORCiD</button> </a>
+                                </div>
+                            </div>
+    
+                        </div>
+                    <hr>
+
+                    {% if c.project.has_labels %}
+                        {% for bclabel in c.project.bclabels.all %}
+                            {% include 'bclabels/researcher-labels.html' %}
+                        {% endfor %}
+                        {% for tklabel in c.project.tklabels.all %}
+                            {% include 'tklabels/researcher-labels.html' %}
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+        </div>
+    
+        <hr>
+
+            {% endfor %}
+        {% else %}
+            <p>No projects available at this time.</p>
+        {% endif %}
+        
+        <a href="{% url 'researcher-create-project' researcher.id %}">
+        <div class="flex-this">
+                <div class="add-notice-btn flex-this justify-center">
+                        <span>+</span>
+                </div>
+                <div class="add-notice-text">
+                        <h4 class="weight-500">
+                            Add new project
+                        </h4>
+                </div>
+        </div>
+        </a>
+
+</div>
+
+{% endblock %}
