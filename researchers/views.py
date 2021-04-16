@@ -71,9 +71,29 @@ def update_researcher(request, pk):
     }
     return render(request, 'researchers/update-researcher.html', context)
 
-# TODO: display labels only if they have been approved by community
 @login_required(login_url='login')
 def researcher_notices(request, pk):
+    researcher = Researcher.objects.get(id=pk)
+    context = {'researcher': researcher,}
+    return render(request, 'researchers/notices.html', context)
+
+@login_required(login_url='login')
+def researcher_requests(request, pk):
+    researcher = Researcher.objects.get(id=pk)
+    bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher)
+    tknotices = TKNotice.objects.filter(placed_by_researcher=researcher)
+
+    context = {
+        'researcher': researcher,
+        'bcnotices': bcnotices,
+        'tknotices': tknotices,
+    }
+    return render(request, 'researchers/requests.html', context)
+
+
+# TODO: display labels only if they have been approved by community
+@login_required(login_url='login')
+def researcher_projects(request, pk):
     researcher = Researcher.objects.get(id=pk)
     contribs = ProjectContributors.objects.filter(researcher=researcher)
     bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher)
@@ -84,7 +104,7 @@ def researcher_notices(request, pk):
         'bcnotices': bcnotices,
     }
 
-    return render(request, 'researchers/notices.html', context)
+    return render(request, 'researchers/projects.html', context)
 
 @login_required(login_url='login')
 def create_project(request, pk):
