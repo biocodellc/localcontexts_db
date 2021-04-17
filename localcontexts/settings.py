@@ -130,6 +130,11 @@ else:
             'PORT': os.environ.get('DB_PORT')
         }
     }
+# if True admin site will not be affected by the maintenance-mode page
+MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
+# if True the superuser will not see the maintenance-mode page
+MAINTENANCE_MODE_IGNORE_SUPERUSER = True
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
