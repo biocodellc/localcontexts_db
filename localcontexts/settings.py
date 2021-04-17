@@ -105,6 +105,8 @@ WSGI_APPLICATION = 'localcontexts.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 if os.getenv('GAE_APPLICATION', None):
+    """Setup Google App Engine-specific options."""
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -114,6 +116,8 @@ if os.getenv('GAE_APPLICATION', None):
             'HOST': '/cloudsql/' + os.environ.get('DB_HOST')
         }
     }
+    GS_BUCKET_NAME = os.environ.get('GCS_BUCKET', 'anth-ja77-local-contexts-8985.appspot.com')
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 else:
     DATABASES = {
         'default': {
