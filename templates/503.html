@@ -1,0 +1,24 @@
+{% extends 'base.html' %}{% load static %}{% block content %}
+    <div class="pad-top-8 grey-bg">
+        <section class="grey-bg">
+
+            <div class="white-bg page-not-found-card content-card">
+
+                <div class="flex-this row page-not-found-content">
+
+                    <div class="flex-this column page-not-found-img">
+                        <img src="{% static 'images/logos/logo-404.png' %}" alt="503 Local Contexts round logo">
+                    </div>
+
+                    <div class="flex-this column page-not-found-txt">
+                        <h2>The website is currently in the maintenance mode. Please try again later.</h2>
+                        <p>Error code: 503</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+{% endblock %}
