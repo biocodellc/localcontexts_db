@@ -71,7 +71,7 @@ def institution_notices(request, pk):
 
 # Requests
 @login_required(login_url='login')
-def institution_requests(request, pk):
+def institution_activity(request, pk):
     institution = Institution.objects.get(id=pk)
     bcnotices = BCNotice.objects.filter(placed_by_institution=institution)
     tknotices = TKNotice.objects.filter(placed_by_institution=institution)
@@ -80,7 +80,7 @@ def institution_requests(request, pk):
         'bcnotices': bcnotices,
         'tknotices': tknotices,
     }
-    return render(request, 'institutions/requests.html', context)
+    return render(request, 'institutions/activity.html', context)
 
 # Projects
 @login_required(login_url='login')
