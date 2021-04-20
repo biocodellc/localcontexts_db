@@ -115,7 +115,7 @@ def create_project(request, pk):
                     TKNotice.objects.create(placed_by_institution=institution, project=data)
 
             ProjectContributors.objects.create(project=data, institution=institution)
-            return redirect('institution-requests', institution.id)
+            return redirect('institution-activity', institution.id)
     else:
         form = CreateProjectForm()
 

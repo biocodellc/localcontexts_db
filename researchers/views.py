@@ -78,7 +78,7 @@ def researcher_notices(request, pk):
     return render(request, 'researchers/notices.html', context)
 
 @login_required(login_url='login')
-def researcher_requests(request, pk):
+def researcher_activity(request, pk):
     researcher = Researcher.objects.get(id=pk)
     bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher)
     tknotices = TKNotice.objects.filter(placed_by_researcher=researcher)
@@ -88,7 +88,7 @@ def researcher_requests(request, pk):
         'bcnotices': bcnotices,
         'tknotices': tknotices,
     }
-    return render(request, 'researchers/requests.html', context)
+    return render(request, 'researchers/activity.html', context)
 
 
 # TODO: display labels only if they have been approved by community
