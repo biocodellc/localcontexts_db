@@ -44,7 +44,7 @@ label {
     font-weight: 400;
 }
 
-input[type=text], input[type=email], input[type=password], input[type=username], select {
+input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], select {
     max-height: 44px;
     min-height: 44px;
     background-color: #fff;

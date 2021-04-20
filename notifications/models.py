@@ -93,7 +93,7 @@ class NoticeStatus(models.Model):
     )
     bcnotice = models.ForeignKey(BCNotice, on_delete=models.CASCADE, null=True, related_name="bcnotice_status", blank=True)
     tknotice = models.ForeignKey(TKNotice, on_delete=models.CASCADE, null=True, related_name="tknotice_status", blank=True)
-    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="status_community")
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="status_community", blank=True)
     seen = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=CHOICES, null=True, blank=True)
 
