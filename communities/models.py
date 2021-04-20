@@ -11,6 +11,7 @@ class Community(models.Model):
     image = models.ImageField(upload_to='photos/communities', blank=True, null=True)
     town = models.CharField(max_length=80, blank=True, null=True)
     country = CountryField(blank=True, null=True)
+    website = models.URLField(max_length=150, blank=True, null=True)
     admins = models.ManyToManyField(User, blank=True, related_name="admins")
     editors = models.ManyToManyField(User, blank=True, related_name="editors")
     viewers = models.ManyToManyField(User, blank=True, related_name="viewers")

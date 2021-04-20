@@ -86,22 +86,6 @@ class InstitutionNotification(models.Model):
         verbose_name_plural = 'Institution Notifications'
         ordering = ('-created',)
 
-# TODO: Think about how to figure out who the message is from (researcher/institution)
-class NoticeComment(models.Model):
-    bcnotice = models.ForeignKey(BCNotice, on_delete=models.CASCADE, null=True, related_name="bcnotice_comment", blank=True)
-    tknotice = models.ForeignKey(TKNotice, on_delete=models.CASCADE, null=True, related_name="tknotice_comment", blank=True)
-    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="comment_community")
-    message = models.TextField(max_length=1500, null=True) #250 word limit on message
-    created = models.DateField(auto_now_add=True, null=True)
-
-    def __str__(self):
-        return 'Comment {} by {}'.format(self.message, self.community)
-
-    class Meta:
-        verbose_name = 'Comment'
-        verbose_name_plural = 'Comments'
-        ordering = ('-created',)
-
 class NoticeStatus(models.Model):
     CHOICES = (
         ('pending', 'pending'),
@@ -118,6 +102,6 @@ class NoticeStatus(models.Model):
 
     class Meta:
         verbose_name = 'Notice Status'
-        verbose_name_plural = 'Notice Statuses'
+        verbose_name_plural = 'Notice Status'
 
 
