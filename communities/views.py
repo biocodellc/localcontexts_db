@@ -184,7 +184,7 @@ def add_member(request, pk):
 
 # Requests / Notices
 @login_required(login_url='login')
-def community_requests(request, pk):
+def community_activity(request, pk):
     community = Community.objects.get(id=pk)
 
     member_role = check_member_role(request.user, community)
@@ -200,7 +200,7 @@ def community_requests(request, pk):
             'community': community,
             'member_role': member_role,
         }
-        return render(request, 'communities/requests.html', context)
+        return render(request, 'communities/activity.html', context)
 
 # Labels Main
 @login_required(login_url='login')

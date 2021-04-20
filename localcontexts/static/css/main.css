@@ -627,7 +627,7 @@ input:focus {
     margin-left: 12px;
     height: 100%;
     margin: auto;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 19px 20px;
 }
 

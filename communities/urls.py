@@ -12,7 +12,7 @@ urlpatterns = [
     path('community/members/<str:pk>/', views.community_members, name="members"),
     path('community/members/add/<str:pk>/', views.add_member, name="add-member"),
     
-    path('community/requests/<str:pk>/', views.community_requests, name="community-requests"),
+    path('community/activity/<str:pk>/', views.community_activity, name="community-activity"),
 
     path('community/labels/<str:pk>/', views.community_labels, name="community-labels"),
     path('community/labels/select/<str:pk>/', views.select_label, name="select-label"),
