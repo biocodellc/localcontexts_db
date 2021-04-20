@@ -37,7 +37,7 @@ def institution_registry(request):
     institutions = Institution.objects.all()
     return render(request, 'institutions/institution-registry.html', {'institutions': institutions})
 
-# Dashboard / Activity
+# Dashboard
 @login_required(login_url='login')
 def institution_dashboard(request, pk):
     institution = Institution.objects.get(id=pk)
@@ -110,9 +110,11 @@ def create_project(request, pk):
 
             for notice in notices_selected:
                 if notice == 'bcnotice':
-                    BCNotice.objects.create(placed_by_institution=institution, project=data)
+                    bcnotice = BCNotice.objects.create(placed_by_institution=institution, project=data)
+                    # NoticeStatus.objects.create(bcnotice=bcnotice, seen=False)
                 if notice == 'tknotice':
-                    TKNotice.objects.create(placed_by_institution=institution, project=data)
+                    tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data)
+                    # NoticeStatus.objects.create(tknotice=tknotice, seen=False)
 
             ProjectContributors.objects.create(project=data, institution=institution)
             return redirect('institution-activity', institution.id)

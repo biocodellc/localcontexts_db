@@ -70,6 +70,14 @@
                                 Project Contact Email: {{ bcnotice.project.project_contact_email }}<br>
                                 Project URL: {{ bcnotice.project.url }}<br>
                             </p>
+
+                            {% for status in bcnotice.statuses.all %}
+                                {{ status.community.community_name }}
+                                {% if status.seen %}
+                                    Seen
+                                {% endif %}
+
+                            {% endfor %}
                         </div>
 
                     </div>
