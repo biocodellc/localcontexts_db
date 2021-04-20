@@ -6,48 +6,80 @@
 
         <div>
             <h3 class="orange-text">Create a Project</h3>
+            <p>A project is the item or sample your entity would like to apply a notice to.</p>
+
             <form method="POST" action="">
                 {% csrf_token %}
 
-                <label>What are you applying the notice to?</label><br>
-                {{ form.project_type }} <br>
+                <div class="border-bottom-dash-teal padding-bottom-1">
+                    <label>What are you applying the Notice to?</label><br>
+                    {{ form.project_type }} <br>
+                </div>
 
-                <p class="weight-500">Project Overview</p>
+                <p class="weight-500">Project Details</p>
+                <p>
+                    The information provided here will be shared to other entities your institution chooses to share with.<br>
+                    Please try to keep this section as informative as you can.
+                </p>
+                <div class="padding-bottom-1">
+                    <label>Project Title</label><br>
+                    {{ form.title }} <br>
+                </div>
 
-                <label>Project Title</label><br>
-                {{ form.title }} <br>
+                <div class="padding-bottom-1">
+                    <label>Date Created</label><br>
+                    {{ form.publication_date }} <br>
+                </div>
 
-                <label>Date Created</label><br>
-                {{ form.publication_date }} <br>
+                <div class="padding-bottom-1">
+                    <label>Project Description</label><br>
+                    {{ form.description }} <br>
+                </div>
 
-                <label>Project Description</label><br>
-                {{ form.description }} <br>
+                <div class="padding-bottom-1">
+                    <label>Project Contact Name* </label><br>
+                    {{ form.project_contact }} <br>
+                </div>
+
+
+                <div class="padding-bottom-1">
+                    <label>Project Contact Email*</label><br>
+                    {{ form.project_contact_email }} <br>
+                </div>
+
+                <div class="padding-bottom-1">
+                    <label>Recommended Citation</label><br>
+                    {{ form.recommended_citation }} <br>
+                </div>
+
+                <div class="padding-bottom-1">
+                    <label>Project URL</label><br>
+                    {{ form.url }} <br>
+                </div>
 
                 <p class="weight-500">Project Metadata</p>
+                <p>
+                    The project metadata is the key information of how to access data relevant to the project. This will only be shown internally.
+                </p>
 
-                <label>Project Contact Name* </label><br>
-                {{ form.project_contact }} <br>
+                <div class="padding-bottom-1">
+                    <label>Project Data GUID</label><br>
+                    {{ form.project_data_guid }} <br>
+                </div>
 
-                <label>Project Contact Email*</label><br>
-                {{ form.project_contact_email }} <br>
+                <div class="padding-bottom-1">
+                    <label>Project DOI</label><br>
+                    {{ form.publication_doi }} <br>
+                </div>
 
-                <label>Project DOI</label><br>
-                {{ form.publication_doi }} <br>
+                <div class="padding-bottom-1">
+                    <label>GEOME Project ID</label><br>
+                    {{ form.geome_project_id }} <br>
+                </div>
 
-                <label>Project Data GUID</label><br>
-                {{ form.project_data_guid }} <br>
-
-                <label>Recommended Citation</label><br>
-                {{ form.recommended_citation }} <br>
-
-                <label>Project URL</label><br>
-                {{ form.url }} <br>
-
-                <label>GEOME Project ID</label><br>
-                {{ form.geome_project_id }} <br>
 
                 <p class="weight-500">Apply Notices</p>
-                <p>1. Select Notices</p><br>
+                <p>Select Notice(s)</p><br>
 
                 <div class="flex-this">
                     
@@ -78,7 +110,7 @@
                 </div>
 
 
-                <p>2. View Notice Description</p>
+                <p>Notice Description</p>
 
                 <div id="show-notice-description-tk" style="display: none;">
                     <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
@@ -111,7 +143,7 @@
 
 
                 {{ form.errors }}
-                <button class="action-btn">Save Project <i class="fa fa-long-arrow-right"></i></button>
+                <button class="action-btn">Save Project</button>
 
             </form>
         </div>

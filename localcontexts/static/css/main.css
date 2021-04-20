@@ -39,7 +39,6 @@ h2 {
 /* FORM INPUTS */
 
 label {
-    color:#007385;
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
@@ -106,6 +105,10 @@ input:focus {
 
 .darkteal-text {
     color: #007585;
+}
+
+.input-label-teal {
+    color:#007385;
 }
 
 .primary-blue-text {
