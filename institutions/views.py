@@ -69,7 +69,7 @@ def institution_notices(request, pk):
     institution = Institution.objects.get(id=pk)
     return render(request, 'institutions/notices.html', {'institution': institution})
 
-# Requests
+# Activity
 @login_required(login_url='login')
 def institution_activity(request, pk):
     institution = Institution.objects.get(id=pk)

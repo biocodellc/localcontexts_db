@@ -411,7 +411,7 @@ function populateTemplate(id) {
 
 }
 
-// Community: Requests
+// Community: Activity
 function showMoreNotice(elem) {
     let noticeID = elem.id
     let expandDiv = document.getElementById(`expand-notice-${noticeID}`)
@@ -446,7 +446,7 @@ function showMoreProject(elem) {
 }
 
 // Community: create project
-// Community: requests : apply labels
+// Community: Activity : apply labels
 function displayDefaultText(elem) {
     let isChecked = elem.checked
     let labelID = elem.id

@@ -182,7 +182,7 @@ def add_member(request, pk):
     }
     return render(request, 'communities/add-member.html', context)
 
-# Requests / Notices
+# Activity / Notices
 @login_required(login_url='login')
 def community_activity(request, pk):
     community = Community.objects.get(id=pk)
