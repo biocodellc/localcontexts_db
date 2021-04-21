@@ -43,7 +43,9 @@
             
                         <div class="w-50 flex-this column">
                             <div class="flex-this flex-end w-100">
-                                <!-- <span class="darkteal-text">Show More</span> -->
+                                <div>
+                                    <a id="{{ c.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                </div>
                             </div> 
                         </div>
             
@@ -70,7 +72,7 @@
                     </p>
                 </div>
 
-                <div class="flex-this column">
+                <div class="flex-this column" id="expand-contrib-{{ c.id }}" style="height: 0px; overflow:hidden;">
                     <div>
                         <p class="weight-500">Labels attached to this project</p>
                     </div>
