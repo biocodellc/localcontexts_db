@@ -49,11 +49,22 @@
                         <div id="expand-notice-{{ bcnotice.unique_id }}" style="height: 0; overflow:hidden;" class="flex-this column">
                             <div class="flex-this space-between">
                                 <div class="w-80">
-                                    <!-- <p>What would you like to do with this notice? 
-                                        <select>
-                                            <option> Acknowledge Notice </option>
-                                        </select>
-                                    </p> -->
+
+                                    <!-- TODO: Comnnect this to an action -- set the status -->
+                                    <form method="POST" action="">
+                                        {% csrf_token %}
+                                            <span class="weight-500">What would you like to do with this notice? </span>
+
+                                            <select>
+                                                <option> ----------------- </option>
+                                                <option> Acknowledge Notice </option>
+                                                <option> Labels Pending </option>
+                                                <option> No Labels Pending </option>
+                                            </select>
+
+                                        <button class="action-btn">Notify</button> (Not active yet)
+                                    </form>
+
                                     <p><span class="weight-500">Description:</span> {{ bcnotice.project.description }}</p>
                                 </div>
     
