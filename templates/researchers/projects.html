@@ -1,137 +1,122 @@
 {% extends 'research-base.html' %} {% load static %}{% block researcher_content %}
 
-<div class="white-bg content-card content-card-space noti-card">
-        <h3 class="orange-text">Projects</h3>
-    
-        <hr>
+<div class="content-card content-card-space white-bg">
 
-        {% if contribs %}
-            {% for c in contribs %}
+    <div class="flex-this space-between">
+        <div>
+            <h2 class="orange-text weight-600">Projects</h2>
+        </div>
+
+        <div class="flex-this align-center">
+            <a class="action-btn" href="{% url 'researcher-create-project' researcher.id %}">
+                Create a project     <i class="fa fa-long-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+{% if contribs %}
+    {% for c in contribs %}
+        <div class="content-card content-card-space white-bg">
 
             <div class="flex-this space-between column">
-            
-    
-                <div class="w-100 flex-this proj-info-container">
-                    <div class="w-10 pad-top-1">
-                        <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle" width="100px" height="100px">
-                    </div>
-                    <div class="w-50 pad-left-1-5 pad-top-1"> 
-                            <h4 class="darkteal-text weight-600 no-top-margin">{{ c.project.title }}</h4>
+        
+                <div class="w-100 flex-this">
 
+                    <div class="w-50"> 
+                            <h4 class="darkteal-text weight-600 no-top-margin">{{ c.project.title }}</h4>
                             <p class="no-top-margin">
-                                {{ c.project.project_type }}<br>
-                                {{ c.project.publication_date }}<br>
+                                Date Created: {{ c.project.date_added }}<br>
+                                Project Type: {{ c.project.project_type }}<br>
+                                Project Contributors: 
+                                {% if c.institution %}
+                                    {{ c.institution.institution_name }} 
+                                {% endif %}
+
+                                {% if c.researcher %}
+                                    , {{ c.researcher.user.get_full_name }}
+                                {% endif %} 
+
+                                {% if c.community %}
+                                    , {{ c.community.community_name }}
+                                {% endif %}<br>
                             </p>
                     </div>
         
-                    <div class="w-50 additional-proj-info flex-this column">
-
-                        <div class="flex-this flex-end w-100 proj-title-container">
-                            <h2>
-                                <a onclick='showMore(this)'>
-                                    <span id="plus-minus-{{c.project.id}}" class="darkteal-text">+</span>
-                                </a>
-                            </h2>
+                    <div class="w-50 flex-this column">
+                        <div class="flex-this flex-end w-100">
+                            <div>
+                                <a id="{{ c.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                            </div>
                         </div> 
-        
-                        <div>
-                            {% if c.project.has_labels %}
-                                <p>Relationship with <a href="#"><span class="darkteal-text">{{c.community.community_name}}</span></a></p>
-                                <div class="flex-this flex-end">
-                                    {% for bclabel in c.project.bclabels.all %}
-                                            {% include 'bclabels/researcher-mini.html' %}
-                                    {% endfor %}
-
-                                    {% for tklabel in c.project.tklabels.all %}
-                                        {% include 'tklabels/researcher-mini.html' %}
-                                    {% endfor %}
-                                </div>
-
-                            {% else %}
-                                <div><small>No labels applied yet</small></div>
-                            {% endif %}
-                        </div>
-
-    
                     </div>
-    
-                </div>
-    
-                <!-- Expandable content -->
-                <div id="proj-expand-{{c.project.id}}" class="proj-expand" style="height: 0px;">
-                    <hr>
-                        <div class="flex-this w-100">
-    
-                            <div class="flex-this column w-70">
-          
-                              <div class="flex-this">
-                                <div class="w-200px">
-
-                                </div>
-
-                                    <div>
-                                        <span class="weight-500">Project Description</span><br>
-
-                                        <p>
-                                            {{ c.project.description }}
-                                        </p>
-                                    </div>
-
-                              </div>
-    
-                            </div>
-          
-                            <div class="flex-this column w-30 proj-btns">
-                                <div>
-                                  <button class="action-btn">Edit Notice</button>
-                                </div>
-                                {% if c.project.geome_project_id %}
-                                    <div>
-                                        <a href="https://geome-db.org/workbench/project-overview?projectId={{ c.project.geome_project_id}}">
-                                            <button class="white-action-btn">View on GEOME</button>
-                                        </a>
-                                    </div>
-                                {% endif %}
-                                <div>
-                                  <a href="https://orcid.org/{{ c.researcher.orcid }}" target="_blank"><button class="white-action-btn">View ORCiD</button> </a>
-                                </div>
-                            </div>
-    
-                        </div>
-                    <hr>
-
-                    {% if c.project.has_labels %}
-                        {% for bclabel in c.project.bclabels.all %}
-                            {% include 'bclabels/researcher-labels.html' %}
-                        {% endfor %}
-                        {% for tklabel in c.project.tklabels.all %}
-                            {% include 'tklabels/researcher-labels.html' %}
-                        {% endfor %}
-                    {% endif %}
-
-                </div>
-        </div>
-    
-        <hr>
-
-            {% endfor %}
-        {% else %}
-            <p>No projects available at this time.</p>
-        {% endif %}
         
-        <a href="{% url 'researcher-create-project' researcher.id %}">
-        <div class="flex-this">
-                <div class="add-notice-btn flex-this justify-center">
-                        <span>+</span>
                 </div>
-                <div class="add-notice-text">
-                        <h4 class="weight-500">
-                            Add new project
-                        </h4>
-                </div>
-        </div>
-        </a>
+        
+            </div>
 
-</div>
+            <div class="flex-this space-between">
+                <div class="w-90">
+                    {{ c.project.description }}
+                </div>
+                <div class="w-20">
+                    <a href="{% url 'researcher-notify-communities' researcher.id c.project.id %}">
+                        <button class="action-btn">Notify Communities <i class="fa fa-users" aria-hidden="true"></i></button>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <p>
+                    Project Contact: {{ c.project.project_contact}} <br>
+                    Project Contact Email: {{ c.project.project_contact_email}} <br>
+                    Project URL: {{ c.project.url }}
+                </p>
+            </div>
+
+            <div class="flex-this column" id="expand-contrib-{{ c.id }}" style="height: 0px; overflow:hidden;">
+                <div>
+                    <p class="weight-500">Labels attached to this project</p>
+                </div>
+                    {% for bclabel in c.project.bclabels.all %}
+
+                        <div class="flex-this">
+                            <div class="small-label">
+                                {% include 'bclabels/which-label.html' %}
+                            </div>
+                            <div class="pad-left-2">
+                                <p class="darkteal-text no-top-margin">Label shared by {{ c.community.community_name }} </p>
+                                <p class="weight-500"> {{ bclabel.name }} </p>
+                                <p>
+                                    {{ bclabel.default_text}}
+                                </p>
+                                <hr>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    {% for tklabel in c.project.tklabels.all %}
+
+                    <div class="flex-this">
+                        <div class="small-label">
+                            {% include 'tklabels/which-label.html' %}
+                        </div>
+                        <div class="pad-left-2">
+                            <p class="darkteal-text no-top-margin">Label shared by {{ c.community.community_name }} </p>
+                            <p class="weight-500"> {{ tklabel.name }} </p>
+                            <p>
+                                {{ tklabel.default_text}}
+                            </p>
+                            <hr>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+    {% endfor %}
+{% endif %}
 
 {% endblock %}

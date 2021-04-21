@@ -49,29 +49,6 @@ if(togglePassword2) {
     })
 }
 
-
-// Expand project details in researcher:notices
-function showMore(elem) {
-    let targetId = elem.firstChild.nextSibling.id
-    // console.log(targetId)
-
-    let matches = targetId.match(/(\d+)/)
-    let targetNum = matches[0]
-    // console.log(targetNum)
-
-    let div = document.getElementById(`proj-expand-${targetNum}`)
-    let span = document.getElementById(targetId)
-
-    if (div.style.height == "0px" && span.textContent == "+") {
-        div.style.height = "300px"
-        div.style.transition = "height 0.5s"
-        span.textContent = "-"
-    } else {
-        div.style.height = "0px"
-        span.textContent = "+"
-    }
-}
-
 // Show customised label text in community: labels
 function customText(imgDiv) {
     let labelID = imgDiv.id

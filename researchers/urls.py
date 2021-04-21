@@ -11,6 +11,9 @@ urlpatterns = [
 
     path('researcher/projects/<str:pk>', views.researcher_projects, name="researcher-projects"),
     path('researcher/projects/create-project/<str:pk>', views.create_project, name="researcher-create-project"),
+    path('researcher/projects/notify/<str:pk>/<str:proj_id>/', views.notify_communities, name="researcher-notify-communities"),
+
     
     path('researcher/relationships/<str:pk>', views.researcher_relationships, name="researcher-relationships"),
+
 ]

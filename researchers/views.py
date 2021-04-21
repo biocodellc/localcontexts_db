@@ -4,10 +4,11 @@ from django.contrib import messages
 
 from accounts.utils import is_user_researcher
 
-from bclabels.models import BCNotice
+from bclabels.models import BCNotice, NoticeStatus
 from tklabels.models import TKNotice
+from communities.models import Community
 from notifications.models import CommunityNotification
-from projects.models import ProjectContributors
+from projects.models import ProjectContributors, Project
 from projects.forms import CreateProjectForm, ProjectContributorsForm
 
 from .models import Researcher
@@ -106,54 +107,141 @@ def researcher_projects(request, pk):
 
     return render(request, 'researchers/projects.html', context)
 
+# @login_required(login_url='login')
+# def create_project(request, pk):
+#     researcher = Researcher.objects.get(id=pk)
+
+#     if request.method == 'POST':
+#         proj_form = CreateProjectForm(request.POST)
+#         contrib_form = ProjectContributorsForm(request.POST)
+
+#         if proj_form.is_valid() and contrib_form.is_valid():            
+#             proj = proj_form.save(commit=False)
+#             proj.project_creator = request.user
+#             contrib_data = contrib_form.save(commit=False)
+#             proj.save()
+#             contrib_data.save()
+
+#             contrib = ProjectContributors.objects.create(project=proj, researcher=researcher, community=contrib_data.community)            
+#             message = request.POST.get('contrib-message') # Get value of message
+
+#             notices_selected = request.POST.getlist('checkbox-notice')
+
+#             for notice in notices_selected:
+#                 if notice == 'bcnotice':
+#                     bc_notice = BCNotice.objects.create(placed_by_researcher=researcher, project=proj)
+#                     bc_notice.communities.add(contrib_data.community)
+
+#                     # Send community notification
+#                     title = "A BC notice has been placed by " + str(researcher.user.get_full_name())
+#                     CommunityNotification.objects.create(community=contrib_data.community, sender=request.user, notification_type='Requests', title=title)
+
+#                 if notice == 'tknotice':
+#                     tk_notice = TKNotice.objects.create(placed_by_researcher=researcher, project=proj)
+#                     tk_notice.communities.add(contrib_data.community)
+
+#                     title = "A TK notice has been placed by " + str(researcher.user.get_full_name())
+#                     CommunityNotification.objects.create(community=contrib_data.community, sender=request.user, notification_type='Requests', title=title)
+
+#             return redirect('researcher-notices', researcher.id)
+#     else:
+#         proj_form = CreateProjectForm()
+#         contrib_form = ProjectContributorsForm()
+        
+#     context = {
+#         'researcher': researcher,
+#         'proj_form': proj_form,
+#         'contrib_form':contrib_form,
+#     }
+
+#     return render(request, 'researchers/create-project.html', context)
+
+# Create Project
 @login_required(login_url='login')
 def create_project(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
-    if request.method == 'POST':
-        proj_form = CreateProjectForm(request.POST)
-        contrib_form = ProjectContributorsForm(request.POST)
-
-        if proj_form.is_valid() and contrib_form.is_valid():            
-            proj = proj_form.save(commit=False)
-            proj.project_creator = request.user
-            contrib_data = contrib_form.save(commit=False)
-            proj.save()
-            contrib_data.save()
-
-            contrib = ProjectContributors.objects.create(project=proj, researcher=researcher, community=contrib_data.community)            
-            message = request.POST.get('contrib-message') # Get value of message
+    if request.method == "POST":
+        form = CreateProjectForm(request.POST or None)
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.project_creator = request.user
+            data.save()
 
             notices_selected = request.POST.getlist('checkbox-notice')
 
             for notice in notices_selected:
                 if notice == 'bcnotice':
-                    bc_notice = BCNotice.objects.create(placed_by_researcher=researcher, project=proj)
-                    bc_notice.communities.add(contrib_data.community)
-
-                    # Send community notification
-                    title = "A BC notice has been placed by " + str(researcher.user.get_full_name())
-                    CommunityNotification.objects.create(community=contrib_data.community, sender=request.user, notification_type='Requests', title=title)
-
+                    bcnotice = BCNotice.objects.create(placed_by_researcher=researcher, project=data)
                 if notice == 'tknotice':
-                    tk_notice = TKNotice.objects.create(placed_by_researcher=researcher, project=proj)
-                    tk_notice.communities.add(contrib_data.community)
+                    tknotice = TKNotice.objects.create(placed_by_researcher=researcher, project=data)
 
-                    title = "A TK notice has been placed by " + str(researcher.user.get_full_name())
-                    CommunityNotification.objects.create(community=contrib_data.community, sender=request.user, notification_type='Requests', title=title)
-
-            return redirect('researcher-notices', researcher.id)
+            ProjectContributors.objects.create(project=data, researcher=researcher)
+            return redirect('researcher-activity', researcher.id)
     else:
-        proj_form = CreateProjectForm()
-        contrib_form = ProjectContributorsForm()
-        
+        form = CreateProjectForm()
+
     context = {
         'researcher': researcher,
-        'proj_form': proj_form,
-        'contrib_form':contrib_form,
+        'form': form,
     }
+    return render(request, 'researchers/create-project.html', context)
 
-    return render(request, 'researchers/add-notice.html', context)
+# Notify Communities of Project
+@login_required(login_url='login')
+def notify_communities(request, pk, proj_id):
+    researcher = Researcher.objects.get(id=pk)
+    project = Project.objects.get(id=proj_id)
+    contribs = ProjectContributors.objects.get(project=project, researcher=researcher)
+
+    bcnotice_exists = BCNotice.objects.filter(project=project).exists()
+    tknotice_exists = TKNotice.objects.filter(project=project).exists()
+
+    communities = Community.objects.all()
+
+    if request.method == "POST":
+        communities_selected = request.POST.getlist('selected_communities')
+        message = request.POST.get('notice_message')
+
+        for community_id in communities_selected:
+            title = str(researcher.user.get_full_name()) + " has placed a Notice"
+
+            community = Community.objects.get(id=community_id)
+
+            # Create notification
+            CommunityNotification.objects.create(community=community, notification_type='Requests', sender=request.user, title=title)
+            
+            # add community to bcnotice instance
+            if bcnotice_exists:
+                bcnotices = BCNotice.objects.filter(project=project)
+                notice_status = NoticeStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
+                for bcnotice in bcnotices:
+                    bcnotice.communities.add(community)
+                    bcnotice.statuses.add(notice_status)
+                    bcnotice.message = message
+                    bcnotice.save()
+            
+            # add community to tknotice instance
+            if tknotice_exists:
+                tknotices = TKNotice.objects.filter(project=project)
+                notice_status = NoticeStatus.objects.create(community=community, seen=False)
+                for tknotice in tknotices:
+                    tknotice.communities.add(community)
+                    tknotice.statuses.add(notice_status)
+                    tknotice.message = message
+                    tknotice.save()
+        
+        return redirect('researcher-projects', researcher.id)
+
+    context = {
+        'researcher': researcher,
+        'project': project,
+        'contribs': contribs,
+        'communities': communities,
+    }
+    return render(request, 'researchers/notify.html', context)
+
+
 
 @login_required(login_url='login')
 def researcher_relationships(request, pk):
