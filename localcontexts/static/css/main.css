@@ -262,11 +262,11 @@ input:focus {
     border-top: 1px dashed #007385;
 }
 
-.border-bottom-solid-teal {
+.border-top-solid-teal {
     border-top: 1px solid #007385;  
 }
 
-.border-top-solid-teal {
+.border-bottom-solid-teal {
     border-bottom: 1px solid #007385;  
 }
 
