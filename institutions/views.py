@@ -5,7 +5,7 @@ from django.contrib import messages
 from .models import Institution
 from researchers.models import Researcher
 from projects.models import Project, ProjectContributors
-from bclabels.models import BCNotice
+from bclabels.models import BCNotice, NoticeStatus
 from tklabels.models import TKNotice
 from communities.models import Community
 from notifications.models import CommunityNotification
@@ -111,10 +111,8 @@ def create_project(request, pk):
             for notice in notices_selected:
                 if notice == 'bcnotice':
                     bcnotice = BCNotice.objects.create(placed_by_institution=institution, project=data)
-                    # NoticeStatus.objects.create(bcnotice=bcnotice, seen=False)
                 if notice == 'tknotice':
                     tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data)
-                    # NoticeStatus.objects.create(tknotice=tknotice, seen=False)
 
             ProjectContributors.objects.create(project=data, institution=institution)
             return redirect('institution-activity', institution.id)
@@ -154,16 +152,20 @@ def notify_communities(request, pk, proj_id):
             # add community to bcnotice instance
             if bcnotice_exists:
                 bcnotices = BCNotice.objects.filter(project=project)
+                notice_status = NoticeStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
                 for bcnotice in bcnotices:
                     bcnotice.communities.add(community)
+                    bcnotice.statuses.add(notice_status)
                     bcnotice.message = message
                     bcnotice.save()
             
             # add community to tknotice instance
             if tknotice_exists:
                 tknotices = TKNotice.objects.filter(project=project)
+                notice_status = NoticeStatus.objects.create(community=community, seen=False)
                 for tknotice in tknotices:
                     tknotice.communities.add(community)
+                    tknotice.statuses.add(notice_status)
                     tknotice.message = message
                     tknotice.save()
         
