@@ -427,9 +427,7 @@ function showMoreProject(elem) {
 function displayDefaultText(elem) {
     let isChecked = elem.checked
     let labelID = elem.id
-
-    let matches = labelID.match(/(\d+)/)
-    let targetNum = matches[0]
+    let targetNum = labelID.slice(14)
 
     let targetDiv = document.getElementById(`open-default-text-${targetNum}`)
     let labelName = document.getElementById(`label-name-${targetNum}`)
