@@ -18,7 +18,6 @@
 
     {% if contribs %}
         {% for contrib in contribs %}
-            {% if contrib.project.has_labels %}
             <div class="content-card-v2 white-bg">
 
                 <div id="full-contrib-card-{{ contrib.id }}" class="flex-this space-between">
@@ -58,6 +57,14 @@
                             <div class="notice-btns center-text">
                                 <a href="#" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
                             </div> -->
+                            {% if contrib.project.has_labels %}
+
+                            {% else %}
+                            <div class="notice-btns center-text">
+                                <a href="{% url 'apply-project-labels' community.id contrib.project.id %}" class="action-btn">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
+                            </div>
+                            {% endif %}
+
                         </div>
                     </div>
 
@@ -104,7 +111,6 @@
                 </div>
 
             </div>
-            {% endif %}
         {% endfor %}
     {% endif %}
 

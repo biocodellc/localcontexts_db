@@ -5,144 +5,88 @@
         <small><a class="darkteal-text" href="{% url 'community-projects' community.id %}">Projects</a> <span class="grey-text"> >> Create New Project</span></small>
     </div>
 
+    <h3 class="orange-text">Create a Project</h3>
+    <p>A project is the item or sample your entity would like to apply Labels to.</p>
+
     <form method="POST" action="">
         {% csrf_token %}
-    <div>
-        <h2 class="orange-text weight-700">Create a project</h2>
+
+    <div class="border-bottom-dash-teal padding-bottom-1">
+        <label>What are you applying the Label to?</label><br>
+        {{ form.project_type }} <br>
     </div>
 
-    <div class="bottom-dashed">
-        <label class="darkteal-text"> What are you applying the Labels to?*</label><br>
-        {{ form.project_type }}
+    <p class="weight-500">Project Details</p>
+    <p>
+        The information provided here will be shared to other entities your community chooses to share with.<br>
+        Please try to keep this section as informative as you can.
+    </p>
+    <div class="padding-bottom-1">
+        <label>Project Title</label><br>
+        {{ form.title }} <br>
     </div>
 
-    <div>
-        <div>
-        <label class="darkteal-text">Project Title*</label><br>
-            {{ form.title }}
-        </div>
-        <div>
-            <label class="darkteal-text">Publication Date</label><br>
-            {{ form.publication_date }}
-        </div>
-        <div>
-            <label class="darkteal-text">Project Description*</label><br>
-            {{ form.description }}
-        </div>
-
-        <div>
-            <label class="darkteal-text">Project Contact Name*</label><br>
-            {{ form.project_contact }}
-        </div>
-        <div>
-            <label class="darkteal-text">Project Contact Email*</label><br>
-            {{ form.project_contact_email }}
-        </div>
-        <div>
-            <label class="darkteal-text">Project URL</label><br>
-            {{ form.url }}
-        </div>
-
-
+    <div class="padding-bottom-1">
+        <label>Project or Publication Date</label><br>
+        {{ form.publication_date }} <br>
     </div>
 
+    <div class="padding-bottom-1">
+        <label>Project Description</label><br>
+        {{ form.description }} <br>
+    </div>
+
+    <div class="padding-bottom-1">
+        <label>Project Contact Name* </label><br>
+        {{ form.project_contact }} <br>
+    </div>
+
+
+    <div class="padding-bottom-1">
+        <label>Project Contact Email*</label><br>
+        {{ form.project_contact_email }} <br>
+    </div>
+
+    <div class="padding-bottom-1">
+        <label>Recommended Citation</label><br>
+        {{ form.recommended_citation }} <br>
+    </div>
+
+    <div class="padding-bottom-1">
+        <label>Project URL</label><br>
+        {{ form.url }} <br>
+    </div>
+
+    <p class="weight-500">Project Metadata</p>
+    <p>
+        The project metadata is the key information of how to access data relevant to the project. This will only be shown internally.
+    </p>
+
+    <div class="padding-bottom-1">
+        <label>Project Data GUID</label><br>
+        {{ form.project_data_guid }} <br>
+    </div>
+
+    <div class="padding-bottom-1">
+        <label>Project DOI</label><br>
+        {{ form.publication_doi }} <br>
+    </div>
+
+    <div class="padding-bottom-1">
+        <label>GEOME Project ID</label><br>
+        {{ form.geome_project_id }} <br>
+    </div>
+
+
     <div>
-
-        <div>
-            <h4 class="weight-500">Apply your custom Labels to this project</h4>
-        </div>
-    
-        <div>
-            <span class="weight-500 darkteal-text">1. Select a Label</span><br>
-            <div class="flex-this wrap">
-    
-            {% if bclabels %}
-                {% for bclabel in bclabels %}
-    
-                    <div class="w-20 wrap center-text">
-                        <div>
-                            <input id="checked-label-{{ bclabel.id }}" onclick="displayDefaultText(this)" value="{{ bclabel.id }}" type="checkbox" name="checked-labels">
-                        </div>
-                        {% include 'bclabels/which-label.html' %}
-                        <span id="label-name-{{ bclabel.id }}" class="grey-text">{{ bclabel.name }}</span>
-                    </div>
-    
-                {% endfor %}
-            {% endif %}
-
-            {% if tklabels %}
-            {% for tklabel in tklabels %}
-
-                <div class="w-20 wrap center-text">
-                    <div>
-                        <input id="checked-label-{{ tklabel.id }}" onclick="displayDefaultText(this)" value="{{ tklabel.id }}" type="checkbox" name="tk-checked-labels">
-                    </div>
-                    {% include 'tklabels/which-label.html' %}
-                    <span id="label-name-{{ tklabel.id }}" class="grey-text">{{ tklabel.name }}</span>
-                </div>
-
-            {% endfor %}
-        {% endif %}
-
-            <div id="grey-border-div" class="center-text">
-                <a href="{% url 'select-label' community.id %}">
-                    <span class="grey-text auto-margin">+ Customise a <br>new Label</span>
-                </a>
-            </div>
-    
-            </div>
-    
-            <p class="weight-500 darkteal-text">2. View Label Description</p>
-
-            {% if bclabels %}
-                {% for bclabel in bclabels %}
-                    <div id="open-default-text-{{ bclabel.id }}" style="height: 0; overflow: hidden;" class="flex-this">
-
-                        <div class="small-label">
-                            {% include 'bclabels/which-label.html' %}
-                        </div>
-                        <div class="pad-left-2">
-                            <p class="darkteal-text no-top-margin">Label shared by {{ bclabel.community.community_name }} </p>
-                            <p class="weight-500"> {{ bclabel.name }} </p>
-                            <p>
-                                {{ bclabel.default_text}}
-                            </p>
-                            <hr>
-                        </div>
-
-                    </div>
-                {% endfor %}
-            {% endif %}
-
-            {% if tklabels %}
-            {% for tklabel in tklabels %}
-                <div id="open-default-text-{{ tklabel.id }}" style="height: 0; overflow: hidden;" class="flex-this">
-
-                    <div class="small-label">
-                        {% include 'tklabels/which-label.html' %}
-                    </div>
-                    <div class="pad-left-2">
-                        <p class="darkteal-text no-top-margin">Label shared by {{ tklabel.community.community_name }} </p>
-                        <p class="weight-500"> {{ tklabel.name }} </p>
-                        <p>
-                            {{ tklabel.default_text}}
-                        </p>
-                        <hr>
-                    </div>
-
-                </div>
-            {% endfor %}
-        {% endif %}
-    
-        </div>
     
         <div>
             {{ form.errors }}
-            <button class="action-btn">Apply Labels</button>
+            <button class="action-btn">Save project</button>
         </div>
 
     </div>
-    </form>
+</form>
 </div>
 
 {% endblock %}
