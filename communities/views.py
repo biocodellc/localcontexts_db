@@ -294,7 +294,7 @@ def select_label(request, pk):
 
         return render(request, 'communities/select-label.html', context)
 
-# Label customisation process
+# BC Label customisation process
 @login_required(login_url='login')
 def customise_bclabel(request, pk, label_type):
     community = Community.objects.get(id=pk)
@@ -329,7 +329,7 @@ def customise_bclabel(request, pk, label_type):
         }
         return render(request, 'communities/customise-bclabel.html', context)
 
-# Label customisation process
+# TK Label customisation process
 @login_required(login_url='login')
 def customise_tklabel(request, pk, label_type):
     community = Community.objects.get(id=pk)
@@ -497,7 +497,7 @@ def create_project(request, pk):
 
 # Appy Labels to Notices
 @login_required(login_url='login')
-def community_add_labels(request, pk, notice_id):
+def apply_notice_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
 
     bcnotice_exists = BCNotice.objects.filter(unique_id=notice_id).exists()
@@ -540,7 +540,7 @@ def community_add_labels(request, pk, notice_id):
                 'tklabels': tklabels,
                 'member_role': member_role,
             }
-            return render(request, 'communities/attach-labels.html', context)
+            return render(request, 'communities/apply-notice-labels.html', context)
 
         else:
             tknotice = TKNotice.objects.get(unique_id=notice_id)
