@@ -5,12 +5,12 @@
             <div class="{% if 'dashboard' in request.path %} active-nav {% endif %}">Notifications</div>
         </a>
 
-        <a href="{% url 'community-labels' community.id %}">
-            <div class="{% if 'labels' in request.path %} active-nav {% endif %}">Labels</div>
+        <a href="{% url 'community-activity' community.id %}">
+            <div class="{% if 'activity' in request.path %} active-nav {% endif %}">Activity</div>
         </a>
 
-        <a href="{% url 'community-requests' community.id %}">
-            <div class="{% if 'requests' in request.path %} active-nav {% endif %}">Requests</div>
+        <a href="{% url 'community-labels' community.id %}">
+            <div class="{% if 'labels' in request.path %} active-nav {% endif %}">Labels</div>
         </a>
 
         <a href="{% url 'community-projects' community.id %}">

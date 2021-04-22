@@ -10,7 +10,7 @@ from accounts.models import UserAffiliation
 from notifications.models import CommunityNotification
 from bclabels.models import BCNotice, BCLabel
 from tklabels.models import TKNotice, TKLabel
-from projects.models import ProjectContributors
+from projects.models import ProjectContributors, Project
 
 from bclabels.forms import CustomiseBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomiseTKLabelForm, ApproveAndEditTKLabelForm
@@ -182,9 +182,9 @@ def add_member(request, pk):
     }
     return render(request, 'communities/add-member.html', context)
 
-# Requests / Notices
+# Activity / Notices
 @login_required(login_url='login')
-def community_requests(request, pk):
+def community_activity(request, pk):
     community = Community.objects.get(id=pk)
 
     member_role = check_member_role(request.user, community)
@@ -194,13 +194,60 @@ def community_requests(request, pk):
         bcnotices = BCNotice.objects.filter(communities=community)
         tknotices = TKNotice.objects.filter(communities=community)
 
-        context = {
-            'bcnotices': bcnotices,
-            'tknotices': tknotices,
-            'community': community,
-            'member_role': member_role,
-        }
-        return render(request, 'communities/requests.html', context)
+        if request.method == "POST":
+            bcnotice_uuid = request.POST.get('bcnotice-uuid')
+            tknotice_uuid = request.POST.get('tknotice-uuid')
+
+            if bcnotice_uuid != None:
+                bcnotice_status = request.POST.get('bcnotice-status')
+
+                bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
+                statuses = bcnotice.statuses.filter(community=community)
+
+                for status in statuses:
+                    if bcnotice_status == 'seen':
+                        status.seen = True
+                        status.save()
+                    if bcnotice_status == 'pending':
+                        status.seen = True
+                        status.status = 'pending'
+                        status.save()
+                    if bcnotice_status == 'not_pending':
+                        status.seen = True
+                        status.status = 'not_pending'
+                        status.save()
+                return redirect('community-activity', community.id)
+
+            else:
+
+                tknotice_status = request.POST.get('tknotice-status')
+
+                tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
+                statuses = tknotice.statuses.filter(community=community)
+
+                for status in statuses:
+                    if tknotice_status == 'seen':
+                        status.seen = True
+                        status.save()
+                    if tknotice_status == 'pending':
+                        status.seen = True
+                        status.status = 'pending'
+                        status.save()
+                    if tknotice_status == 'not_pending':
+                        status.seen = True
+                        status.status = 'not_pending'
+                        status.save()
+                return redirect('community-activity', community.id)
+
+        else:
+
+            context = {
+                'bcnotices': bcnotices,
+                'tknotices': tknotices,
+                'community': community,
+                'member_role': member_role,
+            }
+            return render(request, 'communities/activity.html', context)
 
 # Labels Main
 @login_required(login_url='login')
@@ -247,7 +294,7 @@ def select_label(request, pk):
 
         return render(request, 'communities/select-label.html', context)
 
-# Label customisation process
+# BC Label customisation process
 @login_required(login_url='login')
 def customise_bclabel(request, pk, label_type):
     community = Community.objects.get(id=pk)
@@ -266,6 +313,10 @@ def customise_bclabel(request, pk, label_type):
                 label_form.created_by = request.user
                 label_form.is_approved = False
                 label_form.save()
+
+                title = "A BC Label was customized by " + request.user.get_full_name()
+                CommunityNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+
                 return redirect('community-labels', community.id)
         else:
             form = CustomiseBCLabelForm()
@@ -278,7 +329,7 @@ def customise_bclabel(request, pk, label_type):
         }
         return render(request, 'communities/customise-bclabel.html', context)
 
-# Label customisation process
+# TK Label customisation process
 @login_required(login_url='login')
 def customise_tklabel(request, pk, label_type):
     community = Community.objects.get(id=pk)
@@ -297,6 +348,10 @@ def customise_tklabel(request, pk, label_type):
                 label_form.created_by = request.user
                 label_form.is_approved = False
                 label_form.save()
+                
+                title = "A TK Label was customized by " + request.user.get_full_name()
+                CommunityNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+
                 return redirect('community-labels', community.id)
         else:
             form = CustomiseTKLabelForm()
@@ -328,6 +383,9 @@ def approve_bclabel(request, pk, label_id):
                 label_form.is_approved = True
                 label_form.approved_by = request.user
                 label_form.save()
+                title = "A BC Label was approved by " + request.user.get_full_name()
+                CommunityNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+                
                 return redirect('community-labels', community.id)
         else:
             form = ApproveAndEditBCLabelForm(instance=bclabel)
@@ -358,6 +416,10 @@ def approve_tklabel(request, pk, label_id):
                 label_form.is_approved = True
                 label_form.approved_by = request.user
                 label_form.save()
+
+                title = "A TK Label was approved by " + request.user.get_full_name()
+                CommunityNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+
                 return redirect('community-labels', community.id)
         else:
             form = ApproveAndEditTKLabelForm(instance=tklabel)
@@ -406,17 +468,7 @@ def create_project(request, pk):
             if form.is_valid():
                 obj = form.save(commit=False)
                 obj.project_creator = request.user
-                bclabels_selected = request.POST.getlist('checked-labels')
-                tklabels_selected = request.POST.getlist('tk-checked-labels')
                 obj.save()
-
-                for choice in bclabels_selected:
-                    label = BCLabel.objects.get(id=choice)
-                    obj.bclabels.add(label)
-                
-                for tkchoice in tklabels_selected:
-                    tklabel = TKLabel.objects.get(id=tkchoice)
-                    obj.tklabels.add(tklabel)
 
                 ProjectContributors.objects.create(project=obj, community=community)
                 return redirect('community-projects', community.id)
@@ -433,9 +485,44 @@ def create_project(request, pk):
 
         return render(request, 'communities/create-project.html', context)
 
+# Add labels to community created projects
+@login_required(login_url='login')
+def apply_project_labels(request, pk, project_id):
+    community = Community.objects.get(id=pk)
+    project = Project.objects.get(id=project_id)
+    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
+    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        if request.method == "POST":
+            bclabels_selected = request.POST.getlist('checked-labels')
+            tklabels_selected = request.POST.getlist('tk-checked-labels')
+
+            for choice in bclabels_selected:
+                label = BCLabel.objects.get(unique_id=choice)
+                project.bclabels.add(label)
+                
+            for tkchoice in tklabels_selected:
+                tklabel = TKLabel.objects.get(unique_id=tkchoice)
+                project.tklabels.add(tklabel)
+            
+            return redirect('community-projects', community.id)
+
+        context = {
+            'community': community,
+            'project': project,
+            'bclabels': bclabels,
+            'tklabels': tklabels,
+            'member_role': member_role,
+        }
+        return render(request, 'communities/apply-labels.html', context)
+
 # Appy Labels to Notices
 @login_required(login_url='login')
-def community_add_labels(request, pk, notice_id):
+def apply_notice_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
 
     bcnotice_exists = BCNotice.objects.filter(unique_id=notice_id).exists()
@@ -478,7 +565,7 @@ def community_add_labels(request, pk, notice_id):
                 'tklabels': tklabels,
                 'member_role': member_role,
             }
-            return render(request, 'communities/attach-labels.html', context)
+            return render(request, 'communities/apply-notice-labels.html', context)
 
         else:
             tknotice = TKNotice.objects.get(unique_id=notice_id)

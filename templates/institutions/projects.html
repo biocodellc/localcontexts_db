@@ -43,7 +43,9 @@
             
                         <div class="w-50 flex-this column">
                             <div class="flex-this flex-end w-100">
-                                <!-- <span class="darkteal-text">Show More</span> -->
+                                <div>
+                                    <a id="{{ c.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                </div>
                             </div> 
                         </div>
             
@@ -68,6 +70,46 @@
                         Project Contact Email: {{ c.project.project_contact_email}} <br>
                         Project URL: {{ c.project.url }}
                     </p>
+                </div>
+
+                <div class="flex-this column" id="expand-contrib-{{ c.id }}" style="height: 0px; overflow:hidden;">
+                    <div>
+                        <p class="weight-500">Labels attached to this project</p>
+                    </div>
+                        {% for bclabel in c.project.bclabels.all %}
+
+                            <div class="flex-this">
+                                <div class="small-label">
+                                    {% include 'bclabels/which-label.html' %}
+                                </div>
+                                <div class="pad-left-2">
+                                    <p class="darkteal-text no-top-margin">Label shared by {{ c.community.community_name }} </p>
+                                    <p class="weight-500"> {{ bclabel.name }} </p>
+                                    <p>
+                                        {{ bclabel.default_text}}
+                                    </p>
+                                    <hr>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {% for tklabel in c.project.tklabels.all %}
+
+                        <div class="flex-this">
+                            <div class="small-label">
+                                {% include 'tklabels/which-label.html' %}
+                            </div>
+                            <div class="pad-left-2">
+                                <p class="darkteal-text no-top-margin">Label shared by {{ c.community.community_name }} </p>
+                                <p class="weight-500"> {{ tklabel.name }} </p>
+                                <p>
+                                    {{ tklabel.default_text}}
+                                </p>
+                                <hr>
+                            </div>
+                        </div>
+                    {% endfor %}
+
                 </div>
 
             </div>

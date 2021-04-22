@@ -84,3 +84,4 @@ class InstitutionNotification(models.Model):
         verbose_name_plural = 'Institution Notifications'
         ordering = ('-created',)
 
+

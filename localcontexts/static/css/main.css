@@ -39,13 +39,12 @@ h2 {
 /* FORM INPUTS */
 
 label {
-    color:#007385;
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
 }
 
-input[type=text], input[type=email], input[type=password], input[type=username], select {
+input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], select {
     max-height: 44px;
     min-height: 44px;
     background-color: #fff;
@@ -106,6 +105,10 @@ input:focus {
 
 .darkteal-text {
     color: #007585;
+}
+
+.input-label-teal {
+    color:#007385;
 }
 
 .primary-blue-text {
@@ -182,6 +185,10 @@ input:focus {
 
 /* MARGIN & PADDING */
 
+.margin-top-1 {
+    margin-top: 1%;
+}
+
 .margin-bottom-2 {
     margin-bottom: 2%;
 }
@@ -255,11 +262,11 @@ input:focus {
     border-top: 1px dashed #007385;
 }
 
-.border-bottom-solid-teal {
+.border-top-solid-teal {
     border-top: 1px solid #007385;  
 }
 
-.border-top-solid-teal {
+.border-bottom-solid-teal {
     border-bottom: 1px solid #007385;  
 }
 
@@ -343,6 +350,10 @@ input:focus {
 
 .w-100 {
     width: 100%;
+}
+
+.width-492 {
+    width: 492px;
 }
 
 /* ACTION Buttons / Register,Sign in, etc. */
@@ -619,7 +630,7 @@ input:focus {
     margin-left: 12px;
     height: 100%;
     margin: auto;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 19px 20px;
 }
 
@@ -867,7 +878,7 @@ input:focus {
     margin-bottom: 2%;
 }
 
-/* COMMUNITY DASHBOARD: REQUESTS */
+/* COMMUNITY DASHBOARD: Activity */
 
 .notice-top span {
     transform: rotate(45deg);
@@ -1059,7 +1070,7 @@ input:focus {
     padding-top: 5px;
 }
 
-/* Requests: Apply labels */
+/* Activity: Apply labels */
 .add-label-mini-card {
     margin-top: 35px;
     border: 1px dashed #A09D9D;
@@ -1103,4 +1114,25 @@ input:focus {
     border-radius: 5px;
     cursor: pointer;
     margin-top: 78px;
+}
+
+/* Institution: Notify */
+.selected-community {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 19px;
+    border: 2px dashed #007385;
+    border-radius: 5px;
+    height: 67px;
+    width: 492px;
+}
+
+.center-name, .close-x {
+    margin: 0;
+    align-items: center;
+}
+
+.close-x {
+    color: #007385;
+    font-size: 1.2em;
 }

@@ -1,0 +1,221 @@
+{% extends 'research-base.html' %} {% load static %}{% block researcher_content %}
+
+<div class="content-card content-card-space white-bg ">
+    <h3 class="orange-text reqs">Activity</h3>
+</div>
+
+{% if bcnotices %}
+    {% for bcnotice in bcnotices %}
+
+                <div id="full-notice-card-{{ bcnotice.id }}" class="content-card-v2 white-bg">
+                    <div class="flex-this space-between">
+                        <div>
+                            <p class="no-top-margin notice-date">
+                                Date Sent: {{ bcnotice.created|date:'m/d/Y' }}
+                            </p>
+                        </div>
+                
+                        <div>
+                            <a id="{{ bcnotice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
+                                Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="flex-this">
+
+                        <div class="w-10">
+                            <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
+                        </div>
+
+                        <div class="w-90 pad-left-2">
+                            <p>
+                                <span class="darkteal-text weight-600">{{ bcnotice.project.title}}</span><br>
+                                {{ bcnotice.project.publication_date }} <br>
+                                {{ bcnotice.project.project_type }} <br>
+                                {% for contributor in bcnotice.communities.all %}
+                                    {{ contributor.community_name }},
+                                {% endfor %}
+                                {% if bcnotice.placed_by_researcher %}
+                                    {{ bcnotice.placed_by_researcher.user.get_full_name }}
+                                {% else %}
+                                    {{ bcnotice.placed_by_institution.institution_name}}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="expand-notice-{{ bcnotice.id }}" style="height: 0; overflow:hidden;" class="flex-this column">
+                        <div class="flex-this space-between">
+                            <div class="w-80">
+                                <p><span class="weight-500">Description:</span> {{ bcnotice.project.description }}</p>
+                            </div>
+    
+                            <div class="flex-this column w-15">
+                                {% if bcnotice.project.url %}
+                                    <div class="notice-btns center-text">
+                                        <a href="{{ bcnotice.project.url }}" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                    </div>
+                                {% endif %}
+                                <div class="notice-btns center-text">
+                                    <a href="#" class="action-btn">View Project <i class="fa fa-long-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-bottom-solid-teal">
+                            <p>
+                                Project Contact: {{ bcnotice.project.project_contact }}<br>
+                                Project Contact Email: {{ bcnotice.project.project_contact_email }}<br>
+                                Project URL: {{ bcnotice.project.url }}<br>
+                            </p>
+                        </div>
+
+                        <div class="flex-this column">
+                            {% for status in bcnotice.statuses.all %}
+                                <div class="flex-this space-between pad-top-1-5">
+
+                                    <div>
+                                        <span class="darkteal-text weight-500">{{ status.community.community_name }}</span>
+                                    </div>
+    
+                                    {% if status.seen %}
+                                        {% if status.status == 'pending' %}
+                                            <div>
+                                                <span class="notice-date">Status: Label(s) Pending</span>
+                                            </div>
+                                        {% elif status.status == 'not_pending' %}
+                                            <div>
+                                                <span class="notice-date">Status: No Label(s) Pending</span>
+                                            </div>
+                                        {% else %}
+                                            <div>
+                                                <span class="notice-date">Status: Seen</span>
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <div>
+                                            <span class="notice-date">Status: Unseen</span>                                    
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+
+                    </div>
+
+                    </div>
+
+                </div>
+
+        {% endfor %}
+
+{% endif %}
+
+{% if tknotices %}
+{% for tknotice in tknotices %}
+
+            <div id="full-notice-card-{{ tknotice.id }}" class="content-card-v2 white-bg">
+                <div class="flex-this space-between">
+                    <div>
+                        <p class="no-top-margin notice-date">
+                            Date Sent: {{ tknotice.created|date:'m/d/Y' }}
+                        </p>
+                    </div>
+            
+                    <div>
+                        <a id="{{ tknotice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
+                            Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="flex-this">
+
+                    <div class="w-10">
+                        <img src="{% static 'images/notices/tk-notice.png' %}" alt="TK Notice: a black square with white letters TK in the middle">
+                    </div>
+
+                    <div class="w-90 pad-left-2">
+                        <p>
+                            <span class="darkteal-text weight-600">{{ tknotice.project.title}}</span><br>
+                            {{ tknotice.project.publication_date }} <br>
+                            {{ tknotice.project.project_type }} <br>
+                            {% for contributor in tknotice.communities.all %}
+                                {{ contributor.community_name }},
+                            {% endfor %} 
+                            {% if tknotice.placed_by_researcher %}
+                                {{ tknotice.placed_by_researcher.user.get_full_name }}
+                            {% else %}
+                                {{ tknotice.placed_by_institution.institution_name}}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <div id="expand-notice-{{ tknotice.id }}" style="height: 0; overflow:hidden;" class="flex-this column">
+                    <div class="flex-this space-between">
+                        <div class="w-80">
+                            <p><span class="weight-500">Description:</span> {{ tknotice.project.description }}</p>
+                        </div>
+    
+                        <div class="flex-this column w-15">
+                            {% if tknotice.project.url %}
+                                <div class="notice-btns center-text">
+                                    <a href="{{ tknotice.project.url }}" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                </div>
+                            {% endif %}
+                            <div class="notice-btns center-text">
+                                <a href="#" class="action-btn">View Project <i class="fa fa-long-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-bottom-solid-teal">
+                        <p>
+                            Project Contact: {{ tknotice.project.project_contact }}<br>
+                            Project Contact Email: {{ tknotice.project.project_contact_email }}<br>
+                            Project URL: {{ tknotice.project.url }}<br>
+                        </p>
+                    </div>
+
+                    <div class="flex-this column">
+                        {% for status in tknotice.statuses.all %}
+                            <div class="flex-this space-between pad-top-1-5">
+
+                                <div>
+                                    <span class="darkteal-text weight-500">{{ status.community.community_name }}</span>
+                                </div>
+
+                                {% if status.seen %}
+                                    {% if status.status == 'pending' %}
+                                        <div>
+                                            <span class="notice-date">Status: Label(s) Pending</span>
+                                        </div>
+                                    {% elif status.status == 'not_pending' %}
+                                        <div>
+                                            <span class="notice-date">Status: No Label(s) Pending</span>
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            <span class="notice-date">Status: Seen</span>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div>
+                                        <span class="notice-date">Status: Unseen</span>                                    
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+    {% endfor %}
+
+{% endif %}
+
+{% endblock %}

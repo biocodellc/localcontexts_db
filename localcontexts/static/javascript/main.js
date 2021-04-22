@@ -49,29 +49,6 @@ if(togglePassword2) {
     })
 }
 
-
-// Expand project details in researcher:notices
-function showMore(elem) {
-    let targetId = elem.firstChild.nextSibling.id
-    // console.log(targetId)
-
-    let matches = targetId.match(/(\d+)/)
-    let targetNum = matches[0]
-    // console.log(targetNum)
-
-    let div = document.getElementById(`proj-expand-${targetNum}`)
-    let span = document.getElementById(targetId)
-
-    if (div.style.height == "0px" && span.textContent == "+") {
-        div.style.height = "300px"
-        div.style.transition = "height 0.5s"
-        span.textContent = "-"
-    } else {
-        div.style.height = "0px"
-        span.textContent = "+"
-    }
-}
-
 // Show customised label text in community: labels
 function customText(imgDiv) {
     let labelID = imgDiv.id
@@ -411,7 +388,7 @@ function populateTemplate(id) {
 
 }
 
-// Community: Requests
+// Community: Activity
 function showMoreNotice(elem) {
     let noticeID = elem.id
     let expandDiv = document.getElementById(`expand-notice-${noticeID}`)
@@ -446,13 +423,11 @@ function showMoreProject(elem) {
 }
 
 // Community: create project
-// Community: requests : apply labels
+// Community: Activity : apply labels
 function displayDefaultText(elem) {
     let isChecked = elem.checked
     let labelID = elem.id
-
-    let matches = labelID.match(/(\d+)/)
-    let targetNum = matches[0]
+    let targetNum = labelID.slice(14)
 
     let targetDiv = document.getElementById(`open-default-text-${targetNum}`)
     let labelName = document.getElementById(`label-name-${targetNum}`)
@@ -731,7 +706,7 @@ function showDescription() {
 
 }
 
-// Institutions: projects: notify communities
+// Institutions: projects: notify communities - select desired communities
 function selectCommunities() {
     let select = document.getElementById('communities-select')
     let allOptionsArray = Array.from(select.options)
@@ -747,9 +722,48 @@ function selectCommunities() {
             selectedCommunityDiv.style.height = "auto";
             div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_communities">`
         }
-
-
     })
+}
+
+// Institutions: projects: notify communities - close selected communities
+function cancelCommunitySelection(elem) {
+    let id = elem.id
+    let matches = id.match(/(\d+)/)
+    let targetNum = matches[0]
+
+    let divToClose = document.getElementById(`selected-community-${targetNum}`)
+    let inputDivToRemove = document.getElementById(`comm-id-input-${targetNum}`)
+
+    divToClose.style.height = '0'
+    inputDivToRemove.innerHTML = ``
+}
+
+// Communities: Activity: Notify 
+function setBCNoticeUUID(elem) {
+    let elementId = elem.id
+    let statusSelect = document.getElementById(elementId)
+    let noticeIdInput = document.getElementById('notice-id-input')
+    let statusSelectedInput = document.getElementById('status-selection-input')
+    let noticeID = elementId.slice(7)
+
+    // Set first hidden value to notice UUID
+    noticeIdInput.value = noticeID
+    // Set second hidden value to value of option selected
+    statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
+}
+
+// Communities: Activity: Notify 
+function setTKNoticeUUID(elem) {
+    let elementId = elem.id
+    let statusSelect = document.getElementById(elementId)
+    let noticeIdInput = document.getElementById('tknotice-id-input')
+    let statusSelectedInput = document.getElementById('tkstatus-selection-input')
+    let noticeID = elementId.slice(7)
+
+    // Set first hidden value to notice UUID
+    noticeIdInput.value = noticeID
+    // Set second hidden value to value of option selected
+    statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
 }
 
 // TODO: Add ROR functionality
