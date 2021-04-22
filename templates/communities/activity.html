@@ -50,19 +50,21 @@
                             <div class="flex-this space-between">
                                 <div class="w-80">
 
-                                    <!-- TODO: Comnnect this to an action -- set the status -->
                                     <form method="POST" action="">
                                         {% csrf_token %}
                                             <span class="weight-500">What would you like to do with this notice? </span>
 
-                                            <select>
-                                                <option> ----------------- </option>
-                                                <option> Acknowledge Notice </option>
-                                                <option> Labels Pending </option>
-                                                <option> No Labels Pending </option>
+                                            <select id="select-{{ bcnotice.unique_id }}" onchange="setBCNoticeUUID(this)">
+                                                <option selected="selected" disabled> ----------------- </option>
+                                                <option value="seen"> Acknowledge Notice </option>
+                                                <option value="pending"> Labels Pending </option>
+                                                <option value="not_pending"> No Labels Pending </option>
                                             </select>
 
-                                        <button class="action-btn">Notify</button> (Not active yet)
+                                            <input id="notice-id-input" type="hidden" value="placeholder" name="bcnotice-uuid">
+                                            <input id="status-selection-input" type="hidden" value="placeholder" name="bcnotice-status">
+
+                                            <button class="action-btn">Notify</button>
                                     </form>
 
                                     <p><span class="weight-500">Description:</span> {{ bcnotice.project.description }}</p>
@@ -164,11 +166,24 @@
                     <div id="expand-notice-{{ tknotice.unique_id }}" style="height: 0; overflow:hidden;" class="flex-this column">
                         <div class="flex-this space-between">
                             <div class="w-80">
-                                <!-- <p>What would you like to do with this notice? 
-                                    <select>
-                                        <option> Acknowledge Notice </option>
-                                    </select>
-                                </p> -->
+
+                                <form method="POST" action="">
+                                    {% csrf_token %}
+                                        <span class="weight-500">What would you like to do with this notice? </span>
+
+                                        <select id="select-{{ tknotice.unique_id }}" onchange="setTKNoticeUUID(this)">
+                                            <option selected="selected" disabled> ----------------- </option>
+                                            <option value="seen"> Acknowledge Notice </option>
+                                            <option value="pending"> Labels Pending </option>
+                                            <option value="not_pending"> No Labels Pending </option>
+                                        </select>
+
+                                        <input id="tknotice-id-input" type="hidden" value="placeholder" name="tknotice-uuid">
+                                        <input id="tkstatus-selection-input" type="hidden" value="placeholder" name="tknotice-status">
+
+                                        <button class="action-btn">Notify</button>
+                                </form>
+
                                 <p><span class="weight-500">Description:</span> {{ tknotice.project.description }}</p>
                             </div>
     

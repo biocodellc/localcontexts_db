@@ -740,6 +740,34 @@ function cancelCommunitySelection(elem) {
     inputDivToRemove.innerHTML = ``
 }
 
+// Communities: Activity: Notify 
+function setBCNoticeUUID(elem) {
+    let elementId = elem.id
+    let statusSelect = document.getElementById(elementId)
+    let noticeIdInput = document.getElementById('notice-id-input')
+    let statusSelectedInput = document.getElementById('status-selection-input')
+    let noticeID = elementId.slice(7)
+
+    // Set first hidden value to notice UUID
+    noticeIdInput.value = noticeID
+    // Set second hidden value to value of option selected
+    statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
+}
+
+// Communities: Activity: Notify 
+function setTKNoticeUUID(elem) {
+    let elementId = elem.id
+    let statusSelect = document.getElementById(elementId)
+    let noticeIdInput = document.getElementById('tknotice-id-input')
+    let statusSelectedInput = document.getElementById('tkstatus-selection-input')
+    let noticeID = elementId.slice(7)
+
+    // Set first hidden value to notice UUID
+    noticeIdInput.value = noticeID
+    // Set second hidden value to value of option selected
+    statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
+}
+
 // TODO: Add ROR functionality
 // Create Institution
 // const endpoint = `http://api.ror.org/organizations`

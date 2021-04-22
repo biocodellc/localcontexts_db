@@ -194,13 +194,60 @@ def community_activity(request, pk):
         bcnotices = BCNotice.objects.filter(communities=community)
         tknotices = TKNotice.objects.filter(communities=community)
 
-        context = {
-            'bcnotices': bcnotices,
-            'tknotices': tknotices,
-            'community': community,
-            'member_role': member_role,
-        }
-        return render(request, 'communities/activity.html', context)
+        if request.method == "POST":
+            bcnotice_uuid = request.POST.get('bcnotice-uuid')
+            tknotice_uuid = request.POST.get('tknotice-uuid')
+
+            if bcnotice_uuid != None:
+                bcnotice_status = request.POST.get('bcnotice-status')
+
+                bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
+                statuses = bcnotice.statuses.filter(community=community)
+
+                for status in statuses:
+                    if bcnotice_status == 'seen':
+                        status.seen = True
+                        status.save()
+                    if bcnotice_status == 'pending':
+                        status.seen = True
+                        status.status = 'pending'
+                        status.save()
+                    if bcnotice_status == 'not_pending':
+                        status.seen = True
+                        status.status = 'not_pending'
+                        status.save()
+                return redirect('community-activity', community.id)
+
+            else:
+
+                tknotice_status = request.POST.get('tknotice-status')
+
+                tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
+                statuses = tknotice.statuses.filter(community=community)
+
+                for status in statuses:
+                    if tknotice_status == 'seen':
+                        status.seen = True
+                        status.save()
+                    if tknotice_status == 'pending':
+                        status.seen = True
+                        status.status = 'pending'
+                        status.save()
+                    if tknotice_status == 'not_pending':
+                        status.seen = True
+                        status.status = 'not_pending'
+                        status.save()
+                return redirect('community-activity', community.id)
+
+        else:
+
+            context = {
+                'bcnotices': bcnotices,
+                'tknotices': tknotices,
+                'community': community,
+                'member_role': member_role,
+            }
+            return render(request, 'communities/activity.html', context)
 
 # Labels Main
 @login_required(login_url='login')
