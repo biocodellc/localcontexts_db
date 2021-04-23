@@ -212,10 +212,16 @@ def community_activity(request, pk):
                         status.seen = True
                         status.status = 'pending'
                         status.save()
+                        #TODO:
+                        #Send User Notification (if researcher) OR 
+                        #Send Institution Notififcation
                     if bcnotice_status == 'not_pending':
                         status.seen = True
                         status.status = 'not_pending'
                         status.save()
+                        #TODO:
+                        #Send User Notification (if resaercher) OR 
+                        #Send Institution Notififcation
                 return redirect('community-activity', community.id)
 
             else:
