@@ -57,7 +57,6 @@ class BCLabel(models.Model):
     label_type = models.CharField(max_length=20, null=True, choices=TYPES)
     community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='label name', max_length=90, null=True)
-    bc_notice = models.ForeignKey(BCNotice, null=True, on_delete=models.DO_NOTHING, blank=True)
     default_text = models.TextField(null=True, blank=True)
     is_approved = models.BooleanField(default=False, null=True)
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.DO_NOTHING, related_name="bclabel_approver")

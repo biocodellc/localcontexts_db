@@ -547,14 +547,14 @@ def apply_notice_labels(request, pk, notice_id):
                 label_selected = request.POST.getlist('checkbox-label')
 
                 for choice in label_selected:
-                    bclabel_exists = BCLabel.objects.filter(id=choice).exists()
-                    tklabel_exists = TKLabel.objects.filter(id=choice).exists()
+                    bclabel_exists = BCLabel.objects.filter(unique_id=choice).exists()
+                    tklabel_exists = TKLabel.objects.filter(unique_id=choice).exists()
 
                     if bclabel_exists:
-                        bclabel = BCLabel.objects.get(id=choice)
+                        bclabel = BCLabel.objects.get(unique_id=choice)
                         bcnotice.project.bclabels.add(bclabel)
                     if tklabel_exists:
-                        tklabel = TKLabel.objects.get(id=choice)
+                        tklabel = TKLabel.objects.get(unique_id=choice)
                         bcnotice.project.tklabels.add(tklabel)
                 return redirect('community-projects', community.id)
             
@@ -579,14 +579,14 @@ def apply_notice_labels(request, pk, notice_id):
                 label_selected = request.POST.getlist('checkbox-label')
 
                 for choice in label_selected:
-                    bclabel_exists = BCLabel.objects.filter(id=choice).exists()
-                    tklabel_exists = TKLabel.objects.filter(id=choice).exists()
+                    bclabel_exists = BCLabel.objects.filter(unique_id=choice).exists()
+                    tklabel_exists = TKLabel.objects.filter(unique_id=choice).exists()
 
                     if bclabel_exists:
-                        bclabel = BCLabel.objects.get(id=choice)
+                        bclabel = BCLabel.objects.get(unique_id=choice)
                         tknotice.project.bclabels.add(bclabel)
                     if tklabel_exists:
-                        tklabel = TKLabel.objects.get(id=choice)
+                        tklabel = TKLabel.objects.get(unique_id=choice)
                         tknotice.project.tklabels.add(tklabel)
                 return redirect('community-projects', community.id)
         
@@ -597,7 +597,7 @@ def apply_notice_labels(request, pk, notice_id):
                 'tklabels': tklabels,
                 'member_role': member_role,
             }
-            return render(request, 'communities/attach-labels.html', context)
+            return render(request, 'communities/apply-notice-labels.html', context)
 
 # Relationships
 @login_required(login_url='login')
