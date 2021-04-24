@@ -80,6 +80,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'maintenance_mode.middleware.MaintenanceModeMiddleware',
+]
+
+CONTEXT_PROCESSORS = [
+    'maintenance_mode.context_processors.maintenance_mode',
 ]
 
 ROOT_URLCONF = 'localcontexts.urls'
