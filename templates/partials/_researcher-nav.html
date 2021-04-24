@@ -5,12 +5,12 @@
             <div class="{% if 'dashboard' in request.path %} active-nav {% endif %}">Notifications</div>
         </a>
 
-        <a href="{% url 'researcher-notices' researcher.id %}">
-            <div class="{% if 'notices' in request.path %} active-nav {% endif %}">Notices</div>
+        <a href="{% url 'researcher-activity' researcher.id %}">
+            <div class="{% if 'activity' in request.path %} active-nav {% endif %}">Activity</div>
         </a>
 
-        <a href="{% url 'researcher-requests' researcher.id %}">
-            <div class="{% if 'requests' in request.path %} active-nav {% endif %}">Requests</div>
+        <a href="{% url 'researcher-notices' researcher.id %}">
+            <div class="{% if 'notices' in request.path %} active-nav {% endif %}">Notices</div>
         </a>
 
         <a href="{% url 'researcher-projects' researcher.id %}">

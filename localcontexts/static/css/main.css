@@ -39,13 +39,12 @@ h2 {
 /* FORM INPUTS */
 
 label {
-    color:#007385;
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
 }
 
-input[type=text], input[type=email], input[type=password], input[type=username], select {
+input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], select {
     max-height: 44px;
     min-height: 44px;
     background-color: #fff;
@@ -106,6 +105,10 @@ input:focus {
 
 .darkteal-text {
     color: #007585;
+}
+
+.input-label-teal {
+    color:#007385;
 }
 
 .primary-blue-text {
@@ -259,11 +262,11 @@ input:focus {
     border-top: 1px dashed #007385;
 }
 
-.border-bottom-solid-teal {
+.border-top-solid-teal {
     border-top: 1px solid #007385;  
 }
 
-.border-top-solid-teal {
+.border-bottom-solid-teal {
     border-bottom: 1px solid #007385;  
 }
 
@@ -627,7 +630,7 @@ input:focus {
     margin-left: 12px;
     height: 100%;
     margin: auto;
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 19px 20px;
 }
 
@@ -875,7 +878,7 @@ input:focus {
     margin-bottom: 2%;
 }
 
-/* COMMUNITY DASHBOARD: REQUESTS */
+/* COMMUNITY DASHBOARD: Activity */
 
 .notice-top span {
     transform: rotate(45deg);
@@ -1067,7 +1070,7 @@ input:focus {
     padding-top: 5px;
 }
 
-/* Requests: Apply labels */
+/* Activity: Apply labels */
 .add-label-mini-card {
     margin-top: 35px;
     border: 1px dashed #A09D9D;

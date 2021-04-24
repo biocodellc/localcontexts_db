@@ -1,13 +1,20 @@
 <div class="content-card comm-nav flex-this column white-bg">
     <div class="comm-nav-links flex-this">
         <a href="{% url 'institution-dashboard' institution.id %}">
-            <div class="{% if 'dashboard' in request.path %} active-nav {% endif %}">Notifications</div></a>
+            <div class="{% if 'dashboard' in request.path %} active-nav {% endif %}">Notifications</div>
+        </a>
+
+        <a href="{% url 'institution-activity' institution.id %}">
+            <div class="{% if 'activity' in request.path %} active-nav {% endif %}">Activity</div>
+        </a>
+
         <a href="{% url 'institution-notices' institution.id %}">
-            <div class="{% if 'notices' in request.path %} active-nav {% endif %}">Notices</div></a>
-        <a href="{% url 'institution-requests' institution.id %}">
-            <div class="{% if 'requests' in request.path %} active-nav {% endif %}">Requests</div></a>    
+            <div class="{% if 'notices' in request.path %} active-nav {% endif %}">Notices</div>
+        </a>    
+
         <a href="{% url 'institution-projects' institution.id %}">
-            <div class="{% if 'projects' in request.path %} active-nav {% endif %}">Projects</div></a>
+            <div class="{% if 'projects' in request.path %} active-nav {% endif %}">Projects</div>
+        </a>
 
         <!-- Temporary Removal -->
         <!-- <a href="#"><div>Relationships</div></a> -->

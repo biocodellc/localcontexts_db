@@ -1,7 +1,7 @@
 {% extends 'institution-base.html' %} {% load static %} {% block institution_content %}
 
 <div class="content-card content-card-space white-bg ">
-    <h3 class="orange-text reqs">Requests</h3>
+    <h3 class="orange-text reqs">Activity</h3>
 </div>
 
 {% if bcnotices %}
@@ -64,12 +64,45 @@
                             </div>
                         </div>
 
-                        <div>
+                        <div class="border-bottom-solid-teal">
                             <p>
                                 Project Contact: {{ bcnotice.project.project_contact }}<br>
                                 Project Contact Email: {{ bcnotice.project.project_contact_email }}<br>
                                 Project URL: {{ bcnotice.project.url }}<br>
                             </p>
+
+                        </div>
+
+                        <div class="flex-this column">
+                                {% for status in bcnotice.statuses.all %}
+                                    <div class="flex-this space-between pad-top-1-5">
+
+                                        <div>
+                                            <span class="darkteal-text weight-500">{{ status.community.community_name }}</span>
+                                        </div>
+        
+                                        {% if status.seen %}
+                                            {% if status.status == 'pending' %}
+                                                <div>
+                                                    <span class="notice-date">Status: Label(s) Pending</span>
+                                                </div>
+                                            {% elif status.status == 'not_pending' %}
+                                                <div>
+                                                    <span class="notice-date">Status: No Label(s) Pending</span>
+                                                </div>
+                                            {% else %}
+                                                <div>
+                                                    <span class="notice-date">Status: Seen</span>
+                                                </div>
+                                            {% endif %}
+                                        {% else %}
+                                            <div>
+                                                <span class="notice-date">Status: Unseen</span>                                    
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+
                         </div>
 
                     </div>
@@ -141,12 +174,44 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div class="border-bottom-solid-teal">
                         <p>
                             Project Contact: {{ tknotice.project.project_contact }}<br>
                             Project Contact Email: {{ tknotice.project.project_contact_email }}<br>
                             Project URL: {{ tknotice.project.url }}<br>
                         </p>
+                    </div>
+
+                    <div class="flex-this column">
+                        {% for status in tknotice.statuses.all %}
+                            <div class="flex-this space-between pad-top-1-5">
+
+                                <div>
+                                    <span class="darkteal-text weight-500">{{ status.community.community_name }}</span>
+                                </div>
+
+                                {% if status.seen %}
+                                    {% if status.status == 'pending' %}
+                                        <div>
+                                            <span class="notice-date">Status: Label(s) Pending</span>
+                                        </div>
+                                    {% elif status.status == 'not_pending' %}
+                                        <div>
+                                            <span class="notice-date">Status: No Label(s) Pending</span>
+                                        </div>
+                                    {% else %}
+                                        <div>
+                                            <span class="notice-date">Status: Seen</span>
+                                        </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div>
+                                        <span class="notice-date">Status: Unseen</span>                                    
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
                     </div>
 
                 </div>

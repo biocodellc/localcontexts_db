@@ -5,7 +5,7 @@ from django.contrib import messages
 from .models import Institution
 from researchers.models import Researcher
 from projects.models import Project, ProjectContributors
-from bclabels.models import BCNotice
+from bclabels.models import BCNotice, NoticeStatus
 from tklabels.models import TKNotice
 from communities.models import Community
 from notifications.models import CommunityNotification
@@ -37,7 +37,7 @@ def institution_registry(request):
     institutions = Institution.objects.all()
     return render(request, 'institutions/institution-registry.html', {'institutions': institutions})
 
-# Dashboard / Activity
+# Dashboard
 @login_required(login_url='login')
 def institution_dashboard(request, pk):
     institution = Institution.objects.get(id=pk)
@@ -69,9 +69,9 @@ def institution_notices(request, pk):
     institution = Institution.objects.get(id=pk)
     return render(request, 'institutions/notices.html', {'institution': institution})
 
-# Requests
+# Activity
 @login_required(login_url='login')
-def institution_requests(request, pk):
+def institution_activity(request, pk):
     institution = Institution.objects.get(id=pk)
     bcnotices = BCNotice.objects.filter(placed_by_institution=institution)
     tknotices = TKNotice.objects.filter(placed_by_institution=institution)
@@ -80,7 +80,7 @@ def institution_requests(request, pk):
         'bcnotices': bcnotices,
         'tknotices': tknotices,
     }
-    return render(request, 'institutions/requests.html', context)
+    return render(request, 'institutions/activity.html', context)
 
 # Projects
 @login_required(login_url='login')
@@ -110,12 +110,12 @@ def create_project(request, pk):
 
             for notice in notices_selected:
                 if notice == 'bcnotice':
-                    BCNotice.objects.create(placed_by_institution=institution, project=data)
+                    bcnotice = BCNotice.objects.create(placed_by_institution=institution, project=data)
                 if notice == 'tknotice':
-                    TKNotice.objects.create(placed_by_institution=institution, project=data)
+                    tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data)
 
             ProjectContributors.objects.create(project=data, institution=institution)
-            return redirect('institution-requests', institution.id)
+            return redirect('institution-activity', institution.id)
     else:
         form = CreateProjectForm()
 
@@ -152,16 +152,20 @@ def notify_communities(request, pk, proj_id):
             # add community to bcnotice instance
             if bcnotice_exists:
                 bcnotices = BCNotice.objects.filter(project=project)
+                notice_status = NoticeStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
                 for bcnotice in bcnotices:
                     bcnotice.communities.add(community)
+                    bcnotice.statuses.add(notice_status)
                     bcnotice.message = message
                     bcnotice.save()
             
             # add community to tknotice instance
             if tknotice_exists:
                 tknotices = TKNotice.objects.filter(project=project)
+                notice_status = NoticeStatus.objects.create(community=community, seen=False)
                 for tknotice in tknotices:
                     tknotice.communities.add(community)
+                    tknotice.statuses.add(notice_status)
                     tknotice.message = message
                     tknotice.save()
         
