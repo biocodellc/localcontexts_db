@@ -45,6 +45,7 @@ ADMINS = [(SITE_ADMIN_NAME, SITE_ADMIN_EMAIL)]
 
 # Application definition
 INSTALLED_APPS = [
+    'maintenance_mode',
     'accounts.apps.AccountsConfig',
     'notifications.apps.NotificationsConfig',
     'bclabels.apps.BclabelsConfig',
