@@ -10,8 +10,10 @@ from tklabels.models import TKNotice
 from communities.models import Community
 from notifications.models import CommunityNotification
 
-from .forms import CreateInstitutionForm, UpdateInstitutionForm
 from projects.forms import CreateProjectForm
+
+from .forms import CreateInstitutionForm, UpdateInstitutionForm
+from .utils import *
 # from bclabels.forms import AddBCNoticeMessage
 # from tklabels.forms import AddTKNoticeMessage
 
@@ -41,12 +43,22 @@ def institution_registry(request):
 @login_required(login_url='login')
 def institution_dashboard(request, pk):
     institution = Institution.objects.get(id=pk)
-    return render(request, 'institutions/dashboard.html', {'institution': institution})
+    total_notices = get_notices_count(institution)
+    total_projects = get_projects_count(institution)
+    context = {
+        'institution': institution, 
+        'total_notices': total_notices,
+        'total_projects': total_projects, 
+    }
+    return render(request, 'institutions/dashboard.html', context)
 
 # Update institution
 @login_required(login_url='login')
 def update_institution(request, pk):
     institution = Institution.objects.get(id=pk)
+    total_notices = get_notices_count(institution)
+    total_projects = get_projects_count(institution)
+
     update_form = UpdateInstitutionForm(instance=institution)
     
     if request.method == "POST":
@@ -59,6 +71,8 @@ def update_institution(request, pk):
     context = {
         'institution': institution,
         'update_form': update_form,
+        'total_notices': total_notices,
+        'total_projects': total_projects,
     }
 
     return render(request, 'institutions/update-institution.html', context)
@@ -67,7 +81,14 @@ def update_institution(request, pk):
 @login_required(login_url='login')
 def institution_notices(request, pk):
     institution = Institution.objects.get(id=pk)
-    return render(request, 'institutions/notices.html', {'institution': institution})
+    total_notices = get_notices_count(institution)
+    total_projects = get_projects_count(institution)
+    context = {
+        'institution': institution, 
+        'total_notices': total_notices,
+        'total_projects': total_projects,
+    }
+    return render(request, 'institutions/notices.html', context)
 
 # Activity
 @login_required(login_url='login')
@@ -75,10 +96,15 @@ def institution_activity(request, pk):
     institution = Institution.objects.get(id=pk)
     bcnotices = BCNotice.objects.filter(placed_by_institution=institution)
     tknotices = TKNotice.objects.filter(placed_by_institution=institution)
+    total_notices = bcnotices.count() + tknotices.count()
+    total_projects = get_projects_count(institution)
+
     context = {
         'institution': institution,
         'bcnotices': bcnotices,
         'tknotices': tknotices,
+        'total_notices': total_notices,
+        'total_projects': total_projects,
     }
     return render(request, 'institutions/activity.html', context)
 
@@ -86,11 +112,15 @@ def institution_activity(request, pk):
 @login_required(login_url='login')
 def institution_projects(request, pk):
     institution = Institution.objects.get(id=pk)
+    total_notices = get_notices_count(institution)
+    total_projects = get_projects_count(institution)
     contribs = ProjectContributors.objects.filter(institution=institution)
 
     context = {
         'institution': institution,
         'contribs': contribs,
+        'total_notices': total_notices,
+        'total_projects': total_projects,
     }
     return render(request, 'institutions/projects.html', context)
 
@@ -98,6 +128,8 @@ def institution_projects(request, pk):
 @login_required(login_url='login')
 def create_project(request, pk):
     institution = Institution.objects.get(id=pk)
+    total_notices = get_notices_count(institution)
+    total_projects = get_projects_count(institution)
 
     if request.method == "POST":
         form = CreateProjectForm(request.POST or None)
@@ -122,6 +154,8 @@ def create_project(request, pk):
     context = {
         'institution': institution,
         'form': form,
+        'total_notices': total_notices,
+        'total_projects': total_projects,
     }
     return render(request, 'institutions/create-project.html', context)
 
@@ -131,6 +165,8 @@ def notify_communities(request, pk, proj_id):
     institution = Institution.objects.get(id=pk)
     project = Project.objects.get(id=proj_id)
     contribs = ProjectContributors.objects.get(project=project, institution=institution)
+    total_notices = get_notices_count(institution)
+    total_projects = get_projects_count(institution)
 
     bcnotice_exists = BCNotice.objects.filter(project=project).exists()
     tknotice_exists = TKNotice.objects.filter(project=project).exists()
@@ -176,6 +212,8 @@ def notify_communities(request, pk, proj_id):
         'project': project,
         'contribs': contribs,
         'communities': communities,
+        'total_notices': total_notices,
+        'total_projects': total_projects,
     }
     return render(request, 'institutions/notify.html', context)
 

@@ -35,21 +35,31 @@
     
                 <div class="flex-this white-text w-30">
                     <div class="orange-bg stats-card w-30">
-                        <h1>00</h1>
-                        <p>Labels</p>
+                        <h1>
+                            {% if total_notices < 10 %}
+                                0{{ total_notices }}
+                            {% else %}
+                                {{ total_notices }}
+                            {% endif %}
+                        </h1>
+                        <p>Notices</p>
                     </div>
     
                     <div class="orange-bg stats-card w-30">
                         <h1>
-                            00
+                            {% if total_projects < 10 %}
+                                0{{ total_projects }}
+                            {% else %}
+                                {{ total_projects }}
+                            {% endif %}
                         </h1>
                         <p>Projects</p>
                     </div>
     
-                    <div class="orange-bg stats-card w-30">
+                    <!-- <div class="orange-bg stats-card w-30">
                         <h1>00</h1>
                         <p>Relationships</p>
-                    </div>
+                    </div> -->
                 </div>
     
             </div>
