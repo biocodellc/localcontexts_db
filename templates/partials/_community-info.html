@@ -47,7 +47,13 @@
     
                 <div class="flex-this white-text w-30">
                     <div class="orange-bg stats-card w-30">
-                        <h1>17</h1>
+                        <h1>
+                            {% if total_labels < 10 %}
+                                0{{ total_labels }}
+                            {% else %}
+                                {{ total_labels }}
+                            {% endif %}
+                        </h1>
                         <p>Labels</p>
                     </div>
     
@@ -61,10 +67,10 @@
                         <p>Members</p>
                     </div>
     
-                    <div class="orange-bg stats-card w-30">
+                    <!-- <div class="orange-bg stats-card w-30">
                         <h1>02</h1>
                         <p>Relationships</p>
-                    </div>
+                    </div> -->
                 </div>
     
             </div>
