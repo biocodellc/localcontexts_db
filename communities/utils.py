@@ -1,6 +1,8 @@
 from communities.models import InviteMember, Community
 from accounts.models import UserAffiliation
 from django.contrib.auth.models import Group
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
 
 def checkif_community_in_user_community(user, community):
     u = UserAffiliation.objects.get(user=user)
@@ -42,4 +44,11 @@ def checkif_invite_exists(user, community):
         print(" #########   INVITATION ALREADY EXISTS  ######### ")
     else:
         return False
+
+def get_label_count(community):
+    bclabels = BCLabel.objects.filter(community=community).count()
+    tklabels = TKLabel.objects.filter(community=community).count()
+    total_labels = bclabels + tklabels
+    return total_labels
+
     
