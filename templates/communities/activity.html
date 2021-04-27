@@ -103,8 +103,21 @@
                                             {{ bcnotice.message }}
                                         </p>
                                     {% endif %}
-
                                 </div>
+                            {% endif %}
+
+                            {% if bcnotice.project.project_comment.all %}
+                                {% for comment in bcnotice.project.project_comment.all %}
+                                    {% if community == comment.community %}
+                                        <div>
+                                            <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                            <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                            <p>
+                                                {{ comment.message }}
+                                            </p>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
 
                         </div>

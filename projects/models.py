@@ -58,11 +58,11 @@ class ProjectContributors(models.Model):
         verbose_name_plural = 'Project Contributors'
 
 
-# TODO: Think about how to figure out who the message is from (researcher/institution)
 class ProjectComment(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True, related_name="project_comment", blank=True)
-    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="comment_community")
-    message = models.TextField(max_length=1500, null=True) #250 word limit on message
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="comment_community", blank=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="comment_sender", blank=True)
+    message = models.TextField(max_length=1500, null=True, blank=True) #250 word limit on message
     created = models.DateField(auto_now_add=True, null=True)
 
     def __str__(self):
