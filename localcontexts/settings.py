@@ -45,6 +45,7 @@ ADMINS = [(SITE_ADMIN_NAME, SITE_ADMIN_EMAIL)]
 
 # Application definition
 INSTALLED_APPS = [
+    'maintenance_mode',
     'accounts.apps.AccountsConfig',
     'notifications.apps.NotificationsConfig',
     'bclabels.apps.BclabelsConfig',
@@ -79,6 +80,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'maintenance_mode.middleware.MaintenanceModeMiddleware',
+]
+
+CONTEXT_PROCESSORS = [
+    'maintenance_mode.context_processors.maintenance_mode',
 ]
 
 ROOT_URLCONF = 'localcontexts.urls'
@@ -105,6 +111,8 @@ WSGI_APPLICATION = 'localcontexts.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 if os.getenv('GAE_APPLICATION', None):
+    """Setup Google App Engine-specific options."""
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -114,6 +122,9 @@ if os.getenv('GAE_APPLICATION', None):
             'HOST': '/cloudsql/' + os.environ.get('DB_HOST')
         }
     }
+    GS_BUCKET_NAME = os.environ.get('GCS_BUCKET', 'anth-ja77-local-contexts-8985.appspot.com')
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    MAINTENANCE_MODE_STATE_BACKEND = 'localcontexts.storage_backends.GCSDefaultStorageBackend'
 else:
     DATABASES = {
         'default': {
@@ -125,6 +136,11 @@ else:
             'PORT': os.environ.get('DB_PORT')
         }
     }
+# if True admin site will not be affected by the maintenance-mode page
+MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
+# if True the superuser will not see the maintenance-mode page
+MAINTENANCE_MODE_IGNORE_SUPERUSER = True
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
