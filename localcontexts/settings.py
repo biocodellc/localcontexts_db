@@ -124,7 +124,7 @@ if os.getenv('GAE_APPLICATION', None):
     }
     GS_BUCKET_NAME = os.environ.get('GCS_BUCKET', 'anth-ja77-local-contexts-8985.appspot.com')
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-    MAINTENANCE_MODE_STATE_BACKEND = 'maintenance_mode.backends.DefaultStorageBackend'
+    MAINTENANCE_MODE_STATE_BACKEND = 'localcontexts.storage_backends.GCSDefaultStorageBackend'
 else:
     DATABASES = {
         'default': {
