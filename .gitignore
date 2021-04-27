@@ -6,6 +6,8 @@ env.sh
 env-localprod.sh
 env-local.sh
 
+maintenance_mode_state.txt
+
 .vscode/
 
 staticfiles
