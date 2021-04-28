@@ -119,7 +119,6 @@ def researcher_activity(request, pk):
             data = form.save(commit=False)
             data.project = project
             data.sender = request.user
-            # how to pass community
             data.community = community
             data.save()
             return redirect('researcher-activity', researcher.id)
