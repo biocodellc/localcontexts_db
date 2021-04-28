@@ -58,6 +58,14 @@
 
                                                 {% for status in bcnotice.statuses.all %}
                                                     {% if status.community == community %}
+
+                                                        {% if not status.seen and status.status == None %}
+                                                            <option disabled selected="selected"> ----------------- </option>
+                                                            <option value="seen"> Acknowledge Notice </option>
+                                                            <option value="pending"> Labels Pending </option>
+                                                            <option value="not_pending"> No Labels Pending </option>
+                                                        {% endif %} 
+
                                                         {% if status.seen and status.status == None %}
                                                             <option disabled> ----------------- </option>
                                                             <option value="seen" selected="selected"> Acknowledge Notice </option>
@@ -219,10 +227,39 @@
                                         <span class="weight-500">What would you like to do with this notice? </span>
 
                                         <select id="select-{{ tknotice.unique_id }}" onchange="setTKNoticeUUID(this)">
-                                            <option selected="selected" disabled> ----------------- </option>
-                                            <option value="seen"> Acknowledge Notice </option>
-                                            <option value="pending"> Labels Pending </option>
-                                            <option value="not_pending"> No Labels Pending </option>
+                                            {% for status in tknotice.statuses.all %}
+                                            {% if status.community == community %}
+
+                                                {% if not status.seen and status.status == None %}
+                                                    <option disabled selected="selected"> ----------------- </option>
+                                                    <option value="seen"> Acknowledge Notice </option>
+                                                    <option value="pending"> Labels Pending </option>
+                                                    <option value="not_pending"> No Labels Pending </option>
+                                                {% endif %} 
+
+                                                {% if status.seen and status.status == None %}
+                                                    <option disabled> ----------------- </option>
+                                                    <option value="seen" selected="selected"> Acknowledge Notice </option>
+                                                    <option value="pending"> Labels Pending </option>
+                                                    <option value="not_pending"> No Labels Pending </option>
+                                                {% endif %} 
+
+                                                {% if status.seen and status.status == 'pending' %}
+                                                    <option disabled> ----------------- </option>
+                                                    <option value="seen"> Acknowledge Notice </option>
+                                                    <option value="pending" selected="selected"> Labels Pending </option>
+                                                    <option value="not_pending"> No Labels Pending </option>
+                                                {% endif %}
+
+                                                {% if status.seen and status.status == 'not_pending' %}
+                                                    <option disabled> ----------------- </option>
+                                                    <option value="seen"> Acknowledge Notice </option>
+                                                    <option value="pending"> Labels Pending </option>
+                                                    <option value="not_pending" selected="selected"> No Labels Pending </option>
+                                                {% endif %}
+
+                                            {% endif %}
+                                        {% endfor %}
                                         </select>
 
                                         <input id="tknotice-id-input" type="hidden" value="placeholder" name="tknotice-uuid">
