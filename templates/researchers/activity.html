@@ -73,35 +73,39 @@
 
                         <div class="flex-this column">
                             {% for status in bcnotice.statuses.all %}
-                                <div class="flex-this space-between pad-top-1-5">
 
-                                    <div>
-                                        <span class="darkteal-text weight-500">{{ status.community.community_name }}</span>
-                                    </div>
+                                <div class="flex-this space-between pad-top-1-5">
+                                    <div><span class="darkteal-text weight-500">{{ status.community.community_name }}</span></div>
     
                                     {% if status.seen %}
                                         {% if status.status == 'pending' %}
-                                            <div>
-                                                <span class="notice-date">Status: Label(s) Pending</span>
-                                            </div>
+                                            <div><span class="notice-date">Status: Label(s) Pending</span></div>
                                         {% elif status.status == 'not_pending' %}
-                                            <div>
-                                                <span class="notice-date">Status: No Label(s) Pending</span>
-                                            </div>
+                                            <div><span class="notice-date">Status: No Label(s) Pending</span></div>
                                         {% else %}
-                                            <div>
-                                                <span class="notice-date">Status: Seen</span>
-                                            </div>
+                                            <div><span class="notice-date">Status: Seen</span></div>
                                         {% endif %}
                                     {% else %}
-                                        <div>
-                                            <span class="notice-date">Status: Unseen</span>                                    
-                                        </div>
+                                        <div><span class="notice-date">Status: Unseen</span></div>
                                     {% endif %}
                                 </div>
-                            {% endfor %}
 
-                    </div>
+                                {% if bcnotice.project.project_comment.all %}
+                                    {% for comment in bcnotice.project.project_comment.all %}
+                                        {% if status.community == comment.community %}
+                                            <div class="pad-top-1">
+                                                <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                                <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                                <p>
+                                                    {{ comment.message }}
+                                                </p>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+
+                            {% endfor %}
+                        </div>
 
                     </div>
 
