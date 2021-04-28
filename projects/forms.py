@@ -11,7 +11,7 @@ class CreateProjectForm(forms.ModelForm):
         fields = ['title', 'is_public', 'project_type', 'description', 'url', 'publication_date', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation', 'geome_project_id']
         widgets = {
             'publication_date': DateInput(),
-            'title': forms.Textarea(attrs={'rows': 1, 'cols':65}),
+            'title': forms.TextInput(attrs={'size' :65}),
             'description': forms.Textarea(attrs={'rows': 4, 'cols':65}),
             'is_public': forms.CheckboxInput(attrs={'class':'is-public-checkbox', 'style': 'width:20px;height:20px;'}),
             'project_contact': forms.TextInput(attrs={'size': 65}),
