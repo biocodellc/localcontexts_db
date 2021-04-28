@@ -265,7 +265,7 @@
                                         <input id="tknotice-id-input" type="hidden" value="placeholder" name="tknotice-uuid">
                                         <input id="tkstatus-selection-input" type="hidden" value="placeholder" name="tknotice-status">
 
-                                        <button class="action-btn">Notify</button>
+                                        <button class="action-btn" name="notify-btn">Notify</button>
                                 </form>
 
                                 <p><span class="weight-500">Description:</span> {{ tknotice.project.description }}</p>
@@ -307,6 +307,37 @@
                                 {% endif %}
                             </div>
                         {% endif %}
+
+                        {% if tknotice.project.project_comment.all %}
+                        {% for comment in tknotice.project.project_comment.all %}
+                            {% if community == comment.community %}
+                                <div>
+                                    <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                    <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                    <p>
+                                        {{ comment.message }}
+                                    </p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ tknotice.project.id }}" name="project-id">
+                        <div class="flex-this row">
+                            <div class="w-100">
+                                {{ form.message }}
+                            </div>
+                            <div style="margin-left:-55px; margin-top:7px;">
+                                <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+                            </div>
+                        </div>
+
+                        {% if form.errors %}
+                        {{ form.errors }}
+                        {% endif %}
+                    </form>
                     </div>
 
                 </div>

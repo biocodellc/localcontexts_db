@@ -235,8 +235,7 @@ def community_activity(request, pk):
                         #Send Institution Notififcation
                 return redirect('community-activity', community.id)
 
-            else:
-
+            if tknotice_uuid != None:
                 tknotice_status = request.POST.get('tknotice-status')
 
                 tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
