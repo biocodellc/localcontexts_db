@@ -14,7 +14,7 @@ from projects.models import ProjectContributors, Project
 
 from bclabels.forms import CustomiseBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomiseTKLabelForm, ApproveAndEditTKLabelForm
-from projects.forms import CreateProjectForm
+from projects.forms import CreateProjectForm, ProjectCommentForm
 
 from bclabels.utils import check_bclabel_type
 from tklabels.utils import check_tklabel_type
@@ -204,7 +204,8 @@ def community_activity(request, pk):
         bcnotices = BCNotice.objects.filter(communities=community)
         tknotices = TKNotice.objects.filter(communities=community)
 
-        if request.method == "POST":
+        # Form: Notify project contributor if notice was seen
+        if request.method == "POST" and "notify-btn" in request.POST:
             bcnotice_uuid = request.POST.get('bcnotice-uuid')
             tknotice_uuid = request.POST.get('tknotice-uuid')
 
@@ -255,7 +256,23 @@ def community_activity(request, pk):
                         status.save()
                 return redirect('community-activity', community.id)
 
+        # Form: Add comment to notice
+        elif request.method == "POST" and "add-comment-btn" in request.POST:
+            project_id = request.POST.get('project-id')
+            project = Project.objects.get(id=project_id)
+
+            form = ProjectCommentForm(request.POST or None)
+
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.project = project
+                data.sender = request.user
+                data.community = community
+                data.save()
+                return redirect('community-activity', community.id)
+
         else:
+            form = ProjectCommentForm()
 
             context = {
                 'bcnotices': bcnotices,
@@ -263,6 +280,7 @@ def community_activity(request, pk):
                 'community': community,
                 'member_role': member_role,
                 'total_labels': total_labels,
+                'form': form,
             }
             return render(request, 'communities/activity.html', context)
 

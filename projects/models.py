@@ -71,5 +71,5 @@ class ProjectComment(models.Model):
     class Meta:
         verbose_name = 'Comment'
         verbose_name_plural = 'Comments'
-        ordering = ('-created',)
+        ordering = ('created',)
 

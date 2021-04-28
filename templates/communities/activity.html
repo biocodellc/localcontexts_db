@@ -64,7 +64,7 @@
                                             <input id="notice-id-input" type="hidden" value="placeholder" name="bcnotice-uuid">
                                             <input id="status-selection-input" type="hidden" value="placeholder" name="bcnotice-status">
 
-                                            <button class="action-btn">Notify</button>
+                                            <button class="action-btn" name="notify-btn">Notify</button>
                                     </form>
 
                                     <p><span class="weight-500">Description:</span> {{ bcnotice.project.description }}</p>
@@ -119,6 +119,23 @@
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
+
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ bcnotice.project.id }}" name="project-id">
+                                <div class="flex-this row">
+                                    <div class="w-100">
+                                        {{ form.message }}
+                                    </div>
+                                    <div style="margin-left:-55px; margin-top:7px;">
+                                        <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+                                    </div>
+                                </div>
+
+                                {% if form.errors %}
+                                {{ form.errors }}
+                                {% endif %}
+                            </form>
 
                         </div>
 
