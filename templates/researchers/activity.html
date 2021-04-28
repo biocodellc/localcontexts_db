@@ -90,19 +90,40 @@
                                     {% endif %}
                                 </div>
 
-                                {% if bcnotice.project.project_comment.all %}
-                                    {% for comment in bcnotice.project.project_comment.all %}
-                                        {% if status.community == comment.community %}
-                                            <div class="pad-top-1">
-                                                <span class="weight-500">{{ comment.sender.get_full_name }}</span>
-                                                <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-                                                <p>
-                                                    {{ comment.message }}
-                                                </p>
+                                <form method="POST" action="">
+                                    {% csrf_token %}
+
+                                    {% if bcnotice.project.project_comment.all %}
+                                        {% for comment in bcnotice.project.project_comment.all %}
+                                            {% if status.community == comment.community %}
+                                            <input type="hidden" value="{{ status.community.id }}" name="community-id">
+
+                                                <div class="pad-top-1">
+                                                    <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                                    <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                                    <p>
+                                                        {{ comment.message }}
+                                                    </p>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        <input type="hidden" value="{{ bcnotice.project.id }}" name="project-id">
+
+                                        <div class="flex-this row">
+                                            <div class="w-100">
+                                                {{ form.message }}
                                             </div>
+                                            <div style="margin-left:-55px; margin-top:7px;">
+                                                <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+                                            </div>
+                                        </div>
+                
+                                        {% if form.errors %}
+                                        {{ form.errors }}
                                         {% endif %}
-                                    {% endfor %}
-                                {% endif %}
+                                    {% endif %}
+                                </form>
 
                             {% endfor %}
                         </div>
@@ -210,6 +231,42 @@
                                     </div>
                                 {% endif %}
                             </div>
+
+                            <form method="POST" action="">
+                                {% csrf_token %}
+
+                                {% if tknotice.project.project_comment.all %}
+                                    {% for comment in tknotice.project.project_comment.all %}
+                                        {% if status.community == comment.community %}
+                                        <input type="hidden" value="{{ status.community.id }}" name="community-id">
+
+                                            <div class="pad-top-1">
+                                                <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                                <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                                <p>
+                                                    {{ comment.message }}
+                                                </p>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    <input type="hidden" value="{{ tknotice.project.id }}" name="project-id">
+
+                                    <div class="flex-this row">
+                                        <div class="w-100">
+                                            {{ form.message }}
+                                        </div>
+                                        <div style="margin-left:-55px; margin-top:7px;">
+                                            <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+                                        </div>
+                                    </div>
+            
+                                    {% if form.errors %}
+                                    {{ form.errors }}
+                                    {% endif %}
+                                {% endif %}
+                            </form>
+
                         {% endfor %}
 
                     </div>

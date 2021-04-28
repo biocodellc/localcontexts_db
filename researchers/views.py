@@ -9,7 +9,7 @@ from tklabels.models import TKNotice
 from communities.models import Community
 from notifications.models import CommunityNotification
 from projects.models import ProjectContributors, Project
-from projects.forms import CreateProjectForm, ProjectContributorsForm
+from projects.forms import CreateProjectForm, ProjectContributorsForm, ProjectCommentForm
 
 from .models import Researcher
 from .forms import *
@@ -107,12 +107,32 @@ def researcher_activity(request, pk):
     bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher)
     tknotices = TKNotice.objects.filter(placed_by_researcher=researcher)
 
+    if request.method == 'POST':
+        project_id = request.POST.get('project-id')
+        community_id = request.POST.get('community-id')
+        project = Project.objects.get(id=project_id)
+        community = Community.objects.get(id=community_id)
+
+        form = ProjectCommentForm(request.POST or None)
+
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.project = project
+            data.sender = request.user
+            # how to pass community
+            data.community = community
+            data.save()
+            return redirect('researcher-activity', researcher.id)
+    else:
+        form = ProjectCommentForm()
+
     context = {
         'researcher': researcher,
         'total_notices': total_notices,
         'total_projects': total_projects,
         'bcnotices': bcnotices,
         'tknotices': tknotices,
+        'form': form,
     }
     return render(request, 'researchers/activity.html', context)
 
