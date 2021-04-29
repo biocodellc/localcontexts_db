@@ -349,7 +349,7 @@ def label_exists(request, pk):
     community = Community.objects.get(id=pk)
     total_labels = get_label_count(community)
     member_role = check_member_role(request.user, community)
-    if member_role == False: # If user is not a member / does not have a role.
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         context = {
