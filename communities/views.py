@@ -314,15 +314,27 @@ def select_label(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-            # TODO: Figure out logic for which label is clicked bc or tk?
         if request.method == "POST":
             bclabel_type = request.POST.get('bclabel-type')
             tklabel_type = request.POST.get('tk-label-type')
+            
+            # check if type already exists
 
             if bclabel_type:
-                return redirect('customise-bclabel', community.id, bclabel_type)
+                bctype = check_bclabel_type(bclabel_type)
+                type_exists = BCLabel.objects.filter(community=community, label_type=bctype).exists()
+                if type_exists:
+                    return redirect('label-exists', community.id)
+                else:
+                    return redirect('customise-bclabel', community.id, bclabel_type)
+
             if tklabel_type:
-                return redirect('customise-tklabel', community.id, tklabel_type)
+                tktype = check_tklabel_type(tklabel_type)
+                type_exists = TKLabel.objects.filter(community=community, label_type=tktype).exists()
+                if type_exists:
+                    return redirect('label-exists', community.id)
+                else:
+                    return redirect('customise-tklabel', community.id, tklabel_type)
         
         context = {
             'community': community,
@@ -331,6 +343,21 @@ def select_label(request, pk):
         }
 
         return render(request, 'communities/select-label.html', context)
+
+@login_required(login_url='login')
+def label_exists(request, pk):
+    community = Community.objects.get(id=pk)
+    total_labels = get_label_count(community)
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        context = {
+            'community': community,
+            'member_role': member_role,
+            'total_labels': total_labels,
+        }
+        return render(request, 'communities/label-exists.html', context)
 
 # BC Label customisation process
 @login_required(login_url='login')

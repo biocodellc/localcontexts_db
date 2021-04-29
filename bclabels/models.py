@@ -63,6 +63,14 @@ class BCLabel(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
 
+    @classmethod
+    def label_type_exists(self, community, label_type):
+        bclabels_type_exists = self.objects.filter(community=community, label_type=label_type).exists()
+        if bclabels_type_exists:
+            return True
+        else:
+            return False
+
     def __str__(self):
         return str(self.community) + ' ' + str(self.label_type) + ' ' + str(self.name)
     
