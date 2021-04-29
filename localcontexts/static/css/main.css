@@ -1136,3 +1136,13 @@ input:focus {
     color: #007385;
     font-size: 1.2em;
 }
+
+/* MODAL check label type in comm:labels:select-label */
+.type-modal-box {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 50%;
+    height: 250px;
+}

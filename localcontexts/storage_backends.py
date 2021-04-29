@@ -2,12 +2,6 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from maintenance_mode.backends import AbstractStateBackend
-from storages.backends.s3boto3 import S3Boto3Storage
-
-
-class MediaStorage(S3Boto3Storage):
-    location = 'media'
-    file_overwrite = False
 
 
 class GCSDefaultStorageBackend(AbstractStateBackend):

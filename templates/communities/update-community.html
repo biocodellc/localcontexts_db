@@ -1,4 +1,4 @@
-{% extends 'comm-base.html' %} {% load static %} {% block community_content %}
+{% extends 'comm-base.html' %} {% block title %} | Update {% endblock %}{% load static %} {% block community_content %}
 
     <div class="content-card content-card-space white-bg flex-this column">
         <h3 class="orange-text">Settings</h3>
@@ -25,7 +25,7 @@
                     </div>
     
                     <div>
-                        <form method="POST" action="">
+                        <form method="POST" action="" enctype="multipart/form-data">
                             {% csrf_token %}
 
                                 <div class="w-100 flex-this form-one">
@@ -42,6 +42,25 @@
                                         {{ update_form.country }}
                                     </div>
                                 </div>
+
+                                <div class="flex-this">
+
+                                    <div>
+                                        {% if community.image %}
+                                            <img src="{{ community.image.url }}" width="250" height="300">
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        {{ update_form.image.label }} <br>
+                                        {{ update_form.image }}
+                                        {% if update_form.image.errors %}
+                                            {{update_form.image.errors}}
+                                        {% endif %}
+                                    </div>
+                                    
+                                </div>
+
+                                <br>
 
                                 <div>
                                     <div>
