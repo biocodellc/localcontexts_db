@@ -50,6 +50,10 @@
                             <div class="flex-this space-between">
                                 <div class="w-80">
 
+                                    {% if member_role == 'viewer' %}
+
+                                    {% else %}
+
                                     <form method="POST" action="">
                                         {% csrf_token %}
                                             <span class="weight-500">What would you like to do with this notice? </span>
@@ -98,6 +102,8 @@
                                             <button class="action-btn" name="notify-btn">Notify</button>
                                     </form>
 
+                                    {% endif %}
+
                                     <p><span class="weight-500">Description:</span> {{ bcnotice.project.description }}</p>
                                 </div>
     
@@ -107,9 +113,13 @@
                                             <a href="{{ bcnotice.project.url }}" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
                                         </div>
                                     {% endif %}
+
+                                    {% if member_role == 'viewer' %}
+                                    {% else %}
                                     <div class="notice-btns center-text">
                                         <a href="{% url 'community-add-labels' community.id bcnotice.unique_id %}" class="action-btn">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
 
@@ -150,23 +160,27 @@
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
+                            
+                            {% if member_role == 'viewer' %}
 
-                            <form method="POST" action="">
-                                {% csrf_token %}
-                                <input type="hidden" value="{{ bcnotice.project.id }}" name="project-id">
-                                <div class="flex-this row">
-                                    <div class="w-100">
-                                        {{ form.message }}
+                            {% else %}
+                                <form method="POST" action="">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ bcnotice.project.id }}" name="project-id">
+                                    <div class="flex-this row">
+                                        <div class="w-100">
+                                            {{ form.message }}
+                                        </div>
+                                        <div style="margin-left:-55px; margin-top:7px;">
+                                            <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+                                        </div>
                                     </div>
-                                    <div style="margin-left:-55px; margin-top:7px;">
-                                        <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
-                                    </div>
-                                </div>
 
-                                {% if form.errors %}
-                                {{ form.errors }}
-                                {% endif %}
-                            </form>
+                                    {% if form.errors %}
+                                    {{ form.errors }}
+                                    {% endif %}
+                                </form>
+                            {% endif %}
 
                         </div>
 
@@ -222,6 +236,10 @@
                         <div class="flex-this space-between">
                             <div class="w-80">
 
+                                {% if member_role == 'viewer' %}
+
+                                {% else %}
+
                                 <form method="POST" action="">
                                     {% csrf_token %}
                                         <span class="weight-500">What would you like to do with this notice? </span>
@@ -268,6 +286,8 @@
                                         <button class="action-btn" name="notify-btn">Notify</button>
                                 </form>
 
+                                {% endif %}
+
                                 <p><span class="weight-500">Description:</span> {{ tknotice.project.description }}</p>
                             </div>
     
@@ -277,9 +297,13 @@
                                         <a href="{{ tknotice.project.url }}" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
                                     </div>
                                 {% endif %}
-                                <div class="notice-btns center-text">
-                                    <a href="{% url 'community-add-labels' community.id tknotice.unique_id %}" class="action-btn">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
-                                </div>
+
+                                {% if member_role == 'viewer' %}
+                                {% else %}
+                                    <div class="notice-btns center-text">
+                                        <a href="{% url 'community-add-labels' community.id tknotice.unique_id %}" class="action-btn">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
+                                    </div>
+                                {% endif %}
                             </div>
 
                         </div>
@@ -322,22 +346,27 @@
                         {% endfor %}
                     {% endif %}
 
-                    <form method="POST" action="">
-                        {% csrf_token %}
-                        <input type="hidden" value="{{ tknotice.project.id }}" name="project-id">
-                        <div class="flex-this row">
-                            <div class="w-100">
-                                {{ form.message }}
-                            </div>
-                            <div style="margin-left:-55px; margin-top:7px;">
-                                <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
-                            </div>
-                        </div>
+                    {% if member_role == 'viewer' %}
 
-                        {% if form.errors %}
-                        {{ form.errors }}
-                        {% endif %}
-                    </form>
+                    {% else %}
+
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ tknotice.project.id }}" name="project-id">
+                            <div class="flex-this row">
+                                <div class="w-100">
+                                    {{ form.message }}
+                                </div>
+                                <div style="margin-left:-55px; margin-top:7px;">
+                                    <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+                                </div>
+                            </div>
+
+                            {% if form.errors %}
+                            {{ form.errors }}
+                            {% endif %}
+                        </form>
+                    {% endif %}
                     </div>
 
                 </div>
