@@ -119,8 +119,8 @@ def update_community(request, pk):
     else:
         update_form = UpdateCommunityForm(instance=community)
         if member_role == 'admin': # Only admins can change the form 
-            if request.method == "POST":
-                update_form = UpdateCommunityForm(request.POST, instance=community)
+            if request.method == "POST" and request.FILES:
+                update_form = UpdateCommunityForm(request.POST, request.FILES, instance=community)
                 if update_form.is_valid():
                     update_form.save()
                     messages.add_message(request, messages.SUCCESS, 'Updated!')
