@@ -51,6 +51,11 @@ python manage.py createsuperuser # so you can start using database)
   Email address: *<INSERT SITE_ADMIN_EMAIL> that is specified in the previous step, 'Initialize Environment Variables'*
 ```
 
+## Production Maintenance Mode
+A superuser can enable / disable maintenance mode by going to `/maintenance-mode/on` or `/maintenance-mode/off` which will show the `503.html` template to every user 
+on the site letting users know site is under construction. Superuser will still have access to `/admin` and is the only user that can still make changes to the database at this time. 
+*Maintenance mode should be turned on for production deplyment and turned off when deployment is complete.*
+
 ## Production Deployment and Migration
 Every push to `master` will automatically trigger a new version build. Migrations should be done before pushing to `master`!!
 In order to make migrations or migrate the production database:
@@ -66,7 +71,7 @@ In order to make migrations or migrate the production database:
 Locally, the app will start on port 8000, go to `8000/accounts/login` or `8000/accounts/register` to see the application.
 
 Configuration can be found in the `settings.py` file.
-Database models are located in `apps/accounts/models.py`.
+Database models are located in `/<app name>/models.py`.
 
 # GCP Deployment
 

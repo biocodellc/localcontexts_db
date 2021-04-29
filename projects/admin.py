@@ -8,7 +8,7 @@ class ProjectContributorsAdmin(admin.ModelAdmin):
     list_display = ('project', 'institution', 'community', 'researcher')
 
 class ProjectCommentAdmin(admin.ModelAdmin):
-    list_display = ('project', 'community', 'message', 'created')
+    list_display = ('project', 'sender', 'community', 'message', 'created')
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectContributors, ProjectContributorsAdmin)

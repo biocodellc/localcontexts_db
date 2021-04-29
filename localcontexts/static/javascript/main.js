@@ -766,6 +766,38 @@ function setTKNoticeUUID(elem) {
     statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
 }
 
+// Require Checkbox selection for Notices
+// h/t: https://vyspiansky.github.io/2019/07/13/javascript-at-least-one-checkbox-must-be-selected/
+(function requireCheckbox() {
+    let form = document.querySelector('#createProjectForm')
+    let checkboxes = form.querySelectorAll('input[type=checkbox]')
+    let checkboxLength = checkboxes.length
+    let firstCheckbox = checkboxLength > 0 ? checkboxes[0] : null
+
+    function start() {
+        if (firstCheckbox) {
+            for (let i = 0; i < checkboxLength; i++) {
+                checkboxes[i].addEventListener('change', checkValidity)
+            }
+            checkValidity()
+        }
+    }
+
+    function isChecked() {
+        for (let i = 0; i < checkboxLength; i++) {
+            if (checkboxes[i].checked) return true
+        }
+        return false
+    }
+
+    function checkValidity() {
+        const errorMsg = !isChecked() ? 'At least one Notice must be selected.' : ''
+        firstCheckbox.setCustomValidity(errorMsg)
+    }
+
+    start()
+})()
+
 // TODO: Add ROR functionality
 // Create Institution
 // const endpoint = `http://api.ror.org/organizations`

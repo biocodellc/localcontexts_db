@@ -7,7 +7,7 @@
 {% if bcnotices %}
     {% for bcnotice in bcnotices %}
 
-                <div id="full-notice-card-{{ bcnotice.id }}" class="content-card-v2 white-bg">
+                <div id="full-notice-card-{{ bcnotice.unique_id }}" class="content-card-v2 white-bg">
                     <div class="flex-this space-between">
                         <div>
                             <p class="no-top-margin notice-date">
@@ -16,7 +16,7 @@
                         </div>
                 
                         <div>
-                            <a id="{{ bcnotice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
+                            <a id="{{ bcnotice.unique_id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
                                 Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
                             </a>
                         </div>
@@ -45,7 +45,7 @@
                         </div>
                     </div>
 
-                    <div id="expand-notice-{{ bcnotice.id }}" style="height: 0; overflow:hidden;" class="flex-this column">
+                    <div id="expand-notice-{{ bcnotice.unique_id }}" style="height: 0; overflow:hidden;" class="flex-this column">
                         <div class="flex-this space-between">
                             <div class="w-80">
                                 <p><span class="weight-500">Description:</span> {{ bcnotice.project.description }}</p>
@@ -73,35 +73,60 @@
 
                         <div class="flex-this column">
                             {% for status in bcnotice.statuses.all %}
-                                <div class="flex-this space-between pad-top-1-5">
 
-                                    <div>
-                                        <span class="darkteal-text weight-500">{{ status.community.community_name }}</span>
-                                    </div>
+                                <div class="flex-this space-between pad-top-1-5">
+                                    <div><span class="darkteal-text weight-500">{{ status.community.community_name }}</span></div>
     
                                     {% if status.seen %}
                                         {% if status.status == 'pending' %}
-                                            <div>
-                                                <span class="notice-date">Status: Label(s) Pending</span>
-                                            </div>
+                                            <div><span class="notice-date">Status: Label(s) Pending</span></div>
                                         {% elif status.status == 'not_pending' %}
-                                            <div>
-                                                <span class="notice-date">Status: No Label(s) Pending</span>
-                                            </div>
+                                            <div><span class="notice-date">Status: No Label(s) Pending</span></div>
                                         {% else %}
-                                            <div>
-                                                <span class="notice-date">Status: Seen</span>
-                                            </div>
+                                            <div><span class="notice-date">Status: Seen</span></div>
                                         {% endif %}
                                     {% else %}
-                                        <div>
-                                            <span class="notice-date">Status: Unseen</span>                                    
-                                        </div>
+                                        <div><span class="notice-date">Status: Unseen</span></div>
                                     {% endif %}
                                 </div>
-                            {% endfor %}
 
-                    </div>
+                                <form method="POST" action="">
+                                    {% csrf_token %}
+
+                                    {% if bcnotice.project.project_comment.all %}
+                                        {% for comment in bcnotice.project.project_comment.all %}
+                                            {% if status.community == comment.community %}
+                                            <input type="hidden" value="{{ status.community.id }}" name="community-id">
+
+                                                <div class="pad-top-1">
+                                                    <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                                    <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                                    <p>
+                                                        {{ comment.message }}
+                                                    </p>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        <input type="hidden" value="{{ bcnotice.project.id }}" name="project-id">
+
+                                        <div class="flex-this row">
+                                            <div class="w-100">
+                                                {{ form.message }}
+                                            </div>
+                                            <div style="margin-left:-55px; margin-top:7px;">
+                                                <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+                                            </div>
+                                        </div>
+                
+                                        {% if form.errors %}
+                                        {{ form.errors }}
+                                        {% endif %}
+                                    {% endif %}
+                                </form>
+
+                            {% endfor %}
+                        </div>
 
                     </div>
 
@@ -114,7 +139,7 @@
 {% if tknotices %}
 {% for tknotice in tknotices %}
 
-            <div id="full-notice-card-{{ tknotice.id }}" class="content-card-v2 white-bg">
+            <div id="full-notice-card-{{ tknotice.unique_id }}" class="content-card-v2 white-bg">
                 <div class="flex-this space-between">
                     <div>
                         <p class="no-top-margin notice-date">
@@ -123,7 +148,7 @@
                     </div>
             
                     <div>
-                        <a id="{{ tknotice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
+                        <a id="{{ tknotice.unique_id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
                             Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
                         </a>
                     </div>
@@ -152,7 +177,7 @@
                     </div>
                 </div>
 
-                <div id="expand-notice-{{ tknotice.id }}" style="height: 0; overflow:hidden;" class="flex-this column">
+                <div id="expand-notice-{{ tknotice.unique_id }}" style="height: 0; overflow:hidden;" class="flex-this column">
                     <div class="flex-this space-between">
                         <div class="w-80">
                             <p><span class="weight-500">Description:</span> {{ tknotice.project.description }}</p>
@@ -206,6 +231,42 @@
                                     </div>
                                 {% endif %}
                             </div>
+
+                            <form method="POST" action="">
+                                {% csrf_token %}
+
+                                {% if tknotice.project.project_comment.all %}
+                                    {% for comment in tknotice.project.project_comment.all %}
+                                        {% if status.community == comment.community %}
+                                        <input type="hidden" value="{{ status.community.id }}" name="community-id">
+
+                                            <div class="pad-top-1">
+                                                <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                                <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                                <p>
+                                                    {{ comment.message }}
+                                                </p>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    <input type="hidden" value="{{ tknotice.project.id }}" name="project-id">
+
+                                    <div class="flex-this row">
+                                        <div class="w-100">
+                                            {{ form.message }}
+                                        </div>
+                                        <div style="margin-left:-55px; margin-top:7px;">
+                                            <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+                                        </div>
+                                    </div>
+            
+                                    {% if form.errors %}
+                                    {{ form.errors }}
+                                    {% endif %}
+                                {% endif %}
+                            </form>
+
                         {% endfor %}
 
                     </div>

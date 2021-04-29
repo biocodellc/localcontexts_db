@@ -55,16 +55,47 @@
                                             <span class="weight-500">What would you like to do with this notice? </span>
 
                                             <select id="select-{{ bcnotice.unique_id }}" onchange="setBCNoticeUUID(this)">
-                                                <option selected="selected" disabled> ----------------- </option>
-                                                <option value="seen"> Acknowledge Notice </option>
-                                                <option value="pending"> Labels Pending </option>
-                                                <option value="not_pending"> No Labels Pending </option>
+
+                                                {% for status in bcnotice.statuses.all %}
+                                                    {% if status.community == community %}
+
+                                                        {% if not status.seen and status.status == None %}
+                                                            <option disabled selected="selected"> ----------------- </option>
+                                                            <option value="seen"> Acknowledge Notice </option>
+                                                            <option value="pending"> Labels Pending </option>
+                                                            <option value="not_pending"> No Labels Pending </option>
+                                                        {% endif %} 
+
+                                                        {% if status.seen and status.status == None %}
+                                                            <option disabled> ----------------- </option>
+                                                            <option value="seen" selected="selected"> Acknowledge Notice </option>
+                                                            <option value="pending"> Labels Pending </option>
+                                                            <option value="not_pending"> No Labels Pending </option>
+                                                        {% endif %} 
+
+                                                        {% if status.seen and status.status == 'pending' %}
+                                                            <option disabled> ----------------- </option>
+                                                            <option value="seen"> Acknowledge Notice </option>
+                                                            <option value="pending" selected="selected"> Labels Pending </option>
+                                                            <option value="not_pending"> No Labels Pending </option>
+                                                        {% endif %}
+
+                                                        {% if status.seen and status.status == 'not_pending' %}
+                                                            <option disabled> ----------------- </option>
+                                                            <option value="seen"> Acknowledge Notice </option>
+                                                            <option value="pending"> Labels Pending </option>
+                                                            <option value="not_pending" selected="selected"> No Labels Pending </option>
+                                                        {% endif %}
+
+                                                    {% endif %}
+                                                {% endfor %}
+
                                             </select>
 
                                             <input id="notice-id-input" type="hidden" value="placeholder" name="bcnotice-uuid">
                                             <input id="status-selection-input" type="hidden" value="placeholder" name="bcnotice-status">
 
-                                            <button class="action-btn">Notify</button>
+                                            <button class="action-btn" name="notify-btn">Notify</button>
                                     </form>
 
                                     <p><span class="weight-500">Description:</span> {{ bcnotice.project.description }}</p>
@@ -103,9 +134,39 @@
                                             {{ bcnotice.message }}
                                         </p>
                                     {% endif %}
-
                                 </div>
                             {% endif %}
+
+                            {% if bcnotice.project.project_comment.all %}
+                                {% for comment in bcnotice.project.project_comment.all %}
+                                    {% if community == comment.community %}
+                                        <div>
+                                            <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                            <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                            <p>
+                                                {{ comment.message }}
+                                            </p>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ bcnotice.project.id }}" name="project-id">
+                                <div class="flex-this row">
+                                    <div class="w-100">
+                                        {{ form.message }}
+                                    </div>
+                                    <div style="margin-left:-55px; margin-top:7px;">
+                                        <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+                                    </div>
+                                </div>
+
+                                {% if form.errors %}
+                                {{ form.errors }}
+                                {% endif %}
+                            </form>
 
                         </div>
 
@@ -113,12 +174,6 @@
 
                 {% endif %}
             {% endfor %}
-    {% else %}
-
-        <!-- <div class="content-card content-card-space white-bg">
-            <p>No notices to display at this time</p>
-        </div> -->
-
     {% endif %}
 
     {% if tknotices %}
@@ -172,16 +227,45 @@
                                         <span class="weight-500">What would you like to do with this notice? </span>
 
                                         <select id="select-{{ tknotice.unique_id }}" onchange="setTKNoticeUUID(this)">
-                                            <option selected="selected" disabled> ----------------- </option>
-                                            <option value="seen"> Acknowledge Notice </option>
-                                            <option value="pending"> Labels Pending </option>
-                                            <option value="not_pending"> No Labels Pending </option>
+                                            {% for status in tknotice.statuses.all %}
+                                            {% if status.community == community %}
+
+                                                {% if not status.seen and status.status == None %}
+                                                    <option disabled selected="selected"> ----------------- </option>
+                                                    <option value="seen"> Acknowledge Notice </option>
+                                                    <option value="pending"> Labels Pending </option>
+                                                    <option value="not_pending"> No Labels Pending </option>
+                                                {% endif %} 
+
+                                                {% if status.seen and status.status == None %}
+                                                    <option disabled> ----------------- </option>
+                                                    <option value="seen" selected="selected"> Acknowledge Notice </option>
+                                                    <option value="pending"> Labels Pending </option>
+                                                    <option value="not_pending"> No Labels Pending </option>
+                                                {% endif %} 
+
+                                                {% if status.seen and status.status == 'pending' %}
+                                                    <option disabled> ----------------- </option>
+                                                    <option value="seen"> Acknowledge Notice </option>
+                                                    <option value="pending" selected="selected"> Labels Pending </option>
+                                                    <option value="not_pending"> No Labels Pending </option>
+                                                {% endif %}
+
+                                                {% if status.seen and status.status == 'not_pending' %}
+                                                    <option disabled> ----------------- </option>
+                                                    <option value="seen"> Acknowledge Notice </option>
+                                                    <option value="pending"> Labels Pending </option>
+                                                    <option value="not_pending" selected="selected"> No Labels Pending </option>
+                                                {% endif %}
+
+                                            {% endif %}
+                                        {% endfor %}
                                         </select>
 
                                         <input id="tknotice-id-input" type="hidden" value="placeholder" name="tknotice-uuid">
                                         <input id="tkstatus-selection-input" type="hidden" value="placeholder" name="tknotice-status">
 
-                                        <button class="action-btn">Notify</button>
+                                        <button class="action-btn" name="notify-btn">Notify</button>
                                 </form>
 
                                 <p><span class="weight-500">Description:</span> {{ tknotice.project.description }}</p>
@@ -223,6 +307,37 @@
                                 {% endif %}
                             </div>
                         {% endif %}
+
+                        {% if tknotice.project.project_comment.all %}
+                        {% for comment in tknotice.project.project_comment.all %}
+                            {% if community == comment.community %}
+                                <div>
+                                    <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                    <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                    <p>
+                                        {{ comment.message }}
+                                    </p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ tknotice.project.id }}" name="project-id">
+                        <div class="flex-this row">
+                            <div class="w-100">
+                                {{ form.message }}
+                            </div>
+                            <div style="margin-left:-55px; margin-top:7px;">
+                                <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+                            </div>
+                        </div>
+
+                        {% if form.errors %}
+                        {{ form.errors }}
+                        {% endif %}
+                    </form>
                     </div>
 
                 </div>

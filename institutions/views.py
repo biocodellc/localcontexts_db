@@ -10,7 +10,7 @@ from tklabels.models import TKNotice
 from communities.models import Community
 from notifications.models import CommunityNotification
 
-from projects.forms import CreateProjectForm
+from projects.forms import CreateProjectForm, ProjectCommentForm
 
 from .forms import CreateInstitutionForm, UpdateInstitutionForm
 from .utils import *
@@ -99,12 +99,31 @@ def institution_activity(request, pk):
     total_notices = bcnotices.count() + tknotices.count()
     total_projects = get_projects_count(institution)
 
+    if request.method == 'POST':
+        project_id = request.POST.get('project-id')
+        community_id = request.POST.get('community-id')
+        project = Project.objects.get(id=project_id)
+        community = Community.objects.get(id=community_id)
+
+        form = ProjectCommentForm(request.POST or None)
+
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.project = project
+            data.sender = request.user
+            data.community = community
+            data.save()
+            return redirect('institution-activity', institution.id)
+    else:
+        form = ProjectCommentForm()
+
     context = {
         'institution': institution,
         'bcnotices': bcnotices,
         'tknotices': tknotices,
         'total_notices': total_notices,
         'total_projects': total_projects,
+        'form': form,
     }
     return render(request, 'institutions/activity.html', context)
 
