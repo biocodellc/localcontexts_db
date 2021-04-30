@@ -43,12 +43,4 @@ def checkif_invite_exists(user, community):
     if invite:
         print(" #########   INVITATION ALREADY EXISTS  ######### ")
     else:
-        return False
-
-def get_label_count(community):
-    bclabels = BCLabel.objects.filter(community=community).count()
-    tklabels = TKLabel.objects.filter(community=community).count()
-    total_labels = bclabels + tklabels
-    return total_labels
-
-    
+        return False   

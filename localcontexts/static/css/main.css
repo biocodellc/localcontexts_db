@@ -23,6 +23,8 @@ a {
     text-decoration: none;
 }
 
+
+
 section {
     padding: 20px;
 }
@@ -189,6 +191,14 @@ input:focus {
     margin-top: 1%;
 }
 
+.margin-right-1 {
+    margin-right: 1%;
+}
+
+.margin-left-1 {
+    margin-left: 1%;
+}
+
 .margin-bottom-2 {
     margin-bottom: 2%;
 }
@@ -227,6 +237,10 @@ input:focus {
 
 .pad-left-2 {
     padding-left: 2%;
+}
+
+.pad-right-1{
+    padding-right: 1%;
 }
 
 .padding-bottom-1 {
@@ -856,10 +870,6 @@ input:focus {
 .proj-label-summary h4 {
     padding: 0;
     font-weight: 500;
-}
-
-.margin-left-1 {
-    margin-left: 1%;
 }
 
 /* COMMUNITY DASHBOARD: SETTINGS */

@@ -169,15 +169,20 @@ function showBCLabelInfo() {
     let header = document.getElementById('bclabels-title-vertical')
 
     if (labelContainer.style.height == "0px") {
+        // header.style.margin = "0"
+        // fullCard.style.height = "460px"
+        // fullCard.style.transition = "height 0.5s"
+        // labelContainer.style.height = "460px"
+
         header.style.margin = "0"
-        fullCard.style.height = "460px"
-        fullCard.style.transition = "height 0.5s"
-        labelContainer.style.height = "460px"
+        fullCard.style.height = "auto"
+        labelContainer.style.height = "auto"
+
         span.innerHTML = `Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>`
     } else {
         header.style.margin = "auto 0"
         fullCard.style.height = "113px"
-        fullCard.style.transition = "height 0.5s"
+        // fullCard.style.transition = "height 0.5s"
         labelContainer.style.height = "0px"
         span.innerHTML = `Show More <i class="fa fa-angle-down" aria-hidden="true"></i>`
     }
@@ -205,13 +210,13 @@ function expandBCLabel(img) {
     let labelContainer = document.getElementById('expand-bclabels')
 
     if (info.style.height == "0px") {
-        labelContainer.style.height = "830px"
-        info.style.height = "370px"
-        fullCard.style.height = "850px"
+        labelContainer.style.height = "auto"
+        info.style.height = "auto"
+        fullCard.style.height = "auto"
     } else {
-        labelContainer.style.height = "460px"
+        labelContainer.style.height = "auto"
         info.style.height = "0px"
-        fullCard.style.height = "460px"
+        fullCard.style.height = "auto"
     }
 
     // Set content based on which Label was selected
@@ -269,8 +274,17 @@ function whichBCImgClicked(val) {
 
 // Assign input value based on which bc label image is selected in Community: select-labels
 function whichTKImgClicked(val) {
-    var input = document.getElementById('tk-label-value-type')
-    input.value = val
+    var inputProv = document.getElementById('tk-label-value-type-prov')
+    var inputProt = document.getElementById('tk-label-value-type-prot')
+    var inputPerms = document.getElementById('tk-label-value-type-perms')
+
+    if(val == 'tka' || val == 'tkcl' || val == 'tkf' || val == 'tkmc') {
+        inputProv.value = val
+    } else if (val == 'tks' || val == 'tkwg' || val == 'tkmg' || val == 'tkmr' || val == 'tkwr' || val == 'tkcs' || val == 'tkss') {
+        inputProt.value = val
+    } else if (val == 'tkv' || val == 'tknv' || val == 'tkc' || val == 'tknc' || val == 'tkcv' || val == 'tkco' || val == 'tko') {
+        inputPerms.value = val
+    }
 }
 
 
@@ -465,135 +479,187 @@ function showTKLabelInfo() {
     }
 }
 
+// Select Label - View Info about label 
 function expandTKLabel(img) {
+    // Change Text Color on selected Label
+    let txtDivs = Array.from(document.querySelectorAll('.toggle-txt-color'))
+    txtDivs.forEach(node => {
+        if (node == img.parentElement.nextElementSibling) {
+            node.classList.remove('grey-text')
+            node.classList.add('darkteal-text')
+        } else {
+            node.classList.remove('darkteal-text')
+            node.classList.add('grey-text')
+        }
+    })
+
     let labelContainer = document.getElementById('expand-tklabels')
     let fullCard = document.getElementById('collapsed-tkcard')
-    let info = document.getElementById('tklabel-info')
-    console.log(img.id)
+    let targetImg = img.id
 
-    if (info.style.height == "0px") {
-        labelContainer.style.height = "auto"
-        info.style.height = "auto"
-        fullCard.style.height = "auto"
-    } else {
-        labelContainer.style.height = "auto"
-        info.style.height = "0px"
-        fullCard.style.height = "auto"
+    // Provanance
+    let infoProv = document.getElementById('tklabel-info-prov')
+    let titleProv = document.getElementById('tk-label-title-prov')
+    let templateTextProv = document.getElementById('label-template-text-tk-prov')
+    let whyUseLabelTextProv = document.getElementById('why-use-this-label-tk-prov')
+
+    // Protocols
+    let infoProt = document.getElementById('tklabel-info-prot')
+    let titleProt = document.getElementById('tk-label-title-prot')
+    let templateTextProt = document.getElementById('label-template-text-tk-prot')
+    let whyUseLabelTextProt = document.getElementById('why-use-this-label-tk-prot')
+
+    // Permissions
+    let infoPerms = document.getElementById('tklabel-info-perms')
+    let titlePerms = document.getElementById('tk-label-title-perms')
+    let templateTextPerms = document.getElementById('label-template-text-tk-perms')
+    let whyUseLabelTextPerms = document.getElementById('why-use-this-label-tk-perms')
+
+    console.log(targetImg)
+
+    function openInfoDiv(targetDiv) {
+        if (targetDiv.style.height == "0px") {
+            labelContainer.style.height = "auto"
+            targetDiv.style.height = "auto"
+            fullCard.style.height = "auto"
+        } else {
+            labelContainer.style.height = "auto"
+            targetDiv.style.height = "0px"
+            fullCard.style.height = "auto"
+        }
     }
 
-    let targetImg = img.id
-    let title = document.getElementById('tk-label-title')
-    let templateText = document.getElementById('label-template-text-tk')
-    let whyUseLabelText = document.getElementById('why-use-this-label-tk')
-
     switch (targetImg) {
+        // Provenance Labels
         case 'tka':
+            openInfoDiv(infoProv)
             whichTKImgClicked('tka')
-            title.textContent = tkAttributionName
-            templateText.textContent = tkAttributionText
-            whyUseLabelText.textContent = tkAttributionUse
+            titleProv.textContent = tkAttributionName
+            templateTextProv.textContent = tkAttributionText
+            whyUseLabelTextProv.textContent = tkAttributionUse
             break;
         case 'tkcl':
+            openInfoDiv(infoProv)
             whichTKImgClicked('tkcl')
-            title.textContent = tkClanName
-            templateText.textContent = tkClanText
-            whyUseLabelText.textContent = tkClanUse
+            titleProv.textContent = tkClanName
+            templateTextProv.textContent = tkClanText
+            whyUseLabelTextProv.textContent = tkClanUse
             break;
         case 'tkf':
+            openInfoDiv(infoProv)
             whichTKImgClicked('tkf')
-            title.textContent = tkFamilyName
-            templateText.textContent = tkFamilyText
-            whyUseLabelText.textContent = tkFamilyUse
+            titleProv.textContent = tkFamilyName
+            templateTextProv.textContent = tkFamilyText
+            whyUseLabelTextProv.textContent = tkFamilyUse
             break;
         case 'tkmc':
+            openInfoDiv(infoProv)
             whichTKImgClicked('tkmc')
-            title.textContent = tkMultipleCommunityName
-            templateText.textContent = tkMultipleCommunityText
-            whyUseLabelText.textContent = tkMultipleCommunityUse
+            titleProv.textContent = tkMultipleCommunityName
+            templateTextProv.textContent = tkMultipleCommunityText
+            whyUseLabelTextProv.textContent = tkMultipleCommunityUse
             break;
-        case 'tko':
-            whichTKImgClicked('tko')
-            title.textContent = tkOutreachName
-            templateText.textContent = tkOutreachText
-            whyUseLabelText.textContent = tkOutreachUse
-            break;
-        case 'tknv':
-            whichTKImgClicked('tknv')
-            title.textContent = tkNonVerifiedName
-            templateText.textContent = tkNonVerifiedText
-            whyUseLabelText.textContent = tkNonVerifiedUse
-            break;
-        case 'tkv':
-            whichTKImgClicked('tkv')
-            title.textContent = tkVerifiedName
-            templateText.textContent = tkVerifiedText
-            whyUseLabelText.textContent = tkVerifiedUse
-            break;
-        case 'tknc':
-            whichTKImgClicked('tknc')
-            title.textContent = tkNonCommercialName
-            templateText.textContent = tkNonCommercialText
-            whyUseLabelText.textContent = tkNonCommercialUse
-            break;
-        case 'tkc':
-            whichTKImgClicked('tkc')
-            title.textContent = tkCommercialName
-            templateText.textContent = tkCommercialText
-            whyUseLabelText.textContent = tkCommercialUse
-            break;
-        case 'tkcs':
-            whichTKImgClicked('tkcs')
-            title.textContent = tkCulturallySensitiveName
-            templateText.textContent = tkCulturallySensitiveText
-            whyUseLabelText.textContent = tkCulturallySensitiveUse
-            break;
-        case 'tkcv':
-            whichTKImgClicked('tkcv')
-            title.textContent = tkCommunityVoiceName
-            templateText.textContent = tkCommunityVoiceText
-            whyUseLabelText.textContent = tkCommunityVoiceUse
-            break;
-        case 'tkco':
-            whichTKImgClicked('tkco')
-            title.textContent = tkCommunityUseOnlyName
-            templateText.textContent = tkCommunityUseOnlyText
-            whyUseLabelText.textContent = tkCommunityUseOnlyUse
-            break;
+
+        // Protocols Labels
         case 'tks':
+            openInfoDiv(infoProt)
             whichTKImgClicked('tks')
-            title.textContent = tkSeasonalName
-            templateText.textContent = tkSeasonalText
-            whyUseLabelText.textContent = tkSeasonalUse
+            titleProt.textContent = tkSeasonalName
+            templateTextProt.textContent = tkSeasonalText
+            whyUseLabelTextProt.textContent = tkSeasonalUse
             break;
         case 'tkwg':
-            whichTKImgClicked('tkmg')
-            title.textContent = tkWomenGeneralName
-            templateText.textContent = tkWomenGeneralText
-            whyUseLabelText.textContent = tkWomenGeneralUse
+            openInfoDiv(infoProt)
+            whichTKImgClicked('tkwg')
+            titleProt.textContent = tkWomenGeneralName
+            templateTextProt.textContent = tkWomenGeneralText
+            whyUseLabelTextProt.textContent = tkWomenGeneralUse
             break;
         case 'tkmg':
+            openInfoDiv(infoProt)
             whichTKImgClicked('tkmg')
-            title.textContent = tkMenGeneralName
-            templateText.textContent = tkMenGeneralText
-            whyUseLabelText.textContent = tkMenGeneralUse
+            titleProt.textContent = tkMenGeneralName
+            templateTextProt.textContent = tkMenGeneralText
+            whyUseLabelTextProt.textContent = tkMenGeneralUse
             break;
         case 'tkmr':
+            openInfoDiv(infoProt)
             whichTKImgClicked('tkmr')
-            title.textContent = tkMenRestrictedName
-            templateText.textContent = tkMenRestrictedText
-            whyUseLabelText.textContent = tkMenRestrictedUse
+            titleProt.textContent = tkMenRestrictedName
+            templateTextProt.textContent = tkMenRestrictedText
+            whyUseLabelTextProt.textContent = tkMenRestrictedUse
             break;
         case 'tkwr':
+            openInfoDiv(infoProt)
             whichTKImgClicked('tkwr')
-            title.textContent = tkWomenRestrictedName
-            templateText.textContent = tkWomenRestrictedText
-            whyUseLabelText.textContent = tkWomenRestrictedUse
+            titleProt.textContent = tkWomenRestrictedName
+            templateTextProt.textContent = tkWomenRestrictedText
+            whyUseLabelTextProt.textContent = tkWomenRestrictedUse
+            break;
+        case 'tkcs':
+            openInfoDiv(infoProt)
+            whichTKImgClicked('tkcs')
+            titleProt.textContent = tkCulturallySensitiveName
+            templateTextProt.textContent = tkCulturallySensitiveText
+            whyUseLabelTextProt.textContent = tkCulturallySensitiveUse
             break;
         case 'tkss':
+            openInfoDiv(infoProt)
             whichTKImgClicked('tkss')
-            title.textContent = tkSecretSacredName
-            templateText.textContent = tkSecretSacredText
-            whyUseLabelText.textContent = tkSecretSacredUse
+            titleProt.textContent = tkSecretSacredName
+            templateTextProt.textContent = tkSecretSacredText
+            whyUseLabelTextProt.textContent = tkSecretSacredUse
+            break;
+
+        // Permissions Labels
+        case 'tko':
+            openInfoDiv(infoPerms)
+            whichTKImgClicked('tko')
+            titlePerms.textContent = tkOutreachName
+            templateTextPerms.textContent = tkOutreachText
+            whyUseLabelTextPerms.textContent = tkOutreachUse
+            break;
+        case 'tknv':
+            openInfoDiv(infoPerms)
+            whichTKImgClicked('tknv')
+            titlePerms.textContent = tkNonVerifiedName
+            templateTextPerms.textContent = tkNonVerifiedText
+            whyUseLabelTextPerms.textContent = tkNonVerifiedUse
+            break;
+        case 'tkv':
+            openInfoDiv(infoPerms)
+            whichTKImgClicked('tkv')
+            titlePerms.textContent = tkVerifiedName
+            templateTextPerms.textContent = tkVerifiedText
+            whyUseLabelTextPerms.textContent = tkVerifiedUse
+            break;
+        case 'tknc':
+            openInfoDiv(infoPerms)
+            whichTKImgClicked('tknc')
+            titlePerms.textContent = tkNonCommercialName
+            templateTextPerms.textContent = tkNonCommercialText
+            whyUseLabelTextPerms.textContent = tkNonCommercialUse
+            break;
+        case 'tkc':
+            openInfoDiv(infoPerms)
+            whichTKImgClicked('tkc')
+            titlePerms.textContent = tkCommercialName
+            templateTextPerms.textContent = tkCommercialText
+            whyUseLabelTextPerms.textContent = tkCommercialUse
+            break;
+        case 'tkcv':
+            openInfoDiv(infoPerms)
+            whichTKImgClicked('tkcv')
+            titlePerms.textContent = tkCommunityVoiceName
+            templateTextPerms.textContent = tkCommunityVoiceText
+            whyUseLabelTextPerms.textContent = tkCommunityVoiceUse
+            break;
+        case 'tkco':
+            openInfoDiv(infoPerms)
+            whichTKImgClicked('tkco')
+            titlePerms.textContent = tkCommunityUseOnlyName
+            templateTextPerms.textContent = tkCommunityUseOnlyText
+            whyUseLabelTextPerms.textContent = tkCommunityUseOnlyUse
             break;
     }
 
