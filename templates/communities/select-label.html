@@ -27,38 +27,42 @@
             </p>
         </div>
 
-        <div class="flex-this column">
+        <div class="flex-this column pad-right-1">
 
-            <div class="flex-this wrap w-100" style="align-items: stretch;">
+            <!-- PROVENANCE -->
+            <div class="flex-this w-100">
                 <div class="margin-right-1" style="min-width: 200px">
                     <p><span class="weight-600">Provenance Labels</span><br>
                     Content for Provenance</p>
                 </div>
 
-                <div class="center-text w-15">
-                    <div><img id="tka" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-attribution.png' %}" alt="TK Attribution (TK A) Label"></div>
-                    <div><p class="darkteal-text">TK Attribution <br> (TK A) </p></div>
-                </div>
-        
-                <div class="center-text w-15">
-                    <div><img id="tkcl" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-clan.png' %}" alt="TK Clan (TK CL) Label"></div>
-                    <div><p class="darkteal-text">TK Clan <br> (TK CL)</p></div>
-                </div>
-        
-                <div class="center-text w-15">
-                    <div><img id="tkf" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-family.png' %}" alt="TK Family (TK F) Label"></div>
-                    <div><p class="darkteal-text">TK Family (TK F) </p></div>
-                </div>
-        
-                <div class="center-text w-15">
-                    <div><img id="tkmc" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-multiple-community.png' %}" alt="TK Multiple Communities (TK MC) Label"></div>
-                    <div><p class="darkteal-text">TK Multiple <br>Communities <br> (TK MC)</p></div>
+                <div class="flex-this wrap w-100">
+
+                    <div class="center-text w-15 margin-right-1 margin-left-1">
+                        <div><img id="tka" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-attribution.png' %}" alt="TK Attribution (TK A) Label"></div>
+                        <div><p class="darkteal-text">TK Attribution <br> (TK A) </p></div>
+                    </div>
+            
+                    <div class="center-text w-15 margin-right-1 margin-left-1">
+                        <div><img id="tkcl" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-clan.png' %}" alt="TK Clan (TK CL) Label"></div>
+                        <div><p class="darkteal-text">TK Clan <br> (TK CL)</p></div>
+                    </div>
+            
+                    <div class="center-text w-15 margin-right-1 margin-left-1">
+                        <div><img id="tkf" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-family.png' %}" alt="TK Family (TK F) Label"></div>
+                        <div><p class="darkteal-text">TK Family (TK F) </p></div>
+                    </div>
+            
+                    <div class="center-text w-15 margin-right-1 margin-left-1">
+                        <div><img id="tkmc" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-multiple-community.png' %}" alt="TK Multiple Communities (TK MC) Label"></div>
+                        <div><p class="darkteal-text">TK Multiple <br>Communities <br> (TK MC)</p></div>
+                    </div>
+
                 </div>
             </div>
 
-            <!-- Provenance form div -->
-
-            <div id="tklabel-info-prov" class="flex-this column text-background-blue" style="height:0px; overflow: hidden;">
+            <!-- Provenance FORM -->
+            <div id="tklabel-info-prov" class="flex-this column text-background-blue margin-bottom-2" style="height:0px; overflow: hidden;">
 
                 <form method="POST" action="">
                     {% csrf_token %}
@@ -92,6 +96,7 @@
     
             </div>
 
+            <!-- PROTOCOLS -->
             <div class="flex-this w-100" style="align-items: stretch;">
 
                 <div class="margin-right-1" style="min-width: 200px">
@@ -99,38 +104,38 @@
                     Content for Protocols</p>
                 </div>
 
-                <div class="w-100 flex-this wrap space-between">
-                    <div class="center-text w-15">
+                <div class="w-100 flex-this wrap">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tks" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-seasonal.png' %}" alt="TK Seasonal (TK S) Label"></div>
                         <div><p class="darkteal-text">TK Seasonal <br> (TK S) </p></div>
                     </div>
     
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tkwg" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-women-general.png' %}" alt="TK Weomen General (TK WG) Label"></div>
                         <div><p class="darkteal-text">TK Women General <br> (TK WG) </p></div>
                     </div>
         
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tkmg" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-men-general.png' %}" alt="TK Men General (TK MG) Label"></div>
                         <div><p class="darkteal-text">TK Men General <br> (TK MG) </p></div>
                     </div>
     
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tkmr" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-men-restricted.png' %}" alt="TK Men Restricted (TK MR) Label"></div>
                         <div><p class="darkteal-text">TK Men Restricted <br> (TK MR) </p></div>
                     </div>
         
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tkwr" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-women-restricted.png' %}" alt="TK Women Restricted (TK WR) Label"></div>
                         <div><p class="darkteal-text">TK Women Restricted <br> (TK WR) </p></div>
                     </div>
     
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tkcs" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-culturally-sensitive.png' %}" alt="TK Culturally Sensitive (TK CS) Label"></div>
                         <div><p class="darkteal-text">TK Culturally <br> Sensitive <br> (TK CS) </p></div>
                     </div>
     
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tkss" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-secret-sacred.png' %}" alt="TK Secret Sacred (TK SS) Label"></div>
                         <div><p class="darkteal-text">TK Secret Sacred <br> (TK SS) </p></div>
                     </div>
@@ -138,9 +143,8 @@
 
             </div>
 
-            <!-- Protocols form div -->
-
-            <div id="tklabel-info-prot" class="flex-this column text-background-blue" style="height:0px; overflow: hidden;">
+            <!-- Protocols FORM -->
+            <div id="tklabel-info-prot" class="flex-this column text-background-blue margin-bottom-2" style="height:0px; overflow: hidden;">
 
                 <form method="POST" action="">
                     {% csrf_token %}
@@ -174,46 +178,46 @@
     
             </div>
 
+            <!-- PERMISSIONS -->
             <div class="flex-this w-100">
-
-                <div class="margin-right-1" style="min-width: 200px">
+                <div class="margin-right-1" style="min-width: 200px;">
                     <p><span class="weight-600">Permissions Labels</span><br>
                     Content for Permissions</p>
                 </div>
 
-                <div class="flex-this wrap space-between">
+                <div class="flex-this wrap">
 
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tkv" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-verified.png' %}" alt="TK Verified (TK V) Label"></div>
                         <div><p class="darkteal-text">TK Verified <br> (TK V) </p></div>
                     </div>
     
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tknv" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-non-verified.png' %}" alt="TK Non-Verified (TK NV) Label"></div>
                         <div><p class="darkteal-text">TK Non-Verified <br> (TK NV) </p></div>
                     </div>
     
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tkc" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-commercial.png' %}" alt="TK Commercial (TK C) Label"></div>
                         <div><p class="darkteal-text">TK Commercial <br> (TK C) </p></div>
                     </div>
     
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tknc" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-non-commercial.png' %}" alt="TK Non-Commercial (TK NC) Label"></div>
                         <div><p class="darkteal-text">TK Non-Commercial <br> (TK NC) </p></div>
                     </div>
     
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tkcv" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-community-voice.png' %}" alt="TK Community Voice (TK CV) Label"></div>
                         <div><p class="darkteal-text">TK Community Voice <br> (TK CV) </p></div>
                     </div>
         
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tkco" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-community-use-only.png' %}" alt="TK Community Use Only (TK CO) Label"></div>
                         <div><p class="darkteal-text">TK Community Use <br> Only <br> (TK CO) </p></div>
                     </div>
     
-                    <div class="center-text w-15">
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tko" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-outreach.png' %}" alt="TK Outreach (TK O) Label"></div>
                         <div><p class="darkteal-text"> TK Outreach <br> (TK O)</p></div>
                     </div>
@@ -222,9 +226,8 @@
 
             </div>
 
-            <!-- Permissions form div -->
-
-            <div id="tklabel-info-perms" class="flex-this column text-background-blue" style="height:0px; overflow: hidden;">
+            <!-- Permissions FORM -->
+            <div id="tklabel-info-perms" class="flex-this column text-background-blue margin-bottom-2" style="height:0px; overflow: hidden;">
 
                 <form method="POST" action="">
                     {% csrf_token %}
@@ -259,7 +262,6 @@
             </div>
 
         </div>
-
     </div>
 
 </div>

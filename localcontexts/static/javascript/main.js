@@ -284,7 +284,6 @@ function whichTKImgClicked(val) {
     var inputProv = document.getElementById('tk-label-value-type-prov')
     var inputProt = document.getElementById('tk-label-value-type-prot')
     var inputPerms = document.getElementById('tk-label-value-type-perms')
-    console.log(val)
 
     if(val == 'tka' || val == 'tkcl' || val == 'tkf' || val == 'tkmc') {
         inputProv.value = val
