@@ -169,15 +169,20 @@ function showBCLabelInfo() {
     let header = document.getElementById('bclabels-title-vertical')
 
     if (labelContainer.style.height == "0px") {
+        // header.style.margin = "0"
+        // fullCard.style.height = "460px"
+        // fullCard.style.transition = "height 0.5s"
+        // labelContainer.style.height = "460px"
+
         header.style.margin = "0"
-        fullCard.style.height = "460px"
-        fullCard.style.transition = "height 0.5s"
-        labelContainer.style.height = "460px"
+        fullCard.style.height = "auto"
+        labelContainer.style.height = "auto"
+
         span.innerHTML = `Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>`
     } else {
         header.style.margin = "auto 0"
         fullCard.style.height = "113px"
-        fullCard.style.transition = "height 0.5s"
+        // fullCard.style.transition = "height 0.5s"
         labelContainer.style.height = "0px"
         span.innerHTML = `Show More <i class="fa fa-angle-down" aria-hidden="true"></i>`
     }
@@ -205,13 +210,20 @@ function expandBCLabel(img) {
     let labelContainer = document.getElementById('expand-bclabels')
 
     if (info.style.height == "0px") {
-        labelContainer.style.height = "830px"
-        info.style.height = "370px"
-        fullCard.style.height = "850px"
+        // labelContainer.style.height = "830px"
+        // info.style.height = "370px"
+        // fullCard.style.height = "850px"
+
+        labelContainer.style.height = "auto"
+        info.style.height = "auto"
+        fullCard.style.height = "auto"
     } else {
-        labelContainer.style.height = "460px"
+        // labelContainer.style.height = "460px"
+        // info.style.height = "0px"
+        // fullCard.style.height = "460px"
+        labelContainer.style.height = "auto"
         info.style.height = "0px"
-        fullCard.style.height = "460px"
+        fullCard.style.height = "auto"
     }
 
     // Set content based on which Label was selected
