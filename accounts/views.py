@@ -151,7 +151,7 @@ def registration_reason(request):
             return redirect('connect-institution')
         elif request.POST.get('reason') == 'researcher':
             return redirect('connect-researcher')
-    return render(request, 'accounts/reason.html')
+    return render(request, 'accounts/select-account.html')
 
 @login_required(login_url='login')
 def dashboard(request):
@@ -219,7 +219,7 @@ def create_profile(request):
             user_form.save()
             profile_form.save()
 
-            return redirect('registration-reason')
+            return redirect('select-account')
     else:
         user_form = UserCreateProfileForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
