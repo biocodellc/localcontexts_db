@@ -210,17 +210,10 @@ function expandBCLabel(img) {
     let labelContainer = document.getElementById('expand-bclabels')
 
     if (info.style.height == "0px") {
-        // labelContainer.style.height = "830px"
-        // info.style.height = "370px"
-        // fullCard.style.height = "850px"
-
         labelContainer.style.height = "auto"
         info.style.height = "auto"
         fullCard.style.height = "auto"
     } else {
-        // labelContainer.style.height = "460px"
-        // info.style.height = "0px"
-        // fullCard.style.height = "460px"
         labelContainer.style.height = "auto"
         info.style.height = "0px"
         fullCard.style.height = "auto"
@@ -292,7 +285,6 @@ function whichTKImgClicked(val) {
     } else if (val == 'tkv' || val == 'tknv' || val == 'tkc' || val == 'tknc' || val == 'tkcv' || val == 'tkco' || val == 'tko') {
         inputPerms.value = val
     }
-
 }
 
 
@@ -489,6 +481,18 @@ function showTKLabelInfo() {
 
 // Select Label - View Info about label 
 function expandTKLabel(img) {
+    // Change Text Color on selected Label
+    let txtDivs = Array.from(document.querySelectorAll('.toggle-txt-color'))
+    txtDivs.forEach(node => {
+        if (node == img.parentElement.nextElementSibling) {
+            node.classList.remove('grey-text')
+            node.classList.add('darkteal-text')
+        } else {
+            node.classList.remove('darkteal-text')
+            node.classList.add('grey-text')
+        }
+    })
+
     let labelContainer = document.getElementById('expand-tklabels')
     let fullCard = document.getElementById('collapsed-tkcard')
     let targetImg = img.id
