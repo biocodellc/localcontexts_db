@@ -56,6 +56,42 @@
                 </div>
             </div>
 
+            <!-- Provenance form div -->
+
+            <div id="tklabel-info-prov" class="flex-this column text-background-blue" style="height:0px; overflow: hidden;">
+
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="flex-this">
+    
+                        <input id="tk-label-value-type-prov" type="hidden" value="placeholder" name="tk-label-type">
+                        <div class="w-50">
+                                <h3 class="weight-600 darkteal-text" id="tk-label-title-prov" name="tk-label-title"></h3><br>
+                            </div>
+                            <div class="w-50 right-text">
+                                {% if member_role == 'viewer' %}
+    
+                                {% else %}
+                                    <button class="action-btn">Customise Label <i class="fa fa-long-arrow-right"></i></button>
+                                {% endif %}
+                            </div>
+    
+                    </div>
+                </form>
+    
+                <div class="flex-this column">
+                    <div>
+                        <span class="weight-600 darkteal-text">Why use this label?</span><br>
+                        <p id="why-use-this-label-tk-prov"></p>
+                    </div>
+                    <div>
+                        <span class="weight-600 darkteal-text">Template Text</span><br>
+                        <p id="label-template-text-tk-prov"></p>
+                    </div>
+                </div>
+    
+            </div>
+
             <div class="flex-this w-100" style="align-items: stretch;">
 
                 <div class="margin-right-1" style="min-width: 200px">
@@ -64,7 +100,6 @@
                 </div>
 
                 <div class="w-100 flex-this wrap space-between">
-
                     <div class="center-text w-15">
                         <div><img id="tks" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-seasonal.png' %}" alt="TK Seasonal (TK S) Label"></div>
                         <div><p class="darkteal-text">TK Seasonal <br> (TK S) </p></div>
@@ -99,9 +134,44 @@
                         <div><img id="tkss" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-secret-sacred.png' %}" alt="TK Secret Sacred (TK SS) Label"></div>
                         <div><p class="darkteal-text">TK Secret Sacred <br> (TK SS) </p></div>
                     </div>
-
                 </div>
 
+            </div>
+
+            <!-- Protocols form div -->
+
+            <div id="tklabel-info-prot" class="flex-this column text-background-blue" style="height:0px; overflow: hidden;">
+
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="flex-this">
+    
+                        <input id="tk-label-value-type-prot" type="hidden" value="placeholder" name="tk-label-type">
+                        <div class="w-50">
+                                <h3 class="weight-600 darkteal-text" id="tk-label-title-prot" name="tk-label-title"></h3><br>
+                            </div>
+                            <div class="w-50 right-text">
+                                {% if member_role == 'viewer' %}
+    
+                                {% else %}
+                                    <button class="action-btn">Customise Label <i class="fa fa-long-arrow-right"></i></button>
+                                {% endif %}
+                            </div>
+    
+                    </div>
+                </form>
+    
+                <div class="flex-this column">
+                    <div>
+                        <span class="weight-600 darkteal-text">Why use this label?</span><br>
+                        <p id="why-use-this-label-tk-prot"></p>
+                    </div>
+                    <div>
+                        <span class="weight-600 darkteal-text">Template Text</span><br>
+                        <p id="label-template-text-tk-prot"></p>
+                    </div>
+                </div>
+    
             </div>
 
             <div class="flex-this w-100">
@@ -152,38 +222,40 @@
 
             </div>
 
-        </div>
+            <!-- Permissions form div -->
 
-        <div id="tklabel-info" class="flex-this column text-background-blue" style="height:0px;">
+            <div id="tklabel-info-perms" class="flex-this column text-background-blue" style="height:0px; overflow: hidden;">
 
-            <form method="POST" action="">
-                {% csrf_token %}
-                <div class="flex-this">
-
-                    <input id="tk-label-value-type" type="hidden" value="placeholder" name="tk-label-type">
-                    <div class="w-50">
-                            <h3 class="weight-600 darkteal-text" id="tk-label-title" name="tk-label-title"></h3><br>
-                        </div>
-                        <div class="w-50 right-text">
-                            {% if member_role == 'viewer' %}
-
-                            {% else %}
-                                <button class="action-btn">Customise Label <i class="fa fa-long-arrow-right"></i></button>
-                            {% endif %}
-                        </div>
-
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="flex-this">
+    
+                        <input id="tk-label-value-type-perms" type="hidden" value="placeholder" name="tk-label-type">
+                        <div class="w-50">
+                                <h3 class="weight-600 darkteal-text" id="tk-label-title-perms" name="tk-label-title"></h3><br>
+                            </div>
+                            <div class="w-50 right-text">
+                                {% if member_role == 'viewer' %}
+    
+                                {% else %}
+                                    <button class="action-btn">Customise Label <i class="fa fa-long-arrow-right"></i></button>
+                                {% endif %}
+                            </div>
+    
+                    </div>
+                </form>
+    
+                <div class="flex-this column">
+                    <div>
+                        <span class="weight-600 darkteal-text">Why use this label?</span><br>
+                        <p id="why-use-this-label-tk-perms"></p>
+                    </div>
+                    <div>
+                        <span class="weight-600 darkteal-text">Template Text</span><br>
+                        <p id="label-template-text-tk-perms"></p>
+                    </div>
                 </div>
-            </form>
-
-            <div class="flex-this column">
-                <div>
-                    <span class="weight-600 darkteal-text">Why use this label?</span><br>
-                    <p id="why-use-this-label-tk"></p>
-                </div>
-                <div>
-                    <span class="weight-600 darkteal-text">Template Text</span><br>
-                    <p id="label-template-text-tk"></p>
-                </div>
+    
             </div>
 
         </div>
@@ -290,7 +362,6 @@
                                 <button class="action-btn">Customise Label <i class="fa fa-long-arrow-right"></i></button>
                             {% endif %}
                         </div>
-
                 </div>
             </form>
 
