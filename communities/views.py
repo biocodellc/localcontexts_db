@@ -371,7 +371,7 @@ def customise_bclabel(request, pk, label_type):
                 label_form.is_approved = False
                 label_form.save()
 
-                title = "A BC Label was customized by " + request.user.get_full_name()
+                title = "A BC Label was customised by " + request.user.get_full_name()
                 CommunityNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
                 return redirect('community-labels', community.id)
@@ -407,7 +407,7 @@ def customise_tklabel(request, pk, label_type):
                 label_form.is_approved = False
                 label_form.save()
                 
-                title = "A TK Label was customized by " + request.user.get_full_name()
+                title = "A TK Label was customised by " + request.user.get_full_name()
                 CommunityNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
                 return redirect('community-labels', community.id)
