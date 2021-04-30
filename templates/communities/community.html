@@ -7,14 +7,22 @@
                 {% if notifications %}
                     {% for n in notifications %}
 
-                    <div class="activity-card">
-                        <p class="pad-left-2">
-                            <span class="darkteal-text weight-500">{{ n.notification_type }}</span><br>
-                            {{ n.created }} <br>
-                            {{ n.sender.get_full_name }}<br>
-                            {{ n.title }}
-                        </p>
-                    </div>
+                        {% if n.notification_type == 'Requests' %}
+                            <a href="{% url 'community-activity' community.id %}">
+                        {% endif %}
+                        {% if n.notification_type == 'Labels' %}
+                            <a href="{% url 'community-labels' community.id %}">
+                        {% endif %}
+
+                        <div class="activity-card">
+                            <p class="pad-left-2 black-text">
+                                <span class="darkteal-text weight-500">{{ n.notification_type }}</span><br>
+                                {{ n.created }} <br>
+                                {{ n.sender.get_full_name }}<br>
+                                {{ n.title }}
+                            </p>
+                        </div>
+                    </a>
 
                     {% endfor %}
                 {% else %}
