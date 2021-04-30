@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %} {% load custom_tags %}
 <div class="pad-top-8">
 
     <div class="content-card content-card-space flex-this column white-bg">
@@ -34,8 +34,25 @@
                 <div class="flex-this column w-40">
                     <h2 class="orange-text community-title">{{ community.community_name }} </h2>
                     <p>
-                        Role: <span> {{ member_role }}</span><br>
-                        Members: <span>{{ community.get_member_count }}</span><br>
+                        Role: <span> 
+                            {% if member_role == 'admin' %}
+                                Admin
+                            {% endif %}
+                            {% if member_role == 'editor' %}
+                                Editor
+                            {% endif %}
+                            {% if member_role == 'Viewer' %}
+                                Viewer
+                            {% endif %}
+                        </span><br>
+                        Members: <span>
+                            {% if community.get_member_count < 10 %}
+                                0{{ community.get_member_count }}
+                            {% else %}
+                                {{ community.get_member_count }}
+                            {% endif %}
+                            
+                            </span><br>
                         Location: <span>{{ community.town }}, {{ community.country.name }} </span><br>
                         {% if request.user == community.community_creator and community.is_approved == False %}
                             <small>Your community application is being reviewed and <br> has not been approved yet.</small>
@@ -48,10 +65,11 @@
                 <div class="flex-this white-text w-30">
                     <div class="orange-bg stats-card w-30">
                         <h1>
-                            {% if total_labels < 10 %}
-                                0{{ total_labels }}
+                            {% get_label_count community.id as label_count %}
+                            {% if label_count < 10 %}
+                                0{{ label_count }}
                             {% else %}
-                                {{ total_labels }}
+                                {{ label_count }}
                             {% endif %}
                         </h1>
                         <p>Labels</p>

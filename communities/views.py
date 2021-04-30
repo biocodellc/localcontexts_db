@@ -86,7 +86,6 @@ def community_registry(request):
 @login_required(login_url='login')
 def community_dashboard(request, pk):
     community = Community.objects.get(id=pk)
-    total_labels = get_label_count(community)
 
     n = CommunityNotification.objects.filter(community=community)
     bcnotices = BCNotice.objects.filter(communities=community)
@@ -102,7 +101,7 @@ def community_dashboard(request, pk):
             'member_role': member_role,
             'bcnotices': bcnotices,
             'tknotices': tknotices,
-            'total_labels': total_labels,
+            
         }
         return render(request, 'communities/community.html', context)
 
@@ -110,7 +109,6 @@ def community_dashboard(request, pk):
 @login_required(login_url='login')
 def update_community(request, pk):
     community = Community.objects.get(id=pk)
-    total_labels = get_label_count(community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'editor' or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -131,7 +129,7 @@ def update_community(request, pk):
             'community': community,
             'update_form': update_form,
             'member_role': member_role,
-            'total_labels': total_labels,
+            
         }
         return render(request, 'communities/update-community.html', context)
 
@@ -139,16 +137,14 @@ def update_community(request, pk):
 @login_required(login_url='login')
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
-    total_labels = get_label_count(community)
 
     member_role = check_member_role(request.user, community)
-    return render(request, 'communities/members.html', {'community': community, 'member_role': member_role, 'total_labels': total_labels,})
+    return render(request, 'communities/members.html', {'community': community, 'member_role': member_role, })
 
 # Add member
 @login_required(login_url='login')
 def add_member(request, pk):
     community = Community.objects.get(id=pk)
-    total_labels = get_label_count(community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -187,7 +183,7 @@ def add_member(request, pk):
         'community': community,
         'form': form,
         'member_role': member_role,
-        'total_labels': total_labels,
+        
     }
     return render(request, 'communities/add-member.html', context)
 
@@ -195,7 +191,6 @@ def add_member(request, pk):
 @login_required(login_url='login')
 def community_activity(request, pk):
     community = Community.objects.get(id=pk)
-    total_labels = get_label_count(community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -278,7 +273,7 @@ def community_activity(request, pk):
                 'tknotices': tknotices,
                 'community': community,
                 'member_role': member_role,
-                'total_labels': total_labels,
+                
                 'form': form,
             }
             return render(request, 'communities/activity.html', context)
@@ -289,7 +284,6 @@ def community_labels(request, pk):
     community = Community.objects.get(id=pk)
     bclabels = BCLabel.objects.filter(community=community)
     tklabels = TKLabel.objects.filter(community=community)
-    total_labels = get_label_count(community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -300,7 +294,7 @@ def community_labels(request, pk):
             'member_role': member_role,
             'bclabels': bclabels,
             'tklabels': tklabels,
-            'total_labels': total_labels,
+            
         }
         return render(request, 'communities/labels.html', context)
 
@@ -308,7 +302,6 @@ def community_labels(request, pk):
 @login_required(login_url='login')
 def select_label(request, pk):
     community = Community.objects.get(id=pk)
-    total_labels = get_label_count(community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -339,7 +332,7 @@ def select_label(request, pk):
         context = {
             'community': community,
             'member_role': member_role,
-            'total_labels': total_labels,
+            
         }
 
         return render(request, 'communities/select-label.html', context)
@@ -347,7 +340,6 @@ def select_label(request, pk):
 @login_required(login_url='login')
 def label_exists(request, pk):
     community = Community.objects.get(id=pk)
-    total_labels = get_label_count(community)
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
@@ -355,7 +347,7 @@ def label_exists(request, pk):
         context = {
             'community': community,
             'member_role': member_role,
-            'total_labels': total_labels,
+            
         }
         return render(request, 'communities/label-exists.html', context)
 
@@ -364,7 +356,6 @@ def label_exists(request, pk):
 def customise_bclabel(request, pk, label_type):
     community = Community.objects.get(id=pk)
     bc_type = check_bclabel_type(label_type)
-    total_labels = get_label_count(community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -392,7 +383,7 @@ def customise_bclabel(request, pk, label_type):
             'label_type': label_type,
             'form': form,
             'member_role': member_role,
-            'total_labels': total_labels,
+            
         }
         return render(request, 'communities/customise-bclabel.html', context)
 
@@ -401,7 +392,6 @@ def customise_bclabel(request, pk, label_type):
 def customise_tklabel(request, pk, label_type):
     community = Community.objects.get(id=pk)
     tk_type = check_tklabel_type(label_type)
-    total_labels = get_label_count(community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -430,7 +420,7 @@ def customise_tklabel(request, pk, label_type):
             'form': form,
             'member_role': member_role,
             'form': form,
-            'total_labels': total_labels,
+            
         }
         return render(request, 'communities/customise-tklabel.html', context)
 
@@ -439,7 +429,6 @@ def customise_tklabel(request, pk, label_type):
 def approve_bclabel(request, pk, label_id):
     community = Community.objects.get(id=pk)
     bclabel = BCLabel.objects.get(unique_id=label_id)
-    total_labels = get_label_count(community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -465,7 +454,7 @@ def approve_bclabel(request, pk, label_id):
             'bclabel': bclabel,
             'member_role': member_role,
             'form': form,
-            'total_labels': total_labels,
+            
         }
         return render(request, 'communities/approve-bclabel.html', context)
 
@@ -474,7 +463,6 @@ def approve_bclabel(request, pk, label_id):
 def approve_tklabel(request, pk, label_id):
     community = Community.objects.get(id=pk)
     tklabel = TKLabel.objects.get(unique_id=label_id)
-    total_labels = get_label_count(community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -501,7 +489,7 @@ def approve_tklabel(request, pk, label_id):
             'tklabel': tklabel,
             'member_role': member_role,
             'form': form,
-            'total_labels': total_labels,
+            
         }
         return render(request, 'communities/approve-tklabel.html', context)
 
@@ -509,7 +497,6 @@ def approve_tklabel(request, pk, label_id):
 @login_required(login_url='login')
 def projects(request, pk):
     community = Community.objects.get(id=pk)
-    total_labels = get_label_count(community)
     
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -523,7 +510,7 @@ def projects(request, pk):
             'member_role': member_role,
             'notices': notices,
             'contribs': contribs,
-            'total_labels': total_labels,
+            
         }
         return render(request, 'communities/projects.html', context)
 
@@ -531,7 +518,6 @@ def projects(request, pk):
 @login_required(login_url='login')
 def create_project(request, pk):
     community = Community.objects.get(id=pk)
-    total_labels = get_label_count(community)
 
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
@@ -558,7 +544,7 @@ def create_project(request, pk):
             'form': form,
             'bclabels': bclabels,
             'tklabels': tklabels,
-            'total_labels': total_labels,
+            
         }
 
         return render(request, 'communities/create-project.html', context)
@@ -568,7 +554,6 @@ def create_project(request, pk):
 def apply_project_labels(request, pk, project_id):
     community = Community.objects.get(id=pk)
     project = Project.objects.get(id=project_id)
-    total_labels = get_label_count(community)
 
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
@@ -597,7 +582,7 @@ def apply_project_labels(request, pk, project_id):
             'bclabels': bclabels,
             'tklabels': tklabels,
             'member_role': member_role,
-            'total_labels': total_labels,
+            
         }
         return render(request, 'communities/apply-labels.html', context)
 
@@ -605,7 +590,6 @@ def apply_project_labels(request, pk, project_id):
 @login_required(login_url='login')
 def apply_notice_labels(request, pk, notice_id):
     community = Community.objects.get(id=pk)
-    total_labels = get_label_count(community)
 
     bcnotice_exists = BCNotice.objects.filter(unique_id=notice_id).exists()
     tknotice_exists = TKNotice.objects.filter(unique_id=notice_id).exists()
@@ -646,7 +630,7 @@ def apply_notice_labels(request, pk, notice_id):
                 'bclabels': bclabels,
                 'tklabels': tklabels,
                 'member_role': member_role,
-                'total_labels': total_labels,
+                
             }
             return render(request, 'communities/apply-notice-labels.html', context)
 
@@ -679,7 +663,7 @@ def apply_notice_labels(request, pk, notice_id):
                 'bclabels': bclabels,
                 'tklabels': tklabels,
                 'member_role': member_role,
-                'total_labels': total_labels,
+                
             }
             return render(request, 'communities/apply-notice-labels.html', context)
 
@@ -687,7 +671,6 @@ def apply_notice_labels(request, pk, notice_id):
 @login_required(login_url='login')
 def community_relationships(request, pk):
     community = Community.objects.get(id=pk)
-    total_labels = get_label_count(community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -696,12 +679,11 @@ def community_relationships(request, pk):
         context = {
             'community': community,
             'member_role': member_role,
-            'total_labels': total_labels,
+            
         }
         return render(request, 'communities/relationships.html', context)
 
 def restricted_view(request, pk):
     community = Community.objects.get(id=pk)
-    total_labels = get_label_count(community)
 
-    return render(request, 'communities/restricted.html', {'community': community, 'total_labels': total_labels,})
+    return render(request, 'communities/restricted.html', {'community': community, })
