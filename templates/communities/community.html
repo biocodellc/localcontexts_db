@@ -1,4 +1,4 @@
-{% extends 'comm-base.html' %} {% block title %} | Notifications {% endblock %}{% load static %} {% block community_content %}
+{% extends 'comm-base.html' %} {% block title %} | Notifications {% endblock %}{% load static %} {% load custom_tags %} {% block community_content %}
 
         <div class="flex-this space-between w-100 half-card-container">
 
@@ -31,6 +31,8 @@
 
                         {% else %}
 
+                        <a href="{% anchor 'community-activity' bcnotice.unique_id community.id  %}"> 
+
                             <div class="activity-card flex-this">
 
                                 <div class="pad-left-2 shift-down">
@@ -38,7 +40,7 @@
                                 </div>
 
                                 <div class="pad-left-2">
-                                    <p>
+                                    <p style="color: #000;">
                                         <span class="darkteal-text weight-500">{{ bcnotice.project.title }}</span><br>
                                         {{ bcnotice.project.publication_date }} <br>
                                         {{ bcnotice.project.project_type }}<br>
@@ -47,6 +49,9 @@
                                 </div>
 
                             </div>
+
+                        </a>
+
                         {% endif %}
                     {% endfor %}
                 {% else %}
