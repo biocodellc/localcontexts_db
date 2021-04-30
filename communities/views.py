@@ -101,7 +101,6 @@ def community_dashboard(request, pk):
             'member_role': member_role,
             'bcnotices': bcnotices,
             'tknotices': tknotices,
-            
         }
         return render(request, 'communities/community.html', context)
 
@@ -129,7 +128,6 @@ def update_community(request, pk):
             'community': community,
             'update_form': update_form,
             'member_role': member_role,
-            
         }
         return render(request, 'communities/update-community.html', context)
 
@@ -183,7 +181,6 @@ def add_member(request, pk):
         'community': community,
         'form': form,
         'member_role': member_role,
-        
     }
     return render(request, 'communities/add-member.html', context)
 
@@ -273,7 +270,6 @@ def community_activity(request, pk):
                 'tknotices': tknotices,
                 'community': community,
                 'member_role': member_role,
-                
                 'form': form,
             }
             return render(request, 'communities/activity.html', context)
@@ -294,7 +290,6 @@ def community_labels(request, pk):
             'member_role': member_role,
             'bclabels': bclabels,
             'tklabels': tklabels,
-            
         }
         return render(request, 'communities/labels.html', context)
 
@@ -332,7 +327,6 @@ def select_label(request, pk):
         context = {
             'community': community,
             'member_role': member_role,
-            
         }
 
         return render(request, 'communities/select-label.html', context)
@@ -347,7 +341,6 @@ def label_exists(request, pk):
         context = {
             'community': community,
             'member_role': member_role,
-            
         }
         return render(request, 'communities/label-exists.html', context)
 
@@ -383,7 +376,6 @@ def customise_bclabel(request, pk, label_type):
             'label_type': label_type,
             'form': form,
             'member_role': member_role,
-            
         }
         return render(request, 'communities/customise-bclabel.html', context)
 
@@ -420,7 +412,6 @@ def customise_tklabel(request, pk, label_type):
             'form': form,
             'member_role': member_role,
             'form': form,
-            
         }
         return render(request, 'communities/customise-tklabel.html', context)
 
@@ -454,7 +445,6 @@ def approve_bclabel(request, pk, label_id):
             'bclabel': bclabel,
             'member_role': member_role,
             'form': form,
-            
         }
         return render(request, 'communities/approve-bclabel.html', context)
 
@@ -489,7 +479,6 @@ def approve_tklabel(request, pk, label_id):
             'tklabel': tklabel,
             'member_role': member_role,
             'form': form,
-            
         }
         return render(request, 'communities/approve-tklabel.html', context)
 
@@ -510,7 +499,6 @@ def projects(request, pk):
             'member_role': member_role,
             'notices': notices,
             'contribs': contribs,
-            
         }
         return render(request, 'communities/projects.html', context)
 
@@ -544,7 +532,6 @@ def create_project(request, pk):
             'form': form,
             'bclabels': bclabels,
             'tklabels': tklabels,
-            
         }
 
         return render(request, 'communities/create-project.html', context)
@@ -581,8 +568,7 @@ def apply_project_labels(request, pk, project_id):
             'project': project,
             'bclabels': bclabels,
             'tklabels': tklabels,
-            'member_role': member_role,
-            
+            'member_role': member_role, 
         }
         return render(request, 'communities/apply-labels.html', context)
 
@@ -629,8 +615,7 @@ def apply_notice_labels(request, pk, notice_id):
                 'bcnotice': bcnotice,
                 'bclabels': bclabels,
                 'tklabels': tklabels,
-                'member_role': member_role,
-                
+                'member_role': member_role,  
             }
             return render(request, 'communities/apply-notice-labels.html', context)
 
@@ -663,7 +648,6 @@ def apply_notice_labels(request, pk, notice_id):
                 'bclabels': bclabels,
                 'tklabels': tklabels,
                 'member_role': member_role,
-                
             }
             return render(request, 'communities/apply-notice-labels.html', context)
 
@@ -678,8 +662,7 @@ def community_relationships(request, pk):
     else:
         context = {
             'community': community,
-            'member_role': member_role,
-            
+            'member_role': member_role, 
         }
         return render(request, 'communities/relationships.html', context)
 
