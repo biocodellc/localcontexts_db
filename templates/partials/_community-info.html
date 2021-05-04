@@ -30,7 +30,24 @@
                                 {% for n in notifications %}
 
                                     <div class="border-bottom-solid-teal">
-                                        <a href="#">
+                                        <!-- TODO: add custom anchor tag with referenceid -->
+                                        {% if n.notification_type == 'Labels' %}
+                                            <a href="{% url 'community-labels' community.id %}">
+                                        {% endif %}
+                                        {% if n.notification_type == 'Activity' %}
+                                            {% if n.reference_id %}
+                                                <a href="{% anchor 'community-activity' n.reference_id community.id %}">
+                                            {% else %}
+                                                <a href="{% url 'community-activity' community.id %}">
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if n.notification_type == 'Projects' %}
+                                            <a href="{% url 'community-projects' community.id %}">
+                                        {% endif %}
+                                        {% if n.notification_type == 'Connections' %}
+                                            <a href="#">
+                                        {% endif %}
+                                        
                                             <div class="flex-this space-between margin-top-1">
                                                 <div><span class="notification-type-tag orange-bg white-text font-size-12">
                                                     {% if n.notification_type == 'Notices' %}
