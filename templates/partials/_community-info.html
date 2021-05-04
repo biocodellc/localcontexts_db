@@ -16,12 +16,48 @@
                     </a> 
                     >> {{ community.community_name }}
                 </div>
+
+                <div class="flex-this w-20 space-between">
+                    <div class="dropdown">
+                        <a onclick="toggleNotifications()" class="darkteal-text pointer dropbtn"> Notifications <i class="fa fa-bell" aria-hidden="true"></i></a>
+                        <div id="notification-v2" class="notification-dropdown-content">
+                            <div class="border-bottom-solid-teal center-text">
+                                <span class="orange-text weight-500">{{community.community_name}} Notifications</span>
+                            </div>
+
+                            <div class="border-bottom-solid-teal">
+                                <a href="#">
+                                    <div class="flex-this space-between margin-top-1">
+                                        <div><span class="notification-type-tag orange-bg white-text font-size-12">Labels</span></div>
+                                        <div><span class="font-size-12 grey-text">Date</span></div>
+                                    </div>
     
-                {% if request.user == community.community_creator %}
-                    <div>
-                        <a href="{% url 'update-community' community.id %}" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
+                                    <div><p class="darkteal-text font-size-14"> This is the body of the notification.</p></div>    
+                                </a>
+                            </div>
+
+                            <div class="border-bottom-solid-teal">
+                                <a href="#">
+                                    <div class="flex-this space-between margin-top-1">
+                                        <div><span class="notification-type-tag grey white-text font-size-12">Activity</span></div>
+                                        <div><span class="font-size-12 grey-text">Date</span></div>
+                                    </div>
+
+                                    <div><p class="darkteal-text font-size-14"> This is the body of the notification.</p></div>
+                                </a>
+                            </div>
+
+                        </div>
                     </div>
-                {% endif %}
+
+                    {% if request.user == community.community_creator %}
+
+                        <div>
+                            <a href="{% url 'update-community' community.id %}" class="darkteal-text"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
+                        </div>
+
+                    {% endif %}
+                </div>
                 
             </div>
     
