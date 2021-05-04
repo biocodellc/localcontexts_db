@@ -1,4 +1,5 @@
-{% load static %}
+{% load static %}{% load custom_institution_tags %}
+{% institution_notifications institution as notifications %}
 <div class="pad-top-8">
 
     <div class="content-card content-card-space flex-this column white-bg">
@@ -21,16 +22,54 @@
                                 <span class="orange-text weight-500">Institution Notifications</span>
                             </div>
 
-                            <div class="border-bottom-solid-teal">
-                                <a href="#">
-                                    <div class="flex-this space-between margin-top-1">
-                                        <div><span class="notification-type-tag orange-bg white-text font-size-12">Labels</span></div>
-                                        <div><span class="font-size-12 grey-text">Date</span></div>
+                            {% if notifications %}
+                                {% for n in notifications %}
+
+                                    <div class="border-bottom-solid-teal">
+                                        {% if n.notification_type == 'Labels' %}
+                                            <a href="{% url 'institution-labels' institution.id %}">
+                                        {% endif %}
+                                        {% if n.notification_type == 'Activity' %}
+                                            {% if n.reference_id %}
+                                                <a href="{% anchor 'institution-activity' n.reference_id institution.id %}">
+                                            {% else %}
+                                                <a href="{% url 'institution-activity' institution.id %}">
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if n.notification_type == 'Projects' %}
+                                            <a href="{% url 'institution-projects' institution.id %}">
+                                        {% endif %}
+                                        {% if n.notification_type == 'Connections' %}
+                                            <a href="#">
+                                        {% endif %}
+                                            <div class="flex-this space-between margin-top-1">
+                                                <div><span class="notification-type-tag orange-bg white-text font-size-12">
+                                                    {% if n.notification_type == 'Notices' %}
+                                                        Notices
+                                                    {% endif %}
+                                                    {% if n.notification_type == 'Labels' %}
+                                                        Labels
+                                                    {% endif %}
+                                                    {% if n.notification_type == 'Activity' %}
+                                                        Activity
+                                                    {% endif %}
+                                                    {% if n.notification_type == 'Projects' %}
+                                                        Projects
+                                                    {% endif %}
+                                                    {% if n.notification_type == 'Connections' %}
+                                                        Connections
+                                                    {% endif %}
+                                                </span></div>
+                                                <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
+                                            </div>
+            
+                                            <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
+                                        </a>
                                     </div>
-    
-                                    <div><p class="darkteal-text font-size-14"> This is the body of the notification.</p></div>    
-                                </a>
-                            </div>
+
+                                {% endfor %}
+                            {% endif %}
+
 
                             <div class="border-bottom-solid-teal">
                                 <a href="#">

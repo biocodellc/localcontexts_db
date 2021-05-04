@@ -50,7 +50,7 @@ class CommunityNotification(models.Model):
     notification_type = models.CharField(max_length=20, choices=TYPES, null=True)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="community_noti_sender", blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True)
-    reference_id = models.CharField(max_length=250, null=True, blank=True)
+    reference_id = models.CharField(max_length=50, null=True, blank=True)
     viewed = models.BooleanField(default=False)
     created = models.DateField(auto_now_add=True, null=True)
 
@@ -64,16 +64,17 @@ class CommunityNotification(models.Model):
 
 class InstitutionNotification(models.Model):
     TYPES = (
-        ('Requests', 'requests'),
+        ('Activity', 'activity'),
         ('Labels', 'labels'),
-        ('Connections', 'Connections'),
+        ('Connections', 'connections'),
+        ('Projects', 'projects')
     )
 
     title = models.CharField(max_length=200)
     notification_type = models.CharField(max_length=20, choices=TYPES, null=True)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="institution_noti_sender", blank=True)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True)
-    reference_id = models.CharField(max_length=10, null=True, blank=True)
+    reference_id = models.CharField(max_length=50, null=True, blank=True)
     viewed = models.BooleanField(default=False)
     created = models.DateField(auto_now_add=True, null=True)
 
