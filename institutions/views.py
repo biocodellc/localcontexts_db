@@ -197,12 +197,7 @@ def notify_communities(request, pk, proj_id):
         message = request.POST.get('notice_message')
 
         for community_id in communities_selected:
-            title = str(institution.institution_name) + " has placed a Notice"
-
             community = Community.objects.get(id=community_id)
-
-            # Create notification
-            CommunityNotification.objects.create(community=community, notification_type='Activity', sender=request.user, title=title)
             
             # add community to bcnotice instance
             if bcnotice_exists:
@@ -213,6 +208,11 @@ def notify_communities(request, pk, proj_id):
                     bcnotice.statuses.add(notice_status)
                     bcnotice.message = message
                     bcnotice.save()
+
+                    # Create notification
+                    reference_id = str(bcnotice.unique_id)
+                    title =  "A BC Notice has been placed by " + str(institution.institution_name) + '.'
+                    CommunityNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
             
             # add community to tknotice instance
             if tknotice_exists:
@@ -223,6 +223,12 @@ def notify_communities(request, pk, proj_id):
                     tknotice.statuses.add(notice_status)
                     tknotice.message = message
                     tknotice.save()
+
+                    # Create notification
+                    reference_id = str(tknotice.unique_id)
+                    title =  "A TK Notice has been placed by " + str(institution.institution_name) + '.'
+                    CommunityNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
+
         
         return redirect('institution-projects', institution.id)
 
