@@ -82,28 +82,6 @@ def community_registry(request):
     }
     return render(request, 'communities/community-registry.html', context)
 
-# Dashboard / Activity
-# @login_required(login_url='login')
-# def community_dashboard(request, pk):
-#     community = Community.objects.get(id=pk)
-
-#     n = CommunityNotification.objects.filter(community=community)
-#     bcnotices = BCNotice.objects.filter(communities=community)
-#     tknotices = TKNotice.objects.filter(communities=community)
-
-#     member_role = check_member_role(request.user, community)
-#     if member_role == False: # If user is not a member / does not have a role.
-#         return render(request, 'communities/restricted.html', {'community': community})
-#     else:
-#         context = {
-#             'community': community,
-#             'notifications': n,
-#             'member_role': member_role,
-#             'bcnotices': bcnotices,
-#             'tknotices': tknotices,
-#         }
-#         return render(request, 'communities/community.html', context)
-
 # Update Community / Settings
 @login_required(login_url='login')
 def update_community(request, pk):
