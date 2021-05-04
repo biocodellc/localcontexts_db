@@ -864,6 +864,22 @@ function setTKNoticeUUID(elem) {
     start()
 })()
 
+function toggleNotifications() {
+    document.getElementById('notification-v2').classList.toggle('show')
+
+    window.onclick = function(event) {
+        if(!event.target.matches('.dropbtn')) {
+            let dropdowns = document.getElementsByClassName("notification-dropdown-content")
+            for (let i=0; i < dropdowns.length; i++) {
+                let openDropdown = dropdowns[i]
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show')
+                }
+            }
+        }
+    }
+}
+
 // TODO: Add ROR functionality
 // Create Institution
 // const endpoint = `http://api.ror.org/organizations`
