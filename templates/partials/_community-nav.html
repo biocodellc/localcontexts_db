@@ -1,10 +1,6 @@
 <div class="content-card comm-nav flex-this column white-bg">
     <div class="comm-nav-links flex-this">
 
-        <a href="{% url 'community-dashboard' community.id %}">
-            <div class="{% if 'dashboard' in request.path %} active-nav {% endif %}">Notifications</div>
-        </a>
-
         <a href="{% url 'community-activity' community.id %}">
             <div class="{% if 'activity' in request.path %} active-nav {% endif %}">Activity</div>
         </a>

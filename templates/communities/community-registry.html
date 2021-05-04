@@ -34,7 +34,7 @@
                                         {% csrf_token %}
                                         <tr>
                                             <td class="td-img"><img src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image"></td>
-                                            <td class="td-name"><a href="{% url 'community-dashboard' community.id %}" class="black-text">{{community.community_name}}</a></td>
+                                            <td class="td-name"><a href="{% url 'community-activity' community.id %}" class="black-text">{{community.community_name}}</a></td>
                                             <input type="hidden" value="{{ community.id }}" name="commid">
                                             <td class="td-btn">
                                                 {% if community in user_communities %}
