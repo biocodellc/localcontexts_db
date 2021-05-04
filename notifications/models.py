@@ -40,9 +40,11 @@ class UserNotification(models.Model):
 
 class CommunityNotification(models.Model):
     TYPES = (
-        ('Requests', 'requests'),
         ('Labels', 'labels'),
-        ('Relationships', 'relationships'),
+        ('Connections', 'Connections'),
+        ('Notices', 'notices'),
+        ('Activity', 'activity'),
+        ('Projects', 'projects')
     )
 
     title = models.CharField(max_length=200)
