@@ -1,5 +1,7 @@
 {% load static %}{% load custom_institution_tags %}
 {% institution_notifications institution as notifications %}
+{% get_notices_count institution as total_notices %}
+{% get_projects_count institution as total_projects %}
 <div class="pad-top-8">
 
     <div class="content-card content-card-space flex-this column white-bg">
@@ -70,7 +72,7 @@
                                 {% endfor %}
                             {% endif %}
 
-
+                            <!-- GREY LABEL -->
                             <!-- <div class="border-bottom-solid-teal">
                                 <a href="#">
                                     <div class="flex-this space-between margin-top-1">
