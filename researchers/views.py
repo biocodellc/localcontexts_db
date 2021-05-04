@@ -38,21 +38,7 @@ def connect_researcher(request):
 
         return render(request, 'researchers/connect-researcher.html', {'form': form})
     else:
-        return redirect('researcher-dashboard', researcher.id)
-
-@login_required(login_url='login')
-def researcher_dashboard(request, pk):
-    # TODO: is current user a researcher?
-    researcher = Researcher.objects.get(id=pk)
-    total_notices = get_notices_count(researcher)
-    total_projects = get_projects_count(researcher)
-    context = {
-        'researcher': researcher,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
-    }
-
-    return render(request, 'researchers/dashboard.html', context)
+        return redirect('researcher-activity', researcher.id)
 
 @login_required(login_url='login')
 def update_researcher(request, pk):
