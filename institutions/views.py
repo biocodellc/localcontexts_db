@@ -39,19 +39,6 @@ def institution_registry(request):
     institutions = Institution.objects.all()
     return render(request, 'institutions/institution-registry.html', {'institutions': institutions})
 
-# Dashboard
-@login_required(login_url='login')
-def institution_dashboard(request, pk):
-    institution = Institution.objects.get(id=pk)
-    total_notices = get_notices_count(institution)
-    total_projects = get_projects_count(institution)
-    context = {
-        'institution': institution, 
-        'total_notices': total_notices,
-        'total_projects': total_projects, 
-    }
-    return render(request, 'institutions/dashboard.html', context)
-
 # Update institution
 @login_required(login_url='login')
 def update_institution(request, pk):
