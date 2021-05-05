@@ -25,7 +25,7 @@
                     </div>
     
                     <div>
-                        <form method="POST" action="" enctype="multipart/form-data">
+                        <form method="POST" action="{% url 'update-community' community.id %}" enctype="multipart/form-data">
                             {% csrf_token %}
 
                                 <div class="w-100 flex-this form-one">
@@ -62,6 +62,17 @@
                                             <label for="is_publicly_listed"> Make Public </label><br>
                                             {{ update_form.is_publicly_listed }}
                                         </div>
+                                    </div>
+
+                                    <div class="flex-this">
+                                        <div>
+                                            {{ update_form.image.label }} <br>
+                                            {{ update_form.image }}
+                                            {% if update_form.image.errors %}
+                                                {{update_form.image.errors}}
+                                            {% endif %}
+                                        </div>
+                                        
                                     </div>
                                 </div>
 
