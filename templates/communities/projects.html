@@ -78,9 +78,9 @@
 
                     <div class="flex-this column">
                         {% if contrib.project.bclabels %}
-                            <div><p class="weight-500">No Labels attached to this project</p></div>
-                        {% else %}
                             <div><p class="weight-500">Labels attached to this project</p></div>
+                        {% else %}
+                            <div><p class="weight-500">No Labels attached to this project</p></div>
                         {% endif %}
                             {% for bclabel in contrib.project.bclabels.all %}
 
