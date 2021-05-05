@@ -44,7 +44,11 @@
                     <a href="{% url 'community-activity' community.id %}">
                         <div class="member-card flex-this column white-bg">
                             <div class="member-card-img">
-                                <img src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image">
+                                {% if community.image %}
+                                    <img src="{{ community.image.url }}" alt="{{ community.community_name }} image">
+                                {% else %}
+                                    <img src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image">
+                                {% endif %}
                             </div>
                             <div class="member-card-text flex-this column">
                                 <h3 class="darkteal-text">{{ community }}</h3>
@@ -62,7 +66,11 @@
                 <a href="{% url 'institution-activity' institution.id %}">
                     <div class="member-card flex-this column white-bg">
                         <div class="member-card-img">
-                            <img src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">
+                            {% if institution.image %}
+                                <img src="{{ institution.image.url }}" alt="{{ institution.institution_name }} image">
+                            {% else %}
+                                <img src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">
+                            {% endif %}
                         </div>
                         <div class="member-card-text flex-this column">
                             <h3 class="darkteal-text">{{ institution }}</h3>
@@ -79,7 +87,11 @@
                     <a href="{% url 'researcher-activity' researcher.id %}">
                         <div class="member-card flex-this column white-bg">
                             <div class="member-card-img">
-                                <img src="{% static 'images/placeholders/researcher-place.jpg' %}" alt="researcher image">
+                                {% if researcher.image %}
+                                    <img src="{{ researcher.image.url }}" alt="researcher image">
+                                {% else %}
+                                    <img src="{% static 'images/placeholders/researcher-place.jpg' %}" alt="researcher image">
+                                {% endif %}
                             </div>
                             <div class="member-card-text flex-this column">
                                 <h3 class="darkteal-text">{{ user.get_full_name }}</h3>

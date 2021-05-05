@@ -574,6 +574,7 @@ input:focus {
 .td-img img {
     width: 200px;
     height: 75px;
+    object-fit: cover;
 }
 
 .td-name {
