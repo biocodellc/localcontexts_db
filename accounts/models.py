@@ -39,7 +39,7 @@ class UserAffiliation(models.Model):
 class SignUpInvitation(models.Model):
     email = models.EmailField(null=True)
     message = models.TextField(max_length=120, null=True, blank=True)
-    sender = models.ForeignKey(User, default=None, null=True, on_delete=models.DO_NOTHING)
+    sender = models.ForeignKey(User, default=None, null=True, on_delete=models.CASCADE)
     date_sent = models.DateTimeField(auto_now=True)
 
     def __str__(self):
