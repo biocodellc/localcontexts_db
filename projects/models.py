@@ -47,9 +47,9 @@ class Project(models.Model):
 
 class ProjectContributors(models.Model):
     project = models.OneToOneField(Project, null=True, on_delete=models.CASCADE)
-    institution = models.ForeignKey(Institution, null=True, blank=True, on_delete=models.DO_NOTHING)
-    community = models.ForeignKey(Community, null=True, blank=True, on_delete=models.DO_NOTHING)
-    researcher = models.ForeignKey(Researcher, null=True, blank=True, on_delete=models.DO_NOTHING)
+    institution = models.ForeignKey(Institution, null=True, blank=True, on_delete=models.SET_NULL)
+    community = models.ForeignKey(Community, null=True, blank=True, on_delete=models.SET_NULL)
+    researcher = models.ForeignKey(Researcher, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return str(self.project) + ' ' + str(self.community) + ' ' + str(self.researcher)
