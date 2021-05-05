@@ -33,7 +33,7 @@ def create_institution(request):
         form = CreateInstitutionForm()
         return render(request, 'institutions/create-institution.html', {'form': form})
 
-@login_required(login_url='login')
+# Registry
 def institution_registry(request):
     institutions = Institution.objects.all()
     return render(request, 'institutions/institution-registry.html', {'institutions': institutions})

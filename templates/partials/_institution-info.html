@@ -98,7 +98,11 @@
             <div class="flex-this stats-info-container">
     
                 <div class="w-30 stats-img-container">
-                    <img src="{% static 'images/placeholders/institution-place.jpg' %}" alt="institution image">
+                    {% if institution.image %}
+                        <img src="{{ institution.image.url }}" alt="{{ institution.institution_name }} image">
+                    {% else %}
+                        <img src="{% static 'images/placeholders/institution-place.jpg' %}" alt="institution image">
+                    {% endif %}
                 </div>
     
                 <div class="flex-this column w-40">

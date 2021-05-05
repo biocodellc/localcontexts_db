@@ -574,6 +574,7 @@ input:focus {
 .td-img img {
     width: 200px;
     height: 75px;
+    object-fit: cover;
 }
 
 .td-name {
@@ -629,6 +630,7 @@ input:focus {
     border-radius: 5px;
     width: 320px;
     height: 160px;
+    object-fit: cover;
 }
 
 /* Orange cards on community profiles */

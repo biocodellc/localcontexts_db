@@ -33,7 +33,13 @@
                                 <form method="POST" action="">
                                         {% csrf_token %}
                                         <tr>
-                                            <td class="td-img"><img src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image"></td>
+                                            <td class="td-img">
+                                                {% if community.image %}
+                                                    <img src="{{ community.image.url }}" alt="{{ community.community_name }} image">
+                                                {% else %}
+                                                    <img src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image">
+                                                {% endif %}
+                                            </td>
                                             <td class="td-name"><a href="{% url 'community-activity' community.id %}" class="black-text">{{community.community_name}}</a></td>
                                             <input type="hidden" value="{{ community.id }}" name="commid">
                                             <td class="td-btn">
@@ -48,7 +54,13 @@
 
                                 {% else %}
                                     <tr>
-                                        <td class="td-img"><img src="{% static 'images/placeholders/community-place.jpg' %}"></td>
+                                        <td class="td-img">
+                                            {% if community.image %}
+                                                <img src="{{ community.image.url }}" alt="{{ community.community_name }} image">
+                                            {% else %}
+                                                <img src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image">
+                                            {% endif %}
+                                        </td>
                                         <td class="td-name">{{community.community_name}}</td>
                                         <td class="td-btn"></td>
                                     </tr>
