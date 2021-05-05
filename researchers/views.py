@@ -46,9 +46,8 @@ def update_researcher(request, pk):
     total_notices = get_notices_count(researcher)
     total_projects = get_projects_count(researcher)
 
-
     if request.method == 'POST':
-        update_form = UpdateResearcherForm(request.POST, instance=researcher)
+        update_form = UpdateResearcherForm(request.POST, request.FILES, instance=researcher)
 
         if update_form.is_valid():
             data = update_form.save(commit=False)

@@ -42,16 +42,16 @@ def institution_registry(request):
 @login_required(login_url='login')
 def update_institution(request, pk):
     institution = Institution.objects.get(id=pk)
-
-    update_form = UpdateInstitutionForm(instance=institution)
     
     if request.method == "POST":
-        update_form = UpdateInstitutionForm(request.POST, instance=institution)
+        update_form = UpdateInstitutionForm(request.POST, request.FILES, instance=institution)
         if update_form.is_valid():
             update_form.save()
             messages.add_message(request, messages.SUCCESS, 'Updated!')
-        else:
-            update_form = UpdateInstitutionForm(instance=institution)
+            return redirect('update-institution', institution.id)
+    else:
+        update_form = UpdateInstitutionForm(instance=institution)
+
     context = {
         'institution': institution,
         'update_form': update_form,
