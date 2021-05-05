@@ -3,7 +3,7 @@
     <div class="white-bg content-card content-card-space noti-card">
         <h3 class="orange-text">Settings</h3>
         <div>
-            <form method="POST" action="{% url 'researcher-update' researcher.id %}">
+            <form method="POST" action="{% url 'researcher-update' researcher.id %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ update_form.as_p }}
             
