@@ -6,8 +6,9 @@ steps:
       - "-c"
       - |
         printf "%s" "$$APP_ENGINE_ENVS" > ./env.sh
+        printf "%s" "$$DJANGO_STORAGES_GCS_KEY" > ./django-storages-gcs-key.json
         chmod +x ./env.sh
-    secretEnv: ["APP_ENGINE_ENVS"]
+    secretEnv: ["APP_ENGINE_ENVS", "DJANGO_STORAGES_GCS_KEY"]
     waitFor: ["-"]
   - name: "python:3.8-slim-buster"
     id: "install-deps"
@@ -62,3 +63,5 @@ availableSecrets:
   secretManager:
     - versionName: "projects/anth-ja77-local-contexts-8985/secrets/APP_ENGINE_ENVS/versions/latest"
       env: "APP_ENGINE_ENVS"
+    - versionName: "projects/anth-ja77-local-contexts-8985/secrets/django-storages-gcs-key/versions/latest"
+      env: "DJANGO_STORAGES_GCS_KEY"
