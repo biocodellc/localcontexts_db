@@ -9,7 +9,7 @@ class Institution(models.Model):
     institution_name = models.CharField(max_length=80, null=True, unique=True)
     contact_name = models.CharField(max_length=80, null=True)
     contact_email = models.EmailField(max_length=254, null=True)
-    image = models.ImageField(upload_to='photos/institutions', blank=True, null=True)
+    image = models.ImageField(upload_to='users/institution-images', blank=True, null=True)
     institution_id = models.CharField(max_length=80, blank=True, null=True)
     orcid = models.CharField(max_length=19, null=True, blank=True)
     contact_number = models.CharField(max_length=15, null=True, blank=True)

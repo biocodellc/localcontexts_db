@@ -42,7 +42,6 @@ SITE_ADMIN_NAME = os.environ['SITE_ADMIN_NAME']
 SITE_ADMIN_EMAIL = os.environ['SITE_ADMIN_EMAIL']
 ADMINS = [(SITE_ADMIN_NAME, SITE_ADMIN_EMAIL)]
 
-
 # Application definition
 INSTALLED_APPS = [
     'maintenance_mode',
@@ -107,11 +106,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'localcontexts.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 if os.getenv('GAE_APPLICATION', None):
     """Setup Google App Engine-specific options."""
+
+    from google.oauth2 import service_account
 
     DATABASES = {
         'default': {
@@ -123,6 +123,9 @@ if os.getenv('GAE_APPLICATION', None):
         }
     }
     GS_BUCKET_NAME = os.environ.get('GCS_BUCKET', 'anth-ja77-local-contexts-8985.appspot.com')
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        os.path.join(BASE_DIR, 'django-storages-gcs-key.json')
+    )
     DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
     MAINTENANCE_MODE_STATE_BACKEND = 'localcontexts.storage_backends.GCSDefaultStorageBackend'
 else:
@@ -140,7 +143,6 @@ else:
 MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
 # if True the superuser will not see the maintenance-mode page
 MAINTENANCE_MODE_IGNORE_SUPERUSER = True
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -160,7 +162,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -176,6 +177,7 @@ USE_TZ = True
 
 # Messages
 from django.contrib.messages import constants as messages
+
 MESSAGE_TAGS = {
     messages.ERROR: 'error-msg',
     messages.SUCCESS: 'success-msg',
@@ -189,7 +191,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

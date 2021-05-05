@@ -16,6 +16,7 @@ class Project(models.Model):
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
     title = models.CharField(max_length=300, null=True)
     description = models.TextField(null=True)
+    project_image = models.ImageField(upload_to='users/project-images', blank=True, null=True)
     project_contact = models.CharField(max_length=100, null=True)
     project_contact_email = models.EmailField(max_length=100, null=True)
     publication_doi = models.CharField(max_length=200, blank=True, null=True)

@@ -22,8 +22,13 @@
             <div class="flex-this stats-info-container">
     
                 <div class="w-30 stats-img-container">
-                    <img src="{% static 'images/placeholders/researcher-place.jpg' %}" alt="researcher image">
+                    {% if researcher.image %}
+                        <img src="{{ researcher.image.url }}">
+                    {% else %}
+                        <img src="{% static 'images/placeholders/researcher-place.jpg' %}" alt="researcher image">
+                    {% endif %}
                 </div>
+
     
                 <div class="flex-this column w-40">
                     <h2 class="orange-text community-title">{{ researcher.user.get_full_name }}</h2>
