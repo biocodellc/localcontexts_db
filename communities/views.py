@@ -196,7 +196,7 @@ def community_activity(request, pk):
                         status.save()
                         if tknotice.placed_by_institution:
                             title = community.community_name + ' is in the process of applying Labels to your BC Notice.'
-                            InstitutionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+                            InstitutionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
 
                     if bcnotice_status == 'not_pending':
                         status.seen = True
@@ -204,12 +204,12 @@ def community_activity(request, pk):
                         status.save()
                         if tknotice.placed_by_institution:
                             title = community.community_name + ' will not be applying Labels to your BC Notice.'
-                            InstitutionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+                            InstitutionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
 
                         
                 return redirect('community-activity', community.id)
 
-            if tknotice_uuid != None:
+            if tknotice_uuid != None and tknotice_uuid != 'placeholder':
                 tknotice_status = request.POST.get('tknotice-status')
 
                 tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
@@ -226,7 +226,7 @@ def community_activity(request, pk):
                         status.save()
                         if tknotice.placed_by_institution:
                             title = community.community_name + ' is in the process of applying Labels to your TK Notice.'
-                            InstitutionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+                            InstitutionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
 
                     if tknotice_status == 'not_pending':
                         status.seen = True
@@ -234,7 +234,7 @@ def community_activity(request, pk):
                         status.save()
                         if tknotice.placed_by_institution:
                             title = community.community_name + ' will not be applying Labels to your TK Notice.'
-                            InstitutionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+                            InstitutionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
 
                 return redirect('community-activity', community.id)
 
@@ -596,9 +596,19 @@ def apply_notice_labels(request, pk, notice_id):
                     if bclabel_exists:
                         bclabel = BCLabel.objects.get(unique_id=choice)
                         bcnotice.project.bclabels.add(bclabel)
+                        if bcnotice.placed_by_institution:
+                            reference_id = str(bcnotice.unique_id)
+                            title = community.community_name + ' has applied the ' + bclabel.name + ' Label to your project.'
+                            InstitutionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+
                     if tklabel_exists:
                         tklabel = TKLabel.objects.get(unique_id=choice)
                         bcnotice.project.tklabels.add(tklabel)
+                        if bcnotice.placed_by_institution:
+                            reference_id = str(bcnotice.unique_id)
+                            title = community.community_name + ' has applied the ' + tklabel.name + ' Label to your project.'
+                            InstitutionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+
                 return redirect('community-projects', community.id)
             
             context = {
@@ -628,9 +638,20 @@ def apply_notice_labels(request, pk, notice_id):
                     if bclabel_exists:
                         bclabel = BCLabel.objects.get(unique_id=choice)
                         tknotice.project.bclabels.add(bclabel)
+                        if tknotice.placed_by_institution:
+                            reference_id = str(tknotice.unique_id)
+                            title = community.community_name + ' has applied the ' + bclabel.name + ' Label to your project.'
+                            InstitutionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+
                     if tklabel_exists:
                         tklabel = TKLabel.objects.get(unique_id=choice)
                         tknotice.project.tklabels.add(tklabel)
+                        if tknotice.placed_by_institution:
+                            reference_id = str(tknotice.unique_id)
+                            title = community.community_name + ' has applied the ' + tklabel.name + ' Label to your project.'
+                            InstitutionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+
+
                 return redirect('community-projects', community.id)
         
             context = {
