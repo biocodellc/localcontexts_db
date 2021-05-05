@@ -43,8 +43,6 @@ def connect_researcher(request):
 @login_required(login_url='login')
 def update_researcher(request, pk):
     researcher = Researcher.objects.get(id=pk)
-    total_notices = get_notices_count(researcher)
-    total_projects = get_projects_count(researcher)
 
     if request.method == 'POST':
         update_form = UpdateResearcherForm(request.POST, request.FILES, instance=researcher)
@@ -65,29 +63,21 @@ def update_researcher(request, pk):
     context = {
         'update_form': update_form,
         'researcher': researcher,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
     }
     return render(request, 'researchers/update-researcher.html', context)
 
 @login_required(login_url='login')
 def researcher_notices(request, pk):
     researcher = Researcher.objects.get(id=pk)
-    total_notices = get_notices_count(researcher)
-    total_projects = get_projects_count(researcher)
 
     context = {
         'researcher': researcher,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
     }
     return render(request, 'researchers/notices.html', context)
 
 @login_required(login_url='login')
 def researcher_activity(request, pk):
     researcher = Researcher.objects.get(id=pk)
-    total_notices = get_notices_count(researcher)
-    total_projects = get_projects_count(researcher)
 
     bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher)
     tknotices = TKNotice.objects.filter(placed_by_researcher=researcher)
@@ -112,8 +102,6 @@ def researcher_activity(request, pk):
 
     context = {
         'researcher': researcher,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
         'bcnotices': bcnotices,
         'tknotices': tknotices,
         'form': form,
@@ -125,16 +113,12 @@ def researcher_activity(request, pk):
 @login_required(login_url='login')
 def researcher_projects(request, pk):
     researcher = Researcher.objects.get(id=pk)
-    total_notices = get_notices_count(researcher)
-    total_projects = get_projects_count(researcher)
 
     contribs = ProjectContributors.objects.filter(researcher=researcher)
     bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher)
 
     context = {
         'researcher': researcher,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
         'contribs': contribs,
         'bcnotices': bcnotices,
     }
@@ -146,8 +130,6 @@ def researcher_projects(request, pk):
 @login_required(login_url='login')
 def create_project(request, pk):
     researcher = Researcher.objects.get(id=pk)
-    total_notices = get_notices_count(researcher)
-    total_projects = get_projects_count(researcher)
 
 
     if request.method == "POST":
@@ -172,8 +154,6 @@ def create_project(request, pk):
 
     context = {
         'researcher': researcher,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
         'form': form,
     }
     return render(request, 'researchers/create-project.html', context)
@@ -182,8 +162,6 @@ def create_project(request, pk):
 @login_required(login_url='login')
 def notify_communities(request, pk, proj_id):
     researcher = Researcher.objects.get(id=pk)
-    total_notices = get_notices_count(researcher)
-    total_projects = get_projects_count(researcher)
 
     project = Project.objects.get(id=proj_id)
     contribs = ProjectContributors.objects.get(project=project, researcher=researcher)
@@ -236,8 +214,6 @@ def notify_communities(request, pk, proj_id):
 
     context = {
         'researcher': researcher,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
         'project': project,
         'contribs': contribs,
         'communities': communities,
@@ -249,8 +225,6 @@ def notify_communities(request, pk, proj_id):
 @login_required(login_url='login')
 def researcher_relationships(request, pk):
     researcher = Researcher.objects.get(id=pk)
-    total_notices = get_notices_count(researcher)
-    total_projects = get_projects_count(researcher)
 
 
     return render(request, 'researchers/relationships.html', {'researcher': researcher})

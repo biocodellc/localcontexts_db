@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from communities.models import Community
 from institutions.models import Institution
+from researchers.models import Researcher
 
 class UserNotification(models.Model):
     TYPES = (
@@ -84,6 +85,30 @@ class InstitutionNotification(models.Model):
     class Meta:
         verbose_name = 'Institution Notification'
         verbose_name_plural = 'Institution Notifications'
-        ordering = ('-created',)
+        ordering = ('created',)
+
+class ResearcherNotification(models.Model):
+    TYPES = (
+        ('Activity', 'activity'),
+        ('Labels', 'labels'),
+        ('Connections', 'connections'),
+        ('Projects', 'projects')
+    )
+
+    title = models.CharField(max_length=200)
+    notification_type = models.CharField(max_length=20, choices=TYPES, null=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="researcher_noti_sender", blank=True)
+    researcher = models.ForeignKey(Researcher, on_delete=models.CASCADE, null=True)
+    reference_id = models.CharField(max_length=50, null=True, blank=True)
+    viewed = models.BooleanField(default=False)
+    created = models.DateField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return f"{self.notification_type} - {self.title}"
+
+    class Meta:
+        verbose_name = 'Researcher Notification'
+        verbose_name_plural = 'Researcher Notifications'
+        ordering = ('created',)
 
 
