@@ -183,6 +183,7 @@ def community_activity(request, pk):
                 bcnotice_status = request.POST.get('bcnotice-status')
 
                 bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
+                reference_id = str(bcnotice.unique_id)
                 statuses = bcnotice.statuses.filter(community=community)
 
                 for status in statuses:
@@ -193,16 +194,19 @@ def community_activity(request, pk):
                         status.seen = True
                         status.status = 'pending'
                         status.save()
-                        #TODO:
-                        #Send User Notification (if researcher) OR 
-                        #Send Institution Notififcation
+                        if tknotice.placed_by_institution:
+                            title = community.community_name + ' is in the process of applying Labels to your BC Notice.'
+                            InstitutionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+
                     if bcnotice_status == 'not_pending':
                         status.seen = True
                         status.status = 'not_pending'
                         status.save()
-                        #TODO:
-                        #Send User Notification (if resaercher) OR 
-                        #Send Institution Notififcation
+                        if tknotice.placed_by_institution:
+                            title = community.community_name + ' will not be applying Labels to your BC Notice.'
+                            InstitutionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+
+                        
                 return redirect('community-activity', community.id)
 
             if tknotice_uuid != None:
