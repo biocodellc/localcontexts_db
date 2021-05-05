@@ -194,7 +194,7 @@ def community_activity(request, pk):
                         status.seen = True
                         status.status = 'pending'
                         status.save()
-                        if tknotice.placed_by_institution:
+                        if bcnotice.placed_by_institution:
                             title = community.community_name + ' is in the process of applying Labels to your BC Notice.'
                             InstitutionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
 
@@ -202,7 +202,7 @@ def community_activity(request, pk):
                         status.seen = True
                         status.status = 'not_pending'
                         status.save()
-                        if tknotice.placed_by_institution:
+                        if bcnotice.placed_by_institution:
                             title = community.community_name + ' will not be applying Labels to your BC Notice.'
                             InstitutionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
 
