@@ -29,7 +29,8 @@
 
                                     <div class="border-bottom-solid-teal">
                                         {% if n.notification_type == 'Labels' %}
-                                            <a href="{% url 'institution-labels' institution.id %}">
+                                        <!-- TODO: Figure out what this URL should link to -->
+                                            <a href="{% url 'institution-projects' institution.id %}">
                                         {% endif %}
                                         {% if n.notification_type == 'Activity' %}
                                             {% if n.reference_id %}

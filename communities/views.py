@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from accounts.models import UserAffiliation
-from notifications.models import CommunityNotification
+from notifications.models import CommunityNotification, InstitutionNotification
 from bclabels.models import BCNotice, BCLabel
 from tklabels.models import TKNotice, TKLabel
 from projects.models import ProjectContributors, Project
@@ -179,7 +179,7 @@ def community_activity(request, pk):
             bcnotice_uuid = request.POST.get('bcnotice-uuid')
             tknotice_uuid = request.POST.get('tknotice-uuid')
 
-            if bcnotice_uuid != None:
+            if bcnotice_uuid != None and bcnotice_uuid != 'placeholder':
                 bcnotice_status = request.POST.get('bcnotice-status')
 
                 bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
@@ -209,6 +209,7 @@ def community_activity(request, pk):
                 tknotice_status = request.POST.get('tknotice-status')
 
                 tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
+                reference_id = str(tknotice.unique_id)
                 statuses = tknotice.statuses.filter(community=community)
 
                 for status in statuses:
@@ -219,10 +220,18 @@ def community_activity(request, pk):
                         status.seen = True
                         status.status = 'pending'
                         status.save()
+                        if tknotice.placed_by_institution:
+                            title = community.community_name + ' is in the process of applying Labels to your TK Notice.'
+                            InstitutionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+
                     if tknotice_status == 'not_pending':
                         status.seen = True
                         status.status = 'not_pending'
                         status.save()
+                        if tknotice.placed_by_institution:
+                            title = community.community_name + ' will not be applying Labels to your TK Notice.'
+                            InstitutionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+
                 return redirect('community-activity', community.id)
 
         # Form: Add comment to notice

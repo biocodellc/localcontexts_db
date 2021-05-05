@@ -96,8 +96,8 @@
 
                                             </select>
 
-                                            <input id="notice-id-input" type="hidden" value="placeholder" name="bcnotice-uuid">
-                                            <input id="status-selection-input" type="hidden" value="placeholder" name="bcnotice-status">
+                                            <input id="notice-id-input-{{ bcnotice.unique_id }}" type="hidden" value="placeholder" name="bcnotice-uuid">
+                                            <input id="status-selection-input-{{ bcnotice.unique_id }}" type="hidden" value="placeholder" name="bcnotice-status">
 
                                             <button class="action-btn" name="notify-btn">Notify</button>
                                     </form>
@@ -280,8 +280,8 @@
                                         {% endfor %}
                                         </select>
 
-                                        <input id="tknotice-id-input" type="hidden" value="placeholder" name="tknotice-uuid">
-                                        <input id="tkstatus-selection-input" type="hidden" value="placeholder" name="tknotice-status">
+                                        <input id="tknotice-id-input-{{ tknotice.unique_id}}" type="hidden" value="placeholder" name="tknotice-uuid">
+                                        <input id="tkstatus-selection-input-{{ tknotice.unique_id }}" type="hidden" value="placeholder" name="tknotice-status">
 
                                         <button class="action-btn" name="notify-btn">Notify</button>
                                 </form>
