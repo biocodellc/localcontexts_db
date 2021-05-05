@@ -13,7 +13,7 @@ class ConnectResearcherForm(forms.ModelForm):
 class UpdateResearcherForm(forms.ModelForm):
     class Meta:
         model = Researcher
-        fields = ['orcid', 'contact_email', 'contact_number', 'website']
+        fields = ['orcid', 'image', 'contact_email', 'contact_number', 'website']
         widgets = {
             'orcid': forms.TextInput(attrs={'size': 40}),
             'contact_email': forms.TextInput(attrs={'size': 40}),

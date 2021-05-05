@@ -8,7 +8,7 @@ class Community(models.Model):
     community_name = models.CharField(max_length=80, null=True, unique=True)
     contact_name = models.CharField(max_length=80, null=True)
     contact_email = models.EmailField(max_length=254, null=True)
-    image = models.ImageField(upload_to='photos/communities', blank=True, null=True)
+    image = models.ImageField(upload_to='users/community-images', blank=True, null=True)
     town = models.CharField(max_length=80, blank=True, null=True)
     country = CountryField(blank=True, null=True)
     website = models.URLField(max_length=150, blank=True, null=True)
