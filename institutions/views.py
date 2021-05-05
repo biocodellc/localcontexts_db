@@ -13,7 +13,6 @@ from notifications.models import CommunityNotification
 from projects.forms import CreateProjectForm, ProjectCommentForm
 
 from .forms import CreateInstitutionForm, UpdateInstitutionForm
-from .utils import *
 # from bclabels.forms import AddBCNoticeMessage
 # from tklabels.forms import AddTKNoticeMessage
 
@@ -39,25 +38,10 @@ def institution_registry(request):
     institutions = Institution.objects.all()
     return render(request, 'institutions/institution-registry.html', {'institutions': institutions})
 
-# Dashboard
-@login_required(login_url='login')
-def institution_dashboard(request, pk):
-    institution = Institution.objects.get(id=pk)
-    total_notices = get_notices_count(institution)
-    total_projects = get_projects_count(institution)
-    context = {
-        'institution': institution, 
-        'total_notices': total_notices,
-        'total_projects': total_projects, 
-    }
-    return render(request, 'institutions/dashboard.html', context)
-
 # Update institution
 @login_required(login_url='login')
 def update_institution(request, pk):
     institution = Institution.objects.get(id=pk)
-    total_notices = get_notices_count(institution)
-    total_projects = get_projects_count(institution)
 
     update_form = UpdateInstitutionForm(instance=institution)
     
@@ -71,8 +55,6 @@ def update_institution(request, pk):
     context = {
         'institution': institution,
         'update_form': update_form,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
     }
 
     return render(request, 'institutions/update-institution.html', context)
@@ -81,14 +63,7 @@ def update_institution(request, pk):
 @login_required(login_url='login')
 def institution_notices(request, pk):
     institution = Institution.objects.get(id=pk)
-    total_notices = get_notices_count(institution)
-    total_projects = get_projects_count(institution)
-    context = {
-        'institution': institution, 
-        'total_notices': total_notices,
-        'total_projects': total_projects,
-    }
-    return render(request, 'institutions/notices.html', context)
+    return render(request, 'institutions/notices.html', {'institution': institution,})
 
 # Activity
 @login_required(login_url='login')
@@ -96,8 +71,6 @@ def institution_activity(request, pk):
     institution = Institution.objects.get(id=pk)
     bcnotices = BCNotice.objects.filter(placed_by_institution=institution)
     tknotices = TKNotice.objects.filter(placed_by_institution=institution)
-    total_notices = bcnotices.count() + tknotices.count()
-    total_projects = get_projects_count(institution)
 
     if request.method == 'POST':
         project_id = request.POST.get('project-id')
@@ -121,8 +94,6 @@ def institution_activity(request, pk):
         'institution': institution,
         'bcnotices': bcnotices,
         'tknotices': tknotices,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
         'form': form,
     }
     return render(request, 'institutions/activity.html', context)
@@ -131,15 +102,11 @@ def institution_activity(request, pk):
 @login_required(login_url='login')
 def institution_projects(request, pk):
     institution = Institution.objects.get(id=pk)
-    total_notices = get_notices_count(institution)
-    total_projects = get_projects_count(institution)
     contribs = ProjectContributors.objects.filter(institution=institution)
 
     context = {
         'institution': institution,
         'contribs': contribs,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
     }
     return render(request, 'institutions/projects.html', context)
 
@@ -147,8 +114,6 @@ def institution_projects(request, pk):
 @login_required(login_url='login')
 def create_project(request, pk):
     institution = Institution.objects.get(id=pk)
-    total_notices = get_notices_count(institution)
-    total_projects = get_projects_count(institution)
 
     if request.method == "POST":
         form = CreateProjectForm(request.POST or None)
@@ -173,8 +138,6 @@ def create_project(request, pk):
     context = {
         'institution': institution,
         'form': form,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
     }
     return render(request, 'institutions/create-project.html', context)
 
@@ -184,8 +147,6 @@ def notify_communities(request, pk, proj_id):
     institution = Institution.objects.get(id=pk)
     project = Project.objects.get(id=proj_id)
     contribs = ProjectContributors.objects.get(project=project, institution=institution)
-    total_notices = get_notices_count(institution)
-    total_projects = get_projects_count(institution)
 
     bcnotice_exists = BCNotice.objects.filter(project=project).exists()
     tknotice_exists = TKNotice.objects.filter(project=project).exists()
@@ -197,12 +158,7 @@ def notify_communities(request, pk, proj_id):
         message = request.POST.get('notice_message')
 
         for community_id in communities_selected:
-            title = str(institution.institution_name) + " has placed a Notice"
-
             community = Community.objects.get(id=community_id)
-
-            # Create notification
-            CommunityNotification.objects.create(community=community, notification_type='Requests', sender=request.user, title=title)
             
             # add community to bcnotice instance
             if bcnotice_exists:
@@ -213,6 +169,11 @@ def notify_communities(request, pk, proj_id):
                     bcnotice.statuses.add(notice_status)
                     bcnotice.message = message
                     bcnotice.save()
+
+                    # Create notification
+                    reference_id = str(bcnotice.unique_id)
+                    title =  "A BC Notice has been placed by " + str(institution.institution_name) + '.'
+                    CommunityNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
             
             # add community to tknotice instance
             if tknotice_exists:
@@ -223,6 +184,12 @@ def notify_communities(request, pk, proj_id):
                     tknotice.statuses.add(notice_status)
                     tknotice.message = message
                     tknotice.save()
+
+                    # Create notification
+                    reference_id = str(tknotice.unique_id)
+                    title =  "A TK Notice has been placed by " + str(institution.institution_name) + '.'
+                    CommunityNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
+
         
         return redirect('institution-projects', institution.id)
 
@@ -231,8 +198,6 @@ def notify_communities(request, pk, proj_id):
         'project': project,
         'contribs': contribs,
         'communities': communities,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
     }
     return render(request, 'institutions/notify.html', context)
 

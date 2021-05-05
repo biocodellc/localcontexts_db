@@ -1,7 +1,7 @@
 {% extends 'comm-base.html' %} {% block title %} | Activity {% endblock %} {% load static %} {% block community_content %}
 
     <div class="content-card content-card-space white-bg ">
-        <h3 class="orange-text reqs">Activity</h3>
+        <h2 class="orange-text weight-600">Activity</h2>
     </div>
 
     {% if bcnotices %}
@@ -96,8 +96,8 @@
 
                                             </select>
 
-                                            <input id="notice-id-input" type="hidden" value="placeholder" name="bcnotice-uuid">
-                                            <input id="status-selection-input" type="hidden" value="placeholder" name="bcnotice-status">
+                                            <input id="notice-id-input-{{ bcnotice.unique_id }}" type="hidden" value="placeholder" name="bcnotice-uuid">
+                                            <input id="status-selection-input-{{ bcnotice.unique_id }}" type="hidden" value="placeholder" name="bcnotice-status">
 
                                             <button class="action-btn" name="notify-btn">Notify</button>
                                     </form>
@@ -194,7 +194,7 @@
     {% for tknotice in tknotices %}
             {% if tknotice.project.has_labels == False %}
 
-                <div id="full-notice-card-{{ tknotice.unique_id }}" class="content-card-v2 white-bg">
+                <div id="full-notice-card-{{ tknotice.unique_id }}" class="content-card-v2 white-bg" style="scroll-margin-top: 8em;">
                     <div class="flex-this space-between">
                         <div>
                             <p class="no-top-margin notice-date">
@@ -280,8 +280,8 @@
                                         {% endfor %}
                                         </select>
 
-                                        <input id="tknotice-id-input" type="hidden" value="placeholder" name="tknotice-uuid">
-                                        <input id="tkstatus-selection-input" type="hidden" value="placeholder" name="tknotice-status">
+                                        <input id="tknotice-id-input-{{ tknotice.unique_id}}" type="hidden" value="placeholder" name="tknotice-uuid">
+                                        <input id="tkstatus-selection-input-{{ tknotice.unique_id }}" type="hidden" value="placeholder" name="tknotice-status">
 
                                         <button class="action-btn" name="notify-btn">Notify</button>
                                 </form>
