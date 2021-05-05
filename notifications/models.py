@@ -85,7 +85,7 @@ class InstitutionNotification(models.Model):
     class Meta:
         verbose_name = 'Institution Notification'
         verbose_name_plural = 'Institution Notifications'
-        ordering = ('-created',)
+        ordering = ('created',)
 
 class ResearcherNotification(models.Model):
     TYPES = (
@@ -109,6 +109,6 @@ class ResearcherNotification(models.Model):
     class Meta:
         verbose_name = 'Researcher Notification'
         verbose_name_plural = 'Researcher Notifications'
-        ordering = ('-created',)
+        ordering = ('created',)
 
 
