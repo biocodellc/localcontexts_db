@@ -12,7 +12,7 @@
         <p>{{ n.message }} {{ n.notificaion_type }}</p>
 
         <div class="flex-this space-between">
-            <p><a class="darkteal-text" href="{% url 'community-dashboard' community.id %}">Back to {{ community.community_name }} </a></p>    
+            <p><a class="darkteal-text" href="{% url 'community-activity' community.id %}">Back to {{ community.community_name }} </a></p>    
             <p><a class="darkteal-text" href="{% url 'comm-read' community.id n.id %}">Mark as Read </a></p>    
         </div>
 

@@ -2,6 +2,7 @@ from django import template
 from django.urls import reverse
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
+from notifications.models import CommunityNotification
 
 register = template.Library()
 
@@ -15,3 +16,8 @@ def get_label_count(community):
 @register.simple_tag
 def anchor(url_name, section_id, community_id):
     return reverse(url_name, kwargs={'pk': community_id}) + "#full-notice-card-" + str(section_id)
+
+@register.simple_tag
+def community_notifications(community):
+    notifications = CommunityNotification.objects.filter(community=community)
+    return notifications

@@ -1,13 +1,13 @@
 {% extends 'research-base.html' %} {% block title %} | Activity {% endblock %}{% load static %}{% block researcher_content %}
 
 <div class="content-card content-card-space white-bg ">
-    <h3 class="orange-text reqs">Activity</h3>
+    <h2 class="orange-text weight-600">Activity</h2>
 </div>
 
 {% if bcnotices %}
     {% for bcnotice in bcnotices %}
 
-                <div id="full-notice-card-{{ bcnotice.unique_id }}" class="content-card-v2 white-bg">
+                <div id="full-notice-card-{{ bcnotice.unique_id }}" class="content-card-v2 white-bg" style="scroll-margin-top: 8em;">
                     <div class="flex-this space-between">
                         <div>
                             <p class="no-top-margin notice-date">
@@ -139,7 +139,7 @@
 {% if tknotices %}
 {% for tknotice in tknotices %}
 
-            <div id="full-notice-card-{{ tknotice.unique_id }}" class="content-card-v2 white-bg">
+            <div id="full-notice-card-{{ tknotice.unique_id }}" class="content-card-v2 white-bg" style="scroll-margin-top: 8em;">
                 <div class="flex-this space-between">
                     <div>
                         <p class="no-top-margin notice-date">

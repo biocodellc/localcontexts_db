@@ -38,21 +38,7 @@ def connect_researcher(request):
 
         return render(request, 'researchers/connect-researcher.html', {'form': form})
     else:
-        return redirect('researcher-dashboard', researcher.id)
-
-@login_required(login_url='login')
-def researcher_dashboard(request, pk):
-    # TODO: is current user a researcher?
-    researcher = Researcher.objects.get(id=pk)
-    total_notices = get_notices_count(researcher)
-    total_projects = get_projects_count(researcher)
-    context = {
-        'researcher': researcher,
-        'total_notices': total_notices,
-        'total_projects': total_projects,
-    }
-
-    return render(request, 'researchers/dashboard.html', context)
+        return redirect('researcher-activity', researcher.id)
 
 @login_required(login_url='login')
 def update_researcher(request, pk):
@@ -213,12 +199,7 @@ def notify_communities(request, pk, proj_id):
         message = request.POST.get('notice_message')
 
         for community_id in communities_selected:
-            title = str(researcher.user.get_full_name()) + " has placed a Notice"
-
             community = Community.objects.get(id=community_id)
-
-            # Create notification
-            CommunityNotification.objects.create(community=community, notification_type='Requests', sender=request.user, title=title)
             
             # add community to bcnotice instance
             if bcnotice_exists:
@@ -229,6 +210,12 @@ def notify_communities(request, pk, proj_id):
                     bcnotice.statuses.add(notice_status)
                     bcnotice.message = message
                     bcnotice.save()
+
+                    # Create notification
+                    reference_id = str(bcnotice.unique_id)
+                    title =  "A BC Notice has been placed by " + str(researcher.user.get_full_name()) + '.'
+                    CommunityNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
+
             
             # add community to tknotice instance
             if tknotice_exists:
@@ -239,6 +226,12 @@ def notify_communities(request, pk, proj_id):
                     tknotice.statuses.add(notice_status)
                     tknotice.message = message
                     tknotice.save()
+
+                    # Create notification
+                    reference_id = str(tknotice.unique_id)
+                    title =  "A TK Notice has been placed by " + str(researcher.user.get_full_name()) + '.'
+                    CommunityNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
+
         
         return redirect('researcher-projects', researcher.id)
 

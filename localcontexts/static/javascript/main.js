@@ -807,10 +807,10 @@ function cancelCommunitySelection(elem) {
 // Communities: Activity: Notify 
 function setBCNoticeUUID(elem) {
     let elementId = elem.id
-    let statusSelect = document.getElementById(elementId)
-    let noticeIdInput = document.getElementById('notice-id-input')
-    let statusSelectedInput = document.getElementById('status-selection-input')
     let noticeID = elementId.slice(7)
+    let statusSelect = document.getElementById(elementId)
+    let noticeIdInput = document.getElementById(`notice-id-input-${noticeID}`)
+    let statusSelectedInput = document.getElementById(`status-selection-input-${noticeID}`)
 
     // Set first hidden value to notice UUID
     noticeIdInput.value = noticeID
@@ -821,10 +821,10 @@ function setBCNoticeUUID(elem) {
 // Communities: Activity: Notify 
 function setTKNoticeUUID(elem) {
     let elementId = elem.id
-    let statusSelect = document.getElementById(elementId)
-    let noticeIdInput = document.getElementById('tknotice-id-input')
-    let statusSelectedInput = document.getElementById('tkstatus-selection-input')
     let noticeID = elementId.slice(7)
+    let statusSelect = document.getElementById(elementId)
+    let noticeIdInput = document.getElementById(`tknotice-id-input-${noticeID}`)
+    let statusSelectedInput = document.getElementById(`tkstatus-selection-input-${noticeID}`)
 
     // Set first hidden value to notice UUID
     noticeIdInput.value = noticeID
@@ -863,6 +863,22 @@ function setTKNoticeUUID(elem) {
 
     start()
 })()
+
+function toggleNotifications() {
+    document.getElementById('notification-v2').classList.toggle('show')
+
+    window.onclick = function(event) {
+        if(!event.target.matches('.dropbtn')) {
+            let dropdowns = document.getElementsByClassName("notification-dropdown-content")
+            for (let i=0; i < dropdowns.length; i++) {
+                let openDropdown = dropdowns[i]
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show')
+                }
+            }
+        }
+    }
+}
 
 // TODO: Add ROR functionality
 // Create Institution
