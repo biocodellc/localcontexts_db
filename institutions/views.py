@@ -10,7 +10,8 @@ from tklabels.models import TKNotice
 from communities.models import Community
 from notifications.models import CommunityNotification
 
-from projects.forms import CreateProjectForm, ProjectCommentForm
+from projects.forms import CreateProjectForm
+from notifications.forms import NoticeCommentForm
 
 from .forms import CreateInstitutionForm, UpdateInstitutionForm
 # from bclabels.forms import AddBCNoticeMessage
@@ -78,7 +79,7 @@ def institution_activity(request, pk):
         project = Project.objects.get(id=project_id)
         community = Community.objects.get(id=community_id)
 
-        form = ProjectCommentForm(request.POST or None)
+        form = NoticeCommentForm(request.POST or None)
 
         if form.is_valid():
             data = form.save(commit=False)
@@ -88,7 +89,7 @@ def institution_activity(request, pk):
             data.save()
             return redirect('institution-activity', institution.id)
     else:
-        form = ProjectCommentForm()
+        form = NoticeCommentForm()
 
     context = {
         'institution': institution,

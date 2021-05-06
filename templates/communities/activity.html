@@ -147,8 +147,8 @@
                                 </div>
                             {% endif %}
 
-                            {% if bcnotice.project.project_comment.all %}
-                                {% for comment in bcnotice.project.project_comment.all %}
+                            {% if bcnotice.bcnotice_comment.all %}
+                                {% for comment in bcnotice.bcnotice_comment.all %}
                                     {% if community == comment.community %}
                                         <div>
                                             <span class="weight-500">{{ comment.sender.get_full_name }}</span>
@@ -166,7 +166,7 @@
                             {% else %}
                                 <form method="POST" action="">
                                     {% csrf_token %}
-                                    <input type="hidden" value="{{ bcnotice.project.id }}" name="project-id">
+                                    <input type="hidden" value="{{ bcnotice.unique_id }}" name="bcnotice-uuid">
                                     <div class="flex-this row">
                                         <div class="w-100">
                                             {{ form.message }}
@@ -332,8 +332,8 @@
                             </div>
                         {% endif %}
 
-                        {% if tknotice.project.project_comment.all %}
-                        {% for comment in tknotice.project.project_comment.all %}
+                        {% if tknotice.tknotice_comment.all %}
+                        {% for comment in tknotice.tknotice_comment.all %}
                             {% if community == comment.community %}
                                 <div>
                                     <span class="weight-500">{{ comment.sender.get_full_name }}</span>
@@ -352,7 +352,7 @@
 
                         <form method="POST" action="">
                             {% csrf_token %}
-                            <input type="hidden" value="{{ tknotice.project.id }}" name="project-id">
+                            <input type="hidden" value="{{ tknotice.unique_id }}" name="tknotice-uuid">
                             <div class="flex-this row">
                                 <div class="w-100">
                                     {{ form.message }}

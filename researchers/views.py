@@ -9,7 +9,8 @@ from tklabels.models import TKNotice
 from communities.models import Community
 from notifications.models import CommunityNotification
 from projects.models import ProjectContributors, Project
-from projects.forms import CreateProjectForm, ProjectContributorsForm, ProjectCommentForm
+from projects.forms import CreateProjectForm, ProjectContributorsForm
+from notifications.forms import NoticeCommentForm
 
 from .models import Researcher
 from .forms import *
@@ -88,7 +89,7 @@ def researcher_activity(request, pk):
         project = Project.objects.get(id=project_id)
         community = Community.objects.get(id=community_id)
 
-        form = ProjectCommentForm(request.POST or None)
+        form = NoticeCommentForm(request.POST or None)
 
         if form.is_valid():
             data = form.save(commit=False)
@@ -98,7 +99,7 @@ def researcher_activity(request, pk):
             data.save()
             return redirect('researcher-activity', researcher.id)
     else:
-        form = ProjectCommentForm()
+        form = NoticeCommentForm()
 
     context = {
         'researcher': researcher,

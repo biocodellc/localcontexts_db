@@ -14,7 +14,8 @@ from projects.models import ProjectContributors, Project
 
 from bclabels.forms import CustomiseBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomiseTKLabelForm, ApproveAndEditTKLabelForm
-from projects.forms import CreateProjectForm, ProjectCommentForm
+from projects.forms import CreateProjectForm
+from notifications.forms import NoticeCommentForm
 
 from bclabels.utils import check_bclabel_type
 from tklabels.utils import check_tklabel_type
@@ -250,21 +251,37 @@ def community_activity(request, pk):
 
         # Form: Add comment to notice
         elif request.method == "POST" and "add-comment-btn" in request.POST:
-            project_id = request.POST.get('project-id')
-            project = Project.objects.get(id=project_id)
+            bcnotice_uuid = request.POST.get('bcnotice-uuid')
+            tknotice_uuid = request.POST.get('tknotice-uuid')
 
-            form = ProjectCommentForm(request.POST or None)
+            # Which notice ?
+            bcnotice_exists = BCNotice.objects.filter(unique_id=bcnotice_uuid).exists()
+            tknotice_exists = TKNotice.objects.filter(unique_id=tknotice_uuid).exists()
 
-            if form.is_valid():
-                data = form.save(commit=False)
-                data.project = project
-                data.sender = request.user
-                data.community = community
-                data.save()
-                return redirect('community-activity', community.id)
+            form = NoticeCommentForm(request.POST or None)
+
+            if bcnotice_exists:
+                bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.bcnotice = bcnotice
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('community-activity', community.id)
+            
+            if tknotice_exists:
+                tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.tknotice = tknotice
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('community-activity', community.id)
 
         else:
-            form = ProjectCommentForm()
+            form = NoticeCommentForm()
 
             context = {
                 'bcnotices': bcnotices,
