@@ -1,6 +1,6 @@
 from django import forms
 import datetime
-from .models import Project, ProjectContributors, ProjectComment
+from .models import Project, ProjectContributors
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -27,11 +27,3 @@ class ProjectContributorsForm(forms.ModelForm):
     class Meta:
         model = ProjectContributors
         fields = ['community']
-
-class ProjectCommentForm(forms.ModelForm):
-    class Meta:
-        model = ProjectComment
-        fields = ['message']
-        widgets = {
-            'message': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Add Comment'})
-        }

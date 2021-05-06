@@ -90,11 +90,23 @@
                                     {% endif %}
                                 </div>
 
+                            {% if bcnotice.message %}
+
+                                <div class="pad-top-1">
+                                    <span class="weight-500">{{ bcnotice.placed_by_researcher.user.get_full_name }}</span>
+                                    <span class="grey-text">{{ bcnotice.created|date:'m/d/Y' }}</span><br>
+                                    <p>
+                                        {{ bcnotice.message }}
+                                    </p>
+                                </div>
+
+                            {% endif %}
+
                                 <form method="POST" action="">
                                     {% csrf_token %}
 
-                                    {% if bcnotice.project.project_comment.all %}
-                                        {% for comment in bcnotice.project.project_comment.all %}
+                                    {% if bcnotice.bcnotice_comment.all %}
+                                        {% for comment in bcnotice.bcnotice_comment.all %}
                                             {% if status.community == comment.community %}
                                             <input type="hidden" value="{{ status.community.id }}" name="community-id">
 
@@ -232,11 +244,23 @@
                                 {% endif %}
                             </div>
 
+                            {% if tknotice.message %}
+
+                                <div class="pad-top-1">
+                                    <span class="weight-500">{{ tknotice.placed_by_researcher.user.get_full_name }}</span>
+                                    <span class="grey-text">{{ tknotice.created|date:'m/d/Y' }}</span><br>
+                                    <p>
+                                        {{ tknotice.message }}
+                                    </p>
+                                </div>
+
+                            {% endif %}
+
                             <form method="POST" action="">
                                 {% csrf_token %}
 
-                                {% if tknotice.project.project_comment.all %}
-                                    {% for comment in tknotice.project.project_comment.all %}
+                                {% if tknotice.tknotice_comment.all %}
+                                    {% for comment in tknotice.tknotice_comment.all %}
                                         {% if status.community == comment.community %}
                                         <input type="hidden" value="{{ status.community.id }}" name="community-id">
 
