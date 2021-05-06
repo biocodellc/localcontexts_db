@@ -47,7 +47,14 @@
                                             <a href="#">
                                         {% endif %}
                                             <div class="flex-this space-between margin-top-1">
-                                                <div><span class="notification-type-tag orange-bg white-text font-size-12">
+                                                <div>
+                                                    <span 
+                                                        {% if n.viewed %} 
+                                                            class="notification-type-tag grey white-text font-size-12"
+                                                        {% else %}
+                                                            class="notification-type-tag orange-bg white-text font-size-12"
+                                                        {% endif %}
+                                                    >
                                                     {% if n.notification_type == 'Notices' %}
                                                         Notices
                                                     {% endif %}
@@ -73,18 +80,6 @@
 
                                 {% endfor %}
                             {% endif %}
-
-                            <!-- GREY LABEL -->
-                            <!-- <div class="border-bottom-solid-teal">
-                                <a href="#">
-                                    <div class="flex-this space-between margin-top-1">
-                                        <div><span class="notification-type-tag grey white-text font-size-12">Activity</span></div>
-                                        <div><span class="font-size-12 grey-text">Date</span></div>
-                                    </div>
-
-                                    <div><p class="darkteal-text font-size-14"> This is the body of the notification.</p></div>
-                                </a>
-                            </div> -->
 
                         </div>
                     </div>
