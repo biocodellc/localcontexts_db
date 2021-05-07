@@ -59,12 +59,8 @@ def community_registry(request):
     if request.user.is_authenticated:
         current_user = UserAffiliation.objects.get(user=request.user)
         user_communities = current_user.communities.all()
-        # all_requests = CommunityJoinRequest.objects.all()
 
         if request.method == 'POST':
-            # TODO: Change the button so the user can only submit a request once.
-            # Check if CommunityJoinRequest exists
-            # If it exists, show different button
             buttonid = request.POST.get('commid')
             target_community = Community.objects.get(id=buttonid)
             main_admin = target_community.community_creator
@@ -79,7 +75,6 @@ def community_registry(request):
     context = {
         'communities': communities,
         'user_communities': user_communities,
-        # 'all_requests': all_requests,
     }
     return render(request, 'communities/community-registry.html', context)
 

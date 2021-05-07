@@ -4,6 +4,7 @@ from .models import *
 from communities.models import *
 from accounts.models import UserAffiliation
 from .utils import send_community_approval_notification
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required(login_url='login')
 def show_notification(request, pk):
@@ -94,6 +95,7 @@ def show_notification_community(request, cid, pk):
     return render(request, 'notifications/community-notification.html', context)
 
 @login_required(login_url='login')
+@csrf_exempt
 def read_notification_community(request, cid, pk):
     n = CommunityNotification.objects.get(id=pk)
     community = Community.objects.get(id=cid)
@@ -105,6 +107,36 @@ def read_notification_community(request, cid, pk):
         'community':community,
     }
     return render(request, 'notifications/comm-read.html', context)
+
+@login_required(login_url='login')
+@csrf_exempt
+def read_institution_notification(request, iid, pk):
+    n = InstitutionNotification.objects.get(id=pk)
+    institution = Institution.objects.get(id=iid)
+    n.viewed = True
+    n.save()
+    
+    context = {
+        'n': n,
+        'institution':institution,
+    }
+    return render(request, 'notifications/inst-read.html', context)
+
+@login_required(login_url='login')
+@csrf_exempt
+def read_researcher_notification(request, rid, pk):
+    n = ResearcherNotification.objects.get(id=pk)
+    researcher = Researcher.objects.get(id=rid)
+    n.viewed = True
+    n.save()
+    
+    context = {
+        'n': n,
+        'researcher':researcher,
+    }
+    return render(request, 'notifications/researcher-read.html', context)
+
+
 
 
 # TODO: Do we need to be able to delete activity/ community notifications?

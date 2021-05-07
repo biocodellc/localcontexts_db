@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} | Communities {% endblock %}{% load static %} {% block content %} {% include 'partials/_reg-header.html' %}
+{% extends 'base.html' %} {% block title %} | Communities {% endblock %}{% load static %} {% load custom_tags %}{% block content %} {% include 'partials/_reg-header.html' %}
 
 <section class="flex-this gradient-section">
     <div class="base-card flex-this column">
@@ -28,6 +28,8 @@
                     {% if communities %}
 
                         {% for community in communities %}
+                        {% join_request community.id request.user as request_exists %}
+
                             {% if user.is_authenticated %}
 
                                 <form method="POST" action="">
@@ -43,8 +45,9 @@
                                             <td class="td-name"><a href="{% url 'community-activity' community.id %}" class="black-text">{{community.community_name}}</a></td>
                                             <input type="hidden" value="{{ community.id }}" name="commid">
                                             <td class="td-btn">
-                                                {% if community in user_communities %}
-                                                    <p class="darkteal-text">Already a member</p>
+
+                                                {% if request_exists or community in user_communities %}
+                                                    <p class="darkteal-text">Sent!</p>
                                                 {% else %}
                                                     <button id="btn-{{ community.id }}" class="action-btn">Send request to join</button>
                                                 {% endif %}
