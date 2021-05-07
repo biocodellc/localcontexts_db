@@ -42,6 +42,9 @@ SITE_ADMIN_NAME = os.environ['SITE_ADMIN_NAME']
 SITE_ADMIN_EMAIL = os.environ['SITE_ADMIN_EMAIL']
 ADMINS = [(SITE_ADMIN_NAME, SITE_ADMIN_EMAIL)]
 
+# reCAPTCHA 
+GOOGLE_RECAPTCHA_SECRET_KEY = os.environ['RECAPTCHA_SECRET_KEY']
+
 # Application definition
 INSTALLED_APPS = [
     'maintenance_mode',

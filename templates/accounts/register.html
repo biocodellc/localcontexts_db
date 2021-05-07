@@ -1,52 +1,58 @@
 {% extends 'reg-base.html' %} {% block title %} | Register {% endblock %} {% load static %} {% block card %}
-<div class="flex-this row flex-end w-90">
-    <p>Already a Member?<a href="{% url 'login' %}" class="darkteal-text"> Sign in</a></p>
+
+<div class="flex-this space-between w-90">
+    <div>
+        <h2 class="darkteal-text">Register with Local Contexts</h2>
+    </div>
+    <div>
+        <p>Already a Member?<a href="{% url 'login' %}" class="darkteal-text"> Sign in</a></p>
+    </div>
 </div>
+
 
 <!-- Alerts -->
 {% include 'partials/_alerts.html' %}
 
 <div class="form-container flex-this column w-90">
-<h2 class="darkteal-text">Register with Local Contexts</h2>
 
 <form action="{% url 'register' %}" method="POST" class="flex-this column w-100">
     {% csrf_token %}
     <div class="flex-this w-100">
 
         <div class="pad-right w-50">
-            <label class="input-label-teal" for="first_name">First name</label><br>
+            <label for="first_name">First name</label><br>
             {{form.first_name}}
         </div>
 
         <div class="pad-left w-50">
-            <label class="input-label-teal" for="last_name">Last name</label><br>
+            <label for="last_name">Last name</label><br>
             {{form.last_name}}
 
         </div>
     </div>
     
     <div>
-        <label class="input-label-teal" for="username">Username</label><br>
+        <label for="username">Username</label><br>
         {{form.username}}
         <small>{{form.username.help_text}}</small>
     </div>
     
     <div>
-        <label class="input-label-teal" for="email">Email Address</label><br>
+        <label for="email">Email Address</label><br>
         {{form.email}}
     </div>
 
     <div class="flex-this w-100">
 
         <div class="pad-right w-50">
-            <label class="input-label-teal" for="password">Password</label><br>
+            <label for="password">Password</label><br>
             <div class="flex-this pass-field">
                 {{form.password1}}<i id="toggle-password" class="fa fa-eye" aria-hidden="true"></i>
             </div>
         </div>
 
         <div class="pad-left w-50">
-            <label class="input-label-teal" for="confirm-password">Confirm Password</label><br>
+            <label for="confirm-password">Confirm Password</label><br>
             <div class="flex-this pass-field">
                 {{form.password2}}<i id="toggle-password2" class="fa fa-eye" aria-hidden="true"></i>
             </div>
@@ -68,11 +74,16 @@
             </p>
         </div>
     </div>
-
     <br>
-    <div class="text-align-right">
-        <button class="action-btn">Continue <i class="fa fa-long-arrow-right"></i></button>
+
+    <div class="flex-this space-between">
+        <div class="g-recaptcha" data-sitekey="6Lde2coaAAAAAB4T8Ln0hGur0H7-x4roy47qByAU"></div>
+
+        <div class="text-align-right">
+            <button class="action-btn">Continue <i class="fa fa-long-arrow-right"></i></button>
+        </div>
     </div>
+
 </form>
 </div>
 
