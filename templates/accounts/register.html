@@ -44,10 +44,13 @@
 
     <div class="flex-this w-100">
 
-        <div class="pad-right w-50">
+        <div class="pad-right w-50" style="position: relative;">
             <label for="password">Password</label><br>
             <div class="flex-this pass-field">
                 {{form.password1}}<i id="toggle-password" class="fa fa-eye" aria-hidden="true"></i>
+            </div>
+            <div id="help-text-pw" style="position: absolute;">
+                <small>{{form.password1.help_text}}</small>
             </div>
         </div>
 
@@ -60,9 +63,7 @@
 
     </div>
 
-    <div id="help-text-pw">
-            <small>{{form.password1.help_text}}</small>
-    </div>
+
 
     <div class="flex-this row checkbox-div">
         <div id="checkbox">
