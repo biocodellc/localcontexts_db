@@ -24,40 +24,63 @@ from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeEr
 from .utils import generate_token, email_exists, is_user_researcher
 from django.contrib.sites.shortcuts import get_current_site
 
+# Captcha validation imports
+import urllib
+import json
+
 @unauthenticated_user
 def register(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
+            # h/t: https://simpleisbetterthancomplex.com/tutorial/2017/02/21/how-to-add-recaptcha-to-django-site.html
+            ''' Begin reCAPTCHA validation '''
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            url = 'https://www.google.com/recaptcha/api/siteverify'
+            values = {
+                'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+                'response': recaptcha_response
+            }
+            data = urllib.parse.urlencode(values).encode()
+            req =  urllib.request.Request(url, data=data)
+            response = urllib.request.urlopen(req)
+            result = json.loads(response.read().decode())
+            ''' End reCAPTCHA validation '''
 
-            # Remember the current location
-            current_site=get_current_site(request)
-            template = render_to_string('snippets/activate.html', 
-            {
-                'user': user,
-                'domain':current_site.domain,
-                'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': generate_token.make_token(user)
-            })
+            if result['success']:
+                user = form.save(commit=False)
+                user.is_active = False
+                user.save()
 
-            to_email = form.cleaned_data.get('email')
+                # Remember the current location
+                current_site=get_current_site(request)
+                template = render_to_string('snippets/activate.html', 
+                {
+                    'user': user,
+                    'domain':current_site.domain,
+                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': generate_token.make_token(user)
+                })
 
-            email_contents = EmailMessage(
-                #Email subject
-                'Activate Your Account',
-                #Body of the email
-                template,
-                #Sender
-                settings.EMAIL_HOST_USER,
-                #Recipient, in list to send to multiple addresses at a time.
-                [to_email]
-            )
-            email_contents.fail_silently=False
-            email_contents.send()
-            return redirect('verify')
+                to_email = form.cleaned_data.get('email')
+
+                email_contents = EmailMessage(
+                    #Email subject
+                    'Activate Your Account',
+                    #Body of the email
+                    template,
+                    #Sender
+                    settings.EMAIL_HOST_USER,
+                    #Recipient, in list to send to multiple addresses at a time.
+                    [to_email]
+                )
+                email_contents.fail_silently=False
+                email_contents.send()
+                return redirect('verify')
+            else:
+                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+            
+            return redirect('register')
     else: 
         form = RegistrationForm()
     
