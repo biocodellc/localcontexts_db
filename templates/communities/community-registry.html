@@ -46,7 +46,7 @@
                                             <input type="hidden" value="{{ community.id }}" name="commid">
                                             <td class="td-btn">
 
-                                                {% if request_exists %}
+                                                {% if request_exists or community in user_communities %}
                                                     <p class="darkteal-text">Sent!</p>
                                                 {% else %}
                                                     <button id="btn-{{ community.id }}" class="action-btn">Send request to join</button>
