@@ -28,10 +28,9 @@
                     {% if communities %}
 
                         {% for community in communities %}
-                        {% join_request community.id request.user as request_exists %}
-
                             {% if user.is_authenticated %}
 
+                            {% join_request community.id request.user as request_exists %}
                                 <form method="POST" action="">
                                         {% csrf_token %}
                                         <tr>
