@@ -16,7 +16,25 @@ class Institution(models.Model):
     town_or_city = models.CharField(max_length=80, blank=True, null=True)
     country = CountryField(blank=True, null=True)
     website = models.URLField(max_length=150, blank=True, null=True)
-    researchers = models.ManyToManyField(Researcher, blank=True, related_name="institution_members")
+    admins = models.ManyToManyField(User, blank=True, related_name="institution_admins")
+    editors = models.ManyToManyField(User, blank=True, related_name="institution_editors")
+    viewers = models.ManyToManyField(User, blank=True, related_name="institution_viewers")
+
+    def get_member_count(self):
+        admins = self.admins.count()
+        editors = self.editors.count()
+        viewers = self.viewers.count()
+        total_members = admins + editors + viewers + 1
+        return total_members
+    
+    def get_admins(self):
+        return self.admins.all()
+
+    def get_editors(self):
+        return self.editors.all()
+    
+    def get_viewers(self):
+        return self.viewers.all()
 
     def __str__(self):
         return str(self.institution_name)
