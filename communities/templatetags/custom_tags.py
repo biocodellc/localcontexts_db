@@ -3,7 +3,8 @@ from django.urls import reverse
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from notifications.models import CommunityNotification
-from communities.models import CommunityJoinRequest
+from communities.models import CommunityJoinRequest, Community
+from projects.models import Project
 
 register = template.Library()
 
@@ -27,6 +28,16 @@ def community_notifications(community):
 def join_request(community, user):
     request_exists = CommunityJoinRequest.objects.filter(target_community=community, user_from=user).exists()
     if request_exists:
+        return True
+    else:
+        return False
+
+@register.simple_tag
+def project_has_labels_from_current_community(project_id, community):
+    project = Project.objects.get(id=project_id)
+    bclabels_exist = project.bclabels.filter(community=community).exists()
+    tklabels_exist = project.tklabels.filter(community=community).exists()
+    if bclabels_exist or tklabels_exist:
         return True
     else:
         return False
