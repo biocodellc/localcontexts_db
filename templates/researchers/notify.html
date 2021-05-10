@@ -72,7 +72,9 @@
             <select id="communities-select" class="width-492" onchange="selectCommunities()">
                 <option>Select a Community</option>
                 {% for community in communities %}
+                    {% if community.is_publicly_listed %}
                         <option id="{{ community.id }}">{{ community.community_name }}</option>
+                    {% endif %}
                 {% endfor %}
             </select>
             
