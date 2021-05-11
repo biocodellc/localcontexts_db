@@ -8,7 +8,7 @@ from projects.models import Project, ProjectContributors
 from bclabels.models import BCNotice, NoticeStatus
 from tklabels.models import TKNotice
 from communities.models import Community
-from notifications.models import CommunityNotification
+from notifications.models import ActionNotification
 
 from projects.forms import CreateProjectForm
 from notifications.forms import NoticeCommentForm
@@ -201,7 +201,7 @@ def notify_communities(request, pk, proj_id):
                     # Create notification
                     reference_id = str(bcnotice.unique_id)
                     title =  "A BC Notice has been placed by " + str(institution.institution_name) + '.'
-                    CommunityNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
+                    ActionNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
             
             # add community to tknotice instance
             if tknotice_exists:
@@ -216,7 +216,7 @@ def notify_communities(request, pk, proj_id):
                     # Create notification
                     reference_id = str(tknotice.unique_id)
                     title =  "A TK Notice has been placed by " + str(institution.institution_name) + '.'
-                    CommunityNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
+                    ActionNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
 
         
         return redirect('institution-projects', institution.id)

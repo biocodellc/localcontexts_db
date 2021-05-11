@@ -2,7 +2,7 @@ from django import template
 from django.urls import reverse
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
-from notifications.models import CommunityNotification
+from notifications.models import ActionNotification
 from communities.models import CommunityJoinRequest, Community
 from projects.models import Project
 
@@ -21,7 +21,7 @@ def anchor(url_name, section_id, community_id):
 
 @register.simple_tag
 def community_notifications(community):
-    notifications = CommunityNotification.objects.filter(community=community)
+    notifications = ActionNotification.objects.filter(community=community)
     return notifications
 
 @register.simple_tag

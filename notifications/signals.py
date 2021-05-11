@@ -14,20 +14,30 @@ def send_community_invite(sender, instance, created, **kwargs):
         sender_ = instance.sender
         receiver_ = instance.receiver
         role = instance.role
-        community = instance.community
         ref = instance.id
         msg = instance.message
-
         name = check_full_name(sender_)
 
-        title = "You've been invited by " + str(name) + " to join " + str(community) + "!"
+        if instance.community:
+            community = instance.community
+            title = str(name) + " has invited you to join " + str(community) + "."
 
-        if msg:
-            message = msg
-        else:
-            message= "Join our Community! " + str(community) + " with the role of " + str(role)
+            if msg:
+                message = msg
+            else:
+                message= "You've been invited to join " + str(community) + " with the role of " + str(role)
+            UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="Invitation", community=community, reference_id=ref, role=role)
 
-        UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="Invitation", community=community, reference_id=ref, role=role)
+        if instance.institution:
+            institution = instance.institution
+            title = str(name) + " has invited you to join " + str(institution) + "."
+
+            if msg:
+                message = msg
+            else:
+                message= "You've been invited to join " + str(institution) + " with the role of " + str(role)
+            UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="Invitation", institution=institution, reference_id=ref, role=role)
+
 
 # When an invitation to a community is accepted, send target a notification
 @receiver(post_save, sender=InviteMember)
@@ -36,22 +46,42 @@ def accept_community_invite(sender, instance, **kwargs):
         sender_ = instance.sender
         receiver_ = instance.receiver
         role = instance.role
-        community = instance.community
         ref = instance.id
 
-        # Lets user know they are now a member
-        title = "You are now a member of " + str(community) + "!"
-        message = "You now have access to " + str(community) + "'s notices and labels"
-        
-        UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Accept", community=community, reference_id=ref)
+        if instance.community:
+            community = instance.community
 
-        # Lets sender know their invitation was accepted
-        title2 = str(check_full_name(receiver_)) + " has accepted your invitation to join " + str(community) + "!"
-        message2 = str(check_full_name(receiver_)) + " is now a member of " + str(community)
-        
-        UserNotification.objects.create(to_user=sender_, from_user=receiver_, title=title2, message=message2, notification_type="Accept", community=community, reference_id=ref)
+            # Lets user know they are now a member
+            title = "You are now a member of " + str(community) + "!"
+            message = "You now have access to " + str(community) + "'s notices and labels."
+            
+            UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Accept", community=community, reference_id=ref)
 
-        instance.delete() # Deletes the invitation after it has been accepted
+            # Lets sender know their invitation was accepted
+            title2 = str(check_full_name(receiver_)) + " has accepted your invitation to join " + str(community) + "!"
+            message2 = str(check_full_name(receiver_)) + " is now a member of " + str(community)
+            
+            UserNotification.objects.create(to_user=sender_, from_user=receiver_, title=title2, message=message2, notification_type="Accept", community=community, reference_id=ref)
+
+            instance.delete() # Deletes the invitation after it has been accepted
+
+        if instance.institution:
+            institution = instance.institution
+
+            # Lets user know they are now a member
+            title = "You are now a member of " + str(institution) + "!"
+            message = "You now have access to " + str(institution) + "'s notices and projects."
+            
+            UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Accept", institution=institution, reference_id=ref)
+
+            # Lets sender know their invitation was accepted
+            title2 = str(check_full_name(receiver_)) + " has accepted your invitation to join " + str(institution) + "!"
+            message2 = str(check_full_name(receiver_)) + " is now a member of " + str(institution)
+            
+            UserNotification.objects.create(to_user=sender_, from_user=receiver_, title=title2, message=message2, notification_type="Accept", institution=institution, reference_id=ref)
+
+            instance.delete() # Deletes the invitation after it has been accepted
+
 
 # Send notification when user wishes to join a community
 @receiver(post_save, sender=CommunityJoinRequest)
