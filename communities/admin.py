@@ -8,7 +8,7 @@ class CommunityJoinRequestAdmin(admin.ModelAdmin):
     list_display = ( 'target_community', 'user_from', 'user_to', 'status', 'date_sent')
 
 class InviteMemberAdmin(admin.ModelAdmin):
-    list_display = ('community', 'sender', 'receiver', 'role', 'status', 'created')
+    list_display = ('community', 'institution', 'sender', 'receiver', 'role', 'status', 'created')
 
 admin.site.register(Community, CommunityAdmin)
 admin.site.register(InviteMember, InviteMemberAdmin)

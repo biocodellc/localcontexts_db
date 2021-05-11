@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.conf import settings
+from institutions.models import Institution
 
 class Community(models.Model):
     community_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -53,12 +54,13 @@ class InviteMember(models.Model):
         ('viewer', 'viewer'),
     )
 
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender', blank=True)
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
-    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community', null=True)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community_invitation', null=True, blank=True)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='institution_invitation', null=True, blank=True)
     role = models.CharField(max_length=8, choices=ROLES, null=True)
     message = models.TextField(blank=True, null=True)
-    status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent')
+    status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent', blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 

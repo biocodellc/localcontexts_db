@@ -12,6 +12,7 @@ from notifications.models import CommunityNotification
 
 from projects.forms import CreateProjectForm
 from notifications.forms import NoticeCommentForm
+from communities.forms import InviteMemberForm
 
 from .forms import CreateInstitutionForm, UpdateInstitutionForm
 # from bclabels.forms import AddBCNoticeMessage
@@ -98,6 +99,32 @@ def institution_activity(request, pk):
         'form': form,
     }
     return render(request, 'institutions/activity.html', context)
+
+# Members
+@login_required(login_url='login')
+def institution_members(request, pk):
+    institution = Institution.objects.get(id=pk)
+    return render(request, 'institutions/members.html', {'institution': institution})
+
+@login_required(login_url='login')
+def add_member(request, pk):
+    institution = Institution.objects.get(id=pk)
+
+    if request.method == 'POST':
+        form = InviteMemberForm(request.POST or None)
+        receiver = request.POST.get('receiver')
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.sender = request.user
+            data.status = 'sent'
+            data.institution = institution
+            data.save()
+            messages.add_message(request, messages.INFO, 'Invitation Sent!')
+            return render(request, 'institutions/add-member.html', {'institution': institution, 'form': form,})
+    else:
+        form = InviteMemberForm()
+        
+    return render(request, 'institutions/add-member.html', {'institution': institution, 'form': form,})
 
 # Projects
 @login_required(login_url='login')
