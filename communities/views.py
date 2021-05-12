@@ -65,7 +65,7 @@ def community_registry(request):
             target_community = Community.objects.get(id=buttonid)
             main_admin = target_community.community_creator
 
-            req = CommunityJoinRequest.objects.create(user_from=request.user, target_community=target_community, user_to=main_admin)
+            req = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
             req.save()
 
             return redirect('community-registry')

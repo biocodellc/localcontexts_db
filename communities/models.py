@@ -72,14 +72,15 @@ class InviteMember(models.Model):
         verbose_name_plural = 'Member Invitations'
         ordering = ('-created',)
 
-class CommunityJoinRequest(models.Model):
+class JoinRequest(models.Model):
     STATUS_CHOICES = (
         ('sent', 'sent'),
         ('accepted', 'accepted'),
     )
-    user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_from')
-    user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_to')
-    target_community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='target_community', null=True)
+    user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_sender')
+    user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_receiver')
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='join_request_community', null=True, blank=True)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='join_request_institution', null=True, blank=True)
     status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent')
     date_sent = models.DateTimeField(auto_now=True)
 
@@ -87,6 +88,6 @@ class CommunityJoinRequest(models.Model):
         return f"{self.user_from}-{self.user_to}-{self.target_community}-{self.status}"
 
     class Meta:
-        verbose_name = 'Community Join Request'
-        verbose_name_plural = 'Community Join Requests'
+        verbose_name = 'Join Request'
+        verbose_name_plural = 'Join Requests'
         ordering = ('-date_sent',)

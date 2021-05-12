@@ -37,7 +37,7 @@ def show_notification(request, pk):
                 return render(request, 'notifications/read.html', {'notification': n})
 
             elif n.notification_type == 'Request':
-                j = CommunityJoinRequest.objects.get(id=n.reference_id)
+                j = JoinRequest.objects.get(id=n.reference_id)
                 j.status = 'accepted'
                 j.save()
 
@@ -95,7 +95,7 @@ def show_notification(request, pk):
 
         
             # elif n.notification_type == 'Request':
-            #     j = CommunityJoinRequest.objects.get(id=n.reference_id)
+            #     j = JoinRequest.objects.get(id=n.reference_id)
             #     j.status = 'accepted'
             #     j.save()
 
