@@ -106,8 +106,30 @@
                 <div class="flex-this column w-40">
                     <h2 class="orange-text community-title">{{ institution.institution_name }}</h2>
                     <p>
-                        <span>Members:</span> 00 <br>
-                        <span>Location:</span> {{ institution.town_or_city }}, {{ institution.country.name }}<br>
+                        Role:
+                        <span>
+                            {% if member_role == 'admin' %}
+                                Admin
+                            {% endif %}
+                            {% if member_role == 'editor' %}
+                                Editor
+                            {% endif %}
+                            {% if member_role == 'viewer' %}
+                                Viewer
+                            {% endif %}
+                        </span> 
+                        <br>
+                        Members:
+                        <span>
+                            {% if institution.get_member_count < 10 %} 
+                                0{{ institution.get_member_count }} 
+                            {% else %}
+                            {{ institution.get_member_count }}
+                            {% endif %}
+                        </span> 
+                        <br>
+                        Location:
+                        <span>{{ institution.town_or_city }}, {{ institution.country.name }}</span> <br>
                     </p>
                 </div>
     
