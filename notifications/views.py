@@ -93,29 +93,28 @@ def show_notification(request, pk):
 
                 return render(request, 'notifications/read.html', {'notification': n})
 
-        
-            # elif n.notification_type == 'Request':
-            #     j = JoinRequest.objects.get(id=n.reference_id)
-            #     j.status = 'accepted'
-            #     j.save()
+            elif n.notification_type == 'Request':
+                j = JoinRequest.objects.get(id=n.reference_id)
+                j.status = 'accepted'
+                j.save()
 
-            #     # Add community to UserAffiliation
-            #     u = UserAffiliation.objects.get(user=n.from_user)
-            #     u.institution.add(inst)
-            #     u.save()
+                # Add institution to UserAffiliation
+                u = UserAffiliation.objects.get(user=n.from_user)
+                u.institutions.add(inst)
+                u.save()
 
-            #     c = Institution.objects.get(id=inst)
-            #     radio_value = request.POST.get('role')
+                c = Institution.objects.get(id=inst)
+                radio_value = request.POST.get('role')
 
-            #     if radio_value == 'admin':
-            #         c.admins.add(n.from_user)
-            #     elif radio_value == 'editor':
-            #         c.editors.add(n.from_user)
-            #     elif radio_value == 'viewer':
-            #         c.viewers.add(n.from_user)
-            #     c.save()
+                if radio_value == 'admin':
+                    c.admins.add(n.from_user)
+                elif radio_value == 'editor':
+                    c.editors.add(n.from_user)
+                elif radio_value == 'viewer':
+                    c.viewers.add(n.from_user)
+                c.save()
 
-            #     return render(request, 'notifications/read.html', {'notification': n})
+                return render(request, 'notifications/read.html', {'notification': n})
                 
     return render(request, 'notifications/notification.html', { 'notification': n })
 
