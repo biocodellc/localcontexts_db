@@ -2,7 +2,7 @@
 {% institution_notifications institution as notifications %}
 {% get_notices_count institution as total_notices %}
 {% get_projects_count institution as total_projects %}
-<div class="pad-top-8">
+<div class="pad-top-5">
 
     <div class="content-card content-card-space flex-this column white-bg">
     
@@ -86,9 +86,13 @@
                         </div>
                     </div>
 
-                    <div>
-                        <a href="{% url 'update-institution' institution.id%}" class="darkteal-text"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
-                    </div>
+                    {% if member_role == 'viewer' or member_role == 'editor' %}
+                    {% else %}
+
+                        <div>
+                            <a href="{% url 'update-institution' institution.id%}" class="darkteal-text"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
+                        </div>
+                    {% endif %}
                 </div>
                 
             </div>

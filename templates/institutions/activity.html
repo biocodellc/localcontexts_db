@@ -131,17 +131,22 @@
                                                     </div>
                                                 {% endif %}
                                             {% endfor %}
+
+                                            {% if member_role == 'viewer' %}
+
+                                            {% else %}
         
-                                            <input type="hidden" value="{{ bcnotice.project.id }}" name="project-id">
-        
-                                            <div class="flex-this row">
-                                                <div class="w-100">
-                                                    {{ form.message }}
+                                                <input type="hidden" value="{{ bcnotice.project.id }}" name="project-id">
+            
+                                                <div class="flex-this row">
+                                                    <div class="w-100">
+                                                        {{ form.message }}
+                                                    </div>
+                                                    <div style="margin-left:-55px; margin-top:7px;">
+                                                        <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+                                                    </div>
                                                 </div>
-                                                <div style="margin-left:-55px; margin-top:7px;">
-                                                    <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
-                                                </div>
-                                            </div>
+                                            {% endif %}
                     
                                             {% if form.errors %}
                                             {{ form.errors }}

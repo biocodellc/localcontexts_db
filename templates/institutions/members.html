@@ -76,13 +76,16 @@
                 </div>
             {% endfor %}
 
-                <a href="{% url 'add-institution-member' institution.id %}">
-                    <div class="flex-this add-member-card">
-                        <div class="w-100 add-member">
-                            <h4 class="darkteal-text weight-500">+ Add Members </h4>
+                {% if member_role == 'viewer' %}
+                {% else %}
+                    <a href="{% url 'add-institution-member' institution.id %}">
+                        <div class="flex-this add-member-card">
+                            <div class="w-100 add-member">
+                                <h4 class="darkteal-text weight-500">+ Add Members </h4>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                {% endif %}
 
     </div>
 
