@@ -11,63 +11,111 @@ def show_notification(request, pk):
     n = UserNotification.objects.get(id=pk)
 
     if request.method == 'POST':
-        comm = n.community.id
-        
-        if n.notification_type == 'Invitation':
-            i = InviteMember.objects.get(id=n.reference_id) #Use reference id to find id of Invite Member instance
-            i.status = 'accepted'
-            i.save()
+        if n.community:
+            comm = n.community.id
 
-            # Add community to UserAffiliation
-            u = UserAffiliation.objects.get(user=n.to_user)
-            u.communities.add(comm)
-            u.save()
+            if n.notification_type == 'Invitation':
+                i = InviteMember.objects.get(id=n.reference_id) #Use reference id to find id of Invite Member instance
+                i.status = 'accepted'
+                i.save()
 
-            # Add user as target role to community.
-            c = Community.objects.get(id=comm)
-            if n.role == 'viewer':
-                c.viewers.add(n.to_user)
-            elif n.role == 'admin':
-                c.admins.add(n.to_user)
-            elif n.role == 'editor':
-                c.editors.add(n.to_user)
-            c.save()
+                # Add community to UserAffiliation
+                u = UserAffiliation.objects.get(user=n.to_user)
+                u.communities.add(comm)
+                u.save()
 
-            return render(request, 'notifications/read.html', {'notification': n})
+                # Add user as target role to community.
+                c = Community.objects.get(id=comm)
+                if n.role == 'viewer':
+                    c.viewers.add(n.to_user)
+                elif n.role == 'admin':
+                    c.admins.add(n.to_user)
+                elif n.role == 'editor':
+                    c.editors.add(n.to_user)
+                c.save()
 
-        
-        elif n.notification_type == 'Request':
-            j = CommunityJoinRequest.objects.get(id=n.reference_id)
-            j.status = 'accepted'
-            j.save()
+                return render(request, 'notifications/read.html', {'notification': n})
 
-            # Add community to UserAffiliation
-            u = UserAffiliation.objects.get(user=n.from_user)
-            u.communities.add(comm)
-            u.save()
+            elif n.notification_type == 'Request':
+                j = JoinRequest.objects.get(id=n.reference_id)
+                j.status = 'accepted'
+                j.save()
 
-            c = Community.objects.get(id=comm)
-            radio_value = request.POST.get('role')
+                # Add community to UserAffiliation
+                u = UserAffiliation.objects.get(user=n.from_user)
+                u.communities.add(comm)
+                u.save()
 
-            if radio_value == 'admin':
-                c.admins.add(n.from_user)
-            elif radio_value == 'editor':
-                c.editors.add(n.from_user)
-            elif radio_value == 'viewer':
-                c.viewers.add(n.from_user)
-            c.save()
+                c = Community.objects.get(id=comm)
+                radio_value = request.POST.get('role')
 
-            return render(request, 'notifications/read.html', {'notification': n})
+                if radio_value == 'admin':
+                    c.admins.add(n.from_user)
+                elif radio_value == 'editor':
+                    c.editors.add(n.from_user)
+                elif radio_value == 'viewer':
+                    c.viewers.add(n.from_user)
+                c.save()
 
-        elif n.notification_type == 'Create':
-            new_community = Community.objects.get(id=comm)
-            new_community.is_approved = True
-            new_community.save()
+                return render(request, 'notifications/read.html', {'notification': n})
 
-            send_community_approval_notification(new_community.community_creator, new_community)
+            elif n.notification_type == 'Create':
+                new_community = Community.objects.get(id=comm)
+                new_community.is_approved = True
+                new_community.save()
 
-            return render(request, 'notifications/read.html', {'notification': n})
-        
+                send_community_approval_notification(new_community.community_creator, new_community)
+
+                return render(request, 'notifications/read.html', {'notification': n})
+
+        if n.institution:
+            inst = n.institution.id
+
+            if n.notification_type == 'Invitation':
+                i = InviteMember.objects.get(id=n.reference_id) #Use reference id to find id of Invite Member instance
+                i.status = 'accepted'
+                i.save()
+
+                # Add institution to UserAffiliation
+                u = UserAffiliation.objects.get(user=n.to_user)
+                u.institutions.add(inst)
+                u.save()
+
+                # Add user as target role to institution.
+                c = Institution.objects.get(id=inst)
+                if n.role == 'viewer':
+                    c.viewers.add(n.to_user)
+                elif n.role == 'admin':
+                    c.admins.add(n.to_user)
+                elif n.role == 'editor':
+                    c.editors.add(n.to_user)
+                c.save()
+
+                return render(request, 'notifications/read.html', {'notification': n})
+
+            elif n.notification_type == 'Request':
+                j = JoinRequest.objects.get(id=n.reference_id)
+                j.status = 'accepted'
+                j.save()
+
+                # Add institution to UserAffiliation
+                u = UserAffiliation.objects.get(user=n.from_user)
+                u.institutions.add(inst)
+                u.save()
+
+                c = Institution.objects.get(id=inst)
+                radio_value = request.POST.get('role')
+
+                if radio_value == 'admin':
+                    c.admins.add(n.from_user)
+                elif radio_value == 'editor':
+                    c.editors.add(n.from_user)
+                elif radio_value == 'viewer':
+                    c.viewers.add(n.from_user)
+                c.save()
+
+                return render(request, 'notifications/read.html', {'notification': n})
+                
     return render(request, 'notifications/notification.html', { 'notification': n })
 
 @login_required(login_url='login')
@@ -86,7 +134,7 @@ def delete_notification(request, pk):
 
 @login_required(login_url='login')
 def show_notification_community(request, cid, pk):
-    n = CommunityNotification.objects.get(id=pk)
+    n = ActionNotification.objects.get(id=pk)
     community = Community.objects.get(id=cid)
     context = {
         'n': n,
@@ -97,7 +145,7 @@ def show_notification_community(request, cid, pk):
 @login_required(login_url='login')
 @csrf_exempt
 def read_notification_community(request, cid, pk):
-    n = CommunityNotification.objects.get(id=pk)
+    n = ActionNotification.objects.get(id=pk)
     community = Community.objects.get(id=cid)
     n.viewed = True
     n.save()
@@ -111,7 +159,7 @@ def read_notification_community(request, cid, pk):
 @login_required(login_url='login')
 @csrf_exempt
 def read_institution_notification(request, iid, pk):
-    n = InstitutionNotification.objects.get(id=pk)
+    n = ActionNotification.objects.get(id=pk)
     institution = Institution.objects.get(id=iid)
     n.viewed = True
     n.save()
@@ -125,7 +173,7 @@ def read_institution_notification(request, iid, pk):
 @login_required(login_url='login')
 @csrf_exempt
 def read_researcher_notification(request, rid, pk):
-    n = ResearcherNotification.objects.get(id=pk)
+    n = ActionNotification.objects.get(id=pk)
     researcher = Researcher.objects.get(id=rid)
     n.viewed = True
     n.save()
@@ -142,5 +190,5 @@ def read_researcher_notification(request, rid, pk):
 # TODO: Do we need to be able to delete activity/ community notifications?
 # @login_required(login_url='login')
 # def delete_notification_community(request, pk):
-#     n = CommunityNotification.objects.get(id=pk)
+#     n = ActionNotification.objects.get(id=pk)
 #     return render(request, 'notifications/community-notification.html', { 'n': n })

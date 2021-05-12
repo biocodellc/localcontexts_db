@@ -4,7 +4,7 @@
 {% include 'partials/_auth-header.html' %}
 
     <section class="grey-bg">
-        <div class="pad-top-8"></div>
+        <div class="pad-top-5"></div>
         <div class="content-card content-card-space white-bg">
             <h3 class="darkteal-text">{{ notification.title }}</h3>
             <p>Message: <br>{{ notification.message }}</p>
@@ -30,8 +30,11 @@
                     <input type="radio" name="role" value="editor"><label for="editor">Editor</label>
                     <input type="radio" name="role" value="viewer"><label for="viewer">Viewer</label>
                     <br>
-
-                    <button class="action-btn">Add User To Community</button>
+                     {% if notification.community %}
+                        <button class="action-btn">Add User To Community</button>
+                    {% else %}
+                        <button class="action-btn">Add User To Institution</button>
+                    {% endif %}
                 </form>
             {% endif %}
 

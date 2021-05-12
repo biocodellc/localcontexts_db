@@ -1,6 +1,6 @@
 from django import template
 from django.urls import reverse
-from notifications.models import ResearcherNotification
+from notifications.models import ActionNotification
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from projects.models import ProjectContributors
@@ -9,7 +9,7 @@ register = template.Library()
 
 @register.simple_tag
 def researcher_notifications(researcher):
-    notifications = ResearcherNotification.objects.filter(researcher=researcher)
+    notifications = ActionNotification.objects.filter(researcher=researcher)
     return notifications
 
 @register.simple_tag

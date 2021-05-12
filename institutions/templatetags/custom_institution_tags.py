@@ -1,15 +1,16 @@
 from django import template
 from django.urls import reverse
-from notifications.models import InstitutionNotification
+from notifications.models import ActionNotification
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from projects.models import ProjectContributors
+from communities.models import JoinRequest
 
 register = template.Library()
 
 @register.simple_tag
 def institution_notifications(institution):
-    notifications = InstitutionNotification.objects.filter(institution=institution)
+    notifications = ActionNotification.objects.filter(institution=institution)
     return notifications
 
 @register.simple_tag
@@ -27,3 +28,11 @@ def get_notices_count(institution):
 def get_projects_count(institution):
     contrib_count = ProjectContributors.objects.filter(institution=institution).count()
     return contrib_count
+
+@register.simple_tag
+def join_request(institution, user):
+    request_exists = JoinRequest.objects.filter(institution=institution, user_from=user).exists()
+    if request_exists:
+        return True
+    else:
+        return False
