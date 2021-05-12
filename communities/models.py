@@ -85,7 +85,7 @@ class JoinRequest(models.Model):
     date_sent = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user_from}-{self.user_to}-{self.target_community}-{self.status}"
+        return f"{self.user_from}-{self.user_to}-{self.status}"
 
     class Meta:
         verbose_name = 'Join Request'

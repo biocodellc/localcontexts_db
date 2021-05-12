@@ -30,8 +30,11 @@
                     <input type="radio" name="role" value="editor"><label for="editor">Editor</label>
                     <input type="radio" name="role" value="viewer"><label for="viewer">Viewer</label>
                     <br>
-
-                    <button class="action-btn">Add User To Community</button>
+                     {% if notification.community %}
+                        <button class="action-btn">Add User To Community</button>
+                    {% else %}
+                        <button class="action-btn">Add User To Institution</button>
+                    {% endif %}
                 </form>
             {% endif %}
 

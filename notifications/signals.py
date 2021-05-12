@@ -89,15 +89,25 @@ def send_user_join_request(sender, instance, created, **kwargs):
     if created:
         receiver_ = instance.user_to
         sender_ = instance.user_from
-        community = instance.target_community
         ref = instance.id
 
         name = check_full_name(sender_)
 
-        title = str(name) + " wishes to join " + str(community)
-        message = "You can add " + str(name) + " to " + str(community)
+        if instance.community:
+            community = instance.community
 
-        UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Request", community=community, reference_id=ref)
+            title = str(name) + " wishes to join " + str(community)
+            message = "You can add " + str(name) + " to " + str(community)
+
+            UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Request", community=community, reference_id=ref)
+        if instance.institution:
+            institution = instance.institution
+
+            title = str(name) + " wishes to join " + str(institution)
+            message = "You can add " + str(name) + " to " + str(institution)
+
+            UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Request", institution=institution, reference_id=ref)
+
 
 # Send notification when a user's join request has been accepted and they are now part of a community.
 @receiver(post_save, sender=JoinRequest)

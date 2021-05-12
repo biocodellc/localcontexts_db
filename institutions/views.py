@@ -7,8 +7,9 @@ from researchers.models import Researcher
 from projects.models import Project, ProjectContributors
 from bclabels.models import BCNotice, NoticeStatus
 from tklabels.models import TKNotice
-from communities.models import Community
+from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
+from accounts.models import UserAffiliation
 
 from projects.forms import CreateProjectForm
 from notifications.forms import NoticeCommentForm
@@ -38,7 +39,28 @@ def create_institution(request):
 # Registry
 def institution_registry(request):
     institutions = Institution.objects.all()
-    return render(request, 'institutions/institution-registry.html', {'institutions': institutions})
+
+    if request.user.is_authenticated:
+        current_user = UserAffiliation.objects.get(user=request.user)
+        user_institutions = current_user.institutions.all()
+
+        if request.method == 'POST':
+            buttonid = request.POST.get('instid')
+            target_institution = Institution.objects.get(id=buttonid)
+            main_admin = target_institution.institution_creator
+
+            join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
+            join_request.save()
+            return redirect('institution-registry')
+    else:
+        return render(request, 'institutions/institution-registry.html', {'institutions': institutions})
+
+    context = {
+        'institutions': institutions,
+        'user_institutions': user_institutions,
+    }
+    return render(request, 'institutions/institution-registry.html', context)
+
 
 # Update institution
 @login_required(login_url='login')
