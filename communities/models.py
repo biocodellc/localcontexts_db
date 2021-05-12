@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.conf import settings
+from institutions.models import Institution
 
 class Community(models.Model):
     community_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -53,12 +54,13 @@ class InviteMember(models.Model):
         ('viewer', 'viewer'),
     )
 
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender', blank=True)
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receiver')
-    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community', null=True)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community_invitation', null=True, blank=True)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='institution_invitation', null=True, blank=True)
     role = models.CharField(max_length=8, choices=ROLES, null=True)
     message = models.TextField(blank=True, null=True)
-    status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent')
+    status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent', blank=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -70,21 +72,22 @@ class InviteMember(models.Model):
         verbose_name_plural = 'Member Invitations'
         ordering = ('-created',)
 
-class CommunityJoinRequest(models.Model):
+class JoinRequest(models.Model):
     STATUS_CHOICES = (
         ('sent', 'sent'),
         ('accepted', 'accepted'),
     )
-    user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_from')
-    user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_to')
-    target_community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='target_community', null=True)
+    user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_sender')
+    user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_receiver')
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='join_request_community', null=True, blank=True)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='join_request_institution', null=True, blank=True)
     status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent')
     date_sent = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.user_from}-{self.user_to}-{self.target_community}-{self.status}"
+        return f"{self.user_from}-{self.user_to}-{self.status}"
 
     class Meta:
-        verbose_name = 'Community Join Request'
-        verbose_name_plural = 'Community Join Requests'
+        verbose_name = 'Join Request'
+        verbose_name_plural = 'Join Requests'
         ordering = ('-date_sent',)

@@ -2,7 +2,7 @@
 {% institution_notifications institution as notifications %}
 {% get_notices_count institution as total_notices %}
 {% get_projects_count institution as total_projects %}
-<div class="pad-top-8">
+<div class="pad-top-5">
 
     <div class="content-card content-card-space flex-this column white-bg">
     
@@ -86,9 +86,13 @@
                         </div>
                     </div>
 
-                    <div>
-                        <a href="{% url 'update-institution' institution.id%}" class="darkteal-text"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
-                    </div>
+                    {% if member_role == 'viewer' or member_role == 'editor' %}
+                    {% else %}
+
+                        <div>
+                            <a href="{% url 'update-institution' institution.id%}" class="darkteal-text"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
+                        </div>
+                    {% endif %}
                 </div>
                 
             </div>
@@ -106,8 +110,30 @@
                 <div class="flex-this column w-40">
                     <h2 class="orange-text community-title">{{ institution.institution_name }}</h2>
                     <p>
-                        <span>Members:</span> 00 <br>
-                        <span>Location:</span> {{ institution.town_or_city }}, {{ institution.country.name }}<br>
+                        Role:
+                        <span>
+                            {% if member_role == 'admin' %}
+                                Admin
+                            {% endif %}
+                            {% if member_role == 'editor' %}
+                                Editor
+                            {% endif %}
+                            {% if member_role == 'viewer' %}
+                                Viewer
+                            {% endif %}
+                        </span> 
+                        <br>
+                        Members:
+                        <span>
+                            {% if institution.get_member_count < 10 %} 
+                                0{{ institution.get_member_count }} 
+                            {% else %}
+                            {{ institution.get_member_count }}
+                            {% endif %}
+                        </span> 
+                        <br>
+                        Location:
+                        <span>{{ institution.town_or_city }}, {{ institution.country.name }}</span> <br>
                     </p>
                 </div>
     

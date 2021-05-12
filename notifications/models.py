@@ -28,6 +28,7 @@ class UserNotification(models.Model):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="from_user")
     notification_type = models.CharField(max_length=10, choices=TYPES, null=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, blank=True)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True)
     role = models.CharField(max_length=8, choices=ROLES, null=True, blank=True)
     reference_id = models.CharField(max_length=20, null=True, blank=True)
     viewed = models.BooleanField(default=False)
@@ -41,7 +42,7 @@ class UserNotification(models.Model):
         verbose_name_plural = 'User Notifications'
         ordering = ('-created',)
 
-class CommunityNotification(models.Model):
+class ActionNotification(models.Model):
     TYPES = (
         ('Labels', 'labels'),
         ('Connections', 'connections'),
@@ -51,8 +52,10 @@ class CommunityNotification(models.Model):
 
     title = models.CharField(max_length=200)
     notification_type = models.CharField(max_length=20, choices=TYPES, null=True)
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="community_noti_sender", blank=True)
-    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="notification_sender", blank=True)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, blank=True)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True)
+    researcher = models.ForeignKey(Researcher, on_delete=models.CASCADE, null=True, blank=True)
     reference_id = models.CharField(max_length=50, null=True, blank=True)
     viewed = models.BooleanField(default=False)
     created = models.DateField(auto_now_add=True, null=True)
@@ -61,57 +64,10 @@ class CommunityNotification(models.Model):
         return f"{self.notification_type} - {self.title}"
 
     class Meta:
-        verbose_name = 'Community Notification'
-        verbose_name_plural = 'Community Notifications'
+        verbose_name = 'Action Notification'
+        verbose_name_plural = 'Action Notifications'
         ordering = ('-created',)
 
-class InstitutionNotification(models.Model):
-    TYPES = (
-        ('Activity', 'activity'),
-        ('Labels', 'labels'),
-        ('Connections', 'connections'),
-        ('Projects', 'projects')
-    )
-
-    title = models.CharField(max_length=200)
-    notification_type = models.CharField(max_length=20, choices=TYPES, null=True)
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="institution_noti_sender", blank=True)
-    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True)
-    reference_id = models.CharField(max_length=50, null=True, blank=True)
-    viewed = models.BooleanField(default=False)
-    created = models.DateField(auto_now_add=True, null=True)
-
-    def __str__(self):
-        return f"{self.notification_type} - {self.title}"
-
-    class Meta:
-        verbose_name = 'Institution Notification'
-        verbose_name_plural = 'Institution Notifications'
-        ordering = ('created',)
-
-class ResearcherNotification(models.Model):
-    TYPES = (
-        ('Activity', 'activity'),
-        ('Labels', 'labels'),
-        ('Connections', 'connections'),
-        ('Projects', 'projects')
-    )
-
-    title = models.CharField(max_length=200)
-    notification_type = models.CharField(max_length=20, choices=TYPES, null=True)
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="researcher_noti_sender", blank=True)
-    researcher = models.ForeignKey(Researcher, on_delete=models.CASCADE, null=True)
-    reference_id = models.CharField(max_length=50, null=True, blank=True)
-    viewed = models.BooleanField(default=False)
-    created = models.DateField(auto_now_add=True, null=True)
-
-    def __str__(self):
-        return f"{self.notification_type} - {self.title}"
-
-    class Meta:
-        verbose_name = 'Researcher Notification'
-        verbose_name_plural = 'Researcher Notifications'
-        ordering = ('created',)
 
 class NoticeComment(models.Model):
     bcnotice = models.ForeignKey(BCNotice, on_delete=models.CASCADE, null=True, related_name="bcnotice_comment", blank=True)
