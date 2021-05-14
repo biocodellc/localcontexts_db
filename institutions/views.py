@@ -26,16 +26,14 @@ def connect_institution(request):
 
 @login_required(login_url='login')
 def create_institution(request):
+    form = CreateInstitutionForm(request.POST or None)
     if request.method == 'POST':
-        form = CreateInstitutionForm(request.POST)
         if form.is_valid():
             data = form.save(commit=False)
             data.institution_creator = request.user
             data.save()
             return redirect('dashboard')
-    else:
-        form = CreateInstitutionForm()
-        return render(request, 'institutions/create-institution.html', {'form': form})
+    return render(request, 'institutions/create-institution.html', {'form': form})
 
 # Registry
 def institution_registry(request):

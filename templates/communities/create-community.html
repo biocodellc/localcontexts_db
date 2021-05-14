@@ -32,7 +32,9 @@
             </div>
         </div>
 
-
+        {% if form.errors %}
+            <small>{{ form.errors }}</small>
+        {% endif %}
         {% include 'partials/_alerts.html' %}
 
         <div>
