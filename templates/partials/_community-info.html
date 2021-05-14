@@ -132,7 +132,12 @@
                             {% endif %}
                             
                             </span><br>
-                        Location: <span>{{ community.town }}, {{ community.country.name }} </span><br>
+                        Location: 
+                        <span>
+                            {% if community.town %} {{ community.town }}, {% else %} {{ community.community_creator.profile.city_or_town }}, {% endif %}
+                            {% if community.country.name %} {{ community.country.name }} {% else %} {{ community.community_creator.profile.country.name }} {% endif %}
+                        </span> <br>
+
                         {% if request.user == community.community_creator and community.is_approved == False %}
                             <small>Your community application is being reviewed and <br> has not been approved yet.</small>
                         {% else %}

@@ -133,7 +133,10 @@
                         </span> 
                         <br>
                         Location:
-                        <span>{{ institution.town_or_city }}, {{ institution.country.name }}</span> <br>
+                        <span>
+                            {% if institution.town_or_city %} {{ institution.town_or_city }}, {% else %} {{ institution.institution_creator.profile.city_or_town }}, {% endif %}
+                            {% if institution.country.name %} {{ institution.country.name }} {% else %} {{ institution.institution_creator.profile.country.name }} {% endif %}
+                        </span> <br>
                     </p>
                 </div>
     
