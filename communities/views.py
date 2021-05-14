@@ -32,8 +32,8 @@ def connect_community(request):
 # Create Community
 @login_required(login_url='login')
 def create_community(request):
+    form = CreateCommunityForm(request.POST or None)
     if request.method == "POST":
-        form = CreateCommunityForm(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.community_creator = request.user
@@ -48,9 +48,7 @@ def create_community(request):
                 fail_silently=False)
 
             return redirect('dashboard')
-    else:
-        form = CreateCommunityForm()
-        return render(request, 'communities/create-community.html', {'form': form})
+    return render(request, 'communities/create-community.html', {'form': form})
 
 # Registry
 def community_registry(request):

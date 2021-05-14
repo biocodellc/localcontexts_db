@@ -1,6 +1,6 @@
 from django import forms
 from .models import Community, InviteMember
-from .utils import checkif_community_in_user_community, checkif_invite_exists
+from django.utils.translation import ugettext_lazy as _
 
 class CreateCommunityForm(forms.ModelForm):
     class Meta:
@@ -9,6 +9,11 @@ class CreateCommunityForm(forms.ModelForm):
         widgets = {
             'contact_name': forms.TextInput(attrs={'size': 22}),
             'contact_email': forms.EmailInput(attrs={'size': 24}),
+        }
+        error_messages = {
+            'community_name': {
+                'unique': _("A community by that name already exists."),
+            },
         }
 
 class UpdateCommunityForm(forms.ModelForm):

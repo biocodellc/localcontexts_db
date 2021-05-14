@@ -1,10 +1,16 @@
 from django import forms
 from .models import Institution
+from django.utils.translation import ugettext_lazy as _
 
 class CreateInstitutionForm(forms.ModelForm):
     class Meta:
         model = Institution
         fields = ['institution_name', 'institution_id', 'orcid', 'town_or_city', 'country', 'contact_name', 'contact_email']
+        error_messages = {
+            'institution_name': {
+                'unique': _("An institution by that name already exists."),
+            },
+        }
 
 class UpdateInstitutionForm(forms.ModelForm):
     class Meta:
