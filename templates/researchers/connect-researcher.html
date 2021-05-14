@@ -8,6 +8,9 @@
     <form action="{% url 'connect-researcher' %}" method="POST" class="flex-this column w-100">
         {% csrf_token %}
 
+        <!-- <div id="orcidWidget" data-clientid='APP-QVTI298PQSDYLIV8' data-env="sandbox" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/accounts/dashboard/"></div> -->
+
+
         <label>Orcid ID</label>
         {{ form.orcid }}
 
