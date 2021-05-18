@@ -18,7 +18,7 @@ class CreateProjectForm(forms.ModelForm):
             'project_contact_email': forms.TextInput(attrs={'size': 65}),
             'publication_doi': forms.TextInput(attrs={'size': 65}),
             'project_data_guid': forms.TextInput(attrs={'size': 65}),
-            'recommended_citation': forms.TextInput(attrs={'size': 65}),
+            'recommended_citation': forms.Textarea(attrs={'rows': 4, 'cols': 65}),
             'geome_project_id': forms.TextInput(attrs={'size': 65}),
             'url': forms.TextInput(attrs={'size': 65}),
         }

@@ -21,7 +21,7 @@ class Project(models.Model):
     project_contact_email = models.EmailField(max_length=100, null=True)
     publication_doi = models.CharField(max_length=200, blank=True, null=True)
     project_data_guid = models.CharField(max_length=200, blank=True, null=True)
-    recommended_citation = models.CharField(max_length=200, blank=True, null=True)
+    recommended_citation = models.TextField(null=True, blank=True)
     geome_project_id = models.IntegerField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     publication_date = models.DateField(null=True, blank=True)
