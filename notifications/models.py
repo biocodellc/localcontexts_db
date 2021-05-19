@@ -66,7 +66,7 @@ class ActionNotification(models.Model):
     class Meta:
         verbose_name = 'Action Notification'
         verbose_name_plural = 'Action Notifications'
-        ordering = ('-created',)
+        ordering = ('created',)
 
 
 class NoticeComment(models.Model):

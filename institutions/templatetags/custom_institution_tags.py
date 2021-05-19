@@ -18,8 +18,8 @@ def anchor(url_name, section_id, institution_id):
     return reverse(url_name, kwargs={'pk': institution_id}) + "#full-notice-card-" + str(section_id)
 
 @register.simple_tag
-def anchor_project(url_name, contrib_id, institution_id):
-    return reverse(url_name, kwargs={'pk': institution_id}) + "#project-contrib-" + str(contrib_id)
+def anchor_project(url_name, unique_id, institution_id):
+    return reverse(url_name, kwargs={'pk': institution_id}) + "#project-unique-" + str(unique_id)
 
 @register.simple_tag
 def get_notices_count(institution):

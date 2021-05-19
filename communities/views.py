@@ -533,7 +533,9 @@ def create_project(request, pk):
                 obj.save()
 
                 ProjectContributors.objects.create(project=obj, community=community)
+                
                 # Maybe there's a better way to do this? using project unique id instead of contrib id?
+                # Has to be a contrib id for the js to work. Rework this maybe?
                 contrib = ProjectContributors.objects.get(project=obj)
                 title = 'A new project was created by ' + str(obj.project_creator.get_full_name()) + ': ' + str(obj.title)
                 ActionNotification.objects.create(reference_id=contrib.id, title=title, sender=request.user, community=community, notification_type='Projects')
@@ -623,7 +625,7 @@ def apply_notice_labels(request, pk, notice_id):
                         bclabel = BCLabel.objects.get(unique_id=choice)
                         bcnotice.project.bclabels.add(bclabel)
                         reference_id = str(bcnotice.unique_id)
-                        title = community.community_name + ' has applied the ' + bclabel.name + ' Label to your project ' + bcnotice.project.title
+                        title = community.community_name + ' has applied the ' + bclabel.name + ' Label to your project: ' + bcnotice.project.title
 
                         if bcnotice.placed_by_institution:
                             ActionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
