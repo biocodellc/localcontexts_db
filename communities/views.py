@@ -533,7 +533,10 @@ def create_project(request, pk):
                 obj.save()
 
                 ProjectContributors.objects.create(project=obj, community=community)
-                # TODO: Create community notification with label type: project
+                # Maybe there's a better way to do this? using project unique id instead of contrib id?
+                contrib = ProjectContributors.objects.get(project=obj)
+                title = 'A new project was created by ' + str(obj.project_creator.get_full_name()) + ': ' + str(obj.title)
+                ActionNotification.objects.create(reference_id=contrib.id, title=title, sender=request.user, community=community, notification_type='Projects')
                 return redirect('community-projects', community.id)
         else:
             form = CreateProjectForm()
