@@ -17,6 +17,10 @@ def anchor(url_name, section_id, researcher_id):
     return reverse(url_name, kwargs={'pk': researcher_id}) + "#full-notice-card-" + str(section_id)
 
 @register.simple_tag
+def anchor_project(url_name, unique_id, researcher_id):
+    return reverse(url_name, kwargs={'pk': researcher_id}) + "#project-unique-" + str(unique_id)
+
+@register.simple_tag
 def get_notices_count(researcher):
     bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher).count()
     tknotices = TKNotice.objects.filter(placed_by_researcher=researcher).count()
