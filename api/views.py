@@ -51,8 +51,7 @@ def projects(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def project_detail(request, pk):
-    # TODO: Project should be unique_id not pk
-    projects = Project.objects.get(id=pk)
+def project_detail(request, unique_id):
+    projects = Project.objects.get(unique_id=unique_id)
     serializer = ProjectSerializer(projects, many=False)
     return Response(serializer.data)

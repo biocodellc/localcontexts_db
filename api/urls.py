@@ -21,5 +21,5 @@ urlpatterns = [
     path('v1/tklabel/<str:unique_id>/', views.tklabel_detail, name="api-tklabel-detail"),
 
     path('v1/projects/', views.projects, name="api-projects"),
-    path('v1/project/<str:pk>/', views.project_detail, name="api-project-detail"),
+    path('v1/project/<str:unique_id>/', views.project_detail, name="api-project-detail"),
 ]
