@@ -20,6 +20,10 @@ def anchor(url_name, section_id, community_id):
     return reverse(url_name, kwargs={'pk': community_id}) + "#full-notice-card-" + str(section_id)
 
 @register.simple_tag
+def anchor_project(url_name, contrib_id, community_id):
+    return reverse(url_name, kwargs={'pk': community_id}) + "#full-contrib-card-" + str(contrib_id)
+
+@register.simple_tag
 def community_notifications(community):
     notifications = ActionNotification.objects.filter(community=community)
     return notifications
@@ -38,6 +42,14 @@ def project_has_labels_from_current_community(project_id, community):
     bclabels_exist = project.bclabels.filter(community=community).exists()
     tklabels_exist = project.tklabels.filter(community=community).exists()
     if bclabels_exist or tklabels_exist:
+        return True
+    else:
+        return False
+
+@register.simple_tag
+def unread_notifications(community):
+    notifications = ActionNotification.objects.filter(community=community, viewed=False).exists()
+    if notifications:
         return True
     else:
         return False

@@ -2,6 +2,7 @@
 {% researcher_notifications researcher as notifications %}
 {% get_notices_count researcher as total_notices %}
 {% get_projects_count researcher as total_projects %}
+{% unread_notifications researcher as unread_exist %}
 
 <div class="pad-top-5">
 
@@ -21,7 +22,11 @@
                     <div class="dropdown">
                         <a onclick="toggleNotifications()" class="darkteal-text pointer dropbtn"> 
                             Notifications 
-                            <i class="fa fa-bell" aria-hidden="true"></i>
+                            {% if unread_exist %}
+                                <i class="fa fa-bell orange-text" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="fa fa-bell-o" aria-hidden="true"></i>
+                            {% endif %}
                         </a>
                             <div id="notification-v2" class="notification-dropdown-content">
                             <div class="border-bottom-solid-teal center-text">
@@ -33,8 +38,11 @@
 
                                     <div class="border-bottom-solid-teal">
                                         {% if n.notification_type == 'Labels' %}
-                                        <!-- TODO: Figure out what this URL should link to -->
-                                            <a href="{% url 'researcher-projects' researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
+                                            {% if n.reference_id %}
+                                                <a href="{% anchor_project 'researcher-projects' n.reference_id researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
+                                            {% else %}
+                                                <a href="{% url 'researcher-projects' researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
+                                            {% endif %}
                                         {% endif %}
                                         {% if n.notification_type == 'Activity' %}
                                             {% if n.reference_id %}

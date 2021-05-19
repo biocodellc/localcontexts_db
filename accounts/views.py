@@ -30,8 +30,8 @@ import json
 
 @unauthenticated_user
 def register(request):
+    form = RegistrationForm(request.POST or None)
     if request.method == "POST":
-        form = RegistrationForm(request.POST)
         if form.is_valid():
             # h/t: https://simpleisbetterthancomplex.com/tutorial/2017/02/21/how-to-add-recaptcha-to-django-site.html
             ''' Begin reCAPTCHA validation '''
@@ -66,7 +66,7 @@ def register(request):
 
                 email_contents = EmailMessage(
                     #Email subject
-                    'Activate Your Account',
+                    'Activate Your Local Contexts Hub Account',
                     #Body of the email
                     template,
                     #Sender
@@ -81,9 +81,6 @@ def register(request):
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
             
             return redirect('register')
-    else: 
-        form = RegistrationForm()
-    
     return render(request, "accounts/register.html", { "form" : form })
 
 @unauthenticated_user
@@ -284,8 +281,8 @@ def update_profile(request):
 
 @login_required(login_url='login')
 def invite_user(request):
+    invite_form = SignUpInvitationForm(request.POST or None)
     if request.method == "POST":
-        invite_form = SignUpInvitationForm(request.POST or None)
         if invite_form.is_valid():
             obj = invite_form.save(commit=False)
             obj.sender = request.user
@@ -310,7 +307,4 @@ def invite_user(request):
                     fail_silently=False)
                 
                 return redirect('invite')
-    else:
-        invite_form = SignUpInvitationForm()
-
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
