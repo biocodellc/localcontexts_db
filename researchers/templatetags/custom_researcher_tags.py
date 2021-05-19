@@ -31,3 +31,11 @@ def get_notices_count(researcher):
 def get_projects_count(researcher):
     contrib_count = ProjectContributors.objects.filter(researcher=researcher).count()
     return contrib_count
+
+@register.simple_tag
+def unread_notifications(researcher):
+    notifications = ActionNotification.objects.filter(researcher=researcher, viewed=False).exists()
+    if notifications:
+        return True
+    else:
+        return False

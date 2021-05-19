@@ -45,4 +45,12 @@ def project_has_labels_from_current_community(project_id, community):
         return True
     else:
         return False
+
+@register.simple_tag
+def unread_notifications(community):
+    notifications = ActionNotification.objects.filter(community=community, viewed=False).exists()
+    if notifications:
+        return True
+    else:
+        return False
     

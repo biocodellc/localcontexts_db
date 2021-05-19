@@ -40,3 +40,11 @@ def join_request(institution, user):
         return True
     else:
         return False
+
+@register.simple_tag
+def unread_notifications(institution):
+    notifications = ActionNotification.objects.filter(institution=institution, viewed=False).exists()
+    if notifications:
+        return True
+    else:
+        return False
