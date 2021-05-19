@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from institutions.models import Institution
@@ -12,6 +13,7 @@ class Project(models.Model):
         ('Publication', 'Publication'),
         ('Sample', 'Sample'),
     )
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     project_creator = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="project_creator")
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
     title = models.CharField(max_length=300, null=True)
@@ -25,8 +27,8 @@ class Project(models.Model):
     geome_project_id = models.IntegerField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     publication_date = models.DateField(null=True, blank=True)
-    date_added = models.DateTimeField(auto_now_add=True, null=True)
-    date_modified = models.DateTimeField(auto_now=True, null=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True, null=True)
     is_public = models.BooleanField(default=True, null=True)
     bclabels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_labels")
     tklabels = models.ManyToManyField("tklabels.TKLabel", verbose_name="TK Labels", blank=True, related_name="project_tklabels")
@@ -43,7 +45,7 @@ class Project(models.Model):
         return self.title
     
     class Meta:
-        ordering = ('-date_added',)
+        ordering = ('-created',)
 
 class ProjectContributors(models.Model):
     project = models.OneToOneField(Project, null=True, on_delete=models.CASCADE)
