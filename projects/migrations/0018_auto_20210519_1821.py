@@ -10,18 +10,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name='project',
-            options={'ordering': ('-created',)},
-        ),
-        migrations.RenameField(
-            model_name='project',
-            old_name='date_added',
-            new_name='created',
-        ),
-        migrations.RenameField(
-            model_name='project',
-            old_name='date_modified',
-            new_name='updated',
-        ),
     ]
