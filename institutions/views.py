@@ -213,6 +213,9 @@ def create_project(request, pk):
                         tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data)
 
                 ProjectContributors.objects.create(project=data, institution=institution)
+                contrib = ProjectContributors.objects.get(project=data)
+                title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + str(data.title)
+                ActionNotification.objects.create(title=title, notification_type='Projects', sender=data.project_creator, reference_id=contrib.id, institution=institution)
                 return redirect('institution-activity', institution.id)
         else:
             form = CreateProjectForm()

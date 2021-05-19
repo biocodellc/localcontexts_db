@@ -43,7 +43,11 @@
                                             {% endif %}
                                         {% endif %}
                                         {% if n.notification_type == 'Projects' %}
-                                            <a href="{% url 'institution-projects' institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
+                                            {% if n.reference_id %}
+                                                    <a href="{% anchor_project 'institution-projects' n.reference_id institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
+                                                {% else %}
+                                                    <a href="{% url 'institution-projects' institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
+                                            {% endif %}
                                         {% endif %}
                                         {% if n.notification_type == 'Connections' %}
                                             <a href="#" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
