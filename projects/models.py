@@ -13,7 +13,7 @@ class Project(models.Model):
         ('Publication', 'Publication'),
         ('Sample', 'Sample'),
     )
-    unique_id = models.UUIDField(default=uuid.uuid4, unique=True, null=True)
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
     project_creator = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="project_creator")
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
     title = models.CharField(max_length=300, null=True)
