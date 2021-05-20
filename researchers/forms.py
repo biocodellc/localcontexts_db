@@ -20,4 +20,6 @@ class UpdateResearcherForm(forms.ModelForm):
             'contact_email': forms.TextInput(attrs={'size': 40}),
             'contact_number': forms.TextInput(attrs={'size': 40}),
             'website': forms.TextInput(attrs={'size': 40}),
+            'associated_institution': forms.TextInput(attrs={'size': 40}),
+            'location': forms.TextInput(attrs={'size': 40}),
         }
