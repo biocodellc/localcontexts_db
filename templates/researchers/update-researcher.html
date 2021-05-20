@@ -1,17 +1,93 @@
 {% extends 'research-base.html' %} {% block title %} | Update {% endblock %}{% load static %}{% block researcher_content %}
 
-    <div class="white-bg content-card content-card-space noti-card">
+    <div class="content-card content-card-space white-bg flex-this column">
         <h3 class="orange-text">Settings</h3>
-        <div>
-            <form method="POST" action="{% url 'researcher-update' researcher.id %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ update_form.as_p }}
-            
-                {% include 'partials/_alerts.html' %}
-                <button class="default-btn action-btn">Save</button>
-            
-            </form>
+
+        <div class="flex-this w-100">
+
+            <div class="flex-this w-20 set-nav">
+                <div class="w-20">
+                    <img src="{% static 'images/profile-icon.png' %}" alt="avatar icon">
+                </div>
+    
+                <div class="w-80">
+                    <p>
+                        <strong>Researcher Profile</strong><br>
+                        Contact name, email, location
+                    </p>
+                </div>
+            </div>
+    
+            <div class="flex-this column w-80 border-left">
+    
+                    <div>
+                        <h3>Workspace Settings</h3>
+                    </div>
+    
+                    <div>
+                        <form method="POST" action="{% url 'researcher-update' researcher.id %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                                <div class="w-100 flex-this form-one">
+                                    <div class="w-30">
+                                        {{ update_form.orcid.label }} <br>
+                                        {{ update_form.orcid }}
+                                    </div>
+                                    <div class="w-30">
+                                        <label for="location"> Location </label><br>
+                                        {{ update_form.location }}
+                                    </div>
+                                    <div class="w-30">
+                                        {{ update_form.website.label }} <br>
+                                        {{ update_form.website }}
+                                    </div>
+                                </div>
+
+                                <br>
+
+                                <div>
+                                    <div>
+                                        <h3>Contact Information</h3>
+                                    </div>
+                                    <div class="flex-this w-100 form-one">
+                                        <div class="w-30">
+                                            <label for="contact_number"> Phone Number </label><br>                                           
+                                            {{ update_form.contact_number }}
+                                        </div>
+                                        <div class="w-30">
+                                            <label for="contact_email"> Email </label><br>                                       
+                                            {{ update_form.contact_email }}
+                                        </div>
+                                        <div class="w-30">
+                                            <label for="associated_institution"> Affiliated Institution </label><br>
+                                            {{ update_form.associated_institution }}
+                                        </div>
+
+                                    </div>
+
+                                    <div class="flex-this">
+                                        <div>
+                                            {{ update_form.image.label }} <br>
+                                            {{ update_form.image }}
+                                            {% if update_form.image.errors %}
+                                                {{update_form.image.errors}}
+                                            {% endif %}
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                                {% include 'partials/_alerts.html' %}
+
+                            <div>
+                                <button class="action-btn default-btn">Save</button>
+                            </div>
+                        </form>
+                    </div>
+    
+                </div>
         </div>
+
     </div>
 
 {% endblock %}

@@ -19,23 +19,17 @@ from .utils import *
 @login_required(login_url='login')
 def connect_researcher(request):
     researcher = is_user_researcher(request.user)
+    form = ConnectResearcherForm(request.POST or None)
     
     if researcher == False:
         if request.method == "POST":
-            form = ConnectResearcherForm(request.POST)
             if form.is_valid():
                 data = form.save(commit=False)
                 data.user = request.user
-
-                if '-' in data.orcid:
-                    data.save()
-                else:
-                    data.orcid = '-'.join([data.orcid[i:i+4] for i in range(0, len(data.orcid), 4)])
-                    data.save()
-
+                orcid_id = request.POST.get('orcidId')
+                data.orcid = orcid_id
+                data.save()
                 return redirect('dashboard')
-        else:
-            form = ConnectResearcherForm()
 
         return render(request, 'researchers/connect-researcher.html', {'form': form})
     else:

@@ -16,6 +16,7 @@
 
         <!-- Font Awesome Icons -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://orcid.github.io/orcid-auth-widget/orcid-widget.css">
         
         <!-- CSS -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
@@ -30,6 +31,7 @@
     <body>
         {% block content %} {% endblock %}
 
+        <script src="https://orcid.github.io/orcid-auth-widget/orcid-widget.js"></script>
         <script src='https://www.google.com/recaptcha/api.js'></script>
         <script src="{% static 'javascript/main.js' %}" type="text/javascript"></script>
         <script src="{% static 'javascript/xhr.js' %}" type="text/javascript"></script>
