@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from institutions.models import Institution
@@ -12,6 +13,7 @@ class Project(models.Model):
         ('Publication', 'Publication'),
         ('Sample', 'Sample'),
     )
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
     project_creator = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="project_creator")
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
     title = models.CharField(max_length=300, null=True)
@@ -21,7 +23,7 @@ class Project(models.Model):
     project_contact_email = models.EmailField(max_length=100, null=True)
     publication_doi = models.CharField(max_length=200, blank=True, null=True)
     project_data_guid = models.CharField(max_length=200, blank=True, null=True)
-    recommended_citation = models.CharField(max_length=200, blank=True, null=True)
+    recommended_citation = models.TextField(null=True, blank=True)
     geome_project_id = models.IntegerField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
     publication_date = models.DateField(null=True, blank=True)

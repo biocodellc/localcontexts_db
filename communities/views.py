@@ -533,7 +533,12 @@ def create_project(request, pk):
                 obj.save()
 
                 ProjectContributors.objects.create(project=obj, community=community)
-                # TODO: Create community notification with label type: project
+                
+                # Maybe there's a better way to do this? using project unique id instead of contrib id?
+                # Has to be a contrib id for the js to work. Rework this maybe?
+                contrib = ProjectContributors.objects.get(project=obj)
+                title = 'A new project was created by ' + str(obj.project_creator.get_full_name()) + ': ' + str(obj.title)
+                ActionNotification.objects.create(reference_id=contrib.id, title=title, sender=request.user, community=community, notification_type='Projects')
                 return redirect('community-projects', community.id)
         else:
             form = CreateProjectForm()
@@ -619,8 +624,8 @@ def apply_notice_labels(request, pk, notice_id):
                     if bclabel_exists:
                         bclabel = BCLabel.objects.get(unique_id=choice)
                         bcnotice.project.bclabels.add(bclabel)
-                        reference_id = str(bcnotice.unique_id)
-                        title = community.community_name + ' has applied the ' + bclabel.name + ' Label to your project ' + bcnotice.project.title
+                        reference_id = str(bcnotice.project.unique_id)
+                        title = community.community_name + ' has applied the ' + bclabel.name + ' Label to your project: ' + bcnotice.project.title
 
                         if bcnotice.placed_by_institution:
                             ActionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
@@ -630,7 +635,7 @@ def apply_notice_labels(request, pk, notice_id):
                     if tklabel_exists:
                         tklabel = TKLabel.objects.get(unique_id=choice)
                         bcnotice.project.tklabels.add(tklabel)
-                        reference_id = str(bcnotice.unique_id)
+                        reference_id = str(bcnotice.project.unique_id)
                         title = community.community_name + ' has applied the ' + tklabel.name + ' Label to your project ' + bcnotice.project.title
 
                         if bcnotice.placed_by_institution:
@@ -667,7 +672,7 @@ def apply_notice_labels(request, pk, notice_id):
                     if bclabel_exists:
                         bclabel = BCLabel.objects.get(unique_id=choice)
                         tknotice.project.bclabels.add(bclabel)
-                        reference_id = str(tknotice.unique_id)
+                        reference_id = str(tknotice.project.unique_id)
                         title = community.community_name + ' has applied the ' + bclabel.name + ' Label to your project ' + tknotice.project.title
                         if tknotice.placed_by_institution:
                             ActionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
@@ -677,7 +682,7 @@ def apply_notice_labels(request, pk, notice_id):
                     if tklabel_exists:
                         tklabel = TKLabel.objects.get(unique_id=choice)
                         tknotice.project.tklabels.add(tklabel)
-                        reference_id = str(tknotice.unique_id)
+                        reference_id = str(tknotice.project.unique_id)
                         title = community.community_name + ' has applied the ' + tklabel.name + ' Label to your project ' + tknotice.project.title
                         if tknotice.placed_by_institution:
                             ActionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)

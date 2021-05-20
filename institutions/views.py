@@ -17,8 +17,6 @@ from notifications.forms import NoticeCommentForm
 from communities.forms import InviteMemberForm
 
 from .forms import CreateInstitutionForm, UpdateInstitutionForm
-# from bclabels.forms import AddBCNoticeMessage
-# from tklabels.forms import AddTKNoticeMessage
 
 @login_required(login_url='login')
 def connect_institution(request):
@@ -213,6 +211,9 @@ def create_project(request, pk):
                         tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data)
 
                 ProjectContributors.objects.create(project=data, institution=institution)
+
+                title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + str(data.title)
+                ActionNotification.objects.create(title=title, notification_type='Projects', sender=data.project_creator, reference_id=data.unique_id, institution=institution)
                 return redirect('institution-activity', institution.id)
         else:
             form = CreateProjectForm()

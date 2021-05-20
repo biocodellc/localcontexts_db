@@ -11,6 +11,10 @@ class CreateInstitutionForm(forms.ModelForm):
                 'unique': _("An institution by that name already exists."),
             },
         }
+        widgets = {
+            'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
+            'contact_email': forms.EmailInput(attrs={'class': 'w-100'}),
+        }
 
 class UpdateInstitutionForm(forms.ModelForm):
     class Meta:

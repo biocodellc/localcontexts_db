@@ -18,11 +18,3 @@ class ApproveAndEditTKLabelForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'size': 40}),
             'default_text': forms.Textarea(attrs={'rows': 4, 'cols': 204}),
         }
-
-# class AddTKNoticeMessage(forms.ModelForm):
-#     class Meta:
-#         model = TKNotice
-#         fields = ['message']
-#         widgets = {
-#             'message': forms.Textarea(attrs={'rows': 4, 'cols': 204}),
-#         }
