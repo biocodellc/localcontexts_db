@@ -2,7 +2,8 @@
     
 <div class="flex-this column w-90">
     <div>
-        <h2 class="darkteal-text">Create a Researcher Profile</h2>    
+        <h2 class="darkteal-text">Researcher Profile</h2>
+        <p>Please provide your ORCiD ID</p>    
     </div>
 
     <form action="{% url 'connect-researcher' %}" method="POST" class="flex-this column w-100">
@@ -10,18 +11,16 @@
 
         <div id="orcidWidget" data-clientid='APP-QVTI298PQSDYLIV8' data-env="sandbox" data-redirecturi="http://localhost:8000/researchers/connect-researcher/"></div>
 
+        <p>If you are associated with an institution, please list the institution you associate with.</p>
 
-        <label>Orcid ID</label>
-        {{ form.orcid }}
-
-        <label>Town</label>
+        <label>Associated Institution</label>
         <input type="text">
 
-        <label>Country</label>
+        <label>Location</label>
         <input type="text">
 
         <div>
-            <button class="action-btn default-btn">Continue</button>
+            <button class="action-btn">Get started <i class="fa fa-long-arrow-right"></i></button>
         </div>
     </form>
 
