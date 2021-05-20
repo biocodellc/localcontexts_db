@@ -17,8 +17,6 @@ from notifications.forms import NoticeCommentForm
 from communities.forms import InviteMemberForm
 
 from .forms import CreateInstitutionForm, UpdateInstitutionForm
-# from bclabels.forms import AddBCNoticeMessage
-# from tklabels.forms import AddTKNoticeMessage
 
 @login_required(login_url='login')
 def connect_institution(request):
