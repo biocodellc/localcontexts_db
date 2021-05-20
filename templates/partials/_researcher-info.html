@@ -132,15 +132,7 @@
                             <span>Affiliation:</span> {{ researcher.associated_institution }}
                         {% endif %}
                         
-                        {% if researcher.orcid %}
-                            <div itemscope itemtype="https://schema.org/Person"><a class="darkteal-text" itemprop="sameAs" content="{{ researcher.orcid }}" href="{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
-                                <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">{{ researcher.orcid }}</a>
-                            </div>
-                        {% else %}
-                            <div>
-                                <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"> <small>No ORCiD specified</small>
-                            </div>
-                        {% endif %}
+                        <!-- TODO: add orcid code from notes -->
                     </p>
                 </div>
     
