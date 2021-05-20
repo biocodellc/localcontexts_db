@@ -9,7 +9,9 @@
     <form action="{% url 'connect-researcher' %}" method="POST" class="flex-this column w-100">
         {% csrf_token %}
 
-        <div id="orcidWidget" data-clientid='APP-QVTI298PQSDYLIV8' data-env="sandbox" data-redirecturi="http://localhost:8000/researchers/connect-researcher/"></div>
+        <!-- Leave for local testing -->
+        <!-- <div id="orcidWidget" data-clientid='APP-QVTI298PQSDYLIV8' data-env="sandbox" data-redirecturi="http://localhost:8000/researchers/connect-researcher/"></div> -->
+        <div id="orcidWidget" data-clientid='APP-QVTI298PQSDYLIV8' data-env="sandbox" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div>
 
         <p>If you are associated with an institution, please list the institution you associate with.</p>
 
