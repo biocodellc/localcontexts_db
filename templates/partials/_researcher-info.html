@@ -118,11 +118,19 @@
                     <h2 class="orange-text community-title">{{ researcher.user.get_full_name }}</h2>
                     <p>
                         <span>Job Title:</span> {{ researcher.user.profile.job_title }} <br>
-                        <span>Location:</span> {{ researcher.user.profile.city_or_town }}, {{ researcher.user.profile.country.name }}<br>
+                        <span>Location:</span> {% if researcher.location %} {{ researcher.location }} {% else %} {{ researcher.user.profile.city_or_town }}, {{ researcher.user.profile.country.name }} {% endif %}<br>
                         {% if researcher.website %}
-                        <span>Website:</span> {{ researcher.website }}
+                            <span>Website:</span> {{ researcher.website }}
                         {% endif %}
-                        <div itemscope itemtype="https://schema.org/Person"><a class="darkteal-text" itemprop="sameAs" content="{{ researcher.orcid }}" href="{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">{{ researcher.orcid }}</a></div>
+                        {% if researcher.orcid %}
+                            <div itemscope itemtype="https://schema.org/Person"><a class="darkteal-text" itemprop="sameAs" content="{{ researcher.orcid }}" href="{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
+                                <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">{{ researcher.orcid }}</a>
+                            </div>
+                        {% else %}
+                            <div>
+                                <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"> <small>No ORCiD specified</small>
+                            </div>
+                        {% endif %}
                     </p>
                 </div>
     
