@@ -29,13 +29,6 @@ def connect_researcher(request):
                 orcid_id = request.POST.get('orcidId')
                 data.orcid = orcid_id
                 data.save()
-
-                # if '-' in data.orcid:
-                #     data.save()
-                # else:
-                #     data.orcid = '-'.join([data.orcid[i:i+4] for i in range(0, len(data.orcid), 4)])
-                #     data.save()
-
                 return redirect('dashboard')
 
         return render(request, 'researchers/connect-researcher.html', {'form': form})
