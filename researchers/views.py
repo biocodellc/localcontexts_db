@@ -44,10 +44,13 @@ def update_researcher(request, pk):
 
         if update_form.is_valid():
             data = update_form.save(commit=False)
-            if '-' in data.orcid:
-                data.save()
-            else: 
-                data.orcid = '-'.join([data.orcid[i:i+4] for i in range(0, len(data.orcid), 4)])
+            if data.orcid:
+                if '-' in data.orcid:
+                    data.save()
+                else: 
+                    data.orcid = '-'.join([data.orcid[i:i+4] for i in range(0, len(data.orcid), 4)])
+                    data.save()
+            else:
                 data.save()
 
             messages.add_message(request, messages.SUCCESS, 'Updated!')
