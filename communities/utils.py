@@ -9,7 +9,8 @@ def checkif_community_in_user_community(user, community):
     community_list = u.communities.all()
 
     if community in community_list:
-        return print('################# USER ALREADY A MEMBER ########################')
+        print('################# USER ALREADY A MEMBER ########################')
+        return True
     else:
         return False
 
@@ -42,5 +43,6 @@ def checkif_invite_exists(user, community):
 
     if invite:
         print(" #########   INVITATION ALREADY EXISTS  ######### ")
+        return True
     else:
         return False   

@@ -32,7 +32,7 @@ class InviteMemberForm(forms.ModelForm):
         model = InviteMember
         fields = ['receiver', 'role', 'message']
         widgets = {
-            'message': forms.Textarea(attrs={'rows': 4, 'cols':70}),
+            'message': forms.Textarea(attrs={'rows': 5, 'class':'w-100'}),
         }
     
     def __init__(self, *args, **kwargs):

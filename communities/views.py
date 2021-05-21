@@ -122,8 +122,8 @@ def add_member(request, pk):
         return render(request, 'communities/restricted.html', {'community': community})
 
     else:
+        form = InviteMemberForm(request.POST or None)
         if request.method == "POST":
-            form = InviteMemberForm(request.POST or None)
             receiver = request.POST.get('receiver')
             user_check = checkif_community_in_user_community(receiver, community)
             
@@ -139,23 +139,21 @@ def add_member(request, pk):
                         obj.save()
 
                         messages.add_message(request, messages.INFO, 'Invitation Sent!')
-                        return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
+                        return redirect('members', community.id)
 
                 else: 
-                    messages.add_message(request, messages.INFO, 'This user has already been invited to this community!')
+                    messages.add_message(request, messages.INFO, 'This user has already been invited to this community.')
                     return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
             else:
                 messages.add_message(request, messages.ERROR, 'This user is already a member.')
                 return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
-        else:
-            form = InviteMemberForm()
 
-    context = {
-        'community': community,
-        'form': form,
-        'member_role': member_role,
-    }
-    return render(request, 'communities/add-member.html', context)
+        context = {
+            'community': community,
+            'form': form,
+            'member_role': member_role,
+        }
+        return render(request, 'communities/add-member.html', context)
 
 # Activity / Notices
 @login_required(login_url='login')
@@ -365,8 +363,8 @@ def customise_bclabel(request, pk, label_type):
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        form = CustomiseBCLabelForm(request.POST or None)
         if request.method == "POST":
-            form = CustomiseBCLabelForm(request.POST)
             if form.is_valid():
                 label_form = form.save(commit=False)
                 label_form.label_type = bc_type
@@ -379,8 +377,6 @@ def customise_bclabel(request, pk, label_type):
                 ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
                 return redirect('community-labels', community.id)
-        else:
-            form = CustomiseBCLabelForm()
 
         context = {
             'community': community,
@@ -400,8 +396,8 @@ def customise_tklabel(request, pk, label_type):
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        form = CustomiseTKLabelForm(request.POST or None)
         if request.method == "POST":
-            form = CustomiseTKLabelForm(request.POST)
             if form.is_valid():
                 label_form = form.save(commit=False)
                 label_form.label_type = tk_type
@@ -414,8 +410,6 @@ def customise_tklabel(request, pk, label_type):
                 ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
                 return redirect('community-labels', community.id)
-        else:
-            form = CustomiseTKLabelForm()
 
         context = {
             'community': community,

@@ -26,9 +26,8 @@ def connect_researcher(request):
             if form.is_valid():
                 data = form.save(commit=False)
                 data.user = request.user
-                # TODO: Fix widget
-                # orcid_id = request.POST.get('orcidId')
-                # data.orcid = orcid_id
+                orcid_id = request.POST.get('orcidId')
+                data.orcid = orcid_id
                 data.save()
                 return redirect('dashboard')
 
