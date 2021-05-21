@@ -1201,3 +1201,8 @@ input:focus {
 .show {
     display: block;
 }
+
+/* Textbox message add-members */
+.add-member-message {
+    width: 100px;
+}
