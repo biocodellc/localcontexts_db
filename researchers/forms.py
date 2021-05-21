@@ -5,10 +5,9 @@ from bclabels.models import BCNotice
 class ConnectResearcherForm(forms.ModelForm):
     class Meta:
         model = Researcher
-        fields = ['associated_institution', 'location', 'orcid']
+        fields = ['associated_institution', 'location']
         widgets = {
             'associated_institution': forms.TextInput(attrs={'size': 40}),
-            'orcid': forms.TextInput(attrs={'size': 40}),
         }
 
 class UpdateResearcherForm(forms.ModelForm):
