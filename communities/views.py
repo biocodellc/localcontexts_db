@@ -122,8 +122,8 @@ def add_member(request, pk):
         return render(request, 'communities/restricted.html', {'community': community})
 
     else:
+        form = InviteMemberForm(request.POST or None)
         if request.method == "POST":
-            form = InviteMemberForm(request.POST or None)
             receiver = request.POST.get('receiver')
             user_check = checkif_community_in_user_community(receiver, community)
             
@@ -139,23 +139,21 @@ def add_member(request, pk):
                         obj.save()
 
                         messages.add_message(request, messages.INFO, 'Invitation Sent!')
-                        return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
+                        return redirect('members', community.id)
 
                 else: 
-                    messages.add_message(request, messages.INFO, 'This user has already been invited to this community!')
+                    messages.add_message(request, messages.INFO, 'This user has already been invited to this community.')
                     return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
             else:
                 messages.add_message(request, messages.ERROR, 'This user is already a member.')
                 return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
-        else:
-            form = InviteMemberForm()
 
-    context = {
-        'community': community,
-        'form': form,
-        'member_role': member_role,
-    }
-    return render(request, 'communities/add-member.html', context)
+        context = {
+            'community': community,
+            'form': form,
+            'member_role': member_role,
+        }
+        return render(request, 'communities/add-member.html', context)
 
 # Activity / Notices
 @login_required(login_url='login')
