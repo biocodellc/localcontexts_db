@@ -1,0 +1,77 @@
+#orcidWidget{
+    color: #494A4C;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+#orcidAuthButton {
+    display: block;
+    position: relative;
+    width: 80%;
+    border: 1px solid #d3d3d3;
+    border-radius: 5px;
+    background-color: #fff;
+    margin: 1em auto;
+    padding: .6em;
+    cursor: pointer;
+    color: #494A4C;
+    text-decoration: none;
+}
+
+#orcidWidget.large{
+    width: 400px;
+    font-size: 18px;
+    line-height: 22px;
+}
+
+#orcidWidget.large img {
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+    vertical-align: top;
+}
+
+#orcidWidget.small{
+    width: 300px;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+#orcidWidget.small img {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    vertical-align: top;
+}
+
+#orcidAuthButton:hover{
+    background-color: #e0e0e0;
+    border: solid 1px #d3d3d3;
+}
+
+#orcidAuthSuccess {
+    background-color: #f9f9f9;
+    border: 1px solid #d3d3d3;
+    display: block;
+    position: relative;
+    padding: 1em;
+    color: #494A4C;
+    text-align: center;
+}
+
+#orcidAuthSuccess a {
+    text-decoration: none;
+    color: #338caf;
+}
+
+#orcidAuthFail {
+    display: block;
+    position: relative;
+    margin: 1.2em;
+    color: red;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+}
+
+
+

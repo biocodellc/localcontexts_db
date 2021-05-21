@@ -23,20 +23,19 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/headers.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/footers.css' %}">
-
         <!-- ORCiD Widget -->
-        <!-- <link rel="stylesheet" type="text/css" href="https://orcid.github.io/orcid-auth-widget/orcid-widget.css"> -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/orcid-widget.css' %}">
 
         <title>Local Contexts {% block title %} {% endblock %}</title>
     </head>
 
     <body>
         {% block content %} {% endblock %}
-        <!-- ORCiD Widget -->
-        <!-- <script src="https://orcid.github.io/orcid-auth-widget/orcid-widget.js"></script> -->
         <script src='https://www.google.com/recaptcha/api.js'></script>
         <script src="{% static 'javascript/main.js' %}" type="text/javascript"></script>
         <script src="{% static 'javascript/xhr.js' %}" type="text/javascript"></script>
+        <!-- ORCiD Widget -->
+        <script src="{% static 'javascript/orcid-widget.js' %}" type="text/javascript"></script>
     </body>
 
 </html>
