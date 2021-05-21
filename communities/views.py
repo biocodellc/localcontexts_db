@@ -363,8 +363,8 @@ def customise_bclabel(request, pk, label_type):
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        form = CustomiseBCLabelForm(request.POST or None)
         if request.method == "POST":
-            form = CustomiseBCLabelForm(request.POST)
             if form.is_valid():
                 label_form = form.save(commit=False)
                 label_form.label_type = bc_type
@@ -377,8 +377,6 @@ def customise_bclabel(request, pk, label_type):
                 ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
                 return redirect('community-labels', community.id)
-        else:
-            form = CustomiseBCLabelForm()
 
         context = {
             'community': community,
@@ -398,8 +396,8 @@ def customise_tklabel(request, pk, label_type):
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        form = CustomiseTKLabelForm(request.POST or None)
         if request.method == "POST":
-            form = CustomiseTKLabelForm(request.POST)
             if form.is_valid():
                 label_form = form.save(commit=False)
                 label_form.label_type = tk_type
@@ -412,8 +410,6 @@ def customise_tklabel(request, pk, label_type):
                 ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
                 return redirect('community-labels', community.id)
-        else:
-            form = CustomiseTKLabelForm()
 
         context = {
             'community': community,
