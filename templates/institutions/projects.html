@@ -89,7 +89,7 @@
                                     {% include 'bclabels/which-label.html' %}
                                 </div>
                                 <div class="pad-left-2">
-                                    <p class="darkteal-text no-top-margin">Label shared by {{ c.community.community_name }} </p>
+                                    <p class="darkteal-text no-top-margin">Label shared by {{ bclabel.community.community_name }} </p>
                                     <p class="weight-500"> {{ bclabel.name }} </p>
                                     <p>
                                         {{ bclabel.default_text}}
@@ -106,7 +106,7 @@
                                 {% include 'tklabels/which-label.html' %}
                             </div>
                             <div class="pad-left-2">
-                                <p class="darkteal-text no-top-margin">Label shared by {{ c.community.community_name }} </p>
+                                <p class="darkteal-text no-top-margin">Label shared by {{ tklabel.community.community_name }} </p>
                                 <p class="weight-500"> {{ tklabel.name }} </p>
                                 <p>
                                     {{ tklabel.default_text}}
