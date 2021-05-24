@@ -111,7 +111,7 @@ var tkOutreachName = 'TK Outreach (TK O)'
 var tkNonVerifiedName = 'TK Non-Verified (TK NV)'
 var tkVerifiedName = 'TK Verified (TK V)'
 var tkNonCommercialName = 'TK Non-Commercial (TK NC)'
-var tkCommercialName = 'TK Commercial (TK C)'
+var tkCommercialName = 'TK Open to Commercialization (TK OC)'
 var tkCulturallySensitiveName = 'TK Culturally Sensitive (TK CS)'
 var tkCommunityVoiceName = 'TK Community Voice (TK CV)'
 var tkCommunityUseOnlyName = 'TK Community Use Only (TK CO)'
@@ -130,7 +130,7 @@ var tkOutreachUse = 'This label should be used when you would only like your cul
 var tkNonVerifiedUse = 'This material has not been verified by the community. Reasons for this could include that it has not been appropriately vetted, has mistakes, omissions, derogatory language, lack of informed consent, or its process of creation was through dishonest research which did not follow proper community protocols.'
 var tkVerifiedUse = 'This label should be used when you and your community are satisfied with the way in which your traditional knowledge materials are being represented online or offline. This label affirms that appropriate conditions for access and use are in place and that whoever has made this material accessible has made accommodations for cultural protocols associated with the knowledge. It lets users know that the right thing is being done by your community protocols and standards.'
 var tkNonCommercialUse = 'This label should be used when you would like to let external users who have access to your material know that it should only be used in non-commercial ways. You are asking users to be respectful and fair with your cultural materials and ask that it not be used to derive economic benefits or used in any way that makes it into a commodity for sale or purchase.'
-var tkCommercialUse = 'This label should be used when you are happy for an external user to use your cultural material in any way, including deriving future economic benefit. With commercial use you will have no control over how the work is circulated. We would encourage you to establish contact information to help you have direct negotiations with those external parties who would like to use your work under this label. This is in order to help prevent derogatory treatment and cultural offense.'
+var tkOpenToCommercializationUse = 'Communities have the right to benefit commercially from the information that is derived from their traditional knowledge. This Label is being used to indicate an expressed interest in being a primary party to any future negotiations if commercialization opportunities arise.'
 var tkCulturallySensitiveUse = 'This Label should be used when you would like external users to know that this material has special sensitivities around it and should be treated with great care. These sensitivities could include: that it has only recently been reconnected with the community from which it originates, that the community is currently vetting and spending time with the material, and/or that the material is culturally valued and needs to be kept safe. This Label could also be used to indicate that there are cultural sensitivities around this material arising from legacies of colonialism, for instance, the use of derogatory language or descriptive errors within the content and/or content descriptions.'
 var tkCommunityVoiceUse = 'This Label should be used when you would like to encourage community members to share their knowledge, stories and experiences. This Label would usually be used within a community-based archive to encourage the sharing of stories. This Label indicates that the current narrative or explanation that accompanies this material is incomplete or partial and that many community voices are needed to help make sense and understand the event, photograph, recording or heritage item. The Community Voice Label encourages multiplicity in the telling, listening and sharing of community histories and cultural knowledge.'
 var tkCommunityUseOnlyUse = 'This label should be used when you would like external users to know that this material is subject to certain conditions of circulation namely that this material is usually not circulated beyond the family, clan or community. Because these conditions have not historically been recognized, this label helps make these conditions clearer for future users. Specifically it asks them to respect culturally specific rules of use and to make different and fair decisions about using this type of material.'
@@ -149,7 +149,7 @@ var tkOutreachText = 'This label is being used to indicate that this material is
 var tkNonVerifiedText = 'This Label is being used because there are concerns about accuracy and/or representations made in this material. This material was not created through informed consent or community protocols for research and engagement. Therefore questions about its accuracy and who/how it represents this community are being raised.'
 var tkVerifiedText = 'This label affirms that the representation and presentation of this material is in keeping with community expectations and cultural protocols. It lets you know that for the individual, family or community represented in this material, use is considered fair, reasonable and respectful.'
 var tkNonCommercialText = 'This material has been designated as being available for non-commercial use. You are allowed to use this material for non-commercial purposes including for research, study or public presentation and/or online in blogs or non-commercial websites. This label asks you to think and act with fairness and responsibility towards this material and the original custodians.'
-var tkCommercialText = 'This material is available for commercial use. While the source community does not have copyright ownership of this material, it may still be protected under copyright and any commercial use will need to be cleared with the copyright holder. Regardless of the copyright ownership, you are asked to pay special attention to the community’s protocols and not use this material in any way that could constitute derogatory treatment and/or any other use that could constitute community or cultural harm. Where necessary, contact information is provided to help you enter into a dialogue with the original custodians and to clarify that your use will not be derogatory or cause cultural offense.'
+var tkOpenToCommercializationText = 'This Label is being used to indicate that [community name or authorized party] is open to commercialization opportunities that might derive from any cultural material with traditional knowledge to which this Label is connected to. As a primary party for any partnership and collaboration opportunities that emerge from the use of this cultural material and traditional knowledge, we retain an expressed interest in any future negotiations.'
 var tkCulturallySensitiveText = 'This Label is being used to indicate that this material has cultural and/or historical sensitivities. The label asks for care to be taken when this material is accessed, used, and circulated, especially when materials are first returned or reunited with communities of origin. In some instances, this label will indicate that there are specific permissions for use of this material required directly from the community itself.'
 var tkCommunityVoiceText = 'This Label is being used to encourage the sharing of stories and voices about this material. The Label indicates that existing knowledge or descriptions are incomplete or partial. Any community member is invited and welcome to contribute to our community knowledge about this event, photograph, recording or heritage item. Sharing our voices helps us reclaim our histories and knowledge. This sharing is an internal process.'
 var tkCommunityUseOnlyText = 'This label is being used to indicate that this material is traditionally and usually not publicly available. The label is correcting a misunderstanding about the circulation options for this material and letting any users know that this material has specific conditions for circulation within the community. It is not, and never was, free, public and available for everyone at anytime. This label asks you to think about how you are going to use this material and to respect different cultural values and expectations about circulation and use.'
@@ -359,7 +359,7 @@ function populateTemplate(id) {
             break;
         case 'tkc':
             title.value = tkCommercialName
-            templateText.textContent = tkCommercialText
+            templateText.textContent = tkOpenToCommercializationText
             break;
         case 'tkcs':
             title.value = tkCulturallySensitiveName
@@ -644,8 +644,8 @@ function expandTKLabel(img) {
             openInfoDiv(infoPerms)
             whichTKImgClicked('tkc')
             titlePerms.textContent = tkCommercialName
-            templateTextPerms.textContent = tkCommercialText
-            whyUseLabelTextPerms.textContent = tkCommercialUse
+            templateTextPerms.textContent = tkOpenToCommercializationText
+            whyUseLabelTextPerms.textContent = tkOpenToCommercializationUse
             break;
         case 'tkcv':
             openInfoDiv(infoPerms)
