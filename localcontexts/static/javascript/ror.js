@@ -1,15 +1,25 @@
 // TODO: Add ROR functionality
 
-// Steps: 
-// Dropdown of countries
-// Based on what was selected in the dropdown, enter into endpoint and fetch
-const endpoint = 'https://raw.githubusercontent.com/biocodellc/ror-parser/main/data/afghanistan.json'
-fetch(endpoint)
-    .then(res => res.json())
-    .then(data => console.log(data))
 
-let countrySelect = document.getElementById('id_country')
-console.log(countrySelect)
+// Get value of dropdown of countries
+const countrySelect = document.getElementById('id_country')
+let selectCountry = () => {
+    console.log(countrySelect.value.toLowerCase())
+    let countryCode = countrySelect.value.toLowerCase()
+
+    // TODO: Catch error when institutions don't exist for a country / there is no JSON file. 
+    // Example: Anguilla has no json and no institutions
+
+    // Based on what was selected in the dropdown, enter into endpoint and fetch
+    const endpoint = `https://raw.githubusercontent.com/biocodellc/ror-parser/main/data/${countryCode}.json`
+    fetch(endpoint)
+        .then(res => res.json())
+        .then(data => console.log(data))
+
+}
+
+countrySelect.addEventListener('change', selectCountry)
+
 
 // Create Institution
 // const endpoint = `http://api.ror.org/organizations`
