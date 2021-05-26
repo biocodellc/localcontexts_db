@@ -278,11 +278,11 @@ function whichTKImgClicked(val) {
     var inputProt = document.getElementById('tk-label-value-type-prot')
     var inputPerms = document.getElementById('tk-label-value-type-perms')
 
-    if(val == 'tka' || val == 'tkcl' || val == 'tkf' || val == 'tkmc') {
+    if(val == 'tka' || val == 'tkcl' || val == 'tkf' || val == 'tkmc' || val == 'tkcv') {
         inputProv.value = val
     } else if (val == 'tks' || val == 'tkwg' || val == 'tkmg' || val == 'tkmr' || val == 'tkwr' || val == 'tkcs' || val == 'tkss') {
         inputProt.value = val
-    } else if (val == 'tkv' || val == 'tknv' || val == 'tkc' || val == 'tknc' || val == 'tkcv' || val == 'tkco' || val == 'tko') {
+    } else if (val == 'tkv' || val == 'tknv' || val == 'tkc' || val == 'tknc' || val == 'tkco' || val == 'tko') {
         inputPerms.value = val
     }
 }
@@ -559,6 +559,13 @@ function expandTKLabel(img) {
             templateTextProv.textContent = tkMultipleCommunityText
             whyUseLabelTextProv.textContent = tkMultipleCommunityUse
             break;
+        case 'tkcv':
+            openInfoDiv(infoProv)
+            whichTKImgClicked('tkcv')
+            titleProv.textContent = tkCommunityVoiceName
+            templateTextProv.textContent = tkCommunityVoiceText
+            whyUseLabelTextProv.textContent = tkCommunityVoiceUse
+            break;
 
         // Protocols Labels
         case 'tks':
@@ -646,13 +653,6 @@ function expandTKLabel(img) {
             titlePerms.textContent = tkCommercialName
             templateTextPerms.textContent = tkOpenToCommercializationText
             whyUseLabelTextPerms.textContent = tkOpenToCommercializationUse
-            break;
-        case 'tkcv':
-            openInfoDiv(infoPerms)
-            whichTKImgClicked('tkcv')
-            titlePerms.textContent = tkCommunityVoiceName
-            templateTextPerms.textContent = tkCommunityVoiceText
-            whyUseLabelTextPerms.textContent = tkCommunityVoiceUse
             break;
         case 'tkco':
             openInfoDiv(infoPerms)
