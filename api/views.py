@@ -9,14 +9,13 @@ from projects.models import Project
 
 @api_view(['GET'])
 def apiOverview(request):
-    # TODO: Project should be unique_id not pk
     api_urls = {
         'BCLabels': '/bclabels/',
         'BCLabel Detail View': '/bclabel/<str:unique_id>',
         'TKLabels': '/tklabels/',
         'TKLabel Detail View': '/tklabel/<str:unique_id>',
         'Projects': '/projects/',
-        'Project Detail View': '/project/<str:pk>',
+        'Project Detail View': '/project/<str:unique_id>',
     }
     return Response(api_urls)
 
