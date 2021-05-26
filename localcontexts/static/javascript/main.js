@@ -832,37 +832,40 @@ function setTKNoticeUUID(elem) {
     statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
 }
 
-// Require Checkbox selection for Notices
+// Require Checkbox selection for Notices in create-project researcher and institution
 // h/t: https://vyspiansky.github.io/2019/07/13/javascript-at-least-one-checkbox-must-be-selected/
-(function requireCheckbox() {
-    let form = document.querySelector('#createProjectForm')
-    let checkboxes = form.querySelectorAll('input[type=checkbox]')
-    let checkboxLength = checkboxes.length
-    let firstCheckbox = checkboxLength > 0 ? checkboxes[0] : null
 
-    function start() {
-        if (firstCheckbox) {
-            for (let i = 0; i < checkboxLength; i++) {
-                checkboxes[i].addEventListener('change', checkValidity)
+if (window.location.href.includes('create-project')) { 
+    (function requireCheckbox() {
+        let form = document.querySelector('#createProjectForm')
+        let checkboxes = form.querySelectorAll('input[type=checkbox]')
+        let checkboxLength = checkboxes.length
+        let firstCheckbox = checkboxLength > 0 ? checkboxes[0] : null
+    
+        function start() {
+            if (firstCheckbox) {
+                for (let i = 0; i < checkboxLength; i++) {
+                    checkboxes[i].addEventListener('change', checkValidity)
+                }
+                checkValidity()
             }
-            checkValidity()
         }
-    }
-
-    function isChecked() {
-        for (let i = 0; i < checkboxLength; i++) {
-            if (checkboxes[i].checked) return true
+    
+        function isChecked() {
+            for (let i = 0; i < checkboxLength; i++) {
+                if (checkboxes[i].checked) return true
+            }
+            return false
         }
-        return false
-    }
-
-    function checkValidity() {
-        const errorMsg = !isChecked() ? 'At least one Notice must be selected.' : ''
-        firstCheckbox.setCustomValidity(errorMsg)
-    }
-
-    start()
-})()
+    
+        function checkValidity() {
+            const errorMsg = !isChecked() ? 'At least one Notice must be selected.' : ''
+            firstCheckbox.setCustomValidity(errorMsg)
+        }
+    
+        start()
+    })()
+}
 
 function toggleNotifications() {
     document.getElementById('notification-v2').classList.toggle('show')
