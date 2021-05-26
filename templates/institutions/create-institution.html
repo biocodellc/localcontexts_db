@@ -10,6 +10,9 @@
         {% csrf_token %}
 
         <div class="flex-this column">
+            <label class="pad-top-1-5" for="country">Country (if different from personal country)</label>
+            {{ form.country }}
+            
             <label class="pad-top-1-5" for="institution_name">Name</label>
             {{ form.institution_name }}
 
@@ -20,9 +23,6 @@
     
             <label class="pad-top-1-5" for="town_or_city">Town or City</label>
             {{ form.town_or_city }}
-    
-            <label class="pad-top-1-5" for="country">Country (if different from personal country)</label>
-            {{ form.country }}
         </div>
 
         <div class="w-100 flex-this">
