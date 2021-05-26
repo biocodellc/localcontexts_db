@@ -37,4 +37,4 @@ class InviteMemberForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(InviteMemberForm, self).__init__(*args, **kwargs)
-        self.fields['receiver'].label_from_instance = lambda obj: "%s" % obj.get_full_name() + " " + obj.email
+        self.fields['receiver'].label_from_instance = lambda obj: "%s" % obj.get_full_name()
