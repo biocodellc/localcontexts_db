@@ -1130,17 +1130,6 @@ input:focus {
     height: 116px;
 }
 
-/* Create Institution ROR Searchbar */
-#institution-suggestions {
-    position: absolute;
-    z-index: 2;
-    background-color: #fff;
-    /* border: 1px solid #007385; */
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 78px;
-}
-
 /* Institution: Notify */
 .selected-community {
     margin-top: 5px;
@@ -1205,4 +1194,19 @@ input:focus {
 /* Textbox message add-members */
 .add-member-message {
     width: 100px;
+}
+
+/* Create Institution ROR Searchbar */
+#institution-suggestions {
+    /* display: none; */
+    position: absolute;
+    z-index: 2;
+    background-color: #fff;
+    border: 1px solid #007385;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 120px;
+    height: 200px;
+    width: 200px;
+    overflow: auto;
 }

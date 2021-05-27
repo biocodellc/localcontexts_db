@@ -10,19 +10,28 @@
         {% csrf_token %}
 
         <div class="flex-this column">
-            <label class="pad-top-1-5" for="country">Country (if different from personal country)</label>
-            {{ form.country }}
+                <label class="pad-top-1-5" for="country">Country</label>
+                {{ form.country }}
+
             
-            <label class="pad-top-1-5" for="institution_name">Name</label>
-            {{ form.institution_name }}
+            <!-- <label class="pad-top-1-5" for="institution_name">Name</label>
+            {{ form.institution_name }} -->
 
             <!-- TODO: Add ROR functionality -->
             <!-- <input type="text" class="search" placeholder="Search Institutions">
-            <ul id="institution-suggestions" class="suggestions">
-            </ul> -->
+            <ul id="institution-suggestions" class="suggestions" style="display: none;"></ul> -->
+            <div class="flex-this w-100">
+                <select id="institution-type-select" class="w-50">
+                    <option>-- Select Institution Type --</option>
+                </select>
+                <select id="institution-select" class="w-50">
+                    <option>-- Select Institution Name --</option>
+                </select>
+            </div>
+
     
-            <label class="pad-top-1-5" for="town_or_city">Town or City</label>
-            {{ form.town_or_city }}
+            <!-- <label class="pad-top-1-5" for="town_or_city">Town or City</label>
+            {{ form.town_or_city }} -->
         </div>
 
         <div class="w-100 flex-this">
