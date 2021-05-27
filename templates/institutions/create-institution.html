@@ -17,17 +17,25 @@
             {{ form.institution_name }} -->
 
             <div class="flex-this w-100">
-                <select id="institution-type-select" class="w-50">
-                    <option>-- Select Institution Type --</option>
-                </select>
-                <select id="institution-select" class="w-50">
-                    <option>-- Select Institution Name --</option>
-                </select>
+                <div class="w-50 margin-right-1 pad-top-1-5">
+                    <label for="institution-type-select">Institution Type</label>
+
+                    <select id="institution-type-select" class="w-100">
+                        <option>-- Select Institution Type --</option>
+                    </select>
+                </div>
+                <div class="w-50 pad-top-1-5">
+                    <label for="institution-select">Institution Name</label>
+                    <select id="institution-select" class="w-100">
+                        <option>-- Select Institution Name --</option>
+                    </select>
+                </div>
+
             </div>
 
     
-            <!-- <label class="pad-top-1-5" for="town_or_city">Town or City</label>
-            {{ form.town_or_city }} -->
+            <label class="pad-top-1-5" for="town_or_city">Town or City</label>
+            {{ form.town_or_city }}
         </div>
 
         <div class="w-100 flex-this">
