@@ -27,7 +27,9 @@ def create_institution(request):
     form = CreateInstitutionForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
+            name = request.POST.get('institution_name')
             data = form.save(commit=False)
+            data.institution_name = name
             data.institution_creator = request.user
             data.save()
             return redirect('dashboard')

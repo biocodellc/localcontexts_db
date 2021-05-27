@@ -29,8 +29,9 @@
 /* Community member cards */
 .member-card {
     margin: auto;
-    min-height: 265px;
-    max-height: 265px;
+    /* Take out fixed height of cards so that text can fit */
+    /* min-height: 265px;
+    max-height: 265px; */
     min-width: 400px;
     max-width: 400px;
     align-items: center;
