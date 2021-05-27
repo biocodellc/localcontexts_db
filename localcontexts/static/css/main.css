@@ -1130,17 +1130,6 @@ input:focus {
     height: 116px;
 }
 
-/* Create Institution ROR Searchbar */
-#institution-suggestions {
-    position: absolute;
-    z-index: 2;
-    background-color: #fff;
-    /* border: 1px solid #007385; */
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 78px;
-}
-
 /* Institution: Notify */
 .selected-community {
     margin-top: 5px;

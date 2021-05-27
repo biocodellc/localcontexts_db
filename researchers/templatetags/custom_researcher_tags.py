@@ -39,3 +39,19 @@ def unread_notifications(researcher):
         return True
     else:
         return False
+
+@register.simple_tag
+def bcnotice_status_exists(researcher, community):
+    bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher)
+    for bcnotice in bcnotices:
+        statuses = bcnotice.statuses.all()
+        community_status = statuses.filter(community=community)
+        return community_status
+
+@register.simple_tag
+def tknotice_status_exists(researcher, community):
+    tknotices = TKNotice.objects.filter(placed_by_researcher=researcher)
+    for tknotice in tknotices:
+        statuses = tknotice.statuses.all()
+        community_status = statuses.filter(community=community)
+        return community_status

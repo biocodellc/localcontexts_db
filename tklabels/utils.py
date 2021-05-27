@@ -5,6 +5,8 @@ def check_tklabel_type(label):
         return 'clan'
     if label == 'tkf':
         return 'family'
+    if label == 'tkcv':
+        return 'community_voice'
     if label == 'tkmc':
         return 'tk_multiple_community'
     if label == 'tko':
