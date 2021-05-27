@@ -8,7 +8,7 @@ let selectCountry = () => {
     let countryCode = countrySelect.value.toLowerCase()
 
     // TODO: Catch error when institutions don't exist for a country / there is no JSON file. 
-    // Example: Anguilla has no json and no institutions
+    // Example: Anguilla and American Samoa has no json and no institutions
 
     // Based on what was selected in the dropdown, enter into endpoint and fetch
     const endpoint = `https://raw.githubusercontent.com/biocodellc/ror-parser/main/data/${countryCode}.json`
