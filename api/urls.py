@@ -14,6 +14,12 @@ from .api import *
 urlpatterns = [
     path('v1/', views.apiOverview, name="api-overview"),
 
+    path('v1/bcnotices/', views.bcnotices, name="api-bcnotices"),
+    path('v1/bcnotices/<str:unique_id>/', views.bcnotice_detail, name="api-bcnotice-detail"),
+
+    path('v1/tknotices/', views.tknotices, name="api-tknotices"),
+    path('v1/tknotices/<str:unique_id>/', views.tknotice_detail, name="api-tknotice-detail"),
+
     path('v1/bclabels/', views.bclabels, name="api-bclabels"),
     path('v1/bclabels/<str:unique_id>/', views.bclabel_detail, name="api-bclabel-detail"),
 
