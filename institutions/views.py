@@ -6,10 +6,10 @@ from .utils import check_member_role
 from .models import Institution
 from researchers.models import Researcher
 from projects.models import Project, ProjectContributors
-from bclabels.models import BCNotice, NoticeStatus
+from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from communities.models import Community, JoinRequest
-from notifications.models import ActionNotification
+from notifications.models import ActionNotification, NoticeComment, NoticeStatus
 from accounts.models import UserAffiliation
 
 from projects.forms import CreateProjectForm
@@ -111,16 +111,24 @@ def institution_activity(request, pk):
         tknotices = TKNotice.objects.filter(placed_by_institution=institution)
 
         if request.method == 'POST':
-            project_id = request.POST.get('project-id')
+            bcnotice_uuid = request.POST.get('bcnotice-uuid')
+            tknotice_uuid = request.POST.get('tknotice-uuid')
+
             community_id = request.POST.get('community-id')
-            project = Project.objects.get(id=project_id)
             community = Community.objects.get(id=community_id)
 
             form = NoticeCommentForm(request.POST or None)
 
             if form.is_valid():
                 data = form.save(commit=False)
-                data.project = project
+
+                if bcnotice_uuid:
+                    bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
+                    data.bcnotice = bcnotice
+                else:
+                    tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
+                    data.tknotice = tknotice
+
                 data.sender = request.user
                 data.community = community
                 data.save()
@@ -258,9 +266,14 @@ def notify_communities(request, pk, proj_id):
                     notice_status = NoticeStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
                     for bcnotice in bcnotices:
                         bcnotice.communities.add(community)
-                        bcnotice.statuses.add(notice_status)
-                        bcnotice.message = message
                         bcnotice.save()
+
+                        # Create notice status
+                        notice_status.bcnotice = bcnotice
+                        notice_status.save()
+
+                        # Create first comment for notice
+                        NoticeComment.objects.create(bcnotice=bcnotice, community=community, sender=request.user, message=message)
 
                         # Create notification
                         reference_id = str(bcnotice.unique_id)
@@ -273,9 +286,14 @@ def notify_communities(request, pk, proj_id):
                     notice_status = NoticeStatus.objects.create(community=community, seen=False)
                     for tknotice in tknotices:
                         tknotice.communities.add(community)
-                        tknotice.statuses.add(notice_status)
-                        tknotice.message = message
                         tknotice.save()
+
+                        # Create notice status
+                        notice_status.tknotice = tknotice
+                        notice_status.save()
+
+                        # Create first comment for notice
+                        NoticeComment.objects.create(tknotice=tknotice, community=community, sender=request.user, message=message)
 
                         # Create notification
                         reference_id = str(tknotice.unique_id)

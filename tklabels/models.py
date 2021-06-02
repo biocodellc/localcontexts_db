@@ -5,16 +5,13 @@ from researchers.models import Researcher
 from institutions.models import Institution
 from projects.models import Project
 from django.contrib.auth.models import User
-from bclabels.models import NoticeStatus
 
 class TKNotice(models.Model):
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
     communities = models.ManyToManyField(Community, blank=True, related_name="tknotice_communities")
-    statuses = models.ManyToManyField(NoticeStatus, blank=True, related_name="tknotice_statuses")
     placed_by_researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True)
     placed_by_institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True)
-    message = models.TextField(max_length=1500, null=True, blank=True) #250 word limit on message
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
 
