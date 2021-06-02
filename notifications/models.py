@@ -101,6 +101,6 @@ class NoticeStatus(models.Model):
 
     class Meta:
         verbose_name = 'Notice Status'
-        verbose_name_plural = 'Notice Status'
+        verbose_name_plural = 'Notice Statuses'
 
 
