@@ -4,10 +4,10 @@ from django.contrib import messages
 
 from accounts.utils import is_user_researcher
 
-from bclabels.models import BCNotice, NoticeStatus
+from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from communities.models import Community
-from notifications.models import ActionNotification
+from notifications.models import ActionNotification, NoticeStatus
 from projects.models import ProjectContributors, Project
 from projects.forms import CreateProjectForm, ProjectContributorsForm
 from notifications.forms import NoticeCommentForm
