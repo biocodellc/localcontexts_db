@@ -287,11 +287,10 @@ def notify_communities(request, pk, proj_id):
                     for tknotice in tknotices:
                         tknotice.communities.add(community)
                         tknotice.save()
-                        
+
                         # Create notice status
                         notice_status.tknotice = tknotice
                         notice_status.save()
-
 
                         # Create first comment for notice
                         NoticeComment.objects.create(tknotice=tknotice, community=community, sender=request.user, message=message)

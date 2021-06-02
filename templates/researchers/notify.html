@@ -74,8 +74,8 @@
 
                 {% for community in communities %}
                     <!-- Custom templates to check if status for this project exists for bcnotice or tknotice -->
-                    {% bcnotice_status_exists researcher community as bcnotice_status %}
-                    {% tknotice_status_exists researcher community as tknotice_status %}
+                    {% bcnotice_status_exists project community as bcnotice_status %}
+                    {% tknotice_status_exists project community as tknotice_status %}
 
                     {% if bcnotice_status or tknotice_status %}
                     {% else %}

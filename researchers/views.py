@@ -7,7 +7,7 @@ from accounts.utils import is_user_researcher
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from communities.models import Community
-from notifications.models import ActionNotification, NoticeStatus
+from notifications.models import ActionNotification, NoticeStatus, NoticeComment
 from projects.models import ProjectContributors, Project
 from projects.forms import CreateProjectForm, ProjectContributorsForm
 from notifications.forms import NoticeCommentForm
@@ -182,9 +182,14 @@ def notify_communities(request, pk, proj_id):
                 notice_status = NoticeStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
                 for bcnotice in bcnotices:
                     bcnotice.communities.add(community)
-                    bcnotice.statuses.add(notice_status)
-                    bcnotice.message = message
                     bcnotice.save()
+
+                    # Create notice status
+                    notice_status.bcnotice = bcnotice
+                    notice_status.save()
+
+                    # Create first comment for notice
+                    NoticeComment.objects.create(bcnotice=bcnotice, community=community, sender=request.user, message=message)
 
                     # Create notification
                     reference_id = str(bcnotice.unique_id)
@@ -198,9 +203,14 @@ def notify_communities(request, pk, proj_id):
                 notice_status = NoticeStatus.objects.create(community=community, seen=False)
                 for tknotice in tknotices:
                     tknotice.communities.add(community)
-                    tknotice.statuses.add(notice_status)
-                    tknotice.message = message
                     tknotice.save()
+
+                    # Create notice status
+                    notice_status.tknotice = tknotice
+                    notice_status.save()
+
+                    # Create first comment for notice
+                    NoticeComment.objects.create(tknotice=tknotice, community=community, sender=request.user, message=message)
 
                     # Create notification
                     reference_id = str(tknotice.unique_id)

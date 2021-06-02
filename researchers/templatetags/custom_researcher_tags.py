@@ -1,6 +1,6 @@
 from django import template
 from django.urls import reverse
-from notifications.models import ActionNotification
+from notifications.models import ActionNotification, NoticeStatus
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from projects.models import ProjectContributors
@@ -41,17 +41,34 @@ def unread_notifications(researcher):
         return False
 
 @register.simple_tag
-def bcnotice_status_exists(researcher, community):
-    bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher)
-    for bcnotice in bcnotices:
-        statuses = bcnotice.statuses.all()
-        community_status = statuses.filter(community=community)
-        return community_status
+def bcnotice_status_exists(project, community):
+    # Check if bc notice of target project exists
+    bcnotice_exists = BCNotice.objects.filter(project=project).exists()
+
+    # If it does, get the notice
+    if bcnotice_exists:
+        bcnotice = BCNotice.objects.get(project=project)
+        # See if this notice has a status with target community
+        notice_status_exists = NoticeStatus.objects.filter(bcnotice=bcnotice, community=community).exists()
+
+        if notice_status_exists:
+            return True
+        else:
+            return False
+    else:
+        return False
 
 @register.simple_tag
-def tknotice_status_exists(researcher, community):
-    tknotices = TKNotice.objects.filter(placed_by_researcher=researcher)
-    for tknotice in tknotices:
-        statuses = tknotice.statuses.all()
-        community_status = statuses.filter(community=community)
-        return community_status
+def tknotice_status_exists(project, community):
+    tknotice_exists = TKNotice.objects.filter(project=project).exists()
+
+    if tknotice_exists:
+        tknotice = TKNotice.objects.get(project=project)
+        notice_status_exists = NoticeStatus.objects.filter(tknotice=tknotice, community=community).exists()
+
+        if notice_status_exists:
+            return True
+        else:
+            return False
+    else:
+        return False
