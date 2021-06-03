@@ -61,7 +61,7 @@
 
                                             <select id="select-{{ bcnotice.unique_id }}" onchange="setBCNoticeUUID(this)">
 
-                                                {% for status in bcnotice.statuses.all %}
+                                                {% for status in bcnotice.bcnotice_status.all %}
                                                     {% if status.community == community %}
 
                                                         {% if not status.seen and status.status == None %}
@@ -247,7 +247,7 @@
                                         <span class="weight-500">What would you like to do with this notice? </span>
 
                                         <select id="select-{{ tknotice.unique_id }}" onchange="setTKNoticeUUID(this)">
-                                            {% for status in tknotice.statuses.all %}
+                                            {% for status in tknotice.tknotice_status.all %}
                                             {% if status.community == community %}
 
                                                 {% if not status.seen and status.status == None %}

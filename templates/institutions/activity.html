@@ -74,7 +74,7 @@
                         </div>
 
                         <div class="flex-this column">
-                                {% for status in bcnotice.statuses.all %}
+                                {% for status in bcnotice.bcnotice_status.all %}
                                     <div class="flex-this space-between pad-top-1-5">
 
                                         <div>
@@ -102,18 +102,6 @@
                                         {% endif %}
                                     </div>
 
-                                    {% if bcnotice.message %}
-
-                                        <div class="pad-top-1">
-                                            <span class="weight-500">{{ bcnotice.placed_by_institution }}</span>
-                                            <span class="grey-text">{{ bcnotice.created|date:'m/d/Y' }}</span><br>
-                                            <p>
-                                                {{ bcnotice.message }}
-                                            </p>
-                                        </div>
-        
-                                    {% endif %}
-
                                     <form method="POST" action="">
                                         {% csrf_token %}
         
@@ -136,7 +124,7 @@
 
                                             {% else %}
         
-                                                <input type="hidden" value="{{ bcnotice.project.id }}" name="project-id">
+                                                <input type="hidden" value="{{ bcnotice.unique_id }}" name="bcnotice-uuid">
             
                                                 <div class="flex-this row">
                                                     <div class="w-100">
@@ -236,7 +224,7 @@
                     </div>
 
                     <div class="flex-this column">
-                        {% for status in tknotice.statuses.all %}
+                        {% for status in tknotice.tknotice_status.all %}
                             <div class="flex-this space-between pad-top-1-5">
 
                                 <div>
@@ -264,18 +252,6 @@
                                 {% endif %}
                             </div>
 
-                            {% if tknotice.message %}
-
-                                <div class="pad-top-1">
-                                    <span class="weight-500">{{ tknotice.placed_by_institution }}</span>
-                                    <span class="grey-text">{{ tknotice.created|date:'m/d/Y' }}</span><br>
-                                    <p>
-                                        {{ tknotice.message }}
-                                    </p>
-                                </div>
-
-                            {% endif %}
-
                             <form method="POST" action="">
                                 {% csrf_token %}
 
@@ -294,7 +270,7 @@
                                         {% endif %}
                                     {% endfor %}
 
-                                    <input type="hidden" value="{{ tknotice.project.id }}" name="project-id">
+                                    <input type="hidden" value="{{ tknotice.unique_id }}" name="tknotice-uuid">
 
                                     <div class="flex-this row">
                                         <div class="w-100">

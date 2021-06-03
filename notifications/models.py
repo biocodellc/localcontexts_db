@@ -85,4 +85,22 @@ class NoticeComment(models.Model):
         verbose_name_plural = 'Comments'
         ordering = ('created',)
 
+class NoticeStatus(models.Model):
+    CHOICES = (
+        ('pending', 'pending'),
+        ('not_pending', 'not_pending'),
+    )
+    bcnotice = models.ForeignKey(BCNotice, on_delete=models.CASCADE, null=True, related_name="bcnotice_status", blank=True)
+    tknotice = models.ForeignKey(TKNotice, on_delete=models.CASCADE, null=True, related_name="tknotice_status", blank=True)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="status_community", blank=True)
+    seen = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, choices=CHOICES, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.community} - {self.seen} - {self.status}"
+
+    class Meta:
+        verbose_name = 'Notice Status'
+        verbose_name_plural = 'Notice Statuses'
+
 

@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from accounts.models import UserAffiliation
-from notifications.models import ActionNotification
+from notifications.models import ActionNotification, NoticeStatus
 from bclabels.models import BCNotice, BCLabel
 from tklabels.models import TKNotice, TKLabel
 from projects.models import ProjectContributors, Project
@@ -177,7 +177,7 @@ def community_activity(request, pk):
 
                 bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
                 reference_id = str(bcnotice.unique_id)
-                statuses = bcnotice.statuses.filter(community=community)
+                statuses = NoticeStatus.objects.filter(bcnotice=bcnotice, community=community)
 
                 for status in statuses:
                     if bcnotice_status == 'seen':
@@ -215,7 +215,7 @@ def community_activity(request, pk):
 
                 tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
                 reference_id = str(tknotice.unique_id)
-                statuses = tknotice.statuses.filter(community=community)
+                statuses = NoticeStatus.objects.filter(tknotice=tknotice, community=community)
 
                 for status in statuses:
                     if tknotice_status == 'seen':
