@@ -5,7 +5,7 @@
         <h2 class="darkteal-text">Register with Local Contexts</h2>
     </div>
     <div>
-        <p>Already a Member?<a href="{% url 'login' %}" class="darkteal-text"> Sign in</a></p>
+        <small><span class="grey-text">Already a Member?</span><a href="{% url 'login' %}" class="darkteal-text"> Sign in</a></small>
     </div>
 </div>
 
@@ -17,7 +17,7 @@
 
 <form action="{% url 'register' %}" method="POST" class="flex-this column w-100">
     {% csrf_token %}
-    <div class="flex-this w-100">
+    <div class="flex-this w-100 pad-top-1-5">
 
         <div class="pad-right w-50">
             <label for="first_name">First name</label><br>
@@ -31,18 +31,19 @@
         </div>
     </div>
 
-    <div>
-        <label for="email">Email Address</label><br>
-        {{form.email}}
-    </div>
-    
-    <div>
+    <div class="pad-top-1-5">
         <label for="username">Username</label><br>
         {{form.username}}
         <small>{{form.username.help_text}}</small>
     </div>
 
-    <div class="flex-this w-100">
+    <div class="pad-top-1-5">
+        <label for="email">Email Address</label><br>
+        {{form.email}}
+    </div>
+    
+
+    <div class="flex-this w-100 pad-top-1-5">
 
         <div class="pad-right w-50" style="position: relative;">
             <label for="password">Password</label><br>

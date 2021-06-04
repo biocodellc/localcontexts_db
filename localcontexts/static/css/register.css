@@ -25,8 +25,8 @@
 
 /* Progress Container || THE ORANGE PART */
 #progress-container {
-    max-width: 40%;
-    min-width: 40%;
+    max-width: 35%;
+    min-width: 35%;
     border-radius: 5px 0px 0px 5px;
     font-weight: 600;
     font-size: 14px;
@@ -34,22 +34,13 @@
 
 /* Form Container || THE WHITE PART */
 #complete-form-container {
+    padding: 60px;
     justify-content: center;
-    max-width: 60%;
-    min-width: 60%;
+    max-width: 65%;
+    min-width: 65%;
     border-radius: 0px 5px 5px 0px;
     font-weight: 300;
     font-size: 14px;
-}
-
-/* Card Logo */
-.mini-logo-container {
-    width: 100%;
-    padding: 2%;
-}
-
-.mini-logo {
-    padding: 1%;
 }
 
 /* Progress Container */
@@ -61,7 +52,7 @@
 #progress-ul {
     align-items: center;
     width: 100%;
-    padding: 1% 1% 11% 6%;
+    padding: 11% 1% 11% 6%;
 }
 
 #progress-ul li {
@@ -70,7 +61,7 @@
     position: relative;
     margin: 0;
     padding-bottom: 2em;
-    padding-left: 4.25%;
+    padding-left: 4.91%;
     width: 70%;
     font-weight: 400;
 }
@@ -120,7 +111,7 @@
 #progress-bottom-container h2 {
     font-weight: 400;
     text-align: center;
-    padding-top: 7%;
+    margin-top: 14%;
     padding-bottom: 2%;
 }
 

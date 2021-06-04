@@ -55,7 +55,7 @@ input[type=text], input[type=email], input[type=password], input[type=username],
 
 textarea {
     background-color: #fff;
-    border: 2px solid #007385;
+    border: 1px solid #333333;
     border-radius: 5px;
 }
 
@@ -494,16 +494,6 @@ input:focus {
 
 .page-not-found-txt, .padded {
     padding: 3%;
-}
-
-.contact-form-container {
-    padding-left: 16%;
-}
-
-.contact-form-container input[type=text] {
-    max-width: 265px;
-    min-width: 265px;
-    border: none;
 }
 
 /* COMMUNITY REGISTRY PAGE */
