@@ -17,24 +17,24 @@
             {% include 'partials/_alerts.html' %}
     
             <div class="form-container flex-this column w-90">
-                <h2 class="darkteal-text">Sign In with Local Contexts</h2>
+                <h2 class="darkteal-text margin-bottom-2">Welcome back!</h2>
     
                 <form action="{% url 'login' %}" method="POST" class="flex-this column w-100">
                     {% csrf_token %}
-                    <div>
-                        <label class="input-label-teal">Username</label>
+                    <div class="pad-top-1-5">
+                        <label>Username</label>
                         <input type="username" name="username" required>
                     </div>
-                    <div>
-                        <label class="input-label-teal">Password</label>
+                    <div class="pad-top-1-5">
+                        <label>Password</label>
                         <input type="password" name="password" required>
                     </div>
-                    <div class="flex-this space-between"> 
+                    <div class="flex-this space-between pad-top-1-5"> 
                         <div>
                             <a href="{% url 'reset_password'%}" class="darkteal-text">Forgot Password?</a>
                         </div>  
                         <div>
-                            <button class="action-btn default-btn">Sign In <i class="fa fa-long-arrow-right"></i></button>
+                            <button class="action-btn default-btn">Sign in</button>
                         </div>
                     </div>
 

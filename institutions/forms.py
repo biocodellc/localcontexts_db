@@ -6,14 +6,24 @@ class CreateInstitutionForm(forms.ModelForm):
     class Meta:
         model = Institution
         fields = ['institution_id', 'orcid', 'town_or_city', 'country', 'contact_name', 'contact_email']
-        # error_messages = {
-        #     'institution_name': {
-        #         'unique': _("An institution by that name already exists."),
-        #     },
-        # }
         widgets = {
             'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
             'contact_email': forms.EmailInput(attrs={'class': 'w-100'}),
+        }
+
+class CreateInstitutionNoRorForm(forms.ModelForm):
+    class Meta:
+        model = Institution
+        fields = ['institution_name','institution_id', 'orcid', 'town_or_city', 'country', 'contact_name', 'contact_email']
+        error_messages = {
+            'institution_name': {
+                'unique': _("An institution by that name already exists."),
+            },
+        }
+        widgets = {
+            'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
+            'contact_email': forms.EmailInput(attrs={'class': 'w-100'}),
+            'town_or_city': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
 class UpdateInstitutionForm(forms.ModelForm):

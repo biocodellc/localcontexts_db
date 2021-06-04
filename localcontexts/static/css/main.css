@@ -45,19 +45,17 @@ label {
 }
 
 input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], select {
-    max-height: 44px;
-    min-height: 44px;
+    max-height: 40px;
+    min-height: 40px;
     background-color: #fff;
-    border: 2px solid #007385;
+    border: 1px solid #333333;
     border-radius: 5px;
-    font-size: 14px;
-    line-height: 16px;
-    font-weight: 300;
+    padding:8px;
 }
 
 textarea {
     background-color: #fff;
-    border: 2px solid #007385;
+    border: 1px solid #333333;
     border-radius: 5px;
 }
 
@@ -116,10 +114,6 @@ input:focus {
     color: #007585;
 }
 
-.input-label-teal {
-    color:#007385;
-}
-
 .primary-blue-text {
     color: #3876aa;
 }
@@ -138,6 +132,10 @@ input:focus {
 
 .grey-text {
     color: #A09D9D;
+}
+
+.red-text {
+    color:#ff0000;
 }
 
 .hl {
@@ -383,12 +381,10 @@ input:focus {
 
 /* ACTION Buttons / Register,Sign in, etc. */
 .action-btn {
-    padding: 10px 20px;
+    padding: 8px 16px;
     margin-top: 2%;
     background-color: #007385;
     border: none;
-    max-height: 44px;
-    min-height: 44px;
     border-radius: 5px;
     font-size: 14px;
     line-height: 21px;
@@ -498,16 +494,6 @@ input:focus {
 
 .page-not-found-txt, .padded {
     padding: 3%;
-}
-
-.contact-form-container {
-    padding-left: 16%;
-}
-
-.contact-form-container input[type=text] {
-    max-width: 265px;
-    min-width: 265px;
-    border: none;
 }
 
 /* COMMUNITY REGISTRY PAGE */
@@ -1194,4 +1180,14 @@ input:focus {
 /* Textbox message add-members */
 .add-member-message {
     width: 100px;
+}
+
+/* CREATE INSTITUTION NO ROR */
+.noror-modal-box {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 50%;
+    height: 550px;
 }

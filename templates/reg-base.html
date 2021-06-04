@@ -5,8 +5,6 @@
 
         <div id="progress-container" class="orange-bg white-text flex-this column">
             
-            {% include 'snippets/reg-mini-logo.html'%}
-
             <div id="progress-ul-container" class="flex-this">
                 <ul id="progress-ul" class="flex-this column">
                     <li>
@@ -34,7 +32,7 @@
                         Create Your Profile
                     </li>
                     <li>
-                    {% if request.get_full_path == "/communities/connect-community/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/connect-institution/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/create-institution/"%}
+                    {% if request.get_full_path == "/communities/connect-community/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/connect-institution/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/create-institution/" or request.get_full_path == "/institutions/create-institution/no-ror/"%}
                         {% include 'snippets/bullet-big.html'%}
                     {% else %}
                         {% include 'snippets/bullet.html'%}
@@ -42,7 +40,7 @@
                         Connect or Create an Account</li>
                     <li>
                         {% include 'snippets/bullet.html'%}
-                        Start Creating Labels and Notices
+                        Get started!
                     </li>
                 </ul>
             </div>

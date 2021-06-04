@@ -22,33 +22,6 @@ if (passwordField ) {
     })
 }
 
-// Registration Page
-// Toggle Password Visibility
-var togglePassword = document.querySelector('#toggle-password')
-var password = document.querySelector('#id_password1')
-
-if (togglePassword) {
-    togglePassword.addEventListener('click', (e) => {
-        var type = password.getAttribute('type') === 'password' ? 'text' : 'password'
-        password.setAttribute('type', type)
-
-        togglePassword.classList.toggle('fa-eye-slash')
-    })
-}
-
-// Toggle Confirm Password Visibility
-var togglePassword2 = document.querySelector('#toggle-password2')
-var password2 = document.querySelector('#id_password2')
-
-if(togglePassword2) {
-    togglePassword2.addEventListener('click', (e) => {
-        var type = password2.getAttribute('type') === 'password' ? 'text' : 'password'
-        password2.setAttribute('type', type)
-    
-        togglePassword2.classList.toggle('fa-eye-slash')
-    })
-}
-
 // Show customised label text in community: labels
 function customText(imgDiv) {
     let labelID = imgDiv.id

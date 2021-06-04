@@ -5,13 +5,11 @@ from django.contrib.auth.models import User
 from .models import Profile, SignUpInvitation
 
 class RegistrationForm(UserCreationForm):
-    first_name = forms.CharField(max_length=50, required=False)
-    last_name = forms.CharField(max_length=50, required=False)
     email = forms.EmailField(required=True, max_length=150, help_text='Required')
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2']
     
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=False)
@@ -29,7 +27,7 @@ class RegistrationForm(UserCreationForm):
 class UserCreateProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name']
+        fields = ['first_name', 'last_name']
 
 # updating user instance (same as above but includes email)
 class UserUpdateForm(forms.ModelForm):
@@ -46,7 +44,8 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['job_title', 'city_or_town', 'country']
 
 class ResendEmailActivationForm(forms.Form):
-    email = forms.EmailField(label=_('Email'), required=True)
+    email = forms.EmailField(label=_('Email'), required=True, widget=forms.EmailInput(attrs={'class': 'w-100', 'placeholder': 'email@domain.com'}))
+
 
 class SignUpInvitationForm(forms.ModelForm):
     class Meta:
