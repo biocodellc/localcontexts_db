@@ -17,19 +17,6 @@
 
 <form action="{% url 'register' %}" method="POST" class="flex-this column w-100">
     {% csrf_token %}
-    <div class="flex-this w-100 pad-top-1-5">
-
-        <div class="pad-right w-50">
-            <label for="first_name">First name</label><br>
-            {{form.first_name}}
-        </div>
-
-        <div class="pad-left w-50">
-            <label for="last_name">Last name</label><br>
-            {{form.last_name}}
-
-        </div>
-    </div>
 
     <div class="pad-top-1-5">
         <label for="username">Username</label><br>
