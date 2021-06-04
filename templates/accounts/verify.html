@@ -1,20 +1,27 @@
 {% extends 'reg-base.html' %} {% block title %} | Verify {% endblock %} {% load static %} {% block card %}
 
-<div class="flex-this column centered-content">
+<div class="flex-this column">
 
     <h2 class="darkteal-text">Verify Your Email</h2>
-    <p>Thank you for registering with Local Contexts. <br><br>
-    Check your email for a verification link to activate your account. <br>
+    <p>A verification link has been sent to the email you provided. <br>
 
     If you have verified your email, you're all set! You can close this window. <br><br>
     
-    Didn't get an email? <br>Enter the email you used at registration to send it again.</p>
+    Didn't get an email? <br>Check your spam inbox or enter the email you used at registration to send it again.</p>
         
     <form method="POST" action="">
         {% csrf_token %}
-        {{ form.email }} <br>
+        <div class="w-100 ">
 
-        <button id="resend-email-btn" class="white-bg darkteal-text">Resend Email</button>    
+            <div class="w-60">
+                {{ form.email }}
+            </div>
+
+            <div class="w-40 margin-top-1">
+                <button id="resend-email-btn" class="action-btn">Resend Email</button>    
+            </div>
+    
+        </div>
     </form>
 
     <!-- Alerts -->

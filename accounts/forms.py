@@ -46,7 +46,8 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['job_title', 'city_or_town', 'country']
 
 class ResendEmailActivationForm(forms.Form):
-    email = forms.EmailField(label=_('Email'), required=True)
+    email = forms.EmailField(label=_('Email'), required=True, widget=forms.EmailInput(attrs={'class': 'w-100', 'placeholder': 'email@domain.com'}))
+
 
 class SignUpInvitationForm(forms.ModelForm):
     class Meta:
