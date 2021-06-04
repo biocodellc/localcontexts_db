@@ -45,14 +45,12 @@ label {
 }
 
 input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], select {
-    max-height: 44px;
-    min-height: 44px;
+    max-height: 40px;
+    min-height: 40px;
     background-color: #fff;
-    border: 2px solid #007385;
+    border: 1px solid #333333;
     border-radius: 5px;
-    font-size: 14px;
-    line-height: 16px;
-    font-weight: 300;
+    padding:8px;
 }
 
 textarea {
@@ -114,10 +112,6 @@ input:focus {
 
 .darkteal-text {
     color: #007585;
-}
-
-.input-label-teal {
-    color:#007385;
 }
 
 .primary-blue-text {
@@ -387,12 +381,10 @@ input:focus {
 
 /* ACTION Buttons / Register,Sign in, etc. */
 .action-btn {
-    padding: 10px 20px;
+    padding: 8px 16px;
     margin-top: 2%;
     background-color: #007385;
     border: none;
-    max-height: 44px;
-    min-height: 44px;
     border-radius: 5px;
     font-size: 14px;
     line-height: 21px;

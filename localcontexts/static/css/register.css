@@ -160,16 +160,6 @@
     position: relative;
 }
 
-/* Icons in the password fields */
-.pass-field i {
-    cursor: pointer;
-    position: absolute;
-    left: 285px;
-    top: 11px;
-    font-size: 20px;
-    color: #7d7d7d;
-}
-
 /* Checkbox */
 .checkbox-div {
     justify-content: flex-start;
