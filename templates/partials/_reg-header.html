@@ -3,37 +3,13 @@
 <header id="reg-header" class="flex-this">
     {% if user.is_authenticated %}
 
-    <div class="generic-logo-container flex-this">
-        <div>
-            <a href="#">
-                <img class="logo" src="{% static 'images/logos/logo.png' %}" alt="Local Contexts logo">
-            </a>
-        </div>
-
-        <!-- Keep for now, might need later -->
-        <!-- <div class="mini-nav flex-this">
-            <div class="flex-this badge-container">
-                <div>
-                    <a href="{% url 'create-community' %}" class="white-text">
-                        <div class="badge">C</div>
-                    </a>
-                </div>
-                <div>   
-                    <a href="{% url 'connect-researcher' %}" class="white-text">
-                        <div class="badge">R</div>
-                    </a>
-                </div>
-
-                <div>   
-                    <a href="{% url 'create-institution' %}" class="white-text">
-                        <div class="badge">I</div>
-                    </a>
-                </div>
-
+        <div class="generic-logo-container flex-this">
+            <div>
+                <a href="#">
+                    <img class="logo" src="{% static 'images/logos/logo.png' %}" alt="Local Contexts logo">
+                </a>
             </div>
-        </div> -->
-
-    </div>
+        </div>
 
     {% else %}
 
