@@ -140,6 +140,10 @@ input:focus {
     color: #A09D9D;
 }
 
+.red-text {
+    color:#ff0000;
+}
+
 .hl {
     background-color: #007385;
     color: #fff;
@@ -1194,4 +1198,14 @@ input:focus {
 /* Textbox message add-members */
 .add-member-message {
     width: 100px;
+}
+
+/* CREATE INSTITUTION NO ROR */
+.noror-modal-box {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 50%;
+    height: 550px;
 }

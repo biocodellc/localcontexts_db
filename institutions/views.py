@@ -16,7 +16,7 @@ from projects.forms import CreateProjectForm
 from notifications.forms import NoticeCommentForm
 from communities.forms import InviteMemberForm
 
-from .forms import CreateInstitutionForm, UpdateInstitutionForm
+from .forms import CreateInstitutionForm, UpdateInstitutionForm, CreateInstitutionNoRorForm
 
 @login_required(login_url='login')
 def connect_institution(request):
@@ -39,6 +39,17 @@ def create_institution(request):
                 data.save()
                 return redirect('dashboard')
     return render(request, 'institutions/create-institution.html', {'form': form})
+
+@login_required(login_url='login')
+def create_institution_noror(request):
+    form = CreateInstitutionNoRorForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.institution_creator = request.user
+            data.save()
+            return redirect('dashboard')
+    return render(request, 'institutions/create-institution-noror.html', {'form': form,})
 
 # Registry
 def institution_registry(request):
