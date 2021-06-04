@@ -29,10 +29,15 @@ def create_institution(request):
         if form.is_valid():
             name = request.POST.get('institution_name')
             data = form.save(commit=False)
-            data.institution_name = name
-            data.institution_creator = request.user
-            data.save()
-            return redirect('dashboard')
+
+            if Institution.objects.filter(institution_name=name).exists():
+                messages.add_message(request, messages.ERROR, 'An institution by this name already exists.')
+                return redirect('create-institution')
+            else:
+                data.institution_name = name
+                data.institution_creator = request.user
+                data.save()
+                return redirect('dashboard')
     return render(request, 'institutions/create-institution.html', {'form': form})
 
 # Registry
