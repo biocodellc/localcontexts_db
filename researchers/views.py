@@ -9,7 +9,8 @@ from tklabels.models import TKNotice
 from communities.models import Community
 from notifications.models import ActionNotification, NoticeStatus, NoticeComment
 from projects.models import ProjectContributors, Project
-from projects.forms import CreateProjectForm, ProjectContributorsForm
+# from projects.forms import CreateProjectForm, ProjectContributorsForm
+from projects.forms import CreateProjectForm
 from notifications.forms import NoticeCommentForm
 
 from .models import Researcher

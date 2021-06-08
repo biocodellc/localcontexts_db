@@ -6,7 +6,7 @@ class ProjectAdmin(admin.ModelAdmin):
     readonly_fields = ('unique_id',)
 
 class ProjectContributorsAdmin(admin.ModelAdmin):
-    list_display = ('project', 'institution', 'community', 'researcher')
+    list_display = ('project',)
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectContributors, ProjectContributorsAdmin)

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from bclabels.models import BCLabel, BCNotice
 from tklabels.models import TKLabel, TKNotice
-from projects.models import Project, ProjectContributors
+from projects.models import Project
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
@@ -39,20 +39,20 @@ class TKLabelSerializer(serializers.ModelSerializer):
         model = TKLabel
         fields = '__all__'
 
-class ProjectContributorsSerializer(serializers.ModelSerializer):
-    institution = InstitutionSerializer()
-    researcher = ResearcherSerializer()
-    community = CommunitySerializer()
+# class ProjectContributorsSerializer(serializers.ModelSerializer):
+#     institution = InstitutionSerializer()
+#     researcher = ResearcherSerializer()
+#     community = CommunitySerializer()
     
-    class Meta:
-        model = ProjectContributors
-        fields = ('institution', 'researcher', 'community',)
+#     class Meta:
+#         model = ProjectContributors
+#         fields = ('institution', 'researcher', 'community',)
 
 class ProjectSerializer(serializers.ModelSerializer):
     bclabels = BCLabelSerializer(many=True)
     tklabels = TKLabelSerializer(many=True)
     project_creator = UserSerializer()
-    project_contributors = ProjectContributorsSerializer()
+    # project_contributors = ProjectContributorsSerializer()
 
     class Meta:
         model = Project

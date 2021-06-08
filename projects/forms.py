@@ -23,7 +23,7 @@ class CreateProjectForm(forms.ModelForm):
             'url': forms.TextInput(attrs={'size': 65}),
         }
 
-class ProjectContributorsForm(forms.ModelForm):
-    class Meta:
-        model = ProjectContributors
-        fields = ['community']
+# class ProjectContributorsForm(forms.ModelForm):
+#     class Meta:
+#         model = ProjectContributors
+#         fields = ['community']
