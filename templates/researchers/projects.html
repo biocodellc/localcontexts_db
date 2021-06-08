@@ -25,22 +25,13 @@
                 <div class="w-100 flex-this">
 
                     <div class="w-50"> 
-                            <h4 class="darkteal-text weight-600 no-top-margin">{{ c.project.title }}</h4>
+                            <h4 class="darkteal-text weight-600 no-top-margin">{{ c.title }}</h4>
                             <p class="no-top-margin">
-                                Date Created: {{ c.project.date_added }}<br>
-                                Project Type: {{ c.project.project_type }}<br>
+                                Date Created: {{ c.date_added }}<br>
+                                Project Type: {{ c.project_type }}<br>
                                 Project Contributors: 
-                                {% if c.institution %}
-                                    {{ c.institution.institution_name }} 
-                                {% endif %}
-
-                                {% if c.researcher %}
-                                    , {{ c.researcher.user.get_full_name }}
-                                {% endif %} 
-
-                                {% if c.community %}
-                                    , {{ c.community.community_name }}
-                                {% endif %}<br>
+                                <!-- TODO: ADD CONTRIBUTORS -->
+                                <br>
                             </p>
                     </div>
         
@@ -58,10 +49,10 @@
 
             <div class="flex-this space-between">
                 <div class="w-90">
-                    {{ c.project.description }}
+                    {{ c.description }}
                 </div>
                 <div class="w-20">
-                    <a href="{% url 'researcher-notify-communities' researcher.id c.project.id %}">
+                    <a href="{% url 'researcher-notify-communities' researcher.id c.id %}">
                         <button class="action-btn">Notify Communities <i class="fa fa-users" aria-hidden="true"></i></button>
                     </a>
                 </div>

@@ -130,13 +130,14 @@ def researcher_projects(request, pk):
 def create_project(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
-
     if request.method == "POST":
         form = CreateProjectForm(request.POST or None)
         if form.is_valid():
             data = form.save(commit=False)
             data.project_creator = request.user
             data.save()
+            # Add project to researcher projects
+            researcher.projects.add(data)
 
             notices_selected = request.POST.getlist('checkbox-notice')
 
@@ -146,7 +147,7 @@ def create_project(request, pk):
                 if notice == 'tknotice':
                     tknotice = TKNotice.objects.create(placed_by_researcher=researcher, project=data)
 
-            ProjectContributors.objects.create(project=data, researcher=researcher)
+            # ProjectContributors.objects.create(project=data, researcher=researcher)
             return redirect('researcher-activity', researcher.id)
     else:
         form = CreateProjectForm()
