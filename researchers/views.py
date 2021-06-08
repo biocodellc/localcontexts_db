@@ -113,12 +113,12 @@ def researcher_activity(request, pk):
 def researcher_projects(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
-    contribs = ProjectContributors.objects.filter(researcher=researcher)
+    # contribs = ProjectContributors.objects.filter(researcher=researcher)
     bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher)
 
     context = {
         'researcher': researcher,
-        'contribs': contribs,
+        # 'contribs': contribs,
         'bcnotices': bcnotices,
     }
 
@@ -163,7 +163,7 @@ def notify_communities(request, pk, proj_id):
     researcher = Researcher.objects.get(id=pk)
 
     project = Project.objects.get(id=proj_id)
-    contribs = ProjectContributors.objects.get(project=project, researcher=researcher)
+    # contribs = ProjectContributors.objects.get(project=project, researcher=researcher)
 
     bcnotice_exists = BCNotice.objects.filter(project=project).exists()
     tknotice_exists = TKNotice.objects.filter(project=project).exists()
@@ -224,7 +224,7 @@ def notify_communities(request, pk, proj_id):
     context = {
         'researcher': researcher,
         'project': project,
-        'contribs': contribs,
+        # 'contribs': contribs,
         'communities': communities,
     }
     return render(request, 'researchers/notify.html', context)

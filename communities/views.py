@@ -505,13 +505,13 @@ def projects(request, pk):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         notices = community.bcnotice_communities.all()
-        contribs = ProjectContributors.objects.filter(community=community)
+        # contribs = ProjectContributors.objects.filter(community=community)
 
         context = {
             'community': community, 
             'member_role': member_role,
             'notices': notices,
-            'contribs': contribs,
+            # 'contribs': contribs,
         }
         return render(request, 'communities/projects.html', context)
 

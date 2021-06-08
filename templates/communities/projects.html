@@ -20,38 +20,38 @@
 
     </div>
 
-    {% if contribs %}
-        {% for contrib in contribs %}
+    {% if community.projects %}
+        {% for project in community.projects.all %}
             <div class="content-card-v2 white-bg">
 
-                <div id="full-contrib-card-{{ contrib.id }}" class="flex-this space-between" style="scroll-margin-top: 8em;">
+                <div id="full-contrib-card-{{ project.id }}" class="flex-this space-between" style="scroll-margin-top: 8em;">
                     <div class="w-90">
                         <p class="no-top-margin no-bottom-margin">
                             <span class="darkteal-text weight-500">
-                                {{ contrib.project.title }}
+                                {{ project.project.title }}
                             </span><br>
-                            {{ contrib.project.publication_date }}<br>
-                            {{ contrib.project.project_type }}<br>
-                            {{ contrib.community.community_name }}
-                            {% if contrib.researcher %}
-                                , {{ contrib.researcher.user.get_full_name}}
+                            {{ project.project.publication_date }}<br>
+                            {{ project.project.project_type }}<br>
+                            {{ project.community.community_name }}
+                            {% if project.researcher %}
+                                , {{ project.researcher.user.get_full_name}}
                             {% endif %}
-                            {% if contrib.institution %}
-                                , {{ contrib.institution.institution_name }}
+                            {% if project.institution %}
+                                , {{ project.institution.institution_name }}
                             {% endif %}
 
                         </p>
                     </div>
                     <div>
-                        <a id="{{ contrib.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                        <a id="{{ project.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                     </div>
                 </div>
 
-                <div id="expand-contrib-{{ contrib.id }}" style="height: 0px; overflow:hidden;">
+                <div id="expand-contrib-{{ project.id }}" style="height: 0px; overflow:hidden;">
 
                     <div class="flex-this space-between">
                         <div class="w-80">
-                            <p>{{ contrib.project.description }}</p>
+                            <p>{{ project.project.description }}</p>
                         </div>
     
                         <div class="flex-this column w-15">
@@ -61,14 +61,14 @@
                             <div class="notice-btns center-text">
                                 <a href="#" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
                             </div> -->
-                            {% if contrib.project.has_labels %}
+                            {% if project.project.has_labels %}
 
                             {% else %}
                                 {% if member_role == 'viewer' %}
 
                                 {% else %}
                                     <div class="notice-btns center-text">
-                                        <a href="{% url 'apply-project-labels' community.id contrib.project.id %}" class="action-btn">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
+                                        <a href="{% url 'apply-project-labels' community.id project.id %}" class="action-btn">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
                                     </div>
                                 {% endif %}
                             {% endif %}
@@ -77,12 +77,12 @@
                     </div>
 
                     <div class="flex-this column">
-                        {% if contrib.project.bclabels %}
+                        {% if project.project.bclabels %}
                             <div><p class="weight-500">Labels attached to this project</p></div>
                         {% else %}
                             <div><p class="weight-500">No Labels attached to this project</p></div>
                         {% endif %}
-                            {% for bclabel in contrib.project.bclabels.all %}
+                            {% for bclabel in project.bclabels.all %}
 
                                 <div class="flex-this">
                                     <div class="small-label">
@@ -99,7 +99,7 @@
                                 </div>
                             {% endfor %}
 
-                            {% for tklabel in contrib.project.tklabels.all %}
+                            {% for tklabel in project.tklabels.all %}
 
                             <div class="flex-this">
                                 <div class="small-label">

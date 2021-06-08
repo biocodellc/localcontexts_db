@@ -19,8 +19,8 @@
 
     </div>
 
-    {% if contribs %}
-        {% for c in contribs %}
+    {% if institution.projects %}
+        {% for c in institution.projects.all %}
             <div class="content-card-v2 content-card-space white-bg">
 
                 <div id="project-unique-{{c.project.unique_id}}" class="flex-this space-between column" style="scroll-margin-top: 8em;">

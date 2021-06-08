@@ -204,10 +204,10 @@ def institution_projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
-        contribs = ProjectContributors.objects.filter(institution=institution)
+        # contribs = ProjectContributors.objects.filter(institution=institution)
         context = {
             'institution': institution,
-            'contribs': contribs,
+            # 'contribs': contribs,
             'member_role': member_role,
         }
         return render(request, 'institutions/projects.html', context)
@@ -262,7 +262,7 @@ def notify_communities(request, pk, proj_id):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         project = Project.objects.get(id=proj_id)
-        contribs = ProjectContributors.objects.get(project=project, institution=institution)
+        # contribs = ProjectContributors.objects.get(project=project, institution=institution)
 
         bcnotice_exists = BCNotice.objects.filter(project=project).exists()
         tknotice_exists = TKNotice.objects.filter(project=project).exists()
@@ -322,7 +322,7 @@ def notify_communities(request, pk, proj_id):
         context = {
             'institution': institution,
             'project': project,
-            'contribs': contribs,
+            # 'contribs': contribs,
             'communities': communities,
             'member_role': member_role,
         }

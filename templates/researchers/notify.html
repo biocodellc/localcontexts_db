@@ -11,14 +11,10 @@
                     <p class="no-top-margin">
                         {{ project.date_added|date:'M d Y' }} <br>
                         {{ project.project_type }} <br>
-                        Project Contributors: {{ contribs.institution }},
-                        {% if contribs.community %}
-                            {{ contribs.community }},
-                        {% endif %}
+                        Project Contributors: 
+                        <!-- TODO: ADD CONTRIBUTORS -->
 
-                        {% if contribs.researcher %}
-                            {{ contribs.researcher }},
-                        {% endif %}<br>
+                        <br>
                     </p>
             </div>
 

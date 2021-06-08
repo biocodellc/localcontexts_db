@@ -3,8 +3,8 @@ from django.urls import reverse
 from notifications.models import ActionNotification, NoticeStatus
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
-from projects.models import ProjectContributors
 from communities.models import JoinRequest
+from institutions.models import Institution
 
 register = template.Library()
 
@@ -29,9 +29,10 @@ def get_notices_count(institution):
     return total
 
 @register.simple_tag
-def get_projects_count(institution):
-    contrib_count = ProjectContributors.objects.filter(institution=institution).count()
-    return contrib_count
+def get_projects_count(institution_id):
+    target_institution = Institution.objects.get(id=institution_id)
+    projects_count = target_institution.projects.count()
+    return projects_count
 
 @register.simple_tag
 def join_request(institution, user):
