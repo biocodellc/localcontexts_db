@@ -264,7 +264,8 @@ def notify_communities(request, pk, proj_id):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         project = Project.objects.get(id=proj_id)
-        # contribs = ProjectContributors.objects.get(project=project, institution=institution)
+        # contributors instance needed here to show project contributors on the project card
+        # contributors = ProjectContributors.objects.get(project=project)
 
         bcnotice_exists = BCNotice.objects.filter(project=project).exists()
         tknotice_exists = TKNotice.objects.filter(project=project).exists()
@@ -324,7 +325,7 @@ def notify_communities(request, pk, proj_id):
         context = {
             'institution': institution,
             'project': project,
-            # 'contribs': contribs,
+            # 'contributors': contributors,
             'communities': communities,
             'member_role': member_role,
         }

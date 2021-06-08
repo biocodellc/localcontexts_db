@@ -573,6 +573,7 @@ def apply_project_labels(request, pk, project_id):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         if request.method == "POST":
+            # Get which labels were selected to be applied
             bclabels_selected = request.POST.getlist('checked-labels')
             tklabels_selected = request.POST.getlist('tk-checked-labels')
 
@@ -616,9 +617,9 @@ def apply_notice_labels(request, pk, notice_id):
             bcnotice = BCNotice.objects.get(unique_id=notice_id)
             if request.method == "POST":
                 # add community to project contributors
-                contrib = ProjectContributors.objects.get(project=bcnotice.project)
-                contrib.community = community
-                contrib.save()
+                contributors = ProjectContributors.objects.get(project=bcnotice.project)
+                contributors.communities.add(community)
+                contributors.save()
 
                 # Gets ids of all checkboxes
                 label_selected = request.POST.getlist('checkbox-label')
