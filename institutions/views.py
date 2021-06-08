@@ -227,6 +227,8 @@ def create_project(request, pk):
                 data = form.save(commit=False)
                 data.project_creator = request.user
                 data.save()
+                # Add project to institution projects
+                institution.projects.add(data)
 
                 notices_selected = request.POST.getlist('checkbox-notice')
 
@@ -236,7 +238,7 @@ def create_project(request, pk):
                     if notice == 'tknotice':
                         tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data)
 
-                ProjectContributors.objects.create(project=data, institution=institution)
+                # ProjectContributors.objects.create(project=data, institution=institution)
 
                 truncated_project_title = str(data.title)[0:30]
                 title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + truncated_project_title

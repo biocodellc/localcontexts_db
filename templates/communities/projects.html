@@ -28,17 +28,11 @@
                     <div class="w-90">
                         <p class="no-top-margin no-bottom-margin">
                             <span class="darkteal-text weight-500">
-                                {{ project.project.title }}
+                                {{ project.title }}
                             </span><br>
-                            {{ project.project.publication_date }}<br>
-                            {{ project.project.project_type }}<br>
-                            {{ project.community.community_name }}
-                            {% if project.researcher %}
-                                , {{ project.researcher.user.get_full_name}}
-                            {% endif %}
-                            {% if project.institution %}
-                                , {{ project.institution.institution_name }}
-                            {% endif %}
+                            {{ project.publication_date }}<br>
+                            {{ project.project_type }}<br>
+                            <!-- TODO: ADD CONTRIBUTORS -->
 
                         </p>
                     </div>
@@ -51,7 +45,7 @@
 
                     <div class="flex-this space-between">
                         <div class="w-80">
-                            <p>{{ project.project.description }}</p>
+                            <p>{{ project.description }}</p>
                         </div>
     
                         <div class="flex-this column w-15">
@@ -61,7 +55,7 @@
                             <div class="notice-btns center-text">
                                 <a href="#" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
                             </div> -->
-                            {% if project.project.has_labels %}
+                            {% if project.has_labels %}
 
                             {% else %}
                                 {% if member_role == 'viewer' %}
@@ -77,7 +71,7 @@
                     </div>
 
                     <div class="flex-this column">
-                        {% if project.project.bclabels %}
+                        {% if project.bclabels %}
                             <div><p class="weight-500">Labels attached to this project</p></div>
                         {% else %}
                             <div><p class="weight-500">No Labels attached to this project</p></div>

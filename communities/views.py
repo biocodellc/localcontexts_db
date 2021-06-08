@@ -534,14 +534,17 @@ def create_project(request, pk):
                 obj.project_creator = request.user
                 obj.save()
 
-                ProjectContributors.objects.create(project=obj, community=community)
+                # Add project to community projects
+                community.projects.add(obj)
+
+                # ProjectContributors.objects.create(project=obj, community=community)
                 
                 # Maybe there's a better way to do this? using project unique id instead of contrib id?
                 # Has to be a contrib id for the js to work. Rework this maybe?
-                contrib = ProjectContributors.objects.get(project=obj)
+                # contrib = ProjectContributors.objects.get(project=obj)
                 truncated_project_title = str(obj.title)[0:30]
                 title = 'A new project was created by ' + str(obj.project_creator.get_full_name()) + ': ' + truncated_project_title + ' ...'
-                ActionNotification.objects.create(reference_id=contrib.id, title=title, sender=request.user, community=community, notification_type='Projects')
+                # ActionNotification.objects.create(reference_id=contrib.id, title=title, sender=request.user, community=community, notification_type='Projects')
                 return redirect('community-projects', community.id)
         else:
             form = CreateProjectForm()
