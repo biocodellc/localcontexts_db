@@ -53,7 +53,6 @@ class ProjectContributors(models.Model):
     communities = models.ManyToManyField(Community, blank=True, related_name="contributing_communities")
     researchers = models.ManyToManyField(Researcher, blank=True, related_name="contributing_researchers")
 
-
     def __str__(self):
         return str(self.project)
 

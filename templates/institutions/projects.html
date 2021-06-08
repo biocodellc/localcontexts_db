@@ -20,34 +20,28 @@
     </div>
 
     {% if institution.projects %}
-        {% for c in institution.projects.all %}
+        {% for project in institution.projects.all %}
             <div class="content-card-v2 content-card-space white-bg">
 
-                <div id="project-unique-{{c.project.unique_id}}" class="flex-this space-between column" style="scroll-margin-top: 8em;">
+                <div id="project-unique-{{ project.unique_id}}" class="flex-this space-between column" style="scroll-margin-top: 8em;">
             
                     <div class="w-100 flex-this">
 
                         <div class="w-50"> 
-                                <h4 class="darkteal-text weight-600 no-top-margin">{{ c.project.title }}</h4>
+                                <h4 class="darkteal-text weight-600 no-top-margin">{{  project.title }}</h4>
                                 <p class="no-top-margin">
-                                    Date Created: {{ c.project.date_added }}<br>
-                                    Project Type: {{ c.project.project_type }}<br>
-                                    Project Contributors: {{ c.institution.institution_name }} 
-
-                                    {% if c.researcher %}
-                                        , {{ c.researcher.user.get_full_name }}
-                                    {% endif %} 
-
-                                    {% if c.community %}
-                                        , {{ c.community.community_name }}
-                                    {% endif %}<br>
+                                    Date Created: {{  project.date_added }}<br>
+                                    Project Type: {{  project.project_type }}<br>
+                                    Project Contributors: 
+                                    <!-- TODO: ADD CONTRIBUTORS -->
+                                    <br>
                                 </p>
                         </div>
             
                         <div class="w-50 flex-this column">
                             <div class="flex-this flex-end w-100">
                                 <div>
-                                    <a id="{{ c.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                    <a id="{{ project.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                                 </div>
                             </div> 
                         </div>
@@ -58,12 +52,12 @@
 
                 <div class="flex-this space-between">
                     <div class="w-90">
-                        {{ c.project.description }}
+                        {{ project.description }}
                     </div>
                     <div class="w-20">
                         {% if member_role == 'viewer' %}
                         {% else %}
-                            <a href="{% url 'notify-communities' institution.id c.project.id %}">
+                            <a href="{% url 'notify-communities' institution.id project.id %}">
                                 <button class="action-btn">Notify Communities <i class="fa fa-users" aria-hidden="true"></i></button>
                             </a>
                         {% endif %}
@@ -72,17 +66,17 @@
 
                 <div>
                     <p>
-                        Project Contact: {{ c.project.project_contact}} <br>
-                        Project Contact Email: {{ c.project.project_contact_email}} <br>
-                        Project URL: {{ c.project.url }}
+                        Project Contact: {{ project.project_contact}} <br>
+                        Project Contact Email: {{ project.project_contact_email}} <br>
+                        Project URL: {{ project.url }}
                     </p>
                 </div>
 
-                <div class="flex-this column" id="expand-contrib-{{ c.id }}" style="height: 0px; overflow:hidden;">
+                <div class="flex-this column" id="expand-contrib-{{ project.id }}" style="height: 0px; overflow:hidden;">
                     <div>
                         <p class="weight-500">Labels attached to this project</p>
                     </div>
-                        {% for bclabel in c.project.bclabels.all %}
+                        {% for bclabel in project.bclabels.all %}
 
                             <div class="flex-this">
                                 <div class="small-label">
@@ -99,7 +93,7 @@
                             </div>
                         {% endfor %}
 
-                        {% for tklabel in c.project.tklabels.all %}
+                        {% for tklabel in project.tklabels.all %}
 
                         <div class="flex-this">
                             <div class="small-label">
