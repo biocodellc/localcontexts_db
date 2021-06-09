@@ -28,7 +28,20 @@
                         <p>
                             {{ bcnotice.project.project_type }}<br>
                             {{ bcnotice.project.publication_date }}<br>
-                            Project Contributors<br>
+                            Project Contributors:
+
+                            {% if bcnotice.project.project_contributors %}
+                                {% for institution in bcnotice.project.project_contributors.institutions.all %}
+                                    {{ institution.institution_name }},
+                                {% endfor %}
+                                {% for community in bcnotice.project.project_contributors.communities.all %}
+                                    {{ community.community_name }},
+                                {% endfor %}
+                                {% for researcher in bcnotice.project.project_contributors.researchers.all %}
+                                    {{ researcher.user.get_full_name }},
+                                {% endfor %}
+                            {% endif %}
+                            <br>
                         </p>
             
                         <small>{{ bcnotice.project.description }}</small>
@@ -39,7 +52,21 @@
                         <p>
                             {{ tknotice.project.project_type }}<br>
                             {{ tknotice.project.publication_date }}<br>
-                            Project Contributors<br>
+                            Project Contributors:
+
+                            {% if tknotice.project.project_contributors %}
+                                {% for institution in tknotice.project.project_contributors.institutions.all %}
+                                    {{ institution.institution_name }},
+                                {% endfor %}
+                                {% for community in tknotice.project.project_contributors.communities.all %}
+                                    {{ community.community_name }},
+                                {% endfor %}
+                                {% for researcher in tknotice.project.project_contributors.researchers.all %}
+                                    {{ researcher.user.get_full_name }},
+                                {% endfor %}
+                            {% endif %}
+                            
+                            <br>
                         </p>
             
                         <small>{{ tknotice.project.description }}</small>

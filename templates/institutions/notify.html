@@ -12,7 +12,19 @@
                         {{ project.date_added|date:'M d Y' }} <br>
                         {{ project.project_type }} <br>
                         Project Contributors: 
-                        <!-- TODO: ADD CONTRIBUTORS -->
+
+                        {% if project.project_contributors %}
+                            {% for institution in project.project_contributors.institutions.all %}
+                                {{ institution.institution_name }},
+                            {% endfor %}
+                            {% for community in project.project_contributors.communities.all %}
+                                {{ community.community_name }},
+                            {% endfor %}
+                            {% for researcher in project.project_contributors.researchers.all %}
+                                {{ researcher.user.get_full_name }},
+                            {% endfor %}
+                        {% endif %}
+                        
                         <br>
                     </p>
             </div>
