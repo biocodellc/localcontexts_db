@@ -221,6 +221,9 @@ def create_project(request, pk):
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
+        all_researchers = Researcher.objects.all()
+        all_institutions = Institution.objects.all()
+
         if request.method == "POST":
             form = CreateProjectForm(request.POST or None)
             if form.is_valid():
@@ -253,6 +256,8 @@ def create_project(request, pk):
             'institution': institution,
             'form': form,
             'member_role': member_role,
+            'all_researchers': all_researchers,
+            'all_institutions': all_institutions,
         }
         return render(request, 'institutions/create-project.html', context)
 
@@ -266,8 +271,6 @@ def notify_communities(request, pk, proj_id):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         project = Project.objects.get(id=proj_id)
-        # contributors instance needed here to show project contributors on the project card
-        # contributors = ProjectContributors.objects.get(project=project)
 
         bcnotice_exists = BCNotice.objects.filter(project=project).exists()
         tknotice_exists = TKNotice.objects.filter(project=project).exists()

@@ -764,6 +764,47 @@ function selectCommunities() {
     })
 }
 
+let researcherArray = []
+let institutionArray = []
+
+function selectContributors() {
+    let contribInput = document.getElementById('contributor-input')
+    let contribOptionsArray = Array.from(document.getElementById('contributors').options)
+
+    contribOptionsArray.forEach(option => {
+        // compare input value to option value
+        if (option.value == contribInput.value) {
+
+            // push id to researcherArray or institutionArray
+            if (contribInput.value.includes('Researcher')) {
+                researcherArray.push(option.dataset.resid)
+                contribInput.value = ''
+            } else {
+                institutionArray.push(option.dataset.instid)
+                contribInput.value = ''
+            }
+        }
+    })
+
+    researcherArray.forEach(id => {
+        let selectedResearcherDiv = document.getElementById(`selected-researcher-${id}`)
+        let div = document.getElementById(`res-id-input-${id}`)
+
+        selectedResearcherDiv.style.height = "auto"
+        div.innerHTML = `<input type="hidden" value="${id}" name="selected_researchers">`
+    })
+
+    institutionArray.forEach(id => {
+        let selectedInstitutionDiv = document.getElementById(`selected-institution-${id}`)
+        let div = document.getElementById(`inst-id-input-${id}`)
+
+        selectedInstitutionDiv.style.height = "auto"
+        div.innerHTML = `<input type="hidden" value="${id}" name="selected_institutions">`
+    })
+}
+
+document.getElementById('add-contributor-btn').addEventListener('click', selectContributors)
+
 // Institutions: projects: notify communities - close selected communities
 function cancelCommunitySelection(elem) {
     let id = elem.id

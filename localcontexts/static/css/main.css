@@ -44,13 +44,17 @@ label {
     font-weight: 400;
 }
 
-input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], select {
+input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], input[name=contributors], select {
     max-height: 40px;
     min-height: 40px;
     background-color: #fff;
     border: 1px solid #333333;
     border-radius: 5px;
     padding:8px;
+}
+
+input[name=contributors] {
+    width: 416px;
 }
 
 textarea {
