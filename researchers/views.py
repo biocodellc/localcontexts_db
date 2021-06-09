@@ -147,7 +147,10 @@ def create_project(request, pk):
                 if notice == 'tknotice':
                     tknotice = TKNotice.objects.create(placed_by_researcher=researcher, project=data)
 
-            # ProjectContributors.objects.create(project=data, researcher=researcher)
+            # Get project contributors instance and add researcher to it
+            contributors = ProjectContributors.objects.get(project=data)
+            contributors.researchers.add(researcher)
+
             return redirect('researcher-activity', researcher.id)
     else:
         form = CreateProjectForm()
