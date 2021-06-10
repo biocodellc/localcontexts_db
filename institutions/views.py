@@ -221,9 +221,6 @@ def create_project(request, pk):
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
-        all_researchers = Researcher.objects.all()
-        all_institutions = Institution.objects.all()
-
         if request.method == "POST":
             form = CreateProjectForm(request.POST or None)
             if form.is_valid():
@@ -268,8 +265,6 @@ def create_project(request, pk):
             'institution': institution,
             'form': form,
             'member_role': member_role,
-            'all_researchers': all_researchers,
-            'all_institutions': all_institutions,
         }
         return render(request, 'institutions/create-project.html', context)
 

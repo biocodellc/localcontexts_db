@@ -1,0 +1,54 @@
+{% load static %}{% load custom_project_tags %}
+{% get_all_researchers as all_researchers %}
+{% get_all_institutions as all_institutions %}
+
+<div class="padding-bottom-1 flex-this row">
+    <div>
+        <label for="contributors">Project Contributors</label><br>
+        <input id="contributor-input" list="contributors" name="contributors" placeholder="Select a contributor from the hub">
+        <datalist id="contributors">
+            {% if all_researchers %}
+                {% for researcher in all_researchers %}
+                    <option value="{{ researcher.user.get_full_name }} (Researcher)" data-resid="{{ researcher.id }}">
+                {% endfor %}
+            {% endif %}
+            {% if all_institutions %}
+                {% for institution in all_institutions %}
+                    <option value="{{ institution.institution_name }} (Institution)" data-instid="{{ institution.id }}">
+                {% endfor %}
+            {% endif %}
+        </datalist>    
+    </div>
+    <div id="add-contributor-btn" class="add-square-btn pointer">
+        <span>+</span>
+    </div>
+</div>
+
+<p class="weight-500">Selected Contributors</p>
+{% for researcher in all_researchers %}
+    <div id="selected-researcher-{{ researcher.id }}" style="height: 0px; overflow: hidden;">
+        <div class="selected-community flex-this row space-between">
+            <div>
+                <p class="center-name">{{ researcher.user.get_full_name }}</p>
+            </div>
+            <div>
+                <p id="close-res-{{ researcher.id }}" class="close-x darkteal-text pointer" onclick="cancelResearcherSelection(this)">&times;</p>
+            </div>
+        </div>
+    </div>
+    <div id="res-id-input-{{ researcher.id }}" style="display: none;"></div>
+{% endfor %}
+
+{% for institution in all_institutions %}
+    <div id="selected-institution-{{ institution.id }}" style="height: 0px; overflow: hidden;">
+        <div class="selected-community flex-this row space-between">
+            <div>
+                <p class="center-name">{{ institution.institution_name }}</p>
+            </div>
+            <div>
+                <p id="close-inst-{{ institution.id }}" class="close-x darkteal-text pointer" onclick="cancelInstitutionSelection(this)">&times;</p>
+            </div>
+        </div>
+    </div>
+    <div id="inst-id-input-{{ institution.id }}" style="display: none;"></div>
+{% endfor %}
