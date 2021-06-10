@@ -19,6 +19,7 @@ from notifications.forms import NoticeCommentForm
 
 from bclabels.utils import check_bclabel_type
 from tklabels.utils import check_tklabel_type
+from projects.utils import add_to_contributors
 
 from .forms import *
 from .models import *
@@ -540,6 +541,12 @@ def create_project(request, pk):
                 # Get a project contrubutor object and add community to it.
                 contributors = ProjectContributors.objects.get(project=data)
                 contributors.communities.add(community)
+
+                # Get lists of contributors entered in form
+                institutions_selected = request.POST.getlist('selected_institutions')
+                researchers_selected = request.POST.getlist('selected_researchers')
+
+                add_to_contributors(contributors, data, institutions_selected, researchers_selected)
                 
                 # Maybe there's a better way to do this? using project unique id instead of contrib id?
                 # Has to be a contrib id for the js to work. Rework this maybe?

@@ -796,7 +796,7 @@ function selectContributors() {
 
 }
 
-let addContributorBtn = document.getElementById('add-contributor-btn')
+var addContributorBtn = document.getElementById('add-contributor-btn')
 if(addContributorBtn) {
     addContributorBtn.addEventListener('click', selectContributors)
 }
@@ -870,7 +870,7 @@ function setTKNoticeUUID(elem) {
 // Require Checkbox selection for Notices in create-project researcher and institution
 // h/t: https://vyspiansky.github.io/2019/07/13/javascript-at-least-one-checkbox-must-be-selected/
 
-if (window.location.href.includes('create-project')) { 
+if (window.location.href.includes('researcher/projects/create-project') || window.location.href.includes('institution/projects/create-project') ) { 
     (function requireCheckbox() {
         let form = document.querySelector('#createProjectForm')
         let checkboxes = form.querySelectorAll('input[type=checkbox]')
