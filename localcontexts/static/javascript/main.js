@@ -764,6 +764,7 @@ function selectCommunities() {
     })
 }
 
+// INSTITUTION: create project : add contributors
 let researcherArray = []
 let institutionArray = []
 
@@ -779,6 +780,7 @@ function selectContributors() {
             if (contribInput.value.includes('Researcher')) {
                 researcherArray.push(option.dataset.resid)
                 contribInput.value = ''
+
             } else {
                 institutionArray.push(option.dataset.instid)
                 contribInput.value = ''
@@ -801,9 +803,36 @@ function selectContributors() {
         selectedInstitutionDiv.style.height = "auto"
         div.innerHTML = `<input type="hidden" value="${id}" name="selected_institutions">`
     })
+
+    console.log(researcherArray, institutionArray)
+}
+document.getElementById('add-contributor-btn').addEventListener('click', selectContributors)
+
+function cancelInstitutionSelection(elem) {
+    let id = elem.id
+    let matches = id.match(/(\d+)/)
+    let targetNum = matches[0]
+    console.log(targetNum)
+
+    let divToClose = document.getElementById(`selected-institution-${targetNum}`)
+    let inputDivToRemove = document.getElementById(`inst-id-input-${targetNum}`)
+
+    divToClose.style.height = '0'
+    inputDivToRemove.innerHTML = ``
 }
 
-document.getElementById('add-contributor-btn').addEventListener('click', selectContributors)
+function cancelResearcherSelection(elem) {
+    let id = elem.id
+    let matches = id.match(/(\d+)/)
+    let targetNum = matches[0]
+    console.log(targetNum)
+
+    let divToClose = document.getElementById(`selected-researcher-${targetNum}`)
+    let inputDivToRemove = document.getElementById(`res-id-input-${targetNum}`)
+
+    divToClose.style.height = '0'
+    inputDivToRemove.innerHTML = ``
+}
 
 // Institutions: projects: notify communities - close selected communities
 function cancelCommunitySelection(elem) {

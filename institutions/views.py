@@ -245,6 +245,19 @@ def create_project(request, pk):
                 contributors = ProjectContributors.objects.get(project=data)
                 contributors.institutions.add(institution)
 
+                # Get lists of contributors entered in form
+                institutions_selected = request.POST.getlist('selected_institutions')
+                researchers_selected = request.POST.getlist('selected_researchers')
+
+                # Add each institution and researcher to contributors
+                # TODO: What if an id is not passed but is a string instead?
+                for institution_id in institutions_selected:
+                    inst = Institution.objects.get(id=institution_id)
+                    contributors.institutions.add(inst)
+                for researcher_id in researchers_selected:
+                    res = Researcher.objects.get(id=researcher_id)
+                    contributors.researchers.add(res)
+
                 truncated_project_title = str(data.title)[0:30]
                 title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + truncated_project_title
                 ActionNotification.objects.create(title=title, notification_type='Projects', sender=data.project_creator, reference_id=data.unique_id, institution=institution)

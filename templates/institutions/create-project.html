@@ -83,7 +83,7 @@
                                 <p class="center-name">{{ researcher.user.get_full_name }}</p>
                             </div>
                             <div>
-                                <p id="close-{{ researcher.id }}" class="close-x darkteal-text pointer" onclick="cancelResearcherSelection(this)">&times;</p>
+                                <p id="close-res-{{ researcher.id }}" class="close-x darkteal-text pointer" onclick="cancelResearcherSelection(this)">&times;</p>
                             </div>
                         </div>
                     </div>
@@ -97,7 +97,7 @@
                                 <p class="center-name">{{ institution.institution_name }}</p>
                             </div>
                             <div>
-                                <p id="close-{{ institution.id }}" class="close-x darkteal-text pointer" onclick="cancelInstitutionSelection(this)">&times;</p>
+                                <p id="close-inst-{{ institution.id }}" class="close-x darkteal-text pointer" onclick="cancelInstitutionSelection(this)">&times;</p>
                             </div>
                         </div>
                     </div>
