@@ -80,5 +80,7 @@ let populateInstitutions = () => {
     institutionSelect.selectedIndex = 0
 }
 
-countrySelect.addEventListener('change', getCountry)
-institutionTypeSelect.addEventListener('change', populateInstitutions)
+if (countrySelect){
+    countrySelect.addEventListener('change', getCountry)
+    institutionTypeSelect.addEventListener('change', populateInstitutions)    
+}

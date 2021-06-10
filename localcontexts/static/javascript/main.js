@@ -765,9 +765,6 @@ function selectCommunities() {
 }
 
 // INSTITUTION: create project : add contributors
-let researcherArray = []
-let institutionArray = []
-
 function selectContributors() {
     let contribInput = document.getElementById('contributor-input')
     let contribOptionsArray = Array.from(document.getElementById('contributors').options)
@@ -778,41 +775,36 @@ function selectContributors() {
 
             // push id to researcherArray or institutionArray
             if (contribInput.value.includes('Researcher')) {
-                researcherArray.push(option.dataset.resid)
                 contribInput.value = ''
 
+                let selectedResearcherDiv = document.getElementById(`selected-researcher-${option.dataset.resid}`)
+                let div = document.getElementById(`res-id-input-${option.dataset.resid}`)
+        
+                selectedResearcherDiv.style.height = "auto"
+                div.innerHTML = `<input type="hidden" value="${option.dataset.resid}" name="selected_researchers">`
             } else {
-                institutionArray.push(option.dataset.instid)
                 contribInput.value = ''
+
+                let selectedInstitutionDiv = document.getElementById(`selected-institution-${option.dataset.instid}`)
+                let div = document.getElementById(`inst-id-input-${option.dataset.instid}`)
+
+                selectedInstitutionDiv.style.height = "auto"
+                div.innerHTML = `<input type="hidden" value="${option.dataset.instid}" name="selected_institutions">`
             }
         }
     })
 
-    researcherArray.forEach(id => {
-        let selectedResearcherDiv = document.getElementById(`selected-researcher-${id}`)
-        let div = document.getElementById(`res-id-input-${id}`)
-
-        selectedResearcherDiv.style.height = "auto"
-        div.innerHTML = `<input type="hidden" value="${id}" name="selected_researchers">`
-    })
-
-    institutionArray.forEach(id => {
-        let selectedInstitutionDiv = document.getElementById(`selected-institution-${id}`)
-        let div = document.getElementById(`inst-id-input-${id}`)
-
-        selectedInstitutionDiv.style.height = "auto"
-        div.innerHTML = `<input type="hidden" value="${id}" name="selected_institutions">`
-    })
-
-    console.log(researcherArray, institutionArray)
 }
-document.getElementById('add-contributor-btn').addEventListener('click', selectContributors)
+
+let addContributorBtn = document.getElementById('add-contributor-btn')
+if(addContributorBtn) {
+    addContributorBtn.addEventListener('click', selectContributors)
+}
 
 function cancelInstitutionSelection(elem) {
     let id = elem.id
     let matches = id.match(/(\d+)/)
     let targetNum = matches[0]
-    console.log(targetNum)
 
     let divToClose = document.getElementById(`selected-institution-${targetNum}`)
     let inputDivToRemove = document.getElementById(`inst-id-input-${targetNum}`)
