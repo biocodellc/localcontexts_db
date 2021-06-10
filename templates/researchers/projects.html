@@ -1,4 +1,5 @@
-{% extends 'research-base.html' %} {% block title %} | Projects {% endblock %}{% load static %}{% block researcher_content %}
+{% extends 'research-base.html' %} {% block title %} | Projects {% endblock %}{% load static %}{% load custom_researcher_tags %}{% block researcher_content %}
+{% researcher_contributing_projects researcher as researcher_projects_contrib %}
 
 <div class="content-card content-card-space white-bg">
 
@@ -119,6 +120,117 @@
             </div>
 
         </div>
+    {% endfor %}
+{% endif %}
+
+{% if researcher_projects_contrib %}
+    {% for contrib in researcher_projects_contrib %}
+        {% if contrib.project in researcher.projects.all %}
+        {% else %}
+
+            <div id="project-unique-{{ contrib.project.unique_id }}" class="content-card content-card-space white-bg" style="scroll-margin-top: 8em;"> 
+
+                <div class="flex-this space-between column">
+            
+                    <div class="w-100 flex-this">
+
+                        <div class="w-50"> 
+                                <h4 class="darkteal-text weight-600 no-top-margin">{{ contrib.project.title }}</h4>
+                                <p class="no-top-margin">
+                                    Date Created: {{ contrib.project.date_added }}<br>
+                                    Project Type: {{ contrib.project.project_type }}<br>
+                                    Project Contributors: 
+
+                                    {% if contrib.project.project_contributors %}
+                                        {% for institution in contrib.project.project_contributors.institutions.all %}
+                                            {{ institution.institution_name }},
+                                        {% endfor %}
+                                        {% for community in contrib.project.project_contributors.communities.all %}
+                                            {{ community.community_name }},
+                                        {% endfor %}
+                                        {% for researcher in contrib.project.project_contributors.researchers.all %}
+                                            {{ researcher.user.get_full_name }},
+                                        {% endfor %}
+                                    {% endif %}
+                                    
+                                    <br>
+                                </p>
+                        </div>
+            
+                        <div class="w-50 flex-this column">
+                            <div class="flex-this flex-end w-100">
+                                <div>
+                                    <a id="{{ contrib.project.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                </div>
+                            </div> 
+                        </div>
+            
+                    </div>
+            
+                </div>
+
+                <div class="flex-this space-between">
+                    <div class="w-90">
+                        {{ contrib.project.description }}
+                    </div>
+                    <div class="w-20">
+                        <a href="{% url 'researcher-notify-communities' researcher.id contrib.project.id %}">
+                            <button class="action-btn">Notify Communities <i class="fa fa-users" aria-hidden="true"></i></button>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <p>
+                        Project Contact: {{ contrib.project.project_contact}} <br>
+                        Project Contact Email: {{ contrib.project.project_contact_email}} <br>
+                        Project URL: {{ contrib.project.url }}
+                    </p>
+                </div>
+
+                <div class="flex-this column" id="expand-contrib-{{ contrib.project.id }}" style="height: 0px; overflow:hidden;">
+                    <div>
+                        <p class="weight-500">Labels attached to this project</p>
+                    </div>
+                        {% for bclabel in contrib.project.bclabels.all %}
+
+                            <div class="flex-this">
+                                <div class="small-label">
+                                    {% include 'bclabels/which-label.html' %}
+                                </div>
+                                <div class="pad-left-2">
+                                    <p class="darkteal-text no-top-margin">Label shared by {{ bclabel.community.community_name }} </p>
+                                    <p class="weight-500"> {{ bclabel.name }} </p>
+                                    <p>
+                                        {{ bclabel.default_text}}
+                                    </p>
+                                    <hr>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {% for tklabel in contrib.project.tklabels.all %}
+
+                        <div class="flex-this">
+                            <div class="small-label">
+                                {% include 'tklabels/which-label.html' %}
+                            </div>
+                            <div class="pad-left-2">
+                                <p class="darkteal-text no-top-margin">Label shared by {{ tklabel.community.community_name }} </p>
+                                <p class="weight-500"> {{ tklabel.name }} </p>
+                                <p>
+                                    {{ tklabel.default_text}}
+                                </p>
+                                <hr>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        {% endif %}
     {% endfor %}
 {% endif %}
 
