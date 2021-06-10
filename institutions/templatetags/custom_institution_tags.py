@@ -3,8 +3,9 @@ from django.urls import reverse
 from notifications.models import ActionNotification, NoticeStatus
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
-from projects.models import ProjectContributors
 from communities.models import JoinRequest
+from institutions.models import Institution
+from projects.models import ProjectContributors
 
 register = template.Library()
 
@@ -12,6 +13,11 @@ register = template.Library()
 def institution_notifications(institution):
     notifications = ActionNotification.objects.filter(institution=institution)
     return notifications
+
+@register.simple_tag
+def unread_notifications(institution):
+    unread_notifications_exist = ActionNotification.objects.filter(institution=institution, viewed=False).exists()
+    return unread_notifications_exist
 
 @register.simple_tag
 def anchor(url_name, section_id, institution_id):
@@ -29,25 +35,15 @@ def get_notices_count(institution):
     return total
 
 @register.simple_tag
-def get_projects_count(institution):
-    contrib_count = ProjectContributors.objects.filter(institution=institution).count()
-    return contrib_count
+def get_projects_count(institution_id):
+    target_institution = Institution.objects.get(id=institution_id)
+    projects_count = target_institution.projects.count()
+    return projects_count
 
 @register.simple_tag
 def join_request(institution, user):
     request_exists = JoinRequest.objects.filter(institution=institution, user_from=user).exists()
-    if request_exists:
-        return True
-    else:
-        return False
-
-@register.simple_tag
-def unread_notifications(institution):
-    notifications = ActionNotification.objects.filter(institution=institution, viewed=False).exists()
-    if notifications:
-        return True
-    else:
-        return False
+    return request_exists
 
 @register.simple_tag
 def bcnotice_status_exists(project, community):
@@ -81,3 +77,9 @@ def tknotice_status_exists(project, community):
             return False
     else:
         return False
+
+@register.simple_tag
+def institution_contributing_projects(institution):
+    contributors = ProjectContributors.objects.filter(institutions=institution)
+    return contributors
+    

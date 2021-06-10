@@ -48,13 +48,13 @@ class Project(models.Model):
         ordering = ('-date_added',)
 
 class ProjectContributors(models.Model):
-    project = models.OneToOneField(Project, null=True, on_delete=models.CASCADE)
-    institution = models.ForeignKey(Institution, null=True, blank=True, on_delete=models.SET_NULL)
-    community = models.ForeignKey(Community, null=True, blank=True, on_delete=models.SET_NULL)
-    researcher = models.ForeignKey(Researcher, null=True, blank=True, on_delete=models.SET_NULL)
+    project = models.OneToOneField(Project, related_name="project_contributors", null=True, on_delete=models.CASCADE)
+    institutions = models.ManyToManyField(Institution, blank=True, related_name="contributing_institutions")
+    communities = models.ManyToManyField(Community, blank=True, related_name="contributing_communities")
+    researchers = models.ManyToManyField(Researcher, blank=True, related_name="contributing_researchers")
 
     def __str__(self):
-        return str(self.project) + ' ' + str(self.community) + ' ' + str(self.researcher)
+        return str(self.project)
 
     class Meta:
         verbose_name = 'Project Contributors'

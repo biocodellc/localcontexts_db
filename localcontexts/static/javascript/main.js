@@ -764,6 +764,68 @@ function selectCommunities() {
     })
 }
 
+// INSTITUTION: create project : add contributors
+function selectContributors() {
+    let contribInput = document.getElementById('contributor-input')
+    let contribOptionsArray = Array.from(document.getElementById('contributors').options)
+
+    contribOptionsArray.forEach(option => {
+        // compare input value to option value
+        if (option.value == contribInput.value) {
+
+            // push id to researcherArray or institutionArray
+            if (contribInput.value.includes('Researcher')) {
+                contribInput.value = ''
+
+                let selectedResearcherDiv = document.getElementById(`selected-researcher-${option.dataset.resid}`)
+                let div = document.getElementById(`res-id-input-${option.dataset.resid}`)
+        
+                selectedResearcherDiv.style.height = "auto"
+                div.innerHTML = `<input type="hidden" value="${option.dataset.resid}" name="selected_researchers">`
+            } else {
+                contribInput.value = ''
+
+                let selectedInstitutionDiv = document.getElementById(`selected-institution-${option.dataset.instid}`)
+                let div = document.getElementById(`inst-id-input-${option.dataset.instid}`)
+
+                selectedInstitutionDiv.style.height = "auto"
+                div.innerHTML = `<input type="hidden" value="${option.dataset.instid}" name="selected_institutions">`
+            }
+        }
+    })
+
+}
+
+var addContributorBtn = document.getElementById('add-contributor-btn')
+if(addContributorBtn) {
+    addContributorBtn.addEventListener('click', selectContributors)
+}
+
+function cancelInstitutionSelection(elem) {
+    let id = elem.id
+    let matches = id.match(/(\d+)/)
+    let targetNum = matches[0]
+
+    let divToClose = document.getElementById(`selected-institution-${targetNum}`)
+    let inputDivToRemove = document.getElementById(`inst-id-input-${targetNum}`)
+
+    divToClose.style.height = '0'
+    inputDivToRemove.innerHTML = ``
+}
+
+function cancelResearcherSelection(elem) {
+    let id = elem.id
+    let matches = id.match(/(\d+)/)
+    let targetNum = matches[0]
+    console.log(targetNum)
+
+    let divToClose = document.getElementById(`selected-researcher-${targetNum}`)
+    let inputDivToRemove = document.getElementById(`res-id-input-${targetNum}`)
+
+    divToClose.style.height = '0'
+    inputDivToRemove.innerHTML = ``
+}
+
 // Institutions: projects: notify communities - close selected communities
 function cancelCommunitySelection(elem) {
     let id = elem.id
@@ -808,7 +870,7 @@ function setTKNoticeUUID(elem) {
 // Require Checkbox selection for Notices in create-project researcher and institution
 // h/t: https://vyspiansky.github.io/2019/07/13/javascript-at-least-one-checkbox-must-be-selected/
 
-if (window.location.href.includes('create-project')) { 
+if (window.location.href.includes('researcher/projects/create-project') || window.location.href.includes('institution/projects/create-project') ) { 
     (function requireCheckbox() {
         let form = document.querySelector('#createProjectForm')
         let checkboxes = form.querySelectorAll('input[type=checkbox]')

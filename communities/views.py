@@ -19,6 +19,7 @@ from notifications.forms import NoticeCommentForm
 
 from bclabels.utils import check_bclabel_type
 from tklabels.utils import check_tklabel_type
+from projects.utils import add_to_contributors
 
 from .forms import *
 from .models import *
@@ -505,13 +506,13 @@ def projects(request, pk):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         notices = community.bcnotice_communities.all()
-        contribs = ProjectContributors.objects.filter(community=community)
+        # contribs = ProjectContributors.objects.filter(community=community)
 
         context = {
             'community': community, 
             'member_role': member_role,
             'notices': notices,
-            'contribs': contribs,
+            # 'contribs': contribs,
         }
         return render(request, 'communities/projects.html', context)
 
@@ -530,18 +531,29 @@ def create_project(request, pk):
         if request.method == 'POST':
             form = CreateProjectForm(request.POST)
             if form.is_valid():
-                obj = form.save(commit=False)
-                obj.project_creator = request.user
-                obj.save()
+                data = form.save(commit=False)
+                data.project_creator = request.user
+                data.save()
 
-                ProjectContributors.objects.create(project=obj, community=community)
+                # Add project to community projects
+                community.projects.add(data)
+
+                # Get a project contrubutor object and add community to it.
+                contributors = ProjectContributors.objects.get(project=data)
+                contributors.communities.add(community)
+
+                # Get lists of contributors entered in form
+                institutions_selected = request.POST.getlist('selected_institutions')
+                researchers_selected = request.POST.getlist('selected_researchers')
+
+                add_to_contributors(contributors, data, institutions_selected, researchers_selected)
                 
                 # Maybe there's a better way to do this? using project unique id instead of contrib id?
                 # Has to be a contrib id for the js to work. Rework this maybe?
-                contrib = ProjectContributors.objects.get(project=obj)
-                truncated_project_title = str(obj.title)[0:30]
-                title = 'A new project was created by ' + str(obj.project_creator.get_full_name()) + ': ' + truncated_project_title + ' ...'
-                ActionNotification.objects.create(reference_id=contrib.id, title=title, sender=request.user, community=community, notification_type='Projects')
+                # contrib = ProjectContributors.objects.get(project=data)
+                truncated_project_title = str(data.title)[0:30]
+                title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + truncated_project_title + ' ...'
+                # ActionNotification.objects.create(reference_id=contrib.id, title=title, sender=request.user, community=community, notification_type='Projects')
                 return redirect('community-projects', community.id)
         else:
             form = CreateProjectForm()
@@ -570,6 +582,7 @@ def apply_project_labels(request, pk, project_id):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         if request.method == "POST":
+            # Get which labels were selected to be applied
             bclabels_selected = request.POST.getlist('checked-labels')
             tklabels_selected = request.POST.getlist('tk-checked-labels')
 
@@ -613,9 +626,9 @@ def apply_notice_labels(request, pk, notice_id):
             bcnotice = BCNotice.objects.get(unique_id=notice_id)
             if request.method == "POST":
                 # add community to project contributors
-                contrib = ProjectContributors.objects.get(project=bcnotice.project)
-                contrib.community = community
-                contrib.save()
+                contributors = ProjectContributors.objects.get(project=bcnotice.project)
+                contributors.communities.add(community)
+                contributors.save()
 
                 # Gets ids of all checkboxes
                 label_selected = request.POST.getlist('checkbox-label')

@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
 from .utils import check_member_role
+from projects.utils import add_to_contributors
 
 from .models import Institution
 from researchers.models import Researcher
@@ -15,7 +17,6 @@ from accounts.models import UserAffiliation
 from projects.forms import CreateProjectForm
 from notifications.forms import NoticeCommentForm
 from communities.forms import InviteMemberForm
-
 from .forms import CreateInstitutionForm, UpdateInstitutionForm, CreateInstitutionNoRorForm
 
 @login_required(login_url='login')
@@ -204,10 +205,10 @@ def institution_projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
-        contribs = ProjectContributors.objects.filter(institution=institution)
+        # contribs = ProjectContributors.objects.filter(institution=institution)
         context = {
             'institution': institution,
-            'contribs': contribs,
+            # 'contribs': contribs,
             'member_role': member_role,
         }
         return render(request, 'institutions/projects.html', context)
@@ -227,16 +228,25 @@ def create_project(request, pk):
                 data = form.save(commit=False)
                 data.project_creator = request.user
                 data.save()
+                # Add project to institution projects
+                institution.projects.add(data)
 
                 notices_selected = request.POST.getlist('checkbox-notice')
-
                 for notice in notices_selected:
                     if notice == 'bcnotice':
                         bcnotice = BCNotice.objects.create(placed_by_institution=institution, project=data)
                     if notice == 'tknotice':
                         tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data)
 
-                ProjectContributors.objects.create(project=data, institution=institution)
+                # Get lists of contributors entered in form
+                institutions_selected = request.POST.getlist('selected_institutions')
+                researchers_selected = request.POST.getlist('selected_researchers')
+
+                # Get project contributors instance and add institution
+                contributors = ProjectContributors.objects.get(project=data)
+                contributors.institutions.add(institution)
+                # Add selected contributors to the ProjectContributors object
+                add_to_contributors(contributors, data, institutions_selected, researchers_selected)
 
                 truncated_project_title = str(data.title)[0:30]
                 title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + truncated_project_title
@@ -262,7 +272,6 @@ def notify_communities(request, pk, proj_id):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         project = Project.objects.get(id=proj_id)
-        contribs = ProjectContributors.objects.get(project=project, institution=institution)
 
         bcnotice_exists = BCNotice.objects.filter(project=project).exists()
         tknotice_exists = TKNotice.objects.filter(project=project).exists()
@@ -322,7 +331,7 @@ def notify_communities(request, pk, proj_id):
         context = {
             'institution': institution,
             'project': project,
-            'contribs': contribs,
+            # 'contributors': contributors,
             'communities': communities,
             'member_role': member_role,
         }

@@ -1,4 +1,5 @@
-{% extends 'comm-base.html' %} {% block title %} | Projects {% endblock %} {% load static %} {% block community_content %}
+{% extends 'comm-base.html' %} {% block title %} | Projects {% endblock %} {% load static %} {% load custom_tags %} {% block community_content %}
+{% community_contributing_projects community as community_projects_contrib %}
 
     <div class="content-card content-card-space white-bg">
 
@@ -20,38 +21,33 @@
 
     </div>
 
-    {% if contribs %}
-        {% for contrib in contribs %}
+    <!-- Projects created BY community -->
+    {% if community.projects %}
+        {% for project in community.projects.all %}
             <div class="content-card-v2 white-bg">
 
-                <div id="full-contrib-card-{{ contrib.id }}" class="flex-this space-between" style="scroll-margin-top: 8em;">
+                <div id="full-contrib-card-{{ project.id }}" class="flex-this space-between" style="scroll-margin-top: 8em;">
                     <div class="w-90">
                         <p class="no-top-margin no-bottom-margin">
                             <span class="darkteal-text weight-500">
-                                {{ contrib.project.title }}
+                                {{ project.title }}
                             </span><br>
-                            {{ contrib.project.publication_date }}<br>
-                            {{ contrib.project.project_type }}<br>
-                            {{ contrib.community.community_name }}
-                            {% if contrib.researcher %}
-                                , {{ contrib.researcher.user.get_full_name}}
-                            {% endif %}
-                            {% if contrib.institution %}
-                                , {{ contrib.institution.institution_name }}
-                            {% endif %}
+                            {{ project.publication_date }}<br>
+                            {{ project.project_type }}<br>
+                            <!-- TODO: ADD CONTRIBUTORS -->
 
                         </p>
                     </div>
                     <div>
-                        <a id="{{ contrib.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                        <a id="{{ project.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                     </div>
                 </div>
 
-                <div id="expand-contrib-{{ contrib.id }}" style="height: 0px; overflow:hidden;">
+                <div id="expand-contrib-{{ project.id }}" style="height: 0px; overflow:hidden;">
 
                     <div class="flex-this space-between">
                         <div class="w-80">
-                            <p>{{ contrib.project.description }}</p>
+                            <p>{{ project.description }}</p>
                         </div>
     
                         <div class="flex-this column w-15">
@@ -61,14 +57,14 @@
                             <div class="notice-btns center-text">
                                 <a href="#" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
                             </div> -->
-                            {% if contrib.project.has_labels %}
+                            {% if project.has_labels %}
 
                             {% else %}
                                 {% if member_role == 'viewer' %}
 
                                 {% else %}
                                     <div class="notice-btns center-text">
-                                        <a href="{% url 'apply-project-labels' community.id contrib.project.id %}" class="action-btn">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
+                                        <a href="{% url 'apply-project-labels' community.id project.id %}" class="action-btn">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
                                     </div>
                                 {% endif %}
                             {% endif %}
@@ -77,12 +73,12 @@
                     </div>
 
                     <div class="flex-this column">
-                        {% if contrib.project.bclabels %}
+                        {% if project.bclabels.all or project.tklabels.all %}
                             <div><p class="weight-500">Labels attached to this project</p></div>
                         {% else %}
                             <div><p class="weight-500">No Labels attached to this project</p></div>
                         {% endif %}
-                            {% for bclabel in contrib.project.bclabels.all %}
+                            {% for bclabel in project.bclabels.all %}
 
                                 <div class="flex-this">
                                     <div class="small-label">
@@ -99,7 +95,7 @@
                                 </div>
                             {% endfor %}
 
-                            {% for tklabel in contrib.project.tklabels.all %}
+                            {% for tklabel in project.tklabels.all %}
 
                             <div class="flex-this">
                                 <div class="small-label">
@@ -121,6 +117,108 @@
                 </div>
 
             </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Projects where community is contributor but not creator -->
+    {% if community_projects_contrib %}
+        {% for contrib in community_projects_contrib %}
+            {% if contrib.project in community.projects.all %}
+            {% else %}
+                <div class="content-card-v2 white-bg">
+
+                    <div id="full-contrib-card-{{ contrib.project.id }}" class="flex-this space-between" style="scroll-margin-top: 8em;">
+                        <div class="w-90">
+                            <p class="no-top-margin no-bottom-margin">
+                                <span class="darkteal-text weight-500">
+                                    {{ contrib.project.title }}
+                                </span><br>
+                                {{ contrib.project.publication_date }}<br>
+                                {{ contrib.project.project_type }}<br>
+                                <!-- TODO: ADD CONTRIBUTORS -->
+
+                            </p>
+                        </div>
+                        <div>
+                            <a id="{{ contrib.project.id }}" onclick="showMoreProject(this)" class="darkteal-text pointer">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+
+                    <div id="expand-contrib-{{ contrib.project.id }}" style="height: 0px; overflow:hidden;">
+
+                        <div class="flex-this space-between">
+                            <div class="w-80">
+                                <p>{{ contrib.project.description }}</p>
+                            </div>
+        
+                            <div class="flex-this column w-15">
+                                <!-- <div class="notice-btns center-text">
+                                    <a href="#" class="action-btn">Edit Project <i class="fa fa-pencil"></i></a>
+                                </div>
+                                <div class="notice-btns center-text">
+                                    <a href="#" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                </div> -->
+                                {% if contrib.project.has_labels %}
+
+                                {% else %}
+                                    {% if member_role == 'viewer' %}
+
+                                    {% else %}
+                                        <div class="notice-btns center-text">
+                                            <a href="{% url 'apply-project-labels' community.id contrib.project.id %}" class="action-btn">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+                        <div class="flex-this column">
+                            {% if contrib.project.bclabels.all or contrib.project.tklabels.all %}
+                                <div><p class="weight-500">Labels attached to this project</p></div>
+                            {% else %}
+                                <div><p class="weight-500">No Labels attached to this project</p></div>
+                            {% endif %}
+                                {% for bclabel in contrib.project.bclabels.all %}
+
+                                    <div class="flex-this">
+                                        <div class="small-label">
+                                            {% include 'bclabels/which-label.html' %}
+                                        </div>
+                                        <div class="pad-left-2">
+                                            <p class="darkteal-text no-top-margin">Label shared by {{ bclabel.community.community_name }} </p>
+                                            <p class="weight-500"> {{ bclabel.name }} </p>
+                                            <p>
+                                                {{ bclabel.default_text}}
+                                            </p>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                                {% for tklabel in contrib.project.tklabels.all %}
+
+                                <div class="flex-this">
+                                    <div class="small-label">
+                                        {% include 'tklabels/which-label.html' %}
+                                    </div>
+                                    <div class="pad-left-2">
+                                        <p class="darkteal-text no-top-margin">Label shared by {{ tklabel.community.community_name }} </p>
+                                        <p class="weight-500"> {{ tklabel.name }} </p>
+                                        <p>
+                                            {{ tklabel.default_text}}
+                                        </p>
+                                        <hr>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+            {% endif %}
         {% endfor %}
     {% endif %}
 

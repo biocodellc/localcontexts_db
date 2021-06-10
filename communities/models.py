@@ -18,6 +18,7 @@ class Community(models.Model):
     viewers = models.ManyToManyField(User, blank=True, related_name="viewers")
     is_publicly_listed = models.BooleanField(default=True, null=True)
     is_approved = models.BooleanField(default=False, null=True)
+    projects = models.ManyToManyField('projects.Project', blank=True, related_name="community_projects")
 
     def get_member_count(self):
         admins = self.admins.count()
