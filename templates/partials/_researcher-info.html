@@ -1,7 +1,7 @@
 {% load static %}{% load custom_researcher_tags %}
 {% researcher_notifications researcher as notifications %}
 {% get_notices_count researcher as total_notices %}
-{% get_projects_count researcher as total_projects %}
+{% get_projects_count researcher.id as total_projects %}
 {% unread_notifications researcher as unread_exist %}
 
 <div class="pad-top-5">

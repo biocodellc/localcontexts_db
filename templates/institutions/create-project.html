@@ -1,4 +1,5 @@
-{% extends 'institution-base.html' %} {% block title %} | Create Project {% endblock %}{% load static %}{% block institution_content %}
+{% extends 'institution-base.html' %} {% block title %} | Create Project {% endblock %}{% load static %}
+{% block institution_content %}
 
 <div class="white-bg content-card content-card-space noti-card">
     
@@ -56,6 +57,8 @@
                     <label>Project URL</label><br>
                     {{ form.url }} <br>
                 </div>
+
+                {% include 'partials/_add-contributors.html'%}
 
                 <p class="weight-500">Project Metadata</p>
                 <p>

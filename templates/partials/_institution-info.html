@@ -1,7 +1,7 @@
 {% load static %}{% load custom_institution_tags %}
 {% institution_notifications institution as notifications %}
 {% get_notices_count institution as total_notices %}
-{% get_projects_count institution as total_projects %}
+{% get_projects_count institution.id as total_projects %}
 {% unread_notifications institution as unread_exist %}
 
 <div class="pad-top-5">

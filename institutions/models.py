@@ -19,6 +19,7 @@ class Institution(models.Model):
     admins = models.ManyToManyField(User, blank=True, related_name="institution_admins")
     editors = models.ManyToManyField(User, blank=True, related_name="institution_editors")
     viewers = models.ManyToManyField(User, blank=True, related_name="institution_viewers")
+    projects = models.ManyToManyField('projects.Project', blank=True, related_name="institution_projects")
 
     def get_member_count(self):
         admins = self.admins.count()

@@ -44,13 +44,17 @@ label {
     font-weight: 400;
 }
 
-input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], select {
+input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], input[name=contributors], select {
     max-height: 40px;
     min-height: 40px;
     background-color: #fff;
     border: 1px solid #333333;
     border-radius: 5px;
     padding:8px;
+}
+
+input[name=contributors] {
+    width: 416px;
 }
 
 textarea {
@@ -409,6 +413,25 @@ input:focus {
 .default-btn {
     max-width: 110px;
     min-width: 110px;
+}
+
+/* Square + buttons for adding things */
+.add-square-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 25px 7px 7px 7px;
+    padding: 8px 16px;
+    width: 52px;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #5AA497;
+}
+
+.add-square-btn span {
+    color: #fff;
+    font-size:25px;
 }
 
 /* Width for buttons on connect-researcher, community and institution pages */

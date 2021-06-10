@@ -10,6 +10,7 @@ class Researcher(models.Model):
     website = models.URLField(max_length=150, blank=True, null=True)
     associated_institution = models.CharField(max_length=250, null=True, blank=True)
     location = models.CharField(max_length=300, null=True, blank=True)
+    projects = models.ManyToManyField('projects.Project', blank=True, related_name="researcher_projects")
 
     def __str__(self):
         return str(self.user)

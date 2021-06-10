@@ -3,13 +3,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from accounts.utils import is_user_researcher
+from projects.utils import add_to_contributors
 
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from communities.models import Community
+from institutions.models import Institution
 from notifications.models import ActionNotification, NoticeStatus, NoticeComment
 from projects.models import ProjectContributors, Project
-from projects.forms import CreateProjectForm, ProjectContributorsForm
+# from projects.forms import CreateProjectForm, ProjectContributorsForm
+from projects.forms import CreateProjectForm
 from notifications.forms import NoticeCommentForm
 
 from .models import Researcher
@@ -112,12 +115,12 @@ def researcher_activity(request, pk):
 def researcher_projects(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
-    contribs = ProjectContributors.objects.filter(researcher=researcher)
+    # contribs = ProjectContributors.objects.filter(researcher=researcher)
     bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher)
 
     context = {
         'researcher': researcher,
-        'contribs': contribs,
+        # 'contribs': contribs,
         'bcnotices': bcnotices,
     }
 
@@ -129,23 +132,32 @@ def researcher_projects(request, pk):
 def create_project(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
-
     if request.method == "POST":
         form = CreateProjectForm(request.POST or None)
         if form.is_valid():
             data = form.save(commit=False)
             data.project_creator = request.user
             data.save()
+            # Add project to researcher projects
+            researcher.projects.add(data)
 
             notices_selected = request.POST.getlist('checkbox-notice')
-
             for notice in notices_selected:
                 if notice == 'bcnotice':
                     bcnotice = BCNotice.objects.create(placed_by_researcher=researcher, project=data)
                 if notice == 'tknotice':
                     tknotice = TKNotice.objects.create(placed_by_researcher=researcher, project=data)
 
-            ProjectContributors.objects.create(project=data, researcher=researcher)
+            # Get lists of contributors entered in form
+            institutions_selected = request.POST.getlist('selected_institutions')
+            researchers_selected = request.POST.getlist('selected_researchers')
+
+            # Get project contributors instance and add researcher to it
+            contributors = ProjectContributors.objects.get(project=data)
+            contributors.researchers.add(researcher)
+            # Add selected contributors to the ProjectContributors object
+            add_to_contributors(contributors, data, institutions_selected, researchers_selected)
+
             return redirect('researcher-activity', researcher.id)
     else:
         form = CreateProjectForm()
@@ -162,7 +174,7 @@ def notify_communities(request, pk, proj_id):
     researcher = Researcher.objects.get(id=pk)
 
     project = Project.objects.get(id=proj_id)
-    contribs = ProjectContributors.objects.get(project=project, researcher=researcher)
+    # contribs = ProjectContributors.objects.get(project=project, researcher=researcher)
 
     bcnotice_exists = BCNotice.objects.filter(project=project).exists()
     tknotice_exists = TKNotice.objects.filter(project=project).exists()
@@ -223,7 +235,7 @@ def notify_communities(request, pk, proj_id):
     context = {
         'researcher': researcher,
         'project': project,
-        'contribs': contribs,
+        # 'contribs': contribs,
         'communities': communities,
     }
     return render(request, 'researchers/notify.html', context)

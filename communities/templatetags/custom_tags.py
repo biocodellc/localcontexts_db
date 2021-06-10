@@ -4,7 +4,7 @@ from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from notifications.models import ActionNotification
 from communities.models import JoinRequest, Community
-from projects.models import Project
+from projects.models import Project, ProjectContributors
 
 register = template.Library()
 
@@ -31,10 +31,7 @@ def community_notifications(community):
 @register.simple_tag
 def join_request(community, user):
     request_exists = JoinRequest.objects.filter(community=community, user_from=user).exists()
-    if request_exists:
-        return True
-    else:
-        return False
+    return request_exists
 
 @register.simple_tag
 def project_has_labels_from_current_community(project_id, community):
@@ -48,9 +45,11 @@ def project_has_labels_from_current_community(project_id, community):
 
 @register.simple_tag
 def unread_notifications(community):
-    notifications = ActionNotification.objects.filter(community=community, viewed=False).exists()
-    if notifications:
-        return True
-    else:
-        return False
+    notifications_exist = ActionNotification.objects.filter(community=community, viewed=False).exists()
+    return notifications_exist
+
+@register.simple_tag
+def community_contributing_projects(community):
+    contributors = ProjectContributors.objects.filter(communities=community)
+    return contributors
     

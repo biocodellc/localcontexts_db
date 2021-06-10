@@ -39,10 +39,20 @@ class TKLabelSerializer(serializers.ModelSerializer):
         model = TKLabel
         fields = '__all__'
 
+# class ProjectContributorsSerializer(serializers.ModelSerializer):
+#     institution = InstitutionSerializer()
+#     researcher = ResearcherSerializer()
+#     community = CommunitySerializer()
+    
+#     class Meta:
+#         model = ProjectContributors
+#         fields = ('institution', 'researcher', 'community',)
+
 class ProjectSerializer(serializers.ModelSerializer):
     bclabels = BCLabelSerializer(many=True)
     tklabels = TKLabelSerializer(many=True)
     project_creator = UserSerializer()
+    # project_contributors = ProjectContributorsSerializer()
 
     class Meta:
         model = Project

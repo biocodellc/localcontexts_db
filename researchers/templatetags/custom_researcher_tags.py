@@ -3,6 +3,7 @@ from django.urls import reverse
 from notifications.models import ActionNotification, NoticeStatus
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
+from researchers.models import Researcher
 from projects.models import ProjectContributors
 
 register = template.Library()
@@ -28,17 +29,15 @@ def get_notices_count(researcher):
     return total
 
 @register.simple_tag
-def get_projects_count(researcher):
-    contrib_count = ProjectContributors.objects.filter(researcher=researcher).count()
-    return contrib_count
+def get_projects_count(researcher_id):
+    researcher = Researcher.objects.get(id=researcher_id)
+    project_count = researcher.projects.count()
+    return project_count
 
 @register.simple_tag
 def unread_notifications(researcher):
-    notifications = ActionNotification.objects.filter(researcher=researcher, viewed=False).exists()
-    if notifications:
-        return True
-    else:
-        return False
+    unread_notifications_exist = ActionNotification.objects.filter(researcher=researcher, viewed=False).exists()
+    return unread_notifications_exist
 
 @register.simple_tag
 def bcnotice_status_exists(project, community):
@@ -72,3 +71,8 @@ def tknotice_status_exists(project, community):
             return False
     else:
         return False
+
+@register.simple_tag
+def researcher_contributing_projects(researcher):
+    contributors = ProjectContributors.objects.filter(researchers=researcher)
+    return contributors
