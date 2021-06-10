@@ -5,7 +5,6 @@ from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from communities.models import JoinRequest
 from institutions.models import Institution
-from researchers.models import Researcher
 
 register = template.Library()
 

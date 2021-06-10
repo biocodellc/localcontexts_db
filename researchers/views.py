@@ -3,10 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from accounts.utils import is_user_researcher
+from projects.utils import add_to_contributors
 
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from communities.models import Community
+from institutions.models import Institution
 from notifications.models import ActionNotification, NoticeStatus, NoticeComment
 from projects.models import ProjectContributors, Project
 # from projects.forms import CreateProjectForm, ProjectContributorsForm
@@ -140,16 +142,21 @@ def create_project(request, pk):
             researcher.projects.add(data)
 
             notices_selected = request.POST.getlist('checkbox-notice')
-
             for notice in notices_selected:
                 if notice == 'bcnotice':
                     bcnotice = BCNotice.objects.create(placed_by_researcher=researcher, project=data)
                 if notice == 'tknotice':
                     tknotice = TKNotice.objects.create(placed_by_researcher=researcher, project=data)
 
+            # Get lists of contributors entered in form
+            institutions_selected = request.POST.getlist('selected_institutions')
+            researchers_selected = request.POST.getlist('selected_researchers')
+
             # Get project contributors instance and add researcher to it
             contributors = ProjectContributors.objects.get(project=data)
             contributors.researchers.add(researcher)
+            # Add selected contributors to the ProjectContributors object
+            add_to_contributors(contributors, data, institutions_selected, researchers_selected)
 
             return redirect('researcher-activity', researcher.id)
     else:

@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
 from .utils import check_member_role
+from projects.utils import add_to_contributors
 
 from .models import Institution
 from researchers.models import Researcher
@@ -15,7 +17,6 @@ from accounts.models import UserAffiliation
 from projects.forms import CreateProjectForm
 from notifications.forms import NoticeCommentForm
 from communities.forms import InviteMemberForm
-
 from .forms import CreateInstitutionForm, UpdateInstitutionForm, CreateInstitutionNoRorForm
 
 @login_required(login_url='login')
@@ -231,28 +232,21 @@ def create_project(request, pk):
                 institution.projects.add(data)
 
                 notices_selected = request.POST.getlist('checkbox-notice')
-
                 for notice in notices_selected:
                     if notice == 'bcnotice':
                         bcnotice = BCNotice.objects.create(placed_by_institution=institution, project=data)
                     if notice == 'tknotice':
                         tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data)
 
-                # Get project contributors instance and add institution
-                contributors = ProjectContributors.objects.get(project=data)
-                contributors.institutions.add(institution)
-
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')
                 researchers_selected = request.POST.getlist('selected_researchers')
 
-                # Add each institution and researcher to contributors
-                for institution_id in institutions_selected:
-                    inst = Institution.objects.get(id=institution_id)
-                    contributors.institutions.add(inst)
-                for researcher_id in researchers_selected:
-                    res = Researcher.objects.get(id=researcher_id)
-                    contributors.researchers.add(res)
+                # Get project contributors instance and add institution
+                contributors = ProjectContributors.objects.get(project=data)
+                contributors.institutions.add(institution)
+                # Add selected contributors to the ProjectContributors object
+                add_to_contributors(contributors, data, institutions_selected, researchers_selected)
 
                 truncated_project_title = str(data.title)[0:30]
                 title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + truncated_project_title
