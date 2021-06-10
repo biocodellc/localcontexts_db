@@ -57,22 +57,26 @@
                     {{ form.url }} <br>
                 </div>
 
-                <div class="padding-bottom-1">
-                    <label for="contributors">Project Contributors</label><br>
-                    <input id="contributor-input" list="contributors" name="contributors" placeholder="Example: John Doe (Researcher)">
-                    <datalist id="contributors">
-                        {% if all_researchers %}
-                            {% for researcher in all_researchers %}
-                                <option value="{{ researcher.user.get_full_name }} (Researcher)" data-resid="{{ researcher.id }}">
-                            {% endfor %}
-                        {% endif %}
-                        {% if all_institutions %}
-                            {% for institution in all_institutions %}
-                                <option value="{{ institution.institution_name }} (Institution)" data-instid="{{ institution.id }}">
-                            {% endfor %}
-                        {% endif %}
-                    </datalist>
-                    <a id="add-contributor-btn" class="pointer">Add</a>
+                <div class="padding-bottom-1 flex-this row">
+                    <div>
+                        <label for="contributors">Project Contributors</label><br>
+                        <input id="contributor-input" list="contributors" name="contributors" placeholder="Select a contributor from the hub">
+                        <datalist id="contributors">
+                            {% if all_researchers %}
+                                {% for researcher in all_researchers %}
+                                    <option value="{{ researcher.user.get_full_name }} (Researcher)" data-resid="{{ researcher.id }}">
+                                {% endfor %}
+                            {% endif %}
+                            {% if all_institutions %}
+                                {% for institution in all_institutions %}
+                                    <option value="{{ institution.institution_name }} (Institution)" data-instid="{{ institution.id }}">
+                                {% endfor %}
+                            {% endif %}
+                        </datalist>    
+                    </div>
+                    <div id="add-contributor-btn" class="add-square-btn pointer">
+                        <span>+</span>
+                    </div>
                 </div>
 
                 <p class="weight-500">Selected Contributors</p>
