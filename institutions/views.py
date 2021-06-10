@@ -250,7 +250,6 @@ def create_project(request, pk):
                 researchers_selected = request.POST.getlist('selected_researchers')
 
                 # Add each institution and researcher to contributors
-                # TODO: What if an id is not passed but is a string instead?
                 for institution_id in institutions_selected:
                     inst = Institution.objects.get(id=institution_id)
                     contributors.institutions.add(inst)
