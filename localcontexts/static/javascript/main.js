@@ -826,7 +826,8 @@ function cancelResearcherSelection(elem) {
     inputDivToRemove.innerHTML = ``
 }
 
-// TODO: MAKE THIS WORK: Add project people on institution create-project
+// Add project people on institution create-project
+// h/t: https://medium.com/all-about-django/adding-forms-dynamically-to-a-django-formset-375f1090c2b0
 let count = 0
 
 function cloneForm(el) {
