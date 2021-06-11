@@ -1,0 +1,26 @@
+{% load static %}{% load custom_project_tags %}
+<!-- h/t: https://medium.com/all-about-django/adding-forms-dynamically-to-a-django-formset-375f1090c2b0 -->
+
+{{ formset.management_form }}
+<div class="flex-this column">
+
+    {% for f in formset %}
+
+        <div id="person-form-0" class="flex-this row">
+            <div class="margin-right-1">
+                <label>{{ f.name.label }}</label><br>
+                {{ f.name }}
+            </div>
+            
+            <div>
+                <label>{{ f.email.label }}</label><br>
+                {{ f.email }}
+            </div>
+            <div onclick="cloneForm(this)" class="clone-form-btn add-square-btn pointer">
+                <span>+</span>
+            </div>
+        </div>
+
+
+    {% endfor %}
+</div>

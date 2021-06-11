@@ -1,6 +1,7 @@
 from django import forms
+from django.forms import modelformset_factory
 import datetime
-from .models import Project, ProjectContributors
+from .models import Project, ProjectContributors, ProjectPerson
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -23,7 +24,12 @@ class CreateProjectForm(forms.ModelForm):
             'url': forms.TextInput(attrs={'size': 65}),
         }
 
-# class ProjectContributorsForm(forms.ModelForm):
-#     class Meta:
-#         model = ProjectContributors
-#         fields = ['community']
+ProjectPersonFormset = modelformset_factory(
+    ProjectPerson,
+    fields=('name', 'email' ),
+    extra=2,
+    widgets = {
+        'name': forms.TextInput(attrs={'size': 35, 'placeholder': 'Contributor name'}),
+        'email': forms.EmailInput(attrs={'size': 35, 'placeholder': 'Contributor email'}),
+    }
+)
