@@ -826,6 +826,38 @@ function cancelResearcherSelection(elem) {
     inputDivToRemove.innerHTML = ``
 }
 
+// Add project people on institution create-project
+// h/t: https://medium.com/all-about-django/adding-forms-dynamically-to-a-django-formset-375f1090c2b0
+let count = 0
+
+function cloneForm(el) {
+    // Total forms hidden input needs to be incremented
+    let hiddenInputs = document.getElementsByName('form-TOTAL_FORMS')
+    let totalFormInput = hiddenInputs[0]
+
+    // Need to increment that number by 1 each time parent div is duplicated
+    // Get parent div, clone it and change its attributes
+    let parentDiv = document.getElementById('person-form-0')
+    let clone = parentDiv.cloneNode(true)
+    clone.id = 'person-form-'+ count++ // needs to increment by 1 for unique id
+
+    // Name input has name='form-0-name' and id='id_form-0-name'
+    // Email input has name='form-0-email' and id='id_form-0-email'
+
+    let nameInput = clone.getElementsByTagName('input')[0]
+    let emailInput = clone.getElementsByTagName('input')[1]
+    nameInput.value = ''
+    emailInput.value = ''
+    nameInput.id = `id_form-${count}-name`
+    nameInput.name = `form-${count}-name`
+    emailInput.id = `id_form-${count}-email`
+    emailInput.name = `form-${count}-email`
+    totalFormInput.value = parseInt(totalFormInput.value) + 1
+
+    // Append clone to sibling
+    el.parentElement.parentElement.append(clone)
+}
+
 // Institutions: projects: notify communities - close selected communities
 function cancelCommunitySelection(elem) {
     let id = elem.id

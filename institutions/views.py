@@ -7,14 +7,14 @@ from projects.utils import add_to_contributors
 
 from .models import Institution
 from researchers.models import Researcher
-from projects.models import Project, ProjectContributors
+from projects.models import Project, ProjectContributors, ProjectPerson
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification, NoticeComment, NoticeStatus
 from accounts.models import UserAffiliation
 
-from projects.forms import CreateProjectForm
+from projects.forms import CreateProjectForm, ProjectPersonFormset
 from notifications.forms import NoticeCommentForm
 from communities.forms import InviteMemberForm
 from .forms import CreateInstitutionForm, UpdateInstitutionForm, CreateInstitutionNoRorForm
@@ -124,6 +124,7 @@ def institution_activity(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
+        form = NoticeCommentForm(request.POST or None)
         bcnotices = BCNotice.objects.filter(placed_by_institution=institution)
         tknotices = TKNotice.objects.filter(placed_by_institution=institution)
 
@@ -133,8 +134,6 @@ def institution_activity(request, pk):
 
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
-
-            form = NoticeCommentForm(request.POST or None)
 
             if form.is_valid():
                 data = form.save(commit=False)
@@ -150,8 +149,6 @@ def institution_activity(request, pk):
                 data.community = community
                 data.save()
                 return redirect('institution-activity', institution.id)
-        else:
-            form = NoticeCommentForm()
 
         context = {
             'institution': institution,
@@ -180,8 +177,8 @@ def add_member(request, pk):
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
+        form = InviteMemberForm(request.POST or None)
         if request.method == 'POST':
-            form = InviteMemberForm(request.POST or None)
             receiver = request.POST.get('receiver')
             if form.is_valid():
                 data = form.save(commit=False)
@@ -191,8 +188,6 @@ def add_member(request, pk):
                 data.save()
                 messages.add_message(request, messages.INFO, 'Invitation Sent!')
                 return render(request, 'institutions/add-member.html', {'institution': institution, 'form': form,})
-        else:
-            form = InviteMemberForm()
             
         return render(request, 'institutions/add-member.html', {'institution': institution, 'form': form,})
 
@@ -205,10 +200,8 @@ def institution_projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
-        # contribs = ProjectContributors.objects.filter(institution=institution)
         context = {
             'institution': institution,
-            # 'contribs': contribs,
             'member_role': member_role,
         }
         return render(request, 'institutions/projects.html', context)
@@ -222,9 +215,14 @@ def create_project(request, pk):
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
-        if request.method == "POST":
-            form = CreateProjectForm(request.POST or None)
-            if form.is_valid():
+        if request.method == 'GET':
+            form = CreateProjectForm(request.GET or None)
+            formset = ProjectPersonFormset(queryset=ProjectPerson.objects.none())
+        elif request.method == "POST":
+            form = CreateProjectForm(request.POST)
+            formset = ProjectPersonFormset(request.POST)
+
+            if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
                 data.project_creator = request.user
                 data.save()
@@ -248,16 +246,22 @@ def create_project(request, pk):
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(contributors, data, institutions_selected, researchers_selected)
 
+                # Project person formset
+                instances = formset.save(commit=False)
+                for instance in instances:
+                    instance.project = data
+                    instance.save()
+
+                # Format and send notification about the created project
                 truncated_project_title = str(data.title)[0:30]
                 title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + truncated_project_title
                 ActionNotification.objects.create(title=title, notification_type='Projects', sender=data.project_creator, reference_id=data.unique_id, institution=institution)
                 return redirect('institution-activity', institution.id)
-        else:
-            form = CreateProjectForm()
 
         context = {
             'institution': institution,
             'form': form,
+            'formset': formset,
             'member_role': member_role,
         }
         return render(request, 'institutions/create-project.html', context)
@@ -331,7 +335,6 @@ def notify_communities(request, pk, proj_id):
         context = {
             'institution': institution,
             'project': project,
-            # 'contributors': contributors,
             'communities': communities,
             'member_role': member_role,
         }
