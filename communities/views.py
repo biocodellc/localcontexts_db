@@ -10,11 +10,11 @@ from accounts.models import UserAffiliation
 from notifications.models import ActionNotification, NoticeStatus
 from bclabels.models import BCNotice, BCLabel
 from tklabels.models import TKNotice, TKLabel
-from projects.models import ProjectContributors, Project
+from projects.models import ProjectContributors, Project, ProjectPerson
 
 from bclabels.forms import CustomiseBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomiseTKLabelForm, ApproveAndEditTKLabelForm
-from projects.forms import CreateProjectForm
+from projects.forms import CreateProjectForm, ProjectPersonFormset
 from notifications.forms import NoticeCommentForm
 
 from bclabels.utils import check_bclabel_type
@@ -505,14 +505,9 @@ def projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        notices = community.bcnotice_communities.all()
-        # contribs = ProjectContributors.objects.filter(community=community)
-
         context = {
             'community': community, 
             'member_role': member_role,
-            'notices': notices,
-            # 'contribs': contribs,
         }
         return render(request, 'communities/projects.html', context)
 
@@ -528,9 +523,14 @@ def create_project(request, pk):
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        if request.method == 'POST':
+        if request.method == "GET":
+            form = CreateProjectForm(request.GET or None)
+            formset = ProjectPersonFormset(queryset=ProjectPerson.objects.none())
+        elif request.method == 'POST':
             form = CreateProjectForm(request.POST)
-            if form.is_valid():
+            formset = ProjectPersonFormset(request.POST)
+
+            if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
                 data.project_creator = request.user
                 data.save()
@@ -548,6 +548,12 @@ def create_project(request, pk):
 
                 add_to_contributors(contributors, data, institutions_selected, researchers_selected)
                 
+                # Project person formset
+                instances = formset.save(commit=False)
+                for instance in instances:
+                    instance.project = data
+                    instance.save()
+
                 # Maybe there's a better way to do this? using project unique id instead of contrib id?
                 # Has to be a contrib id for the js to work. Rework this maybe?
                 # contrib = ProjectContributors.objects.get(project=data)
@@ -555,13 +561,12 @@ def create_project(request, pk):
                 title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + truncated_project_title + ' ...'
                 # ActionNotification.objects.create(reference_id=contrib.id, title=title, sender=request.user, community=community, notification_type='Projects')
                 return redirect('community-projects', community.id)
-        else:
-            form = CreateProjectForm()
         
         context = {
             'community': community,
             'member_role': member_role,
             'form': form,
+            'formset': formset,
             'bclabels': bclabels,
             'tklabels': tklabels,
         }
