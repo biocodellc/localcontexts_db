@@ -27,7 +27,7 @@ class CreateProjectForm(forms.ModelForm):
 ProjectPersonFormset = modelformset_factory(
     ProjectPerson,
     fields=('name', 'email' ),
-    extra=2,
+    extra=1,
     widgets = {
         'name': forms.TextInput(attrs={'size': 35, 'placeholder': 'Contributor name'}),
         'email': forms.EmailInput(attrs={'size': 35, 'placeholder': 'Contributor email'}),
