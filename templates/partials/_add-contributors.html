@@ -24,6 +24,8 @@
     </div>
 </div>
 
+{% include 'partials/_add-projectperson.html'%}
+
 <p class="weight-500">Selected Contributors</p>
 {% for researcher in all_researchers %}
     <div id="selected-researcher-{{ researcher.id }}" style="height: 0px; overflow: hidden;">

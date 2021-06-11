@@ -10,9 +10,9 @@ from tklabels.models import TKNotice
 from communities.models import Community
 from institutions.models import Institution
 from notifications.models import ActionNotification, NoticeStatus, NoticeComment
-from projects.models import ProjectContributors, Project
+from projects.models import ProjectContributors, Project, ProjectPerson
 # from projects.forms import CreateProjectForm, ProjectContributorsForm
-from projects.forms import CreateProjectForm
+from projects.forms import CreateProjectForm, ProjectPersonFormset
 from notifications.forms import NoticeCommentForm
 
 from .models import Researcher
@@ -110,21 +110,10 @@ def researcher_activity(request, pk):
     return render(request, 'researchers/activity.html', context)
 
 
-# TODO: display labels only if they have been approved by community
 @login_required(login_url='login')
 def researcher_projects(request, pk):
     researcher = Researcher.objects.get(id=pk)
-
-    # contribs = ProjectContributors.objects.filter(researcher=researcher)
-    bcnotices = BCNotice.objects.filter(placed_by_researcher=researcher)
-
-    context = {
-        'researcher': researcher,
-        # 'contribs': contribs,
-        'bcnotices': bcnotices,
-    }
-
-    return render(request, 'researchers/projects.html', context)
+    return render(request, 'researchers/projects.html', {'researcher': researcher,})
 
 
 # Create Project
@@ -132,9 +121,14 @@ def researcher_projects(request, pk):
 def create_project(request, pk):
     researcher = Researcher.objects.get(id=pk)
 
-    if request.method == "POST":
+    if request.method == "GET":
         form = CreateProjectForm(request.POST or None)
-        if form.is_valid():
+        formset = ProjectPersonFormset(queryset=ProjectPerson.objects.none())
+    elif request.method == "POST":
+        form = CreateProjectForm(request.POST)
+        formset = ProjectPersonFormset(request.POST)
+
+        if form.is_valid() and formset.is_valid():
             data = form.save(commit=False)
             data.project_creator = request.user
             data.save()
@@ -158,13 +152,18 @@ def create_project(request, pk):
             # Add selected contributors to the ProjectContributors object
             add_to_contributors(contributors, data, institutions_selected, researchers_selected)
 
+            # Project person formset
+            instances = formset.save(commit=False)
+            for instance in instances:
+                instance.project = data
+                instance.save()
+
             return redirect('researcher-activity', researcher.id)
-    else:
-        form = CreateProjectForm()
 
     context = {
         'researcher': researcher,
         'form': form,
+        'formset': formset,
     }
     return render(request, 'researchers/create-project.html', context)
 
