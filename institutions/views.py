@@ -41,6 +41,7 @@ def create_institution(request):
             else:
                 data.institution_name = name
                 data.institution_creator = request.user
+                data.is_approved = True
                 data.save()
                 return redirect('dashboard')
     return render(request, 'institutions/create-institution.html', {'form': form})
@@ -52,6 +53,7 @@ def create_institution_noror(request):
         if form.is_valid():
             data = form.save(commit=False)
             data.institution_creator = request.user
+            data.is_ror = False
             data.save()
 
             template = render_to_string('snippets/institution-application.html', { 'data' : data })
