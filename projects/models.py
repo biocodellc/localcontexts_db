@@ -61,13 +61,13 @@ class ProjectContributors(models.Model):
         verbose_name_plural = 'Project Contributors'
 
 class ProjectPerson(models.Model):
-    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_person")
+    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="additional_contributors")
     name = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-        return str(self.project) + ' ' + self.name + self.email
+        return str(self.project)
     
     class Meta:
-        verbose_name = 'Project Person'
-        verbose_name_plural = 'Project People'
+        verbose_name = 'Additional Contributor'
+        verbose_name_plural = 'Additional Contributors'
