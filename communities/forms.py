@@ -19,9 +19,8 @@ class CreateCommunityForm(forms.ModelForm):
 class UpdateCommunityForm(forms.ModelForm):
     class Meta:
         model = Community
-        fields = ['community_name', 'contact_name', 'contact_email', 'town', 'country', 'is_publicly_listed', 'image']
+        fields = ['contact_name', 'contact_email', 'town', 'country', 'is_publicly_listed', 'image']
         widgets = {
-            'community_name': forms.TextInput(attrs={'size': 40}),
             'contact_name': forms.TextInput(attrs={'size': 40}),
             'contact_email': forms.EmailInput(attrs={'size': 40}),
             'town': forms.TextInput(attrs={'size': 40}),
