@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
 from .utils import check_member_role
 from projects.utils import add_to_contributors
 
@@ -49,6 +53,15 @@ def create_institution_noror(request):
             data = form.save(commit=False)
             data.institution_creator = request.user
             data.save()
+
+            template = render_to_string('snippets/institution-application.html', { 'data' : data })
+            send_mail(
+                'New Institution Application', 
+                template, 
+                settings.EMAIL_HOST_USER, 
+                [settings.SITE_ADMIN_EMAIL], 
+                fail_silently=False)
+        
             return redirect('dashboard')
     return render(request, 'institutions/create-institution-noror.html', {'form': form,})
 
