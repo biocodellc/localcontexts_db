@@ -83,7 +83,7 @@
                                     <h3 class="dashcard-h3 darkteal-text">{{ community }}</h3>
                                 </div>
                                 <div>
-                                    <p class="black-text dashcard-subheader">Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %} | Location: {{ community.town }}, {{ community.country.name }}</p>
+                                    <p class="black-text dashcard-subheader">Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %} | Location: {{ community.city_or_town }}, {{ community.country.name }}</p>
                                 </div>
                                 <div>
                                     <p class="dashcard-description">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p>
@@ -114,7 +114,7 @@
                                 <h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3>
                             </div>
                             <div>
-                                <p class="black-text dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | Location: {{ institution.town_or_city }}, {{ institution.country.name }}</p>
+                                <p class="black-text dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | Location: {{ institution.city_or_town }}, {{ institution.country.name }}</p>
                             </div>
                             <div>
                                 <p class="dashcard-description">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p>
