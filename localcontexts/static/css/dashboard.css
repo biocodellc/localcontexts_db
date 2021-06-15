@@ -1,91 +1,4 @@
-#user-affiliation-container { 
-    margin: auto;
-    min-width: 100%;
-    max-width: 100%;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 2%;
-    padding-bottom: 5%;
-}
-
-#user-affiliation-content {
-    flex-wrap: wrap;
-    max-width: 1320px;
-    min-width: 1320px;
-    margin: auto;
-    padding: 0;
-}
-
-.member-card-container {
-    padding-bottom: 2%;
-    width: 437px;
-}
-
-/* Every third element starting with the second */
-.member-card-container:nth-child(3n + 2) {
-    margin-right: 7px;
-}
-
-/* Community member cards */
-.member-card {
-    margin: auto;
-    /* Take out fixed height of cards so that text can fit */
-    /* min-height: 265px;
-    max-height: 265px; */
-    min-width: 400px;
-    max-width: 400px;
-    align-items: center;
-    border-radius: 5px;
-}
-
-.member-card {
-    margin-top: 2%;
-    margin-bottom: 2%;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-}
-
-.member-card-img {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 195px;
-    max-height: 195px;
-    min-width: 400px;
-    max-width: 400px;
-}
-
-.member-card-img img {
-    margin: 0;
-    padding: 0;
-    width: 400px;
-    height: 195px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    object-fit: cover;
-}
-
-.member-card-text {
-    padding: 1% 4% 1% 4%;
-    width: 100%;
-    margin-bottom: 2%;
-}
-
-.member-card-text h3, .member-card-text p {
-    width: 100%;
-    margin: 0;
-}
-
-/* Profile Settings page */
-.edit-profile-section {
-    align-items: center;
-}
-
-.edit-profile-section input {
-    width: 50%;
-}
-
-
-/* NEW DASH CARD */
+/* DASH CARD */
 .dashcard {
     margin-top: 5px;
     margin-bottom: 10px;
@@ -96,27 +9,25 @@
     border-radius: 10px;
 }
 
+.dashcard-img-container, .dashcard-text-container {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    margin-right: 25px;
+}
+
 .dashcard-img-container {
     width: 286px;
     height: 160.88px;
     margin-left: 16px;
-    margin-top: 16px;
-    margin-bottom: 16px;
-    margin-right: 25px;
 }
 
 .dashcard img {
     width: 286px;
     height: 160.88px;
     object-fit: cover;
-
 }
 
 .dashcard-text-container {
-    /* border: 1px solid red; */
-    margin-top: 16px;
-    margin-bottom: 16px;
-    margin-right: 16px;
     width: 60%;
 }
 
@@ -128,7 +39,6 @@
 }
 
 .dashcard-subheader {
-    /* border: 1px solid red; */
     margin-bottom: 0;
     font-weight: 500;
 }
@@ -140,4 +50,13 @@
     font-size: 16px;
     font-style: normal;
     color: #333;
+}
+
+/* Profile Settings page */
+.edit-profile-section {
+    align-items: center;
+}
+
+.edit-profile-section input {
+    width: 50%;
 }
