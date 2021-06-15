@@ -47,14 +47,7 @@ def update_researcher(request, pk):
 
         if update_form.is_valid():
             data = update_form.save(commit=False)
-            if data.orcid:
-                if '-' in data.orcid:
-                    data.save()
-                else: 
-                    data.orcid = '-'.join([data.orcid[i:i+4] for i in range(0, len(data.orcid), 4)])
-                    data.save()
-            else:
-                data.save()
+            data.save()
 
             messages.add_message(request, messages.SUCCESS, 'Updated!')
             return redirect('researcher-update', researcher.id)
@@ -158,7 +151,7 @@ def create_project(request, pk):
                 instance.project = data
                 instance.save()
 
-            return redirect('researcher-activity', researcher.id)
+            return redirect('researcher-projects', researcher.id)
 
     context = {
         'researcher': researcher,
