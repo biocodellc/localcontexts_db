@@ -16,7 +16,6 @@ class UpdateResearcherForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['user']
         widgets = {
-            'orcid': forms.TextInput(attrs={'size': 40}),
             'contact_email': forms.TextInput(attrs={'size': 40}),
             'contact_number': forms.TextInput(attrs={'size': 40}),
             'website': forms.TextInput(attrs={'size': 40}),
