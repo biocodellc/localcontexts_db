@@ -5,7 +5,7 @@ from bclabels.models import BCNotice
 class ConnectResearcherForm(forms.ModelForm):
     class Meta:
         model = Researcher
-        fields = ['primary_institution', 'location']
+        fields = ['primary_institution']
         widgets = {
             'primary_institution': forms.TextInput(attrs={'size': 40}),
         }
@@ -20,5 +20,4 @@ class UpdateResearcherForm(forms.ModelForm):
             'contact_number': forms.TextInput(attrs={'size': 40}),
             'website': forms.TextInput(attrs={'size': 40}),
             'primary_institution': forms.TextInput(attrs={'size': 40}),
-            'location': forms.TextInput(attrs={'size': 40}),
         }
