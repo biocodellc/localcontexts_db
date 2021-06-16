@@ -14,8 +14,8 @@ class RegistrationForm(UserCreationForm):
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=False)
         # Cleans the data so nothing harmful can get passed though the form
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
+        # user.first_name = self.cleaned_data['first_name']
+        # user.last_name = self.cleaned_data['last_name']
         user.email = self.cleaned_data['email']
 
         #if we want to save
