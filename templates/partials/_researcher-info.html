@@ -118,18 +118,14 @@
                     <h2 class="orange-text community-title">{{ researcher.user.get_full_name }}</h2>
                     <p>
                         <span>Location:</span> 
-                        {% if researcher.location %} 
-                            {{ researcher.location }} 
-                        {% else %} 
-                            {{ researcher.user.profile.city_or_town }}, {{ researcher.user.profile.country.name }} 
-                        {% endif %}<br>
+                            {{ researcher.user.profile.city_or_town }}, {{ researcher.user.profile.state_or_province }}, {{ researcher.user.profile.country.name }} <br>
 
                         {% if researcher.website %}
                             <span>Website:</span> {{ researcher.website }}<br>
                         {% endif %}
 
-                        {% if researcher.associated_institution %}
-                            <span>Affiliation:</span> {{ researcher.associated_institution }}
+                        {% if researcher.primary_institution %}
+                            <span>Affiliation:</span> {{ researcher.primary_institution }}
                         {% endif %}
                         
                         <!-- ORCID display based on how it sits in the db -->

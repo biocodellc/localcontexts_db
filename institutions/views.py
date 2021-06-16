@@ -271,7 +271,7 @@ def create_project(request, pk):
                 truncated_project_title = str(data.title)[0:30]
                 title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + truncated_project_title
                 ActionNotification.objects.create(title=title, notification_type='Projects', sender=data.project_creator, reference_id=data.unique_id, institution=institution)
-                return redirect('institution-activity', institution.id)
+                return redirect('institution-projects', institution.id)
 
         context = {
             'institution': institution,

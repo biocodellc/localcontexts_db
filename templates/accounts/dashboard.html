@@ -34,76 +34,103 @@
             </div>
     {% endif %}
 
+    <section class="flex-this column align-center">
 
-    <section id="user-affiliation-container">
-        <div id="user-affiliation-content" class="flex-this">
+        {% if researcher %}
+            <div class="dashcard">
+                <a href="{% url 'researcher-activity' researcher.id %}">
+                    <div class="flex-this">
 
-            {% if user_communities %}
-                {% for community in user_communities %}
-                <div class="member-card-container">
+                        <div class="dashcard-img-container">
+                            {% if researcher.image %}
+                                <img src="{{ researcher.image.url }}" alt="{{ researcher.researcher_name }} image">
+                            {% else %}
+                                <img src="{% static 'images/placeholders/researcher-place.jpg' %}" alt="{{ researcher.researcher_name }} image">
+                            {% endif %}
+                        </div>
+                        <div class="flex-this column dashcard-text-container">
+                            <div>
+                                <h3 class="dashcard-h3 darkteal-text">{{ researcher.user.get_full_name }}</h3>
+                            </div>
+                            <div>
+                                <p class="black-text dashcard-subheader">Researcher | Location: {{ user.profile.city_or_town }}, {{ user.profile.state_or_province}}, {{ user.profile.country.name }}</p>
+                            </div>
+                            <div>
+                                <p class="dashcard-description">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+
+        {% if user_communities %}
+            {% for community in user_communities %}
+                <div class="dashcard">
                     <a href="{% url 'community-activity' community.id %}">
-                        <div class="member-card flex-this column white-bg">
-                            <div class="member-card-img">
+                        <div class="flex-this">
+
+                            <div class="dashcard-img-container">
                                 {% if community.image %}
                                     <img src="{{ community.image.url }}" alt="{{ community.community_name }} image">
                                 {% else %}
                                     <img src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image">
                                 {% endif %}
                             </div>
-                            <div class="member-card-text flex-this column">
-                                <h3 class="darkteal-text">{{ community }}</h3>
-                                <p class="upper black-text">Community</p>
+                            <div class="flex-this column dashcard-text-container">
+                                <div>
+                                    <h3 class="dashcard-h3 darkteal-text">{{ community }}</h3>
+                                </div>
+                                <div>
+                                    <p class="black-text dashcard-subheader">Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %} | Location: {{ community.city_or_town }}, {{ community.country.name }}</p>
+                                </div>
+                                <div>
+                                    <p class="dashcard-description">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p>
+                                </div>
                             </div>
+
                         </div>
                     </a>
                 </div>
-                {% endfor %}
-            {% endif %}
+            {% endfor %}
+        {% endif %}
 
-            {% if user_institutions %}
-            {% for institution in user_institutions %}
-            <div class="member-card-container">
+    {% if user_institutions %}
+        {% for institution in user_institutions %}
+            <div class="dashcard">
                 <a href="{% url 'institution-activity' institution.id %}">
-                    <div class="member-card flex-this column white-bg">
-                        <div class="member-card-img">
+                    <div class="flex-this">
+
+                        <div class="dashcard-img-container">
                             {% if institution.image %}
                                 <img src="{{ institution.image.url }}" alt="{{ institution.institution_name }} image">
                             {% else %}
                                 <img src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">
                             {% endif %}
                         </div>
-                        <div class="member-card-text flex-this column">
-                            <h3 class="darkteal-text">{{ institution }}</h3>
-                            <p class="upper black-text">Institution</p>
+                        <div class="flex-this column dashcard-text-container">
+                            <div>
+                                <h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3>
+                            </div>
+                            <div>
+                                <p class="black-text dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | Location: {{ institution.city_or_town }}, {{ institution.country.name }}</p>
+                            </div>
+                            <div>
+                                <p class="dashcard-description">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p>
+                            </div>
                         </div>
+
                     </div>
                 </a>
             </div>
-            {% endfor %}
-            {% endif %}
+        {% endfor %}
+    {% endif %}
 
-            {% if researcher %}
-                <div class="member-card-container">
-                    <a href="{% url 'researcher-activity' researcher.id %}">
-                        <div class="member-card flex-this column white-bg">
-                            <div class="member-card-img">
-                                {% if researcher.image %}
-                                    <img src="{{ researcher.image.url }}" alt="researcher image">
-                                {% else %}
-                                    <img src="{% static 'images/placeholders/researcher-place.jpg' %}" alt="researcher image">
-                                {% endif %}
-                            </div>
-                            <div class="member-card-text flex-this column">
-                                <h3 class="darkteal-text">{{ user.get_full_name }}</h3>
-                                <p class="upper black-text">Researcher</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            {% endif %}
-            
-        </div>
     </section>
+
+
+
 
 </div>
 </div>

@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 class CreateCommunityForm(forms.ModelForm):
     class Meta:
         model = Community
-        fields = ['community_name', 'town', 'country', 'contact_name', 'contact_email']
+        fields = ['community_name', 'city_or_town', 'country', 'contact_name', 'contact_email']
         widgets = {
             'contact_name': forms.TextInput(attrs={'size': 22}),
             'contact_email': forms.EmailInput(attrs={'size': 24}),
@@ -19,11 +19,11 @@ class CreateCommunityForm(forms.ModelForm):
 class UpdateCommunityForm(forms.ModelForm):
     class Meta:
         model = Community
-        fields = ['contact_name', 'contact_email', 'town', 'country', 'is_publicly_listed', 'image']
+        fields = ['contact_name', 'contact_email', 'city_or_town', 'country', 'is_publicly_listed', 'image']
         widgets = {
             'contact_name': forms.TextInput(attrs={'size': 40}),
             'contact_email': forms.EmailInput(attrs={'size': 40}),
-            'town': forms.TextInput(attrs={'size': 40}),
+            'city_or_town': forms.TextInput(attrs={'size': 40}),
         }
 
 class InviteMemberForm(forms.ModelForm):

@@ -271,7 +271,6 @@ if (parentDiv) {
 function populateTemplate(id) {
     let title = document.getElementById('label-title-name')
     let templateText = document.getElementById('label-template-text')
-
     switch (id) {
         case 'bcr':
             title.value = researchUseName
@@ -828,7 +827,7 @@ function cancelResearcherSelection(elem) {
 
 // Add project people on institution create-project
 // h/t: https://medium.com/all-about-django/adding-forms-dynamically-to-a-django-formset-375f1090c2b0
-let count = 0
+var count = 0
 
 function cloneForm(el) {
     // Total forms hidden input needs to be incremented
