@@ -22,7 +22,7 @@ class UserNotification(models.Model):
         ('Viewer', 'viewer'),
     )
 
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, blank=True)
     message = models.TextField()
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="to_user")
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="from_user")
@@ -40,7 +40,7 @@ class UserNotification(models.Model):
     class Meta:
         verbose_name = 'User Notification'
         verbose_name_plural = 'User Notifications'
-        ordering = ('-created',)
+        ordering = ('viewed', '-created') # will display False first, then True
 
 class ActionNotification(models.Model):
     TYPES = (
@@ -66,7 +66,7 @@ class ActionNotification(models.Model):
     class Meta:
         verbose_name = 'Action Notification'
         verbose_name_plural = 'Action Notifications'
-        ordering = ('-created',)
+        ordering = ('viewed', '-created')
 
 
 class NoticeComment(models.Model):
