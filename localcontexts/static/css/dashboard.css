@@ -2,6 +2,7 @@
 .dashcard {
     margin-top: 5px;
     margin-bottom: 10px;
+    padding: 16px;
     width: 1280px;
     /* height: 193px; */
     background-color: #fff;
@@ -10,15 +11,15 @@
 }
 
 .dashcard-img-container, .dashcard-text-container {
-    margin-top: 16px;
-    margin-bottom: 16px;
-    margin-right: 25px;
+    /* margin-top: 16px; */
+    /* margin-bottom: 16px; */
+    margin-right: 20px;
 }
 
 .dashcard-img-container {
     width: 286px;
     height: 160.88px;
-    margin-left: 16px;
+    /* margin-left: 16px; */
 }
 
 .dashcard img {
@@ -34,6 +35,7 @@
 .dashcard-h3 {
     font-weight: 600;
     font-size: 24px;
+    line-height: 28px;
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -47,9 +49,18 @@
     margin-top: 5px;
     margin-bottom: 0;
     font-weight: 400;
-    font-size: 16px;
     font-style: normal;
     color: #333;
+}
+
+.description-sm {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.description-reg {
+    font-size: 16px;
+    line-height: 24px;
 }
 
 /* Profile Settings page */
