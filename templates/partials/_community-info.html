@@ -113,7 +113,11 @@
                         <h3 class="dashcard-h3 darkteal-text">{{ community.community_name }}</h3>
                     </div>
                     <div>
-                        <p class="black-text dashcard-subheader">Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %}  | Location: {% if community.city_or_town %} {{ community.city_or_town }}, {% endif %} {% if community.state_or_province %} {{ community.state_or_province }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}</p>
+                        <p class="black-text dashcard-subheader">Community | 
+                            {% if member_role == 'admin' %} Administrator {% endif %}
+                            {% if member_role == 'editor' %} Editor {% endif %}
+                            {% if member_role == 'viewer' %} Viewer {% endif %} |
+                            Location: {% if community.city_or_town %} {{ community.city_or_town }}, {% endif %} {% if community.state_or_province %} {{ community.state_or_province }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}</p>
                     </div>
                     <div>
                         <p class="dashcard-description description-sm">{% if community.description %}{{ community.description }} {% else %} No description provided. {% endif %}</p>

@@ -119,7 +119,11 @@
                         <h3 class="dashcard-h3 darkteal-text">{{ institution.institution_name }}</h3>
                     </div>
                     <div>
-                        <p class="black-text dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %}  | Location: {% if institution.city_or_town %} {{ institution.city_or_town }}, {% endif %} {% if institution.state_or_province %} {{ institution.state_or_province }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}</p>
+                        <p class="black-text dashcard-subheader">Institution |  
+                        {% if member_role == 'admin' %} Administrator {% endif %}
+                        {% if member_role == 'editor' %} Editor {% endif %}
+                        {% if member_role == 'viewer' %} Viewer {% endif %} | 
+                        Location: {% if institution.city_or_town %} {{ institution.city_or_town }}, {% endif %} {% if institution.state_or_province %} {{ institution.state_or_province }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}</p>
                     </div>
                     <div>
                         <p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p>
