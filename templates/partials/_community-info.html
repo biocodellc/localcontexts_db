@@ -5,7 +5,7 @@
 <div class="pad-top-5">
 
     <div class="dashcard auto-margin">
-        
+
         <!-- Top Nav -->
         <div class="flex-this w-100 space-between">
             <div class="loc">
@@ -113,7 +113,7 @@
                         <h3 class="dashcard-h3 darkteal-text">{{ community.community_name }}</h3>
                     </div>
                     <div>
-                        <p class="black-text dashcard-subheader">Community | Members: 05 | Location: {{ user.profile.city_or_town }}, {{ user.profile.state_or_province}}, {{ user.profile.country.name }}</p>
+                        <p class="black-text dashcard-subheader">Community | Members: 05 | Location: {% if community.city_or_town %} {{ community.city_or_town }}, {% endif %} {% if community.state_or_province %} {{ community.state_or_province }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}</p>
                     </div>
                     <div>
                         <p class="dashcard-description description-sm">{% if community.description %}{{ community.description }} {% else %} No description provided. {% endif %}</p>

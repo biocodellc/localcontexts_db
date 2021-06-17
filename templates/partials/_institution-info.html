@@ -6,186 +6,149 @@
 
 <div class="pad-top-5">
 
-    <div class="content-card content-card-space flex-this column white-bg">
-    
-        <div class="flex-this column">
-    
-            <div class="flex-this w-100 space-between">
-                <div class="loc">
-                    <a href="{% url 'users' institution.institution_creator.id %}" class="darkteal-text">
-                        {{ institution.institution_creator.get_full_name}}
-                    </a> 
-                    >> {{ institution.institution_name }}
-                </div>
-    
-                <div class="flex-this w-20 space-between">
-                    <div class="dropdown">
-                        <a onclick="toggleNotifications()" class="darkteal-text pointer dropbtn"> 
-                            Notifications 
-                            {% if unread_exist %}
-                                <i class="fa fa-bell orange-text" aria-hidden="true"></i>
-                            {% else %}
-                                <i class="fa fa-bell-o" aria-hidden="true"></i>
-                            {% endif %}
-                        </a>
-                            <div id="notification-v2" class="notification-dropdown-content">
-                            <div class="border-bottom-solid-teal center-text">
-                                <span class="orange-text weight-500">{{ institution.institution_name }} Notifications</span>
-                            </div>
+    <div class="dashcard auto-margin">
+        
+        <!-- Top Nav -->
+        <div class="flex-this w-100 space-between">
+            <div class="loc">
+                <a href="{% url 'users' institution.institution_creator.id %}" class="darkteal-text">
+                    {% if institution.institution_creator.first_name %}
+                        {{ institution.institution_creator.first_name }}
+                    {% else %}
+                        {{ institution.institution_creator }}
+                    {% endif %}
+                </a> 
+                >> {{ institution.institution_name }}
+            </div>
 
-                            {% if notifications %}
-                                {% for n in notifications %}
+            <!-- Notifications -->
+            <div class="flex-this w-20 space-between">
+                <div class="dropdown">
+                    <a onclick="toggleNotifications()" class="darkteal-text pointer dropbtn"> 
+                        Notifications 
+                        {% if unread_exist %}
+                            <i class="fa fa-bell orange-text" aria-hidden="true"></i>
+                        {% else %}
+                            <i class="fa fa-bell-o" aria-hidden="true"></i>
+                        {% endif %}
+                    </a>
+                        <div id="notification-v2" class="notification-dropdown-content">
+                        <div class="border-bottom-solid-teal center-text">
+                            <span class="orange-text weight-500">{{ institution.institution_name }} Notifications</span>
+                        </div>
 
-                                    <div class="border-bottom-solid-teal">
-                                        {% if n.notification_type == 'Labels' %}
-                                        <!-- TODO: Figure out what this URL should link to -->
-                                            {% if n.reference_id %}
+                        {% if notifications %}
+                            {% for n in notifications %}
+
+                                <div class="border-bottom-solid-teal">
+                                    {% if n.notification_type == 'Labels' %}
+                                    <!-- TODO: Figure out what this URL should link to -->
+                                        {% if n.reference_id %}
+                                            <a href="{% anchor_project 'institution-projects' n.reference_id institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
+                                        {% else %}
+                                            <a href="{% url 'institution-projects' institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if n.notification_type == 'Activity' %}
+                                        {% if n.reference_id %}
+                                            <a href="{% anchor 'institution-activity' n.reference_id institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
+                                        {% else %}
+                                            <a href="{% url 'institution-activity' institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if n.notification_type == 'Projects' %}
+                                        {% if n.reference_id %}
                                                 <a href="{% anchor_project 'institution-projects' n.reference_id institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
                                             {% else %}
                                                 <a href="{% url 'institution-projects' institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
-                                            {% endif %}
                                         {% endif %}
-                                        {% if n.notification_type == 'Activity' %}
-                                            {% if n.reference_id %}
-                                                <a href="{% anchor 'institution-activity' n.reference_id institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
-                                            {% else %}
-                                                <a href="{% url 'institution-activity' institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
-                                            {% endif %}
-                                        {% endif %}
-                                        {% if n.notification_type == 'Projects' %}
-                                            {% if n.reference_id %}
-                                                    <a href="{% anchor_project 'institution-projects' n.reference_id institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
-                                                {% else %}
-                                                    <a href="{% url 'institution-projects' institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
-                                            {% endif %}
-                                        {% endif %}
-                                        {% if n.notification_type == 'Connections' %}
-                                            <a href="#" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
-                                        {% endif %}
-                                            <div class="flex-this space-between margin-top-1">
-                                                <div>
-                                                    <span id="notification-label-tag-{{ n.id }}"
-                                                        {% if n.viewed %} 
-                                                            class="notification-type-tag grey white-text font-size-12"
-                                                        {% else %}
-                                                            class="notification-type-tag orange-bg white-text font-size-12"
-                                                        {% endif %}
-                                                    >
-                                                    {% if n.notification_type == 'Notices' %}
-                                                        Notices
+                                    {% endif %}
+                                    {% if n.notification_type == 'Connections' %}
+                                        <a href="#" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
+                                    {% endif %}
+                                        <div class="flex-this space-between margin-top-1">
+                                            <div>
+                                                <span id="notification-label-tag-{{ n.id }}"
+                                                    {% if n.viewed %} 
+                                                        class="notification-type-tag grey white-text font-size-12"
+                                                    {% else %}
+                                                        class="notification-type-tag orange-bg white-text font-size-12"
                                                     {% endif %}
-                                                    {% if n.notification_type == 'Labels' %}
-                                                        Labels
-                                                    {% endif %}
-                                                    {% if n.notification_type == 'Activity' %}
-                                                        Activity
-                                                    {% endif %}
-                                                    {% if n.notification_type == 'Projects' %}
-                                                        Projects
-                                                    {% endif %}
-                                                    {% if n.notification_type == 'Connections' %}
-                                                        Connections
-                                                    {% endif %}
-                                                </span></div>
-                                                <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
-                                            </div>
-            
-                                            <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
-                                        </a>
-                                    </div>
+                                                >
+                                                {% if n.notification_type == 'Notices' %} Notices {% endif %}
+                                                {% if n.notification_type == 'Labels' %} Labels {% endif %}
+                                                {% if n.notification_type == 'Activity' %} Activity {% endif %}
+                                                {% if n.notification_type == 'Projects' %} Projects {% endif %}
+                                                {% if n.notification_type == 'Connections' %} Connections {% endif %}
+                                            </span></div>
+                                            <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
+                                        </div>
+        
+                                        <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
+                                    </a>
+                                </div>
 
-                                {% endfor %}
-                            {% endif %}
+                            {% endfor %}
+                        {% endif %}
 
-                        </div>
                     </div>
-
-                    {% if member_role == 'viewer' or member_role == 'editor' %}
-                    {% else %}
-
-                        <div>
-                            <a href="{% url 'update-institution' institution.id%}" class="darkteal-text"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
-                        </div>
-                    {% endif %}
                 </div>
-                
+
+                {% if member_role == 'viewer' or member_role == 'editor' %}
+                {% else %}
+
+                    <div>
+                        <a href="{% url 'update-institution' institution.id%}" class="darkteal-text"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
+                    </div>
+                {% endif %}
             </div>
-    
-            <div class="flex-this stats-info-container">
-    
-                <div class="w-30 stats-img-container">
+            
+        </div>
+            <!-- Image, headers, description -->
+        <div class="flex-this">
+
+                <div class="dashcard-img-container">
                     {% if institution.image %}
                         <img src="{{ institution.image.url }}" alt="{{ institution.institution_name }} image">
                     {% else %}
-                        <img src="{% static 'images/placeholders/institution-place.jpg' %}" alt="institution image">
+                        <img src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">
                     {% endif %}
                 </div>
-    
-                <div class="flex-this column w-40">
-                    <h2 class="orange-text community-title">{{ institution.institution_name }}</h2>
-                    <p>
-                        Role:
-                        <span>
-                            {% if member_role == 'admin' %}
-                                Admin
-                            {% endif %}
-                            {% if member_role == 'editor' %}
-                                Editor
-                            {% endif %}
-                            {% if member_role == 'viewer' %}
-                                Viewer
-                            {% endif %}
-                        </span> 
-                        <br>
-                        Members:
-                        <span>
-                            {% if institution.get_member_count < 10 %} 
-                                0{{ institution.get_member_count }} 
-                            {% else %}
-                            {{ institution.get_member_count }}
-                            {% endif %}
-                        </span> 
-                        <br>
-                        Location:
-                        <span>
-                            {% if institution.city_or_town %} {{ institution.city_or_town }}, {% else %} {{ institution.institution_creator.profile.city_or_town }}, {% endif %}
-                            {% if institution.country.name %} {{ institution.country.name }} {% else %} {{ institution.institution_creator.profile.country.name }} {% endif %}
-                        </span> <br>
-                    </p>
+                <div class="flex-this column dashcard-text-container">
+                    <div>
+                        <h3 class="dashcard-h3 darkteal-text">{{ institution.institution_name }}</h3>
+                    </div>
+                    <div>
+                        <p class="black-text dashcard-subheader">Institution | Members: 05 | Location: {% if institution.city_or_town %} {{ institution.city_or_town }}, {% endif %} {% if institution.state_or_province %} {{ institution.state_or_province }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}</p>
+                    </div>
+                    <div>
+                        <p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p>
+                    </div>
                 </div>
-    
-                <div class="flex-this white-text w-30">
-                    <div class="orange-bg stats-card w-30">
+
+                <!-- Orange cards -->
+                <div class="flex-this white-text">
+                    <div class="orange-bg stats-card">
                         <h1>
-                            {% if total_notices < 10 %}
-                                0{{ total_notices }}
-                            {% else %}
-                                {{ total_notices }}
-                            {% endif %}
+                            {% if total_notices < 10 %} 0{{ total_notices }} {% else %} {{ total_notices }} {% endif %}
                         </h1>
                         <p>Notices</p>
                     </div>
     
-                    <div class="orange-bg stats-card w-30">
+                    <div class="orange-bg stats-card">
                         <h1>
-                            {% if total_projects < 10 %}
-                                0{{ total_projects }}
-                            {% else %}
-                                {{ total_projects }}
-                            {% endif %}
+                            {% if total_projects < 10 %} 0{{ total_projects }} {% else %} {{ total_projects }} {% endif %}
                         </h1>
                         <p>Projects</p>
                     </div>
     
-                    <!-- <div class="orange-bg stats-card w-30">
-                        <h1>00</h1>
-                        <p>Relationships</p>
-                    </div> -->
+                    <div class="orange-bg stats-card">
+                        <h1>02</h1>
+                        <p>Connections</p>
+                    </div>
                 </div>
-    
-            </div>
-    
+
         </div>
-    
+
     </div>
 </div>
