@@ -52,4 +52,3 @@ def unread_notifications(community):
 def community_contributing_projects(community):
     contributors = ProjectContributors.objects.filter(communities=community)
     return contributors
-    

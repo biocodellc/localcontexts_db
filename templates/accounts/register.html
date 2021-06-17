@@ -21,7 +21,6 @@
     <div class="pad-top-1-5">
         <label for="username">Username</label><br>
         {{form.username}}
-        <small>{{form.username.help_text}}</small>
     </div>
 
     <div class="pad-top-1-5">
@@ -50,6 +49,10 @@
         </div>
 
     </div>
+
+    {% if form.errors %}
+            <small style="color:red;"> {{ form.errors }}</small>
+    {% endif %}
 
 
 
