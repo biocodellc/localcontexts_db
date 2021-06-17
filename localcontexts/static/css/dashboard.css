@@ -3,6 +3,7 @@
     width: 1280px;
     height: 114px;
     margin: auto;
+    padding: 20px;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
     border-radius: 10px;
     align-items: center;
@@ -89,4 +90,38 @@
 
 .edit-profile-section input {
     width: 50%;
+}
+
+/* USER NOTIFICATIONS */
+
+.noti-card a {
+    color: black;
+}
+
+.noti-container {
+    width: 100%;
+    padding-top: 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #A09D9D;
+}
+
+.noti-container:hover {
+    background-color: #C3E3F0;
+}
+
+.noti-container span {
+    margin-left: 5px;
+}
+
+.noti-container p {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    width: 950px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.tag-container {
+    width: 120px;
 }

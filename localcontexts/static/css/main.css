@@ -23,19 +23,6 @@ a {
     text-decoration: none;
 }
 
-section {
-    padding: 20px;
-}
-
-section h1 {
-    font-size: 36px;
-    font-weight: 400;
-}
-
-h2 {
-    font-weight: 500;
-}
-
 /* FORM INPUTS */
 
 label {
@@ -808,32 +795,6 @@ input:focus {
 .add-member-modal-content {
     padding-left: 40px;
     padding-right: 40px;
-}
-
-/* NOTIFICATIONS */
-
-.noti-card a {
-    color: black;
-}
-
-.noti-container {
-    width: 100%;
-}
-
-.noti-container:hover {
-    background: rgba(56, 116, 171, 0.1);
-}
-
-.noti-container div:first-child {
-    width: 3%;
-}
-
-.noti-container div:nth-child(2) {
-    width: 10%;
-}
-
-.noti-container div:last-child {
-    width: 87%;
 }
 
 /* COMMUNITY DASHBOARD: LABELS PAGE */
