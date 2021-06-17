@@ -482,6 +482,8 @@ input:focus {
 .content-card-space {
     padding: 1%;
     margin-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .content-card-v2 {
