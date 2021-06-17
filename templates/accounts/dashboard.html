@@ -29,7 +29,6 @@
                             </a>
                         {% endif %}
 
-
                     {% endfor %}
             </div>
     {% endif %}
@@ -43,9 +42,9 @@
 
                         <div class="dashcard-img-container">
                             {% if researcher.image %}
-                                <img src="{{ researcher.image.url }}" alt="{{ researcher.researcher_name }} image">
+                                <img class="profile-img" src="{{ researcher.image.url }}" alt="{{ researcher.researcher_name }} image">
                             {% else %}
-                                <img src="{% static 'images/placeholders/researcher-place.jpg' %}" alt="{{ researcher.researcher_name }} image">
+                                <img class="profile-img" src="{% static 'images/placeholders/researcher-place.jpg' %}" alt="{{ researcher.researcher_name }} image">
                             {% endif %}
                         </div>
                         <div class="flex-this column dashcard-text-container">
@@ -73,9 +72,9 @@
 
                             <div class="dashcard-img-container">
                                 {% if community.image %}
-                                    <img src="{{ community.image.url }}" alt="{{ community.community_name }} image">
+                                    <img class="profile-img" src="{{ community.image.url }}" alt="{{ community.community_name }} image">
                                 {% else %}
-                                    <img src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image">
+                                    <img class="profile-img" src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image">
                                 {% endif %}
                             </div>
                             <div class="flex-this column dashcard-text-container">
@@ -104,9 +103,9 @@
 
                         <div class="dashcard-img-container">
                             {% if institution.image %}
-                                <img src="{{ institution.image.url }}" alt="{{ institution.institution_name }} image">
+                                <img class="profile-img" src="{{ institution.image.url }}" alt="{{ institution.institution_name }} image">
                             {% else %}
-                                <img src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">
+                                <img class="profile-img" src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">
                             {% endif %}
                         </div>
                         <div class="flex-this column dashcard-text-container">

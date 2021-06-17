@@ -109,9 +109,9 @@
 
                 <div class="dashcard-img-container">
                     {% if institution.image %}
-                        <img src="{{ institution.image.url }}" alt="{{ institution.institution_name }} image">
+                        <img class="profile-img" src="{{ institution.image.url }}" alt="{{ institution.institution_name }} image">
                     {% else %}
-                        <img src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">
+                        <img class="profile-img" src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">
                     {% endif %}
                 </div>
                 <div class="flex-this column dashcard-text-container">
