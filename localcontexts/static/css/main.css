@@ -606,6 +606,8 @@ input:focus {
 .loc {
     font-size: 14px;
     font-weight: 500;
+    color: #A09D9D;
+    line-height: 20px;
 }
 
 .community-title {
@@ -632,17 +634,46 @@ input:focus {
     object-fit: cover;
 }
 
-/* Orange cards on community profiles */
+/* Count cards on dashcards on profiles */
+.stats-card-container {
+    width: 250px; 
+    margin: 10px;
+}
+
 .stats-card {
+    width: 235px;
+    height: 35px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    align-items: center;
+    color: white;
+    padding: 16px 8px;
     border-radius: 5px;
-    max-height: 150px;
-    min-height: 150px;
-    min-width: 120px;
-    max-width: 120px;
-    margin: auto;
-    text-align: center;
-    margin-left: 3px;
-    margin-right: 3px;
+}
+
+.stats-card:first-child {
+  background-color: #007385; 
+}
+
+.stats-card:nth-child(2) {
+    background-color: #5AA497; 
+}
+
+.stats-card:nth-child(3) {
+    background-color: #EF6C00; 
+}
+
+.stats-card p {
+    font-size: 24px;
+    line-height: 28px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.stats-card span {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 600;
 }
 
 /* SUBNAV */

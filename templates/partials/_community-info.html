@@ -120,33 +120,48 @@
                     </div>
                 </div>
 
-                <!-- Orange cards -->
-                <div class="flex-this white-text">
-                    <div class="orange-bg stats-card">
-                        <h1>
-                            {% get_label_count community.id as label_count %}
-                            {% if label_count < 10 %}
-                                0{{ label_count }}
-                            {% else %}
-                                {{ label_count }}
-                            {% endif %}
-                        </h1>
-                        <p>Labels</p>
+                <!-- Count cards -->
+                <div class="flex-this column stats-card-container">
+
+                    <div class="stats-card flex-this space-between">
+                        <div>
+                            <p>
+                                {% get_label_count community.id as label_count %}
+                                {% if label_count < 10 %}
+                                    0{{ label_count }}
+                                {% else %}
+                                    {{ label_count }}
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div>
+                            <span>Labels</span>
+                        </div>
                     </div>
     
-                    <div class="orange-bg stats-card">
-                        <h1>{% if community.get_member_count < 10 %}
-                                0{{ community.get_member_count }}
-                            {% else %}
-                                {{ community.get_member_count }}
-                            {% endif %}
-                        </h1>
-                        <p>Members</p>
+                    <div class="stats-card flex-this space-between">
+                        <div>
+                            <p>
+                                {% if community.get_member_count < 10 %}
+                                    0{{ community.get_member_count }}
+                                {% else %}
+                                    {{ community.get_member_count }}
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <div>
+                            <span>Members</span>
+                        </div>
                     </div>
     
-                    <div class="orange-bg stats-card">
-                        <h1>02</h1>
-                        <p>Connections</p>
+                    <div class="stats-card flex-this space-between">
+                        <div>
+                            <p>02</p>
+                        </div>
+                        <div>
+                            <span>Connections</span>
+                        </div>
                     </div>
                 </div>
 

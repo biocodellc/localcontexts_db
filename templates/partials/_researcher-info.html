@@ -150,25 +150,39 @@
 
                 </div>
 
-                <!-- Orange cards -->
-                <div class="flex-this white-text">
-                    <div class="orange-bg stats-card">
-                        <h1>
-                            {% if total_notices < 10 %} 0{{ total_notices }} {% else %} {{ total_notices }} {% endif %}
-                        </h1>
-                        <p>Notices</p>
+                <!-- Count cards -->
+                <div class="flex-this column stats-card-container">
+
+                    <div class="stats-card flex-this space-between">
+                        <div>
+                            <p>
+                                {% if total_notices < 10 %} 0{{ total_notices }} {% else %} {{ total_notices }} {% endif %}
+                            </p>
+                        </div>
+                        <div>
+                            <span>Notices</span>
+                        </div>
                     </div>
     
-                    <div class="orange-bg stats-card">
-                        <h1>
-                            {% if total_projects < 10 %} 0{{ total_projects }} {% else %} {{ total_projects }} {% endif %}
-                        </h1>
-                        <p>Projects</p>
+                    <div class="stats-card flex-this space-between">
+                        <div>
+                            <p>
+                                {% if total_projects < 10 %} 0{{ total_projects }} {% else %} {{ total_projects }} {% endif %}
+                            </p>
+                        </div>
+
+                        <div>
+                            <span>Projects</span>
+                        </div>
                     </div>
     
-                    <div class="orange-bg stats-card">
-                        <h1>02</h1>
-                        <p>Connections</p>
+                    <div class="stats-card flex-this space-between">
+                        <div>
+                            <p>02</p>
+                        </div>
+                        <div>
+                            <span>Connections</span>
+                        </div>
                     </div>
                 </div>
 
