@@ -1,15 +1,10 @@
 {% load static %}
 
-<section class="white-bg content-card content-card-space">
-    <div class="flex-this space-between">
-
+<section class="white-bg dash-driver flex-this space-between">
         <div>
-            <h2 class="orange-text weight-500">Welcome, {{ user.first_name }} </h2>
+            <h2 class="orange-text">Welcome, {{ user.first_name }} </h2>
         </div>
         <div>
-            <a href="{% url 'update-profile' %}" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
+            <a href="{% url 'update-profile' %}" class="darkteal-text"><span>My Profile</span> <i class="fa fa-user" aria-hidden="true"></i></a>
         </div>
-
-    </div>
-
 </section>

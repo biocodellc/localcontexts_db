@@ -1,7 +1,31 @@
-/* DASH CARD */
+/* Welcome card */
+.dash-driver {
+    width: 1280px;
+    height: 114px;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    align-items: center;
+}
+
+.dash-driver h2 {
+    font-size: 34px;
+    line-height: 40px;
+    font-weight: 700;
+}
+
+.dash-driver span {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+/* DASH CARDS */
 .dashcard {
     margin-top: 5px;
     margin-bottom: 10px;
+    padding: 16px;
     width: 1280px;
     /* height: 193px; */
     background-color: #fff;
@@ -10,18 +34,15 @@
 }
 
 .dashcard-img-container, .dashcard-text-container {
-    margin-top: 16px;
-    margin-bottom: 16px;
-    margin-right: 25px;
+    margin-right: 20px;
 }
 
 .dashcard-img-container {
     width: 286px;
     height: 160.88px;
-    margin-left: 16px;
 }
 
-.dashcard img {
+.profile-img {
     width: 286px;
     height: 160.88px;
     object-fit: cover;
@@ -34,6 +55,7 @@
 .dashcard-h3 {
     font-weight: 600;
     font-size: 24px;
+    line-height: 28px;
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -47,9 +69,18 @@
     margin-top: 5px;
     margin-bottom: 0;
     font-weight: 400;
-    font-size: 16px;
     font-style: normal;
     color: #333;
+}
+
+.description-sm {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.description-reg {
+    font-size: 16px;
+    line-height: 24px;
 }
 
 /* Profile Settings page */
@@ -59,4 +90,38 @@
 
 .edit-profile-section input {
     width: 50%;
+}
+
+/* USER NOTIFICATIONS */
+
+.noti-card a {
+    color: black;
+}
+
+.noti-container {
+    width: 100%;
+    padding-top: 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #A09D9D;
+}
+
+.noti-container:hover {
+    background-color: #C3E3F0;
+}
+
+.noti-container span {
+    margin-left: 5px;
+}
+
+.noti-container p {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    width: 950px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.tag-container {
+    width: 120px;
 }

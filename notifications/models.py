@@ -22,7 +22,7 @@ class UserNotification(models.Model):
         ('Viewer', 'viewer'),
     )
 
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, blank=True)
     message = models.TextField()
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="to_user")
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="from_user")
@@ -32,7 +32,7 @@ class UserNotification(models.Model):
     role = models.CharField(max_length=8, choices=ROLES, null=True, blank=True)
     reference_id = models.CharField(max_length=20, null=True, blank=True)
     viewed = models.BooleanField(default=False)
-    created = models.DateField(auto_now_add=True, null=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return f"{self.notification_type}-{self.title}"
@@ -40,7 +40,7 @@ class UserNotification(models.Model):
     class Meta:
         verbose_name = 'User Notification'
         verbose_name_plural = 'User Notifications'
-        ordering = ('-created',)
+        ordering = ('viewed', '-created') # will display False first, then True
 
 class ActionNotification(models.Model):
     TYPES = (
@@ -58,7 +58,7 @@ class ActionNotification(models.Model):
     researcher = models.ForeignKey(Researcher, on_delete=models.CASCADE, null=True, blank=True)
     reference_id = models.CharField(max_length=50, null=True, blank=True)
     viewed = models.BooleanField(default=False)
-    created = models.DateField(auto_now_add=True, null=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return f"{self.notification_type} - {self.title}"
@@ -66,7 +66,7 @@ class ActionNotification(models.Model):
     class Meta:
         verbose_name = 'Action Notification'
         verbose_name_plural = 'Action Notifications'
-        ordering = ('-created',)
+        ordering = ('viewed', '-created')
 
 
 class NoticeComment(models.Model):
@@ -75,7 +75,7 @@ class NoticeComment(models.Model):
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="comment_community", blank=True)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="comment_sender", blank=True)
     message = models.TextField(max_length=1500, null=True, blank=True) #250 word limit on message
-    created = models.DateField(auto_now_add=True, null=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return 'Comment {} by {}'.format(self.message, self.community)

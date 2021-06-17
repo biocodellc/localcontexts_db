@@ -23,19 +23,6 @@ a {
     text-decoration: none;
 }
 
-section {
-    padding: 20px;
-}
-
-section h1 {
-    font-size: 36px;
-    font-weight: 400;
-}
-
-h2 {
-    font-weight: 500;
-}
-
 /* FORM INPUTS */
 
 label {
@@ -481,7 +468,9 @@ input:focus {
 
 .content-card-space {
     padding: 1%;
-    margin-top: 1.5%;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .content-card-v2 {
@@ -615,7 +604,10 @@ input:focus {
 }
 
 .loc {
-    padding-left: 1%;
+    font-size: 14px;
+    font-weight: 500;
+    color: #A09D9D;
+    line-height: 20px;
 }
 
 .community-title {
@@ -642,20 +634,52 @@ input:focus {
     object-fit: cover;
 }
 
-/* Orange cards on community profiles */
+/* Count cards on dashcards on profiles */
+.stats-card-container {
+    width: 250px; 
+    margin: 10px;
+}
+
 .stats-card {
+    width: 235px;
+    height: 35px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    align-items: center;
+    color: white;
+    padding: 16px 8px;
     border-radius: 5px;
-    max-height: 150px;
-    min-height: 150px;
-    min-width: 120px;
-    max-width: 120px;
-    margin: auto;
-    text-align: center;
+}
+
+.stats-card:first-child {
+  background-color: #007385; 
+}
+
+.stats-card:nth-child(2) {
+    background-color: #5AA497; 
+}
+
+.stats-card:nth-child(3) {
+    background-color: #EF6C00; 
+}
+
+.stats-card p {
+    font-size: 24px;
+    line-height: 28px;
+    margin: 0;
+    font-weight: 500;
+}
+
+.stats-card span {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 600;
 }
 
 /* SUBNAV */
 .comm-nav {
-    margin-top: 1.5%;
+    margin-top: 16px;
+    margin-bottom: 16px;
     max-height: 60px;
     min-height: 60px;
 }
@@ -802,32 +826,6 @@ input:focus {
 .add-member-modal-content {
     padding-left: 40px;
     padding-right: 40px;
-}
-
-/* NOTIFICATIONS */
-
-.noti-card a {
-    color: black;
-}
-
-.noti-container {
-    width: 100%;
-}
-
-.noti-container:hover {
-    background: rgba(56, 116, 171, 0.1);
-}
-
-.noti-container div:first-child {
-    width: 3%;
-}
-
-.noti-container div:nth-child(2) {
-    width: 10%;
-}
-
-.noti-container div:last-child {
-    width: 87%;
 }
 
 /* COMMUNITY DASHBOARD: LABELS PAGE */
