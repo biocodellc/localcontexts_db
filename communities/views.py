@@ -28,7 +28,9 @@ from .utils import *
 # Connect
 @login_required(login_url='login')
 def connect_community(request):
-    return render(request, 'communities/connect-community.html')
+    communities = Community.objects.all()
+    context = { 'communities': communities,}
+    return render(request, 'communities/connect-community.html', context)
 
 # Create Community
 @login_required(login_url='login')

@@ -1,29 +1,37 @@
 {% extends 'reg-base.html' %} {% block title %} | Connect {% endblock %}{% load static %} {% block card %}
 
-<div class="flex-this column centered-content">
-    <div>
-        <img src="{% static 'images/logos/welcome-logo.png' %}" width="209px" alt="Local Contexts logo">
+<div class="flex-this column">
+
+    <div class="form-heading flex-this column w-90">
+        <h2 class="darkteal-text margin-bottom-2">Community Profile</h2>
+        <p>Please check if your community is already registered. If your community is not in our register, you can create a new community profile.</p>    
     </div>
 
-    <h2 class="darkteal-text">
-        Hello {% if request.user.first_name %} 
-                {{ request.user.first_name }},
-              {% else %}
-                {{ request.user.username }},
-              {% endif %} <br> 
-        Welcome to Local Contexts</h2>
-    <p>
-        Before we start would you like to connect with an existing Community or create your own?
-    </p>
+    <form method="GET" action="">
+        {% csrf_token %}
+        <div>
+            <label for="community-search">Search our community register</label><br>
+            {% if communities %}
+            <input list="communities" name="communities" class="w-100">
+                <datalist id="communities">
+                    {% for community in communities %}
+                        <option value="{{ community.community_name }}">
+                    {% endfor %}
+                </datalist>
+            {% endif %}
+        </div>
 
-    <a class="white-text action-btn connect-btn auto-margin" href="{% url 'community-registry' %}">
-        Search the register
-    </a>
+        <div class="flex-this space-between margin-top-1">
+            <div>
+                <a class="darkteal-text" href="{% url 'create-community' %}">Or create a community profile</a>
+            </div>
+            <div>
+                <button class="action-btn">Next <i class="fa fa-long-arrow-right"></i></button>
+            </div>
+        </div>
 
-    OR
 
-    <a class="white-text action-btn connect-btn auto-margin" href="{% url 'create-community' %}">
-            Create a Community profile
-    </a>
+    </form>
+
 </div>
 {% endblock %}
