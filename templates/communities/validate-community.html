@@ -1,0 +1,39 @@
+{% extends 'reg-base.html' %} {% block title %} | Create Community {% endblock %}{% load static %} {% block card %}
+    
+<div class="flex-this column w-90">
+    <div class="margin-bottom-1">
+        <h2 class="darkteal-text">Validate Community</h2>
+        <p>
+            Before your community starts customizing Labels, we need to be able to confirm your community. You can either provide us with an email of another member of the community or upload a letter outlining your desire to participate in the platform.
+        </p>    
+    </div>
+    
+    <form action="" method="POST" class="flex-this column w-100">
+        {% csrf_token %}
+
+        <div class="w-50">
+            <div>
+                <label for="contact_name">Community Contact Name</label>
+                {{ form.contact_name }}
+            </div>
+    
+            <div>
+                <label for="contact_email">Community Contact Email</label>
+                {{ form.contact_email }}
+            </div>
+        </div>
+
+        {% if form.errors %}
+            <small class="red-text">{{form.errors}}</small>
+        {% endif %}
+
+        {% include 'partials/_alerts.html' %}
+
+        <div class="text-align-right">
+            <button class="action-btn">Get Started <i class="fa fa-long-arrow-right"></i></button>
+        </div>
+    </form>
+
+</div>
+
+{% endblock %}

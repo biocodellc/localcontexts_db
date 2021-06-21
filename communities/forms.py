@@ -5,16 +5,28 @@ from django.utils.translation import ugettext_lazy as _
 class CreateCommunityForm(forms.ModelForm):
     class Meta:
         model = Community
-        fields = ['community_name', 'city_or_town', 'country', 'contact_name', 'contact_email']
+        fields = ['community_name', 'city_or_town', 'state_or_province', 'country', 'description']
         widgets = {
-            'contact_name': forms.TextInput(attrs={'size': 22}),
-            'contact_email': forms.EmailInput(attrs={'size': 24}),
+            'community_name': forms.TextInput(attrs={'class': 'w-100'}),
+            'city_or_town': forms.TextInput(attrs={'class': 'w-100'}),
+            'state_or_province': forms.TextInput(attrs={'class': 'w-100'}),
+            'description': forms.TextInput(attrs={'class': 'w-100'}),
         }
         error_messages = {
             'community_name': {
                 'unique': _("A community by that name already exists."),
             },
         }
+
+class ValidateCommunityForm(forms.ModelForm):
+    class Meta:
+        model = Community
+        fields = ['contact_name', 'contact_email']
+        widgets = {
+            'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
+            'contact_email': forms.EmailInput(attrs={'class': 'w-100'}),
+        }
+
 
 class UpdateCommunityForm(forms.ModelForm):
     class Meta:
