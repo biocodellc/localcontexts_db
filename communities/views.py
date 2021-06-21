@@ -29,7 +29,20 @@ from .utils import *
 @login_required(login_url='login')
 def connect_community(request):
     communities = Community.objects.all()
-    context = { 'communities': communities,}
+    form = JoinRequestForm(request.POST or None)
+
+    if request.method == 'POST':
+        community_id = request.POST.get('community_name')
+        community = Community.objects.get(community_name=community_id)
+
+        data = form.save(commit=False)
+        data.user_from = request.user
+        data.community = community
+        data.user_to = community.community_creator
+        data.save()
+        # Create a notification here
+        return redirect('dashboard')
+    context = { 'communities': communities, 'form': form,}
     return render(request, 'communities/connect-community.html', context)
 
 # Create Community

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Community, InviteMember
+from .models import Community, InviteMember, JoinRequest
 from django.utils.translation import ugettext_lazy as _
 
 class CreateCommunityForm(forms.ModelForm):
@@ -37,3 +37,11 @@ class InviteMemberForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(InviteMemberForm, self).__init__(*args, **kwargs)
         self.fields['receiver'].label_from_instance = lambda obj: "%s" % obj.get_full_name()
+
+class JoinRequestForm(forms.ModelForm):
+    class Meta:
+        model = JoinRequest
+        fields = ['role', 'message']
+        widgets = {
+            'message': forms.Textarea(attrs={'rows': 5, 'class':'w-100'}),
+        }

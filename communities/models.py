@@ -80,10 +80,19 @@ class JoinRequest(models.Model):
         ('sent', 'sent'),
         ('accepted', 'accepted'),
     )
+
+    ROLES = (
+        ('admin', 'admin'),
+        ('editor', 'editor'),
+        ('viewer', 'viewer'),
+    )
+
     user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_sender')
     user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_receiver')
+    role = models.CharField(max_length=8, choices=ROLES, null=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='join_request_community', null=True, blank=True)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='join_request_institution', null=True, blank=True)
+    message = models.TextField(blank=True)
     status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent')
     date_sent = models.DateTimeField(auto_now=True)
 

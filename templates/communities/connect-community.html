@@ -4,34 +4,70 @@
 
     <div class="form-heading flex-this column w-90">
         <h2 class="darkteal-text margin-bottom-2">Community Profile</h2>
-        <p>Please check if your community is already registered. If your community is not in our register, you can create a new community profile.</p>    
+        <p>Please first check if your community is already registered. If your community is not in our register, you can create a new community profile.</p>    
     </div>
 
-    <form method="GET" action="">
-        {% csrf_token %}
-        <div>
-            <label for="community-search">Search our community register</label><br>
-            {% if communities %}
-            <input list="communities" name="communities" class="w-100">
-                <datalist id="communities">
-                    {% for community in communities %}
-                        <option value="{{ community.community_name }}">
-                    {% endfor %}
-                </datalist>
-            {% endif %}
-        </div>
+     <div>
+         <label for="community-search">Search our community register</label><br>
+         {% if communities %}
+            <input id="selectedCommunityInputList" list="communities" name="communities" class="w-100">
+            <datalist id="communities">
+                {% for community in communities %}
+                    <option value="{{ community.community_name }}">
+                {% endfor %}
+            </datalist>
+         {% endif %}
+     </div>
 
-        <div class="flex-this space-between margin-top-1">
+     <div class="flex-this space-between margin-top-1">
+         <div><a class="darkteal-text" href="{% url 'create-community' %}">Or create a community profile</a></div>
+         <div><button id="openJoinRequestModalBtn" class="action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
+     </div>
+
+</div>
+
+<div id="joinRequestModal" class="modal" style="display: none;">
+
+    <div class="noror-modal-box flex-this column w-100">
+  
+        <div id="close-modal" class="close-modal-btn w-100"> <span class="darkteal-text close-modal">&times;</span></div>
+        <div class="add-member-modal-content w-100">
+
             <div>
-                <a class="darkteal-text" href="{% url 'create-community' %}">Or create a community profile</a>
+                <h2 id="commName" class="darkteal-text"></h2>  
+                <p>Send a request to join community. Include your desired role and an optional message.</p>  
             </div>
-            <div>
-                <button class="action-btn">Next <i class="fa fa-long-arrow-right"></i></button>
-            </div>
+
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input id="hidden-community-input" type="hidden" value="" name="community_name">
+
+                <div class="flex-this column w-100">
+
+                    <!-- <label class="pad-top-1-5" for="community">Community Name</label> -->
+                    
+                        <div class="w-50 pad-top-1-5 margin-right-1">
+                            <label class="pad-top-1-5" for="role">Desired Role</label><br>
+                            {{ form.role }}
+                        </div>
+                        
+                        <div class="pad-top-1-5">
+                            <label class="pad-top-1-5" for="message">Optional Message</label><br>
+                            {{ form.message }}
+                        </div>
+
+                        {% if form.errors %}
+                            <small class="red-text">{{ form.errors }}</small>
+                        {% endif %}
+
+                    {% include 'partials/_alerts.html' %}
+        
+                </div>
+                <button class="action-btn">Send request and continue</button>
+
+            </form>
+
         </div>
-
-
-    </form>
-
+    </div>
 </div>
 {% endblock %}
