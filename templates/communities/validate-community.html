@@ -8,7 +8,7 @@
         </p>    
     </div>
     
-    <form action="" method="POST" class="flex-this column w-100">
+    <form action="" method="POST" enctype="multipart/form-data" class="flex-this column w-100">
         {% csrf_token %}
 
         <div class="w-50">
@@ -20,6 +20,11 @@
             <div>
                 <label for="contact_email">Community Contact Email</label>
                 {{ form.contact_email }}
+            </div>
+
+            <div>
+                <label for="support_document">Support Document</label>
+                {{ form.support_document }}
             </div>
         </div>
 

@@ -54,23 +54,15 @@ def create_community(request):
             obj = form.save(commit=False)
             obj.community_creator = request.user
             obj.save()
-
-            # template = render_to_string('snippets/community-application.html', { 'obj' : obj })
-            # send_mail(
-            #     'New Community Application', 
-            #     template, 
-            #     settings.EMAIL_HOST_USER, 
-            #     [settings.SITE_ADMIN_EMAIL], 
-            #     fail_silently=False)
-
-            return redirect('validate-community')
+            return redirect('validate-community', obj.id)
     return render(request, 'communities/create-community.html', {'form': form})
 
 # Validate Community
 @login_required(login_url='login')
-def validate_community(request):
-    # how do we pass previous page's community?
-    form = ValidateCommunityForm(request.POST or None)
+def validate_community(request, community_id):
+    community = Community.objects.get(id=community_id)
+
+    form = ValidateCommunityForm(request.POST or None, request.FILES, instance=community)
     if request.method == "POST":
         if form.is_valid():
             obj = form.save(commit=False)

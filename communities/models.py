@@ -10,6 +10,7 @@ class Community(models.Model):
     contact_name = models.CharField(max_length=80, null=True)
     contact_email = models.EmailField(max_length=254, null=True)
     image = models.ImageField(upload_to='users/community-images', blank=True, null=True)
+    support_document = models.FileField(upload_to='communities/support-files', blank=True, null=True)
     description = models.TextField(null=True, blank=True)
     city_or_town = models.CharField(max_length=80, blank=True, null=True)
     state_or_province = models.CharField(verbose_name='state or province', max_length=100, blank=True, null=True)
