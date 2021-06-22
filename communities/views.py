@@ -68,6 +68,9 @@ def validate_community(request, community_id):
             obj = form.save(commit=False)
             obj.save()
 
+            # TODO: Send attachment in email
+            # https://stackoverflow.com/questions/33218629/attaching-pdfs-to-emails-in-django
+            # https://docs.djangoproject.com/en/dev/topics/email/#the-emailmessage-class
             template = render_to_string('snippets/community-application.html', { 'obj' : obj })
             send_mail(
                 'New Community Application', 

@@ -7,8 +7,8 @@ from institutions.models import Institution
 class Community(models.Model):
     community_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     community_name = models.CharField(max_length=80, null=True, unique=True)
-    contact_name = models.CharField(max_length=80, null=True)
-    contact_email = models.EmailField(max_length=254, null=True)
+    contact_name = models.CharField(max_length=80, null=True, blank=True)
+    contact_email = models.EmailField(max_length=254, null=True, blank=True)
     image = models.ImageField(upload_to='users/community-images', blank=True, null=True)
     support_document = models.FileField(upload_to='communities/support-files', blank=True, null=True)
     description = models.TextField(null=True, blank=True)
