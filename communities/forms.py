@@ -33,9 +33,9 @@ class UpdateCommunityForm(forms.ModelForm):
         model = Community
         fields = ['contact_name', 'contact_email', 'city_or_town', 'country', 'is_publicly_listed', 'image']
         widgets = {
-            'contact_name': forms.TextInput(attrs={'size': 40}),
-            'contact_email': forms.EmailInput(attrs={'size': 40}),
-            'city_or_town': forms.TextInput(attrs={'size': 40}),
+            'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
+            'contact_email': forms.EmailInput(attrs={'class': 'w-100'}),
+            'city_or_town': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
 class InviteMemberForm(forms.ModelForm):
