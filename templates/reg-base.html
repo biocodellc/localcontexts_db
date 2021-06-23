@@ -21,7 +21,7 @@
                         {% else %}
                             {% include 'snippets/bullet.html'%}
                         {% endif %}
-                            Verify Email
+                            Verify email
                     </li>
                     <li>
                         {% if 'accounts/create-profile' in request.path or '/accounts/select-account/' in request.path %}
@@ -29,7 +29,7 @@
                         {% else %}
                             {% include 'snippets/bullet.html'%}
                         {% endif %}
-                        Create Your Profile
+                        Create your profile
                     </li>
                     <li>
                     {% if 'connect-community' in request.path or 'create-community' in request.path or 'validate-community' in request.path or 'connect-researcher' in request.path or 'connect-institution' in request.path or 'create-community' in request.path or 'connect-researcher' in request.path or 'create-institution' in request.path or 'create-institution/no-ror/' in request.path %}
@@ -37,7 +37,7 @@
                     {% else %}
                         {% include 'snippets/bullet.html'%}
                     {% endif %}
-                        Connect or Create an Account</li>
+                        Connect or create a profile</li>
                     <li>
                         {% include 'snippets/bullet.html'%}
                         Get started!
