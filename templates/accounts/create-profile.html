@@ -12,11 +12,11 @@
         <div class="flex-this column w-100">
 
             <div class="flex-this w-100 space-between">
-                <div class="w-50"> 
+                <div class="w-50 margin-right-1"> 
                     <label for="first_name">First Name </label>
                         {{ user_form.first_name }}
                 </div>
-                <div class="w-50 pad-left-1-5">
+                <div class="w-50 margin-left-1">
                     <label for="last_name">Last Name</label>
                         {{ user_form.last_name }}
                 </div>
@@ -27,19 +27,36 @@
                 {{ profile_form.job_title }}
             </div>
 
-            <div class="w-100 flex-this row space-between  pad-top-1-5">
-                <div class="w-50 country-container">
-                    <label for="country">Country </label><br>
-                    {{ profile_form.country }}
-                </div>
-
-                <div class="w-50 pad-left">
+            <div class="w-100 flex-this row space-between pad-top-1-5">
+                <div class="w-50 margin-right-1">
                     <label for="city_or_town">City or Town </label>
                     {{ profile_form.city_or_town }}
                 </div>
+
+                <div class="w-50 margin-right-1">
+                    <label for="state_or_province">State or Province </label>
+                    {{ profile_form.state_or_province }}
+                </div>
+
+                <div class="w-50 country-container margin-left-1">
+                    <label for="country">Country </label><br>
+                    {{ profile_form.country }}
+                </div>
             </div>
 
+            <div class="w-100 flex-this row space-between pad-top-1-5">
+                <div class="w-50 margin-right-1">
+                    <label for="preferred_language">Preferred language </label>
+                    {{ profile_form.preferred_language }}
+                </div>
+
+                <div class="w-50 margin-left-1">
+                    <label for="languages_spoken">Languages Spoken </label><br>
+                    {{ profile_form.languages_spoken }}
+                </div>
             </div>
+
+        </div>
 
 
         <div class="text-align-right">
