@@ -4,29 +4,34 @@
     <div class="margin-bottom-1">
         <h2 class="darkteal-text">Validate Community</h2>
         <p>
-            Before your community starts customizing Labels, we need to be able to confirm your community. You can either provide us with an email of another member of the community or upload a letter outlining your desire to participate in the platform.
+            Before your community starts customizing Labels, we need to be able to confirm your community. Please provide us with an email of another member of the community or upload a letter outlining your desire to participate in the platform.
         </p>    
     </div>
     
     <form action="" method="POST" enctype="multipart/form-data" class="flex-this column w-100">
         {% csrf_token %}
 
-        <div class="w-50">
-            <div>
-                <label for="contact_name">Community Contact Name</label>
-                {{ form.contact_name }}
+        <div class="flex-this space-between margin-right-1">
+            <div class="w-50 margin-right-1">
+                <div>
+                    <label for="contact_name">Community Contact Name</label>
+                    {{ form.contact_name }}
+                </div>
+        
+                <div class="margin-top-1">
+                    <label for="contact_email">Community Contact Email</label>
+                    {{ form.contact_email }}
+                </div>
             </div>
     
-            <div>
-                <label for="contact_email">Community Contact Email</label>
-                {{ form.contact_email }}
-            </div>
-
-            <div>
-                <label for="support_document">Support Document</label>
-                {{ form.support_document }}
+            <div class="w-50 margin-left-1">
+                <div>
+                    <label for="support_document">Support Document</label>
+                    {{ form.support_document }}
+                </div>
             </div>
         </div>
+
 
         {% if form.errors %}
             <small class="red-text">{{form.errors}}</small>
