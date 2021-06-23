@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.template.loader import render_to_string
 
 from accounts.models import UserAffiliation
@@ -68,16 +68,19 @@ def validate_community(request, community_id):
             obj = form.save(commit=False)
             obj.save()
 
-            # TODO: Send attachment in email
-            # https://stackoverflow.com/questions/33218629/attaching-pdfs-to-emails-in-django
             # https://docs.djangoproject.com/en/dev/topics/email/#the-emailmessage-class
             template = render_to_string('snippets/community-application.html', { 'obj' : obj })
-            send_mail(
-                'New Community Application', 
-                template, 
+
+            email = EmailMessage(
+                'New Community Application',
+                template,
                 settings.EMAIL_HOST_USER, 
                 [settings.SITE_ADMIN_EMAIL], 
-                fail_silently=False)
+            )
+            if request.FILES:
+                uploaded_file = request.FILES['support_document']
+                email.attach(uploaded_file.name, uploaded_file.read(), uploaded_file.content_type)
+            email.send()
 
             return redirect('dashboard')
     return render(request, 'communities/validate-community.html', {'form': form})
