@@ -31,6 +31,6 @@ class UpdateInstitutionForm(forms.ModelForm):
         model = Institution
         fields = ['contact_name', 'contact_email', 'city_or_town', 'country', 'image']
         widgets = {
-            'contact_name': forms.TextInput(attrs={'size': 30}),
-            'contact_email': forms.EmailInput(attrs={'size': 40}),
+            'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
+            'contact_email': forms.EmailInput(attrs={'class': 'w-100'}),
         }

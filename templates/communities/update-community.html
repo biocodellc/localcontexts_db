@@ -76,6 +76,9 @@
                                 </div>
 
                                 {% include 'partials/_alerts.html' %}
+                                {% if update_form.errors %}
+                                    {{ update_form.errors }}
+                                {% endif %}
 
                             <div>
                                 <button class="action-btn default-btn">Save</button>

@@ -948,3 +948,38 @@ function toggleNotifications() {
         }
     }
 }
+
+let inputList = document.getElementById('selectedCommunityInputList')
+if (inputList) {
+    inputList.addEventListener('change', setCommunity)
+    inputList.addEventListener('click', setCommunity)
+}
+
+function setCommunity() {
+    let hiddenCommunityInput = document.getElementById('hidden-community-input')
+    hiddenCommunityInput.value = inputList.value
+    let header = document.getElementById('commName')
+    header.innerText = `Request to join ${inputList.value}`
+}
+
+let joinBtn = document.getElementById('openJoinRequestModalBtn')
+if (joinBtn) {
+    joinBtn.addEventListener('click', function(e) {
+        if (!inputList.value) {
+            alert('Please select a community')
+        } else {
+            e.preventDefault()
+            // handle when inputlist value is ''
+            let modal = document.getElementById('joinRequestModal')
+            if (modal.style.display == 'none') {
+                modal.style.display = 'block'
+            }
+        
+            let span = document.querySelector('.close-modal')
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+        }
+    })
+}
+

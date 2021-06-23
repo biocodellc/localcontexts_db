@@ -8,7 +8,7 @@
             <div id="progress-ul-container" class="flex-this">
                 <ul id="progress-ul" class="flex-this column">
                     <li>
-                        {% if request.get_full_path == "/accounts/register/" %}
+                        {% if '/accounts/register' in request.path %}
                             {% include 'snippets/bullet-big.html'%}
                         {% else %}
                             {% include 'snippets/bullet.html'%}
@@ -16,7 +16,7 @@
                         Register
                     </li>
                     <li>
-                        {% if request.get_full_path == "/accounts/verify/" %}
+                        {% if 'accounts/verify' in request.path %}
                             {% include 'snippets/bullet-big.html'%}
                         {% else %}
                             {% include 'snippets/bullet.html'%}
@@ -24,7 +24,7 @@
                             Verify Email
                     </li>
                     <li>
-                        {% if request.get_full_path == "/accounts/create-profile/" or request.get_full_path == "/accounts/select-account/" %}
+                        {% if 'accounts/create-profile' in request.path or '/accounts/select-account/' in request.path %}
                             {% include 'snippets/bullet-big.html'%}
                         {% else %}
                             {% include 'snippets/bullet.html'%}
@@ -32,7 +32,7 @@
                         Create Your Profile
                     </li>
                     <li>
-                    {% if request.get_full_path == "/communities/connect-community/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/connect-institution/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/create-institution/" or request.get_full_path == "/institutions/create-institution/no-ror/"%}
+                    {% if 'connect-community' in request.path or 'create-community' in request.path or 'validate-community' in request.path or 'connect-researcher' in request.path or 'connect-institution' in request.path or 'create-community' in request.path or 'connect-researcher' in request.path or 'create-institution' in request.path or 'create-institution/no-ror/' in request.path %}
                         {% include 'snippets/bullet-big.html'%}
                     {% else %}
                         {% include 'snippets/bullet.html'%}

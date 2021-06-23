@@ -1,8 +1,7 @@
 {% extends 'reg-base.html' %} {% block title %} | Create Community {% endblock %}{% load static %} {% block card %}
     
 <div class="flex-this column w-90">
-    <div>
-        <p>Indigenous Communities</p>
+    <div class="margin-bottom-1">
         <h2 class="darkteal-text">Create a Community Profile</h2>    
     </div>
     
@@ -10,35 +9,42 @@
         {% csrf_token %}
 
         <div class="flex-this column">
-            <label class="pad-top-1-5" for="community_name">Community Name</label>
-            {{ form.community_name }}
-    
-            <label class="pad-top-1-5" for="city_or_town">City or Town</label>
-            {{ form.city_or_town}}
-    
-            <label class="pad-top-1-5" for="country">Country (if different from personal country)</label>
-            {{ form.country }}
-        </div>
-
-        <div class="w-100 flex-this">
-            <div class="w-50 pad-top-1-5">
-                <label for="contact_name">Contact Name</label><br>
-                {{ form.contact_name }}
+            <div>
+                <label class="pad-top-1-5" for="community_name">Community Name</label><br>
+                {{ form.community_name }}
             </div>
 
-            <div class="w-50 pad-top-1-5">
-                <label for="contact_email">Contact Email</label><br>
-                {{ form.contact_email }}
+            <div class="flex-this">
+                <div class="w-50 margin-right-1">
+                    <label class="pad-top-1-5" for="city_or_town">City or Town</label><br>
+                    {{ form.city_or_town}}    
+                </div>
+                <div class="w-50">
+                    <label class="pad-top-1-5" for="state_or_province">State or Province</label><br>
+                    {{ form.state_or_province}}
+                </div>
+            </div>
+        
+            <div>
+                <label class="pad-top-1-5" for="country">Country</label><br>
+                {{ form.country }}
+            </div>
+        </div>
+
+        <div class="w-100">
+            <div class="pad-top-1-5">
+                <label for="description">Community Description</label><br>
+                {{ form.description }}
             </div>
         </div>
 
         {% if form.errors %}
-            <small>{{ form.errors }}</small>
+            <small class="red-text">{{ form.errors }}</small>
         {% endif %}
         {% include 'partials/_alerts.html' %}
 
-        <div>
-            <button class="action-btn default-btn">Continue</button>
+        <div class="text-align-right">
+            <button class="action-btn">Next <i class="fa fa-long-arrow-right"></i></button>
         </div>
     </form>
 
