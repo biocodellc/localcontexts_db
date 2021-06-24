@@ -949,7 +949,21 @@ function toggleNotifications() {
     }
 }
 
-let inputList = document.getElementById('selectedCommunityInputList')
+function showUserNotifications(btn) {
+    let div = document.getElementById('userNotifications')
+    div.classList.toggle('hide')
+
+    if (div.classList.contains('hide')) {
+        btn.classList.remove('active-dash-driver-btn')
+        btn.classList.add('action-btn')
+    } else {
+        btn.classList.add('active-dash-driver-btn')
+        btn.classList.remove('action-btn')    
+    }
+
+}
+
+var inputList = document.getElementById('selectedCommunityInputList')
 if (inputList) {
     inputList.addEventListener('change', setCommunity)
     inputList.addEventListener('click', setCommunity)
@@ -962,7 +976,7 @@ function setCommunity() {
     header.innerText = `Request to join ${inputList.value}`
 }
 
-let joinBtn = document.getElementById('openJoinRequestModalBtn')
+var joinBtn = document.getElementById('openJoinRequestModalBtn')
 if (joinBtn) {
     joinBtn.addEventListener('click', function(e) {
         if (!inputList.value) {

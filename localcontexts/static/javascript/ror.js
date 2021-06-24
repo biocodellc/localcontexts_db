@@ -1,17 +1,17 @@
 // Get value of dropdown of countries
-const countrySelect = document.getElementById('id_country')
-const institutionSelect = document.getElementById('institution-select')
-const institutionTypeSelect = document.getElementById('institution-type-select')
+var countrySelect = document.getElementById('id_country')
+var institutionSelect = document.getElementById('institution-select')
+var institutionTypeSelect = document.getElementById('institution-type-select')
 
-const institutions = []
+var institutions = []
 
-let removeAllOptions = (selectBox) => {
+var removeAllOptions = (selectBox) => {
     while (selectBox.options.length > 1) {
         selectBox.remove(1);
     }
 }
 
-let getCountry = () => {
+var getCountry = () => {
     let countryCode = countrySelect.value.toLowerCase()
 
     // Based on what was selected in the dropdown, enter into endpoint and fetch
@@ -42,11 +42,11 @@ let getCountry = () => {
     removeAllOptions(institutionSelect)
 }
 
-let uniqueArray = (value, index, self) => {
+var uniqueArray = (value, index, self) => {
     return self.indexOf(value) === index
 }
 
-let getType = () => {
+var getType = () => {
     let typesArray = []
     institutions.forEach(item => {
         // If type is undefined, set type as Other
@@ -65,7 +65,7 @@ let getType = () => {
     })
 }
 
-let populateInstitutions = () => {
+var populateInstitutions = () => {
     // Removes previous institution options
     removeAllOptions(institutionSelect)
     institutions.forEach(object => {
