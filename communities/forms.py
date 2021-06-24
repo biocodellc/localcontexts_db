@@ -31,11 +31,12 @@ class ValidateCommunityForm(forms.ModelForm):
 class UpdateCommunityForm(forms.ModelForm):
     class Meta:
         model = Community
-        fields = ['contact_name', 'contact_email', 'city_or_town', 'country', 'is_publicly_listed', 'image']
+        fields = ['contact_name', 'contact_email', 'city_or_town', 'state_or_province', 'country', 'is_publicly_listed', 'image']
         widgets = {
             'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
             'contact_email': forms.EmailInput(attrs={'class': 'w-100'}),
             'city_or_town': forms.TextInput(attrs={'class': 'w-100'}),
+            'state_or_province': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
 class InviteMemberForm(forms.ModelForm):
