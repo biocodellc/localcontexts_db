@@ -65,14 +65,20 @@
 
                 <div class="flex-this space-between">
                     <div class="w-90">
-                        {{ project.description }}
+                        <p class="margin-right-1">{{ project.description }}</p>
                     </div>
                     <div class="w-20">
+                        <div class="notice-btns center-text">
+                            <a href="{% url 'view-project' project.unique_id %}" class="action-btn">View Project</a>
+                        </div>
+
                         {% if member_role == 'viewer' %}
                         {% else %}
-                            <a href="{% url 'notify-communities' institution.id project.id %}">
-                                <button class="action-btn">Notify Communities <i class="fa fa-users" aria-hidden="true"></i></button>
-                            </a>
+                            <div>
+                                <a href="{% url 'notify-communities' institution.id project.id %}">
+                                    <button class="action-btn">Notify Communities <i class="fa fa-users" aria-hidden="true"></i></button>
+                                </a>
+                            </div>
                         {% endif %}
                     </div>
                 </div>
@@ -179,9 +185,14 @@
         
                         <div class="flex-this space-between">
                             <div class="w-90">
-                                {{ contrib.project.description }}
+                                <p class="margin-right-1">{{ contrib.project.description }}</p>
                             </div>
                             <div class="w-20">
+
+                                <div class="notice-btns center-text">
+                                    <a href="{% url 'view-project' contrib.project.unique_id %}" class="action-btn">View Project</a>
+                                </div>
+
                                 {% if member_role == 'viewer' %}
                                 {% else %}
                                     <a href="{% url 'notify-communities' institution.id contrib.project.id %}">

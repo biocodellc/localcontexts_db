@@ -39,13 +39,21 @@ p, span, label {
     font-weight: bold;
 }
 
+.p-28 {
+    font-size: 28px;
+}
+
+.p-24 {
+    font-size: 24px;
+}
+
 body {
     margin: 0;
     min-width: 80%;
     min-height: 100%;
 }
 
-ul {
+.ul-no-bullets {
     list-style-type: none;
 }
 
