@@ -116,10 +116,6 @@
     border-bottom: 1px solid #A09D9D;
 }
 
-.noti-container:hover {
-    background-color: #C3E3F0;
-}
-
 .noti-container span {
     margin-left: 5px;
 }
