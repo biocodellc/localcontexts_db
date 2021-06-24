@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 class TKNotice(models.Model):
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
-    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_tknotice")
     communities = models.ManyToManyField(Community, blank=True, related_name="tknotice_communities")
     placed_by_researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True)
     placed_by_institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True)
