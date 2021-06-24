@@ -3,7 +3,7 @@
 <div class="flex-this column w-90">
     <div class="margin-bottom-1">
         <h2 class="darkteal-text">Create a community profile</h2>    
-        <p>Community profiles that are created in the Local Contexts Hub are set as private on creation until they are confirmed. If you would like to keep your community private after it has been confirmed, select the toggle below.</p>
+        <p>Community profiles that are created in the Local Contexts Hub are set as private on creation until they are confirmed. You will be able to change your community to public after confirmation.</p>
     </div>
     
     <form action="" method="POST" class="flex-this column w-100">
@@ -15,7 +15,7 @@
                 {{ form.community_name }}
             </div>
 
-            <div class="flex-this margin-top-16">
+            <div class="flex-this margin-top-8">
                 <div class="w-50 margin-right-1">
                     <label class="pad-top-1-5" for="city_or_town">City or Town</label><br>
                     {{ form.city_or_town}}    
@@ -26,40 +26,32 @@
                 </div>
             </div>
         
-            <div class="country-container margin-top-16">
+            <div class="country-container margin-top-8">
                 <label class="pad-top-1-5" for="country">Country</label><br>
                 {{ form.country }}
             </div>
         </div>
 
-        <div class="w-100 margin-top-16">
+        <div class="w-100">
             <div class="pad-top-1-5">
                 <label for="description">Community description</label><br>
                 {{ form.description }}
             </div>
         </div>
 
-        {% if form.errors %}
-            <small class="red-text">{{ form.errors }}</small>
-        {% endif %}
-        {% include 'partials/_alerts.html' %}
-
-        <div class="flex-this space-between margin-top-16">
-            <div class="flex-this w-50">
-                <div class="margin-right-1">
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-                <div>
-                    <p class="no-top-margin no-bottom-margin padding-bottom-1">This profile is private</p>
-                </div>
+        <div class="flex-this space-between">
+            <div>
+                {% if form.errors %}
+                    <small class="red-text">{{ form.errors }}</small>
+                {% endif %}
+                {% include 'partials/_alerts.html' %}
             </div>
+    
             <div class="text-align-right">
                 <button class="action-btn">Continue <i class="fa fa-long-arrow-right"></i></button>
             </div>
         </div>
+
 
     </form>
 
