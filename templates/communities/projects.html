@@ -154,10 +154,10 @@
                             <div class="flex-this column w-15">
                                 <!-- <div class="notice-btns center-text">
                                     <a href="#" class="action-btn">Edit Project <i class="fa fa-pencil"></i></a>
-                                </div>
-                                <div class="notice-btns center-text">
-                                    <a href="#" class="orange-btn">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
                                 </div> -->
+                                <div class="notice-btns center-text">
+                                    <a href="{% url 'view-project' contrib.project.unique_id %}" class="action-btn">View Project</a>
+                                </div>
                                 {% if contrib.project.has_labels %}
 
                                 {% else %}
