@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.core.mail import send_mail, EmailMessage
 from django.template.loader import render_to_string
 
+from mimetypes import guess_type
+
 from accounts.models import UserAffiliation
 from notifications.models import ActionNotification, NoticeStatus
 from bclabels.models import BCNotice, BCLabel
@@ -78,8 +80,9 @@ def validate_community(request, community_id):
                 [settings.SITE_ADMIN_EMAIL], 
             )
             if request.FILES:
-                uploaded_file = request.FILES['support_document']
-                email.attach(uploaded_file.name, uploaded_file.read(), uploaded_file.content_type)
+                uploaded_file = obj.support_document
+                file_type = guess_type(uploaded_file.name)
+                email.attach(uploaded_file.name, uploaded_file.read(), file_type[0])
             email.send()
 
             return redirect('dashboard')
