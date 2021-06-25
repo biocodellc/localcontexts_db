@@ -6,9 +6,9 @@
         <div id="progress-container" class="orange-bg white-text flex-this column">
             
             <div id="progress-ul-container" class="flex-this">
-                <ul id="progress-ul" class="flex-this column">
+                <ul id="progress-ul" class="flex-this column ul-no-bullets">
                     <li>
-                        {% if request.get_full_path == "/accounts/register/" %}
+                        {% if '/accounts/register' in request.path %}
                             {% include 'snippets/bullet-big.html'%}
                         {% else %}
                             {% include 'snippets/bullet.html'%}
@@ -16,28 +16,28 @@
                         Register
                     </li>
                     <li>
-                        {% if request.get_full_path == "/accounts/verify/" %}
+                        {% if 'accounts/verify' in request.path %}
                             {% include 'snippets/bullet-big.html'%}
                         {% else %}
                             {% include 'snippets/bullet.html'%}
                         {% endif %}
-                            Verify Email
+                            Verify email
                     </li>
                     <li>
-                        {% if request.get_full_path == "/accounts/create-profile/" or request.get_full_path == "/accounts/select-account/" %}
+                        {% if 'accounts/create-profile' in request.path or '/accounts/select-account/' in request.path %}
                             {% include 'snippets/bullet-big.html'%}
                         {% else %}
                             {% include 'snippets/bullet.html'%}
                         {% endif %}
-                        Create Your Profile
+                        Create your profile
                     </li>
                     <li>
-                    {% if request.get_full_path == "/communities/connect-community/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/connect-institution/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/researchers/connect-researcher/" or request.get_full_path == "/institutions/create-institution/" or request.get_full_path == "/institutions/create-institution/no-ror/"%}
+                    {% if 'connect-community' in request.path or 'create-community' in request.path or 'validate-community' in request.path or 'connect-researcher' in request.path or 'connect-institution' in request.path or 'create-community' in request.path or 'connect-researcher' in request.path or 'create-institution' in request.path or 'create-institution/no-ror/' in request.path %}
                         {% include 'snippets/bullet-big.html'%}
                     {% else %}
                         {% include 'snippets/bullet.html'%}
                     {% endif %}
-                        Connect or Create an Account</li>
+                        Connect or create a profile</li>
                     <li>
                         {% include 'snippets/bullet.html'%}
                         Get started!

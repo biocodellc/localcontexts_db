@@ -1,10 +1,48 @@
 {% load static %}
 
 <section class="white-bg dash-driver flex-this space-between">
-        <div>
+        <div class="w-70">
             <h2 class="orange-text">Welcome, {{ user.first_name }} </h2>
         </div>
-        <div>
-            <a href="{% url 'update-profile' %}" class="darkteal-text"><span>My Profile</span> <i class="fa fa-user" aria-hidden="true"></i></a>
+        
+        <div class="flex-this dash-btn-container space-between">
+            <div><a onclick="showUserNotifications(this)" class="action-btn">Notifications <i class="fa fa-bell" aria-hidden="true"></i></a></div>
+            {% if 'update-profile' in request.path %}
+                <div><a href="{% url 'update-profile' %}" class="active-dash-driver-btn">My Profile <i class="fa fa-user" aria-hidden="true"></i></a></div>
+            {% else %}
+            <div><a href="{% url 'update-profile' %}" class="white-text action-btn">My Profile <i class="fa fa-user" aria-hidden="true"></i></a></div>
+            {% endif %}
         </div>
+
 </section>
+
+
+<div id="userNotifications" class="white-bg content-card content-card-space noti-card hide">
+    <div class="noti-container">
+        <h2 class="no-top-margin no-bottom-margin weight-500 margin-left-1">Notifications</h2>
+    </div>
+    {% if notifications %}
+        {% for n in notifications %}
+
+            {% if n.viewed == False %}
+                <a href="{% url 'show' n.id %}">
+                    <div class="noti-container flex-this row">
+                        <div class="tag-container"><span class="notification-type-tag orange-bg white-text font-size-12">{{ n.notification_type }}</span></div> <!-- This will be notification type-->
+                        <div><p>{{ n.message }}</p></div>
+                    </div>
+                </a>
+            {% endif %}
+            {% if n.viewed == True %}
+                <a href="{% url 'read' n.id %}">
+                    <div class="noti-container flex-this row">
+                        <div class="tag-container"><span class="notification-type-tag grey white-text font-size-12">{{ n.notification_type }}</span></div>
+                        <div><p>{{ n.message }}</p></div>
+                    </div>
+                </a>
+            {% endif %}
+
+        {% endfor %}
+        {% else %}
+        <p>No notifications yet</p>
+    {% endif %}
+</div>

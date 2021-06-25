@@ -1,29 +1,75 @@
 {% extends 'reg-base.html' %} {% block title %} | Connect {% endblock %}{% load static %} {% block card %}
 
-<div class="flex-this column centered-content">
-    <div>
-        <img src="{% static 'images/logos/welcome-logo.png' %}" width="209px" alt="Local Contexts logo">
+<div class="flex-this column">
+
+    <div class="form-heading flex-this column w-90">
+        <h2 class="darkteal-text margin-bottom-2">Community Profile</h2>
+        <p>Please first check if your community is already registered. If your community is not in our register, you can create a new community profile.</p>    
     </div>
 
-    <h2 class="darkteal-text">
-        Hello {% if request.user.first_name %} 
-                {{ request.user.first_name }},
-              {% else %}
-                {{ request.user.username }},
-              {% endif %} <br> 
-        Welcome to Local Contexts</h2>
-    <p>
-        Before we start would you like to connect with an existing Community or create your own?
-    </p>
+     <div>
+         <label for="community-search">Search our community register</label><br>
+         {% if communities %}
+            <input id="selectedCommunityInputList" list="communities" name="communities" class="w-100">
+            <datalist id="communities">
+                {% for community in communities %}
+                    <option value="{{ community.community_name }}">
+                {% endfor %}
+            </datalist>
+         {% endif %}
+     </div>
 
-    <a class="white-text action-btn connect-btn auto-margin" href="{% url 'community-registry' %}">
-        Search the register
-    </a>
+     <div class="flex-this space-between margin-top-1">
+         <div><a class="darkteal-text" href="{% url 'create-community' %}">Or create a community profile</a></div>
+         <div><button id="openJoinRequestModalBtn" class="action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
+     </div>
 
-    OR
+</div>
 
-    <a class="white-text action-btn connect-btn auto-margin" href="{% url 'create-community' %}">
-            Create a Community profile
-    </a>
+<div id="joinRequestModal" class="modal" style="display: none;">
+
+    <div class="noror-modal-box flex-this column w-100">
+  
+        <div id="close-modal" class="close-modal-btn w-100"> <span class="darkteal-text close-modal">&times;</span></div>
+        <div class="add-member-modal-content w-100">
+
+            <div>
+                <h2 id="commName" class="darkteal-text"></h2>  
+                <p>Send a request to join community. Include your desired role and an optional message.</p>  
+            </div>
+
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input id="hidden-community-input" type="hidden" value="" name="community_name">
+
+                <div class="flex-this column w-100">
+
+                    <!-- <label class="pad-top-1-5" for="community">Community Name</label> -->
+                    
+                        <div class="w-50 pad-top-1-5 margin-right-1">
+                            <label class="pad-top-1-5" for="role">Desired Role</label><br>
+                            {{ form.role }}
+                        </div>
+                        
+                        <div class="pad-top-1-5">
+                            <label class="pad-top-1-5" for="message">Optional Message</label><br>
+                            {{ form.message }}
+                        </div>
+
+                        {% if form.errors %}
+                            <small class="red-text">{{ form.errors }}</small>
+                        {% endif %}
+
+                    {% include 'partials/_alerts.html' %}
+        
+                </div>
+                <div class="text-align-right">
+                    <button class="action-btn">Send request and continue</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
 </div>
 {% endblock %}

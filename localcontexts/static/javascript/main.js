@@ -948,3 +948,52 @@ function toggleNotifications() {
         }
     }
 }
+
+function showUserNotifications(btn) {
+    let div = document.getElementById('userNotifications')
+    div.classList.toggle('hide')
+
+    if (div.classList.contains('hide')) {
+        btn.classList.remove('active-dash-driver-btn')
+        btn.classList.add('action-btn')
+    } else {
+        btn.classList.add('active-dash-driver-btn')
+        btn.classList.remove('action-btn')    
+    }
+
+}
+
+var inputList = document.getElementById('selectedCommunityInputList')
+if (inputList) {
+    inputList.addEventListener('change', setCommunity)
+    inputList.addEventListener('click', setCommunity)
+}
+
+function setCommunity() {
+    let hiddenCommunityInput = document.getElementById('hidden-community-input')
+    hiddenCommunityInput.value = inputList.value
+    let header = document.getElementById('commName')
+    header.innerText = `Request to join ${inputList.value}`
+}
+
+var joinBtn = document.getElementById('openJoinRequestModalBtn')
+if (joinBtn) {
+    joinBtn.addEventListener('click', function(e) {
+        if (!inputList.value) {
+            alert('Please select a community')
+        } else {
+            e.preventDefault()
+            // handle when inputlist value is ''
+            let modal = document.getElementById('joinRequestModal')
+            if (modal.style.display == 'none') {
+                modal.style.display = 'block'
+            }
+        
+            let span = document.querySelector('.close-modal')
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+        }
+    })
+}
+

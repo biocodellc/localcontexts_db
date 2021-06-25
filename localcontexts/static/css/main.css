@@ -1,12 +1,50 @@
-/* Fira Sant Google Font */
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@200;300;400;600&display=swap');
 /* Poppins Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap');
+
+@font-face {
+    font-family: "BCSans";
+    src: url("../fonts/BC-Sans-Font-woff/BCSans-Regular.woff") format('woff');
+}
+
+@font-face {
+    font-family: "BCSans";
+    src: url("../fonts/BC-Sans-Font-woff/BCSans-Bold.woff") format('woff');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "BCSans";
+    src: url("../fonts/BC-Sans-Font-woff/BCSans-BoldItalic.woff") format('woff');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "BCSans";
+    src: url("../fonts/BC-Sans-Font-woff/BCSans-Italic.woff") format('woff');
+    font-style: italic;
+}
 
 /* GENERAL */
 * {
     box-sizing: border-box;
     font-family: 'Poppins', Verdana, sans-serif;
+}
+
+p, span, label {
+    font-family: 'BCSans', Verdana, sans-serif;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.p-28 {
+    font-size: 28px;
+}
+
+.p-24 {
+    font-size: 24px;
 }
 
 body {
@@ -15,7 +53,7 @@ body {
     min-height: 100%;
 }
 
-ul {
+.ul-no-bullets {
     list-style-type: none;
 }
 
@@ -31,7 +69,7 @@ label {
     font-weight: 400;
 }
 
-input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], input[name=contributors], select {
+input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], input[name=contributors], input[name=communities], select {
     max-height: 40px;
     min-height: 40px;
     background-color: #fff;
@@ -259,6 +297,25 @@ input:focus {
     padding-top: 5%;
 }
 
+.margin-top-8 {
+    margin-top: 8px;
+}
+
+.margin-bottom-8 {
+    margin-bottom: 8px;
+}
+
+.margin-left-16 {
+    margin-left: 16px;
+}
+
+.margin-top-16 {
+    margin-top: 16px;
+}
+
+.margin-bottom-16 {
+    margin-bottom: 16px;
+}
 /* BORDERS */
 .border-bottom-blk {
     border-bottom: 1px solid #000000;
@@ -1198,6 +1255,10 @@ input:focus {
     display: block;
 }
 
+.hide {
+    display: none;
+}
+
 /* Textbox message add-members */
 .add-member-message {
     width: 100px;
@@ -1212,3 +1273,67 @@ input:focus {
     width: 50%;
     height: 550px;
 }
+
+/* TOGGLE SWITCH */
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 27px;
+    height: 14px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 10px;
+    width: 10px;
+    left: 3px;
+    bottom: 1.73px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #007385;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #007385;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(11px);
+    -ms-transform: translateX(11px);
+    transform: translateX(11px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }

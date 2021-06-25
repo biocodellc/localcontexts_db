@@ -62,6 +62,7 @@ def show_notification(request, pk):
             elif n.notification_type == 'Create':
                 new_community = Community.objects.get(id=comm)
                 new_community.is_approved = True
+                new_community.is_publicly_listed = True
                 new_community.save()
 
                 send_community_approval_notification(new_community.community_creator, new_community)

@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxLengthValidator
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.conf import settings
@@ -7,10 +8,11 @@ from institutions.models import Institution
 class Community(models.Model):
     community_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     community_name = models.CharField(max_length=80, null=True, unique=True)
-    contact_name = models.CharField(max_length=80, null=True)
-    contact_email = models.EmailField(max_length=254, null=True)
+    contact_name = models.CharField(max_length=80, null=True, blank=True)
+    contact_email = models.EmailField(max_length=254, null=True, blank=True)
     image = models.ImageField(upload_to='users/community-images', blank=True, null=True)
-    description = models.TextField(null=True, blank=True)
+    support_document = models.FileField(upload_to='communities/support-files', blank=True, null=True)
+    description = models.TextField(null=True, blank=True, validators=[MaxLengthValidator(200)])
     city_or_town = models.CharField(max_length=80, blank=True, null=True)
     state_or_province = models.CharField(verbose_name='state or province', max_length=100, blank=True, null=True)
     country = CountryField(blank=True, null=True)
@@ -18,7 +20,7 @@ class Community(models.Model):
     admins = models.ManyToManyField(User, blank=True, related_name="admins")
     editors = models.ManyToManyField(User, blank=True, related_name="editors")
     viewers = models.ManyToManyField(User, blank=True, related_name="viewers")
-    is_publicly_listed = models.BooleanField(default=True, null=True)
+    is_publicly_listed = models.BooleanField(default=False, null=True)
     is_approved = models.BooleanField(default=False, null=True)
     projects = models.ManyToManyField('projects.Project', blank=True, related_name="community_projects")
 
@@ -80,10 +82,19 @@ class JoinRequest(models.Model):
         ('sent', 'sent'),
         ('accepted', 'accepted'),
     )
+
+    ROLES = (
+        ('admin', 'admin'),
+        ('editor', 'editor'),
+        ('viewer', 'viewer'),
+    )
+
     user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_sender')
     user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_receiver')
+    role = models.CharField(max_length=8, choices=ROLES, null=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='join_request_community', null=True, blank=True)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='join_request_institution', null=True, blank=True)
+    message = models.TextField(blank=True)
     status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent')
     date_sent = models.DateTimeField(auto_now=True)
 

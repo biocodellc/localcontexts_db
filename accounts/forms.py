@@ -14,8 +14,6 @@ class RegistrationForm(UserCreationForm):
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=False)
         # Cleans the data so nothing harmful can get passed though the form
-        # user.first_name = self.cleaned_data['first_name']
-        # user.last_name = self.cleaned_data['last_name']
         user.email = self.cleaned_data['email']
 
         #if we want to save
@@ -31,17 +29,29 @@ class UserCreateProfileForm(forms.ModelForm):
 
 # updating user instance (same as above but includes email)
 class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField()
-
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
+        widgets = {
+            'username': forms.TextInput(attrs={'style': 'width: 100%;'}),
+            'email': forms.EmailInput(attrs={'style': 'width: 100%;'}),
+            'first_name': forms.TextInput(attrs={'style': 'width: 100%;'}),
+            'last_name': forms.TextInput(attrs={'style': 'width: 100%;'}),
+        }
 
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['job_title', 'affiliation', 'preferred_language', 'languages_spoken', 'city_or_town', 'state_or_province', 'country']
+        widgets = {
+            'job_title': forms.TextInput(attrs={'style': 'width: 100%;'}),
+            'affiliation': forms.TextInput(attrs={'style': 'width: 100%;'}),
+            'preferred_language': forms.TextInput(attrs={'style': 'width: 100%;'}),
+            'languages_spoken': forms.TextInput(attrs={'style': 'width: 100%;'}),
+            'city_or_town': forms.TextInput(attrs={'style': 'width: 100%;'}),
+            'state_or_province': forms.TextInput(attrs={'style': 'width: 100%;'}),
+        }
 
 class ResendEmailActivationForm(forms.Form):
     email = forms.EmailField(label=_('Email'), required=True, widget=forms.EmailInput(attrs={'class': 'w-100', 'placeholder': 'email@domain.com'}))

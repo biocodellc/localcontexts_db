@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.template.loader import render_to_string
 
 from accounts.models import UserAffiliation
@@ -28,7 +28,22 @@ from .utils import *
 # Connect
 @login_required(login_url='login')
 def connect_community(request):
-    return render(request, 'communities/connect-community.html')
+    communities = Community.objects.all()
+    form = JoinRequestForm(request.POST or None)
+
+    if request.method == 'POST':
+        community_id = request.POST.get('community_name')
+        community = Community.objects.get(community_name=community_id)
+
+        data = form.save(commit=False)
+        data.user_from = request.user
+        data.community = community
+        data.user_to = community.community_creator
+        data.save()
+        # Create a notification here
+        return redirect('dashboard')
+    context = { 'communities': communities, 'form': form,}
+    return render(request, 'communities/connect-community.html', context)
 
 # Create Community
 @login_required(login_url='login')
@@ -39,17 +54,36 @@ def create_community(request):
             obj = form.save(commit=False)
             obj.community_creator = request.user
             obj.save()
+            return redirect('validate-community', obj.id)
+    return render(request, 'communities/create-community.html', {'form': form})
 
+# Validate Community
+@login_required(login_url='login')
+def validate_community(request, community_id):
+    community = Community.objects.get(id=community_id)
+
+    form = ValidateCommunityForm(request.POST or None, request.FILES, instance=community)
+    if request.method == "POST":
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+
+            # https://docs.djangoproject.com/en/dev/topics/email/#the-emailmessage-class
             template = render_to_string('snippets/community-application.html', { 'obj' : obj })
-            send_mail(
-                'New Community Application', 
-                template, 
+
+            email = EmailMessage(
+                'New Community Application',
+                template,
                 settings.EMAIL_HOST_USER, 
                 [settings.SITE_ADMIN_EMAIL], 
-                fail_silently=False)
+            )
+            if request.FILES:
+                uploaded_file = request.FILES['support_document']
+                email.attach(uploaded_file.name, uploaded_file.read(), uploaded_file.content_type)
+            email.send()
 
             return redirect('dashboard')
-    return render(request, 'communities/create-community.html', {'form': form})
+    return render(request, 'communities/validate-community.html', {'form': form})
 
 # Registry
 def community_registry(request):
