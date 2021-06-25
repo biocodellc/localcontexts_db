@@ -4,6 +4,13 @@ from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.conf import settings
 from institutions.models import Institution
+import uuid
+import os
+
+def get_file_path(self, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (str(uuid.uuid4()), ext)
+    return os.path.join('communities/support-files', filename)  
 
 class Community(models.Model):
     community_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -11,7 +18,7 @@ class Community(models.Model):
     contact_name = models.CharField(max_length=80, null=True, blank=True)
     contact_email = models.EmailField(max_length=254, null=True, blank=True)
     image = models.ImageField(upload_to='users/community-images', blank=True, null=True)
-    support_document = models.FileField(upload_to='communities/support-files', blank=True, null=True)
+    support_document = models.FileField(upload_to=get_file_path, blank=True, null=True)
     description = models.TextField(null=True, blank=True, validators=[MaxLengthValidator(200)])
     city_or_town = models.CharField(max_length=80, blank=True, null=True)
     state_or_province = models.CharField(verbose_name='state or province', max_length=100, blank=True, null=True)
