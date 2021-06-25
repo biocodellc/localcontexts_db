@@ -20,12 +20,27 @@ from accounts.models import UserAffiliation
 
 from projects.forms import CreateProjectForm, ProjectPersonFormset
 from notifications.forms import NoticeCommentForm
-from communities.forms import InviteMemberForm
+from communities.forms import InviteMemberForm, JoinRequestForm
 from .forms import CreateInstitutionForm, UpdateInstitutionForm, CreateInstitutionNoRorForm
 
 @login_required(login_url='login')
 def connect_institution(request):
-    return render(request, 'institutions/connect-institution.html')
+    institutions = Institution.objects.all()
+    form = JoinRequestForm(request.POST or None)
+
+    if request.method == 'POST':
+        institution_id = request.POST.get('organization_name')
+        institution = Institution.objects.get(institution_name=institution_id)
+
+        data = form.save(commit=False)
+        data.user_from = request.user
+        data.institution = institution
+        data.user_to = institution.institution_creator
+        data.save()
+        # Create a notification here
+        return redirect('dashboard')
+    context = { 'institutions': institutions, 'form': form,}
+    return render(request, 'institutions/connect-institution.html', context)
 
 @login_required(login_url='login')
 def create_institution(request):
