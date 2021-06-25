@@ -69,7 +69,7 @@ label {
     font-weight: 400;
 }
 
-input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], input[name=contributors], input[name=communities], select {
+input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], input[name=contributors], input[name=communities], input[name=institutions], select {
     max-height: 40px;
     min-height: 40px;
     background-color: #fff;

@@ -963,16 +963,18 @@ function showUserNotifications(btn) {
 
 }
 
-var inputList = document.getElementById('selectedCommunityInputList')
+
+var inputList = document.getElementById('selectedOrganizationInputList')
+
 if (inputList) {
     inputList.addEventListener('change', setCommunity)
     inputList.addEventListener('click', setCommunity)
 }
 
 function setCommunity() {
-    let hiddenCommunityInput = document.getElementById('hidden-community-input')
+    let hiddenCommunityInput = document.getElementById('hidden-target-input')
     hiddenCommunityInput.value = inputList.value
-    let header = document.getElementById('commName')
+    let header = document.getElementById('orgName')
     header.innerText = `Request to join ${inputList.value}`
 }
 
@@ -980,7 +982,7 @@ var joinBtn = document.getElementById('openJoinRequestModalBtn')
 if (joinBtn) {
     joinBtn.addEventListener('click', function(e) {
         if (!inputList.value) {
-            alert('Please select a community')
+            alert('Please select an organization from the list')
         } else {
             e.preventDefault()
             // handle when inputlist value is ''

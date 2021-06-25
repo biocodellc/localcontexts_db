@@ -10,7 +10,7 @@
      <div>
          <label for="community-search">Search our community register</label><br>
          {% if communities %}
-            <input id="selectedCommunityInputList" list="communities" name="communities" class="w-100">
+            <input id="selectedOrganizationInputList" list="communities" name="communities" class="w-100">
             <datalist id="communities">
                 {% for community in communities %}
                     <option value="{{ community.community_name }}">
@@ -34,13 +34,13 @@
         <div class="add-member-modal-content w-100">
 
             <div>
-                <h2 id="commName" class="darkteal-text"></h2>  
+                <h2 id="orgName" class="darkteal-text"></h2>  
                 <p>Send a request to join community. Include your desired role and an optional message.</p>  
             </div>
 
             <form method="POST" action="">
                 {% csrf_token %}
-                <input id="hidden-community-input" type="hidden" value="" name="community_name">
+                <input id="hidden-target-input" type="hidden" value="" name="organization_name">
 
                 <div class="flex-this column w-100">
 

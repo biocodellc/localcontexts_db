@@ -3,7 +3,7 @@
 <div class="flex-this column w-90">
     <div>
         <h2 class="darkteal-text">Institution Profile</h2>  
-        <p>Create a profile for an institution.</p>  
+        or <a class="darkteal-text" href="{% url 'connect-institution' %}">Connect to an institution profile</a>  
     </div>
 
     <form action="" method="POST" class="flex-this column w-100">
@@ -32,8 +32,19 @@
             <small>Can't find the institution you are looking for? <a href="{% url 'create-institution-noror' %}"><span class="darkteal-text">Fill out this form.</span></a></small>
 
     
-            <label class="pad-top-1-5" for="city_or_town">Town or City</label>
-            {{ form.city_or_town }}
+
+        </div>
+
+        <div class="w-100 flex-this">
+            <div class="w-50 pad-top-1-5 margin-right-1">
+                <label class="pad-top-1-5" for="city_or_town">Town or City</label><br>
+                {{ form.city_or_town }}
+            </div>
+
+            <div class="w-50 pad-top-1-5">
+                <label for="state_or_province">State or Province</label><br>
+                {{ form.state_or_province }}
+            </div>
         </div>
 
         <div class="w-100 flex-this">

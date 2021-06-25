@@ -34,7 +34,7 @@ def connect_community(request):
     form = JoinRequestForm(request.POST or None)
 
     if request.method == 'POST':
-        community_id = request.POST.get('community_name')
+        community_id = request.POST.get('organization_name')
         community = Community.objects.get(community_name=community_id)
 
         data = form.save(commit=False)
