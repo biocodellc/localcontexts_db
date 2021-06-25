@@ -29,8 +29,10 @@ class CreateInstitutionNoRorForm(forms.ModelForm):
 class UpdateInstitutionForm(forms.ModelForm):
     class Meta:
         model = Institution
-        fields = ['contact_name', 'contact_email', 'city_or_town', 'country', 'image']
+        fields = ['contact_name', 'contact_email', 'city_or_town', 'state_or_province', 'country', 'image']
         widgets = {
             'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
             'contact_email': forms.EmailInput(attrs={'class': 'w-100'}),
+            'state_or_province': forms.TextInput(attrs={'class': 'w-100'}),
+            'city_or_town': forms.TextInput(attrs={'class': 'w-100'}),
         }

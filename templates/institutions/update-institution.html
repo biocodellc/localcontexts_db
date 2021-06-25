@@ -29,12 +29,13 @@
                             {% csrf_token %}
 
                                 <div class="w-100 flex-this form-one">
-                                    <div class="w-30">
-                                        {{ institution.institution_name }}
-                                    </div>
-                                    <div class="w-30">
+                                    <div class="w-30 margin-right-1">
                                         <label for="city_or_town">City or Town</label> <br>
                                         {{ update_form.city_or_town }}
+                                    </div>
+                                    <div class="w-30 margin-right-1">
+                                        <label for="state_or_province">State or Province</label> <br>
+                                        {{ update_form.state_or_province }}
                                     </div>
                                     <div class="w-30">
                                         <label for="country">Country</label>  <br>
@@ -47,25 +48,29 @@
                                         <h3>Contact Person</h3>
                                     </div>
                                     <div class="flex-this w-100 form-one">
-                                        <div class="w-30">
+                                        <div class="w-30 margin-right-1">
                                             <label for="contact_name"> Name </label><br>  
                                             {{ update_form.contact_name }}                                         
                                         </div>
-                                        <div class="w-30">
+                                        <div class="w-30 margin-right-1">
                                             <label for="contact_email"> Email </label><br>                                       
                                             {{ update_form.contact_email }}
                                         </div>
-                                        <div class="w-30">
-                                            <!-- <label for="is_publicly_listed"> Make Public </label><br> -->
-                                            <label for="image">Image</label><br>
-                                            {{ update_form.image }}
-                                        </div>
+                                </div>
+
+                                <div class="flex-this">
+                                    <div>
+                                        {{ update_form.image.label }} <br>
+                                        {{ update_form.image }}
+                                        {% if update_form.image.errors %}
+                                            {{update_form.image.errors}}
+                                        {% endif %}
                                     </div>
                                 </div>
 
                                 {% include 'partials/_alerts.html' %}
 
-                            <div>
+                            <div class="margin-top-1">
                                 <button class="action-btn default-btn">Save</button>
                             </div>
                         </form>
