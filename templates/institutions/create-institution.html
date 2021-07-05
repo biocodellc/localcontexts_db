@@ -31,8 +31,6 @@
 
             <small>Can't find the institution you are looking for? <a href="{% url 'create-institution-noror' %}"><span class="darkteal-text">Fill out this form.</span></a></small>
 
-    
-
         </div>
 
         <div class="w-100 flex-this">
@@ -59,13 +57,17 @@
             </div>
         </div>
 
-        {% if form.errors %}
-            <small>{{ form.errors }}</small>
-        {% endif %}
-        {% include 'partials/_alerts.html' %}
-
-        <div>
-            <button class="action-btn default-btn">Continue</button>
+        <div class="flex-this space-between margin-top-8">
+            <div>
+                {% if form.errors %}
+                    <small class="red-text">{{ form.errors }}</small>
+                {% endif %}
+                {% include 'partials/_alerts.html' %}
+            </div>
+    
+            <div class="text-align-right">
+                <button class="action-btn">Continue <i class="fa fa-long-arrow-right"></i></button>
+            </div>
         </div>
     </form>
 

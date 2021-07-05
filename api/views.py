@@ -23,7 +23,7 @@ def apiOverview(request):
     }
     return Response(api_urls)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def bcnotices(request):
     bcnotices = BCNotice.objects.all()
     serializer = BCNoticeSerializer(bcnotices, many=True)
@@ -35,7 +35,7 @@ def bcnotice_detail(request, unique_id):
     serializer = BCNoticeSerializer(bcnotice, many=False)
     return Response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def tknotices(request):
     tknotices = TKNotice.objects.all()
     serializer = TKNoticeSerializer(tknotices, many=True)
@@ -71,7 +71,7 @@ def tklabel_detail(request, unique_id):
     serializer = TKLabelSerializer(tklabel, many=False)
     return Response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def projects(request):
     projects = Project.objects.all()
     serializer = ProjectSerializer(projects, many=True)
