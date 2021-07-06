@@ -48,7 +48,7 @@
         {% endif %}
     </div>
 
-        <div class="flex-this column text-background-blue">
+        <div class="flex-this column">
             <form method="POST" action="">
                 {% csrf_token %}
                 <div class="flex-this space-between">
@@ -61,9 +61,14 @@
                     </div>
                 </div>
                 <div>
-                    <p class="darkteal-text">Each description is written to be flexible for use in multiple projects. <br>This text is written in English but you are welcome to add another language to this label.</p>
+                    <p>Each description is written to be flexible for use in multiple projects. <br>This text is written in English but you are welcome to add another language to this label.</p>
                         {{ form.name }}<br>
                         {{ form.default_text }}
+                </div>
+
+
+                <div>
+                    {{ translation_form }}
                 </div>
             </form>
         </div>

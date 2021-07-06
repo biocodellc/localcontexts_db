@@ -16,6 +16,7 @@ from projects.models import ProjectContributors, Project, ProjectPerson
 
 from bclabels.forms import CustomiseBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomiseTKLabelForm, ApproveAndEditTKLabelForm
+from helpers.forms import AddLabelTranslationForm
 from projects.forms import CreateProjectForm, ProjectPersonFormset
 from notifications.forms import NoticeCommentForm
 
@@ -410,14 +411,19 @@ def customise_bclabel(request, pk, label_type):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         form = CustomiseBCLabelForm(request.POST or None)
+        translation_form = AddLabelTranslationForm(request.POST or None)
         if request.method == "POST":
-            if form.is_valid():
+            if form.is_valid() and translation_form.is_valid():
                 label_form = form.save(commit=False)
                 label_form.label_type = bc_type
                 label_form.community = community
                 label_form.created_by = request.user
                 label_form.is_approved = False
                 label_form.save()
+
+                tran_form = translation_form.save(commit=False)
+                # tran_form.bclabel = ???
+                tran_form.save()
 
                 title = "A BC Label was customised by " + request.user.get_full_name()
                 ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
@@ -428,6 +434,7 @@ def customise_bclabel(request, pk, label_type):
             'community': community,
             'label_type': label_type,
             'form': form,
+            'translation_form': translation_form,
             'member_role': member_role,
         }
         return render(request, 'communities/customise-bclabel.html', context)
