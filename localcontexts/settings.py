@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'communities',
     'institutions',
     'api',
+    'helpers',
 
     'django.contrib.admin',
     'django.contrib.auth',
