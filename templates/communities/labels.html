@@ -96,6 +96,18 @@
                         {% if bclabel.is_approved %}
                             <h3 class="darkteal-text">{{ bclabel.name }}</h3>
                             <p>{{ bclabel.default_text }}</p>
+
+                            {% if bclabel.bclabel_translation.all %}
+                            {% for translation in bclabel.bclabel_translation.all %}
+                                <div>
+                                    <div class="flex-this space-between">
+                                        <div><h3 class="darkteal-text">{{ translation.title }}</h3></div>
+                                        <div><p class="darkteal-text">{{ translation.language }}</p></div>
+                                    </div>
+                                    <div><p>{{ translation.translation }} </p></div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                         {% else %}
                             <div class="flex-this space-between">
                                 <div>
@@ -104,7 +116,7 @@
                                 {% if bclabel.created_by == request.user or member_role == 'viewer' %}
 
                                 {% else %}
-                                    <div>
+                                    <div class="margin-top-1">
                                         <a href="{% url 'approve-label' community.id bclabel.unique_id %}">
                                             <div class="action-btn">Review Label</div>
                                         </a>
@@ -117,17 +129,16 @@
                             </div>
 
                             {% if bclabel.bclabel_translation.all %}
-                                {% for translation in bclabel.bclabel_translation.all %}
+                            {% for translation in bclabel.bclabel_translation.all %}
                                 <div>
-                                    <div>
-                                        <h3 class="darkteal-text">{{ translation.title }}</h3>
+                                    <div class="flex-this space-between">
+                                        <div><h3 class="darkteal-text">{{ translation.title }}</h3></div>
+                                        <div><p class="darkteal-text">{{ translation.language }}</p></div>
                                     </div>
-                                    <div>
-                                        <p>{{ translation.translation }} </p>
-                                    </div>
+                                    <div><p>{{ translation.translation }} </p></div>
                                 </div>
-                                {% endfor %}
-                            {% endif %}
+                            {% endfor %}
+                        {% endif %}
 
                         {% endif %}
                     </div>
@@ -142,6 +153,19 @@
                     {% if tklabel.is_approved %}
                         <h3 class="darkteal-text">{{ tklabel.name }}</h3>
                         <p>{{ tklabel.default_text }}</p>
+
+                        {% if tklabel.tklabel_translation.all %}
+                            {% for translation in tklabel.tklabel_translation.all %}
+                                <div>
+                                    <div class="flex-this space-between">
+                                        <div><h3 class="darkteal-text">{{ translation.title }}</h3></div>
+                                        <div><p class="darkteal-text">{{ translation.language }}</p></div>
+                                    </div>
+                                    <div><p>{{ translation.translation }} </p></div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
                     {% else %}
                         <div class="flex-this space-between">
                             <div>
@@ -150,7 +174,7 @@
                             {% if tklabel.created_by == request.user or member_role == 'viewer' %}
 
                             {% else %}
-                                <div>
+                                <div class="margin-top-1">
                                     <a href="{% url 'approve-tklabel' community.id tklabel.unique_id %}">
                                         <div class="action-btn">Review Label</div>
                                     </a>
@@ -160,17 +184,15 @@
                         <div>
                             <p>{{ tklabel.default_text }}</p>
                         </div>
-
                         {% if tklabel.tklabel_translation.all %}
                             {% for translation in tklabel.tklabel_translation.all %}
-                            <div>
                                 <div>
-                                    <h3 class="darkteal-text">{{ translation.title }}</h3>
+                                    <div class="flex-this space-between">
+                                        <div><h3 class="darkteal-text">{{ translation.title }}</h3></div>
+                                        <div><p class="darkteal-text">{{ translation.language }}</p></div>
+                                    </div>
+                                    <div><p>{{ translation.translation }} </p></div>
                                 </div>
-                                <div>
-                                    <p>{{ translation.translation }} </p>
-                                </div>
-                            </div>
                             {% endfor %}
                         {% endif %}
 

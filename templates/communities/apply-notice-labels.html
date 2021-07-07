@@ -24,7 +24,7 @@
                 <div class="notice-info border-bottom-dash-teal padding-bottom-2">
 
                     {% if bcnotice %}
-                        <a href="#"><h4 class="darkteal-text weight-500">{{ bcnotice.project.title}}</h4></a>
+                        <h4 class="darkteal-text weight-500">{{ bcnotice.project.title}}</h4>
                         <p>
                             {{ bcnotice.project.project_type }}<br>
                             {{ bcnotice.project.publication_date }}<br>
@@ -48,7 +48,7 @@
                     {% endif %}
 
                     {% if tknotice %}
-                        <a href="#"><h4 class="darkteal-text weight-500">{{ tknotice.project.title}}</h4></a>
+                        <h4 class="darkteal-text weight-500">{{ tknotice.project.title}}</h4>
                         <p>
                             {{ tknotice.project.project_type }}<br>
                             {{ tknotice.project.publication_date }}<br>
@@ -146,9 +146,24 @@
                                                         <p>
                                                             {{ bclabel.default_text}}
                                                         </p>
+
+                                                        {% if bclabel.bclabel_translation.all %}
+                                                            {% for translation in bclabel.bclabel_translation.all %}
+                                                                <div>
+                                                                    <div class="flex-this space-between">
+                                                                        <div><p class="darkteal-text">{{ translation.title }}</p></div>
+                                                                        <div><p class="darkteal-text">{{ translation.language }}</p></div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="no-top-margin no-bottom-margin">{{ translation.translation }} </p>
+                                                                    </div>
+                                                                </div>
+                                                            {% endfor %}
+                                                        {% endif %}
+
                                                     </div>
                                                 </div>
-                                                <div class="border-bottom-solid-teal"></div>
+                                                <div class="border-bottom-solid-teal pad-top-1"></div>
                                             </div>
 
                                         {% endfor %}
@@ -168,9 +183,24 @@
                                                     <p>
                                                         {{ tklabel.default_text}}
                                                     </p>
+
+                                                    {% if tklabel.tklabel_translation.all %}
+                                                        {% for translation in tklabel.tklabel_translation.all %}
+                                                            <div>
+                                                                <div class="flex-this space-between">
+                                                                    <div><p class="darkteal-text">{{ translation.title }}</p></div>
+                                                                    <div><p class="darkteal-text">{{ translation.language }}</p></div>
+                                                                </div>
+                                                                <div>
+                                                                    <p class="no-top-margin no-bottom-margin">{{ translation.translation }} </p>
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
+
                                                 </div>
                                             </div>
-                                            <div class="border-bottom-solid-teal"></div>
+                                            <div class="border-bottom-solid-teal pad-top-1"></div>
                                         </div>
 
                                     {% endfor %}
