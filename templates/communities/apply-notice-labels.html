@@ -143,23 +143,9 @@
                                                     <div class="pad-left-2">
                                                         <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
                                                         <p class="weight-500"> {{ bclabel.name }} </p>
-                                                        <p>
-                                                            {{ bclabel.default_text}}
-                                                        </p>
+                                                        <p>{{ bclabel.default_text}}</p>
 
-                                                        {% if bclabel.bclabel_translation.all %}
-                                                            {% for translation in bclabel.bclabel_translation.all %}
-                                                                <div>
-                                                                    <div class="flex-this space-between">
-                                                                        <div><p class="darkteal-text">{{ translation.title }}</p></div>
-                                                                        <div><p class="darkteal-text">{{ translation.language }}</p></div>
-                                                                    </div>
-                                                                    <div>
-                                                                        <p class="no-top-margin no-bottom-margin">{{ translation.translation }} </p>
-                                                                    </div>
-                                                                </div>
-                                                            {% endfor %}
-                                                        {% endif %}
+                                                        {% include 'partials/_label-translation.html' %}
 
                                                     </div>
                                                 </div>
@@ -180,23 +166,9 @@
                                                 <div class="pad-left-2">
                                                     <p class="darkteal-text">Label shared by {{ tklabel.community.community_name }} </p>
                                                     <p class="weight-500"> {{ tklabel.name }} </p>
-                                                    <p>
-                                                        {{ tklabel.default_text}}
-                                                    </p>
+                                                    <p>{{ tklabel.default_text}}</p>
 
-                                                    {% if tklabel.tklabel_translation.all %}
-                                                        {% for translation in tklabel.tklabel_translation.all %}
-                                                            <div>
-                                                                <div class="flex-this space-between">
-                                                                    <div><p class="darkteal-text">{{ translation.title }}</p></div>
-                                                                    <div><p class="darkteal-text">{{ translation.language }}</p></div>
-                                                                </div>
-                                                                <div>
-                                                                    <p class="no-top-margin no-bottom-margin">{{ translation.translation }} </p>
-                                                                </div>
-                                                            </div>
-                                                        {% endfor %}
-                                                    {% endif %}
+                                                    {% include 'partials/_label-translation.html' %}
 
                                                 </div>
                                             </div>

@@ -97,16 +97,8 @@
                             <h3 class="darkteal-text">{{ bclabel.name }}</h3>
                             <p>{{ bclabel.default_text }}</p>
 
-                            {% if bclabel.bclabel_translation.all %}
-                            {% for translation in bclabel.bclabel_translation.all %}
-                                <div>
-                                    <div class="flex-this space-between">
-                                        <div><h3 class="darkteal-text">{{ translation.title }}</h3></div>
-                                        <div><p class="darkteal-text">{{ translation.language }}</p></div>
-                                    </div>
-                                    <div><p>{{ translation.translation }} </p></div>
-                                </div>
-                            {% endfor %}
+                            {% include 'partials/_label-translation.html' %}
+
                         {% endif %}
                         {% else %}
                             <div class="flex-this space-between">
@@ -128,17 +120,7 @@
                                 <p>{{ bclabel.default_text }}</p>
                             </div>
 
-                            {% if bclabel.bclabel_translation.all %}
-                            {% for translation in bclabel.bclabel_translation.all %}
-                                <div>
-                                    <div class="flex-this space-between">
-                                        <div><h3 class="darkteal-text">{{ translation.title }}</h3></div>
-                                        <div><p class="darkteal-text">{{ translation.language }}</p></div>
-                                    </div>
-                                    <div><p>{{ translation.translation }} </p></div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+                            {% include 'partials/_label-translation.html' %}
 
                         {% endif %}
                     </div>
@@ -154,17 +136,7 @@
                         <h3 class="darkteal-text">{{ tklabel.name }}</h3>
                         <p>{{ tklabel.default_text }}</p>
 
-                        {% if tklabel.tklabel_translation.all %}
-                            {% for translation in tklabel.tklabel_translation.all %}
-                                <div>
-                                    <div class="flex-this space-between">
-                                        <div><h3 class="darkteal-text">{{ translation.title }}</h3></div>
-                                        <div><p class="darkteal-text">{{ translation.language }}</p></div>
-                                    </div>
-                                    <div><p>{{ translation.translation }} </p></div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+                        {% include 'partials/_label-translation.html' %}
 
                     {% else %}
                         <div class="flex-this space-between">
@@ -184,17 +156,7 @@
                         <div>
                             <p>{{ tklabel.default_text }}</p>
                         </div>
-                        {% if tklabel.tklabel_translation.all %}
-                            {% for translation in tklabel.tklabel_translation.all %}
-                                <div>
-                                    <div class="flex-this space-between">
-                                        <div><h3 class="darkteal-text">{{ translation.title }}</h3></div>
-                                        <div><p class="darkteal-text">{{ translation.language }}</p></div>
-                                    </div>
-                                    <div><p>{{ translation.translation }} </p></div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+                        {% include 'partials/_label-translation.html' %}
 
                     {% endif %}
                 </div>
