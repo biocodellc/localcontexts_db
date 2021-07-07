@@ -115,6 +115,20 @@
                             <div>
                                 <p>{{ bclabel.default_text }}</p>
                             </div>
+
+                            {% if bclabel.bclabel_translation.all %}
+                                {% for translation in bclabel.bclabel_translation.all %}
+                                <div>
+                                    <div>
+                                        <h3 class="darkteal-text">{{ translation.title }}</h3>
+                                    </div>
+                                    <div>
+                                        <p>{{ translation.translation }} </p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+
                         {% endif %}
                     </div>
                 </div>
@@ -146,6 +160,20 @@
                         <div>
                             <p>{{ tklabel.default_text }}</p>
                         </div>
+
+                        {% if tklabel.tklabel_translation.all %}
+                            {% for translation in tklabel.tklabel_translation.all %}
+                            <div>
+                                <div>
+                                    <h3 class="darkteal-text">{{ translation.title }}</h3>
+                                </div>
+                                <div>
+                                    <p>{{ translation.translation }} </p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+
                     {% endif %}
                 </div>
             </div>
