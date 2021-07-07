@@ -364,7 +364,6 @@ def select_label(request, pk):
             tklabel_type = request.POST.get('tk-label-type')
             
             # check if type already exists
-
             if bclabel_type:
                 bctype = check_bclabel_type(bclabel_type)
                 type_exists = BCLabel.objects.filter(community=community, label_type=bctype).exists()
@@ -458,7 +457,6 @@ def customise_tklabel(request, pk, label_type):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         form = CustomiseTKLabelForm(request.POST or None)
-        # translation_form = AddLabelTranslationForm(request.POST or None)
 
         if request.method == "GET":
             formset = LabelTranslationFormset(queryset=LabelTranslation.objects.none())

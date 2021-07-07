@@ -10,7 +10,7 @@ class LabelTranslation(models.Model):
     translation = models.TextField(blank=True)
 
     def __str__(self):
-        return self.language
+        return self.title
     
     class Meta:
         verbose_name = "Label Translation"
