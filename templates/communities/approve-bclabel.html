@@ -23,6 +23,10 @@
 
                 {{ formset.management_form }}
                 {% for tran_form in formset %}
+                    {% for hidden in tran_form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+
                     <div class="flex-this column">
                         <div class="flex-this space-between">
                             <div class="w-30">
@@ -35,6 +39,13 @@
                         {{ tran_form.translation }}
                     </div>
                 {% endfor %}
+                {% if formset.errors %}
+                    {% for error in formset.errors %}
+                        <div>
+                            <small style="color:red;"> {{ error }}</small>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
 
 
