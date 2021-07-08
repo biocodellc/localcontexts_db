@@ -1,6 +1,7 @@
 from django import template
 from django.urls import reverse
-from notifications.models import ActionNotification, NoticeStatus
+from notifications.models import ActionNotification
+from helpers.models import NoticeStatus
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from communities.models import JoinRequest

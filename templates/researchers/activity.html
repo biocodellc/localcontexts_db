@@ -104,7 +104,7 @@
                                             {% endif %}
                                         {% endfor %}
 
-                                        <input type="hidden" value="{{ bcnotice.project.id }}" name="project-id">
+                                        <input type="hidden" value="{{ bcnotice.unique_id }}" name="bcnotice-uuid">
 
                                         <div class="flex-this row">
                                             <div class="w-100">
@@ -241,7 +241,7 @@
                                         {% endif %}
                                     {% endfor %}
 
-                                    <input type="hidden" value="{{ tknotice.project.id }}" name="project-id">
+                                    <input type="hidden" value="{{ tknotice.unique_id }}" name="tknotice-uuid">
 
                                     <div class="flex-this row">
                                         <div class="w-100">

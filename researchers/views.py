@@ -9,11 +9,12 @@ from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from communities.models import Community
 from institutions.models import Institution
-from notifications.models import ActionNotification, NoticeStatus, NoticeComment
+from notifications.models import ActionNotification
+from helpers.models import NoticeStatus, NoticeComment
 from projects.models import ProjectContributors, Project, ProjectPerson
-# from projects.forms import CreateProjectForm, ProjectContributorsForm
+
 from projects.forms import CreateProjectForm, ProjectPersonFormset
-from notifications.forms import NoticeCommentForm
+from helpers.forms import NoticeCommentForm
 
 from .models import Researcher
 from .forms import *
@@ -77,16 +78,24 @@ def researcher_activity(request, pk):
     tknotices = TKNotice.objects.filter(placed_by_researcher=researcher)
 
     if request.method == 'POST':
-        project_id = request.POST.get('project-id')
+        bcnotice_uuid = request.POST.get('bcnotice-uuid')
+        tknotice_uuid = request.POST.get('tknotice-uuid')
+
         community_id = request.POST.get('community-id')
-        project = Project.objects.get(id=project_id)
         community = Community.objects.get(id=community_id)
 
         form = NoticeCommentForm(request.POST or None)
 
         if form.is_valid():
             data = form.save(commit=False)
-            data.project = project
+
+            if bcnotice_uuid:
+                bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
+                data.bcnotice = bcnotice
+            else:
+                tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
+                data.tknotice = tknotice
+
             data.sender = request.user
             data.community = community
             data.save()
