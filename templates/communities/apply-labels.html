@@ -76,10 +76,11 @@
                                         {% include 'bclabels/which-label.html' %}
                                     </div>
                                     <div class="pad-left-2">
-                                        <p class="weight-500"> {{ bclabel.name }} </p>
-                                        <p>
-                                            {{ bclabel.default_text}}
-                                        </p>
+                                        <p class="weight-500 darkteal-text"> {{ bclabel.name }} </p>
+                                        <p>{{ bclabel.default_text}}</p>
+
+                                        {% include 'partials/_label-translation.html' %}
+
                                         <hr>
                                     </div>
                 
@@ -90,16 +91,23 @@
                         {% if tklabels %}
                             {% for tklabel in tklabels %}
                                 <div id="open-default-text-{{ tklabel.unique_id }}" style="height: 0; overflow: hidden;" class="flex-this">
-                    
-                                    <div class="small-label">
-                                        {% include 'tklabels/which-label.html' %}
-                                    </div>
-                                    <div class="pad-left-2">
-                                        <p class="weight-500"> {{ tklabel.name }} </p>
-                                        <p>
-                                            {{ tklabel.default_text}}
-                                        </p>
-                                        <hr>
+                                    
+                                    <div class="flex-this column">
+                                        <div class="flex-this">
+                                            <div class="small-label">
+                                                {% include 'tklabels/which-label.html' %}
+                                            </div>
+                                            <div class="pad-left-2">
+                                                <p class="weight-500 darkteal-text"> {{ tklabel.name }} </p>
+                                                <p>{{ tklabel.default_text}}</p>
+
+                                                {% include 'partials/_label-translation.html' %}
+
+                                                <hr>
+                                            </div>
+                                        </div>
+    
+
                                     </div>
                     
                                 </div>

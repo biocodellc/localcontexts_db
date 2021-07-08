@@ -5,6 +5,10 @@
 
     {% for f in formset %}
 
+        {% for hidden in f.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+
         <div id="person-form-0" class="flex-this row">
             <div class="margin-right-1">
                 <label>{{ f.name.label }}</label><br>
@@ -20,6 +24,13 @@
             </div>
         </div>
 
-
     {% endfor %}
+
+    {% if formset.errors %}
+        {% for error in formset.errors %}
+            <div>
+                <small style="color:red;"> {{ error }}</small>
+            </div>
+        {% endfor %}
+    {% endif %}
 </div>

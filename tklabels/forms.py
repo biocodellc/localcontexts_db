@@ -6,8 +6,8 @@ class CustomiseTKLabelForm(forms.ModelForm):
         model = TKLabel
         fields = ['name', 'default_text']
         widgets = {
-            'name': forms.TextInput(attrs={'size': 40, 'id': 'label-title-name'}),
-            'default_text': forms.Textarea(attrs={'rows': 4, 'cols': 204, 'id': 'label-template-text'}),
+            'name': forms.TextInput(attrs={'class': 'w-100', 'id': 'label-title-name'}),
+            'default_text': forms.Textarea(attrs={'class': 'w-100 margin-top-1 margin-bottom-2', 'id': 'label-template-text', 'style': 'height: 150px; padding: 10px;'}),
         }
 
 class ApproveAndEditTKLabelForm(forms.ModelForm):
@@ -15,6 +15,6 @@ class ApproveAndEditTKLabelForm(forms.ModelForm):
         model = TKLabel
         fields = ['name', 'default_text']
         widgets = {
-            'name': forms.TextInput(attrs={'size': 40}),
-            'default_text': forms.Textarea(attrs={'rows': 4, 'cols': 204}),
+            'name': forms.TextInput(attrs={'class': 'w-100'}),
+            'default_text': forms.Textarea(attrs={'class': 'w-100 margin-top-1 margin-bottom-2', 'id': 'label-template-text', 'style': 'height: 150px; padding: 10px;'}),
         }
