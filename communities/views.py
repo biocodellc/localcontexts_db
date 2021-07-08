@@ -17,7 +17,7 @@ from projects.models import ProjectContributors, Project, ProjectPerson
 
 from bclabels.forms import CustomiseBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomiseTKLabelForm, ApproveAndEditTKLabelForm
-from helpers.forms import LabelTranslationFormset
+from helpers.forms import AddLabelTranslationFormSet, UpdateLabelTranslationFormSet
 from projects.forms import CreateProjectForm, ProjectPersonFormset
 from notifications.forms import NoticeCommentForm
 
@@ -413,10 +413,10 @@ def customise_bclabel(request, pk, label_type):
         form = CustomiseBCLabelForm(request.POST or None)
 
         if request.method == "GET":
-            formset = LabelTranslationFormset(queryset=LabelTranslation.objects.none())
+            formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
 
         elif request.method == "POST":
-            formset = LabelTranslationFormset(request.POST)
+            formset = AddLabelTranslationFormSet(request.POST)
 
             if form.is_valid() and formset.is_valid():
                 label_form = form.save(commit=False)
@@ -459,10 +459,10 @@ def customise_tklabel(request, pk, label_type):
         form = CustomiseTKLabelForm(request.POST or None)
 
         if request.method == "GET":
-            formset = LabelTranslationFormset(queryset=LabelTranslation.objects.none())
+            formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
 
         elif request.method == "POST":
-            formset = LabelTranslationFormset(request.POST)
+            formset = AddLabelTranslationFormSet(request.POST)
 
             if form.is_valid() and formset.is_valid():
                 label_form = form.save(commit=False)
@@ -495,6 +495,7 @@ def customise_tklabel(request, pk, label_type):
 # Approve BC Label
 @login_required(login_url='login')
 def approve_bclabel(request, pk, label_id):
+
     community = Community.objects.get(id=pk)
     bclabel = BCLabel.objects.get(unique_id=label_id)
 
@@ -503,12 +504,19 @@ def approve_bclabel(request, pk, label_id):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         form = ApproveAndEditBCLabelForm(request.POST or None, instance=bclabel)
+        formset = UpdateLabelTranslationFormSet(request.POST or None, instance=bclabel)
+
         if request.method == "POST":
-            if form.is_valid():
+            if form.is_valid() and formset.is_valid():
                 label_form = form.save(commit=False)
                 label_form.is_approved = True
                 label_form.approved_by = request.user
                 label_form.save()
+
+                instances = formset.save(commit=False)
+                for instance in instances:
+                    instance.save()
+
                 title = "A BC Label was approved by " + request.user.get_full_name()
                 ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
                 
@@ -519,6 +527,7 @@ def approve_bclabel(request, pk, label_id):
             'bclabel': bclabel,
             'member_role': member_role,
             'form': form,
+            'formset': formset,
         }
         return render(request, 'communities/approve-bclabel.html', context)
 

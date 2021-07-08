@@ -92,14 +92,13 @@
         {% if bclabels %}
             {% for bclabel in bclabels %}
                 <div id="open-div-{{ bclabel.unique_id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
-                    <div class="border-top-solid-teal border-bottom-solid-teal">
+                    <div class="border-top-solid-teal border-bottom-solid-teal padding-bottom-1">
                         {% if bclabel.is_approved %}
                             <h3 class="darkteal-text">{{ bclabel.name }}</h3>
                             <p>{{ bclabel.default_text }}</p>
 
                             {% include 'partials/_label-translation.html' %}
 
-                        {% endif %}
                         {% else %}
                             <div class="flex-this space-between">
                                 <div>
@@ -131,7 +130,7 @@
         {% if tklabels %}
         {% for tklabel in tklabels %}
             <div id="open-div-{{ tklabel.unique_id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
-                <div class="border-top-solid-teal border-bottom-solid-teal">
+                <div class="border-top-solid-teal border-bottom-solid-teal padding-bottom-1">
                     {% if tklabel.is_approved %}
                         <h3 class="darkteal-text">{{ tklabel.name }}</h3>
                         <p>{{ tklabel.default_text }}</p>
