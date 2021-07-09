@@ -1,0 +1,31 @@
+{% if bclabel %}
+    {% if bclabel.bclabel_translation.all %}
+    {% for translation in bclabel.bclabel_translation.all %}
+        <div>
+            <div class="flex-this space-between">
+                <div><p class="darkteal-text">{{ translation.title }}</p></div>
+                <div><p class="darkteal-text">{{ translation.language }}</p></div>
+            </div>
+            <div>
+                <p class="no-top-margin no-bottom-margin">{{ translation.translation }} </p>
+            </div>
+        </div>
+    {% endfor %}
+    {% endif %}
+{% endif %}
+
+{% if tklabel %}
+    {% if tklabel.tklabel_translation.all %}
+    {% for translation in tklabel.tklabel_translation.all %}
+        <div>
+            <div class="flex-this space-between">
+                <div><p class="darkteal-text">{{ translation.title }}</p></div>
+                <div><p class="darkteal-text">{{ translation.language }}</p></div>
+            </div>
+            <div>
+                <p class="no-top-margin no-bottom-margin">{{ translation.translation }} </p>
+            </div>
+        </div>
+    {% endfor %}
+    {% endif %}
+{% endif %}

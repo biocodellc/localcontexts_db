@@ -1,15 +1,15 @@
 {% extends 'comm-base.html' %} {% block title %} | Approve Label {% endblock %}{% load static %} {% block community_content %}
 
 <div class="content-card content-card-space white-bg">
-    <h3 class="orange-text">Customised Labels</h3>
-    <div class="text-background-blue">
+    <h3 class="orange-text no-bottom-margin">Customised Labels</h3>
+
         <form method="POST" action="">
             {% csrf_token %}
             <div class="flex-this space-between">
                     
                 <div>
                     <h3 class="darkteal-text">Approve Label</h3>
-                    <p class="darkteal-text">These Labels need to be approved by a secondary person (admin or editor) apart of the community.</p>
+                    <p>These Labels need to be approved by a secondary person (admin or editor) apart of the community.</p>
                 </div>
                 <div>
                     <button class="action-btn">Approve Label</button>
@@ -18,11 +18,38 @@
             </div>
     
             <div>
-                {{ form.name }}
-                {{ form.default_text }}
+                <div class="w-30">{{ form.name }}</div>
+                <div>{{ form.default_text }}</div>
+
+                {{ formset.management_form }}
+                {% for tran_form in formset %}
+                    {% for hidden in tran_form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+
+                    <div class="flex-this column">
+                        <div class="flex-this space-between">
+                            <div class="w-30">
+                                {{ tran_form.title }}
+                            </div>
+                            <div class="w-30">
+                                {{ tran_form.language }}
+                            </div>
+                        </div>
+                        {{ tran_form.translation }}
+                    </div>
+                {% endfor %}
+                {% if formset.errors %}
+                    {% for error in formset.errors %}
+                        <div>
+                            <small style="color:red;"> {{ error }}</small>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
+
+
         </form>
-    </div>
 </div>
 
 {% endblock %}

@@ -128,22 +128,50 @@
     {% endif %}
     </div>
 
-        <div class="flex-this column text-background-blue">
+        <div class="flex-this column">
             <form method="POST" action="">
                 {% csrf_token %}
                 <div class="flex-this space-between">
-                    <div>
-                        <h3 class="darkteal-text weight-600">Customise Label</h3>
-                    </div>
-                    <div>
-                        <button class="action-btn">Save as draft</button> 
-                        <!-- <button class="white-bg darkteal-text">Cancel</button> -->
-                    </div>
+                    <h3 class="darkteal-text weight-600 no-bottom-margin">Customise Label</h3>
                 </div>
                 <div>
-                    <p class="darkteal-text">Each description is written to be flexible for use in multiple projects. <br>This text is written in English but you are welcome to add another language to this label.</p>
-                        {{ form.name }}<br>
+                    <p>Each description is written to be flexible for use in multiple projects. <br>This text is written in English but you are welcome to add another language to this label.</p>
+                    <div class="w-30">
+                        {{ form.name }}
+                    </div>
                         {{ form.default_text }}
+                </div>
+
+                {{ formset.management_form }}
+                {% for tran_form in formset %}
+                    {% for hidden in tran_form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+
+                    <div class="flex-this column">
+                        <div class="flex-this space-between">
+                            <div class="w-30">
+                                {{ tran_form.title }}
+                            </div>
+                            <div class="w-30">
+                                {{ tran_form.language }}
+                            </div>
+                        </div>
+                        {{ tran_form.translation }}
+                    </div>
+                {% endfor %}
+
+                {% if formset.errors %}
+                    {% for error in formset.errors %}
+                        <div>
+                            <small style="color:red;"> {{ error }}</small>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="text-align-right">
+                    <button class="action-btn">Save as draft</button> 
+                    <!-- <button class="white-bg darkteal-text">Cancel</button> -->
                 </div>
             </form>
         </div>

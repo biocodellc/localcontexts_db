@@ -24,7 +24,7 @@
                 <div class="notice-info border-bottom-dash-teal padding-bottom-2">
 
                     {% if bcnotice %}
-                        <a href="#"><h4 class="darkteal-text weight-500">{{ bcnotice.project.title}}</h4></a>
+                        <h4 class="darkteal-text weight-500">{{ bcnotice.project.title}}</h4>
                         <p>
                             {{ bcnotice.project.project_type }}<br>
                             {{ bcnotice.project.publication_date }}<br>
@@ -48,7 +48,7 @@
                     {% endif %}
 
                     {% if tknotice %}
-                        <a href="#"><h4 class="darkteal-text weight-500">{{ tknotice.project.title}}</h4></a>
+                        <h4 class="darkteal-text weight-500">{{ tknotice.project.title}}</h4>
                         <p>
                             {{ tknotice.project.project_type }}<br>
                             {{ tknotice.project.publication_date }}<br>
@@ -143,12 +143,13 @@
                                                     <div class="pad-left-2">
                                                         <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
                                                         <p class="weight-500"> {{ bclabel.name }} </p>
-                                                        <p>
-                                                            {{ bclabel.default_text}}
-                                                        </p>
+                                                        <p>{{ bclabel.default_text}}</p>
+
+                                                        {% include 'partials/_label-translation.html' %}
+
                                                     </div>
                                                 </div>
-                                                <div class="border-bottom-solid-teal"></div>
+                                                <div class="border-bottom-solid-teal pad-top-1"></div>
                                             </div>
 
                                         {% endfor %}
@@ -165,12 +166,13 @@
                                                 <div class="pad-left-2">
                                                     <p class="darkteal-text">Label shared by {{ tklabel.community.community_name }} </p>
                                                     <p class="weight-500"> {{ tklabel.name }} </p>
-                                                    <p>
-                                                        {{ tklabel.default_text}}
-                                                    </p>
+                                                    <p>{{ tklabel.default_text}}</p>
+
+                                                    {% include 'partials/_label-translation.html' %}
+
                                                 </div>
                                             </div>
-                                            <div class="border-bottom-solid-teal"></div>
+                                            <div class="border-bottom-solid-teal pad-top-1"></div>
                                         </div>
 
                                     {% endfor %}
