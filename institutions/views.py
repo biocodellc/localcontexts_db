@@ -15,11 +15,13 @@ from projects.models import Project, ProjectContributors, ProjectPerson
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
 from communities.models import Community, JoinRequest
-from notifications.models import ActionNotification, NoticeComment, NoticeStatus
+from notifications.models import ActionNotification
+from helpers.models import NoticeComment, NoticeStatus
+
 from accounts.models import UserAffiliation
 
 from projects.forms import CreateProjectForm, ProjectPersonFormset
-from notifications.forms import NoticeCommentForm
+from helpers.forms import NoticeCommentForm
 from communities.forms import InviteMemberForm, JoinRequestForm
 from .forms import CreateInstitutionForm, UpdateInstitutionForm, CreateInstitutionNoRorForm
 

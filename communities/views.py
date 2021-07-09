@@ -9,8 +9,8 @@ from django.template.loader import render_to_string
 from mimetypes import guess_type
 
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation
-from notifications.models import ActionNotification, NoticeStatus
+from helpers.models import LabelTranslation, NoticeStatus
+from notifications.models import ActionNotification
 from bclabels.models import BCNotice, BCLabel
 from tklabels.models import TKNotice, TKLabel
 from projects.models import ProjectContributors, Project, ProjectPerson
@@ -19,7 +19,7 @@ from bclabels.forms import CustomiseBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomiseTKLabelForm, ApproveAndEditTKLabelForm
 from helpers.forms import AddLabelTranslationFormSet, UpdateBCLabelTranslationFormSet, UpdateTKLabelTranslationFormSet
 from projects.forms import CreateProjectForm, ProjectPersonFormset
-from notifications.forms import NoticeCommentForm
+from helpers.forms import NoticeCommentForm
 
 from bclabels.utils import check_bclabel_type
 from tklabels.utils import check_tklabel_type
