@@ -3,8 +3,8 @@
 <div class="flex-this column">
 
     <div class="form-heading flex-this column w-90">
-        <h2 class="darkteal-text margin-bottom-2">Institution Profile</h2>
-        <p>Please first check if your institution is already registered. If your institution is not in our register, you can create a new institution profile.</p>    
+        <h2 class="darkteal-text margin-bottom-2">Institution Account</h2>
+        <p>Please first check if your institution is already registered. If your institution is not in our register, you can create a new institution account.</p>    
     </div>
 
      <div>
@@ -20,7 +20,7 @@
      </div>
 
      <div class="flex-this space-between margin-top-1">
-         <div><a class="darkteal-text" href="{% url 'create-institution' %}">Or create an institution profile</a></div>
+         <div><a class="darkteal-text" href="{% url 'create-institution' %}">Or create an institution account</a></div>
          <div><button id="openJoinRequestModalBtn" class="action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
      </div>
 
@@ -35,7 +35,7 @@
 
             <div>
                 <h2 id="orgName" class="darkteal-text"></h2>  
-                <p>Send a request to join community. Include your desired role and an optional message.</p>  
+                <p>Send a request to join community. Include your requested role and an optional message.</p>  
             </div>
 
             <form method="POST" action="">
@@ -47,7 +47,7 @@
                     <!-- <label class="pad-top-1-5" for="community">Community Name</label> -->
                     
                         <div class="w-50 pad-top-1-5 margin-right-1">
-                            <label class="pad-top-1-5" for="role">Desired Role</label><br>
+                            <label class="pad-top-1-5" for="role">Requested Role</label><br>
                             {{ form.role }}
                         </div>
                         
