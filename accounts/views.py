@@ -163,14 +163,6 @@ def logout(request):
 
 @login_required(login_url='login')
 def registration_reason(request):
-    # Redirects based on what is selected radio input
-    if request.method == 'POST':
-        if request.POST.get('reason') == 'community':
-            return redirect('connect-community')
-        elif request.POST.get('reason') == 'institution':
-            return redirect('connect-institution')
-        elif request.POST.get('reason') == 'researcher':
-            return redirect('connect-researcher')
     return render(request, 'accounts/select-account.html')
 
 @login_required(login_url='login')
@@ -231,7 +223,7 @@ def users_view(request, pk):
 def create_profile(request):
     if request.method == 'POST':
         user_form = UserCreateProfileForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(
+        profile_form = ProfileCreationForm(
             request.POST,  
             instance=request.user.profile
         )
@@ -242,7 +234,7 @@ def create_profile(request):
             return redirect('select-account')
     else:
         user_form = UserCreateProfileForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=request.user.profile)
+        profile_form = ProfileCreationForm(instance=request.user.profile)
 
     context = {
         'user_form': user_form,

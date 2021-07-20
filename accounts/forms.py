@@ -27,6 +27,14 @@ class UserCreateProfileForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name']
 
+class ProfileCreationForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['job_title']
+        widgets = {
+            'job_title': forms.TextInput(attrs={'style': 'width: 100%;'}),
+        }
+
 # updating user instance (same as above but includes email)
 class UserUpdateForm(forms.ModelForm):
     class Meta:
