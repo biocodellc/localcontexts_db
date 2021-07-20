@@ -246,9 +246,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 8px;  
+  padding: 15px;  
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
   border-radius: 12px;
+}
+
+.account-card:nth-child(2) {
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
 .white-btn {
