@@ -34,7 +34,7 @@
 
 /* Form Container || THE WHITE PART */
 #complete-form-container {
-    padding: 60px;
+    padding: 40px;
     justify-content: center;
     max-width: 65%;
     min-width: 65%;
@@ -252,8 +252,8 @@
 }
 
 .account-card:nth-child(2) {
-    margin-left: 15px;
-    margin-right: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .white-btn {
