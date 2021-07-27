@@ -664,14 +664,25 @@ def apply_project_labels(request, pk, project_id):
             tklabels_selected = request.POST.getlist('tk-checked-labels')
 
             for choice in bclabels_selected:
-                label = BCLabel.objects.get(unique_id=choice)
-                project.bclabels.add(label)
-                #TODO: Create ActionNotification: tk label has been applied to project
+                bclabel = BCLabel.objects.get(unique_id=choice)
+                project.bclabels.add(bclabel)
+
+                # Send Activity notification to current community confirming Label application
+                reference_id = str(project.unique_id)
+                truncated_project_title = str(project.title)[0:30]
+                title = bclabel.name + ' Label has been applied to the project ' + truncated_project_title + ' ...'
+                ActionNotification.objects.create(title=title, notification_type='Projects', community=community, reference_id=reference_id)
                 
             for tkchoice in tklabels_selected:
                 tklabel = TKLabel.objects.get(unique_id=tkchoice)
                 project.tklabels.add(tklabel)
-                #TODO: Create ActionNotification: tk label has been applied to project
+
+                # Send Activity notification to current community confirming Label application
+                reference_id = str(project.unique_id)
+                truncated_project_title = str(project.title)[0:30]
+                title = tklabel.name + ' Label has been applied to the project ' + truncated_project_title + ' ...'
+                ActionNotification.objects.create(title=title, notification_type='Projects', community=community, reference_id=reference_id)
+
             
             return redirect('community-projects', community.id)
 
