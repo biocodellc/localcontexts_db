@@ -2,8 +2,8 @@
 
 <div class="flex-this column w-90">
     <div>
-        <h2 class="darkteal-text">Institution Profile</h2>  
-        or <a class="darkteal-text" href="{% url 'connect-institution' %}">Connect to an institution profile</a>  
+        <h2 class="darkteal-text">Institution Account</h2>  
+        or <a class="darkteal-text" href="{% url 'connect-institution' %}">Request to join an institution account</a>  
     </div>
 
     <form action="" method="POST" class="flex-this column w-100">
@@ -23,8 +23,8 @@
                 </div>
                 <div class="w-50 pad-top-1-5">
                     <label for="institution-select">Institution Name</label>
-                    <select id="institution-select" name="institution_name" class="w-100">
-                        <option disabled selected="selected">-- Select Institution Name --</option>
+                    <select id="institution-select" name="institution_name" class="w-100" required>
+                        <option disabled selected="selected" value="">-- Select Institution Name --</option>
                     </select>
                 </div>
             </div>

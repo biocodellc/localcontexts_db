@@ -1,7 +1,7 @@
 from django import forms
 from .models import *
 
-class CustomiseTKLabelForm(forms.ModelForm):
+class CustomizeTKLabelForm(forms.ModelForm):
     class Meta:
         model = TKLabel
         fields = ['name', 'default_text']

@@ -3,44 +3,42 @@
 <div class="flex-this column">
     <div class="registration-card-space">
 
-        <h2 class="darkteal-text">Which profile do you want to create?</h2>
-        <p class="darkteal-text">Please choose one profile to register with.</p>
+        <h2 class="darkteal-text">Choose an account</h2>
+        <p>Local Contexts has three types of accounts for Indigenous Communities, Researchers and Institutions. Please choose which one suits you.</p>
 
-        <form method="POST" action="">
-            {% csrf_token %}
-            
-            <div class="flex-this radio-group">
-                <div class="reason-radio">
-                    <input type="radio" value="community" id="community-radio" name="reason">
+        <div class="flex-this row space-between">
+
+            <div class="account-card margin-right-1">
+                <p><strong>Community Account </strong></p>
+                <div><img class="tiny-label" src="{% static 'images/tk-labels/tk-attribution.png' %}"></div>
+                <p><strong>Who?</strong> A community entity or representative</p>
+                <p><strong>What?</strong> Customize Labels, create projects and apply Labels</p>
+                <a href="{% url 'connect-community' %}"><div class="white-btn"><span>Join</span></div></a>
+                <a href="{% url 'create-community' %}"><div class="white-btn"><span>Create</span></div></a>
+            </div>
+            <div class="account-card margin-left-1 margin-right-1">
+                <p><strong>Institution Account</strong></p>
+                <div class="flex-this">
+                    <div class="margin-right-1"><img class="tiny-notice" src="{% static 'images/notices/tk-notice.png' %}"></div>
+                    <div class="margin-left-16"><img class="tiny-notice" src="{% static 'images/notices/ci-open-to-collaborate.png' %}"></div>
                 </div>
-                <div>
-                    <label class="darkteal-text" for="community-radio">Community Profile: </label> <span>A community profile can be used by a Community entity or representative organisation.</span> <br>
+                <p><strong>Who?</strong> Cultural or research institutions as well as other data repsitories</p>
+                <p><strong>What?</strong> Create projects and apply Notices</p>
+                <a href="{% url 'connect-institution' %}"><div class="white-btn"><span>Join</span></div></a>
+                <a href="{% url 'create-institution' %}"><div class="white-btn"><span>Create</span></div></a>
+            </div>
+            <div class="account-card margin-left-1">
+                <p><strong>Researcher Account</strong></p>
+                <div class="flex-this">
+                    <div class="margin-right-1"><img class="tiny-notice" src="{% static 'images/notices/tk-notice.png' %}"></div>
+                    <div class="margin-left-16"><img class="tiny-notice" src="{% static 'images/notices/bc-notice.png' %}"></div>
                 </div>
+                <p><strong>Who?</strong> An individual researcher who is either affiliated with an institution or independent </p>
+                <p><strong>What?</strong> Create projects and apply Notices</p>
+                <a href="{% url 'connect-researcher' %}"><div class="white-btn"><span>Create</span></div></a>
             </div>
 
-            <div class="flex-this radio-group">
-                <div class="reason-radio">
-                    <input type="radio" value="institution" id="institution-radio" name="reason">
-                </div>
-                <div>
-                    <label class="darkteal-text" for="institution-radio">Institution Profile:  </label><span>An institution profile can be used by cultural and research institutions as well as other data repositories.</span><br>
-                </div>
-            </div>
-
-            <div class="flex-this radio-group">
-                <div class="reason-radio">
-                    <input type="radio" value="researcher" id="researcher-radio" name="reason">
-                </div>
-                <div>
-                    <label class="darkteal-text" for="researcher-radio">Researcher Profile: </label><span>A researcher profile can be used by researchers including those affiliated with research institutions and those that are independent.</span><br>
-                </div>
-            </div>
-
-            <div class="text-align-right">
-                <button class="action-btn">Continue <i class="fa fa-long-arrow-right"></i></button>
-            </div>
-            
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -57,20 +57,6 @@
     <h4 class="orange-text weight-600 no-top-margin">Send Requests</h4>
     <p>Once you have created a project, you can send this project to communities, institutions or researchers that could be interested in this project.</p>
 
-    <!-- TODO: Set this up  -->
-    <!-- <p>Do you know who you need to notify?<br>
-        <input type="radio"> Yes <br>
-        <input type="radio"> No
-    </p>
-
-    <p>
-        How do you want to find others?<br>
-        <input type="radio"> By our Local Contexts register <br>
-        <input type="radio"> Invite entities that are not registered with us
-    </p> -->
-
-    <!-- <p>Please enter their details</p> -->
-
     <form method="POST" action="">
         {% csrf_token %}
 
@@ -109,18 +95,6 @@
                 <div id="comm-id-input-{{ community.id }}" style="display: none;"></div>
             {% endfor %}
         {% endif %}
-    
-        <!-- TODO: Set this up -->
-        <!-- <div class="flex-this">
-            <div>
-                <label>Contact Name</label><br>
-                <input type="text">
-            </div>    
-            <div>
-                <label>Email Address</label><br>
-                <input type="text">
-            </div>
-        </div> -->
     
         <div class="margin-top-1">
             <label>Send a supporting message with this request</label><br>

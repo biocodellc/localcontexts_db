@@ -34,7 +34,7 @@
 
 /* Form Container || THE WHITE PART */
 #complete-form-container {
-    padding: 60px;
+    padding: 40px;
     justify-content: center;
     max-width: 65%;
     min-width: 65%;
@@ -52,7 +52,7 @@
 #progress-ul {
     align-items: center;
     width: 100%;
-    padding: 11% 1% 11% 6%;
+    padding: 11% 1% 4% 6%;
 }
 
 #progress-ul li {
@@ -111,7 +111,7 @@
 #progress-bottom-container h2 {
     font-weight: 400;
     text-align: center;
-    margin-top: 14%;
+    margin-top: 11%;
     padding-bottom: 2%;
 }
 
@@ -235,4 +235,58 @@
 
 .radio-group {
     margin-bottom: 30px;
+}
+
+/* Choose an account page */
+
+.account-card {
+  width: 218px;
+  height: 383px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;  
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+}
+
+.account-card:nth-child(2) {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.white-btn {
+   margin: 5px 10px;
+   padding: 8px;
+   border-radius: 5px;
+   border: 1px solid #007385;
+   width: 81px;
+   height: 40px; 
+   background-color: #fff;
+   text-align: center; 
+}
+
+.white-btn span {
+    font-size: 14px;
+    font-weight: bold;
+    color: #007385; 
+}
+
+.white-btn:hover {
+    background-color: #007385;
+}
+
+.white-btn:hover span {
+    color: #fff;
+}
+
+.tiny-label {
+    width: 50px;
+    height: 38.46px;
+}
+
+.tiny-notice {
+    width: 42.59px;
+    height: 42.59px;
 }

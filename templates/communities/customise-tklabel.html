@@ -1,9 +1,9 @@
-{% extends 'comm-base.html' %} {% block title %} | Customise {% endblock %}{% load static %} {% block community_content %}
+{% extends 'comm-base.html' %} {% block title %} | Customize {% endblock %}{% load static %} {% block community_content %}
 
 <div class="content-card content-card-space white-bg">
     <div>
         <h2 class="orange-text">Labels</h2>
-        <p class="darkteal-text">You currently have 1 label customised</p>
+        <p class="darkteal-text">You currently have 1 label customized</p>
     
         {% if label_type == 'tka' %}
             <div id="target-img-div">
@@ -132,7 +132,7 @@
             <form method="POST" action="">
                 {% csrf_token %}
                 <div class="flex-this space-between">
-                    <h3 class="darkteal-text weight-600 no-bottom-margin">Customise Label</h3>
+                    <h3 class="darkteal-text weight-600 no-bottom-margin">Customize Label</h3>
                 </div>
                 <div>
                     <p>Each description is written to be flexible for use in multiple projects. <br>This text is written in English but you are welcome to add another language to this label.</p>

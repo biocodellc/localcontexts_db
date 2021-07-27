@@ -24,8 +24,9 @@ class ValidateCommunityForm(forms.ModelForm):
         fields = ['contact_name', 'contact_email', 'support_document']
         widgets = {
             'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
-            'contact_email': forms.EmailInput(attrs={'class': 'w-100'}),
+            'contact_email': forms.EmailInput(attrs={'class': 'w-100', 'required': 'required'}),
         }
+
 
 
 class UpdateCommunityForm(forms.ModelForm):
