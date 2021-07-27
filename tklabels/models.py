@@ -12,6 +12,7 @@ class TKNotice(models.Model):
     communities = models.ManyToManyField(Community, blank=True, related_name="tknotice_communities")
     placed_by_researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True)
     placed_by_institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True)
+    img_url = models.URLField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
 
