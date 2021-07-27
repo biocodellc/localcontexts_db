@@ -19,8 +19,6 @@ class CreateCommunityForm(forms.ModelForm):
         }
 
 class ValidateCommunityForm(forms.ModelForm):
-    # contact_email = forms.EmailField(required=True)
-
     class Meta:
         model = Community
         fields = ['contact_name', 'contact_email', 'support_document']
