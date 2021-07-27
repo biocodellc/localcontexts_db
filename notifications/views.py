@@ -184,12 +184,3 @@ def read_researcher_notification(request, rid, pk):
         'researcher':researcher,
     }
     return render(request, 'notifications/researcher-read.html', context)
-
-
-
-
-# TODO: Do we need to be able to delete activity/ community notifications?
-# @login_required(login_url='login')
-# def delete_notification_community(request, pk):
-#     n = ActionNotification.objects.get(id=pk)
-#     return render(request, 'notifications/community-notification.html', { 'n': n })

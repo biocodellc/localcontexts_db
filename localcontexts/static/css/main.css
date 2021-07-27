@@ -440,20 +440,6 @@ input:focus {
     cursor: pointer;
 }
 
-/* TODO: consolidate this so it does not repeat */
-.white-action-btn {
-    color: #007385;
-    cursor: pointer;
-    margin-top: 2%;
-    background-color: #fff;
-    border: 2px solid #007385;
-    max-height: 44px;
-    min-height: 44px;
-    border-radius: 5px;
-    font-size: 14px;
-    line-height: 21px;
-}
-
 .default-btn {
     max-width: 110px;
     min-width: 110px;
