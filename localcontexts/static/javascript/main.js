@@ -22,7 +22,7 @@ if (passwordField ) {
     })
 }
 
-// Show customised label text in community: labels
+// Show customized label text in community: labels
 function customText(imgDiv) {
     let labelID = imgDiv.id
     let divs = Array.from(document.querySelectorAll('.div-toggle'))
@@ -261,7 +261,7 @@ function whichTKImgClicked(val) {
 }
 
 
-// Community: Customise labels -- populate default text
+// Community: Customize labels -- populate default text
 var parentDiv = document.getElementById('target-img-div')
 if (parentDiv) {
     var image = parentDiv.firstChild.nextSibling
@@ -431,7 +431,7 @@ function displayDefaultText(elem) {
 }
 
 
-// TK Labels : community -> customise -> select labels
+// TK Labels : community -> customize -> select labels
 function showTKLabelInfo() {
     let labelContainer = document.getElementById('expand-tklabels')
     let span = document.getElementById('show-more-tk-down')

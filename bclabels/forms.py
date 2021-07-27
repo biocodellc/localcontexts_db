@@ -1,7 +1,7 @@
 from django import forms
 from .models import *
 
-class CustomiseBCLabelForm(forms.ModelForm):
+class CustomizeBCLabelForm(forms.ModelForm):
     class Meta:
         model = BCLabel
         fields = ['name', 'default_text']
