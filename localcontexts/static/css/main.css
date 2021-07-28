@@ -1300,6 +1300,8 @@ input:focus {
   }
 
   .tooltiptext {
+    padding: 10px;
+    display: inline-block;
     font-size: 14px;
   }
   

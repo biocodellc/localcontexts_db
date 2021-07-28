@@ -974,8 +974,6 @@ if (inputList) {
 function setCommunity() {
     let hiddenCommunityInput = document.getElementById('hidden-target-input')
     hiddenCommunityInput.value = inputList.value
-    let header = document.getElementById('orgName')
-    header.innerText = `Request to join ${inputList.value}`
 }
 
 var joinBtn = document.getElementById('openJoinRequestModalBtn')
