@@ -35,6 +35,7 @@ class Project(models.Model):
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     date_modified = models.DateTimeField(auto_now=True, null=True)
     is_public = models.BooleanField(default=True, null=True)
+    is_discoverable = models.BooleanField(default=True, null=True)
     bclabels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_labels")
     tklabels = models.ManyToManyField("tklabels.TKLabel", verbose_name="TK Labels", blank=True, related_name="project_tklabels")
 

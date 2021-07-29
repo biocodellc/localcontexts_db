@@ -6,18 +6,27 @@
         <p><a href="{% url 'institution-projects' institution.id %}"><span class="darkteal-text">Projects</span></a> <span>>> Create New Project</span></p>
 
         <div>
-            <h3 class="orange-text">Create a Project</h3>
-            <p>A project is the item or sample your entity would like to apply a notice to.</p>
+            <h2>Create a Local Contexts Project</h2>
+            <p>A Local Contexts project supports the application of the Local Contexts Notices to a traditional knowledge materials your group would like to share. </p>
+
+            <h3>Project Overview</h3>
 
             <form method="POST" action="" id="createProjectForm">
                 {% csrf_token %}
 
                 <div class="border-bottom-dash-teal padding-bottom-1">
-                    <label>What are you applying the Notice to?</label><br>
+                    <label>What type of project are you applying the Notice to?</label><br>
                     {{ form.project_type }} <br>
                 </div>
 
-                <p class="weight-500">Project Details</p>
+                <div class="margin-bottom-1 margin-top-1">
+                    <label>What is the privacy level of this project?</label><br>
+                    <input type="radio"> Public: Can be seen by anyone within and outside of the Local Contexts Hub<br>
+                    <input type="radio"> Discoverable: Can be seen by profiles in the Local Contexts Hub only<br>
+                    <input type="radio"> Private: Can only be seen by Local Contexts profiles that have been notified of the project<br>
+                </div>
+
+                <h3>Project Details</h3>
                 <p>
                     The information provided here will be shared to other entities your institution chooses to share with.<br>
                     Please try to keep this section as informative as you can.
@@ -37,6 +46,12 @@
                     {{ form.description }} <br>
                 </div>
 
+
+                <div class="padding-bottom-1 w-50">
+                    <label>Project Link (if applicable</label><br>
+                    {{ form.url }} <br>
+                </div>
+
                 <div class="padding-bottom-1 w-50">
                     <label>Project Contact Name* </label><br>
                     {{ form.project_contact }} <br>
@@ -51,11 +66,6 @@
                 <div class="padding-bottom-1 w-50">
                     <label>Recommended Citation</label><br>
                     {{ form.recommended_citation }} <br>
-                </div>
-
-                <div class="padding-bottom-1 w-50">
-                    <label>Project URL</label><br>
-                    {{ form.url }} <br>
                 </div>
 
                 {% include 'partials/_add-contributors.html'%}
