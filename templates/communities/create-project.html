@@ -5,90 +5,104 @@
         <small><a class="darkteal-text" href="{% url 'community-projects' community.id %}">Projects</a> <span class="grey-text"> >> Create New Project</span></small>
     </div>
 
-    <h3 class="orange-text">Create a Project</h3>
-    <p>A project is the item or sample your entity would like to apply Labels to.</p>
+    <div class="margin-top-16">
+        <h2>Create a Local Contexts Project</h2>
+        <p>A Local Contexts project supports the application of the Local Contexts Notices to a traditional knowledge materials your group would like to share. </p>
 
-    <form method="POST" action="">
-        {% csrf_token %}
+        <h3>Project Overview</h3>
 
-    <div class="border-bottom-dash-teal padding-bottom-1">
-        <label>What are you applying the Label to?</label><br>
-        {{ form.project_type }} <br>
-    </div>
+        <form method="POST" action="" id="createProjectForm">
+            {% csrf_token %}
 
-    <p class="weight-500">Project Details</p>
-    <p>
-        The information provided here will be shared to other entities your community chooses to share with.<br>
-        Please try to keep this section as informative as you can.
-    </p>
-    <div class="padding-bottom-1 w-50">
-        <label>Project Title*</label><br>
-        {{ form.title }} <br>
-    </div>
+            <div class="border-bottom-dash-teal padding-bottom-1">
+                <label>What type of project are you applying the Notice to?</label><br>
+                {{ form.project_type }} <br>
+            </div>
 
-    <div class="padding-bottom-1 w-50">
-        <label>Project or Publication Date</label><br>
-        {{ form.publication_date }} <br>
-    </div>
+            <div class="margin-bottom-1 margin-top-1">
+                <p class="no-bottom-margin">What is the privacy level of this project?</p><br>
+                <input type="radio" name="privacy_level" value="public"> <label for="public">Public: Can be seen by anyone within and outside of the Local Contexts Hub</label><br>
+                <input type="radio" name="privacy_level" value="discoverable"> <label for="discoverable">Discoverable: Can be seen by profiles in the Local Contexts Hub only</label><br>
+                <input type="radio" name="privacy_level" value="private"> <label for="private">Private: Can only be seen by Local Contexts profiles that have been notified of the project</label><br>
+            </div>
 
-    <div class="padding-bottom-1 w-50">
-        <label>Project Description*</label><br>
-        {{ form.description }} <br>
-    </div>
+            <h3>Project Details</h3>
+            <p>
+                The information provided here will be shared to other entities your institution chooses to share with.<br>
+                Please try to keep this section as informative as you can.
+            </p>
+            <div class="padding-bottom-1 w-50">
+                <label>Project Title*</label><br>
+                {{ form.title }} <br>
+            </div>
 
-    <div class="padding-bottom-1 w-50">
-        <label>Project Contact Name* </label><br>
-        {{ form.project_contact }} <br>
-    </div>
+            <div class="padding-bottom-1 w-50">
+                <label>Project Description*</label><br>
+                {{ form.description }} <br>
+            </div>
 
-
-    <div class="padding-bottom-1 w-50">
-        <label>Project Contact Email*</label><br>
-        {{ form.project_contact_email }} <br>
-    </div>
-
-    <div class="padding-bottom-1 w-50">
-        <label>Recommended Citation</label><br>
-        {{ form.recommended_citation }} <br>
-    </div>
-
-    <div class="padding-bottom-1 w-50">
-        <label>Project URL</label><br>
-        {{ form.url }} <br>
-    </div>
-
-    {% include 'partials/_add-contributors.html'%}
-
-    <p class="weight-500">Project Metadata</p>
-    <p>
-        The project metadata is the key information of how to access data relevant to the project. This will only be shown internally.
-    </p>
-
-    <div class="padding-bottom-1 w-50">
-        <label>Project Data GUID</label><br>
-        {{ form.project_data_guid }} <br>
-    </div>
-
-    <div class="padding-bottom-1 w-50">
-        <label>Project DOI</label><br>
-        {{ form.publication_doi }} <br>
-    </div>
-
-    <div class="padding-bottom-1 w-50">
-        <label>GEOME Project ID</label><br>
-        {{ form.geome_project_id }} <br>
-    </div>
+            <div class="padding-bottom-1 flex-this w-50 space-between">
+                <div>
+                    <label>Project date</label><br>
+                    {{ form.publication_date }} <br>
+                </div>
+                <div class="margin-top-16">
+                    <p>OR</p>
+                </div>
+                <div class="margin-top-16">
+                    <p>{{ form.publication_date_ongoing }} <label>Ongoing project</label></p>
+                </div>
+            </div>
 
 
-    <div>
-    
-        <div>
+            <div class="padding-bottom-1 w-50">
+                <label>Project Link (if applicable)</label><br>
+                {{ form.url }} <br>
+            </div>
+
+            <div class="padding-bottom-1 w-50">
+                <label>Project Contact Name* </label><br>
+                {{ form.project_contact }} <br>
+            </div>
+
+
+            <div class="padding-bottom-1 w-50">
+                <label>Project Contact Email*</label><br>
+                {{ form.project_contact_email }} <br>
+            </div>
+
+            <div class="padding-bottom-1 w-50">
+                <label>Recommended Citation</label><br>
+                {{ form.recommended_citation }} <br>
+            </div>
+
+            {% include 'partials/_add-contributors.html'%}
+
+            <h3>Project Metadata</h3>
+            <p>
+                The project metadata is the key information of how to access data relevant to the project. This will only be shown internally.
+            </p>
+
+            <div class="padding-bottom-1 w-50">
+                <label>Project Data GUID</label><br>
+                {{ form.project_data_guid }} <br>
+            </div>
+
+            <div class="padding-bottom-1 w-50">
+                <label>Project DOI</label><br>
+                {{ form.publication_doi }} <br>
+            </div>
+
+            <div class="padding-bottom-1 w-50">
+                <label>GEOME Project ID</label><br>
+                {{ form.geome_project_id }} <br>
+            </div>
+
             {{ form.errors }}
-            <button class="action-btn">Save project</button>
-        </div>
+            <button class="action-btn">Save Project</button>
 
+        </form>
     </div>
-</form>
 </div>
 
 {% endblock %}

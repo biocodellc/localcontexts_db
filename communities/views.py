@@ -23,7 +23,7 @@ from helpers.forms import NoticeCommentForm
 
 from bclabels.utils import check_bclabel_type
 from tklabels.utils import check_tklabel_type
-from projects.utils import add_to_contributors
+from projects.utils import add_to_contributors, set_project_privacy
 
 from .forms import *
 from .models import *
@@ -603,7 +603,9 @@ def create_project(request, pk):
             formset = ProjectPersonFormset(request.POST)
 
             if form.is_valid() and formset.is_valid():
+                privacy_radio_value = request.POST.get('privacy_level')
                 data = form.save(commit=False)
+                set_project_privacy(data, privacy_radio_value)
                 data.project_creator = request.user
                 data.save()
 
