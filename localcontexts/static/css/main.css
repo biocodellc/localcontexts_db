@@ -1220,6 +1220,8 @@ input:focus {
     position: absolute;
     padding: 20px;
     background-color: #fff;
+    opacity: 1;
+    z-index: 1;
     height: 546px;
     width: 386px;
     border-radius: 10px;
