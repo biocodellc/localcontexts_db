@@ -5,8 +5,8 @@
 
     <div id="tklabels-title-vertical" style="margin:auto 0;">
         <div class="flex-this space-between">
-            <div>
-                <h2 class="orange-text weight-600">Traditional Knowledge (TK) Labels</h2>
+            <div class="margin-left-1">
+                <h2>Traditional Knowledge (TK) Labels</h2>
             </div>
             <div>
                 <a onclick='showTKLabelInfo()' class="darkteal-text pointer"> <span id="show-more-tk-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
@@ -14,9 +14,9 @@
         </div>
     </div>
 
-    <div id="expand-tklabels" style="height:0px; overflow:hidden;">
+    <div id="expand-tklabels" style="height:0px; overflow:hidden;" class="margin-left-1">
         <div>
-            <p>
+            <p class="w-70">
 
                 The TK Label text is intended to be customized by each community – giving the Labels specificity and context. 
                 The title of each TK Label can be translated into one or more languages and displayed in addition to the default Label title. 
@@ -30,10 +30,10 @@
         <div class="flex-this column pad-right-1">
 
             <!-- PROVENANCE -->
-            <div class="flex-this w-100">
-                <div class="margin-right-1" style="min-width: 200px">
-                    <p><span class="weight-600">Provenance Labels</span><br>
-                    Content for Provenance</p>
+            <div class="flex-this column w-100">
+                <div class="margin-bottom-16 w-50">
+                    <h3 class="no-top-margin no-bottom-margin">Provenance Labels</h3>
+                    <p>Provenance Labels identify the group or sub-group which is the primary cultural authority for the material, and/or recognises other interests in the material.</p>
                 </div>
 
                 <div class="flex-this wrap w-100">
@@ -67,7 +67,7 @@
             </div>
 
             <!-- Provenance FORM -->
-            <div id="tklabel-info-prov" class="flex-this column text-background-blue margin-bottom-2" style="height:0px; overflow: hidden;">
+            <div id="tklabel-info-prov" class="flex-this column margin-bottom-2" style="height:0px; overflow: hidden;">
 
                 <form method="POST" action="">
                     {% csrf_token %}
@@ -102,11 +102,11 @@
             </div>
 
             <!-- PROTOCOLS -->
-            <div class="flex-this w-100" style="align-items: stretch;">
+            <div class="flex-this column w-100">
 
-                <div class="margin-right-1" style="min-width: 200px">
-                    <p><span class="weight-600">Protocols Labels</span><br>
-                    Content for Protocols</p>
+                <div class="margin-bottom-16 w-50">
+                    <h3 class="no-top-margin no-bottom-margin">Protocol Labels</h3>
+                    <p>Protocol Labels outline traditional protocols associated with access to this material and invite viewers to respect community protocols.</p>
                 </div>
 
                 <div class="w-100 flex-this wrap">
@@ -149,7 +149,7 @@
             </div>
 
             <!-- Protocols FORM -->
-            <div id="tklabel-info-prot" class="flex-this column text-background-blue margin-bottom-2" style="height:0px; overflow: hidden;">
+            <div id="tklabel-info-prot" class="flex-this column margin-bottom-2" style="height:0px; overflow: hidden;">
 
                 <form method="POST" action="">
                     {% csrf_token %}
@@ -184,10 +184,11 @@
             </div>
 
             <!-- PERMISSIONS -->
-            <div class="flex-this w-100">
-                <div class="margin-right-1" style="min-width: 200px;">
-                    <p><span class="weight-600">Permissions Labels</span><br>
-                    Content for Permissions</p>
+            <div class="flex-this column w-100">
+
+                <div class="margin-bottom-16 w-50">
+                    <h3 class="no-top-margin no-bottom-margin">Permissions Labels</h3>
+                    <p>Permission Labels indicate what activities the community has approved as generally acceptable. Other uses require direct engagement with primary cultural authorities.</p>
                 </div>
 
                 <div class="flex-this wrap">
@@ -227,7 +228,7 @@
             </div>
 
             <!-- Permissions FORM -->
-            <div id="tklabel-info-perms" class="flex-this column text-background-blue margin-bottom-2" style="height:0px; overflow: hidden;">
+            <div id="tklabel-info-perms" class="flex-this column margin-bottom-2" style="height:0px; overflow: hidden;">
 
                 <form method="POST" action="">
                     {% csrf_token %}
@@ -271,8 +272,8 @@
 
     <div id="bclabels-title-vertical" style="margin:auto 0;">
         <div class="flex-this space-between">
-            <div>
-                <h2 class="orange-text weight-600">Biocultural (BC) Labels</h2>
+            <div class="margin-left-1">
+                <h2>Biocultural (BC) Labels</h2>
             </div>
             <div>
                 <a onclick='showBCLabelInfo()' class="darkteal-text pointer"> <span id="show-more-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
@@ -280,9 +281,9 @@
         </div>
     </div>
 
-    <div id="expand-bclabels" style="height:0px;">
+    <div id="expand-bclabels" style="height:0px;" class="margin-left-1">
         <div>
-            <p>
+            <p class="w-70">
 
                 The BC Label text is intended to be customized by each community – giving the Labels specificity and context. 
                 The title of each BC Label can be translated into one or more languages and displayed in addition to the default Label title. 
@@ -296,19 +297,19 @@
 
         <div class="flex-this column">
 
-            <div class="flex-this wrap w-100" style="align-items: stretch;">
+            <div class="margin-bottom-16 w-50">
+                <h3 class="no-top-margin no-bottom-margin">Provenance Labels</h3>
+                <p>Provenance Labels identify the group or sub-group which is the primary cultural authority for the material, and/or recognizes other interests in the material.</p>
+            </div>
 
-                <div class="margin-right-1" style="min-width: 200px">
-                    <p><span class="weight-600">Provenance Labels</span><br>
-                    Content for Provenance</p>
-                </div>
+            <div class="flex-this wrap w-100">
 
-                <div class="center-text w-15">
+                <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bcp" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label"></div>
                     <div class="toggle-txt-color grey-text"><p> Provenance <br> (BC P)</p></div>
                 </div>
 
-                <div class="center-text w-15">
+                <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bcmc" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label"></div>
                     <div class="toggle-txt-color grey-text"><p>Multiple Communities <br> (BC MC)</p></div>
                 </div>
@@ -316,29 +317,29 @@
 
             </div>
 
-            <div class="flex-this wrap w-100" style="align-items: stretch;">
-                
-                <div class="margin-right-1" style="min-width: 200px">
-                    <p><span class="weight-600">Permissions Labels</span><br>
-                    Content for Permissions</p>
-                </div>
+            <div class="margin-bottom-16 w-50">
+                <h3 class="no-top-margin no-bottom-margin">Permission Labels</h3>
+                <p>Permission Labels indicate what activities the community has approved as generally acceptable. Other uses require direct engagement with primary cultural authorities. </p>
+            </div>
 
-                <div class="center-text w-15">
+            <div class="flex-this wrap w-100">
+
+                <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bccv" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label"></div>
                     <div class="toggle-txt-color grey-text"><p>Consent Verified <br> (BC CV) </p></div>
                 </div>
     
-                <div class="center-text w-15">
+                <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bcr" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label"></div>
                     <div class="toggle-txt-color grey-text"><p>Research Use <br> (BC R) </p></div>
                 </div>
     
-                <div class="center-text w-15">
+                <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bcocoll" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label"></div>
                     <div class="toggle-txt-color grey-text"><p>Open to <br>Collaboration <br> (BC OC) </p></div>
                 </div>
     
-                <div class="center-text w-15">
+                <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bcocomm" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label"></div>
                     <div class="toggle-txt-color grey-text"><p>Open to <br>Commercialization <br> (BC OC)</p></div>
                 </div>
@@ -347,7 +348,7 @@
     
         </div>
 
-        <div id="bclabel-info" class="flex-this column text-background-blue" style="height:0px;">
+        <div id="bclabel-info" class="flex-this column" style="height:0px;">
 
             <form method="POST" action="">
                 {% csrf_token %}
