@@ -51,6 +51,7 @@ class TKLabel(models.Model):
     community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='label name', max_length=90, null=True)
     default_text = models.TextField(null=True, blank=True)
+    img_url = models.URLField(blank=True, null=True)
     is_approved = models.BooleanField(default=False, null=True)
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="tklabel_approver")
     created = models.DateTimeField(auto_now_add=True, null=True)

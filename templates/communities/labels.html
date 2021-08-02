@@ -6,7 +6,7 @@
             {% if bclabels or tklabels %}
 
                 <div>
-                    <h2 class="orange-text weight-600">Labels</h2>
+                    <h2>Customized Labels</h2>
                     <p>You currently have {{ bclabels.count }} BC Labels and {{ tklabels.count }} TK Labels customized</p>
                 </div>
                 <div class="flex-this align-center">
@@ -37,8 +37,8 @@
         </div>
         
         <div class="flex-this wrap">
+            <!-- UNAPPROVED BCLABELS -->
             {% if bclabels %}
-
                 {% for bclabel in bclabels %}
                     {% if bclabel.is_approved == False %}
                         <div class="w-20 custom-labels">
@@ -50,42 +50,53 @@
                                     </div>
                             </div>
                         </div>
-                    {% else %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <!-- UNAPPROVED TK LABELS -->
+            {% if tklabels %}
+                {% for tklabel in tklabels %}
+                    {% if tklabel.is_approved == False %}
+                        <div class="w-20 custom-labels">
+                            <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
+                                <p class="darkteal-text">Waiting approval*</p>
+                                    <div>
+                                        {% include 'tklabels/which-label.html' %}
+                                        <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
+                                    </div>  
+                            </div>
+                        </div>
+                    {% endif %}
+
+                {% endfor %}
+            {% endif %}
+
+            <!-- APPROVED BC LABELS -->
+            {% if bclabels %}
+                {% for bclabel in bclabels %}
+                    {% if bclabel.is_approved == True %}
                         <div class="w-20 custom-labels">
                             <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="approved-label center-text pointer">
                                 {% include 'bclabels/which-label.html' %}
                                 <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color grey-text">{{ bclabel.name }}</p>
                             </div>
                         </div>
-
                     {% endif %}
                 {% endfor %}
             {% endif %}
 
+            <!-- APPROVED TKLABELS -->
             {% if tklabels %}
-
-            {% for tklabel in tklabels %}
-                {% if tklabel.is_approved == False %}
-                    <div class="w-20 custom-labels">
-                        <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
-                            <p class="darkteal-text">Waiting approval*</p>
-                                <div>
-                                    {% include 'tklabels/which-label.html' %}
-                                    <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
-                                </div>  
-                        </div>
-                    </div>
-                {% else %}
+                {% if tklabel.is_approved == True %}
                     <div class="w-20 custom-labels">
                         <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="approved-label center-text pointer">
                             {% include 'tklabels/which-label.html' %}
                             <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
                         </div>
                     </div>
-
                 {% endif %}
-            {% endfor %}
-        {% endif %}
+            {% endif %}
 
         </div>
 

@@ -1,12 +1,12 @@
-{% extends 'comm-base.html' %} {% block title %} | Select Label {% endblock %}{% load static %} {% block community_content %}
+{% extends 'comm-base.html' %} {% block title %} | Select Label {% endblock %}{% load static %} {% load custom_tags%} {% block community_content %}
 
 <!-- TK Label Card -->
 <div id="collapsed-tkcard" class="content-card-v2 content-card-space white-bg flex-this column">
 
     <div id="tklabels-title-vertical" style="margin:auto 0;">
         <div class="flex-this space-between">
-            <div>
-                <h2 class="orange-text weight-600">Traditional Knowledge (TK) Labels</h2>
+            <div class="margin-left-1">
+                <h2>Traditional Knowledge (TK) Labels</h2>
             </div>
             <div>
                 <a onclick='showTKLabelInfo()' class="darkteal-text pointer"> <span id="show-more-tk-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
@@ -14,9 +14,9 @@
         </div>
     </div>
 
-    <div id="expand-tklabels" style="height:0px; overflow:hidden;">
+    <div id="expand-tklabels" style="height:0px; overflow:hidden;" class="margin-left-1">
         <div>
-            <p>
+            <p class="w-70">
 
                 The TK Label text is intended to be customized by each community – giving the Labels specificity and context. 
                 The title of each TK Label can be translated into one or more languages and displayed in addition to the default Label title. 
@@ -30,10 +30,10 @@
         <div class="flex-this column pad-right-1">
 
             <!-- PROVENANCE -->
-            <div class="flex-this w-100">
-                <div class="margin-right-1" style="min-width: 200px">
-                    <p><span class="weight-600">Provenance Labels</span><br>
-                    Content for Provenance</p>
+            <div class="flex-this column w-100">
+                <div class="margin-bottom-16 w-50">
+                    <h3 class="no-top-margin no-bottom-margin">Provenance Labels</h3>
+                    <p>Provenance Labels identify the group or sub-group which is the primary cultural authority for the material, and/or recognises other interests in the material.</p>
                 </div>
 
                 <div class="flex-this wrap w-100">
@@ -67,46 +67,67 @@
             </div>
 
             <!-- Provenance FORM -->
-            <div id="tklabel-info-prov" class="flex-this column text-background-blue margin-bottom-2" style="height:0px; overflow: hidden;">
+            <div id="tklabel-info-prov" class="flex-this margin-bottom-2 border-top-solid-teal border-bottom-solid-teal" style="height:0px; overflow: hidden;">
 
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <div class="flex-this">
-    
-                        <input id="tk-label-value-type-prov" type="hidden" value="placeholder" name="tk-label-type">
-                        <div class="w-50">
-                                <h3 class="weight-600 darkteal-text" id="tk-label-title-prov" name="tk-label-title"></h3><br>
+                <div class="w-20 margin-right-1 margin-top-1" style="text-align: right;">
+
+                    <div id="tklabel-expanded-img-tka" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tka' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkcl" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkcl' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkf" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkf' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkmc" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkmc' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkcv" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkcv' %}" class="default-label-img">
+                    </div>
+                    
+                    <div><button class="green-btn">Listen <i class="fa fa-volume-up"></i></button></div>
+                    <div><button class="green-btn">Example</button></div>
+                </div>
+
+                <div class="w-80 margin-left-1 margin-bottom-16">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div>
+                            <input id="tk-label-value-type-prov" type="hidden" value="placeholder" name="tk-label-type">
+                            <div><h3 class="weight-600" id="tk-label-title-prov" name="tk-label-title"></h3></div>
+                        </div>
+
+                        <div class="flex-this column">
+                            <div>
+                                <span class="weight-600 ">Why use this label?</span><br>
+                                <p id="why-use-this-label-tk-prov"></p>
                             </div>
-                            <div class="w-50 right-text">
+                            <div>
+                                <span class="weight-600 ">Template Text</span><br>
+                                <p id="label-template-text-tk-prov"></p>
+                            </div>
+                            <div class="right-text">
                                 {% if member_role == 'viewer' %}
-    
+
                                 {% else %}
-                                    <button class="action-btn">Customize Label <i class="fa fa-long-arrow-right"></i></button>
+                                    <button class="action-btn">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
                                 {% endif %}
                             </div>
-    
-                    </div>
-                </form>
-    
-                <div class="flex-this column">
-                    <div>
-                        <span class="weight-600 darkteal-text">Why use this label?</span><br>
-                        <p id="why-use-this-label-tk-prov"></p>
-                    </div>
-                    <div>
-                        <span class="weight-600 darkteal-text">Template Text</span><br>
-                        <p id="label-template-text-tk-prov"></p>
-                    </div>
+                        </div>
+                    </form>  
+
                 </div>
-    
+
             </div>
 
             <!-- PROTOCOLS -->
-            <div class="flex-this w-100" style="align-items: stretch;">
+            <div class="flex-this column w-100">
 
-                <div class="margin-right-1" style="min-width: 200px">
-                    <p><span class="weight-600">Protocols Labels</span><br>
-                    Content for Protocols</p>
+                <div class="margin-bottom-16 w-50">
+                    <h3>Protocol Labels</h3>
+                    <p>Protocol Labels outline traditional protocols associated with access to this material and invite viewers to respect community protocols.</p>
                 </div>
 
                 <div class="w-100 flex-this wrap">
@@ -149,45 +170,73 @@
             </div>
 
             <!-- Protocols FORM -->
-            <div id="tklabel-info-prot" class="flex-this column text-background-blue margin-bottom-2" style="height:0px; overflow: hidden;">
+            <div id="tklabel-info-prot" class="flex-this margin-bottom-2 border-top-solid-teal border-bottom-solid-teal" style="height:0px; overflow: hidden;">
 
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <div class="flex-this">
-    
-                        <input id="tk-label-value-type-prot" type="hidden" value="placeholder" name="tk-label-type">
-                        <div class="w-50">
-                                <h3 class="weight-600 darkteal-text" id="tk-label-title-prot" name="tk-label-title"></h3><br>
+                <div class="w-20 margin-right-1 margin-top-1" style="text-align: right;">
+
+                    <div id="tklabel-expanded-img-tks" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tks' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkwg" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkwg' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkmg" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkmg' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkmr" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkmr' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkwr" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkwr' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkcs" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkcs' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkss" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkss' %}" class="default-label-img">
+                    </div>
+
+                    <div><button class="green-btn">Listen <i class="fa fa-volume-up"></i></button></div>
+                    <div><button class="green-btn">Example</button></div>
+                </div>
+
+                <div class="w-80 margin-left-1 margin-bottom-16">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div>
+                            <input id="tk-label-value-type-prot" type="hidden" value="placeholder" name="tk-label-type">
+                            <div><h3 class="weight-600" id="tk-label-title-prot" name="tk-label-title"></h3></div>
+                        </div>
+                    
+                        <div class="flex-this column">
+                            <div>
+                                <span class="weight-600 ">Why use this label?</span><br>
+                                <p id="why-use-this-label-tk-prot"></p>
                             </div>
-                            <div class="w-50 right-text">
+                            <div>
+                                <span class="weight-600 ">Template Text</span><br>
+                                <p id="label-template-text-tk-prot"></p>
+                            </div>
+
+                            <div class="right-text">
                                 {% if member_role == 'viewer' %}
     
                                 {% else %}
-                                    <button class="action-btn">Customize Label <i class="fa fa-long-arrow-right"></i></button>
+                                    <button class="action-btn">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
                                 {% endif %}
                             </div>
-    
-                    </div>
-                </form>
-    
-                <div class="flex-this column">
-                    <div>
-                        <span class="weight-600 darkteal-text">Why use this label?</span><br>
-                        <p id="why-use-this-label-tk-prot"></p>
-                    </div>
-                    <div>
-                        <span class="weight-600 darkteal-text">Template Text</span><br>
-                        <p id="label-template-text-tk-prot"></p>
-                    </div>
+                        </div>
+                    </form>
                 </div>
     
             </div>
 
             <!-- PERMISSIONS -->
-            <div class="flex-this w-100">
-                <div class="margin-right-1" style="min-width: 200px;">
-                    <p><span class="weight-600">Permissions Labels</span><br>
-                    Content for Permissions</p>
+            <div class="flex-this column w-100">
+
+                <div class="margin-bottom-16 w-50">
+                    <h3 class="no-top-margin no-bottom-margin">Permissions Labels</h3>
+                    <p>Permission Labels indicate what activities the community has approved as generally acceptable. Other uses require direct engagement with primary cultural authorities.</p>
                 </div>
 
                 <div class="flex-this wrap">
@@ -227,38 +276,61 @@
             </div>
 
             <!-- Permissions FORM -->
-            <div id="tklabel-info-perms" class="flex-this column text-background-blue margin-bottom-2" style="height:0px; overflow: hidden;">
+            <div id="tklabel-info-perms" class="flex-this space-between margin-bottom-2 border-top-solid-teal border-bottom-solid-teal" style="height:0px; overflow: hidden;">
 
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <div class="flex-this">
-    
-                        <input id="tk-label-value-type-perms" type="hidden" value="placeholder" name="tk-label-type">
-                        <div class="w-50">
-                                <h3 class="weight-600 darkteal-text" id="tk-label-title-perms" name="tk-label-title"></h3><br>
+                <div class="w-20 margin-right-1 margin-top-1" style="text-align: right;">
+                    <div id="tklabel-expanded-img-tko" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tko' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tknv" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tknv' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkv" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkv' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tknc" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tknc' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkc" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkc' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkco" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkco' %}" class="default-label-img">
+                    </div>
+
+                    <div><button class="green-btn">Listen <i class="fa fa-volume-up"></i></button></div>
+                    <div><button class="green-btn">Example</button></div>
+                </div>
+
+                <div class="w-80 margin-left-1 margin-bottom-16">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div>
+                            <input id="tk-label-value-type-perms" type="hidden" value="placeholder" name="tk-label-type">
+                            <div><h3 class="weight-600 " id="tk-label-title-perms" name="tk-label-title"></h3></div>
+                        </div>
+        
+                        <div class="flex-this column">
+                            <div>
+                                <span class="weight-600 ">Why use this label?</span><br>
+                                <p id="why-use-this-label-tk-perms"></p>
                             </div>
-                            <div class="w-50 right-text">
+                            <div>
+                                <span class="weight-600 ">Template Text</span><br>
+                                <p id="label-template-text-tk-perms"></p>
+                            </div>
+
+                            <div class="right-text">
                                 {% if member_role == 'viewer' %}
-    
+
                                 {% else %}
                                     <button class="action-btn">Customize Label <i class="fa fa-long-arrow-right"></i></button>
                                 {% endif %}
                             </div>
-    
-                    </div>
-                </form>
-    
-                <div class="flex-this column">
-                    <div>
-                        <span class="weight-600 darkteal-text">Why use this label?</span><br>
-                        <p id="why-use-this-label-tk-perms"></p>
-                    </div>
-                    <div>
-                        <span class="weight-600 darkteal-text">Template Text</span><br>
-                        <p id="label-template-text-tk-perms"></p>
-                    </div>
+                        </div>
+                    </form>
                 </div>
-    
+
             </div>
 
         </div>
@@ -271,8 +343,8 @@
 
     <div id="bclabels-title-vertical" style="margin:auto 0;">
         <div class="flex-this space-between">
-            <div>
-                <h2 class="orange-text weight-600">Biocultural (BC) Labels</h2>
+            <div class="margin-left-1">
+                <h2>Biocultural (BC) Labels</h2>
             </div>
             <div>
                 <a onclick='showBCLabelInfo()' class="darkteal-text pointer"> <span id="show-more-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
@@ -280,9 +352,9 @@
         </div>
     </div>
 
-    <div id="expand-bclabels" style="height:0px;">
+    <div id="expand-bclabels" style="height:0px;" class="margin-left-1">
         <div>
-            <p>
+            <p class="w-70">
 
                 The BC Label text is intended to be customized by each community – giving the Labels specificity and context. 
                 The title of each BC Label can be translated into one or more languages and displayed in addition to the default Label title. 
@@ -296,19 +368,19 @@
 
         <div class="flex-this column">
 
-            <div class="flex-this wrap w-100" style="align-items: stretch;">
+            <div class="margin-bottom-16 w-50">
+                <h3 class="no-top-margin no-bottom-margin">Provenance Labels</h3>
+                <p>Provenance Labels identify the group or sub-group which is the primary cultural authority for the material, and/or recognizes other interests in the material.</p>
+            </div>
 
-                <div class="margin-right-1" style="min-width: 200px">
-                    <p><span class="weight-600">Provenance Labels</span><br>
-                    Content for Provenance</p>
-                </div>
+            <div class="flex-this wrap w-100">
 
-                <div class="center-text w-15">
+                <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bcp" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label"></div>
                     <div class="toggle-txt-color grey-text"><p> Provenance <br> (BC P)</p></div>
                 </div>
 
-                <div class="center-text w-15">
+                <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bcmc" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label"></div>
                     <div class="toggle-txt-color grey-text"><p>Multiple Communities <br> (BC MC)</p></div>
                 </div>
@@ -316,29 +388,29 @@
 
             </div>
 
-            <div class="flex-this wrap w-100" style="align-items: stretch;">
-                
-                <div class="margin-right-1" style="min-width: 200px">
-                    <p><span class="weight-600">Permissions Labels</span><br>
-                    Content for Permissions</p>
-                </div>
+            <div class="margin-bottom-16 w-50">
+                <h3 class="no-top-margin no-bottom-margin">Permission Labels</h3>
+                <p>Permission Labels indicate what activities the community has approved as generally acceptable. Other uses require direct engagement with primary cultural authorities. </p>
+            </div>
 
-                <div class="center-text w-15">
+            <div class="flex-this wrap w-100">
+
+                <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bccv" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label"></div>
                     <div class="toggle-txt-color grey-text"><p>Consent Verified <br> (BC CV) </p></div>
                 </div>
     
-                <div class="center-text w-15">
+                <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bcr" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label"></div>
                     <div class="toggle-txt-color grey-text"><p>Research Use <br> (BC R) </p></div>
                 </div>
     
-                <div class="center-text w-15">
+                <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bcocoll" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label"></div>
                     <div class="toggle-txt-color grey-text"><p>Open to <br>Collaboration <br> (BC OC) </p></div>
                 </div>
     
-                <div class="center-text w-15">
+                <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bcocomm" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label"></div>
                     <div class="toggle-txt-color grey-text"><p>Open to <br>Commercialization <br> (BC OC)</p></div>
                 </div>
@@ -347,35 +419,62 @@
     
         </div>
 
-        <div id="bclabel-info" class="flex-this column text-background-blue" style="height:0px;">
+        <div id="bclabel-info" class="flex-this margin-bottom-2 border-top-solid-teal border-bottom-solid-teal" style="height:0px; overflow: hidden;" >
 
-            <form method="POST" action="">
-                {% csrf_token %}
-                <div class="flex-this">
+            <div class="w-20 margin-right-1 margin-top-1" style="text-align: right;">
 
-                    <input id="bc-label-value-type" type="hidden" value="placeholder" name="bclabel-type">
-                    <div class="w-50">
-                            <h3 class="weight-600 darkteal-text" id="bc-label-title" name="bc-label-title"></h3><br>
+                <div id="bclabel-expanded-img-bcr" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bcr' %}" class="default-label-img">
+                </div>
+                <div id="bclabel-expanded-img-bccv" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bccv' %}" class="default-label-img">
+                </div>
+                <div id="bclabel-expanded-img-bcocoll" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bcocoll' %}">
+                </div>
+                <div id="bclabel-expanded-img-bcocomm" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bcocomm' %}" class="default-label-img">
+                </div>
+
+                <div id="bclabel-expanded-img-bcp" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bcp' %}" class="default-label-img">
+                </div>
+
+                <div id="bclabel-expanded-img-bcmc" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bcmc' %}" class="default-label-img">
+                </div>
+
+                <div><button class="green-btn">Listen <i class="fa fa-volume-up"></i></button></div>
+                <div><button class="green-btn">Example</button></div>
+            </div>
+
+            <div class="flex-this column w-80 margin-left-1">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div>
+                        <input id="bc-label-value-type" type="hidden" value="placeholder" name="bclabel-type">
+                        <div><h3 id="bc-label-title" name="bc-label-title"></h3></div>
+                    </div>
+    
+                    <div class="flex-this column">
+                        <div>
+                            <span class="weight-600">Why use this label?</span><br>
+                            <p id="why-use-this-label"></p>
                         </div>
-                        <div class="w-50 right-text">
-                            {% if member_role == 'viewer' %}
-
-                            {% else %}
-                                <button class="action-btn">Customize Label <i class="fa fa-long-arrow-right"></i></button>
-                            {% endif %}
+                        <div>
+                            <span class="weight-600">Template Text</span><br>
+                            <p id="label-template-text"></p>
                         </div>
-                </div>
-            </form>
+                    </div>
 
-            <div class="flex-this column">
-                <div>
-                    <span class="weight-600 darkteal-text">Why use this label?</span><br>
-                    <p id="why-use-this-label"></p>
-                </div>
-                <div>
-                    <span class="weight-600 darkteal-text">Template Text</span><br>
-                    <p id="label-template-text"></p>
-                </div>
+                    <div class="right-text">
+                        {% if member_role == 'viewer' %}
+
+                        {% else %}
+                            <button class="action-btn">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
+                        {% endif %}
+                    </div>
+                </form>
             </div>
 
         </div>

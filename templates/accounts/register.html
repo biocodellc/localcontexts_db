@@ -50,32 +50,31 @@
 
     </div>
 
-    {% if form.errors %}
-            <small style="color:red;"> {{ form.errors }}</small>
-    {% endif %}
-
-
-
-    <div class="flex-this row checkbox-div">
-        <div id="checkbox">
-            <!-- Temporarily take out required for this input -->
-            <input type="checkbox" id="terms-agreement" name="terms-agreement">
+    <div class="flex-this row margin-top-16">
+        <div class="flex-this space-between">
+            <div class="text-align-right checkbox-space">
+                <!-- TODO: make this required -->
+                <input type="checkbox" name="terms-agreement">
+            </div>
+            <div class="checkbox-label w-100">
+                <p><span>Creating an account means you agree with the</span> <a href="#" class="darkteal-text">Terms and Conditions</a> <span>and</span> <a href="#" class="darkteal-text">Data Sovereignty Agreement</a>.</p>
+            </div>
         </div>
-        <div class="checkbox-label w-80">
-            <p>
-                <span>Creating an account means you agree with the</span> <a href="#" class="darkteal-text">Terms and Conditions</a> <span>and</span> <a href="#" class="darkteal-text">Data Sovereignty Agreement</a>.
-            </p>
+
+        <div>
+            <div class="g-recaptcha" data-sitekey="6Lde2coaAAAAAB4T8Ln0hGur0H7-x4roy47qByAU"></div>
         </div>
     </div>
     <br>
 
-    <div class="flex-this space-between">
-        <div class="g-recaptcha" data-sitekey="6Lde2coaAAAAAB4T8Ln0hGur0H7-x4roy47qByAU"></div>
+    {% if form.errors %}
+        <small style="color:red;"> {{ form.errors }}</small>
+    {% endif %}
 
-        <div class="text-align-right">
-            <button class="action-btn">Next <i class="fa fa-long-arrow-right"></i></button>
-        </div>
+    <div class="text-align-right">
+        <button class="action-btn">Continue <i class="fa fa-long-arrow-right"></i></button>
     </div>
+
 
 </form>
 </div>

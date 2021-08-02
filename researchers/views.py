@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from accounts.utils import is_user_researcher
-from projects.utils import add_to_contributors
+from projects.utils import add_to_contributors, set_project_privacy
 
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
@@ -131,7 +131,9 @@ def create_project(request, pk):
         formset = ProjectPersonFormset(request.POST)
 
         if form.is_valid() and formset.is_valid():
+            privacy_radio_value = request.POST.get('privacy_level')
             data = form.save(commit=False)
+            set_project_privacy(data, privacy_radio_value)
             data.project_creator = request.user
             data.save()
             # Add project to researcher projects
@@ -141,10 +143,10 @@ def create_project(request, pk):
             for notice in notices_selected:
                 if notice == 'bcnotice':
                     img_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/bc-notice.png'
-                    bcnotice = BCNotice.objects.create(placed_by_institution=institution, project=data, img_url=img_url)
+                    bcnotice = BCNotice.objects.create(placed_by_researcher=researcher, project=data, img_url=img_url)
                 if notice == 'tknotice':
                     img_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/tk-notice.png'
-                    tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data, img_url=img_url)
+                    tknotice = TKNotice.objects.create(placed_by_researcher=researcher, project=data, img_url=img_url)
 
 
             # Get lists of contributors entered in form

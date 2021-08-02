@@ -23,7 +23,13 @@
                     {{ form.city_or_town}}    
                 </div>
                 <div class="w-50">
-                    <label class="pad-top-1-5" for="state_or_province">State or Province</label><br>
+                    <label class="pad-top-1-5" for="state_or_province">State or Province</label>
+
+                    <div class="tooltip"><strong>i</strong>
+                        <span class="tooltiptext">By stating your location we will be able to connect your community with projects involved with this location.</span>
+                    </div>
+
+                      <br>
                     {{ form.state_or_province}}
                 </div>
             </div>
@@ -36,7 +42,13 @@
 
         <div class="w-100">
             <div class="pad-top-1-5">
-                <label for="description">Community description</label><br>
+                <label for="description">Community description</label>
+
+                <div class="tooltip"><strong>i</strong>
+                    <span class="tooltiptext">A community description allows you to share key public information about your community or community organization.</span>
+                </div>
+
+                <br>
                 {{ form.description }}
             </div>
         </div>

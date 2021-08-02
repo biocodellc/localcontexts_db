@@ -239,10 +239,31 @@ function expandBCLabel(img) {
 
 }
 
-//  Assign input value based on which bc label image is selected in Community: select-abels
+//  Assign input value based on which bc label image is selected in Community: select-labels
 function whichBCImgClicked(val) {
     var input = document.getElementById('bc-label-value-type')
     input.value = val
+    displayExpandedImage(val)
+}
+
+// Display Label images that was clicked in the expanded Div
+function displayExpandedImage(type) {
+    let imgArray
+
+    if (type.startsWith('b')) {
+        imgArray = Array.from(document.querySelectorAll('.bc-img-div'))
+    } else if (type.startsWith('t')) {
+        imgArray = Array.from(document.querySelectorAll('.tk-img-div'))
+    }
+
+    for (let i = 0; i < imgArray.length; i ++) {
+        // take the id and split it, compare type to the split
+        if (imgArray[i].id.slice(21) == type) {
+            imgArray[i].style.display = 'block'
+        } else {
+            imgArray[i].style.display = 'none'
+        }
+    }
 }
 
 // Assign input value based on which bc label image is selected in Community: select-labels
@@ -258,6 +279,8 @@ function whichTKImgClicked(val) {
     } else if (val == 'tkv' || val == 'tknv' || val == 'tkc' || val == 'tknc' || val == 'tkco' || val == 'tko') {
         inputPerms.value = val
     }
+
+    displayExpandedImage(val)
 }
 
 
@@ -974,8 +997,6 @@ if (inputList) {
 function setCommunity() {
     let hiddenCommunityInput = document.getElementById('hidden-target-input')
     hiddenCommunityInput.value = inputList.value
-    let header = document.getElementById('orgName')
-    header.innerText = `Request to join ${inputList.value}`
 }
 
 var joinBtn = document.getElementById('openJoinRequestModalBtn')

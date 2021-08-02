@@ -147,18 +147,6 @@
     position: relative;
 }
 
-/* Checkbox */
-.checkbox-div {
-    justify-content: flex-start;
-    width: 100%;
-    padding-top: 2%;
-}
-
-#checkbox {
-    width: 5%;
-    padding-right: 2%;
-}
-
 .checkbox-label p {
     margin: 0;
 }
@@ -212,7 +200,7 @@
     max-width: 80%;
 }
 
-/* Why are you registering page */
+/* Choose account page */
 .registration-card-space {
     padding: 70px;
 }
@@ -225,16 +213,13 @@
     text-align: right;
 }
 
-.reason-radio input{
-    width: 20px;
-    height: 20px;
-    margin-right: 20px;
-    margin-top: 10px;
-
+.checkbox-space {
+    margin-top: 4%;
+    margin-right: 2%;
 }
 
-.radio-group {
-    margin-bottom: 30px;
+input[type=checkbox] {
+    transform: scale(1.5);
 }
 
 /* Choose an account page */

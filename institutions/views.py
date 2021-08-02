@@ -7,7 +7,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from .utils import check_member_role
-from projects.utils import add_to_contributors
+from projects.utils import add_to_contributors, set_project_privacy
 
 from .models import Institution
 from researchers.models import Researcher
@@ -255,7 +255,9 @@ def create_project(request, pk):
             formset = ProjectPersonFormset(request.POST)
 
             if form.is_valid() and formset.is_valid():
+                privacy_radio_value = request.POST.get('privacy_level')
                 data = form.save(commit=False)
+                set_project_privacy(data, privacy_radio_value)
                 data.project_creator = request.user
                 data.save()
                 # Add project to institution projects
