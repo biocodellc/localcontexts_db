@@ -256,7 +256,6 @@ function displayExpandedBCImage(type) {
     let imgArray = Array.from(document.querySelectorAll('.bc-img-div'))
 
     for (let i = 0; i < imgArray.length; i ++) {
-        console.log(imgArray[i].id.includes(type))
 
         if (imgArray[i].id.includes(type) == true) {
             imgArray[i].style.display = 'block'
