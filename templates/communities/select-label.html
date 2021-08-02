@@ -96,16 +96,16 @@
                         {% csrf_token %}
                         <div>
                             <input id="tk-label-value-type-prov" type="hidden" value="placeholder" name="tk-label-type">
-                            <div><h3 class="weight-600 darkteal-text" id="tk-label-title-prov" name="tk-label-title"></h3></div>
+                            <div><h3 class="weight-600" id="tk-label-title-prov" name="tk-label-title"></h3></div>
                         </div>
 
                         <div class="flex-this column">
                             <div>
-                                <span class="weight-600 darkteal-text">Why use this label?</span><br>
+                                <span class="weight-600 ">Why use this label?</span><br>
                                 <p id="why-use-this-label-tk-prov"></p>
                             </div>
                             <div>
-                                <span class="weight-600 darkteal-text">Template Text</span><br>
+                                <span class="weight-600 ">Template Text</span><br>
                                 <p id="label-template-text-tk-prov"></p>
                             </div>
                             <div class="right-text">
@@ -126,7 +126,7 @@
             <div class="flex-this column w-100">
 
                 <div class="margin-bottom-16 w-50">
-                    <h3 class="no-top-margin no-bottom-margin">Protocol Labels</h3>
+                    <h3>Protocol Labels</h3>
                     <p>Protocol Labels outline traditional protocols associated with access to this material and invite viewers to respect community protocols.</p>
                 </div>
 
@@ -205,16 +205,16 @@
                         {% csrf_token %}
                         <div>
                             <input id="tk-label-value-type-prot" type="hidden" value="placeholder" name="tk-label-type">
-                            <div><h3 class="weight-600 darkteal-text no-bottom-margin" id="tk-label-title-prot" name="tk-label-title"></h3></div>
+                            <div><h3 class="weight-600" id="tk-label-title-prot" name="tk-label-title"></h3></div>
                         </div>
                     
                         <div class="flex-this column">
                             <div>
-                                <span class="weight-600 darkteal-text">Why use this label?</span><br>
+                                <span class="weight-600 ">Why use this label?</span><br>
                                 <p id="why-use-this-label-tk-prot"></p>
                             </div>
                             <div>
-                                <span class="weight-600 darkteal-text">Template Text</span><br>
+                                <span class="weight-600 ">Template Text</span><br>
                                 <p id="label-template-text-tk-prot"></p>
                             </div>
 
@@ -307,16 +307,16 @@
                         {% csrf_token %}
                         <div>
                             <input id="tk-label-value-type-perms" type="hidden" value="placeholder" name="tk-label-type">
-                            <div><h3 class="weight-600 darkteal-text" id="tk-label-title-perms" name="tk-label-title"></h3></div>
+                            <div><h3 class="weight-600 " id="tk-label-title-perms" name="tk-label-title"></h3></div>
                         </div>
         
                         <div class="flex-this column">
                             <div>
-                                <span class="weight-600 darkteal-text">Why use this label?</span><br>
+                                <span class="weight-600 ">Why use this label?</span><br>
                                 <p id="why-use-this-label-tk-perms"></p>
                             </div>
                             <div>
-                                <span class="weight-600 darkteal-text">Template Text</span><br>
+                                <span class="weight-600 ">Template Text</span><br>
                                 <p id="label-template-text-tk-perms"></p>
                             </div>
 
@@ -451,32 +451,30 @@
             <div class="flex-this column w-80 margin-left-1">
                 <form method="POST" action="">
                     {% csrf_token %}
-                    <div class="flex-this">
-    
+                    <div>
                         <input id="bc-label-value-type" type="hidden" value="placeholder" name="bclabel-type">
-                        <div class="w-50">
-                                <h3 class="weight-600 darkteal-text" id="bc-label-title" name="bc-label-title"></h3><br>
-                            </div>
-                            <div class="w-50 right-text">
-                                {% if member_role == 'viewer' %}
+                        <div><h3 id="bc-label-title" name="bc-label-title"></h3></div>
+                    </div>
     
-                                {% else %}
-                                    <button class="action-btn">Customize Label <i class="fa fa-long-arrow-right"></i></button>
-                                {% endif %}
-                            </div>
+                    <div class="flex-this column">
+                        <div>
+                            <span class="weight-600">Why use this label?</span><br>
+                            <p id="why-use-this-label"></p>
+                        </div>
+                        <div>
+                            <span class="weight-600">Template Text</span><br>
+                            <p id="label-template-text"></p>
+                        </div>
+                    </div>
+
+                    <div class="right-text">
+                        {% if member_role == 'viewer' %}
+
+                        {% else %}
+                            <button class="action-btn">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
+                        {% endif %}
                     </div>
                 </form>
-    
-                <div class="flex-this column">
-                    <div>
-                        <span class="weight-600 darkteal-text">Why use this label?</span><br>
-                        <p id="why-use-this-label"></p>
-                    </div>
-                    <div>
-                        <span class="weight-600 darkteal-text">Template Text</span><br>
-                        <p id="label-template-text"></p>
-                    </div>
-                </div>
             </div>
 
         </div>
