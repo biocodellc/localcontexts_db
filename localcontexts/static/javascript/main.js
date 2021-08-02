@@ -201,42 +201,36 @@ function expandBCLabel(img) {
     switch (targetImg) {
         case 'bcr':
             whichBCImgClicked('bcr')
-            displayExpandedBCImage('bcr')
             title.textContent = researchUseName
             templateText.textContent = researchUseText
             whyUseLabelText.textContent = researchUse
             break;
         case 'bccv':
             whichBCImgClicked('bccv')
-            displayExpandedBCImage('bccv')
             title.textContent = consentVerifiedName
             templateText.textContent = consentVerifiedText
             whyUseLabelText.textContent = consentVerifiedUse
             break;
         case 'bcocomm':
             whichBCImgClicked('bcocomm')
-            displayExpandedBCImage('bcocomm')
             title.textContent = openToCommercializationName
             templateText.textContent = openToCommercializationText
             whyUseLabelText.textContent = openToCommUse
             break;
         case 'bcocoll':
             whichBCImgClicked('bcocoll')
-            displayExpandedBCImage('bcocoll')
             title.textContent = openToCollabName
             templateText.textContent = openToCollabText
             whyUseLabelText.textContent = openToCollabUse
             break;
         case 'bcmc':
             whichBCImgClicked('bcmc')
-            displayExpandedBCImage('bcmc')
             title.textContent = multipleCommunityName
             templateText.textContent = multipleCommunityText
             whyUseLabelText.textContent = multipleCommUse
             break;
         case 'bcp':
             whichBCImgClicked('bcp')
-            displayExpandedBCImage('bcp')
             title.textContent = provenanceName
             templateText.textContent = provenanceText
             whyUseLabelText.textContent = provenanceUse
@@ -249,15 +243,22 @@ function expandBCLabel(img) {
 function whichBCImgClicked(val) {
     var input = document.getElementById('bc-label-value-type')
     input.value = val
+    displayExpandedImage(val)
 }
 
-// Display BC Label image that was clicked in the expanded Div
-function displayExpandedBCImage(type) {
-    let imgArray = Array.from(document.querySelectorAll('.bc-img-div'))
+// Display Label images that was clicked in the expanded Div
+function displayExpandedImage(type) {
+    let imgArray
+
+    if (type.startsWith('b')) {
+        imgArray = Array.from(document.querySelectorAll('.bc-img-div'))
+    } else if (type.startsWith('t')) {
+        imgArray = Array.from(document.querySelectorAll('.tk-img-div'))
+    }
 
     for (let i = 0; i < imgArray.length; i ++) {
-
-        if (imgArray[i].id.includes(type) == true) {
+        // take the id and split it, compare type to the split
+        if (imgArray[i].id.slice(21) == type) {
             imgArray[i].style.display = 'block'
         } else {
             imgArray[i].style.display = 'none'
@@ -278,6 +279,8 @@ function whichTKImgClicked(val) {
     } else if (val == 'tkv' || val == 'tknv' || val == 'tkc' || val == 'tknc' || val == 'tkco' || val == 'tko') {
         inputPerms.value = val
     }
+
+    displayExpandedImage(val)
 }
 
 

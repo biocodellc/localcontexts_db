@@ -71,3 +71,47 @@ def get_bclabel_img_url(img_type, *args, **kwargs):
         image_path = 'images/bc-labels/bc-multiple-community.png'
 
     return static(image_path)
+
+@register.simple_tag
+def get_tklabel_img_url(img_type, *args, **kwargs):
+    # Returns image url, usage: <img src="{% get_tklabel_img_url img_type %}">
+    if img_type == 'tka':
+        image_path = 'images/tk-labels/tk-attribution.png'
+    elif img_type =='tkcl':
+        image_path = 'images/tk-labels/tk-clan.png'
+    elif img_type =='tkf':
+        image_path = 'images/tk-labels/tk-family.png'
+    elif img_type =='tkmc':
+        image_path = 'images/tk-labels/tk-multiple-community.png'
+    elif img_type =='tkcv':
+        image_path = 'images/tk-labels/tk-community-voice.png'
+
+    elif img_type =='tks':
+        image_path = 'images/tk-labels/tk-seasonal.png'
+    elif img_type =='tkwg':
+        image_path = 'images/tk-labels/tk-women-general.png'
+    elif img_type =='tkmg':
+        image_path = 'images/tk-labels/tk-men-general.png'
+    elif img_type =='tkmr':
+        image_path = 'images/tk-labels/tk-men-restricted.png'
+    elif img_type =='tkwr':
+        image_path = 'images/tk-labels/tk-women-restricted.png'
+    elif img_type =='tkcs':
+        image_path = 'images/tk-labels/tk-culturally-sensitive.png'
+    elif img_type =='tkss':
+        image_path = 'images/tk-labels/tk-secret-sacred.png'
+
+    elif img_type =='tkv':
+        image_path = 'images/tk-labels/tk-verified.png'
+    elif img_type =='tknv':
+        image_path = 'images/tk-labels/tk-non-verified.png'
+    elif img_type =='tkc':
+        image_path = 'images/tk-labels/tk-commercial.png'
+    elif img_type =='tknc':
+        image_path = 'images/tk-labels/tk-non-commercial.png'
+    elif img_type =='tkco':
+        image_path = 'images/tk-labels/tk-community-use-only.png'
+    elif img_type =='tko':
+        image_path = 'images/tk-labels/tk-outreach.png'
+
+    return static(image_path)
