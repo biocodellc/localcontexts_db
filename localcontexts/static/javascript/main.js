@@ -201,36 +201,42 @@ function expandBCLabel(img) {
     switch (targetImg) {
         case 'bcr':
             whichBCImgClicked('bcr')
+            displayExpandedBCImage('bcr')
             title.textContent = researchUseName
             templateText.textContent = researchUseText
             whyUseLabelText.textContent = researchUse
             break;
         case 'bccv':
             whichBCImgClicked('bccv')
+            displayExpandedBCImage('bccv')
             title.textContent = consentVerifiedName
             templateText.textContent = consentVerifiedText
             whyUseLabelText.textContent = consentVerifiedUse
             break;
         case 'bcocomm':
             whichBCImgClicked('bcocomm')
+            displayExpandedBCImage('bcocomm')
             title.textContent = openToCommercializationName
             templateText.textContent = openToCommercializationText
             whyUseLabelText.textContent = openToCommUse
             break;
         case 'bcocoll':
             whichBCImgClicked('bcocoll')
+            displayExpandedBCImage('bcocoll')
             title.textContent = openToCollabName
             templateText.textContent = openToCollabText
             whyUseLabelText.textContent = openToCollabUse
             break;
         case 'bcmc':
             whichBCImgClicked('bcmc')
+            displayExpandedBCImage('bcmc')
             title.textContent = multipleCommunityName
             templateText.textContent = multipleCommunityText
             whyUseLabelText.textContent = multipleCommUse
             break;
         case 'bcp':
             whichBCImgClicked('bcp')
+            displayExpandedBCImage('bcp')
             title.textContent = provenanceName
             templateText.textContent = provenanceText
             whyUseLabelText.textContent = provenanceUse
@@ -239,10 +245,25 @@ function expandBCLabel(img) {
 
 }
 
-//  Assign input value based on which bc label image is selected in Community: select-abels
+//  Assign input value based on which bc label image is selected in Community: select-labels
 function whichBCImgClicked(val) {
     var input = document.getElementById('bc-label-value-type')
     input.value = val
+}
+
+// Display BC Label image that was clicked in the expanded Div
+function displayExpandedBCImage(type) {
+    let imgArray = Array.from(document.querySelectorAll('.bc-img-div'))
+
+    for (let i = 0; i < imgArray.length; i ++) {
+        console.log(imgArray[i].id.includes(type))
+
+        if (imgArray[i].id.includes(type) == true) {
+            imgArray[i].style.display = 'block'
+        } else {
+            imgArray[i].style.display = 'none'
+        }
+    }
 }
 
 // Assign input value based on which bc label image is selected in Community: select-labels

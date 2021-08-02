@@ -1,4 +1,4 @@
-{% extends 'comm-base.html' %} {% block title %} | Select Label {% endblock %}{% load static %} {% block community_content %}
+{% extends 'comm-base.html' %} {% block title %} | Select Label {% endblock %}{% load static %} {% load custom_tags%} {% block community_content %}
 
 <!-- TK Label Card -->
 <div id="collapsed-tkcard" class="content-card-v2 content-card-space white-bg flex-this column">
@@ -348,34 +348,63 @@
     
         </div>
 
-        <div id="bclabel-info" class="flex-this column" style="height:0px;">
+        <div id="bclabel-info" class="flex-this border-top-solid-teal border-bottom-solid-teal" style="height:0px; overflow: hidden;" >
 
-            <form method="POST" action="">
-                {% csrf_token %}
-                <div class="flex-this">
+            <div class="w-20 margin-right-1 margin-top-1" style="text-align: right;">
 
-                    <input id="bc-label-value-type" type="hidden" value="placeholder" name="bclabel-type">
-                    <div class="w-50">
-                            <h3 class="weight-600 darkteal-text" id="bc-label-title" name="bc-label-title"></h3><br>
-                        </div>
-                        <div class="w-50 right-text">
-                            {% if member_role == 'viewer' %}
-
-                            {% else %}
-                                <button class="action-btn">Customize Label <i class="fa fa-long-arrow-right"></i></button>
-                            {% endif %}
-                        </div>
+                <div id="bclabel-expanded-img-bcr" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bcr' %}">
                 </div>
-            </form>
-
-            <div class="flex-this column">
-                <div>
-                    <span class="weight-600 darkteal-text">Why use this label?</span><br>
-                    <p id="why-use-this-label"></p>
+                <div id="bclabel-expanded-img-bccv" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bccv' %}">
                 </div>
-                <div>
-                    <span class="weight-600 darkteal-text">Template Text</span><br>
-                    <p id="label-template-text"></p>
+                <div id="bclabel-expanded-img-bcocoll" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bcocoll' %}">
+                </div>
+                <div id="bclabel-expanded-img-bcocomm" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bcocomm' %}">
+                </div>
+
+                <div id="bclabel-expanded-img-bcp" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bcp' %}">
+                </div>
+
+                <div id="bclabel-expanded-img-bcmc" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bcmc' %}">
+                </div>
+
+                <div><button class="green-btn">Listen <i class="fa fa-volume-up"></i></button></div>
+                <div><button class="green-btn">Example</button></div>
+            </div>
+
+            <div class="flex-this column w-80 margin-left-1">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="flex-this">
+    
+                        <input id="bc-label-value-type" type="hidden" value="placeholder" name="bclabel-type">
+                        <div class="w-50">
+                                <h3 class="weight-600 darkteal-text" id="bc-label-title" name="bc-label-title"></h3><br>
+                            </div>
+                            <div class="w-50 right-text">
+                                {% if member_role == 'viewer' %}
+    
+                                {% else %}
+                                    <button class="action-btn">Customize Label <i class="fa fa-long-arrow-right"></i></button>
+                                {% endif %}
+                            </div>
+                    </div>
+                </form>
+    
+                <div class="flex-this column">
+                    <div>
+                        <span class="weight-600 darkteal-text">Why use this label?</span><br>
+                        <p id="why-use-this-label"></p>
+                    </div>
+                    <div>
+                        <span class="weight-600 darkteal-text">Template Text</span><br>
+                        <p id="label-template-text"></p>
+                    </div>
                 </div>
             </div>
 

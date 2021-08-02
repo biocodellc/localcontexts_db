@@ -1,5 +1,6 @@
 from django import template
 from django.urls import reverse
+from django.templatetags.static import static
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from notifications.models import ActionNotification
@@ -52,3 +53,21 @@ def unread_notifications(community):
 def community_contributing_projects(community):
     contributors = ProjectContributors.objects.filter(communities=community)
     return contributors
+
+@register.simple_tag
+def get_bclabel_img_url(img_type, *args, **kwargs):
+    # Returns image url, usage: <img src="{% get_bclabel_img_url img_type %}">
+    if img_type == 'bcr':
+        image_path = 'images/bc-labels/bc-research-use.png'
+    elif img_type =='bccv':
+        image_path = 'images/bc-labels/bc-consent-verified.png'
+    elif img_type =='bcocoll':
+        image_path = 'images/bc-labels/bc-open-to-collaboration.png'
+    elif img_type =='bcocomm':
+        image_path = 'images/bc-labels/bc-open-to-commercialization.png'
+    elif img_type =='bcp':
+        image_path = 'images/bc-labels/bc-provenance.png'
+    elif img_type =='bcmc':
+        image_path = 'images/bc-labels/bc-multiple-community.png'
+
+    return static(image_path)

@@ -317,13 +317,6 @@ input:focus {
     margin-bottom: 16px;
 }
 /* BORDERS */
-.border-bottom-blk {
-    border-bottom: 1px solid #000000;
-}
-
-.border-bottom-grey {
-    border-bottom: 1px solid #A09D9D;
-}
 
 .border-bottom-dash-teal {
     border-bottom: 1px dashed #007385;
@@ -445,6 +438,21 @@ input:focus {
     min-width: 110px;
 }
 
+/* Community: select-labels: Listen and Example btns */
+.green-btn {
+    width: 118px;
+    height: 40px;
+    background-color:#468076;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 2%;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 20px;
+}
+
 /* Square + buttons for adding things */
 .add-square-btn {
     display: flex;
@@ -462,12 +470,6 @@ input:focus {
 .add-square-btn span {
     color: #fff;
     font-size:25px;
-}
-
-/* Width for buttons on connect-researcher, community and institution pages */
-.connect-btn {
-    max-width: 250px;
-    min-width: 250px;
 }
 
 /* ALERTS / MESSAGES */
