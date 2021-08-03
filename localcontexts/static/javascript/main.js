@@ -276,7 +276,7 @@ function whichTKImgClicked(val) {
         inputProv.value = val
     } else if (val == 'tks' || val == 'tkwg' || val == 'tkmg' || val == 'tkmr' || val == 'tkwr' || val == 'tkcs' || val == 'tkss') {
         inputProt.value = val
-    } else if (val == 'tkv' || val == 'tknv' || val == 'tkc' || val == 'tknc' || val == 'tkco' || val == 'tko') {
+    } else if (val == 'tkv' || val == 'tknv' || val == 'tkoc' || val == 'tknc' || val == 'tkco' || val == 'tko') {
         inputPerms.value = val
     }
 
@@ -352,7 +352,7 @@ function populateTemplate(id) {
             title.value = tkNonCommercialName
             templateText.textContent = tkNonCommercialText
             break;
-        case 'tkc':
+        case 'tkoc':
             title.value = tkCommercialName
             templateText.textContent = tkOpenToCommercializationText
             break;
@@ -642,9 +642,9 @@ function expandTKLabel(img) {
             templateTextPerms.textContent = tkNonCommercialText
             whyUseLabelTextPerms.textContent = tkNonCommercialUse
             break;
-        case 'tkc':
+        case 'tkoc':
             openInfoDiv(infoPerms)
-            whichTKImgClicked('tkc')
+            whichTKImgClicked('tkoc')
             titlePerms.textContent = tkCommercialName
             templateTextPerms.textContent = tkOpenToCommercializationText
             whyUseLabelTextPerms.textContent = tkOpenToCommercializationUse

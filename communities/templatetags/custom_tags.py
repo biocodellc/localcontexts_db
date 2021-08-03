@@ -105,7 +105,7 @@ def get_tklabel_img_url(img_type, *args, **kwargs):
         image_path = 'images/tk-labels/tk-verified.png'
     elif img_type =='tknv':
         image_path = 'images/tk-labels/tk-non-verified.png'
-    elif img_type =='tkc':
+    elif img_type =='tkoc':
         image_path = 'images/tk-labels/tk-commercial.png'
     elif img_type =='tknc':
         image_path = 'images/tk-labels/tk-non-commercial.png'
