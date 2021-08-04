@@ -6,7 +6,7 @@
             
             <div class="flex-this margin-right-1 margin-left-1">
                 <div class="flex-this column w-60">
-                    <div><p class="p-28">{{ project.title }}</p></div>
+                    <div><p class="p-28 bold">{{ project.title }}</p></div>
                     <div><p class="bold">{{ project.date_added|date:'d F Y' }} | 
                         {{ project.project_type }} |
                         {% if project.is_public %}
@@ -68,7 +68,7 @@
                         <p class="p-24 bold no-bottom-margin">Project Identifiers</p>
 
                         <div class="flex-this space-between">
-                            <div><p><span class="bold">Local Contexts ID:</span> <br>{{ project.unique_id }}<br></p></div>
+                            <div><p><span class="bold">Local Contexts ID</span> <br>{{ project.unique_id }}<br></p></div>
                             <div class="margin-top-1">
                                 {% if project.unique_id %}
                                     <a href="#" class="action-btn">Copy Local Contexts ID <i class="fa fa-external-link" aria-hidden="true"></i></a>
@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="flex-this space-between">
-                            <div><p><span class="bold">GEOME Project ID:</span><br> {{ project.geome_project_id }}<br></p></div>
+                            <div><p><span class="bold">GEOME Project ID</span><br> {{ project.geome_project_id }}<br></p></div>
                             <div class="margin-top-1">
                                 {% if project.geome_project_id %}
                                     <a href="https://geome-db.org/workbench/project-overview?projectId={{ project.geome_project_id }}" class="action-btn">View in GEOME <i class="fa fa-external-link" aria-hidden="true"></i></a>
@@ -86,7 +86,7 @@
                         </div>
 
                         <div class="flex-this space-between">
-                            <div><p><span class="bold">Project DOI:</span> <br>{{ project.publication_doi }} <br></p></div>
+                            <div><p><span class="bold">Project DOI</span> <br>{{ project.publication_doi }} <br></p></div>
                             <div class="margin-top-1">
                                 {% if project.publication_doi %}
                                     {% if 'https://' not in project.publication_doi %}
@@ -97,13 +97,15 @@
                         </div>
 
                         <div class="flex-this space-between">
-                            <div><p><span class="bold">Project Data GUID:</span><br> {{ project.project_data_guid }}<br></p></div>
+                            <div><p><span class="bold">Project Data GUID</span><br> {{ project.project_data_guid }}<br></p></div>
                             <div class="margin-top-1">
                                 {% if project.project_data_guid %}
                                     <a href="#" class="action-btn">Copy GUID <i class="fa fa-external-link" aria-hidden="true"></i></a>
                                 {% endif %}
                             </div>
                         </div>
+
+                        <div><p><span class="bold">Recommended Citation</span><br> {{ project.recommended_citation }}<br></p></div>
 
                     </div>
                 </div>
@@ -139,7 +141,7 @@
 
                     </div>
                 </div>
-
+            
             </div>
 
             <div class="margin-right-1 margin-left-1">
