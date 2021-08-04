@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} | Projects {% endblock %} {% load static %} {% block content %}
+{% extends 'base.html' %} {% block title %} | Projects {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
 
 <div class="content-card-v2 content-card-space white-bg">
     <div id="project-unique-{{ project.unique_id}}" class="flex-this space-between" style="scroll-margin-top: 8em;">
@@ -33,14 +33,20 @@
                     {% endif %}
                 </div>
             </div>
-            <div>
-                <p>
-                    <span class="bold">Communities Notified</span><br>
-                    Community One<br>
-                    Community Two<br>
-                    Community Three<br>
-                </p>
-            </div>
+                <div>
+                    <p>
+                        <span class="bold">Communities Notified</span><br>
+                        {% which_communities_notified project as statuses %}
+
+                        {% if statuses %}
+                            {% for status in statuses %}
+                                {{ status.community.community_name }}<br>
+                            {% endfor %}
+                        {% else %}
+                            No communities notified yet
+                        {% endif %}
+                    </p>
+                </div>
 
         </div>
 
@@ -82,9 +88,16 @@
                 </div>
             </div>
             <div>
-                <div>
-                    <img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px">
-                </div>
+                {% if project.project_bcnotice.all %}
+                    <div>
+                        <img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px">
+                    </div>
+                {% endif %}
+                {% if project.project_tknotice.all %}
+                    <div>
+                        <img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px">
+                    </div>
+                {% endif %}
             </div>
 
         </div>
