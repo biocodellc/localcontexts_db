@@ -12,3 +12,8 @@ def get_all_researchers():
 @register.simple_tag
 def get_all_institutions():
     return Institution.objects.all()
+
+@register.simple_tag
+def define(val=None):
+    # To use: {% define 'oldVariable' as newVariable %}
+  return val
