@@ -6,11 +6,31 @@
         <div class="w-60 flex-this column">
             <!-- title -->
             <div><h3 class="no-bottom-margin no-top-margin">{{ project.title }}</h3></div>
-            <div><p>{{ project.date_added|date:'M d, Y' }} | {{ project.project_type }} | Privacy Level</p></div>
+            <div><p>{{ project.date_added|date:'M d, Y' }} | 
+                {{ project.project_type }} | 
+                {% if project.is_public %}
+                    Public
+                {% else %}
+                    {% if project.is_discoverable %}
+                        Discoverable
+                    {% else %}
+                        Private
+                    {% endif %}
+                {% endif %}
+                </p></div>
             <div>
                 <div class="flex-this">
-                    <div class="margin-right-1"><a href="#" class="green-btn">DOI <i class="fa fa-external-link" aria-hidden="true"></i></a></div>
-                    <div class="margin-left-1"><a href="#" class="green-btn">Project Website <i class="fa fa-external-link" aria-hidden="true"></i></a></div>
+                    {% if project.publication_doi %}
+                        <div class="margin-right-1">
+                            {% if not 'https://' in project.publication_doi %}
+                                <a href="https://doi.org/{{ project.publication_doi }}" class="green-btn">{{ project.publication_doi }} <i class="fa fa-external-link" aria-hidden="true"></i></a></div>
+                            {% else %}
+                                <a href="{{ project.publication_doi }}" class="green-btn">{{ project.publication_doi }} <i class="fa fa-external-link" aria-hidden="true"></i></a></div>
+                            {% endif %}
+                    {% endif %}
+                    {% if project.url %}
+                        <div class="margin-left-1"><a href="{{ project.url }}" class="green-btn">Project Link <i class="fa fa-external-link" aria-hidden="true"></i></a></div>
+                    {% endif %}
                 </div>
             </div>
             <div>
