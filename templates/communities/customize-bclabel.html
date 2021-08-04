@@ -1,84 +1,103 @@
 {% extends 'comm-base.html' %} {% block title %} | Customize {% endblock %}{% load static %} {% block community_content %}
 
 <div class="content-card content-card-space white-bg">
-    <div>
+    <div class="margin-bottom-16">
         <h2 class="orange-text">Labels</h2>
-        <p class="darkteal-text">You currently have 1 label customized</p>
+        <p>These customized Labels your community create can be applied to projects. Learn more about projects <a href="#" class="darkteal-text">here</a>.</p>
     
+        <div class="center-text w-20">
         {% if label_type == 'bcr' %}
             <div id="target-img-div">
                 <img id="bcr" class="opacity-4" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
             </div>
-            <p class="darkteal-text">Research Use <br> (BC R)</p>
+            <div class="teal-text-background">
+                <p>Research Use <br> (BC R)</p>
+            </div>
         {% endif %}
     
         {% if label_type == 'bccv' %}
             <div id="target-img-div">
                 <img id="bccv" class="opacity-4" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
             </div>
-            <p class="darkteal-text">Consent Verified <br> (BC CV)</p>
+            <div class="teal-text-background">
+                <p>Consent Verified <br> (BC CV)</p>
+            </div>
         {% endif %}
     
         {% if label_type == 'bcocomm' %}
             <div id="target-img-div">
                 <img id="bcocomm" class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
             </div>
-            <p class="darkteal-text">Open to <br> Commercialization <br> (BC OC)</p>
+            <div class="teal-text-background">
+                <p>Open to <br> Commercialization <br> (BC OC)</p>
+            </div>
         {% endif %}
     
         {% if label_type == 'bcocoll' %}
             <div id="target-img-div">
                 <img id="bcocoll" class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
             </div>
-            <p class="darkteal-text">Open to <br> Collaboration <br> (BC OC)</p>
+            <div class="teal-text-background">
+                <p>Open to <br> Collaboration <br> (BC OC)</p>
+            </div>
         {% endif %}
     
         {% if label_type == 'bcmc' %}
             <div id="target-img-div">
                 <img id="bcmc" class="opacity-4" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
             </div>
-            <p class="darkteal-text">Multiple Community <br> (BC MC)</p>
+            <div class="teal-text-background">
+                <p>Multiple Community <br> (BC MC)</p>
+            </div>
         {% endif %}
     
         {% if label_type == 'bcp' %}
             <div id="target-img-div">
                 <img id="bcp" class="opacity-4" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
             </div>
-            <p class="darkteal-text">Provenance <br> (BC P)</p>
+            <div class="teal-text-background">
+                <p>Provenance <br> (BC P)</p>
+            </div>
         {% endif %}
+        </div>
     </div>
 
-        <div class="flex-this column">
-            <form method="POST" action="">
+    <div class="flex-this column border-top-solid-teal border-bottom-solid-teal">
+
+        <form method="POST" action="">
                 {% csrf_token %}
-                <div class="flex-this space-between">
-                    <h3 class="darkteal-text weight-600 no-bottom-margin">Customize Label</h3>
+                <div>
+                    <h3 class="no-bottom-margin">Step 1: Customize Label</h3>
                 </div>
                 <div>
-                    <p>Each description is written to be flexible for use in multiple projects. <br>This text is written in English but you are welcome to add another language to this label.</p>
-                        <div class="w-30">
-                            {{ form.name }}
-                        </div>
+                    <p class="w-60">
+                        <span class="bold">How this works:</span> This Label should be customized to suit the values and principles of your community. We encourage you to keep these broad as your can so that it can be used for multiple projects. 
+                    </p>
+                    <div class="w-30 margin-bottom-16">
+                        <label for="name">Label name</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="w-80">
+                        <label for="default_text">Label description</label>
                         {{ form.default_text }}
+                    </div>
                 </div>
+
+                <!-- <div><button class="green-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Translation</button></div> -->
+
 
                 {{ formset.management_form }}
                 {% for tran_form in formset %}
                     {% for hidden in tran_form.hidden_fields %}
                         {{ hidden }}
                     {% endfor %}
-
-                    <div class="flex-this column">
-                        <div class="flex-this space-between">
-                            <div class="w-30">
-                                {{ tran_form.title }}
+                        <div class="flex-this column margin-top-16">
+                            <div class="flex-this w-80 space-between">
+                                <div class="w-30">{{ tran_form.title }}</div>
+                                <div class="w-30">{{ tran_form.language }}</div>
                             </div>
-                            <div class="w-30">
-                                {{ tran_form.language }}
-                            </div>
+                            <div class="w-80">{{ tran_form.translation }}</div>
                         </div>
-                        {{ tran_form.translation }}
-                    </div>
                 {% endfor %}
 
                 {% if formset.errors %}
@@ -89,7 +108,7 @@
                     {% endfor %}
                 {% endif %}
 
-                <div class="text-align-right">
+                <div class="text-align-right margin-bottom-16">
                     <button class="action-btn">Save as draft</button> 
                     <!-- <button class="white-bg darkteal-text">Cancel</button> -->
                 </div>
