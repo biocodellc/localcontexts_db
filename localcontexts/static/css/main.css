@@ -425,6 +425,7 @@ input:focus {
     padding: 8px 16px;
     margin-top: 2%;
     background-color: #007385;
+    border: none;
     border-radius: 5px;
     font-size: 14px;
     line-height: 21px;
@@ -561,7 +562,7 @@ input:focus {
 /* Gray background for sections, etc */
 .grey-bg {
     margin: 0;
-    padding-top: 3%;
+    padding-top: 1%;
     background-color: #f1f4f5;
     padding-bottom: 100px;
 }

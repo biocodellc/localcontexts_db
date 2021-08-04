@@ -20,6 +20,7 @@ def define(val=None):
     # To use: {% define 'oldVariable' as newVariable %}
   return val
 
+# TODO: what if there are 2 notices?
 @register.simple_tag
 def which_communities_notified(project):
     if project.project_bcnotice.all().exists():
@@ -31,6 +32,3 @@ def which_communities_notified(project):
         tknotice = TKNotice.objects.get(project=project)
         statuses = NoticeStatus.objects.filter(tknotice=tknotice)
         return statuses
-
-    # if yes, 
-    # check to see if notice status exists for a particular project then which community the status is associated with
