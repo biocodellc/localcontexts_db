@@ -241,7 +241,7 @@ input[type=checkbox] {
     margin-right: 10px;
 }
 
-.white-btn {
+.white-btn-select {
    margin: 5px 10px;
    padding: 8px;
    border-radius: 5px;
@@ -252,17 +252,17 @@ input[type=checkbox] {
    text-align: center; 
 }
 
-.white-btn span {
+.white-btn-select span {
     font-size: 14px;
     font-weight: bold;
     color: #007385; 
 }
 
-.white-btn:hover {
+.white-btn-select:hover {
     background-color: #007385;
 }
 
-.white-btn:hover span {
+.white-btn-select:hover span {
     color: #fff;
 }
 

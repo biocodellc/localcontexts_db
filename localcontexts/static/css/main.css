@@ -359,6 +359,10 @@ input:focus {
     align-items:center;
 }
 
+.align-right {
+    align-items: flex-end;
+}
+
 .wrap {
     flex-wrap: wrap;
 }
@@ -421,17 +425,36 @@ input:focus {
     padding: 8px 16px;
     margin-top: 2%;
     background-color: #007385;
-    border: none;
     border-radius: 5px;
     font-size: 14px;
     line-height: 21px;
     color: #fff;
     cursor: pointer;
+    display: block;
 }
 
 .default-btn {
     max-width: 110px;
     min-width: 110px;
+}
+
+.white-btn {
+    margin-top: 2%;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: bold;
+    border: 1px solid #007385;
+    color: #007385;
+    background-color: #fff;
+    cursor: pointer;
+    display: block;
+}
+
+.white-btn:hover {
+    color: #007385;
+    background-color: #fff;
 }
 
 /* Community: select-labels: Listen and Example btns */
@@ -441,7 +464,7 @@ input:focus {
     height: 40px;
     padding: 8px 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     margin-top: 2%;
     cursor: pointer;
     font-size: 14px;
@@ -475,7 +498,6 @@ input:focus {
 .teal-text-background {
     color: #fff;
     background-color: #007385;
-    /* width: 200px; */
     border: 1px solid #007385;
     box-sizing: border-box;
     border-radius: 10px;
