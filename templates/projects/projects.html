@@ -1,0 +1,107 @@
+{% extends 'base.html' %} {% block title %} | Projects {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
+
+<!-- Create Project button card -->
+<div class="content-card content-card-space white-bg">
+
+    <div class="flex-this space-between">
+        <div class="w-60"><h2>Local Contexts Projects</h2></div>
+
+        {% if community or institution %}
+            {% if member_role == 'viewer' %}
+            {% else %}
+                <div class="flex-this align-center">
+                    <a class="action-btn"
+                        {% if community %} href="{% url 'create-project' community.id %}" {% endif %}
+                        {% if institution %} href="{% url 'inst-create-project' institution.id %}" {% endif %}
+                    >
+                        Create a project <i class="fa fa-long-arrow-right"></i>
+                    </a>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="flex-this align-center">
+                <a class="action-btn" href="{% url 'researcher-create-project' researcher.id %}">
+                    Create a project <i class="fa fa-long-arrow-right"></i>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+    <div class="w-70">
+        <p class="no-top-margin">
+            A Local Context Project outlines data/information to which a notice and/or labels will be applied. A Local Contexts Project has space for project details, project contacts, project metadata, project disclosures, and is the first step to applying notices, notifying communities, and exporting notices for use in other places.
+        </p>
+    </div>
+
+</div>
+
+<!-- Project  Overview Cards -->
+
+{% if institution %}
+
+<!-- Projects where institution is the creator -->
+    {% if institution.projects %}
+        {% for project in institution.projects.all %}
+            {% include 'projects/project-overview.html' %}
+        {% endfor %}
+    {% endif %}
+
+<!-- Projects where institution is a contributor -->
+    {% if institution_projects_contrib %}
+        {% for contrib in institution_projects_contrib %}
+            {% if contrib.project in institution.projects.all %}
+            {% else %}
+                {% define contrib.project as project %}
+
+                {% include 'projects/project-overview.html' %}
+
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+{% endif %}
+
+{% if researcher %}
+
+<!-- Projects where institution is the creator -->
+    {% if researcher.projects %}
+        {% for project in researcher.projects.all %}
+            {% include 'projects/project-overview.html' %}
+        {% endfor%}
+    {% endif %}
+
+    <!-- Projects where researcher is a contributor -->
+    {% if researcher_projects_contrib %}
+        {% for contrib in researcher_projects_contrib %}
+            {% if contrib.project in researcher.projects.all %}
+            {% else %}
+                {% define contrib.project as project %}
+                {% include 'projects/project-overview.html' %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endif %}
+
+{% if community %}
+
+<!-- Projects where community is the creator -->
+    {% if community.projects %}
+        {% for project in community.projects.all %}
+            {% include 'projects/project-overview.html' %}
+        {% endfor %}
+    {% endif %}
+
+<!-- Projects where community is a contributor -->
+    {% if community_projects_contrib %}
+        {% for contrib in community_projects_contrib %}
+            {% if contrib.project in community.projects.all %}
+            {% else %}
+                {% define contrib.project as project %}
+                {% include 'projects/project-overview.html' %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endif %}
+
+
+
+{% endblock %}
