@@ -70,7 +70,7 @@ var consentVerifiedUse = 'Indigenous peoples have the right to permission the us
 var provenanceText = 'This Label is being used to affirm an inherent interest Indigenous people have in the scientific collections and data about communities, peoples, and the biodiversity found within traditional lands, waters and territories. [Community name or authorizing party] has permissioned the use of this collection and associated data for research purposes, and retains the right to be named and associated with it into the future. This association reflects a significant relationship and responsibility to [the species or biological entity] and associated scientific collections and data.'
 var multipleCommunityText = 'This Label is being used to affirm responsibility and ownership over this information, collection, data and digital sequence information is spread across several distinct communities. Use will be dependent upon discussion and negotiation with multiple communities.'
 var openToCollabText = 'This Label is being used to make clear [community name or authorizing body] is open to future engagement, collaboration, and partnership around research and outreach opportunities.'
-var openToCommercializationText = 'This Label is being used to indicate that [community name or authorizing party] is open to commercialization opportunities that might derive from any information, collections, data and DSI to which this Label is connected. As a primary party in any partnership and collaboration opportunities that emerge from the use of these resources, we retain an express interest in any future negotiations.'
+var openToCommercializationText = 'This Label is being used to indicate that [community name or authorizing party] is open to commercialization opportunities that might derive from any information, collections, data and digital sequence information (DSI) to which this Label is connected. As a primary party in any partnership and collaboration opportunities that emerge from the use of these resources, we retain an express interest in any future negotiations.'
 var researchUseText = 'This Label is being used by [community name or authorizing body] to allow this information, collection, data and digital sequence information to be used for unspecified research purposes. This Label does not provide permission for commercialization activities.  [Optional return of research results statement].'
 var consentVerifiedText = 'This Label is being used to verify that [community name or authorizing party] have consent conditions in place for the use of this information, collections, data and digital sequence information.'
 
@@ -276,7 +276,7 @@ function whichTKImgClicked(val) {
         inputProv.value = val
     } else if (val == 'tks' || val == 'tkwg' || val == 'tkmg' || val == 'tkmr' || val == 'tkwr' || val == 'tkcs' || val == 'tkss') {
         inputProt.value = val
-    } else if (val == 'tkv' || val == 'tknv' || val == 'tkc' || val == 'tknc' || val == 'tkco' || val == 'tko') {
+    } else if (val == 'tkv' || val == 'tknv' || val == 'tkoc' || val == 'tknc' || val == 'tkco' || val == 'tko') {
         inputPerms.value = val
     }
 
@@ -352,7 +352,7 @@ function populateTemplate(id) {
             title.value = tkNonCommercialName
             templateText.textContent = tkNonCommercialText
             break;
-        case 'tkc':
+        case 'tkoc':
             title.value = tkCommercialName
             templateText.textContent = tkOpenToCommercializationText
             break;
@@ -642,9 +642,9 @@ function expandTKLabel(img) {
             templateTextPerms.textContent = tkNonCommercialText
             whyUseLabelTextPerms.textContent = tkNonCommercialUse
             break;
-        case 'tkc':
+        case 'tkoc':
             openInfoDiv(infoPerms)
-            whichTKImgClicked('tkc')
+            whichTKImgClicked('tkoc')
             titlePerms.textContent = tkCommercialName
             templateTextPerms.textContent = tkOpenToCommercializationText
             whyUseLabelTextPerms.textContent = tkOpenToCommercializationUse

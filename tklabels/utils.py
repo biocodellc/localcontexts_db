@@ -17,7 +17,7 @@ def check_tklabel_type(label):
         return 'verified'
     if label == 'tknc':
         return 'non_commercial'
-    if label == 'tkc':
+    if label == 'tkoc':
         return 'commercial'
     if label == 'tkcs':
         return 'culturally_sensitive'

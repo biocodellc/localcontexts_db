@@ -6,22 +6,31 @@
             
             <div class="flex-this margin-right-1 margin-left-1">
                 <div class="flex-this column w-60">
-                    <div><p class="p-28">{{ project.title }}</p></div>
-                    <div><p class="bold">{{ project.date_added|date:'d F Y' }} | {{ project.project_type }}</p></div>
-                    <div><input type="checkbox"> <label>This project is public facing</label></div>
+                    <div><p class="p-28 bold">{{ project.title }}</p></div>
+                    <div><p class="bold">{{ project.date_added|date:'d F Y' }} | 
+                        {{ project.project_type }} |
+                        {% if project.is_public %}
+                            Public
+                        {% else %}
+                            {% if project.is_discoverable %}
+                                Discoverable
+                            {% else %}
+                                Private
+                            {% endif %}
+                        {% endif %}
+                    </p></div>
 
                     <div>
-                        <p class="p-24 bold">Project details</p>
-                        <p>
-                            {{ project.description }}
-                        </p>
+                        <p class="p-24 bold no-top-margin">Project Information</p>
+                        <span class="bold">Project description</span><br>
+                        <p>{{ project.description }}</p>
                     </div>
 
                     <div>
                         <p class="bold">Project contact details</p>
                         <p>
-                            Name: {{ project.project_contact }} <br>
-                            Email: {{ project.project_contact_email }}
+                            Name | {{ project.project_contact }} <br>
+                            Email | {{ project.project_contact_email }}
                         </p>
                     </div>
 
@@ -56,12 +65,20 @@
                     </div>
 
                     <div>
-                        <p class="p-24 bold">Project Metadata</p>
+                        <p class="p-24 bold no-bottom-margin">Project Identifiers</p>
+
                         <div class="flex-this space-between">
-                            <div>
-                                <p>GEOME Project ID: {{ project.geome_project_id }}<br></p>
+                            <div><p><span class="bold">Local Contexts Project ID</span> <br>{{ project.unique_id }}<br></p></div>
+                            <div class="margin-top-1">
+                                {% if project.unique_id %}
+                                    <a href="#" class="action-btn">Copy Local Contexts ID <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                {% endif %}
                             </div>
-                            <div>
+                        </div>
+
+                        <div class="flex-this space-between">
+                            <div><p><span class="bold">GEOME Project ID</span><br> {{ project.geome_project_id }}<br></p></div>
+                            <div class="margin-top-1">
                                 {% if project.geome_project_id %}
                                     <a href="https://geome-db.org/workbench/project-overview?projectId={{ project.geome_project_id }}" class="action-btn">View in GEOME <i class="fa fa-external-link" aria-hidden="true"></i></a>
                                 {% endif %}
@@ -69,40 +86,62 @@
                         </div>
 
                         <div class="flex-this space-between">
-                            <div>
-                                <p>Project Data GUID: {{ project.project_data_guid }}<br></p>
-                            </div>
-                            <div>
-                                {% if project.project_data_guid %}
-                                    <a href="#" class="action-btn">Button <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                            <div><p><span class="bold">Project DOI</span> <br>{{ project.publication_doi }} <br></p></div>
+                            <div class="margin-top-1">
+                                {% if project.publication_doi %}
+                                    {% if 'https://' not in project.publication_doi %}
+                                        <a href="https://www.doi.org/{{ project.publication_doi }}" class="action-btn">Project DOI <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
 
                         <div class="flex-this space-between">
-                            <div>
-                                <p>Project DOI: {{ project.publication_doi }} <br></p>
-                            </div>
-                            <div>
-                                {% if project.publication_doi %}
-                                    <a href="#" class="action-btn">Project DOI <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                            <div><p><span class="bold">Project Data GUID</span><br> {{ project.project_data_guid }}<br></p></div>
+                            <div class="margin-top-1">
+                                {% if project.project_data_guid %}
+                                    <a href="#" class="action-btn">Copy GUID <i class="fa fa-external-link" aria-hidden="true"></i></a>
                                 {% endif %}
                             </div>
                         </div>
 
+                        <div><p><span class="bold">Recommended Citation</span><br> {{ project.recommended_citation }}<br></p></div>
 
                     </div>
                 </div>
-    
+                
+                <!-- PROJECT IMAGES -->
                 <div class="w-40 flex-this column">
                     <div class="text-align-right margin-top-16">
+
                         {% if project.project_image %}
-                            <img src="{{ project.project_image.url }}" width="320px" height="180px">
+                            <div><img src="{{ project.project_image.url }}" width="320px" height="180px"></div>
                         {% else %}
-                            <img src="{% static 'images/placeholders/placeholder-img.png' %}" width="320px" height="180px">
+                            <div class="w-100">
+                                <img src="{% static 'images/placeholders/placeholder-img.png' %}" width="320px" height="180px">
+                            </div>
+                            <div class="flex-this w-100">
+                                <div class="flex-this row space-between w-70" style="margin-left:auto; width: 320px;">
+                                    <div class="margin-right-1">
+                                        <img src="{% static 'images/placeholders/placeholder-img.png' %}" width="74px" height="42px">
+                                    </div>
+                                    <div class="margin-right-1">
+                                        <img src="{% static 'images/placeholders/placeholder-img.png' %}" width="74px" height="42px">
+                                    </div>
+                                    <div class="margin-right-1">
+                                        <img src="{% static 'images/placeholders/placeholder-img.png' %}" width="74px" height="42px">
+                                    </div>
+                                    <div>
+                                        <img src="{% static 'images/placeholders/placeholder-img.png' %}" width="74px" height="42px">
+                                    </div>
+                                </div>
+
+                            </div>
                         {% endif %}
+
                     </div>
                 </div>
+            
             </div>
 
             <div class="margin-right-1 margin-left-1">

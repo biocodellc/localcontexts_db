@@ -359,6 +359,10 @@ input:focus {
     align-items:center;
 }
 
+.align-right {
+    align-items: flex-end;
+}
+
 .wrap {
     flex-wrap: wrap;
 }
@@ -427,6 +431,7 @@ input:focus {
     line-height: 21px;
     color: #fff;
     cursor: pointer;
+    display: block;
 }
 
 .default-btn {
@@ -434,19 +439,42 @@ input:focus {
     min-width: 110px;
 }
 
+.white-btn {
+    margin-top: 2%;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: bold;
+    border: 1px solid #007385;
+    color: #007385;
+    background-color: #fff;
+    cursor: pointer;
+    display: block;
+}
+
+.white-btn:hover {
+    color: #007385;
+    background-color: #fff;
+}
+
 /* Community: select-labels: Listen and Example btns */
 .green-btn {
-    width: 118px;
-    height: 40px;
     background-color:#468076;
     color: #fff;
+    height: 40px;
     padding: 8px 16px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     margin-top: 2%;
     cursor: pointer;
     font-size: 14px;
     line-height: 20px;
+}
+
+/* LISTEN / EXAMPLE btn size */
+.green-btn-default-size {
+    width: 118px;
 }
 
 /* Square + buttons for adding things */
@@ -466,6 +494,14 @@ input:focus {
 .add-square-btn span {
     color: #fff;
     font-size:25px;
+}
+
+.teal-text-background {
+    color: #fff;
+    background-color: #007385;
+    border: 1px solid #007385;
+    box-sizing: border-box;
+    border-radius: 10px;
 }
 
 /* ALERTS / MESSAGES */
@@ -526,7 +562,7 @@ input:focus {
 /* Gray background for sections, etc */
 .grey-bg {
     margin: 0;
-    padding-top: 3%;
+    padding-top: 1%;
     background-color: #f1f4f5;
     padding-bottom: 100px;
 }
