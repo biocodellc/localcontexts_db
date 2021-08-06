@@ -21,8 +21,8 @@ from helpers.forms import AddLabelTranslationFormSet, UpdateBCLabelTranslationFo
 from projects.forms import CreateProjectForm, ProjectPersonFormset
 from helpers.forms import NoticeCommentForm
 
-from bclabels.utils import check_bclabel_type
-from tklabels.utils import check_tklabel_type
+from bclabels.utils import check_bclabel_type, assign_bclabel_img
+from tklabels.utils import check_tklabel_type, assign_tklabel_img
 from projects.utils import add_to_contributors, set_project_privacy
 
 from .forms import *
@@ -405,6 +405,7 @@ def label_exists(request, pk):
 def customize_bclabel(request, pk, label_type):
     community = Community.objects.get(id=pk)
     bc_type = check_bclabel_type(label_type)
+    img_url = assign_bclabel_img(label_type)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -422,6 +423,7 @@ def customize_bclabel(request, pk, label_type):
                 label_form = form.save(commit=False)
                 label_form.label_type = bc_type
                 label_form.community = community
+                label_form.img_url = img_url
                 label_form.created_by = request.user
                 label_form.is_approved = False
                 label_form.save()
@@ -451,6 +453,7 @@ def customize_bclabel(request, pk, label_type):
 def customize_tklabel(request, pk, label_type):
     community = Community.objects.get(id=pk)
     tk_type = check_tklabel_type(label_type)
+    img_url = assign_tklabel_img(label_type)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -468,6 +471,7 @@ def customize_tklabel(request, pk, label_type):
                 label_form = form.save(commit=False)
                 label_form.label_type = tk_type
                 label_form.community = community
+                label_form.img_url = img_url
                 label_form.created_by = request.user
                 label_form.is_approved = False
                 label_form.save()

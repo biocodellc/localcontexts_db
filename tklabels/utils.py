@@ -37,3 +37,45 @@ def check_tklabel_type(label):
         return 'secret_sacred'
     if label == 'placeholder':
         return False
+
+def assign_tklabel_img(label_type):
+    baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/tklabels/'
+
+    if label_type == 'tka':
+        return baseURL + 'tk-attribution.png'
+    if label_type == 'tkcl':
+        return baseURL + 'tk-clan.png'
+    if label_type == 'tkf':
+        return baseURL + 'tk-family.png'
+    if label_type == 'tkcv':
+        return baseURL + 'tk-community-voice.png'
+    if label_type == 'tkmc':
+        return baseURL + 'tk-multiple-communities.png'
+    if label_type == 'tko':
+        return baseURL + 'tk-outreach.png'
+    if label_type == 'tknv':
+        return baseURL + 'tk-non-verified.png'
+    if label_type == 'tkv':
+        return baseURL + 'tk-verified.png'
+    if label_type == 'tknc':
+        return baseURL + 'tk-non-commercial.png'
+    if label_type == 'tkoc':
+        return baseURL + 'tk-commercial.png'
+    if label_type == 'tkcs':
+        return baseURL + 'tk-culturally-sensitive.png'
+    if label_type == 'tkco':
+        return baseURL + 'tk-community-use-only.png'
+    if label_type == 'tks':
+        return baseURL + 'tk-seasonal.png'
+    if label_type == 'tkwg':
+        return baseURL + 'tk-women-general.png'
+    if label_type == 'tkmg':
+        return baseURL + 'tk-men-general.png'
+    if label_type == 'tkmr':
+        return baseURL + 'tk-men-restricted.png'
+    if label_type == 'tkwr':
+        return baseURL + 'tk-women-restricted.png'
+    if label_type == 'tkss':
+        return baseURL + 'tk-secret-sacred.png'
+    if label_type == 'placeholder':
+        return None
