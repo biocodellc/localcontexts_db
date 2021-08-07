@@ -1,7 +1,8 @@
 from rest_framework import serializers
+from rest_framework.serializers import SerializerMethodField
 from bclabels.models import BCLabel, BCNotice
 from tklabels.models import TKLabel, TKNotice
-from projects.models import Project, ProjectContributors, ProjectPerson
+from projects.models import Project
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
@@ -30,39 +31,37 @@ class ResearcherSerializer(serializers.ModelSerializer):
         fields = ('user', 'orcid')
 
 class BCLabelSerializer(serializers.ModelSerializer):
+    community = CommunitySerializer()
+
     class Meta:
         model = BCLabel
-        fields = '__all__'
+        fields = ('name', 'label_type', 'default_text', 'img_url', 'community', 'created', 'updated')
 
 class TKLabelSerializer(serializers.ModelSerializer):
+    community = CommunitySerializer()
+
     class Meta:
         model = TKLabel
-        fields = '__all__'
-
-class ProjectPersonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProjectPerson
-        fields = ('name',)
-
-class ProjectContributorsSerializer(serializers.ModelSerializer):
-    institutions = InstitutionSerializer(many=True)
-    researchers = ResearcherSerializer(many=True)
-    communities = CommunitySerializer(many=True)
-    
-    class Meta:
-        model = ProjectContributors
-        fields = ('institutions', 'researchers', 'communities',)
+        fields = ('name', 'label_type', 'default_text', 'img_url', 'community', 'created', 'updated')
 
 class ProjectSerializer(serializers.ModelSerializer):
     bclabels = BCLabelSerializer(many=True)
     tklabels = TKLabelSerializer(many=True)
-    project_creator = UserSerializer()
-    project_contributors = ProjectContributorsSerializer()
-    additional_contributors = ProjectPersonSerializer(many=True)
 
     class Meta:
         model = Project
-        fields = '__all__'
+        fields = ('unique_id', 'title', 'bclabels', 'tklabels')
+
+    # def get_notices_or_labels(self, obj):
+    #     if self.bclabels.all().exists() or self.tklabels.all().exists():
+    #         return self
+    #     else:
+    #         if self.project_bcnotice:
+    #             return self.project_bcnotice
+    #         elif self.project_tknotice:
+    #             return self.project_tknotice
+    #         else:
+    #             return self
 
 class BCNoticeSerializer(serializers.ModelSerializer):
     project = ProjectSerializer()
