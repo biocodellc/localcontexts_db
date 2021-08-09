@@ -8,12 +8,22 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from django.contrib.auth.models import User
 
+class InstitutionSerializer(serializers.ModelSerializer):
+    institution_name = SerializerMethodField()
+
+    class Meta:
+        model = Institution
+        fields = ('id', 'institution_name')
+
+    def get_institution_name(self, obj):
+        return str(obj.institution_name)
+
 class ResearcherSerializer(serializers.ModelSerializer):
     user = SerializerMethodField()
 
     class Meta:
         model = Researcher
-        fields = ('user', 'orcid')
+        fields = ('id', 'user', 'orcid')
 
     def get_user(self, obj):
         return str(obj.user.first_name) + ' ' + str(obj.user.last_name)
@@ -39,27 +49,21 @@ class TKLabelSerializer(serializers.ModelSerializer):
         return str(obj.community.community_name)
 
 class BCNoticeSerializer(serializers.ModelSerializer):
-    placed_by_institution = SerializerMethodField()
+    placed_by_institution = InstitutionSerializer()
     placed_by_researcher = ResearcherSerializer()
 
     class Meta:
         model = BCNotice
         fields = ('unique_id', 'img_url', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
-
-    def get_placed_by_institution(self, obj):
-        return str(obj.placed_by_institution)
     
 class TKNoticeSerializer(serializers.ModelSerializer):
-    placed_by_institution = SerializerMethodField()
+    placed_by_institution = InstitutionSerializer()
     placed_by_researcher = ResearcherSerializer()
 
     class Meta:
         model = TKNotice
         fields = ('unique_id', 'img_url', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
     
-    def get_placed_by_institution(self, obj):
-        return str(obj.placed_by_institution)
-
 class ProjectSerializer(serializers.ModelSerializer):
     bclabels = BCLabelSerializer(many=True)
     tklabels = TKLabelSerializer(many=True)
