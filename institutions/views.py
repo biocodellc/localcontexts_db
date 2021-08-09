@@ -305,13 +305,24 @@ def create_project(request, pk):
 def edit_project(request, institution_id, project_uuid):
     institution = Institution.objects.get(id=institution_id)
     project = Project.objects.get(unique_id=project_uuid)
-    form = EditProjectForm(request.POST or None, instance=project)
 
-    if request.method == 'POST':
-        if form.is_valid():
-            data = form.save(commit=False)
-            data.save()
-    return render(request, 'institutions/edit-project.html', {'institution': institution, 'project': project, 'form': form,})
+    member_role = check_member_role(request.user, institution)
+    if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
+        return render(request, 'institutions/restricted.html', {'institution': institution})
+    else:
+        form = EditProjectForm(request.POST or None, instance=project)
+
+        if request.method == 'POST':
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.save()
+        context = {
+            'member_role': member_role,
+            'institution': institution, 
+            'project': project, 
+            'form': form,
+        }
+        return render(request, 'institutions/edit-project.html', context)
 
 # Notify Communities of Project
 @login_required(login_url='login')

@@ -670,13 +670,25 @@ def create_project(request, pk):
 def edit_project(request, community_id, project_uuid):
     community = Community.objects.get(id=community_id)
     project = Project.objects.get(unique_id=project_uuid)
-    form = EditProjectForm(request.POST or None, instance=project)
+    
+    member_role = check_member_role(request.user, community)
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        form = EditProjectForm(request.POST or None, instance=project)
 
-    if request.method == 'POST':
-        if form.is_valid():
-            data = form.save(commit=False)
-            data.save()
-    return render(request, 'communities/edit-project.html', {'community': community, 'project': project, 'form': form,})
+        if request.method == 'POST':
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.save()
+
+        context = {
+            'member_role': member_role,
+            'community': community, 
+            'project': project, 
+            'form': form,
+        }
+        return render(request, 'communities/edit-project.html', context)
 
 # Add labels to community created projects
 @login_required(login_url='login')
