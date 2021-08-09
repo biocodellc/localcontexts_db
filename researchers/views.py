@@ -13,7 +13,7 @@ from notifications.models import ActionNotification
 from helpers.models import NoticeStatus, NoticeComment
 from projects.models import ProjectContributors, Project, ProjectPerson
 
-from projects.forms import CreateProjectForm, ProjectPersonFormset
+from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
 from helpers.forms import NoticeCommentForm
 
 from .models import Researcher
@@ -173,6 +173,18 @@ def create_project(request, pk):
         'formset': formset,
     }
     return render(request, 'researchers/create-project.html', context)
+
+@login_required(login_url='login')
+def edit_project(request, researcher_id, project_uuid):
+    researcher = Researcher.objects.get(id=researcher_id)
+    project = Project.objects.get(unique_id=project_uuid)
+    form = EditProjectForm(request.POST or None, instance=project)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.save()
+    return render(request, 'researchers/edit-project.html', {'researcher': researcher, 'project': project, 'form': form,})
 
 # Notify Communities of Project
 @login_required(login_url='login')

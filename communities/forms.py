@@ -27,8 +27,6 @@ class ValidateCommunityForm(forms.ModelForm):
             'contact_email': forms.EmailInput(attrs={'class': 'w-100', 'required': 'required'}),
         }
 
-
-
 class UpdateCommunityForm(forms.ModelForm):
     class Meta:
         model = Community

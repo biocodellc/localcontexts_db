@@ -18,11 +18,11 @@ from projects.models import ProjectContributors, Project, ProjectPerson
 from bclabels.forms import CustomizeBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomizeTKLabelForm, ApproveAndEditTKLabelForm
 from helpers.forms import AddLabelTranslationFormSet, UpdateBCLabelTranslationFormSet, UpdateTKLabelTranslationFormSet
-from projects.forms import CreateProjectForm, ProjectPersonFormset
+from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
 from helpers.forms import NoticeCommentForm
 
-from bclabels.utils import check_bclabel_type
-from tklabels.utils import check_tklabel_type
+from bclabels.utils import check_bclabel_type, assign_bclabel_img
+from tklabels.utils import check_tklabel_type, assign_tklabel_img
 from projects.utils import add_to_contributors, set_project_privacy
 
 from .forms import *
@@ -44,7 +44,6 @@ def connect_community(request):
         data.community = community
         data.user_to = community.community_creator
         data.save()
-        # Create a notification here
         return redirect('dashboard')
     context = { 'communities': communities, 'form': form,}
     return render(request, 'communities/connect-community.html', context)
@@ -301,22 +300,38 @@ def community_activity(request, pk):
 
             if bcnotice_exists:
                 bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
+                status = NoticeStatus.objects.get(bcnotice=bcnotice, community=community)
+
                 if form.is_valid():
                     data = form.save(commit=False)
                     data.bcnotice = bcnotice
                     data.sender = request.user
                     data.community = community
                     data.save()
+
+                    # If message is sent, set notice status to 'Seen'
+                    if status.seen == False:
+                        status.seen = True
+                        status.save()
+
                     return redirect('community-activity', community.id)
             
             if tknotice_exists:
                 tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
+                status = NoticeStatus.objects.get(tknotice=tknotice, community=community)
+
                 if form.is_valid():
                     data = form.save(commit=False)
                     data.tknotice = tknotice
                     data.sender = request.user
                     data.community = community
                     data.save()
+
+                    # If message is sent, set notice status to 'Seen'
+                    if status.seen == False:
+                        status.seen = True
+                        status.save()
+
                     return redirect('community-activity', community.id)
 
         else:
@@ -405,6 +420,7 @@ def label_exists(request, pk):
 def customize_bclabel(request, pk, label_type):
     community = Community.objects.get(id=pk)
     bc_type = check_bclabel_type(label_type)
+    img_url = assign_bclabel_img(label_type)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -422,6 +438,7 @@ def customize_bclabel(request, pk, label_type):
                 label_form = form.save(commit=False)
                 label_form.label_type = bc_type
                 label_form.community = community
+                label_form.img_url = img_url
                 label_form.created_by = request.user
                 label_form.is_approved = False
                 label_form.save()
@@ -451,6 +468,7 @@ def customize_bclabel(request, pk, label_type):
 def customize_tklabel(request, pk, label_type):
     community = Community.objects.get(id=pk)
     tk_type = check_tklabel_type(label_type)
+    img_url = assign_tklabel_img(label_type)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -468,6 +486,7 @@ def customize_tklabel(request, pk, label_type):
                 label_form = form.save(commit=False)
                 label_form.label_type = tk_type
                 label_form.community = community
+                label_form.img_url = img_url
                 label_form.created_by = request.user
                 label_form.is_approved = False
                 label_form.save()
@@ -646,6 +665,30 @@ def create_project(request, pk):
         }
 
         return render(request, 'communities/create-project.html', context)
+
+@login_required(login_url='login')
+def edit_project(request, community_id, project_uuid):
+    community = Community.objects.get(id=community_id)
+    project = Project.objects.get(unique_id=project_uuid)
+    
+    member_role = check_member_role(request.user, community)
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        form = EditProjectForm(request.POST or None, instance=project)
+
+        if request.method == 'POST':
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.save()
+
+        context = {
+            'member_role': member_role,
+            'community': community, 
+            'project': project, 
+            'form': form,
+        }
+        return render(request, 'communities/edit-project.html', context)
 
 # Add labels to community created projects
 @login_required(login_url='login')

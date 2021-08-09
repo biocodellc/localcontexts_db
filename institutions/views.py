@@ -20,7 +20,7 @@ from helpers.models import NoticeComment, NoticeStatus
 
 from accounts.models import UserAffiliation
 
-from projects.forms import CreateProjectForm, ProjectPersonFormset
+from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
 from helpers.forms import NoticeCommentForm
 from communities.forms import InviteMemberForm, JoinRequestForm
 from .forms import CreateInstitutionForm, UpdateInstitutionForm, CreateInstitutionNoRorForm
@@ -31,15 +31,14 @@ def connect_institution(request):
     form = JoinRequestForm(request.POST or None)
 
     if request.method == 'POST':
-        institution_id = request.POST.get('organization_name')
-        institution = Institution.objects.get(institution_name=institution_id)
+        institution_name = request.POST.get('organization_name')
+        institution = Institution.objects.get(institution_name=institution_name)
 
         data = form.save(commit=False)
         data.user_from = request.user
         data.institution = institution
         data.user_to = institution.institution_creator
         data.save()
-        # Create a notification here
         return redirect('dashboard')
     context = { 'institutions': institutions, 'form': form,}
     return render(request, 'institutions/connect-institution.html', context)
@@ -301,6 +300,29 @@ def create_project(request, pk):
             'member_role': member_role,
         }
         return render(request, 'institutions/create-project.html', context)
+
+@login_required(login_url='login')
+def edit_project(request, institution_id, project_uuid):
+    institution = Institution.objects.get(id=institution_id)
+    project = Project.objects.get(unique_id=project_uuid)
+
+    member_role = check_member_role(request.user, institution)
+    if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
+        return render(request, 'institutions/restricted.html', {'institution': institution})
+    else:
+        form = EditProjectForm(request.POST or None, instance=project)
+
+        if request.method == 'POST':
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.save()
+        context = {
+            'member_role': member_role,
+            'institution': institution, 
+            'project': project, 
+            'form': form,
+        }
+        return render(request, 'institutions/edit-project.html', context)
 
 # Notify Communities of Project
 @login_required(login_url='login')

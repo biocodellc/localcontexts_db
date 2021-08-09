@@ -1,77 +1,24 @@
-from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.http import JsonResponse
+from rest_framework.reverse import reverse
+
 from .serializers import *
 from bclabels.models import BCLabel, BCNotice
 from tklabels.models import TKLabel, TKNotice
 from projects.models import Project
 
 @api_view(['GET'])
-def apiOverview(request):
+def apiOverview(request, format=None):
     api_urls = {
-        'BCNotices': '/bcnotices/',
-        'BCNotice Detail View': '/bcnotices/<str:unique_id>',
-        'TKNotices': '/tknotices/',
-        'TKNotice Detail View': '/tknotices/<str:unique_id>',
-        'BCLabels': '/bclabels/',
-        'BCLabel Detail View': '/bclabels/<str:unique_id>',
-        'TKLabels': '/tklabels/',
-        'TKLabel Detail View': '/tklabels/<str:unique_id>',
-        'Projects': '/projects/',
-        'Project Detail View': '/projects/<str:unique_id>',
+        'projects': reverse('api-projects', request=request, format=format),
+        'project detail view': '/projects/<str:unique_id>',
+        'projects by username': '/projects/users/<str:username>',
+        'projects by institution id': '/projects/institutions/<str:institution_id>',
+        'projects by researcher id': 'projects/researchers/<str:researcher_id>',
     }
     return Response(api_urls)
 
-@api_view(['GET', 'POST'])
-def bcnotices(request):
-    bcnotices = BCNotice.objects.all()
-    serializer = BCNoticeSerializer(bcnotices, many=True)
-    return Response(serializer.data)
-
 @api_view(['GET'])
-def bcnotice_detail(request, unique_id):
-    bcnotice = BCNotice.objects.get(unique_id=unique_id)
-    serializer = BCNoticeSerializer(bcnotice, many=False)
-    return Response(serializer.data)
-
-@api_view(['GET', 'POST'])
-def tknotices(request):
-    tknotices = TKNotice.objects.all()
-    serializer = TKNoticeSerializer(tknotices, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def tknotice_detail(request, unique_id):
-    tknotice = TKNotice.objects.get(unique_id=unique_id)
-    serializer = TKNoticeSerializer(tknotice, many=False)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def bclabels(request):
-    bclabels = BCLabel.objects.all()
-    serializer = BCLabelSerializer(bclabels, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def bclabel_detail(request, unique_id):
-    bclabel = BCLabel.objects.get(unique_id=unique_id)
-    serializer = BCLabelSerializer(bclabel, many=False)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def tklabels(request):
-    tklabels = TKLabel.objects.all()
-    serializer = TKLabelSerializer(tklabels, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def tklabel_detail(request, unique_id):
-    tklabel = TKLabel.objects.get(unique_id=unique_id)
-    serializer = TKLabelSerializer(tklabel, many=False)
-    return Response(serializer.data)
-
-@api_view(['GET', 'POST'])
 def projects(request):
     projects = Project.objects.all()
     serializer = ProjectSerializer(projects, many=True)
@@ -79,6 +26,28 @@ def projects(request):
 
 @api_view(['GET'])
 def project_detail(request, unique_id):
-    projects = Project.objects.get(unique_id=unique_id)
-    serializer = ProjectSerializer(projects, many=False)
+    project = Project.objects.get(unique_id=unique_id)
+    serializer = ProjectSerializer(project, many=False)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def projects_by_user(request, username):
+    user = User.objects.get(username=username)
+    projects = Project.objects.filter(project_creator=user)
+    serializer = ProjectSerializer(projects, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def projects_by_institution(request, institution_id):
+    institution = Institution.objects.get(id=institution_id)
+    projects = institution.projects.all()
+    serializer = ProjectSerializer(projects, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def projects_by_researcher(request, researcher_id):
+    researcher = Researcher.objects.get(id=researcher_id)
+    projects = researcher.projects.all()
+    serializers = ProjectSerializer(projects, many=True)
+    return Response(serializers.data)
+
