@@ -44,7 +44,6 @@ def connect_community(request):
         data.community = community
         data.user_to = community.community_creator
         data.save()
-        # Create a notification here
         return redirect('dashboard')
     context = { 'communities': communities, 'form': form,}
     return render(request, 'communities/connect-community.html', context)

@@ -39,7 +39,6 @@ def connect_institution(request):
         data.institution = institution
         data.user_to = institution.institution_creator
         data.save()
-        # Create a notification here
         return redirect('dashboard')
     context = { 'institutions': institutions, 'form': form,}
     return render(request, 'institutions/connect-institution.html', context)
