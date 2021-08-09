@@ -13,8 +13,8 @@ def apiOverview(request, format=None):
         'projects': reverse('api-projects', request=request, format=format),
         'project detail view': '/projects/<str:unique_id>',
         'projects by username': '/projects/users/<str:username>',
-        'projects by institution': '/projects/institutions/<str:institution_id>',
-        'projects by researcher': 'projects/researchers/<str:researcher_id>',
+        'projects by institution id': '/projects/institutions/<str:institution_id>',
+        'projects by researcher id': 'projects/researchers/<str:researcher_id>',
     }
     return Response(api_urls)
 
