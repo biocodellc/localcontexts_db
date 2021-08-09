@@ -8,11 +8,6 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from django.contrib.auth.models import User
 
-class CommunitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Community
-        fields = ('community_name',)
-
 class ResearcherSerializer(serializers.ModelSerializer):
     user = SerializerMethodField()
 
@@ -49,7 +44,7 @@ class BCNoticeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BCNotice
-        fields = ('placed_by_researcher', 'placed_by_institution', 'unique_id', 'created', 'updated',)
+        fields = ('unique_id', 'img_url', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
 
     def get_placed_by_institution(self, obj):
         return str(obj.placed_by_institution)
@@ -60,7 +55,7 @@ class TKNoticeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TKNotice
-        fields = ('placed_by_researcher', 'placed_by_institution', 'unique_id', 'created', 'updated',)
+        fields = ('unique_id', 'img_url', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
     
     def get_placed_by_institution(self, obj):
         return str(obj.placed_by_institution)
@@ -74,14 +69,3 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ('unique_id', 'title', 'bcnotice', 'tknotice', 'bclabels', 'tklabels')
-
-    # def get_notices_or_labels(self, obj):
-    #     if self.bclabels.all().exists() or self.tklabels.all().exists():
-    #         return self
-    #     else:
-    #         if self.project_bcnotice:
-    #             return self.project_bcnotice
-    #         elif self.project_tknotice:
-    #             return self.project_tknotice
-    #         else:
-    #             return self
