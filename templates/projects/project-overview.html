@@ -57,7 +57,6 @@
                 {% if community %}
                     {% if member_role == 'viewer' %}
                     {% else %}
-                        <!-- Apply labels to community project -->
                         <div class="margin-right-1">
                             <a href="{% url 'apply-project-labels' community.id project.id %}" class="action-btn">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
                         </div>
