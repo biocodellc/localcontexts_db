@@ -88,20 +88,26 @@
                 {% endif %}
 
                 <!-- TODO: can't see this button if labels applied to project, also only seen by creator of project -->
-                <div class="margin-right-1">
-                    {% if community %}
-                        <a href="{% url 'edit-project' community.id project.unique_id %}" class="action-btn">
-                            Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
-                    {% endif %}
-                    {% if institution %}
-                        <a href="{% url 'inst-edit-project' institution.id project.unique_id %}" class="action-btn">
-                            Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
-                    {% endif %}                        
-                    {% if researcher %}
-                        <a href="{% url 'researcher-edit-project' researcher.id project.unique_id %}" class="action-btn">
-                            Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
-                    {% endif %}                        
-                </div>
+                {% if project.bclabels.all or project.tklabels.all %}
+
+                {% else %}
+                    {% if request.user == project.project_creator %}
+                            <div class="margin-right-1">
+                                {% if community %}
+                                    <a href="{% url 'edit-project' community.id project.unique_id %}" class="action-btn">
+                                        Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
+                                {% endif %}
+                                {% if institution %}
+                                    <a href="{% url 'inst-edit-project' institution.id project.unique_id %}" class="action-btn">
+                                        Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
+                                {% endif %}                        
+                                {% if researcher %}
+                                    <a href="{% url 'researcher-edit-project' researcher.id project.unique_id %}" class="action-btn">
+                                        Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
+                                {% endif %}                        
+                            </div>
+                        {% endif %}
+                {% endif %}
 
                 <div>
                     <a href="{% url 'view-project' project.unique_id %}" class="white-btn">Open Project <i class="fa fa-long-arrow-right"></i></a>
