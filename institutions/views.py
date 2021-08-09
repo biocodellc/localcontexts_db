@@ -31,8 +31,8 @@ def connect_institution(request):
     form = JoinRequestForm(request.POST or None)
 
     if request.method == 'POST':
-        institution_id = request.POST.get('organization_name')
-        institution = Institution.objects.get(institution_name=institution_id)
+        institution_name = request.POST.get('organization_name')
+        institution = Institution.objects.get(institution_name=institution_name)
 
         data = form.save(commit=False)
         data.user_from = request.user

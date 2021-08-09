@@ -97,14 +97,14 @@ def send_user_join_request(sender, instance, created, **kwargs):
             community = instance.community
 
             title = str(name) + " wishes to join " + str(community)
-            message = "You can add " + str(name) + " to " + str(community)
+            message = str(name) + " is requesting to join " + str(community)
 
             UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Request", community=community, reference_id=ref)
         if instance.institution:
             institution = instance.institution
 
             title = str(name) + " wishes to join " + str(institution)
-            message = "You can add " + str(name) + " to " + str(institution)
+            message = str(name) + " is requesting to join " + str(institution)
 
             UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Request", institution=institution, reference_id=ref)
 
@@ -128,7 +128,7 @@ def accept_user_join_request(sender, instance, created, **kwargs):
 
             # Message to user accepting the join request letting them know user is now a community member.
             title2 = str(check_full_name(sender_)) + " is now a member of " + str(community)
-            message2 = "They will now have access to " + str(community) + "'s notices and labels"
+            message2 = str(check_full_name(sender_)) + " is now a member of " + str(community) + "." + " They will now have access to " + str(community) + "'s notices and labels"
 
             UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title2, message=message2, notification_type="Accept", community=community, reference_id=ref)
             instance.delete() # Deletes the request when it has been accepted
@@ -144,7 +144,7 @@ def accept_user_join_request(sender, instance, created, **kwargs):
 
             # Message to user accepting the join request letting them know user is now a institution member.
             title2 = str(check_full_name(sender_)) + " is now a member of " + str(institution)
-            message2 = "They will now have access to " + str(institution) + "'s notices and projects"
+            message2 = str(check_full_name(sender_)) + " is now a member of " + str(institution) + "." + " They will now have access to " + str(institution) + "'s notices and projects"
 
             UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title2, message=message2, notification_type="Accept", institution=institution, reference_id=ref)
             instance.delete() # Deletes the request when it has been accepted
@@ -158,7 +158,7 @@ def community_application(sender, instance, created, **kwargs):
     name = check_full_name(creator)
 
     title = str(name) + " wants to create a community: " + str(instance.community_name)
-    message = "Community application"
+    message = str(name) + " wants to create a community: " + str(instance.community_name)
 
     if created:
         UserNotification.objects.create(to_user=admin, from_user=creator, title=title, message=message, notification_type="Create", community=instance)

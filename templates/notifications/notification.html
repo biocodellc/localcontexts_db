@@ -1,12 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% load custom_noti_tags %}
 {% block content %}
 
 {% include 'partials/_auth-header.html' %}
 
     <section class="grey-bg">
         <div class="content-card content-card-space white-bg">
-            <h3 class="darkteal-text">{{ notification.title }}</h3>
-            <p>Message: <br>{{ notification.message }}</p>
+            <h3 class="darkteal-text">{{ notification.message }}</h3>
 
             {% if notification.notification_type == 'Welcome' %}
                 
@@ -21,6 +20,11 @@
             {% endif %}
 
             {% if notification.notification_type == 'Request' %}
+
+            {% display_joinrequest_message notification.reference_id as request_message %}
+            {% if request_message %}
+                <p>Request message:<br> {{ request_message }}</p>
+            {% endif %}
                 <form method="POST" action="">
                     {% csrf_token %}
                     <input type="hidden">
