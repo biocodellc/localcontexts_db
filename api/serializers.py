@@ -54,7 +54,7 @@ class BCNoticeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BCNotice
-        fields = ('unique_id', 'img_url', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
+        fields = ('img_url', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
     
 class TKNoticeSerializer(serializers.ModelSerializer):
     placed_by_institution = InstitutionSerializer()
@@ -62,7 +62,7 @@ class TKNoticeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TKNotice
-        fields = ('unique_id', 'img_url', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
+        fields = ('img_url', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
     
 class ProjectSerializer(serializers.ModelSerializer):
     bclabels = BCLabelSerializer(many=True)
