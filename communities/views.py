@@ -18,7 +18,7 @@ from projects.models import ProjectContributors, Project, ProjectPerson
 from bclabels.forms import CustomizeBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomizeTKLabelForm, ApproveAndEditTKLabelForm
 from helpers.forms import AddLabelTranslationFormSet, UpdateBCLabelTranslationFormSet, UpdateTKLabelTranslationFormSet
-from projects.forms import CreateProjectForm, ProjectPersonFormset
+from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
 from helpers.forms import NoticeCommentForm
 
 from bclabels.utils import check_bclabel_type, assign_bclabel_img
@@ -665,6 +665,18 @@ def create_project(request, pk):
         }
 
         return render(request, 'communities/create-project.html', context)
+
+@login_required(login_url='login')
+def edit_project(request, community_id, project_uuid):
+    community = Community.objects.get(id=community_id)
+    project = Project.objects.get(unique_id=project_uuid)
+    form = EditProjectForm(request.POST or None, instance=project)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.save()
+    return render(request, 'communities/edit-project.html', {'community': community, 'project': project, 'form': form,})
 
 # Add labels to community created projects
 @login_required(login_url='login')

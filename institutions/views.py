@@ -20,7 +20,7 @@ from helpers.models import NoticeComment, NoticeStatus
 
 from accounts.models import UserAffiliation
 
-from projects.forms import CreateProjectForm, ProjectPersonFormset
+from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
 from helpers.forms import NoticeCommentForm
 from communities.forms import InviteMemberForm, JoinRequestForm
 from .forms import CreateInstitutionForm, UpdateInstitutionForm, CreateInstitutionNoRorForm
@@ -300,6 +300,18 @@ def create_project(request, pk):
             'member_role': member_role,
         }
         return render(request, 'institutions/create-project.html', context)
+
+@login_required(login_url='login')
+def edit_project(request, institution_id, project_uuid):
+    institution = Institution.objects.get(id=institution_id)
+    project = Project.objects.get(unique_id=project_uuid)
+    form = EditProjectForm(request.POST or None, instance=project)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            data = form.save(commit=False)
+            data.save()
+    return render(request, 'institutions/edit-project.html', {'institution': institution, 'project': project, 'form': form,})
 
 # Notify Communities of Project
 @login_required(login_url='login')

@@ -10,6 +10,7 @@ urlpatterns = [
 
     path('researcher/projects/<str:pk>', views.researcher_projects, name="researcher-projects"),
     path('researcher/projects/create-project/<str:pk>', views.create_project, name="researcher-create-project"),
+    path('researcher/projects/edit-project/<str:researcher_id>/<str:project_uuid>', views.edit_project, name="researcher-edit-project"),
     path('researcher/projects/notify/<str:pk>/<str:proj_id>/', views.notify_communities, name="researcher-notify-communities"),
 
     
