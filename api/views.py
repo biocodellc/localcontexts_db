@@ -1,20 +1,20 @@
-from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.http import JsonResponse
+from rest_framework.reverse import reverse
+
 from .serializers import *
 from bclabels.models import BCLabel, BCNotice
 from tklabels.models import TKLabel, TKNotice
 from projects.models import Project
 
 @api_view(['GET'])
-def apiOverview(request):
+def apiOverview(request, format=None):
     api_urls = {
-        'Projects': '/projects',
-        'Project detail view': '/projects/<str:unique_id>',
-        'Projects by user': '/projects/users/<str:username>',
-        'Projects by institution': '/projects/institutions/<str:institution_id>',
-        'Projects by researcher': 'projects/researchers/<str:researcher_id>',
+        'projects': reverse('api-projects', request=request, format=format),
+        'project detail view': '/projects/<str:unique_id>',
+        'projects by username': '/projects/users/<str:username>',
+        'projects by institution': '/projects/institutions/<str:institution_id>',
+        'projects by researcher': 'projects/researchers/<str:researcher_id>',
     }
     return Response(api_urls)
 
