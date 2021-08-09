@@ -300,22 +300,38 @@ def community_activity(request, pk):
 
             if bcnotice_exists:
                 bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
+                status = NoticeStatus.objects.get(bcnotice=bcnotice, community=community)
+
                 if form.is_valid():
                     data = form.save(commit=False)
                     data.bcnotice = bcnotice
                     data.sender = request.user
                     data.community = community
                     data.save()
+
+                    # If message is sent, set notice status to 'Seen'
+                    if status.seen == False:
+                        status.seen = True
+                        status.save()
+
                     return redirect('community-activity', community.id)
             
             if tknotice_exists:
                 tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
+                status = NoticeStatus.objects.get(tknotice=tknotice, community=community)
+
                 if form.is_valid():
                     data = form.save(commit=False)
                     data.tknotice = tknotice
                     data.sender = request.user
                     data.community = community
                     data.save()
+
+                    # If message is sent, set notice status to 'Seen'
+                    if status.seen == False:
+                        status.seen = True
+                        status.save()
+
                     return redirect('community-activity', community.id)
 
         else:
