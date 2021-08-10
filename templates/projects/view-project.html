@@ -99,15 +99,6 @@
                         </div>
 
                         <div class="flex-this space-between">
-                            <div><p><span class="bold">GEOME Project ID</span><br> {{ project.geome_project_id }}<br></p></div>
-                            <div class="margin-top-1">
-                                {% if project.geome_project_id %}
-                                    <a href="https://geome-db.org/workbench/project-overview?projectId={{ project.geome_project_id }}" class="action-btn">View in GEOME <i class="fa fa-external-link" aria-hidden="true"></i></a>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <div class="flex-this space-between">
                             <div><p><span class="bold">Project DOI</span> <br>{{ project.publication_doi }} <br></p></div>
                             <div class="margin-top-1">
                                 {% if project.publication_doi %}

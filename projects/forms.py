@@ -9,7 +9,7 @@ class DateInput(forms.DateInput):
 class CreateProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['title', 'project_type', 'description', 'url', 'publication_date', 'publication_date_ongoing', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation', 'geome_project_id']
+        fields = ['title', 'project_type', 'description', 'url', 'publication_date', 'publication_date_ongoing', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation']
         widgets = {
             'publication_date': DateInput(),
             'title': forms.TextInput(attrs={'class': 'w-100'}),
@@ -20,7 +20,6 @@ class CreateProjectForm(forms.ModelForm):
             'publication_doi': forms.TextInput(attrs={'class': 'w-100'}),
             'project_data_guid': forms.TextInput(attrs={'class': 'w-100'}),
             'recommended_citation': forms.Textarea(attrs={'rows': 4, 'class': 'w-100'}),
-            'geome_project_id': forms.TextInput(attrs={'class': 'w-100'}),
             'url': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
@@ -37,7 +36,7 @@ ProjectPersonFormset = modelformset_factory(
 class EditProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['title', 'project_type', 'description', 'url', 'publication_date', 'publication_date_ongoing', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation', 'geome_project_id']
+        fields = ['title', 'project_type', 'description', 'url', 'publication_date', 'publication_date_ongoing', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation']
         widgets = {
             'publication_date': DateInput(),
             'title': forms.TextInput(attrs={'class': 'w-100'}),
@@ -48,6 +47,5 @@ class EditProjectForm(forms.ModelForm):
             'publication_doi': forms.TextInput(attrs={'class': 'w-100'}),
             'project_data_guid': forms.TextInput(attrs={'class': 'w-100'}),
             'recommended_citation': forms.Textarea(attrs={'rows': 4, 'class': 'w-100'}),
-            'geome_project_id': forms.TextInput(attrs={'class': 'w-100'}),
             'url': forms.TextInput(attrs={'class': 'w-100'}),
         }

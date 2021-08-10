@@ -21,7 +21,7 @@ def apiOverview(request, format=None):
 @api_view(['GET'])
 def projects(request):
     projects = Project.objects.all()
-    serializer = ProjectSerializer(projects, many=True)
+    serializer = ProjectOverviewSerializer(projects, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -34,20 +34,20 @@ def project_detail(request, unique_id):
 def projects_by_user(request, username):
     user = User.objects.get(username=username)
     projects = Project.objects.filter(project_creator=user)
-    serializer = ProjectSerializer(projects, many=True)
+    serializer = ProjectOverviewSerializer(projects, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def projects_by_institution(request, institution_id):
     institution = Institution.objects.get(id=institution_id)
     projects = institution.projects.all()
-    serializer = ProjectSerializer(projects, many=True)
+    serializer = ProjectOverviewSerializer(projects, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def projects_by_researcher(request, researcher_id):
     researcher = Researcher.objects.get(id=researcher_id)
     projects = researcher.projects.all()
-    serializers = ProjectSerializer(projects, many=True)
+    serializers = ProjectOverviewSerializer(projects, many=True)
     return Response(serializers.data)
 
