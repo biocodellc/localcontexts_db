@@ -11,10 +11,10 @@ from projects.models import Project
 def apiOverview(request, format=None):
     api_urls = {
         'projects': reverse('api-projects', request=request, format=format),
-        'project detail view': '/projects/<str:unique_id>',
-        'projects by username': '/projects/users/<str:username>',
-        'projects by institution id': '/projects/institutions/<str:institution_id>',
-        'projects by researcher id': '/projects/researchers/<str:researcher_id>',
+        'project detail view': '/projects/<PROJECT_UNIQUE_ID>',
+        'projects by username': '/projects/users/<USERNAME>',
+        'projects by institution id': '/projects/institutions/<INSTITUTION_ID>',
+        'projects by researcher id': '/projects/researchers/<RESEARCHER_ID>',
     }
     return Response(api_urls)
 

@@ -25,11 +25,7 @@
                         </div>
 
                         <div class="flex-this">
-
-                            <div class="w-10">
-                                <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
-                            </div>
-
+                            <div class="w-10"><img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle"></div>
                             <div class="w-90 pad-left-2">
                                 <p>
                                     <span class="darkteal-text weight-600">{{ bcnotice.project.title}}</span><br>
@@ -55,53 +51,53 @@
 
                                     {% else %}
 
-                                    <form method="POST" action="">
-                                        {% csrf_token %}
-                                            <span class="weight-500">What would you like to do with this notice? </span>
-
-                                            <select id="select-{{ bcnotice.unique_id }}" onchange="setBCNoticeUUID(this)">
-
-                                                {% for status in bcnotice.bcnotice_status.all %}
-                                                    {% if status.community == community %}
-
-                                                        {% if not status.seen and status.status == None %}
-                                                            <option disabled selected="selected"> ----------------- </option>
-                                                            <option value="seen"> Acknowledge Notice </option>
-                                                            <option value="pending"> Labels Pending </option>
-                                                            <option value="not_pending"> No Labels Pending </option>
-                                                        {% endif %} 
-
-                                                        {% if status.seen and status.status == None %}
-                                                            <option disabled> ----------------- </option>
-                                                            <option value="seen" selected="selected"> Acknowledge Notice </option>
-                                                            <option value="pending"> Labels Pending </option>
-                                                            <option value="not_pending"> No Labels Pending </option>
-                                                        {% endif %} 
-
-                                                        {% if status.seen and status.status == 'pending' %}
-                                                            <option disabled> ----------------- </option>
-                                                            <option value="seen"> Acknowledge Notice </option>
-                                                            <option value="pending" selected="selected"> Labels Pending </option>
-                                                            <option value="not_pending"> No Labels Pending </option>
-                                                        {% endif %}
-
-                                                        {% if status.seen and status.status == 'not_pending' %}
-                                                            <option disabled> ----------------- </option>
-                                                            <option value="seen"> Acknowledge Notice </option>
-                                                            <option value="pending"> Labels Pending </option>
-                                                            <option value="not_pending" selected="selected"> No Labels Pending </option>
-                                                        {% endif %}
-
-                                                    {% endif %}
-                                                {% endfor %}
-
-                                            </select>
-
+                                        <form method="POST" action="">
+                                            {% csrf_token %}
                                             <input id="notice-id-input-{{ bcnotice.unique_id }}" type="hidden" value="placeholder" name="bcnotice-uuid">
                                             <input id="status-selection-input-{{ bcnotice.unique_id }}" type="hidden" value="placeholder" name="bcnotice-status">
 
-                                            <button class="action-btn" name="notify-btn">Notify</button>
-                                    </form>
+                                            <div><span class="weight-500">What would you like to do with this notice? </span></div>
+                                            <div class="flex-this">
+                                                <div class="margin-right-1"><select id="select-{{ bcnotice.unique_id }}" onchange="setBCNoticeUUID(this)">
+
+                                                    {% for status in bcnotice.bcnotice_status.all %}
+                                                        {% if status.community == community %}
+
+                                                            {% if not status.seen and status.status == None %}
+                                                                <option disabled selected="selected"> ----------------- </option>
+                                                                <option value="seen"> Acknowledge Notice </option>
+                                                                <option value="pending"> Labels Pending </option>
+                                                                <option value="not_pending"> No Labels Pending </option>
+                                                            {% endif %} 
+
+                                                            {% if status.seen and status.status == None %}
+                                                                <option disabled> ----------------- </option>
+                                                                <option value="seen" selected="selected"> Acknowledge Notice </option>
+                                                                <option value="pending"> Labels Pending </option>
+                                                                <option value="not_pending"> No Labels Pending </option>
+                                                            {% endif %} 
+
+                                                            {% if status.seen and status.status == 'pending' %}
+                                                                <option disabled> ----------------- </option>
+                                                                <option value="seen"> Acknowledge Notice </option>
+                                                                <option value="pending" selected="selected"> Labels Pending </option>
+                                                                <option value="not_pending"> No Labels Pending </option>
+                                                            {% endif %}
+
+                                                            {% if status.seen and status.status == 'not_pending' %}
+                                                                <option disabled> ----------------- </option>
+                                                                <option value="seen"> Acknowledge Notice </option>
+                                                                <option value="pending"> Labels Pending </option>
+                                                                <option value="not_pending" selected="selected"> No Labels Pending </option>
+                                                            {% endif %}
+
+                                                        {% endif %}
+                                                    {% endfor %}
+                                            </select></div>
+                                            <div class="margin-left-1"><button class="action-btn" name="notify-btn">Notify</button></div>
+                                        </div>
+
+                                        </form>
 
                                     {% endif %}
 
