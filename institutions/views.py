@@ -8,6 +8,8 @@ from django.template.loader import render_to_string
 
 from .utils import check_member_role
 from projects.utils import add_to_contributors, set_project_privacy
+from bclabels.utils import set_bcnotice_defaults
+from tklabels.utils import set_tknotice_defaults
 
 from .models import Institution
 from researchers.models import Researcher
@@ -265,11 +267,11 @@ def create_project(request, pk):
                 notices_selected = request.POST.getlist('checkbox-notice')
                 for notice in notices_selected:
                     if notice == 'bcnotice':
-                        img_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/bc-notice.png'
-                        bcnotice = BCNotice.objects.create(placed_by_institution=institution, project=data, img_url=img_url)
+                        bcnotice = BCNotice.objects.create(placed_by_institution=institution, project=data)
+                        set_bcnotice_defaults(bcnotice)
                     if notice == 'tknotice':
-                        img_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/tk-notice.png'
-                        tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data, img_url=img_url)
+                        tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data)
+                        set_tknotice_defaults(tknotice)
 
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')

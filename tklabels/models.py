@@ -13,6 +13,7 @@ class TKNotice(models.Model):
     placed_by_researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True)
     placed_by_institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True)
     img_url = models.URLField(blank=True, null=True)
+    default_text = models.TextField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
 
