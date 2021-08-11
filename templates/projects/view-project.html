@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="flex-this w-30">
-                <div class="margin-left-1"><a class="action-btn">Share Project <i class="fa fa-share-alt" aria-hidden="true"></i></a></div>
+                <div class="margin-left-1"><a class="action-btn margin-top-2 ">Share Project <i class="fa fa-share-alt" aria-hidden="true"></i></a></div>
             </div>
         </div>
 
@@ -93,7 +93,7 @@
                             <div><p><span class="bold">Local Contexts Unique Project ID</span> <br><span id="uniqueIDToCopy">{{ project.unique_id }}</span><br></p></div>
                             <div class="margin-top-1">
                                 {% if project.unique_id %}
-                                    <a onclick="copyToClipboard()" class="action-btn copied-display">Copy ID <i class="fa fa-copy"></i></a>
+                                    <a onclick="copyToClipboard()" class="action-btn margin-top-2  copied-display">Copy ID <i class="fa fa-copy"></i></a>
                                 {% endif %}
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                             <div class="margin-top-1">
                                 {% if project.publication_doi %}
                                     {% if 'https://' not in project.publication_doi %}
-                                        <a href="https://www.doi.org/{{ project.publication_doi }}" class="action-btn">Project DOI <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                        <a href="https://www.doi.org/{{ project.publication_doi }}" class="action-btn margin-top-2 ">Project DOI <i class="fa fa-external-link" aria-hidden="true"></i></a>
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -113,7 +113,7 @@
                             <div><p><span class="bold">Project Data GUID</span><br> {{ project.project_data_guid }}<br></p></div>
                             <div class="margin-top-1">
                                 {% if project.project_data_guid %}
-                                    <a href="#" class="action-btn">Copy GUID <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                    <a href="#" class="action-btn margin-top-2 ">Copy GUID <i class="fa fa-external-link" aria-hidden="true"></i></a>
                                 {% endif %}
                             </div>
                         </div>

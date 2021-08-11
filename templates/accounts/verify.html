@@ -11,13 +11,13 @@
         
     <form method="POST" action="">
         {% csrf_token %}
-        <div class="w-100 ">
+        <div class="w-100 flex-this">
 
             <div class="w-60">
                 {{ form.email }}
             </div>
 
-            <div class="w-40 margin-top-1">
+            <div class="w-40">
                 <button id="resend-email-btn" class="action-btn">Resend Email</button>    
             </div>
     

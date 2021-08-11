@@ -237,6 +237,10 @@ input:focus {
     margin-left: 1%;
 }
 
+.margin-top-2 {
+    margin-top: 2%;
+}
+
 .margin-bottom-2 {
     margin-bottom: 2%;
 }
@@ -423,7 +427,6 @@ input:focus {
 /* ACTION Buttons / Register,Sign in, etc. */
 .action-btn {
     padding: 8px 16px;
-    margin-top: 2%;
     background-color: #007385;
     border: none;
     border-radius: 5px;

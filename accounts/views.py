@@ -1,28 +1,26 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages, auth
+from django.views.generic import View
+
+from django.contrib.auth.decorators import login_required
+from .decorators import unauthenticated_user
+
+# For emails
+from django.conf import settings
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_text
+from helpers.emails import send_activation_email, resend_activation_email, generate_token
 
 from django.contrib.auth.models import User
-from django.views.generic import View
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
 from notifications.models import UserNotification
 
-from .decorators import *
 from .models import *
 from .forms import *
-
-# Imports for sending emails
-from django.contrib.auth.decorators import login_required
-from django.core import signing
-from django.core.mail import EmailMessage, send_mail
-from django.conf import settings
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
-from .utils import generate_token, email_exists, is_user_researcher
-from django.contrib.sites.shortcuts import get_current_site
+from .utils import *
 
 # Captcha validation imports
 import urllib
@@ -52,59 +50,14 @@ def register(request):
                 user.is_active = False
                 user.save()
 
-                # Remember the current location
-                current_site=get_current_site(request)
-                template = render_to_string('snippets/activate.html', 
-                {
-                    'user': user,
-                    'domain':current_site.domain,
-                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': generate_token.make_token(user)
-                })
-
                 to_email = form.cleaned_data.get('email')
-
-                email_contents = EmailMessage(
-                    #Email subject
-                    'Activate Your Local Contexts Hub Account',
-                    #Body of the email
-                    template,
-                    #Sender
-                    settings.EMAIL_HOST_USER,
-                    #Recipient, in list to send to multiple addresses at a time.
-                    [to_email]
-                )
-                email_contents.fail_silently=False
-                email_contents.send()
+                send_activation_email(request, user, to_email)
                 return redirect('verify')
             else:
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
             
             return redirect('register')
     return render(request, "accounts/register.html", { "form" : form })
-
-@unauthenticated_user
-def login(request):
-    if request.method == 'POST':
-        # email = request.POST['email']
-        username = request.POST['username']
-        password = request.POST['password']
-
-        user = auth.authenticate(request, username=username, password=password)
-
-        # If user is found, log in the user.
-        if user is not None:
-            if not user.last_login:
-                auth.login(request, user)
-                return redirect('create-profile')
-            else:
-                auth.login(request, user)
-                return redirect('dashboard')
-        else:
-            messages.error(request, 'Your username or password does not match an account')
-            return redirect('login')
-    else:
-        return render(request, "accounts/login.html")
 
 class ActivateAccountView(View):
     def get(self, request, uidb64, token):
@@ -126,8 +79,8 @@ def verify(request):
     if not request.user.is_anonymous:
         return HttpResponseRedirect('/accounts/dashboard/')
 
+    form = ResendEmailActivationForm(request.POST or None)
     if request.method == 'POST':
-        form = ResendEmailActivationForm(request.POST)
         if form.is_valid():
             active_users = User._default_manager.filter(**{
                 '%s__iexact' % User.get_email_field_name(): form.cleaned_data['email'],
@@ -135,25 +88,35 @@ def verify(request):
             })
 
             if active_users:
-                current_site = get_current_site(request)
-                email_template = 'snippets/activate.html'
-                email_subject = 'Activate Your Account'
-                message = render_to_string(email_template, {
-                    'user': active_users[0],
-                    'domain': current_site.domain,
-                    'uid': urlsafe_base64_encode(force_bytes(active_users[0].pk)),
-                    'token': generate_token.make_token(active_users[0]),
-                })
-                active_users[0].email_user(email_subject, message)
+                resend_activation_email(request, active_users)
                 messages.add_message(request, messages.INFO, 'Activation Email Sent!')
                 return redirect('verify')
-
             else:
                 messages.add_message(request, messages.ERROR, 'Email did not match any registration email.')
                 return redirect('verify')
-    else:
-        form = ResendEmailActivationForm()
     return render(request, 'accounts/verify.html', {'form': form})
+
+@unauthenticated_user
+def login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(request, username=username, password=password)
+
+        # If user is found, log in the user.
+        if user is not None:
+            if not user.last_login:
+                auth.login(request, user)
+                return redirect('create-profile')
+            else:
+                auth.login(request, user)
+                return redirect('dashboard')
+        else:
+            messages.error(request, 'Your username or password does not match an account')
+            return redirect('login')
+    else:
+        return render(request, "accounts/login.html")
     
 @login_required(login_url='login')
 def logout(request):
