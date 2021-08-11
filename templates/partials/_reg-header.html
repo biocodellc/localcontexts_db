@@ -25,16 +25,10 @@
             <!-- <li><a class="white-text upper" href="#">Labels</a></li> -->
             <!-- <li><a class="white-text upper" href="#">Notices</a></li> -->
 
-            {% if request.get_full_path == "/communities/community-registry/" or request.get_full_path == "/communities/create-community/" or request.get_full_path == "/communities/connect-community/" %}
-                <li><a id="active-link" class="white-text upper" href="{% url 'community-registry' %}">Communities</a></li>
+            {% if request.get_full_path == "/accounts/registry/" %}
+                <li><a id="active-link" class="white-text upper" href="{% url 'organization-registry' %}">Local Contexts Registry</a></li>
             {% else %}
-                <li><a class="white-text upper" href="{% url 'community-registry' %}">Communities</a></li>
-            {% endif %}
-
-            {% if request.get_full_path == "/institutions/institution-registry/" or request.get_full_path == "/institutions/create-institution/" or request.get_full_path == "/institutions/connect-institution/" %}
-                <li><a id="active-link" class="white-text upper" href="{% url 'institution-registry' %}">Institutions</a></li>
-            {% else %}
-                <li><a class="white-text upper" href="{% url 'institution-registry' %}">Institutions</a></li>
+                <li><a class="white-text upper" href="{% url 'organization-registry' %}">Local Contexts Registry</a></li>
             {% endif %}
 
             {% if request.get_full_path == "/researchers/connect-researcher/" %}

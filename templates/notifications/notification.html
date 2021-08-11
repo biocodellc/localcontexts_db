@@ -15,7 +15,7 @@
                 <form method="POST" action="">
                     {% csrf_token %}
                     <input type="hidden">
-                    <button class="action-btn">Accept Invitation</button>
+                    <button class="action-btn margin-top-2 ">Accept Invitation</button>
                 </form>
             {% endif %}
 
@@ -34,9 +34,9 @@
                     <input type="radio" name="role" value="viewer"><label for="viewer">Viewer</label>
                     <br>
                      {% if notification.community %}
-                        <button class="action-btn">Add User To Community</button>
+                        <button class="action-btn margin-top-2 ">Add User To Community</button>
                     {% else %}
-                        <button class="action-btn">Add User To Institution</button>
+                        <button class="action-btn margin-top-2 ">Add User To Institution</button>
                     {% endif %}
                 </form>
             {% endif %}
@@ -52,7 +52,7 @@
                 <form method="POST" action="">
                     {% csrf_token %}
                     <input type="hidden">
-                    <button class="action-btn">Approve Community</button>
+                    <button class="action-btn margin-top-2 ">Approve Community</button>
                 </form>
             {% endif %}
 

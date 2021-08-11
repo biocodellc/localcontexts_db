@@ -4,7 +4,6 @@ from notifications.models import ActionNotification
 from helpers.models import NoticeStatus
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
-from communities.models import JoinRequest
 from institutions.models import Institution
 from projects.models import ProjectContributors
 
@@ -40,11 +39,6 @@ def get_projects_count(institution_id):
     target_institution = Institution.objects.get(id=institution_id)
     projects_count = target_institution.projects.count()
     return projects_count
-
-@register.simple_tag
-def join_request(institution, user):
-    request_exists = JoinRequest.objects.filter(institution=institution, user_from=user).exists()
-    return request_exists
 
 @register.simple_tag
 def bcnotice_status_exists(project, community):
