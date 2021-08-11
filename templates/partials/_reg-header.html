@@ -1,7 +1,6 @@
 <!-- Header for the registration process -->
 {% load static %}
 <header id="reg-header" class="flex-this">
-    {% if user.is_authenticated %}
 
         <div class="generic-logo-container flex-this">
             <div>
@@ -11,19 +10,8 @@
             </div>
         </div>
 
-    {% else %}
-
-    <div class="generic-logo-container">
-        <a href="#">
-            <img class="logo" src="{% static 'images/logos/logo.png' %}" alt="Local Contexts logo">
-        </a>
-    </div>
-
-    {% endif %}
     <nav class="generic-nav flex-this">
         <ul class="flex-this generic-nav-ul ul-no-bullets">
-            <!-- <li><a class="white-text upper" href="#">Labels</a></li> -->
-            <!-- <li><a class="white-text upper" href="#">Notices</a></li> -->
 
             {% if request.get_full_path == "/accounts/registry/" %}
                 <li><a id="active-link" class="white-text upper" href="{% url 'organization-registry' %}">Local Contexts Registry</a></li>
@@ -31,26 +19,26 @@
                 <li><a class="white-text upper" href="{% url 'organization-registry' %}">Local Contexts Registry</a></li>
             {% endif %}
 
-            {% if request.get_full_path == "/researchers/connect-researcher/" %}
-                <li><a id="active-link" class="white-text upper" href="{% url 'connect-researcher' %}">Researcher</a></li>
-            {% else %}
-                <li><a class="white-text upper" href="{% url 'connect-researcher' %}">Researcher</a></li>
-            {% endif %}
-
             {% if user.is_authenticated %}
 
-            <li><a class="white-text upper" href="{% url 'dashboard' %}">My Account</a></li>
-            <div>
-                <li class="flex-this column sign-out white-bg">
-                    <a class="upper orange-text" href="javascript:{document.getElementById('logout').submit()}">
-                        <form action="{% url 'logout' %}" method="POST" id="logout">
-                            {% csrf_token %}
-                            <input type="hidden">
-                        </form>
-                        <span class="nav-span">Sign Out</span>
-                    </a>
-                </li>
-            </div>
+                {% if request.get_full_path == "/researchers/connect-researcher/" %}
+                    <li><a id="active-link" class="white-text upper" href="{% url 'connect-researcher' %}">Researcher</a></li>
+                {% else %}
+                    <li><a class="white-text upper" href="{% url 'connect-researcher' %}">Researcher</a></li>
+                {% endif %}
+
+                <li><a class="white-text upper" href="{% url 'dashboard' %}">My Account</a></li>
+                <div>
+                    <li class="flex-this column sign-out white-bg">
+                        <a class="upper orange-text" href="javascript:{document.getElementById('logout').submit()}">
+                            <form action="{% url 'logout' %}" method="POST" id="logout">
+                                {% csrf_token %}
+                                <input type="hidden">
+                            </form>
+                            <span class="nav-span">Sign Out</span>
+                        </a>
+                    </li>
+                </div>
 
             {% else %}
                 {% if request.get_full_path == "/accounts/register/" %}
