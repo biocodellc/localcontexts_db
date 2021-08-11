@@ -428,7 +428,7 @@ input:focus {
 .action-btn {
     padding: 8px 16px;
     background-color: #007385;
-    border: none;
+    border: 1px solid #007385;
     border-radius: 5px;
     font-size: 14px;
     line-height: 21px;
@@ -443,7 +443,6 @@ input:focus {
 }
 
 .white-btn {
-    margin-top: 2%;
     padding: 8px 16px;
     border-radius: 5px;
     font-size: 14px;

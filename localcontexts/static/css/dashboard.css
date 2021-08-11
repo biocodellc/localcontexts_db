@@ -25,11 +25,11 @@
     background-color: #fff;
     border: 1px solid #007385;
     padding: 8px 16px;
-    margin-top: 2%;
     border-radius: 5px;
     font-size: 14px;
     line-height: 21px;
     cursor: pointer;
+    display: block;
 }
 
 /* DASH CARDS */
