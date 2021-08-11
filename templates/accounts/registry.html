@@ -1,0 +1,105 @@
+{% extends 'base.html' %} {% block title %} | Registry {% endblock %}{% load static %} {% load custom_acct_tags %}{% block content %} {% include 'partials/_auth-header.html' %}
+
+<section class="grey-bg flex-this column align-center">
+
+    {% if institutions %}
+        {% for institution in institutions %}
+            <div class="dashcard">
+                <a href="{% url 'institution-activity' institution.id %}">
+                    <div class="flex-this">
+
+                        <div class="dashcard-img-container">
+                            {% if institution.image %}
+                                <img class="profile-img" src="{{ institution.image.url }}" alt="{{ institution.institution_name }} image">
+                            {% else %}
+                                <img class="profile-img" src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">
+                            {% endif %}
+                        </div>
+                        <div class="flex-this column dashcard-text-container">
+                            <div>
+                                <h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3>
+                            </div>
+                            <div>
+                                <p class="black-text dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | Location: {% if institution.city_or_town %} {{ institution.city_or_town }}, {% endif %} {% if institution.state_or_province %} {{ institution.state_or_province }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}</p>
+                            </div>
+                            <div>
+                                <p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            {% if user.is_authenticated %}
+                                {% join_request_inst institution.id request.user as request_exists %}
+                                {% if request_exists or institution in user_institutions %}
+                                    <p class="darkteal-text">Sent!</p>
+                                {% else %}
+                                    <form method="POST" action="">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{ institution.id }}" name="instid">
+                                        <div><button id="btn-{{ institution.id }}" class="action-btn">Send request to join</button></div>
+                                    </form>
+                                {% endif %}
+                            {% else %}
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if communities %}
+        {% for community in communities %}
+
+                <div class="dashcard">
+                    <a href="{% url 'community-activity' community.id %}">
+                        <div class="flex-this">
+
+                            <div class="dashcard-img-container">
+                                {% if community.image %}
+                                    <img class="profile-img" src="{{ community.image.url }}" alt="{{ community.community_name }} image">
+                                {% else %}
+                                    <img class="profile-img" src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image">
+                                {% endif %}
+                            </div>
+                            <div class="flex-this column dashcard-text-container">
+                                <div>
+                                    <h3 class="dashcard-h3 darkteal-text">{{ community }}</h3>
+                                </div>
+                                <div>
+                                    <p class="black-text dashcard-subheader">Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %} | Location: {% if community.city_or_town %} {{ community.city_or_town }}, {% endif %} {% if community.state_or_province %} {{ community.state_or_province }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}</p>
+                                </div>
+                                <div>
+                                    <p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p>
+                                </div>
+                            </div>
+                            <div>
+                                {% if user.is_authenticated %}
+                                    {% join_request_comm community.id request.user as request_exists %}
+                                    {% if request_exists or community in user_communities %}
+                                        <p class="darkteal-text">Sent!</p>
+                                    {% else %}
+                                        <form method="POST" action="">
+                                            {% csrf_token %}
+                                            <input type="hidden" value="{{ community.id }}" name="commid">
+                                            <div>
+                                                <button id="btn-{{ community.id }}" class="action-btn">Send request to join</button>
+                                            </div>
+                                        </form>
+                                    {% endif %}
+                                {% else %}
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </a>
+                </div>
+            
+        {% endfor %}
+    {% endif %}
+
+</section>
+
+{% include 'partials/_auth-footer.html' %}
+{% endblock %}

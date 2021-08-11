@@ -17,6 +17,8 @@ urlpatterns = [
     path('update-profile/', views.update_profile, name='update-profile'),
 
     path('select-account/', views.registration_reason, name='select-account'),
+    
+    path('registry/', views.organization_registry, name='organization-registry'),
 
     path('users/<str:pk>/', views.users_view, name='users'),
 

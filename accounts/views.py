@@ -13,7 +13,7 @@ from django.utils.encoding import force_bytes, force_text
 from helpers.emails import send_activation_email, resend_activation_email, generate_token
 
 from django.contrib.auth.models import User
-from communities.models import Community
+from communities.models import Community, JoinRequest
 from institutions.models import Institution
 from researchers.models import Researcher
 from notifications.models import UserNotification
@@ -263,3 +263,41 @@ def invite_user(request):
                 
                 return redirect('invite')
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
+
+def organization_registry(request):
+    communities = Community.objects.filter(is_approved=True, is_publicly_listed=True)
+    institutions = Institution.objects.all()
+
+    if request.user.is_authenticated:
+        user_institutions = UserAffiliation.objects.get(user=request.user).institutions.all()
+        user_communities = UserAffiliation.objects.get(user=request.user).communities.all()
+
+        if request.method == 'POST':
+            inst_btn_id = request.POST.get('instid')
+            comm_btn_id = request.POST.get('commid')
+
+            if inst_btn_id:
+                target_institution = Institution.objects.get(id=inst_btn_id)
+                main_admin = target_institution.institution_creator
+
+                join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
+                join_request.save()
+
+            if comm_btn_id:
+                target_community = Community.objects.get(id=comm_btn_id)
+                main_admin = target_community.community_creator
+
+                req = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
+                req.save()
+            
+            return redirect('organization-registry')
+
+
+    context = {
+        'communities': communities,
+        'institutions': institutions,
+        'user_institutions': user_institutions,
+        'user_communities': user_communities,
+    }
+    return render(request, 'accounts/registry.html', context)
+
