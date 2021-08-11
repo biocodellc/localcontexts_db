@@ -461,6 +461,17 @@ input:focus {
     background-color: #fff;
 }
 
+.task-complete-btn {
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 21px;
+    border: 1px solid #007385;
+    color: #007385;
+    background-color: #fff;
+    display: block;
+}
+
 /* Community: select-labels: Listen and Example btns */
 .green-btn {
     background-color:#468076;

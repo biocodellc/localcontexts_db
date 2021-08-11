@@ -94,6 +94,14 @@
     line-height: 24px;
 }
 
+/* Registry btns on dashcard */
+.dashcard-btn-container {
+    display: flex;
+    width: 20%;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Profile Settings page */
 .edit-profile-section {
     align-items: center;

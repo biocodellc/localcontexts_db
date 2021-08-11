@@ -26,9 +26,9 @@
             <!-- <li><a class="white-text upper" href="#">Notices</a></li> -->
 
             {% if request.get_full_path == "/accounts/registry/" %}
-                <li><a id="active-link" class="white-text upper" href="{% url 'organization-registry' %}">Registry</a></li>
+                <li><a id="active-link" class="white-text upper" href="{% url 'organization-registry' %}">Local Contexts Registry</a></li>
             {% else %}
-                <li><a class="white-text upper" href="{% url 'organization-registry' %}">Registry</a></li>
+                <li><a class="white-text upper" href="{% url 'organization-registry' %}">Local Contexts Registry</a></li>
             {% endif %}
 
             {% if request.get_full_path == "/researchers/connect-researcher/" %}
