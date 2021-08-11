@@ -27,7 +27,7 @@
                     {% if member_role == 'viewer' %}
 
                     {% else %}
-                    <a class="action-btn" href="{% url 'select-label' community.id %}">
+                    <a class="action-btn margin-top-2 " href="{% url 'select-label' community.id %}">
                         Customize a Label     <i class="fa fa-long-arrow-right"></i>
                     </a>
                     {% endif %}
@@ -120,7 +120,7 @@
                                 {% else %}
                                     <div class="margin-top-1">
                                         <a href="{% url 'approve-label' community.id bclabel.unique_id %}">
-                                            <div class="action-btn">Review Label</div>
+                                            <div class="action-btn margin-top-2 ">Review Label</div>
                                         </a>
                                     </div>
                                 {% endif %}
@@ -158,7 +158,7 @@
                             {% else %}
                                 <div class="margin-top-1">
                                     <a href="{% url 'approve-tklabel' community.id tklabel.unique_id %}">
-                                        <div class="action-btn">Review Label</div>
+                                        <div class="action-btn margin-top-2 ">Review Label</div>
                                     </a>
                                 </div>
                             {% endif %}

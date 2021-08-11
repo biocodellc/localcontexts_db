@@ -57,9 +57,8 @@
                 {% if community %}
                     {% if member_role == 'viewer' %}
                     {% else %}
-                        <!-- Apply labels to community project -->
                         <div class="margin-right-1">
-                            <a href="{% url 'apply-project-labels' community.id project.id %}" class="action-btn">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
+                            <a href="{% url 'apply-project-labels' community.id project.id %}" class="action-btn margin-top-2 ">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
                         </div>
                     {% endif %}
                 {% endif%}
@@ -69,7 +68,7 @@
                         {% if member_role == 'viewer' %}
                         {% else %}
                             <div class="margin-right-1">
-                                <a href="{% url 'notify-communities' institution.id project.id %}" class="action-btn">
+                                <a href="{% url 'notify-communities' institution.id project.id %}" class="action-btn margin-top-2 ">
                                     Notify Communities <i class="fa fa-long-arrow-right"></i>
                                 </a>
                             </div>
@@ -80,7 +79,7 @@
                 {% if researcher %}
                     {% if project in researcher.projects.all %}
                         <div class="margin-right-1">
-                            <a href="{% url 'researcher-notify-communities' researcher.id project.id %}" class="action-btn">
+                            <a href="{% url 'researcher-notify-communities' researcher.id project.id %}" class="action-btn margin-top-2 ">
                                 Notify Communities <i class="fa fa-long-arrow-right"></i>
                             </a>
                         </div>
@@ -94,15 +93,15 @@
                     {% if request.user == project.project_creator %}
                             <div class="margin-right-1">
                                 {% if community %}
-                                    <a href="{% url 'edit-project' community.id project.unique_id %}" class="action-btn">
+                                    <a href="{% url 'edit-project' community.id project.unique_id %}" class="action-btn margin-top-2 ">
                                         Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
                                 {% endif %}
                                 {% if institution %}
-                                    <a href="{% url 'inst-edit-project' institution.id project.unique_id %}" class="action-btn">
+                                    <a href="{% url 'inst-edit-project' institution.id project.unique_id %}" class="action-btn margin-top-2 ">
                                         Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
                                 {% endif %}                        
                                 {% if researcher %}
-                                    <a href="{% url 'researcher-edit-project' researcher.id project.unique_id %}" class="action-btn">
+                                    <a href="{% url 'researcher-edit-project' researcher.id project.unique_id %}" class="action-btn margin-top-2 ">
                                         Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
                                 {% endif %}                        
                             </div>

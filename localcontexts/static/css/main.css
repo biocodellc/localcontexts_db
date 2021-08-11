@@ -237,6 +237,10 @@ input:focus {
     margin-left: 1%;
 }
 
+.margin-top-2 {
+    margin-top: 2%;
+}
+
 .margin-bottom-2 {
     margin-bottom: 2%;
 }
@@ -423,9 +427,8 @@ input:focus {
 /* ACTION Buttons / Register,Sign in, etc. */
 .action-btn {
     padding: 8px 16px;
-    margin-top: 2%;
     background-color: #007385;
-    border: none;
+    border: 1px solid #007385;
     border-radius: 5px;
     font-size: 14px;
     line-height: 21px;
@@ -440,7 +443,6 @@ input:focus {
 }
 
 .white-btn {
-    margin-top: 2%;
     padding: 8px 16px;
     border-radius: 5px;
     font-size: 14px;
@@ -456,6 +458,17 @@ input:focus {
 .white-btn:hover {
     color: #007385;
     background-color: #fff;
+}
+
+.task-complete-btn {
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 21px;
+    border: 1px solid #007385;
+    color: #007385;
+    background-color: #fff;
+    display: block;
 }
 
 /* Community: select-labels: Listen and Example btns */
@@ -585,132 +598,6 @@ input:focus {
     padding: 3%;
 }
 
-/* COMMUNITY REGISTRY PAGE */
-
-.registry-container {
-    margin: auto;
-    width: 95%;
-}
-
-.registry-title {
-    text-align: center;
-}
-
-.registry-title h2 {
-    margin: 0;
-}
-
-.registry-table-container {
-    margin: auto;
-    margin-top: 0.5%;
-   border-top: 1px solid #000; 
-   border-bottom: 1px solid #000; 
-   min-width: 1078px;
-   max-width: 1078px;
-   padding: 1%;
-}
-
-.registry-table {
-    margin: auto;
-    display: block;
-    overflow: auto;
-    min-height: 275px;
-    max-height: 275px;
-    min-width: 1078px;
-    max-width: 1078px;
-    border-collapse: collapse;
-}
-
-.registry-table img {
-    border-radius: 5px;
-}
-
-.registry-table tr {
-    border-bottom: 1px solid black;
-    min-width: 1078px;
-    max-width: 1078px;
-}
-
-.registry-table tr:last-child {
-    border-bottom: none;
-}
-
-.registry-table td {
-     padding: 0.5%;
-     margin: auto;
-}
-
-.td-img {
-    text-align: center;
-    min-width: 210px;
-    max-width: 210px;
-}
-
-.td-img img {
-    width: 200px;
-    height: 75px;
-    object-fit: cover;
-}
-
-.td-name {
-    min-width: 650px;
-    max-width: 650px;
-}
-
-.td-btn {
-    text-align: center;
-    min-width: 200px;
-    max-width: 200px;
-}
-
-.td-btn button {
-    align-items: center;
-    min-width: 180px;
-    max-width: 180px;
-}
-
-/* COMMUNITY DASHBOARD */
-
-.stats-info-container {
-    max-height: 200px;
-    min-height: 200px;
-}
-
-.stats-info-container h1, h2 {
-    margin-bottom: 0;
-}
-
-.loc {
-    font-size: 14px;
-    font-weight: 500;
-    color: #A09D9D;
-    line-height: 20px;
-}
-
-.community-title {
-    margin-top: 16px;
-}
-
-.activity-card-container h3 {
-    margin-top: 0;
-}
-
-.stats-info-container span {
-    font-weight: 500;
-}
-
-.stats-img-container {
-    margin: auto;
-    text-align: center;
-}
-
-.stats-img-container img {
-    border-radius: 5px;
-    width: 320px;
-    height: 160px;
-    object-fit: cover;
-}
-
 /* Count cards on dashcards on profiles */
 .stats-card-container {
     width: 250px; 
@@ -787,34 +674,6 @@ input:focus {
 .activity-card-container {
     max-height: 169px;
     min-height: 169px;
-}
-
-/* recent activity notices */
-.recent-act-label-card {
-    max-width: 360px;
-    min-width: 360px;
-    min-height: 70px;
-    max-height: 70px;
-}
-
-.blk {
-    max-width: 91px;
-    min-width: 91px;
-    background-color: #000;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    text-align: center;
-}
-
-.org {
-    max-width: 270px;
-    min-width: 270px;
-    border-radius: 0px 5px 5px 0px;
-    padding: 2%;
-}
-
-.org span {
-    font-size: 14px;
 }
 
 /* COMMUNITY DASHBOARD: MEMBERS PAGE */
@@ -903,72 +762,6 @@ input:focus {
 .add-member-modal-content {
     padding-left: 40px;
     padding-right: 40px;
-}
-
-/* COMMUNITY DASHBOARD: LABELS PAGE */
-.bc-label-container {
-    padding: 1%;
-    flex-wrap: wrap;
-}
-
-.bc-label-container > div {
-    margin-right: 1.6%;
-}
-
-.proj-info-container p {
-    margin-top: 0;
-}
-
-.additional-proj-info {
-    text-align: right;
-}
-
-.proj-title-container h4, h2 {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.proj-title-container h2 {
-    font-size: 40px;
-    cursor: pointer;
-}
-
-.additional-proj-info img, .proj-label-summary img {
-    width: 90.3px;
-    height: 70px;
-}
-
-.mini-label-container div {
-    margin-left: 3%;
-}
-
-/* COMMUNITY DASHBOARD: LABELS EXPANDABLE CONTENT */
-
-.proj-label-summary h4, .set-nav p, .border-left h3, .reqs, .notice-top p, .notice-card h4 {
-    margin: 0;
-}
-
-.proj-expand, #proj-expand {
-    overflow: auto;
-}
-
-.proj-btns {
-    text-align: right;
-}
-
-.proj-btns button {
-    min-width: 119px;
-    max-width: 119px;
-}
-
-.w-200px {
-    max-width: 200px;
-    min-width: 200px;
-}
-
-.proj-label-summary h4 {
-    padding: 0;
-    font-weight: 500;
 }
 
 /* COMMUNITY DASHBOARD: SETTINGS */

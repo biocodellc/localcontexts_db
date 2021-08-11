@@ -1020,3 +1020,14 @@ if (joinBtn) {
     })
 }
 
+// Copy text to clipboard
+function copyToClipboard() {
+    let span = document.getElementById('uniqueIDToCopy')
+    var textArea = document.createElement("textarea");
+    textArea.value = span.textContent;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("Copy");
+    textArea.remove();
+}
+

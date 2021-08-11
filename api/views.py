@@ -11,17 +11,17 @@ from projects.models import Project
 def apiOverview(request, format=None):
     api_urls = {
         'projects': reverse('api-projects', request=request, format=format),
-        'project detail view': '/projects/<str:unique_id>',
-        'projects by username': '/projects/users/<str:username>',
-        'projects by institution id': '/projects/institutions/<str:institution_id>',
-        'projects by researcher id': 'projects/researchers/<str:researcher_id>',
+        'project detail view': '/projects/<PROJECT_UNIQUE_ID>',
+        'projects by username': '/projects/users/<USERNAME>',
+        'projects by institution id': '/projects/institutions/<INSTITUTION_ID>',
+        'projects by researcher id': '/projects/researchers/<RESEARCHER_ID>',
     }
     return Response(api_urls)
 
 @api_view(['GET'])
 def projects(request):
     projects = Project.objects.all()
-    serializer = ProjectSerializer(projects, many=True)
+    serializer = ProjectOverviewSerializer(projects, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -34,20 +34,20 @@ def project_detail(request, unique_id):
 def projects_by_user(request, username):
     user = User.objects.get(username=username)
     projects = Project.objects.filter(project_creator=user)
-    serializer = ProjectSerializer(projects, many=True)
+    serializer = ProjectOverviewSerializer(projects, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def projects_by_institution(request, institution_id):
     institution = Institution.objects.get(id=institution_id)
     projects = institution.projects.all()
-    serializer = ProjectSerializer(projects, many=True)
+    serializer = ProjectOverviewSerializer(projects, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def projects_by_researcher(request, researcher_id):
     researcher = Researcher.objects.get(id=researcher_id)
     projects = researcher.projects.all()
-    serializers = ProjectSerializer(projects, many=True)
+    serializers = ProjectOverviewSerializer(projects, many=True)
     return Response(serializers.data)
 

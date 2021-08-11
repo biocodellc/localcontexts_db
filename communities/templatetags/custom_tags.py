@@ -4,7 +4,7 @@ from django.templatetags.static import static
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from notifications.models import ActionNotification
-from communities.models import JoinRequest, Community
+from communities.models import Community
 from projects.models import Project, ProjectContributors
 
 register = template.Library()
@@ -28,11 +28,6 @@ def anchor_project(url_name, contrib_id, community_id):
 def community_notifications(community):
     notifications = ActionNotification.objects.filter(community=community)
     return notifications
-
-@register.simple_tag
-def join_request(community, user):
-    request_exists = JoinRequest.objects.filter(community=community, user_from=user).exists()
-    return request_exists
 
 @register.simple_tag
 def project_has_labels_from_current_community(project_id, community):

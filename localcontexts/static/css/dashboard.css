@@ -25,11 +25,11 @@
     background-color: #fff;
     border: 1px solid #007385;
     padding: 8px 16px;
-    margin-top: 2%;
     border-radius: 5px;
     font-size: 14px;
     line-height: 21px;
     cursor: pointer;
+    display: block;
 }
 
 /* DASH CARDS */
@@ -92,6 +92,14 @@
 .description-reg {
     font-size: 16px;
     line-height: 24px;
+}
+
+/* Registry btns on dashcard */
+.dashcard-btn-container {
+    display: flex;
+    width: 20%;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Profile Settings page */

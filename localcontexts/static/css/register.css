@@ -164,16 +164,13 @@
 }
 
 /* Verify Buttons */
-#verify-email-btn {
-    margin: 1% auto 2% auto;
-    font-size: 14px;
-}
 
 #resend-email-btn {
     border: none;
     max-width: 130px;
     min-width: 130px;
-    margin: 2% auto 2% auto;
+    margin-left: 2%;
+    margin-top: 2px;
 }
 
 /* Create Profile Page Country Select */

@@ -8,6 +8,8 @@ from django.template.loader import render_to_string
 
 from .utils import check_member_role
 from projects.utils import add_to_contributors, set_project_privacy
+from bclabels.utils import set_bcnotice_defaults
+from tklabels.utils import set_tknotice_defaults
 
 from .models import Institution
 from researchers.models import Researcher
@@ -70,6 +72,7 @@ def create_institution_noror(request):
             data = form.save(commit=False)
             data.institution_creator = request.user
             data.is_ror = False
+            data.is_approved = False
             data.save()
 
             template = render_to_string('snippets/institution-application.html', { 'data' : data })
@@ -82,32 +85,6 @@ def create_institution_noror(request):
         
             return redirect('dashboard')
     return render(request, 'institutions/create-institution-noror.html', {'form': form,})
-
-# Registry
-def institution_registry(request):
-    institutions = Institution.objects.all()
-
-    if request.user.is_authenticated:
-        current_user = UserAffiliation.objects.get(user=request.user)
-        user_institutions = current_user.institutions.all()
-
-        if request.method == 'POST':
-            buttonid = request.POST.get('instid')
-            target_institution = Institution.objects.get(id=buttonid)
-            main_admin = target_institution.institution_creator
-
-            join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
-            join_request.save()
-            return redirect('institution-registry')
-    else:
-        return render(request, 'institutions/institution-registry.html', {'institutions': institutions})
-
-    context = {
-        'institutions': institutions,
-        'user_institutions': user_institutions,
-    }
-    return render(request, 'institutions/institution-registry.html', context)
-
 
 # Update institution
 @login_required(login_url='login')
@@ -265,11 +242,11 @@ def create_project(request, pk):
                 notices_selected = request.POST.getlist('checkbox-notice')
                 for notice in notices_selected:
                     if notice == 'bcnotice':
-                        img_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/bc-notice.png'
-                        bcnotice = BCNotice.objects.create(placed_by_institution=institution, project=data, img_url=img_url)
+                        bcnotice = BCNotice.objects.create(placed_by_institution=institution, project=data)
+                        set_bcnotice_defaults(bcnotice)
                     if notice == 'tknotice':
-                        img_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/tk-notice.png'
-                        tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data, img_url=img_url)
+                        tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data)
+                        set_tknotice_defaults(tknotice)
 
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')

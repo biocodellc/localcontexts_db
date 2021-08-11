@@ -5,7 +5,6 @@ urlpatterns = [
     path('connect-institution/', views.connect_institution, name="connect-institution"),
     path('create-institution/', views.create_institution, name="create-institution"),
     path('create-institution/no-ror/', views.create_institution_noror, name="create-institution-noror"),
-    path('institution-registry/', views.institution_registry, name="institution-registry"),
 
     path('institution/dashboard/update/<str:pk>/', views.update_institution, name="update-institution"),
 
