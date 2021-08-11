@@ -293,11 +293,17 @@ def organization_registry(request):
             return redirect('organization-registry')
 
 
+        context = {
+            'communities': communities,
+            'institutions': institutions,
+            'user_institutions': user_institutions,
+            'user_communities': user_communities,
+        }
+        return render(request, 'accounts/registry.html', context)
+
     context = {
         'communities': communities,
         'institutions': institutions,
-        'user_institutions': user_institutions,
-        'user_communities': user_communities,
     }
     return render(request, 'accounts/registry.html', context)
 
