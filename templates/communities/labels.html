@@ -88,14 +88,16 @@
 
             <!-- APPROVED TKLABELS -->
             {% if tklabels %}
-                {% if tklabel.is_approved == True %}
-                    <div class="w-20 custom-labels">
-                        <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="approved-label center-text pointer">
-                            {% include 'tklabels/which-label.html' %}
-                            <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
+                {% for tklabel in tklabels %}
+                    {% if tklabel.is_approved == True %}
+                        <div class="w-20 custom-labels">
+                            <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="approved-label center-text pointer">
+                                {% include 'tklabels/which-label.html' %}
+                                <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
+                            </div>
                         </div>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                {% endfor %}
             {% endif %}
 
         </div>

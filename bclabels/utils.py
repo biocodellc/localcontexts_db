@@ -11,6 +11,14 @@ def check_bclabel_type(label):
         return 'multiple_community'
     if label == 'bcp':
         return 'provenance'
+    if label == 'bccl':
+        return 'clan'
+    if label == 'bco':
+        return 'outreach'
+    if label == 'bccnv':
+        return 'consent_non_verified'
+    if label == 'bcnc':
+        return 'non_commercial'
     if label == 'placeholder':
         return False
 
@@ -29,6 +37,14 @@ def assign_bclabel_img(label_type):
         return baseURL + 'bc-multiple-community.png'
     if label_type == 'bcp':
         return baseURL + 'bc-provenance.png'
+    if label_type == 'bccl':
+        return 'bc-clan.png'
+    if label_type == 'bco':
+        return 'bc-outreach.png'
+    if label_type == 'bccnv':
+        return 'bc-consent-non-verified.png'
+    if label_type == 'bcnc':
+        return 'bc-non-commercial.png'
     if label_type == 'placeholder':
         return None
 
