@@ -35,6 +35,8 @@ def check_tklabel_type(label):
         return 'women_restricted'
     if label == 'tkss':
         return 'secret_sacred'
+    if label == 'tkcb':
+        return 'open_to_collaboration'
     if label == 'placeholder':
         return False
 
@@ -77,6 +79,8 @@ def assign_tklabel_img(label_type):
         return baseURL + 'tk-women-restricted.png'
     if label_type == 'tkss':
         return baseURL + 'tk-secret-sacred.png'
+    if label_type == 'tkcb':
+        return baseURL + 'tk-open-to-collaboration.png'
     if label_type == 'placeholder':
         return None
 

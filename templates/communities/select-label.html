@@ -271,6 +271,11 @@
                         <div class="toggle-txt-color grey-text"><p> TK Outreach <br> (TK O)</p></div>
                     </div>
 
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
+                        <div><img id="tkcb" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-open-to-collaboration.png' %}" alt="TK Open to Collaboration (TK CB) Label"></div>
+                        <div class="toggle-txt-color grey-text"><p> TK Open to Collaboration <br> (TK CB)</p></div>
+                    </div>
+
                 </div>
 
             </div>
@@ -296,6 +301,9 @@
                     </div>
                     <div id="tklabel-expanded-img-tkco" class="tk-img-div" style="display: none;">
                         <img src="{% get_tklabel_img_url 'tkco' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkcb" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkcb' %}" class="default-label-img">
                     </div>
 
                     <div><button class="green-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div>
@@ -385,6 +393,10 @@
                     <div class="toggle-txt-color grey-text"><p>Multiple Communities <br> (BC MC)</p></div>
                 </div>
 
+                <div class="center-text w-15 margin-left-1 margin-right-1">
+                    <div><img id="bccl" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-clan.png' %}" alt="BC Clan (BC CL) Label"></div>
+                    <div class="toggle-txt-color grey-text"><p>Clan <br> (BC CL)</p></div>
+                </div>
 
             </div>
 
@@ -398,6 +410,11 @@
                 <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bccv" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label"></div>
                     <div class="toggle-txt-color grey-text"><p>Consent Verified <br> (BC CV) </p></div>
+                </div>
+
+                <div class="center-text w-15 margin-left-1 margin-right-1">
+                    <div><img id="bccnv" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" alt="BC Consent Non-Verified (BC CNV) Label"></div>
+                    <div class="toggle-txt-color grey-text"><p>Consent Non-Verified <br> (BC CNV) </p></div>
                 </div>
     
                 <div class="center-text w-15 margin-left-1 margin-right-1">
@@ -413,6 +430,16 @@
                 <div class="center-text w-15 margin-left-1 margin-right-1">
                     <div><img id="bcocomm" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label"></div>
                     <div class="toggle-txt-color grey-text"><p>Open to <br>Commercialization <br> (BC OC)</p></div>
+                </div>
+
+                <div class="center-text w-15 margin-left-1 margin-right-1">
+                    <div><img id="bco" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-outreach.png' %}" alt="BC Outreach (BC O) Label"></div>
+                    <div class="toggle-txt-color grey-text"><p>Outreach <br> (BC O)</p></div>
+                </div>
+
+                <div class="center-text w-15 margin-left-1 margin-right-1">
+                    <div><img id="bcnc" onclick="expandBCLabel(this)" class="default-label-img pointer" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label"></div>
+                    <div class="toggle-txt-color grey-text"><p>Non-Commercial <br> (BC OC)</p></div>
                 </div>
 
             </div>
@@ -442,6 +469,21 @@
 
                 <div id="bclabel-expanded-img-bcmc" class="bc-img-div" style="display: none;">
                     <img src="{% get_bclabel_img_url 'bcmc' %}" class="default-label-img">
+                </div>
+
+                <div id="bclabel-expanded-img-bccl" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bccl' %}" class="default-label-img">
+                </div>
+
+                <div id="bclabel-expanded-img-bco" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bco' %}" class="default-label-img">
+                </div>
+
+                <div id="bclabel-expanded-img-bccnv" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bccnv' %}" class="default-label-img">
+                </div>
+                <div id="bclabel-expanded-img-bcnc" class="bc-img-div" style="display: none;">
+                    <img src="{% get_bclabel_img_url 'bcnc' %}" class="default-label-img">
                 </div>
 
                 <div><button class="green-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div>

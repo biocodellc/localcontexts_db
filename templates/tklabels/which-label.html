@@ -146,4 +146,12 @@
             {% endif %}
         {% endif %}
 
+        {% if tklabel.label_type == 'open_to_collaboration' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4 img-sizedown-151-116" src="{% static 'images/tk-labels/tk-open-to-collaboration.png' %}" alt="TK Open to Collaboration (TK CB) Label">
+            {% else %}
+                <img class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-open-to-collaboration.png' %}" alt="TK Open to Collaboration (TK CB) Label">
+            {% endif %}
+        {% endif %}
+
     </div>

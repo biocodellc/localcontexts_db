@@ -59,6 +59,43 @@
                 <p>Provenance <br> (BC P)</p>
             </div>
         {% endif %}
+
+        {% if label_type == 'bccl' %}
+            <div id="target-img-div">
+                <img id="bccl" class="opacity-4" src="{% static 'images/bc-labels/bc-clan.png' %}" alt="BC Clan (BC CL) Label">
+            </div>
+            <div class="teal-text-background">
+                <p>Clan <br> (BC CL)</p>
+            </div>
+        {% endif %}
+
+        {% if label_type == 'bco' %}
+            <div id="target-img-div">
+                <img id="bco" class="opacity-4" src="{% static 'images/bc-labels/bc-outreach.png' %}" alt="BC Outreach (BC O) Label">
+            </div>
+            <div class="teal-text-background">
+                <p>Outreach <br> (BC O)</p>
+            </div>
+        {% endif %}
+
+        {% if label_type == 'bccnv' %}
+            <div id="target-img-div">
+                <img id="bccnv" class="opacity-4" src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" alt="BC Consent Non-Verified (BC CNV) Label">
+            </div>
+            <div class="teal-text-background">
+                <p>Consent Non-Verified <br> (BC CNV)</p>
+            </div>
+        {% endif %}
+
+        {% if label_type == 'bcnc' %}
+            <div id="target-img-div">
+                <img id="bcnc" class="opacity-4" src="{% static 'images/bc-labels/bc-non-commercial.png' %}" alt="BC Non-Commercial (BC NC) Label">
+            </div>
+            <div class="teal-text-background">
+                <p>Non-Commercial <br> (BC NC)</p>
+            </div>
+        {% endif %}
+
         </div>
     </div>
 

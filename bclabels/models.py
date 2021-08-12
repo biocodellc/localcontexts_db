@@ -31,10 +31,14 @@ class BCLabel(models.Model):
     TYPES = (
         ('provenance', 'provenance'),
         ('commercialization', 'commercialization'),
+        ('non_commercial', 'non_commercial'),  
         ('collaboration', 'collaboration'),
         ('consent_verified', 'consent_verified'),
+        ('consent_non_verified', 'consent_non_verified'),
         ('multiple_community', 'multiple_community'),
         ('research', 'research'),  
+        ('clan', 'clan'),
+        ('outreach', 'outreach'),  
     )
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="bclabel_creator")
