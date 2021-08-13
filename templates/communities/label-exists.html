@@ -1,45 +1,30 @@
 {% extends 'comm-base.html' %} {% block title %} | Labels {% endblock %}{% load static %} {% block community_content %}
 
 <div id="collapsed-card" class="content-card content-card-space white-bg flex-this column">
-
-    <div id="bclabels-title-vertical" style="margin:auto 0;">
+    <div style="margin:auto 0;">
         <div class="flex-this space-between">
-            <div>
-                <h2 class="orange-text weight-600">Biocultural (BC) Labels</h2>
-            </div>
-            <div>
-                <a class="darkteal-text pointer"> <span id="show-more-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
-            </div>
+            <div><h2>Biocultural (BC) Labels</h2></div>
+            <div><a class="darkteal-text pointer"> <span id="show-more-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a></div>
         </div>
     </div>
-
 </div>
 
 <!-- TK Label Card -->
 <div id="collapsed-tkcard" class="content-card content-card-space white-bg flex-this column">
-
-    <div id="tklabels-title-vertical" style="margin:auto 0;">
+    <div style="margin:auto 0;">
         <div class="flex-this space-between">
-            <div>
-                <h2 class="orange-text weight-600">Traditional Knowledge (TK) Labels</h2>
-            </div>
-            <div>
-                <a class="darkteal-text pointer"> <span id="show-more-tk-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
-            </div>
+            <div><h2>Traditional Knowledge (TK) Labels</h2></div>
+            <div><a class="darkteal-text pointer"> <span id="show-more-tk-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a></div>
         </div>
     </div>
-
 </div>
 
-
 <div id="add-member-modal" class="modal" style="display: block;">
-
     <div class="type-modal-box flex-this column w-100">
-  
         <div id="close-modal" class="close-modal-btn w-100"> <a class="darkteal-text" href="{% url 'select-label' community.id %}"><span>&times;</span></a></div>
-        <div class="add-member-modal-content w-100">
+        <div class="add-member-modal-content">
             <p>A Label of this type has already been customized by your community.</p>
-            <a class="action-btn margin-top-2 " href="{% url 'community-labels' community.id %}">Go to customized Labels</a>
+            <div class="w-40"><a class="action-btn margin-top-2 " href="{% url 'community-labels' community.id %}">Go to customized Labels</a></div>
         </div>
     </div>
 </div>

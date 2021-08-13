@@ -390,79 +390,84 @@ def label_exists(request, pk):
 def customize_label(request, pk, label_type):
     community = Community.objects.get(id=pk)
 
-    # TK Label
-    if label_type.startswith('tk'):
-        tk_type = check_tklabel_type(label_type)
-        img_url = assign_tklabel_img(label_type)
+    member_role = check_member_role(request.user, community)
+    if member_role == False or member_role == 'viewer':
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        # TK Label
+        if label_type.startswith('tk'):
+            tk_type = check_tklabel_type(label_type)
+            img_url = assign_tklabel_img(label_type)
 
-        form = CustomizeTKLabelForm(request.POST or None)
+            form = CustomizeTKLabelForm(request.POST or None)
 
-        if request.method == "GET":
-            formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+            if request.method == "GET":
+                formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
 
-        elif request.method == "POST":
-            formset = AddLabelTranslationFormSet(request.POST)
+            elif request.method == "POST":
+                formset = AddLabelTranslationFormSet(request.POST)
 
-            if form.is_valid() and formset.is_valid():
-                label_form = form.save(commit=False)
-                label_form.label_type = tk_type
-                label_form.community = community
-                label_form.img_url = img_url
-                label_form.created_by = request.user
-                label_form.is_approved = False
-                label_form.save()
+                if form.is_valid() and formset.is_valid():
+                    label_form = form.save(commit=False)
+                    label_form.label_type = tk_type
+                    label_form.community = community
+                    label_form.img_url = img_url
+                    label_form.created_by = request.user
+                    label_form.is_approved = False
+                    label_form.save()
 
-                # Save all label translation instances
-                instances = formset.save(commit=False)
-                for instance in instances:
-                    instance.tklabel = label_form
-                    instance.save()
-                
-                title = "A TK Label was customized by " + request.user.get_full_name() + " and is waiting approval by another member of the community."
-                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+                    # Save all label translation instances
+                    instances = formset.save(commit=False)
+                    for instance in instances:
+                        instance.tklabel = label_form
+                        instance.save()
+                    
+                    title = "A TK Label was customized by " + request.user.get_full_name() + " and is waiting approval by another member of the community."
+                    ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
-                return redirect('community-labels', community.id)
+                    return redirect('community-labels', community.id)
 
-    # BCLabel
-    if label_type.startswith('bc'):
-        bc_type = check_bclabel_type(label_type)
-        img_url = assign_bclabel_img(label_type)
+        # BCLabel
+        if label_type.startswith('bc'):
+            bc_type = check_bclabel_type(label_type)
+            img_url = assign_bclabel_img(label_type)
 
-        form = CustomizeBCLabelForm(request.POST or None)
+            form = CustomizeBCLabelForm(request.POST or None)
 
-        if request.method == "GET":
-            formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+            if request.method == "GET":
+                formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
 
-        elif request.method == "POST":
-            formset = AddLabelTranslationFormSet(request.POST)
+            elif request.method == "POST":
+                formset = AddLabelTranslationFormSet(request.POST)
 
-            if form.is_valid() and formset.is_valid():
-                label_form = form.save(commit=False)
-                label_form.label_type = bc_type
-                label_form.community = community
-                label_form.img_url = img_url
-                label_form.created_by = request.user
-                label_form.is_approved = False
-                label_form.save()
+                if form.is_valid() and formset.is_valid():
+                    label_form = form.save(commit=False)
+                    label_form.label_type = bc_type
+                    label_form.community = community
+                    label_form.img_url = img_url
+                    label_form.created_by = request.user
+                    label_form.is_approved = False
+                    label_form.save()
 
-                # Save all label translation instances
-                instances = formset.save(commit=False)
-                for instance in instances:
-                    instance.bclabel = label_form
-                    instance.save()
+                    # Save all label translation instances
+                    instances = formset.save(commit=False)
+                    for instance in instances:
+                        instance.bclabel = label_form
+                        instance.save()
 
-                title = "A BC Label was customized by " + request.user.get_full_name()
-                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+                    title = "A BC Label was customized by " + request.user.get_full_name()
+                    ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
-                return redirect('community-labels', community.id)
-        
-    context = {
-        'community': community,
-        'label_type': label_type,
-        'form': form,
-        'formset': formset,
-    }
-    return render(request, 'communities/customize-label.html', context)
+                    return redirect('community-labels', community.id)
+            
+        context = {
+            'member_role': member_role,
+            'community': community,
+            'label_type': label_type,
+            'form': form,
+            'formset': formset,
+        }
+        return render(request, 'communities/customize-label.html', context)
 
 # Approve BC Label
 @login_required(login_url='login')
