@@ -787,14 +787,6 @@ input:focus {
     font-size: 36px;
 }
 
-.notice-info, .notice-msg {
-    margin-left: 1%;
-}
-
-.notice-msg {
-    background: rgba(56, 116, 171, 0.1);
-}
-
 .notice-card h4 {
     padding: 0;
 }
