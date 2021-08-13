@@ -664,173 +664,76 @@ def edit_project(request, community_id, project_uuid):
         }
         return render(request, 'communities/edit-project.html', context)
 
-# Add labels to community created projects
 @login_required(login_url='login')
-def apply_project_labels(request, pk, project_id):
+def apply_labels(request, pk, project_uuid):
     community = Community.objects.get(id=pk)
-    project = Project.objects.get(id=project_id)
-
+    project = Project.objects.get(unique_id=project_uuid)
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+
+    bcnotice = project.project_bcnotice.all()
+    tknotice = project.project_tknotice.all()
+
+    # Define Notification attrs
+    reference_id = str(project.unique_id)
+    truncated_project_title = str(project.title)[0:30]
+    title = community.community_name + ' has applied Labels to project ' + truncated_project_title + ' ...'
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         if request.method == "POST":
-            # Get which labels were selected to be applied
-            bclabels_selected = request.POST.getlist('checked-labels')
-            tklabels_selected = request.POST.getlist('tk-checked-labels')
+            # Get uuids of each label that was checked and add them to the project
+            bclabels_selected = request.POST.getlist('selected_bclabels')
+            tklabels_selected = request.POST.getlist('selected_tklabels')
 
-            for choice in bclabels_selected:
-                bclabel = BCLabel.objects.get(unique_id=choice)
+            for bclabel_uuid in bclabels_selected:
+                bclabel = BCLabel.objects.get(unique_id=bclabel_uuid)
                 project.bclabels.add(bclabel)
 
-                # Send Activity notification to current community confirming Label application
-                reference_id = str(project.unique_id)
-                truncated_project_title = str(project.title)[0:30]
-                title = bclabel.name + ' Label has been applied to the project ' + truncated_project_title + ' ...'
-                ActionNotification.objects.create(title=title, notification_type='Projects', community=community, reference_id=reference_id)
-                
-            for tkchoice in tklabels_selected:
-                tklabel = TKLabel.objects.get(unique_id=tkchoice)
+            for tklabel_uuid in tklabels_selected:
+                tklabel = TKLabel.objects.get(unique_id=tklabel_uuid)
                 project.tklabels.add(tklabel)
-
-                # Send Activity notification to current community confirming Label application
-                reference_id = str(project.unique_id)
-                truncated_project_title = str(project.title)[0:30]
-                title = tklabel.name + ' Label has been applied to the project ' + truncated_project_title + ' ...'
-                ActionNotification.objects.create(title=title, notification_type='Projects', community=community, reference_id=reference_id)
-
             
-            return redirect('community-projects', community.id)
-
-        context = {
-            'community': community,
-            'project': project,
-            'bclabels': bclabels,
-            'tklabels': tklabels,
-            'member_role': member_role, 
-        }
-        return render(request, 'communities/apply-labels.html', context)
-
-# Appy Labels to Notices
-@login_required(login_url='login')
-def apply_notice_labels(request, pk, notice_id):
-    community = Community.objects.get(id=pk)
-
-    bcnotice_exists = BCNotice.objects.filter(unique_id=notice_id).exists()
-    tknotice_exists = TKNotice.objects.filter(unique_id=notice_id).exists()
-
-    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
-    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
-
-    member_role = check_member_role(request.user, community)
-    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
-    else:
-        if bcnotice_exists:
-            bcnotice = BCNotice.objects.get(unique_id=notice_id)
-            if request.method == "POST":
+            if bcnotice or tknotice:
                 # add community to project contributors
-                contributors = ProjectContributors.objects.get(project=bcnotice.project)
+                contributors = ProjectContributors.objects.get(project=project)
                 contributors.communities.add(community)
                 contributors.save()
+            else:
+                comm_title = 'Labels have been applied to the project ' + truncated_project_title + ' ...'
+                ActionNotification.objects.create(title=comm_title, notification_type='Projects', community=community, reference_id=reference_id)
 
-                # Gets ids of all checkboxes
-                label_selected = request.POST.getlist('checkbox-label')
+            # If BC Notice exists
+            if bcnotice:
+                for bc in bcnotice:
+                    # send notification to either institution or researcher
+                    if bc.placed_by_institution:
+                        ActionNotification.objects.create(title=title, institution=bc.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+                    if bc.placed_by_researcher:
+                        ActionNotification.objects.create(title=title, researcher=bc.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
 
-                for choice in label_selected:
-                    bclabel_exists = BCLabel.objects.filter(unique_id=choice).exists()
-                    tklabel_exists = TKLabel.objects.filter(unique_id=choice).exists()
+            # If TK Notice exists
+            if tknotice:
+                for tk in tknotice:
+                    # send notification to either institution or researcher
+                    if tk.placed_by_institution:
+                        ActionNotification.objects.create(title=title, institution=tk.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+                    if tk.placed_by_researcher:
+                        ActionNotification.objects.create(title=title, researcher=tk.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
 
-                    if bclabel_exists:
-                        bclabel = BCLabel.objects.get(unique_id=choice)
-                        bcnotice.project.bclabels.add(bclabel)
-                        reference_id = str(bcnotice.project.unique_id)
+            return redirect('community-projects', community.id)
 
-                        truncated_project_title = str(bcnotice.project.title)[0:30]
-                        title = community.community_name + ' has applied the ' + bclabel.name + ' Label to your project: ' + truncated_project_title + ' ...'
-
-                        if bcnotice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
-                        if bcnotice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=bcnotice.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
-
-                    if tklabel_exists:
-                        tklabel = TKLabel.objects.get(unique_id=choice)
-                        bcnotice.project.tklabels.add(tklabel)
-                        reference_id = str(bcnotice.project.unique_id)
-
-                        truncated_project_title = str(bcnotice.project.title)[0:30]
-                        title = community.community_name + ' has applied the ' + tklabel.name + ' Label to your project ' + truncated_project_title + ' ...'
-
-                        if bcnotice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
-                        if bcnotice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=bcnotice.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
-
-                return redirect('community-projects', community.id)
-            
-            context = {
-                'community': community,
-                'bcnotice': bcnotice,
-                'bclabels': bclabels,
-                'tklabels': tklabels,
-                'member_role': member_role,  
-            }
-            return render(request, 'communities/apply-notice-labels.html', context)
-
-        else:
-            tknotice = TKNotice.objects.get(unique_id=notice_id)
-            if request.method == "POST":
-                # add community to project contributors
-                contrib = ProjectContributors.objects.get(project=tknotice.project)
-                contrib.community = community
-                contrib.save()
-
-                # Gets ids of all checkboxes
-                label_selected = request.POST.getlist('checkbox-label')
-
-                for choice in label_selected:
-                    bclabel_exists = BCLabel.objects.filter(unique_id=choice).exists()
-                    tklabel_exists = TKLabel.objects.filter(unique_id=choice).exists()
-
-                    if bclabel_exists:
-                        bclabel = BCLabel.objects.get(unique_id=choice)
-                        tknotice.project.bclabels.add(bclabel)
-                        reference_id = str(tknotice.project.unique_id)
-
-                        truncated_project_title = str(tknotice.project.title)[0:30]
-                        title = community.community_name + ' has applied the ' + bclabel.name + ' Label to your project ' + truncated_project_title
-                        if tknotice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
-                        if tknotice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=tknotice.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
-
-                    if tklabel_exists:
-                        tklabel = TKLabel.objects.get(unique_id=choice)
-                        tknotice.project.tklabels.add(tklabel)
-                        reference_id = str(tknotice.project.unique_id)
-
-                        truncated_project_title = str(tknotice.project.title)[0:30]
-                        title = community.community_name + ' has applied the ' + tklabel.name + ' Label to your project ' + truncated_project_title
-                        if tknotice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Labels', reference_id=reference_id)
-                        if tknotice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=tknotice.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
-
-
-                return redirect('community-projects', community.id)
-        
-            context = {
-                'community': community,
-                'tknotice': tknotice,
-                'bclabels': bclabels,
-                'tklabels': tklabels,
-                'member_role': member_role,
-            }
-            return render(request, 'communities/apply-notice-labels.html', context)
+    context = {
+        'community': community,
+        'project': project,
+        'bclabels': bclabels,
+        'tklabels': tklabels,
+        'bcnotice': bcnotice,
+        'tknotice': tknotice,
+    }
+    return render(request, 'communities/apply-labels.html', context)
 
 def restricted_view(request, pk):
     community = Community.objects.get(id=pk)

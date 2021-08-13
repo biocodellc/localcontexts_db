@@ -1,129 +1,166 @@
 {% extends 'comm-base.html' %} {% block title %} | Apply Labels {% endblock %}{% load static %} {% block community_content %}
 
-<div class="content-card-v2 content-card-space white-bg">
+<div class="content-card content-card-space white-bg">
+    <div class="flex-this column notice-card">
+        <div class="padding-bottom-2"><small><a href="{% url 'community-activity' community.id %}"><span class="darkteal-text">Activity</span></a> >> Apply Labels</small></div>
 
-    <div class="flex-this column">
-        <div>
-            <small><a href="{% url 'community-projects' community.id %}">
-                <span class="darkteal-text">Projects</span></a> >> Apply Labels
-            </small>
-        </div>
-    
-        <div class="flex-this column">
-            <div class="border-bottom-dash-teal padding-bottom-2 pad-top-1-5">
 
-                <h4 class="darkteal-text weight-500 no-top-margin">{{ project.title}}</h4></a>
-                <p>
-                    {{ project.project_type }}<br>
-                    {{ project.publication_date }}<br>
-                    {{ project.project_creator.get_full_name }}<br>
-                </p>
-                <small>{{ project.description }}</small>
+        <div class="flex-this">
 
-            </div>
-
-            <div class="pad-top-1-5">
-                <span>Select from your customized Labels</span>
-
-                <form method="POST">
-                    {% csrf_token %}
-
-                    <div class="flex-this wrap">
-            
-                        {% if bclabels %}
-                            {% for bclabel in bclabels %}
-                
-                                <div class="w-20 wrap center-text">
-                                    <div>
-                                        <input id="checked-label-{{ bclabel.unique_id }}" onclick="displayDefaultText(this)" value="{{ bclabel.unique_id }}" type="checkbox" name="checked-labels">
-                                    </div>
-                                    {% include 'bclabels/which-label.html' %}
-                                    <span id="label-name-{{ bclabel.unique_id }}" class="grey-text">{{ bclabel.name }}</span>
-                                </div>
-                
-                            {% endfor %}
+            <div class="w-10">
+                <div class="flex-this column">
+                    <div>
+                        {% if bcnotice %}
+                            <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
                         {% endif %}
-                
-                        {% if tklabels %}
-                            {% for tklabel in tklabels %}
-                    
-                                <div class="w-20 wrap center-text">
-                                    <div>
-                                        <input id="checked-label-{{ tklabel.unique_id }}" onclick="displayDefaultText(this)" value="{{ tklabel.unique_id }}" type="checkbox" name="tk-checked-labels">
-                                    </div>
-                                    {% include 'tklabels/which-label.html' %}
-                                    <span id="label-name-{{ tklabel.unique_id }}" class="grey-text">{{ tklabel.name }}</span>
-                                </div>
-                    
-                            {% endfor %}
+                        {% if tknotice %}
+                            <img src="{% static 'images/notices/tk-notice.png' %}" alt="TK Notice: a black square with white letters TK in the middle">
                         {% endif %}
-                
-                        <div id="grey-border-div" class="center-text">
-                            <a href="{% url 'select-label' community.id %}">
-                                <span class="grey-text auto-margin">+ Customize a <br>new Label</span>
-                            </a>
-                        </div>
-                
                     </div>
-                
-                        <p>Label Description</p>
-                
-                        {% if bclabels %}
-                            {% for bclabel in bclabels %}
-                                <div id="open-default-text-{{ bclabel.unique_id }}" style="height: 0; overflow: hidden;" class="flex-this">
-                
-                                    <div class="small-label">
-                                        {% include 'bclabels/which-label.html' %}
-                                    </div>
-                                    <div class="pad-left-2">
-                                        <p class="weight-500 darkteal-text"> {{ bclabel.name }} </p>
-                                        <p>{{ bclabel.default_text}}</p>
-
-                                        {% include 'partials/_label-translation.html' %}
-
-                                        <hr>
-                                    </div>
-                
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                
-                        {% if tklabels %}
-                            {% for tklabel in tklabels %}
-                                <div id="open-default-text-{{ tklabel.unique_id }}" style="height: 0; overflow: hidden;" class="flex-this">
-                                    
-                                    <div class="flex-this column">
-                                        <div class="flex-this">
-                                            <div class="small-label">
-                                                {% include 'tklabels/which-label.html' %}
-                                            </div>
-                                            <div class="pad-left-2">
-                                                <p class="weight-500 darkteal-text"> {{ tklabel.name }} </p>
-                                                <p>{{ tklabel.default_text}}</p>
-
-                                                {% include 'partials/_label-translation.html' %}
-
-                                                <hr>
-                                            </div>
-                                        </div>
+                </div>
+            </div>
     
+            <div class="w-90 flex-this column">
+                <div class="notice-info border-bottom-dash-teal padding-bottom-2">
+
+
+                        <h4 class="darkteal-text weight-500">{{ project.title}}</h4>
+                        <p>
+                            {{ project.project_type }}<br>
+                            {{ project.publication_date }}<br>
+                            Project Contributors:
+
+                            {% if project.project_contributors %}
+                                {% for institution in project.project_contributors.institutions.all %}
+                                    {{ institution.institution_name }},
+                                {% endfor %}
+                                {% for community in project.project_contributors.communities.all %}
+                                    {{ community.community_name }},
+                                {% endfor %}
+                                {% for researcher in project.project_contributors.researchers.all %}
+                                    {{ researcher.user.get_full_name }},
+                                {% endfor %}
+                            {% endif %}
+                            <br>
+                        </p>
+            
+                        <small>{{ project.description }}</small>
+
+                </div>
+
+                <div class="notice-info">
+                    <div>
+                        <p>Replace the notice with the labels you believe are relevant to the project</p>
+                    </div>
+                    <div>
+                        <ol class="no-left-padding">
+                            <form method="POST" action="">
+                                {% csrf_token %}
+
+                                <li>
+                                    <p class="weight-500 darkteal-text">Select a Label</p>
+                                    <div class="flex-this wrap">
+                                        {% if bclabels %}
+                                            {% for bclabel in bclabels %}
+                                                <div class="w-20 wrap center-text margin-top-1">
+
+                                                    <div>
+                                                        <input id="checked-label-{{ bclabel.unique_id }}" onclick="displayDefaultText(this)" value="{{ bclabel.unique_id }}" type="checkbox" name="selected_bclabels">
+                                                    </div>
+                                                    <div class="label-margin">
+                                                        {% include 'bclabels/which-label.html' %}
+                                                        <span id="label-name-{{ bclabel.unique_id }}" class="grey-text">{{ bclabel.name }}</span>
+                                                    </div>
+                                                </div>
+
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% if tklabels %}
+                                        {% for tklabel in tklabels %}
+                                            <div class="w-20 wrap center-text margin-top-1">
+
+                                                <div>
+                                                    <input id="checked-label-{{ tklabel.unique_id }}" onclick="displayDefaultText(this)" value="{{ tklabel.unique_id }}" type="checkbox" name="selected_tklabels">
+                                                </div>
+                                                <div class="label-margin">
+                                                    {% include 'tklabels/which-label.html' %}
+                                                    <span id="label-name-{{ tklabel.unique_id }}" class="grey-text">{{ tklabel.name }}</span>
+                                                </div>
+                                            </div>
+
+                                        {% endfor %}
+                                        {% endif %}
 
                                     </div>
-                    
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                            <button class="action-btn margin-top-2 ">Apply Label(s)</button>
-                </form>
-            
+                                </li>
+
+                                <li>
+                                    <p class="weight-500 darkteal-text">View Label Description</p>
+
+                                    {% if bclabels %}
+                                        {% for bclabel in bclabels %}
+
+                                            <div id="open-default-text-{{ bclabel.unique_id }}" style="height: 0; overflow: hidden;">
+                                                <div class="flex-this">
+                                                    <div class="small-label pad-top-1-5">
+                                                        {% include 'bclabels/which-label.html' %}
+                                                    </div>
+                                                    <div class="pad-left-2">
+                                                        <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
+                                                        <p class="weight-500"> {{ bclabel.name }} </p>
+                                                        <p>{{ bclabel.default_text}}</p>
+
+                                                        {% include 'partials/_label-translation.html' %}
+
+                                                    </div>
+                                                </div>
+                                                <div class="border-bottom-solid-teal pad-top-1"></div>
+                                            </div>
+
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    {% if tklabels %}
+                                    {% for tklabel in tklabels %}
+
+                                        <div id="open-default-text-{{ tklabel.unique_id }}" style="height: 0; overflow: hidden;">
+                                            <div class="flex-this">
+                                                <div class="small-label pad-top-1-5">
+                                                    {% include 'tklabels/which-label.html' %}
+                                                </div>
+                                                <div class="pad-left-2">
+                                                    <p class="darkteal-text">Label shared by {{ tklabel.community.community_name }} </p>
+                                                    <p class="weight-500"> {{ tklabel.name }} </p>
+                                                    <p>{{ tklabel.default_text}}</p>
+
+                                                    {% include 'partials/_label-translation.html' %}
+
+                                                </div>
+                                            </div>
+                                            <div class="border-bottom-solid-teal pad-top-1"></div>
+                                        </div>
+
+                                    {% endfor %}
+                                {% endif %}
+
+                                    <div>
+                                        <button class="action-btn margin-top-2 ">Apply Label(s) to project</button>
+                                    </div>
+                                </li>
+
+                        </form>
+
+                        </ol>
+                    </div>
+                </div>
 
             </div>
 
         </div>
+
 
     </div>
-
 </div>
-
 
 {% endblock %}
