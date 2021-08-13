@@ -359,7 +359,7 @@ def select_label(request, pk):
                 if type_exists:
                     return redirect('label-exists', community.id)
                 else:
-                    return redirect('customize-bclabel', community.id, bclabel_type)
+                    return redirect('customize-label', community.id, bclabel_type)
 
             if tklabel_type:
                 tktype = check_tklabel_type(tklabel_type)
@@ -367,7 +367,7 @@ def select_label(request, pk):
                 if type_exists:
                     return redirect('label-exists', community.id)
                 else:
-                    return redirect('customize-tklabel', community.id, tklabel_type)
+                    return redirect('customize-label', community.id, tklabel_type)
         
         context = {
             'community': community,
@@ -383,71 +383,18 @@ def label_exists(request, pk):
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        context = {
-            'community': community,
-            'member_role': member_role,
-        }
+        context = {'community': community, 'member_role': member_role,}
         return render(request, 'communities/label-exists.html', context)
 
-# BC Label customisation process
 @login_required(login_url='login')
-def customize_bclabel(request, pk, label_type):
+def customize_label(request, pk, label_type):
     community = Community.objects.get(id=pk)
-    bc_type = check_bclabel_type(label_type)
-    img_url = assign_bclabel_img(label_type)
 
-    member_role = check_member_role(request.user, community)
-    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
-    else:
-        form = CustomizeBCLabelForm(request.POST or None)
+    # TK Label
+    if label_type.startswith('tk'):
+        tk_type = check_tklabel_type(label_type)
+        img_url = assign_tklabel_img(label_type)
 
-        if request.method == "GET":
-            formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
-
-        elif request.method == "POST":
-            formset = AddLabelTranslationFormSet(request.POST)
-
-            if form.is_valid() and formset.is_valid():
-                label_form = form.save(commit=False)
-                label_form.label_type = bc_type
-                label_form.community = community
-                label_form.img_url = img_url
-                label_form.created_by = request.user
-                label_form.is_approved = False
-                label_form.save()
-
-                # Save all label translation instances
-                instances = formset.save(commit=False)
-                for instance in instances:
-                    instance.bclabel = label_form
-                    instance.save()
-
-                title = "A BC Label was customized by " + request.user.get_full_name()
-                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
-
-                return redirect('community-labels', community.id)
-
-        context = {
-            'member_role': member_role,
-            'community': community,
-            'label_type': label_type,
-            'form': form,
-            'formset': formset,
-        }
-        return render(request, 'communities/customize-bclabel.html', context)
-
-# TK Label customisation process
-@login_required(login_url='login')
-def customize_tklabel(request, pk, label_type):
-    community = Community.objects.get(id=pk)
-    tk_type = check_tklabel_type(label_type)
-    img_url = assign_tklabel_img(label_type)
-
-    member_role = check_member_role(request.user, community)
-    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
-    else:
         form = CustomizeTKLabelForm(request.POST or None)
 
         if request.method == "GET":
@@ -476,14 +423,46 @@ def customize_tklabel(request, pk, label_type):
 
                 return redirect('community-labels', community.id)
 
-        context = {
-            'community': community,
-            'label_type': label_type,
-            'form': form,
-            'member_role': member_role,
-            'formset': formset,
-        }
-        return render(request, 'communities/customize-tklabel.html', context)
+    # BCLabel
+    if label_type.startswith('bc'):
+        bc_type = check_bclabel_type(label_type)
+        img_url = assign_bclabel_img(label_type)
+
+        form = CustomizeBCLabelForm(request.POST or None)
+
+        if request.method == "GET":
+            formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+
+        elif request.method == "POST":
+            formset = AddLabelTranslationFormSet(request.POST)
+
+            if form.is_valid() and formset.is_valid():
+                label_form = form.save(commit=False)
+                label_form.label_type = bc_type
+                label_form.community = community
+                label_form.img_url = img_url
+                label_form.created_by = request.user
+                label_form.is_approved = False
+                label_form.save()
+
+                # Save all label translation instances
+                instances = formset.save(commit=False)
+                for instance in instances:
+                    instance.bclabel = label_form
+                    instance.save()
+
+                title = "A BC Label was customized by " + request.user.get_full_name()
+                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+
+                return redirect('community-labels', community.id)
+        
+    context = {
+        'community': community,
+        'label_type': label_type,
+        'form': form,
+        'formset': formset,
+    }
+    return render(request, 'communities/customize-label.html', context)
 
 # Approve BC Label
 @login_required(login_url='login')
