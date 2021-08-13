@@ -10,90 +10,70 @@
             <div id="target-img-div">
                 <img id="bcr" class="opacity-4" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
             </div>
-            <div class="teal-text-background">
-                <p>Research Use <br> (BC R)</p>
-            </div>
+            <div class="teal-text-background"><p>Research Use <br> (BC R)</p></div>
         {% endif %}
     
         {% if label_type == 'bccv' %}
             <div id="target-img-div">
                 <img id="bccv" class="opacity-4" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
             </div>
-            <div class="teal-text-background">
-                <p>Consent Verified <br> (BC CV)</p>
-            </div>
+            <div class="teal-text-background"><p>Consent Verified <br> (BC CV)</p></div>
         {% endif %}
     
         {% if label_type == 'bcocomm' %}
             <div id="target-img-div">
                 <img id="bcocomm" class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
             </div>
-            <div class="teal-text-background">
-                <p>Open to <br> Commercialization <br> (BC OC)</p>
-            </div>
+            <div class="teal-text-background"><p>Open to <br> Commercialization <br> (BC OC)</p></div>
         {% endif %}
     
         {% if label_type == 'bcocoll' %}
             <div id="target-img-div">
                 <img id="bcocoll" class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC OC) Label">
             </div>
-            <div class="teal-text-background">
-                <p>Open to <br> Collaboration <br> (BC OC)</p>
-            </div>
+            <div class="teal-text-background"><p>Open to <br> Collaboration <br> (BC OC)</p></div>
         {% endif %}
     
         {% if label_type == 'bcmc' %}
             <div id="target-img-div">
                 <img id="bcmc" class="opacity-4" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
             </div>
-            <div class="teal-text-background">
-                <p>Multiple Community <br> (BC MC)</p>
-            </div>
+            <div class="teal-text-background"><p>Multiple Community <br> (BC MC)</p></div>
         {% endif %}
     
         {% if label_type == 'bcp' %}
             <div id="target-img-div">
                 <img id="bcp" class="opacity-4" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
             </div>
-            <div class="teal-text-background">
-                <p>Provenance <br> (BC P)</p>
-            </div>
+            <div class="teal-text-background"><p>Provenance <br> (BC P)</p></div>
         {% endif %}
 
         {% if label_type == 'bccl' %}
             <div id="target-img-div">
                 <img id="bccl" class="opacity-4" src="{% static 'images/bc-labels/bc-clan.png' %}" alt="BC Clan (BC CL) Label">
             </div>
-            <div class="teal-text-background">
-                <p>Clan <br> (BC CL)</p>
-            </div>
+            <div class="teal-text-background"><p>Clan <br> (BC CL)</p></div>
         {% endif %}
 
         {% if label_type == 'bco' %}
             <div id="target-img-div">
                 <img id="bco" class="opacity-4" src="{% static 'images/bc-labels/bc-outreach.png' %}" alt="BC Outreach (BC O) Label">
             </div>
-            <div class="teal-text-background">
-                <p>Outreach <br> (BC O)</p>
-            </div>
+            <div class="teal-text-background"><p>Outreach <br> (BC O)</p></div>
         {% endif %}
 
         {% if label_type == 'bccnv' %}
             <div id="target-img-div">
                 <img id="bccnv" class="opacity-4" src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" alt="BC Consent Non-Verified (BC CNV) Label">
             </div>
-            <div class="teal-text-background">
-                <p>Consent Non-Verified <br> (BC CNV)</p>
-            </div>
+            <div class="teal-text-background"><p>Consent Non-Verified <br> (BC CNV)</p></div>
         {% endif %}
 
         {% if label_type == 'bcnc' %}
             <div id="target-img-div">
                 <img id="bcnc" class="opacity-4" src="{% static 'images/bc-labels/bc-non-commercial.png' %}" alt="BC Non-Commercial (BC NC) Label">
             </div>
-            <div class="teal-text-background">
-                <p>Non-Commercial <br> (BC NC)</p>
-            </div>
+            <div class="teal-text-background"><p>Non-Commercial <br> (BC NC)</p></div>
         {% endif %}
 
         </div>
@@ -103,9 +83,7 @@
 
         <form method="POST" action="">
                 {% csrf_token %}
-                <div>
-                    <h3 class="no-bottom-margin">Step 1: Customize Label</h3>
-                </div>
+                <div><h3 class="no-bottom-margin">Step 1: Customize Label</h3></div>
                 <div>
                     <p class="w-60">
                         <span class="bold">How this works:</span> This Label should be customized to suit the values and principles of your community. We encourage you to keep these broad as your can so that it can be used for multiple projects. 
