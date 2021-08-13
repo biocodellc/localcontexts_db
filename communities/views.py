@@ -832,22 +832,6 @@ def apply_notice_labels(request, pk, notice_id):
             }
             return render(request, 'communities/apply-notice-labels.html', context)
 
-# Relationships
-@login_required(login_url='login')
-def community_relationships(request, pk):
-    community = Community.objects.get(id=pk)
-
-    member_role = check_member_role(request.user, community)
-    if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
-    else:
-        context = {
-            'community': community,
-            'member_role': member_role, 
-        }
-        return render(request, 'communities/relationships.html', context)
-
 def restricted_view(request, pk):
     community = Community.objects.get(id=pk)
-
     return render(request, 'communities/restricted.html', {'community': community, })
