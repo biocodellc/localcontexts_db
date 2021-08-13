@@ -972,34 +972,6 @@ input:focus {
     padding-top: 5px;
 }
 
-/* Activity: Apply labels */
-.add-label-mini-card {
-    margin-top: 35px;
-    border: 1px dashed #A09D9D;
-    border-radius: 5px;
-    width: 160px;
-    height: 101px;
-}
-
-.add-label-mini-card div {
-    margin: 20px 10px;
-    text-align: center;
-}
-
-/* Community: create project 'customize a new label' button */
-#grey-border-div {
-    width: 160px;
-    height: 101px;
-    border: 1px dashed #A09D9D;
-    border-radius: 5px;
-    margin-top: 30px;
-}
-
-#grey-border-div a {
-    display: inline-block;
-    margin-top: 23px;
-}
-
 /* Customize TK Label page */
 
 .img-sizedown-151-116 {
