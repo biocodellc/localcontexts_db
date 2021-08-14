@@ -469,19 +469,26 @@ def customize_label(request, pk, label_type):
         }
         return render(request, 'communities/customize-label.html', context)
 
-# Approve BC Label
 @login_required(login_url='login')
-def approve_bclabel(request, pk, label_id):
+def approve_label(request, pk, label_id):
     community = Community.objects.get(id=pk)
-    bclabel = BCLabel.objects.get(unique_id=label_id)
+    bclabel_exists = BCLabel.objects.filter(unique_id=label_id).exists()
+    tklabel_exists = TKLabel.objects.filter(unique_id=label_id).exists()
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer':
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        form = ApproveAndEditBCLabelForm(request.POST or None, instance=bclabel)
-        formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
+        if bclabel_exists:
+            bclabel = BCLabel.objects.get(unique_id=label_id)
+            form = ApproveAndEditBCLabelForm(request.POST or None, instance=bclabel)
+            formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
 
+        if tklabel_exists:
+            tklabel = TKLabel.objects.get(unique_id=label_id)
+            form = ApproveAndEditTKLabelForm(request.POST or None, instance=tklabel)
+            formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
+        
         if request.method == "POST":
             if form.is_valid() and formset.is_valid():
                 label_form = form.save(commit=False)
@@ -493,57 +500,18 @@ def approve_bclabel(request, pk, label_id):
                 for instance in instances:
                     instance.save()
 
-                title = "A BC Label was approved by " + request.user.get_full_name()
-                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
-                
-                return redirect('community-labels', community.id)
-
-        context = {
-            'community': community,
-            'bclabel': bclabel,
-            'member_role': member_role,
-            'form': form,
-            'formset': formset,
-        }
-        return render(request, 'communities/approve-bclabel.html', context)
-
-# Approve TK Labels
-@login_required(login_url='login')
-def approve_tklabel(request, pk, label_id):
-    community = Community.objects.get(id=pk)
-    tklabel = TKLabel.objects.get(unique_id=label_id)
-
-    member_role = check_member_role(request.user, community)
-    if member_role == False or member_role == 'viewer':
-        return render(request, 'communities/restricted.html', {'community': community})
-    else:
-        form = ApproveAndEditTKLabelForm(request.POST or None, instance=tklabel)
-        formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
-
-        if request.method == "POST":
-            if form.is_valid() and formset.is_valid():
-                label_form = form.save(commit=False)
-                label_form.is_approved = True
-                label_form.approved_by = request.user
-                label_form.save()
-
-                instances = formset.save(commit=False)
-                for instance in instances:
-                    instance.save()
-
-                title = "A TK Label was approved by " + request.user.get_full_name()
+                title = "A Label was approved by " + request.user.get_full_name()
                 ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
                 return redirect('community-labels', community.id)
 
         context = {
             'community': community,
-            'tklabel': tklabel,
             'member_role': member_role,
             'form': form,
             'formset': formset,
         }
-        return render(request, 'communities/approve-tklabel.html', context)
+        return render(request, 'communities/approve-label.html', context)
 
 # Projects Main
 @login_required(login_url='login')

@@ -17,10 +17,9 @@ urlpatterns = [
     path('community/labels/select/<str:pk>/', views.select_label, name="select-label"),
     path('community/labels/select/label-exists/<str:pk>/', views.label_exists, name="label-exists"),
 
-    path('community/labels/<str:pk>/<str:label_id>/', views.approve_bclabel, name="approve-label"),
-    path('community/labels/tk/<str:pk>/<str:label_id>/', views.approve_tklabel, name="approve-tklabel"),
-
     path('community/labels/customize/<str:pk>/<str:label_type>', views.customize_label, name="customize-label"),
+    path('community/labels/<str:pk>/<str:label_id>/', views.approve_label, name="approve-label"),
+
 
     path('community/labels/apply-labels/<str:pk>/<str:project_uuid>', views.apply_labels, name="apply-labels"),
 
