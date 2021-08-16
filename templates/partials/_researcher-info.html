@@ -9,8 +9,8 @@
         <!-- Top Nav -->
         <div class="flex-this w-100 space-between">
             <div class="loc">
-                <a href="{% url 'users' researcher.user.id %}" class="darkteal-text">
-                    {{ researcher.user.get_full_name }}
+                <a href="{% url 'dashboard' %}" class="darkteal-text">
+                    {{ request.user.get_full_name }}
                 </a> 
                 >> {{ researcher.user.get_full_name }}
             </div>

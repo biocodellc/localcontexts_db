@@ -7,12 +7,9 @@
         <!-- Top Nav -->
         <div class="flex-this w-100 space-between">
             <div class="loc">
-                <a href="{% url 'users' community.community_creator.id %}" class="darkteal-text">
-                    {% if community.community_creator.first_name %}
-                        {{ community.community_creator.first_name }}
-                    {% else %}
-                        {{ community.community_creator }}
-                    {% endif %}
+                <a href="{% url 'dashboard' %}" class="darkteal-text">
+                    {% if request.user.first_name %} {{ request.user.get_full_name }}
+                    {% else %}{{ request.user }}{% endif %}
                 </a> 
                 >> {{ community.community_name }}
             </div>

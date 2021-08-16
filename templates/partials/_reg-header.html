@@ -21,12 +21,6 @@
 
             {% if user.is_authenticated %}
 
-                {% if request.get_full_path == "/researchers/connect-researcher/" %}
-                    <li><a id="active-link" class="white-text upper" href="{% url 'connect-researcher' %}">Researcher</a></li>
-                {% else %}
-                    <li><a class="white-text upper" href="{% url 'connect-researcher' %}">Researcher</a></li>
-                {% endif %}
-
                 <li><a class="white-text upper" href="{% url 'dashboard' %}">My Account</a></li>
                 <div>
                     <li class="flex-this column sign-out white-bg">
