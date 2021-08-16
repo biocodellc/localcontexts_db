@@ -1,5 +1,4 @@
 {% extends 'comm-base.html' %} {% block title %} | Labels {% endblock %}{% load static %} {% block community_content %}
-    
     <div class="content-card content-card-space white-bg">
 
         <div class="flex-this space-between">
@@ -88,14 +87,16 @@
 
             <!-- APPROVED TKLABELS -->
             {% if tklabels %}
-                {% if tklabel.is_approved == True %}
-                    <div class="w-20 custom-labels">
-                        <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="approved-label center-text pointer">
-                            {% include 'tklabels/which-label.html' %}
-                            <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
+                {% for tklabel in tklabels %}
+                    {% if tklabel.is_approved == True %}
+                        <div class="w-20 custom-labels">
+                            <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="approved-label center-text pointer">
+                                {% include 'tklabels/which-label.html' %}
+                                <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
+                            </div>
                         </div>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                {% endfor %}
             {% endif %}
 
         </div>
@@ -157,7 +158,7 @@
 
                             {% else %}
                                 <div class="margin-top-1">
-                                    <a href="{% url 'approve-tklabel' community.id tklabel.unique_id %}">
+                                    <a href="{% url 'approve-label' community.id tklabel.unique_id %}">
                                         <div class="action-btn margin-top-2 ">Review Label</div>
                                     </a>
                                 </div>

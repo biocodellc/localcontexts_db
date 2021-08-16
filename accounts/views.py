@@ -166,23 +166,6 @@ def dashboard(request):
         return render(request, "accounts/dashboard.html")
 
 @login_required(login_url='login')
-def users_view(request, pk):
-    target_user = User.objects.get(id=pk)
-    x = UserAffiliation.objects.get(user=target_user) 
-    user_communities = x.communities.all()
-    researcher = is_user_researcher(target_user)
-
-    if request.user == target_user:
-        return redirect('dashboard')
-    else:
-        context = {
-            'target_user': target_user,
-            'user_communities': user_communities,
-            'researcher': researcher,
-        }
-        return render(request, 'accounts/users.html', context)
-
-@login_required(login_url='login')
 def create_profile(request):
     if request.method == 'POST':
         user_form = UserCreateProfileForm(request.POST, instance=request.user)

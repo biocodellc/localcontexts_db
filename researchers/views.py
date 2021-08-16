@@ -258,12 +258,3 @@ def notify_communities(request, pk, proj_id):
         'communities': communities,
     }
     return render(request, 'researchers/notify.html', context)
-
-
-
-@login_required(login_url='login')
-def researcher_relationships(request, pk):
-    researcher = Researcher.objects.get(id=pk)
-
-
-    return render(request, 'researchers/relationships.html', {'researcher': researcher})

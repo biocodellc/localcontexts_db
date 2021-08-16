@@ -1,45 +1,46 @@
 {% extends 'comm-base.html' %} {% block title %} | Labels {% endblock %}{% load static %} {% block community_content %}
 
-<div id="collapsed-card" class="content-card content-card-space white-bg flex-this column">
+<div class="content-card-v2 content-card-space white-bg">
+    <h2>TK and BC Labels</h2>
+    <p>
+        The TK and BC Labels are an initiative for Indigenous communities and local organizations. The Labels allow communities to express local and specific conditions for engaging and sharing traditional knowledge that are consistent with already existing community rules, governance and protocols for using, sharing and circulating knowledge and data. <br>
+    </p>
+    <strong>How this works:</strong>
+    <ol>
+         <li>Select a Label from the TK and BC Labels below.</li>
+         <li>Customize the template text provided to support the vision of your community.</li>
+         <li>Apply these Labels to research and traditional knowledge projects.</li>
+    </ol> 
+    <p>
+        The template text is intended to be customized by each community – giving the Labels specificity and context. The title of each TK Label can be translated into one or more languages and displayed in addition to the default Label title. The TK Label icons are not to be altered.  This is to ensure national and international recognition and integrity across content and collection management systems, online repositories, websites, and physical exhibits, learn more about TK Labels.
+    </p>
+</div>
 
-    <div id="bclabels-title-vertical" style="margin:auto 0;">
+<div id="collapsed-card" class="content-card content-card-space white-bg flex-this column">
+    <div style="margin:auto 0;">
         <div class="flex-this space-between">
-            <div>
-                <h2 class="orange-text weight-600">Biocultural (BC) Labels</h2>
-            </div>
-            <div>
-                <a class="darkteal-text pointer"> <span id="show-more-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
-            </div>
+            <div><h2>Biocultural (BC) Labels</h2></div>
+            <div><a class="darkteal-text pointer"> <span id="show-more-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a></div>
         </div>
     </div>
-
 </div>
 
 <!-- TK Label Card -->
 <div id="collapsed-tkcard" class="content-card content-card-space white-bg flex-this column">
-
-    <div id="tklabels-title-vertical" style="margin:auto 0;">
+    <div style="margin:auto 0;">
         <div class="flex-this space-between">
-            <div>
-                <h2 class="orange-text weight-600">Traditional Knowledge (TK) Labels</h2>
-            </div>
-            <div>
-                <a class="darkteal-text pointer"> <span id="show-more-tk-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
-            </div>
+            <div><h2>Traditional Knowledge (TK) Labels</h2></div>
+            <div><a class="darkteal-text pointer"> <span id="show-more-tk-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a></div>
         </div>
     </div>
-
 </div>
 
-
 <div id="add-member-modal" class="modal" style="display: block;">
-
     <div class="type-modal-box flex-this column w-100">
-  
         <div id="close-modal" class="close-modal-btn w-100"> <a class="darkteal-text" href="{% url 'select-label' community.id %}"><span>&times;</span></a></div>
-        <div class="add-member-modal-content w-100">
+        <div class="add-member-modal-content">
             <p>A Label of this type has already been customized by your community.</p>
-            <a class="action-btn margin-top-2 " href="{% url 'community-labels' community.id %}">Go to customized Labels</a>
+            <div class="w-40"><a class="action-btn margin-top-2 " href="{% url 'community-labels' community.id %}">Go to customized Labels</a></div>
         </div>
     </div>
 </div>

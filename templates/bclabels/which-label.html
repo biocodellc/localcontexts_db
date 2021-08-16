@@ -50,4 +50,36 @@
             {% endif %}
         {% endif %}
 
+        {% if bclabel.label_type == 'non_commercial' %}
+            {% if bclabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/bc-labels/bc-non-commercial.png' %}" alt="BC Non-Commercial (BC NC) Label">
+            {% else %}
+                <img src="{% static 'images/bc-labels/bc-non-commercial.png' %}" alt="BC Non-Commercial (BC NC) Label">
+            {% endif %}
+        {% endif %}
+
+        {% if bclabel.label_type == 'consent_non_verified' %}
+            {% if bclabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" alt="BC Consent Non-Verified (BC CNV) Label">
+            {% else %}
+                <img src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" alt="BC Consent Non-Verified (BC CNV) Label">
+            {% endif %}
+        {% endif %}
+
+        {% if bclabel.label_type == 'clan' %}
+            {% if bclabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/bc-labels/bc-clan.png' %}" alt="BC Clan (BC CL) Label">
+            {% else %}
+                <img src="{% static 'images/bc-labels/bc-clan.png' %}" alt="BC Clan (BC CL) Label">
+            {% endif %}
+        {% endif %}
+
+        {% if bclabel.label_type == 'outreach' %}
+            {% if bclabel.is_approved == False %}
+                <img class="opacity-4" src="{% static 'images/bc-labels/bc-outreach.png' %}" alt="BC Outreach (BC O) Label">
+            {% else %}
+                <img src="{% static 'images/bc-labels/bc-outreach.png' %}" alt="BC Outreach (BC O) Label">
+            {% endif %}
+        {% endif %}
+
     </div>

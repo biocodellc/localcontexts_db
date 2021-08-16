@@ -65,6 +65,15 @@ def get_bclabel_img_url(img_type, *args, **kwargs):
     elif img_type =='bcmc':
         image_path = 'images/bc-labels/bc-multiple-community.png'
 
+    elif img_type =='bccl':
+        image_path = 'images/bc-labels/bc-clan.png'
+    elif img_type =='bco':
+        image_path = 'images/bc-labels/bc-outreach.png'
+    elif img_type =='bccnv':
+        image_path = 'images/bc-labels/bc-consent-non-verified.png'
+    elif img_type =='bcnc':
+        image_path = 'images/bc-labels/bc-non-commercial.png'
+
     return static(image_path)
 
 @register.simple_tag
@@ -108,5 +117,6 @@ def get_tklabel_img_url(img_type, *args, **kwargs):
         image_path = 'images/tk-labels/tk-community-use-only.png'
     elif img_type =='tko':
         image_path = 'images/tk-labels/tk-outreach.png'
-
+    elif img_type =='tkcb':
+        image_path = 'images/tk-labels/tk-open-to-collaboration.png'
     return static(image_path)

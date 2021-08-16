@@ -59,6 +59,10 @@ var openToCollabName = 'BC Open to Collaboration (BC OC)'
 var openToCommercializationName = ' BC Open to Commercialization (BC C)'
 var researchUseName = 'BC Research Use (BC R)'
 var consentVerifiedName = 'BC Consent Verified (BC CV)'
+var consentNonVerifiedName = 'BC Consent Verified (BC CNV)'
+var clanName = 'BC Clan (BC CL)'
+var outreachName = 'BC Outreach (BC O)'
+var nonCommercialName = 'BC Non-Commercial (BC NC)'
 
 var provenanceUse = 'Indigenous peoples have the right to make decisions about the future use of information, biological collections, data and digital sequence information (DSI) that derives from associated lands, waters and territories. This Label supports the practice of proper and appropriate acknowledgement into the future.'
 var multipleCommUse = 'This Label should be used to indicate that multiple communities have responsibility, custodianship and/or ownership over the geographic regions where this species or biological entity originates/is found. This Label recognizes that whilst one community might exert specific authority, other communities also have rights and responsibilities for use and care.'
@@ -66,6 +70,10 @@ var openToCollabUse = 'This Label is being used to indicate that the community i
 var openToCommUse = 'Indigenous peoples have the right to benefit from information, biological collections, data and digital sequence information (DSI) that derives from traditional lands, waters and territories. This Label is being used to indicate the express interest that [community name or authorizing party] has in being a primary party to any future negotiations if future commercialization opportunities arise from these resources.'
 var researchUse = 'This label should be used for permissioning the use of information, collections, data and digital sequence information for unspecified research. The research use label does not give permission for commercialization activities.'
 var consentVerifiedUse = 'Indigenous peoples have the right to permission the use of information, biological collections, data and digital sequence information (DSI) that derives from associated lands, waters and territories. This Label verifies that there are consent conditions in place for uses of information, collections, data and digital sequence information.'
+var consentNonVerifiedUse = 'The consent associated with this data has not been verified by the community. Reasons for this could include that it has not been appropriately vetted, has mistakes, omissions, lack of informed consent, or its process of creation was through research which did not follow proper community protocols.'
+var clanUse = 'This Label should be used when you would like external users to know that this material is subject to conditions for circulation relating to clan membership and/or is according to protocols for clan relationships. Because these conditions have not historically been recognized, this Label helps make these conditions for use and circulation clearer. Specifically, the Label asks future users to respect culturally specific rules of use and to make informed decisions about using this type of material.'
+var outreachUse = 'This Label should be used when you would only like your biocultural materials and/or data used for educational outreach activities. Outreach activities means to share works outside the community in order to increase and raise awareness and education about your family, clan and/or community. Sites for outreach activities can include schools, universities, libraries, archives, museums, online forums, and small learning groups.'
+var nonCommercialUse = 'This Label should be used when you would like to let external users who have access to your biocultural data know that it should only be used in non-commercial ways. You are asking users to be respectful with your data and ask that it not be used to derive economic benefits or used in any way that makes it into a commodity for sale or purchase.'
 
 var provenanceText = 'This Label is being used to affirm an inherent interest Indigenous people have in the scientific collections and data about communities, peoples, and the biodiversity found within traditional lands, waters and territories. [Community name or authorizing party] has permissioned the use of this collection and associated data for research purposes, and retains the right to be named and associated with it into the future. This association reflects a significant relationship and responsibility to [the species or biological entity] and associated scientific collections and data.'
 var multipleCommunityText = 'This Label is being used to affirm responsibility and ownership over this information, collection, data and digital sequence information is spread across several distinct communities. Use will be dependent upon discussion and negotiation with multiple communities.'
@@ -73,6 +81,10 @@ var openToCollabText = 'This Label is being used to make clear [community name o
 var openToCommercializationText = 'This Label is being used to indicate that [community name or authorizing party] is open to commercialization opportunities that might derive from any information, collections, data and digital sequence information (DSI) to which this Label is connected. As a primary party in any partnership and collaboration opportunities that emerge from the use of these resources, we retain an express interest in any future negotiations.'
 var researchUseText = 'This Label is being used by [community name or authorizing body] to allow this information, collection, data and digital sequence information to be used for unspecified research purposes. This Label does not provide permission for commercialization activities.  [Optional return of research results statement].'
 var consentVerifiedText = 'This Label is being used to verify that [community name or authorizing party] have consent conditions in place for the use of this information, collections, data and digital sequence information.'
+var consentNonVerifiedText = 'This Label is being used because there are concerns about the accuracy of the consent and/or representations made for this data. This material was not created through informed consent or community protocols for research and engagement.'
+var clanText = 'This Label is being used to indicate that this material is traditionally and usually not publicly available. The Label lets future users know that this data has specific conditions for use and sharing because of clan membership and/or relationships. This Label asks viewers of this data to respect the cultural values and expectations about circulation and use defined by designated clans, members, and their internal relations.'
+var outreachText = 'The Label is letting any users know that this data can be used for educational outreach activities. This Label asks you to respect the designated circulation conditions for these biocultural materials and/or data and additionally, where possible, to develop a means for fair and equitable reciprocal exchange for the use of this data with the relevant BC holders.'
+var nonCommercialText = 'This Label is being used to indicate that these biocultural materials and/or data have been designated as being available for non-commercial use. You are allowed to use this material for non-commercial purposes including for research, study, or public presentation and/or online in blogs or non-commercial websites. This Label asks you to think and act with respect and responsibility towards this data and the original custodians.'
 
 
 // TK Content
@@ -94,6 +106,7 @@ var tkMenGeneralName = 'TK Men General (TK MG)'
 var tkMenRestrictedName = 'TK Men Restricted (TK MR)'
 var tkWomenRestrictedName = 'TK Women Restricted (TK WR)'
 var tkSecretSacredName = 'TK Secret / Sacred (TK SS)'
+var tkOpenToCollaborationName = 'TK Open to Collaboration (TK CB)'
 
 var tkAttributionUse = 'This label should be used when you would like anyone who uses this material to know who the correct sources, custodians, owners are. This is especially useful if this material has been wrongly attributed or important names of the people involved in making this material or safeguarding this material, are missing. This label allows you to correct historical mistakes in terms of naming and acknowledging the legitimate authorities for this material. This label asks for future users to also apply the correct names and attribution.'
 var tkClanUse = 'This Label should be used when you would like external users to know that this material is subject to conditions for circulation relating to clan membership and or is according to protocols for clan relationships. Because these conditions have not historically been recognized, this Label helps make these conditions for use and circulation clearer. Specifically, the Label asks future users to respect culturally specific rules of use and to make informed decisions about using this type of material.'
@@ -113,6 +126,7 @@ var tkMenGeneralUse = 'This label should be used when you want to let external u
 var tkMenRestrictedUse = 'This label should be used when you want to let external users know that the material circulating freely is actually of a highly restricted nature. This is a men’s highly restricted label and indicates that there are restrictions of access and use based on customary law. This label can be used to help external users recognize that with this material there are very specific protocols and conditions of use. This label is designed to recognize that some knowledge is gendered, and that certain knowledge expressions can only be shared among specific members of the community. Only authorized [and/or initiated] men within the community should be using this material.'
 var tkWomenRestrictedUse = 'This label should be used when you want to let external users know that the material circulating freely is actually of a highly restricted nature. This is a women’s highly restricted label and indicates that there are restrictions of access and use based on customary law. This label can be used to help external users recognize that with this material there are very specific protocols and conditions of use. This label is designed to recognize that some knowledge is gendered, and that certain knowledge expressions can only be shared among specific members of the community. Only authorized [and/or initiated] women within the community should be using this material.'
 var tkSecretSacredUse = 'This label should be used when you want to let external users know that the material that is openly circulating contains secret/sacred information and that it has specific conditions of access and use. These conditions potentially include restrictions upon access. Using this label helps to alert external users that this material is special and requires respectful and careful treatment. It asks users to make different decisions about using it and, importantly, to discuss any potential use with you.'
+var tkOpenToCollaborationUse = 'This Label is being used to indicate that the community is open to research collaborations. With this Label, future opportunities for collaboration and engagement are supported.'
 
 var tkAttributionText = 'This label is being used to correct historical mistakes or exclusions pertaining to this material. This is especially in relation to the names of the people involved in performing or making this work and/or correctly naming the community from which it originally derives. As a user you are being asked to also apply the correct attribution in any future use of this work.'
 var tkClanText = 'This Label is being used to indicate that this material is traditionally and usually not publicly available. The Label lets future users know that this material has specific conditions for use and sharing because of clan membership and/or relationships. This material is not, and never was, free, public and available for everyone. This Label asks viewers of these materials to respect the cultural values and expectations about circulation and use defined by designated clans, members and their internal relations.'
@@ -132,6 +146,7 @@ var tkMenGeneralText = 'This material has specific gender restrictions on access
 var tkMenRestrictedText = 'This material has specific gender restrictions on access. It is regarded as important secret and/or ceremonial material that has community-based laws in relation to who can access it. Given its nature it is only to be accessed and used by authorized [and initiated] men in the community. If you are an external third party user and you have accessed this material, you are requested to not download, copy, remix or otherwise circulate this material to others. This material is not freely available within the community and it therefore should not be considered freely available outside the community. This label asks you to think about whether you should be using this material and to respect different cultural values and expectations about circulation and use.'
 var tkWomenRestrictedText = 'This material has specific gender restrictions on access. It is regarded as important secret and/or ceremonial material that has community-based laws in relation to who can access it. Given its nature it is only to be accessed and used by authorized [and initiated] women in the community. If you are an external third party user and you have accessed this material, you are requested to not download, copy, remix or otherwise circulate this material to others. This material is not freely available within the community and it therefore should not be considered freely available outside the community. This label asks you to think about whether you should be using this material and to respect different cultural values and expectations about circulation and use.'
 var tkSecretSacredText = 'This label is being used to indicate that this material is traditionally and usually not publicly available because it contains important secret or sacred components. The label is correcting a misunderstanding about the significance of this material and therefore its circulation conditions. It is letting users know that because of its secret/sacred status it is not, and was never free, public and available for everyone at anytime. This label asks you to think about whether you should be using this material and to respect different cultural values and expectations about circulation and use.'
+var tkOpenToCollaborationText = 'This Label is being used to make clear [community name or authorizing body] is open to future engagement, collaboration, and partnership around research opportunities.'
 
 
 // Expand BC Labels Card in Community: Labels -> select-labels
@@ -235,6 +250,31 @@ function expandBCLabel(img) {
             templateText.textContent = provenanceText
             whyUseLabelText.textContent = provenanceUse
             break;
+
+        case 'bccl':
+            whichBCImgClicked('bccl')
+            title.textContent = clanName
+            templateText.textContent = clanText
+            whyUseLabelText.textContent = clanUse
+            break;
+        case 'bco':
+            whichBCImgClicked('bco')
+            title.textContent = outreachName
+            templateText.textContent = outreachText
+            whyUseLabelText.textContent = outreachUse
+            break;
+        case 'bccnv':
+            whichBCImgClicked('bccnv')
+            title.textContent = consentNonVerifiedName
+            templateText.textContent = consentNonVerifiedText
+            whyUseLabelText.textContent = consentNonVerifiedUse
+            break;
+        case 'bcnc':
+            whichBCImgClicked('bcnc')
+            title.textContent = nonCommercialName
+            templateText.textContent = nonCommercialText
+            whyUseLabelText.textContent = nonCommercialUse
+            break;
     }
 
 }
@@ -276,7 +316,7 @@ function whichTKImgClicked(val) {
         inputProv.value = val
     } else if (val == 'tks' || val == 'tkwg' || val == 'tkmg' || val == 'tkmr' || val == 'tkwr' || val == 'tkcs' || val == 'tkss') {
         inputProt.value = val
-    } else if (val == 'tkv' || val == 'tknv' || val == 'tkoc' || val == 'tknc' || val == 'tkco' || val == 'tko') {
+    } else if (val == 'tkv' || val == 'tknv' || val == 'tkoc' || val == 'tknc' || val == 'tkco' || val == 'tko' || val == 'tkcb') {
         inputPerms.value = val
     }
 
@@ -319,7 +359,24 @@ function populateTemplate(id) {
             title.value = provenanceName
             templateText.textContent = provenanceText
             break;
-    
+
+        case 'bccl':
+            title.value = clanName
+            templateText.textContent = clanText
+            break;
+        case 'bco':
+            title.value = outreachName
+            templateText.textContent = outreachText
+            break;
+        case 'bccnv':
+            title.value = consentNonVerifiedName
+            templateText.textContent = consentNonVerifiedText
+            break;
+        case 'bcnc':
+            title.value = nonCommercialName
+            templateText.textContent = nonCommercialText
+            break;
+                                                            
         case 'tka':
             title.value = tkAttributionName
             templateText.textContent = tkAttributionText
@@ -391,6 +448,10 @@ function populateTemplate(id) {
         case 'tkss':
             title.value = tkSecretSacredName
             templateText.textContent = tkSecretSacredText
+            break;
+        case 'tkcb':
+            title.value = tkOpenToCollaborationName
+            templateText.textContent = tkOpenToCollaborationText
             break;
                                                                                                                 
     }
@@ -655,6 +716,13 @@ function expandTKLabel(img) {
             titlePerms.textContent = tkCommunityUseOnlyName
             templateTextPerms.textContent = tkCommunityUseOnlyText
             whyUseLabelTextPerms.textContent = tkCommunityUseOnlyUse
+            break;
+        case 'tkcb':
+            openInfoDiv(infoPerms)
+            whichTKImgClicked('tkcb')
+            titlePerms.textContent = tkOpenToCollaborationName
+            templateTextPerms.textContent = tkOpenToCollaborationText
+            whyUseLabelTextPerms.textContent = tkOpenToCollaborationUse
             break;
     }
 
