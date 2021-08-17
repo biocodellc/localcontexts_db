@@ -102,13 +102,24 @@
     justify-content: center;
 }
 
-/* Profile Settings page */
-.edit-profile-section {
-    align-items: center;
+/* SETTINGS */
+.selected {
+    background-color: #468076;
+    border-radius: 5px;
+    color: #fff;
 }
 
-.edit-profile-section input {
-    width: 50%;
+.side-nav-item {
+    height: 86px;
+    width: 271px;
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+.side-nav-item i {
+    padding-top: 5px;
+    padding-left: 5px;
+    font-size: 37px;
 }
 
 /* USER NOTIFICATIONS */

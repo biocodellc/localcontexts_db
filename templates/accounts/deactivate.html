@@ -1,69 +1,15 @@
-{% extends 'base.html' %} {% block title %} | Update Profile {% endblock %} {% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
+{% extends 'settings-base.html' %}{% load static %}
 
-{% if user.is_authenticated %}
+{% block settings %}
+    <div class="flex-this column w-80 border-left margin-right-1">
+        <div><h3>Deactivate Your Account</h3></div>
 
-<section class="edit-profile-section flex-this column w-100 grey-bg">
-
-        {% include 'partials/_user-info.html' %}
-
-        <div class="content-card content-card-space white-bg flex-this column">
-            <h3 class="orange-text">Settings</h3>
-    
-            <div class="flex-this w-100">
-    
-                <div class="flex-this column w-20 set-nav">
-                    <a href="{% url 'update-profile' %}">
-                        <div class="flex-this">
-                            <div class="w-20">
-                                <img src="{% static 'images/profile-icon.png' %}" alt="orange profile icon">
-                            </div>
-                            <div class="w-80">
-                                <p class="no-top-margin">
-                                    <strong>Account</strong><br>
-                                    Contact name, email, location
-                                </p>
-                            </div>  
-                        </div>   
-                    </a>
-
-
-                    <a href="{% url 'deactivate-user' %}">
-                        <div class="flex-this">
-                            <div class="w-20">
-                                <img src="{% static 'images/profile-icon.png' %}" alt="orange profile icon">
-                            </div>
-                            <div class="w-80">
-                                <p class="no-top-margin">
-                                    <strong>Deactivate</strong><br>
-                                    Deactivate Your Account
-                                </p>
-                            </div>  
-                        </div>
-                    </a>
-                    
-                </div>
-        
-                <div class="flex-this column w-80 border-left margin-right-1">
-                    <div>
-                        <h3>Deactivate Your Account</h3>
-                    </div>
-        
-                    <div>
-                        <form method="POST">
-                            {% csrf_token %}
-                            <button class="action-btn">Deactivate</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-    
+        <div class="w-70 margin-bottom-2">
+            <p class="no-top-margin">Please note that you will not be able to sign-in after deactivation. Your account and its associated data will be deleted 30 days after deactivation.</p>
+            <form method="POST">
+                {% csrf_token %}
+                <button class="action-btn">Deactivate</button>
+            </form>
         </div>
-
-
-
-</section>
-
-{% endif %}
-
-{% include 'partials/_auth-footer.html' %}
+    </div>
 {% endblock %}

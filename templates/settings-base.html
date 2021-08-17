@@ -1,0 +1,67 @@
+{% extends 'base.html' %} {% block title %} | Update Profile {% endblock %} {% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
+
+{% if user.is_authenticated %}
+
+<section class="grey-bg">
+
+        {% include 'partials/_user-info.html' %}
+
+        <div class="content-card-v2 content-card-space white-bg flex-this column">
+            <h2>My Profile Settings</h2>
+    
+            <div class="flex-this w-100">
+    
+                <div class="flex-this column set-nav margin-right-1">
+
+
+                    <a href="{% url 'update-profile' %}">
+                    {% if 'update-profile' in request.path %} 
+                        <div class="flex-this side-nav-item selected">
+                    {% else %}
+                        <div class="flex-this side-nav-item grey-text">
+                    {% endif %}
+                            <div class="w-20">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                            </div>
+                            <div class="w-80">
+                                <p class="no-top-margin">
+                                    <strong>Account</strong><br>
+                                    Contact name, email, location
+                                </p>
+                            </div>  
+                        </div>   
+                    </a>
+
+                    <a href="{% url 'deactivate-user' %}">
+                    {% if 'deactivate' in request.path %} 
+                        <div class="flex-this side-nav-item selected">
+                    {% else %}
+                        <div class="flex-this side-nav-item grey-text">
+                    {% endif %}
+                            <div class="w-20">
+                                <i class="fa fa-power-off" aria-hidden="true"></i>
+                            </div>
+                            <div class="w-80">
+                                <p class="no-top-margin">
+                                    <strong>Deactivate</strong><br>
+                                    Deactivate your account
+                                </p>
+                            </div>  
+                        </div>
+                    </a>
+
+                </div>
+
+                {% block settings %}{% endblock %}
+            </div>
+    
+        </div>
+
+
+
+</section>
+
+{% endif %}
+
+{% include 'partials/_auth-footer.html' %}
+{% endblock %}
