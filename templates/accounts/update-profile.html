@@ -1,33 +1,28 @@
 {% extends 'settings-base.html' %} {% load static %}
 
 {% block settings %}
-<div class="flex-this column w-80 border-left margin-right-1">
+<div class="flex-this column w-50 border-left margin-right-1">
     <div><h3>Account</h3></div>
 
     <div>
         <form method="POST" action="" enctype="multipart/form-data">
             {% csrf_token %}
 
+            <div class="w-100 flex-this form-one">
+                <div class="w-50">
+                    <label for="first_name">First Name </label><br>
+                    {{ user_form.first_name }}<br>
+                </div>
+                <div class="w-50 margin-left-16">
+                    <label for="last_name">Last Name </label><br>
+                    {{ user_form.last_name }}<br>
+                </div>
+            </div>
+
                 <div class="w-100 flex-this form-one">
-                    <div class="w-30">
+                    <div class="w-100">
                         <label for="email">Email</label><br>
                         {{ user_form.email }}
-                    </div>
-
-                    <div class="w-30 margin-left-16">
-                        <label for="username">Username </label><br>
-                        {{ user_form.username }}
-                    </div>
-                </div>
-
-                <div class="w-100 flex-this form-one">
-                    <div class="w-30">
-                        <label for="first_name">First Name </label><br>
-                        {{ user_form.first_name }}<br>
-                    </div>
-                    <div class="w-30 margin-left-16">
-                        <label for="last_name">Last Name </label><br>
-                        {{ user_form.last_name }}<br>
                     </div>
                 </div>
 
@@ -37,36 +32,33 @@
                     </div>
 
                     <div class="w-100 flex-this form-one">
-                        <div class="w-30">
+                        <div class="w-50">
                             <label for="job_title">Job Title </label><br>                                           
                             {{ profile_form.job_title }}
                         </div>
-                        <div class="w-30 margin-left-16">
+
+                        <div class="w-50 margin-left-16">
                             <label for="affiliation">Affiliation </label><br>                                           
                             {{ profile_form.affiliation }}
                         </div>
-
                     </div>
 
+
+
                     <div class="w-100 flex-this form-one">
-                        <div class="w-30">
+                        <div class="w-100">
                             <label for="preferred_language">Preferred Language </label><br>
                             {{ profile_form.preferred_language }}
-                        </div>
-
-                        <div class="w-30 margin-left-16">
-                            <label for="languages_spoken">Languages Spoken </label><br>
-                            {{ profile_form.languages_spoken }}
                         </div>
 
                     </div>
 
                     <div class="flex-this w-100 form-one">
-                        <div class="w-30">
+                        <div class="w-100">
                             <label for="city_or_town">City or Town </label><br>
                             {{ profile_form.city_or_town }}
                         </div>
-                        <div class="w-30 margin-left-16">
+                        <div class="w-100 margin-left-16">
                             <label for="state_or_province">State or Province </label><br>                                           
                             {{ profile_form.state_or_province }}
                         </div>
@@ -74,7 +66,7 @@
                     </div>
 
                     <div class="flex-this w-100 form-one">
-                        <div class="w-30">
+                        <div class="w-100">
                             <label for="country">Country </label><br>                                       
                             {{ profile_form.country }}
                         </div>

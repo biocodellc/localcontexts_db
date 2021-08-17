@@ -229,6 +229,10 @@ def deactivate_user(request):
     return render(request, 'accounts/deactivate.html')
 
 @login_required(login_url='login')
+def manage_organizations(request):
+    return render(request, 'accounts/manage-orgs.html')
+
+@login_required(login_url='login')
 def invite_user(request):
     invite_form = SignUpInvitationForm(request.POST or None)
     if request.method == "POST":
