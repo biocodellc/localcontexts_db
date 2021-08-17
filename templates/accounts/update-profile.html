@@ -11,17 +11,34 @@
     
             <div class="flex-this w-100">
     
-                <div class="flex-this w-20 set-nav">
-                    <div class="w-20">
-                        <img src="{% static 'images/profile-icon.png' %}" alt="profile icon for settings">
-                    </div>
-        
-                    <div class="w-80">
-                        <p>
-                            <strong>Account</strong><br>
-                            Contact name, email, location
-                        </p>
-                    </div>
+                <div class="flex-this column w-20 set-nav">
+                    <a href="{% url 'update-profile' %}">
+                        <div class="flex-this">
+                            <div class="w-20">
+                                <img src="{% static 'images/profile-icon.png' %}" alt="orange profile icon">
+                            </div>
+                            <div class="w-80">
+                                <p class="no-top-margin">
+                                    <strong>Account</strong><br>
+                                    Contact name, email, location
+                                </p>
+                            </div>  
+                        </div>   
+                    </a>
+
+                    <a href="{% url 'deactivate-user' %}">
+                        <div class="flex-this">
+                            <div class="w-20">
+                                <img src="{% static 'images/profile-icon.png' %}" alt="orange profile icon">
+                            </div>
+                            <div class="w-80">
+                                <p class="no-top-margin">
+                                    <strong>Deactivate</strong><br>
+                                    Deactivate Your Account
+                                </p>
+                            </div>  
+                        </div>
+                    </a>
                 </div>
         
                 <div class="flex-this column w-80 border-left margin-right-1">
