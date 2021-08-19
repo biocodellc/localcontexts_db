@@ -3,23 +3,20 @@
 
 <section class="grey-bg">
 
-    <div class="content-card-v2 content-card-space white-bg">
-        
-        <div class="flex-this space-between">
-            <div class="flex-this column w-100">
-                <div class="margin-top-1">
-                    <div>
-                    <p class="p-24 bold">Project Archive</p>
-                    <p>Listed below is an archive of all of the information that is associated with this project.<br>
-                        If you would like to edit this project again, you can do so until a community has applied a Label to this project. </p>
+        <div class="content-card-v2 content-card-space white-bg">
+            <div class="flex-this space-between">
+                <div class="flex-this column w-100">
+                    <div class="margin-top-1">
+                        <p class="p-24 bold">Project Archive</p>
+                        <p>Listed below is an archive of all of the information that is associated with this project.<br>
+                            If you would like to edit this project again, you can do so until a community has applied a Label to this project. </p>
+                    </div>
+                </div>
+                <div class="flex-this w-30">
+                    <div class="margin-left-1"><a class="action-btn margin-top-2 ">Share Project <i class="fa fa-share-alt" aria-hidden="true"></i></a></div>
                 </div>
             </div>
-            <div class="flex-this w-30">
-                <div class="margin-left-1"><a class="action-btn margin-top-2 ">Share Project <i class="fa fa-share-alt" aria-hidden="true"></i></a></div>
-            </div>
         </div>
-
-    </div>
 
         <div class="content-card content-card-space white-bg">
             
@@ -28,10 +25,10 @@
                     <div><p class="p-28 bold">{{ project.title }}</p></div>
                     <div><p class="bold">{{ project.date_added|date:'d F Y' }} | 
                         {{ project.project_type }} |
-                        {% if project.is_public %}
+                        {% if project.project_privacy == 'Public' %}
                             Public
                         {% else %}
-                            {% if project.is_discoverable %}
+                            {% if project.project_privacy == 'Discoverable' %}
                                 Discoverable
                             {% else %}
                                 Private

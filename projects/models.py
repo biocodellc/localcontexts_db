@@ -13,9 +13,15 @@ class Project(models.Model):
         ('Publication', 'Publication'),
         ('Sample', 'Sample'),
     )
+    PRIVACY_LEVEL = {
+        ('Public', 'Public'),
+        ('Discoverable', 'Discoverable'),
+        ('Private', 'Private')
+    }
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
     project_creator = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="project_creator")
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
+    project_privacy = models.CharField(max_length=20, null=True, choices=PRIVACY_LEVEL)
     title = models.CharField(max_length=300, null=True)
     description = models.TextField(null=True)
     project_contact = models.CharField(max_length=100, null=True)
@@ -34,8 +40,6 @@ class Project(models.Model):
     publication_date_ongoing = models.BooleanField(default=False, blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     date_modified = models.DateTimeField(auto_now=True, null=True)
-    is_public = models.BooleanField(default=True, null=True)
-    is_discoverable = models.BooleanField(default=True, null=True)
     bclabels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_labels")
     tklabels = models.ManyToManyField("tklabels.TKLabel", verbose_name="TK Labels", blank=True, related_name="project_tklabels")
 

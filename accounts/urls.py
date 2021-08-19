@@ -14,7 +14,10 @@ urlpatterns = [
 
     path('dashboard/', views.dashboard, name='dashboard'),
     path('create-profile/', views.create_profile, name='create-profile'),
+
     path('update-profile/', views.update_profile, name='update-profile'),
+    path('manage/', views.manage_organizations, name='manage-orgs'),
+    path('deactivate/', views.deactivate_user, name='deactivate-user'),
 
     path('select-account/', views.registration_reason, name='select-account'),
     

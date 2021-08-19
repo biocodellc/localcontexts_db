@@ -191,7 +191,7 @@ def create_profile(request):
 
 @login_required(login_url='login')
 def update_profile(request):
-    #TODO: add a password reset form
+    #TODO: add a password reset form and account deactivation
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(
@@ -216,6 +216,21 @@ def update_profile(request):
         'profile_form': profile_form
     }
     return render(request, 'accounts/update-profile.html', context)
+
+@login_required(login_url='login')
+def deactivate_user(request):
+    if request.method == "POST":
+        user = request.user
+        user.is_active = False
+        user.save()
+        auth.logout(request)
+        messages.add_message(request, messages.INFO, 'Your account has been deactivated.')
+        return redirect('login')
+    return render(request, 'accounts/deactivate.html')
+
+@login_required(login_url='login')
+def manage_organizations(request):
+    return render(request, 'accounts/manage-orgs.html')
 
 @login_required(login_url='login')
 def invite_user(request):
