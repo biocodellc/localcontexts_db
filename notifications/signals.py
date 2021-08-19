@@ -2,7 +2,6 @@ from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver, Signal
 from django.contrib.auth.models import User, Group
 from communities.models import *
-from bclabels.models import BCNotice
 from .models import *
 from .utils import *
 from django.conf import settings

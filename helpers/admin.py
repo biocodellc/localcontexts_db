@@ -8,10 +8,10 @@ class LabelTranslationAdmin(admin.ModelAdmin):
     list_display = ('language', 'title', 'translation', )
 
 class NoticeCommentAdmin(admin.ModelAdmin):
-    list_display = ('notice', 'bcnotice', 'tknotice', 'sender', 'community', 'message', 'created')
+    list_display = ('notice', 'sender', 'community', 'message', 'created')
 
 class NoticeStatusAdmin(admin.ModelAdmin):
-    list_display = ('notice', 'bcnotice', 'tknotice', 'community', 'seen', 'status')
+    list_display = ('notice', 'community', 'seen', 'status')
 
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(LabelTranslation, LabelTranslationAdmin)

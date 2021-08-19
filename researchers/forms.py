@@ -1,6 +1,5 @@
 from django import forms
 from .models import Researcher
-from bclabels.models import BCNotice
 
 class ConnectResearcherForm(forms.ModelForm):
     class Meta:
