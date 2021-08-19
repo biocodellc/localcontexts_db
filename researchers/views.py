@@ -191,9 +191,7 @@ def edit_project(request, researcher_id, project_uuid):
 @login_required(login_url='login')
 def notify_communities(request, pk, proj_id):
     researcher = Researcher.objects.get(id=pk)
-
     project = Project.objects.get(id=proj_id)
-    # contribs = ProjectContributors.objects.get(project=project, researcher=researcher)
 
     bcnotice_exists = BCNotice.objects.filter(project=project).exists()
     tknotice_exists = TKNotice.objects.filter(project=project).exists()
@@ -201,6 +199,11 @@ def notify_communities(request, pk, proj_id):
     communities = Community.objects.all()
 
     if request.method == "POST":
+        # Set private project to discoverable
+        if project.project_privacy == 'Private':
+            project.project_privacy = 'Discoverable'
+            project.save()
+
         communities_selected = request.POST.getlist('selected_communities')
         message = request.POST.get('notice_message')
 

@@ -3,6 +3,32 @@ from django.contrib.auth.models import User
 from bclabels.models import BCNotice, BCLabel
 from tklabels.models import TKNotice, TKLabel
 from communities.models import Community
+from projects.models import Project
+from researchers.models import Researcher
+from institutions.models import Institution
+
+class Notice(models.Model):
+    TYPES = (
+        ('biocultural', 'biocultural'),
+        ('traditional_knowledge', 'traditional_knowledge')
+    )
+    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_notice")
+    notice_type = models.CharField(max_length=50, null=True, choices=TYPES)
+    communities = models.ManyToManyField(Community, blank=True, related_name="notice_communities")
+    placed_by_researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True)
+    placed_by_institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True)
+    img_url = models.URLField(blank=True, null=True)
+    default_text = models.TextField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.project.title)
+    
+    class Meta:
+        verbose_name = 'Notice'
+        verbose_name_plural = 'Notices'
+        ordering = ('-created',)
 
 class LabelTranslation(models.Model):
     bclabel = models.ForeignKey(BCLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="bclabel_translation")

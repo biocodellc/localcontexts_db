@@ -1,6 +1,7 @@
 from django import template
 from institutions.models import Institution
 from researchers.models import Researcher
+from communities.models import Community
 from helpers.models import NoticeStatus
 from bclabels.models import BCNotice
 from tklabels.models import TKNotice
@@ -32,3 +33,14 @@ def which_communities_notified(project):
         tknotice = TKNotice.objects.get(project=project)
         statuses = NoticeStatus.objects.filter(tknotice=tknotice)
         return statuses
+
+def discoverable_project(user, project):
+    # Is user in..
+    # If project privacy is discoverable...
+    # Notified Communities
+    # placed_by_institution
+    # placed_by_researcher
+    # project creator
+    # If status exists
+    
+    return True

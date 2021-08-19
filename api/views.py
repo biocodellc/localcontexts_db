@@ -29,7 +29,7 @@ def projects(request):
 @api_view(['GET'])
 def project_detail(request, unique_id):
     project = Project.objects.get(unique_id=unique_id)
-    if project.project_privacy == 'Public':
+    if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable':
         serializer = ProjectSerializer(project, many=False)
         return Response(serializer.data)
     else:

@@ -636,6 +636,11 @@ def apply_labels(request, pk, project_uuid):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         if request.method == "POST":
+             # Set private project to discoverable
+            if project.project_privacy == 'Private':
+                project.project_privacy = 'Discoverable'
+                project.save()
+
             # Get uuids of each label that was checked and add them to the project
             bclabels_selected = request.POST.getlist('selected_bclabels')
             tklabels_selected = request.POST.getlist('selected_tklabels')

@@ -318,6 +318,11 @@ def notify_communities(request, pk, proj_id):
         communities = Community.objects.all()
 
         if request.method == "POST":
+            # Set private project to discoverable
+            if project.project_privacy == 'Private':
+                project.project_privacy = 'Discoverable'
+                project.save()
+
             communities_selected = request.POST.getlist('selected_communities')
             message = request.POST.get('notice_message')
 

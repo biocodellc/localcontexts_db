@@ -14,15 +14,7 @@
             <div><h3 class="no-bottom-margin no-top-margin">{{ project.title }}</h3></div>
             <div><p>{{ project.date_added|date:'M d, Y' }} | 
                 {{ project.project_type }} | 
-                {% if project.project_privacy == 'Public' %}
-                    Public
-                {% else %}
-                    {% if project.project_privacy == 'Discoverable' %}
-                        Discoverable
-                    {% else %}
-                        Private
-                    {% endif %}
-                {% endif %}
+                {{ project.project_privacy }}
                 </p>
             </div>
             
