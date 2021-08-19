@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from bclabels.models import BCNotice, BCLabel
-from tklabels.models import TKNotice, TKLabel
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
 from communities.models import Community
 from projects.models import Project
 from researchers.models import Researcher
@@ -46,8 +46,6 @@ class LabelTranslation(models.Model):
 
 class NoticeComment(models.Model):
     notice = models.ForeignKey(Notice, on_delete=models.CASCADE, null=True, related_name="notice_comment", blank=True)
-    bcnotice = models.ForeignKey(BCNotice, on_delete=models.CASCADE, null=True, related_name="bcnotice_comment", blank=True)
-    tknotice = models.ForeignKey(TKNotice, on_delete=models.CASCADE, null=True, related_name="tknotice_comment", blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="comment_community", blank=True)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="comment_sender", blank=True)
     message = models.TextField(max_length=1500, null=True, blank=True) #250 word limit on message
@@ -57,8 +55,8 @@ class NoticeComment(models.Model):
         return 'Comment {} by {}'.format(self.message, self.community)
 
     class Meta:
-        verbose_name = 'Comment'
-        verbose_name_plural = 'Comments'
+        verbose_name = 'Notice Comment'
+        verbose_name_plural = 'Notice Comments'
         ordering = ('created',)
 
 class NoticeStatus(models.Model):
@@ -67,8 +65,6 @@ class NoticeStatus(models.Model):
         ('not_pending', 'not_pending'),
     )
     notice = models.ForeignKey(Notice, on_delete=models.CASCADE, null=True, related_name="notice_status", blank=True)
-    bcnotice = models.ForeignKey(BCNotice, on_delete=models.CASCADE, null=True, related_name="bcnotice_status", blank=True)
-    tknotice = models.ForeignKey(TKNotice, on_delete=models.CASCADE, null=True, related_name="tknotice_status", blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="status_community", blank=True)
     seen = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=CHOICES, null=True, blank=True)

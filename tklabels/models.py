@@ -6,25 +6,6 @@ from institutions.models import Institution
 from projects.models import Project
 from django.contrib.auth.models import User
 
-class TKNotice(models.Model):
-    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
-    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_tknotice")
-    communities = models.ManyToManyField(Community, blank=True, related_name="tknotice_communities")
-    placed_by_researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True)
-    placed_by_institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True)
-    img_url = models.URLField(blank=True, null=True)
-    default_text = models.TextField(null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True, null=True)
-    updated = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return str(self.project)
-    
-    class Meta:
-        verbose_name = 'TK Notice'
-        verbose_name_plural = 'TK Notices'
-        ordering = ('-created',)
-
 class TKLabel(models.Model):
     TYPES = (
         ('attribution', 'attribution'),
