@@ -45,6 +45,7 @@ class LabelTranslation(models.Model):
         verbose_name_plural = "Label Translations"
 
 class NoticeComment(models.Model):
+    notice = models.ForeignKey(Notice, on_delete=models.CASCADE, null=True, related_name="notice_comment", blank=True)
     bcnotice = models.ForeignKey(BCNotice, on_delete=models.CASCADE, null=True, related_name="bcnotice_comment", blank=True)
     tknotice = models.ForeignKey(TKNotice, on_delete=models.CASCADE, null=True, related_name="tknotice_comment", blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="comment_community", blank=True)
@@ -65,6 +66,7 @@ class NoticeStatus(models.Model):
         ('pending', 'pending'),
         ('not_pending', 'not_pending'),
     )
+    notice = models.ForeignKey(Notice, on_delete=models.CASCADE, null=True, related_name="notice_status", blank=True)
     bcnotice = models.ForeignKey(BCNotice, on_delete=models.CASCADE, null=True, related_name="bcnotice_status", blank=True)
     tknotice = models.ForeignKey(TKNotice, on_delete=models.CASCADE, null=True, related_name="tknotice_status", blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="status_community", blank=True)

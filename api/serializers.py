@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from rest_framework.serializers import SerializerMethodField
-from bclabels.models import BCLabel, BCNotice
-from tklabels.models import TKLabel, TKNotice
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
+from helpers.models import Notice
 from projects.models import Project
 from communities.models import Community
 from institutions.models import Institution
@@ -48,21 +49,13 @@ class TKLabelSerializer(serializers.ModelSerializer):
     def get_community(self, obj):
         return str(obj.community.community_name)
 
-class BCNoticeSerializer(serializers.ModelSerializer):
+class NoticeSerializer(serializers.ModelSerializer):
     placed_by_institution = InstitutionSerializer()
     placed_by_researcher = ResearcherSerializer()
 
     class Meta:
-        model = BCNotice
-        fields = ('img_url', 'default_text', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
-    
-class TKNoticeSerializer(serializers.ModelSerializer):
-    placed_by_institution = InstitutionSerializer()
-    placed_by_researcher = ResearcherSerializer()
-
-    class Meta:
-        model = TKNotice
-        fields = ('img_url', 'default_text', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
+        model = Notice
+        fields = ('notice_type', 'img_url', 'default_text', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
 
 class ProjectOverviewSerializer(serializers.ModelSerializer):
     class Meta:
@@ -72,9 +65,8 @@ class ProjectOverviewSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     bclabels = BCLabelSerializer(many=True)
     tklabels = TKLabelSerializer(many=True)
-    bcnotice = BCNoticeSerializer(source="project_bcnotice", many=True)
-    tknotice = BCNoticeSerializer(source="project_tknotice", many=True)
+    notice = NoticeSerializer(source="project_notice", many=True)
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'title', 'bcnotice', 'tknotice', 'bclabels', 'tklabels')
+        fields = ('unique_id', 'title', 'notice', 'bclabels', 'tklabels')

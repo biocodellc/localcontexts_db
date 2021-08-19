@@ -5,8 +5,8 @@ from rest_framework import permissions
 from rest_framework.exceptions import PermissionDenied
 
 from .serializers import *
-from bclabels.models import BCLabel, BCNotice
-from tklabels.models import TKLabel, TKNotice
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
 from projects.models import Project
 
 @api_view(['GET'])
