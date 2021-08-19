@@ -62,7 +62,7 @@
 
 {% if researcher %}
 
-<!-- Projects where institution is the creator -->
+<!-- Projects where researcher is the creator -->
     {% if researcher.projects %}
         {% for project in researcher.projects.all %}
             {% include 'projects/project-overview.html' %}

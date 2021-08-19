@@ -15,12 +15,9 @@ def add_to_contributors(contributors, project, institutions_list, researchers_li
 
 def set_project_privacy(project, privacy_level):
     if privacy_level == 'public':
-        project.is_public = True
-        project.discoverable = False
+        project.project_privacy = 'Public'
     if privacy_level == 'discoverable':
-        project.is_public = False
-        project.is_discoverable = True
+        project.project_privacy = 'Discoverable'
     if privacy_level == 'private':
-        project.is_public = False
-        project.is_discoverable = False
+        project.project_privacy = 'Private'
         return project

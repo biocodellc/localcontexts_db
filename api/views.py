@@ -22,14 +22,14 @@ def apiOverview(request, format=None):
 
 @api_view(['GET'])
 def projects(request):
-    projects = Project.objects.filter(is_discoverable=True, is_public=True)
+    projects = Project.objects.filter(project_privacy='Public')
     serializer = ProjectOverviewSerializer(projects, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def project_detail(request, unique_id):
     project = Project.objects.get(unique_id=unique_id)
-    if project.is_public:
+    if project.project_privacy == 'Public':
         serializer = ProjectSerializer(project, many=False)
         return Response(serializer.data)
     else:
@@ -39,21 +39,21 @@ def project_detail(request, unique_id):
 @api_view(['GET'])
 def projects_by_user(request, username):
     user = User.objects.get(username=username)
-    projects = Project.objects.filter(project_creator=user, is_discoverable=True, is_public=True)
+    projects = Project.objects.filter(project_creator=user, project_privacy='Public')
     serializer = ProjectOverviewSerializer(projects, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def projects_by_institution(request, institution_id):
     institution = Institution.objects.get(id=institution_id)
-    projects = institution.projects.filter(is_discoverable=True, is_public=True)
+    projects = institution.projects.filter(project_privacy='Public')
     serializer = ProjectOverviewSerializer(projects, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def projects_by_researcher(request, researcher_id):
     researcher = Researcher.objects.get(id=researcher_id)
-    projects = researcher.projects.filter(is_discoverable=True, is_public=True)
+    projects = researcher.projects.filter(project_privacy='Public')
     serializers = ProjectOverviewSerializer(projects, many=True)
     return Response(serializers.data)
 

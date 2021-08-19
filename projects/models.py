@@ -13,9 +13,15 @@ class Project(models.Model):
         ('Publication', 'Publication'),
         ('Sample', 'Sample'),
     )
+    PRIVACY_LEVEL = {
+        ('Public', 'Public'),
+        ('Discoverable', 'Discoverable'),
+        ('Private', 'Private')
+    }
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
     project_creator = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="project_creator")
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
+    project_privacy = models.CharField(max_length=20, null=True, choices=PRIVACY_LEVEL)
     title = models.CharField(max_length=300, null=True)
     description = models.TextField(null=True)
     project_contact = models.CharField(max_length=100, null=True)
