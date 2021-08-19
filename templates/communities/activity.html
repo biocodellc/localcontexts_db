@@ -4,375 +4,189 @@
         <h2>Activity</h2>
     </div>
 
-    {% if bcnotices %}
-        {% for bcnotice in bcnotices %}
-        {% project_has_labels_from_current_community bcnotice.project.id community as project_has_labels %}
-            {% if project_has_labels == False %}
+    {% if notices %}
+        {% for notice in notices %}
 
-                    <div id="full-notice-card-{{ bcnotice.unique_id }}" class="content-card-v2 white-bg" style="scroll-margin-top: 8em;">
-                        <div class="flex-this space-between">
-                            <div>
-                                <p class="no-top-margin notice-date">
-                                    Date Sent: {{ bcnotice.created|date:'m/d/Y' }}
-                                </p>
-                            </div>
-                    
-                            <div>
-                                <a id="{{ bcnotice.unique_id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
-                                    Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="flex-this">
-                            <div class="w-10"><img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle"></div>
-                            <div class="w-90 pad-left-2">
-                                <p>
-                                    <span class="darkteal-text weight-600">{{ bcnotice.project.title}}</span><br>
-                                    {{ bcnotice.project.publication_date }} <br>
-                                    {{ bcnotice.project.project_type }} <br>
-                                    {% for contributor in bcnotice.communities.all %}
-                                        {{ contributor.community_name }}
-                                    {% endfor %}, 
-                                    {% if bcnotice.placed_by_institution %}
-                                        {{ bcnotice.placed_by_institution.institution_name }}
-                                    {% else %}
-                                        {{ bcnotice.placed_by_researcher.user.get_full_name}}
-                                    {% endif %}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div id="expand-notice-{{ bcnotice.unique_id }}" style="height: 0; overflow:hidden;" class="flex-this column">
-                            <div class="flex-this space-between">
-                                <div class="w-80">
-
-                                    {% if member_role == 'viewer' %}
-
-                                    {% else %}
-
-                                        <form method="POST" action="">
-                                            {% csrf_token %}
-                                            <input id="notice-id-input-{{ bcnotice.unique_id }}" type="hidden" value="placeholder" name="bcnotice-uuid">
-                                            <input id="status-selection-input-{{ bcnotice.unique_id }}" type="hidden" value="placeholder" name="bcnotice-status">
-
-                                            <div><span class="weight-500">What would you like to do with this notice? </span></div>
-                                            <div class="flex-this">
-                                                <div class="margin-right-1"><select id="select-{{ bcnotice.unique_id }}" onchange="setBCNoticeUUID(this)">
-
-                                                    {% for status in bcnotice.bcnotice_status.all %}
-                                                        {% if status.community == community %}
-
-                                                            {% if not status.seen and status.status == None %}
-                                                                <option disabled selected="selected"> ----------------- </option>
-                                                                <option value="seen"> Acknowledge Notice </option>
-                                                                <option value="pending"> Labels Pending </option>
-                                                                <option value="not_pending"> No Labels Pending </option>
-                                                            {% endif %} 
-
-                                                            {% if status.seen and status.status == None %}
-                                                                <option disabled> ----------------- </option>
-                                                                <option value="seen" selected="selected"> Acknowledge Notice </option>
-                                                                <option value="pending"> Labels Pending </option>
-                                                                <option value="not_pending"> No Labels Pending </option>
-                                                            {% endif %} 
-
-                                                            {% if status.seen and status.status == 'pending' %}
-                                                                <option disabled> ----------------- </option>
-                                                                <option value="seen"> Acknowledge Notice </option>
-                                                                <option value="pending" selected="selected"> Labels Pending </option>
-                                                                <option value="not_pending"> No Labels Pending </option>
-                                                            {% endif %}
-
-                                                            {% if status.seen and status.status == 'not_pending' %}
-                                                                <option disabled> ----------------- </option>
-                                                                <option value="seen"> Acknowledge Notice </option>
-                                                                <option value="pending"> Labels Pending </option>
-                                                                <option value="not_pending" selected="selected"> No Labels Pending </option>
-                                                            {% endif %}
-
-                                                        {% endif %}
-                                                    {% endfor %}
-                                            </select></div>
-                                            <div class="margin-left-1"><button class="action-btn" name="notify-btn">Notify</button></div>
-                                        </div>
-
-                                        </form>
-
-                                    {% endif %}
-
-                                    <p><span class="weight-500">Description:</span> {{ bcnotice.project.description }}</p>
-                                </div>
+        <div id="full-notice-card-{{ notice.id }}" class="content-card-v2 white-bg" style="scroll-margin-top: 8em;">
+            <div class="flex-this space-between">
+                <div>
+                    <p class="no-top-margin notice-date">
+                        Date Sent: {{ notice.created|date:'m/d/Y' }}
+                    </p>
+                </div>
+        
+                <div>
+                    <a id="{{ notice.id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
+                        Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
     
-                                <div class="flex-this column w-15">
-                                        <div class="notice-btns center-text">
-                                            <a href="{% url 'view-project' bcnotice.project.unique_id %}" class="action-btn margin-top-2 ">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
-                                        </div>
-
-                                    {% if member_role == 'viewer' %}
-                                    {% else %}
-                                        <div class="notice-btns center-text">
-                                            <a href="{% url 'apply-labels' community.id bcnotice.project.unique_id %}" class="action-btn margin-top-2 ">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            {% if bcnotice.message %}
-                                <div>
-                                    <p class="weight-500">Comments</p>
-                                    <hr>
-                                    {% if bcnotice.placed_by_institution %}
-                                        <span class="weight-500">{{ bcnotice.placed_by_institution.institution_name }}</span>
-                                        <span class="grey-text">{{ bcnotice.created|date:'m/d/Y' }}</span><br>
-
-                                        <p>
-                                            {{ bcnotice.message }}
-                                        </p>
-                                    {% endif %}
-
-                                    {% if bcnotice.placed_by_researcher %}
-                                        <span class="weight-500">{{ bcnotice.placed_by_researcher.user.get_full_name }}</span>
-                                        <span class="grey-text">{{ bcnotice.created|date:'m/d/Y' }}</span><br>
-
-                                        <p>
-                                            {{ bcnotice.message }}
-                                        </p>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
-
-                            {% if bcnotice.bcnotice_comment.all %}
-                                {% for comment in bcnotice.bcnotice_comment.all %}
-                                    {% if community == comment.community %}
-                                        <div>
-                                            <span class="weight-500">{{ comment.sender.get_full_name }}</span>
-                                            <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-                                            <p>
-                                                {{ comment.message }}
-                                            </p>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                            
-                            {% if member_role == 'viewer' %}
-
-                            {% else %}
-                                <form method="POST" action="">
-                                    {% csrf_token %}
-                                    <input type="hidden" value="{{ bcnotice.unique_id }}" name="bcnotice-uuid">
-                                    <div class="flex-this row">
-                                        <div class="w-100">
-                                            {{ form.message }}
-                                        </div>
-                                        <div style="margin-left:-55px; margin-top:7px;">
-                                            <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
-                                        </div>
-                                    </div>
-
-                                    {% if form.errors %}
-                                    {{ form.errors }}
-                                    {% endif %}
-                                </form>
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-
-                {% endif %}
-            {% endfor %}
-    {% endif %}
-
-    {% if tknotices %}
-    {% for tknotice in tknotices %}
-        {% project_has_labels_from_current_community tknotice.project.id community as project_has_labels %}
-        {% if project_has_labels == False %}
-
-                <div id="full-notice-card-{{ tknotice.unique_id }}" class="content-card-v2 white-bg" style="scroll-margin-top: 8em;">
-                    <div class="flex-this space-between">
-                        <div>
-                            <p class="no-top-margin notice-date">
-                                Date Sent: {{ tknotice.created|date:'m/d/Y' }}
-                            </p>
-                        </div>
-                
-                        <div>
-                            <a id="{{ tknotice.unique_id }}" onclick='showMoreNotice(this)' class="darkteal-text pointer">
-                                Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="flex-this">
-
-                        <div class="w-10">
-                            <img src="{% static 'images/notices/tk-notice.png' %}" alt="TK Notice: a black square with white letters TK in the middle">
-                        </div>
-
-                        <div class="w-90 pad-left-2">
-                            <p>
-                                <span class="darkteal-text weight-600">{{ tknotice.project.title}}</span><br>
-                                {{ tknotice.project.publication_date }} <br>
-                                {{ tknotice.project.project_type }} <br>
-                                {% for contributor in tknotice.communities.all %}
-                                    {{ contributor.community_name }}
-                                {% endfor %}, 
-                                {% if tknotice.placed_by_institution %}
-                                    {{ tknotice.placed_by_institution.institution_name }}
-                                {% else %}
-                                    {{ tknotice.placed_by_researcher.user.get_full_name}}
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div id="expand-notice-{{ tknotice.unique_id }}" style="height: 0; overflow:hidden;" class="flex-this column">
-                        <div class="flex-this space-between">
-                            <div class="w-80">
-
-                                {% if member_role == 'viewer' %}
-
-                                {% else %}
-
-                                <form method="POST" action="">
-                                    {% csrf_token %}
-                                        <span class="weight-500">What would you like to do with this notice? </span>
-
-                                        <select id="select-{{ tknotice.unique_id }}" onchange="setTKNoticeUUID(this)">
-                                            {% for status in tknotice.tknotice_status.all %}
+            <div class="flex-this">
+                <div class="w-10">
+                    {% if notice.notice_type == 'biocultural' %}
+                        <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
+                    {% endif %}
+                    {% if notice.notice_type == 'traditional_knowledge' %}
+                        <img src="{% static 'images/notices/tk-notice.png' %}" alt="TK Notice: a black square with white letters TK in the middle">
+                    {% endif %}
+                </div>
+                <div class="w-90 pad-left-2">
+                    <p>
+                        <span class="darkteal-text weight-600">{{ notice.project.title}}</span><br>
+                        {{ notice.project.publication_date }} <br>
+                        {{ notice.project.project_type }} <br>
+                        {% for contributor in notice.communities.all %}
+                            {{ contributor.community_name }}
+                        {% endfor %}, 
+                        {% if notice.placed_by_institution %}
+                            {{ notice.placed_by_institution.institution_name }}
+                        {% else %}
+                            {{ notice.placed_by_researcher.user.get_full_name}}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+    
+            <div id="expand-notice-{{ notice.id }}" style="height: 0; overflow:hidden;" class="flex-this column">
+                <div class="flex-this space-between">
+                    <div class="w-80">
+    
+                        {% if member_role == 'viewer' %}
+    
+                        {% else %}
+    
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <input id="notice-id-input-{{ notice.id }}" type="hidden" value="placeholder" name="notice-id">
+                                <input id="status-selection-input-{{ notice.id }}" type="hidden" value="placeholder" name="bnotice-status">
+    
+                                <div><span class="weight-500">What would you like to do with this notice? </span></div>
+                                <div class="flex-this">
+                                    <div class="margin-right-1"><select id="select-{{ notice.id }}" onchange="setBCNoticeUUID(this)">
+    
+                                        {% for status in notice.notice_status.all %}
                                             {% if status.community == community %}
-
+    
                                                 {% if not status.seen and status.status == None %}
                                                     <option disabled selected="selected"> ----------------- </option>
                                                     <option value="seen"> Acknowledge Notice </option>
                                                     <option value="pending"> Labels Pending </option>
                                                     <option value="not_pending"> No Labels Pending </option>
                                                 {% endif %} 
-
+    
                                                 {% if status.seen and status.status == None %}
                                                     <option disabled> ----------------- </option>
                                                     <option value="seen" selected="selected"> Acknowledge Notice </option>
                                                     <option value="pending"> Labels Pending </option>
                                                     <option value="not_pending"> No Labels Pending </option>
                                                 {% endif %} 
-
+    
                                                 {% if status.seen and status.status == 'pending' %}
                                                     <option disabled> ----------------- </option>
                                                     <option value="seen"> Acknowledge Notice </option>
                                                     <option value="pending" selected="selected"> Labels Pending </option>
                                                     <option value="not_pending"> No Labels Pending </option>
                                                 {% endif %}
-
+    
                                                 {% if status.seen and status.status == 'not_pending' %}
                                                     <option disabled> ----------------- </option>
                                                     <option value="seen"> Acknowledge Notice </option>
                                                     <option value="pending"> Labels Pending </option>
                                                     <option value="not_pending" selected="selected"> No Labels Pending </option>
                                                 {% endif %}
-
+    
                                             {% endif %}
                                         {% endfor %}
-                                        </select>
-
-                                        <input id="tknotice-id-input-{{ tknotice.unique_id}}" type="hidden" value="placeholder" name="tknotice-uuid">
-                                        <input id="tkstatus-selection-input-{{ tknotice.unique_id }}" type="hidden" value="placeholder" name="tknotice-status">
-
-                                        <button class="action-btn" name="notify-btn">Notify</button>
-                                </form>
-
-                                {% endif %}
-
-                                <p><span class="weight-500">Description:</span> {{ tknotice.project.description }}</p>
+                                </select></div>
+                                <div class="margin-left-1"><button class="action-btn" name="notify-btn">Notify</button></div>
                             </div>
     
-                            <div class="flex-this column w-15">
-                                <div class="notice-btns center-text">
-                                    <a href="{% url 'view-project' tknotice.project.unique_id %}" class="action-btn margin-top-2 ">View Project</a>
-                                </div>
-
-                                {% if member_role == 'viewer' %}
-                                {% else %}
-                                    <div class="notice-btns center-text">
-                                        <a href="{% url 'apply-labels' community.id tknotice.project.unique_id %}" class="action-btn margin-top-2 ">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
-                                    </div>
-                                {% endif %}
+                            </form>
+    
+                        {% endif %}
+    
+                        <p><span class="weight-500">Description:</span> {{ notice.project.description }}</p>
+                    </div>
+    
+                    <div class="flex-this column w-15">
+                            <div class="notice-btns center-text">
+                                <a href="{% url 'view-project' notice.project.unique_id %}" class="action-btn margin-top-2 ">View Project <i class="fa fa-external-link" aria-hidden="true"></i></a>
                             </div>
-
-                        </div>
-
-                        {% if tknotice.message %}
-                            <div>
-                                <p class="weight-500">Comments</p>
-                                <hr>
-                                {% if tknotice.placed_by_institution %}
-                                    <span class="weight-500">{{ tknotice.placed_by_institution.institution_name }}</span>
-                                    <span class="grey-text">{{ tknotice.created|date:'m/d/Y' }}</span><br>
-
-                                    <p>
-                                        {{ tknotice.message }}
-                                    </p>
-                                {% endif %}
-
-                                {% if tknotice.placed_by_researcher %}
-                                    <span class="weight-500">{{ tknotice.placed_by_researcher.user.get_full_name }}</span>
-                                    <span class="grey-text">{{ tknotice.created|date:'m/d/Y' }}</span><br>
-
-                                    <p>
-                                        {{ tknotice.message }}
-                                    </p>
-                                {% endif %}
+    
+                        {% if member_role == 'viewer' %}
+                        {% else %}
+                            <div class="notice-btns center-text">
+                                <a href="{% url 'apply-labels' community.id notice.project.unique_id %}" class="action-btn margin-top-2 ">Apply Labels <i class="fa fa-long-arrow-right"></i></a>
                             </div>
                         {% endif %}
-
-                        {% if tknotice.tknotice_comment.all %}
-                        {% for comment in tknotice.tknotice_comment.all %}
-                            {% if community == comment.community %}
-                                <div>
-                                    <span class="weight-500">{{ comment.sender.get_full_name }}</span>
-                                    <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-                                    <p>
-                                        {{ comment.message }}
-                                    </p>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-
-                    {% if member_role == 'viewer' %}
-
-                    {% else %}
-
-                        <form method="POST" action="">
-                            {% csrf_token %}
-                            <input type="hidden" value="{{ tknotice.unique_id }}" name="tknotice-uuid">
-                            <div class="flex-this row">
-                                <div class="w-100">
-                                    {{ form.message }}
-                                </div>
-                                <div style="margin-left:-55px; margin-top:7px;">
-                                    <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
-                                </div>
-                            </div>
-
-                            {% if form.errors %}
-                            {{ form.errors }}
-                            {% endif %}
-                        </form>
-                    {% endif %}
                     </div>
-
                 </div>
+    
+                {% if notice.message %}
+                    <div>
+                        <p class="weight-500">Comments</p>
+                        <hr>
+                        {% if notice.placed_by_institution %}
+                            <span class="weight-500">{{ notice.placed_by_institution.institution_name }}</span>
+                            <span class="grey-text">{{ notice.created|date:'m/d/Y' }}</span><br>
+    
+                            <p>
+                                {{ notice.message }}
+                            </p>
+                        {% endif %}
+    
+                        {% if notice.placed_by_researcher %}
+                            <span class="weight-500">{{ notice.placed_by_researcher.user.get_full_name }}</span>
+                            <span class="grey-text">{{ notice.created|date:'m/d/Y' }}</span><br>
+    
+                            <p>
+                                {{ notice.message }}
+                            </p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+    
+                {% if notice.notice_comment.all %}
+                    {% for comment in notice.notice_comment.all %}
+                        {% if community == comment.community %}
+                            <div>
+                                <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                <p>
+                                    {{ comment.message }}
+                                </p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                
+                {% if member_role == 'viewer' %}
+    
+                {% else %}
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ notice.id }}" name="notice-id">
+                        <div class="flex-this row">
+                            <div class="w-100">
+                                {{ form.message }}
+                            </div>
+                            <div style="margin-left:-55px; margin-top:7px;">
+                                <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+                            </div>
+                        </div>
+    
+                        {% if form.errors %}
+                        {{ form.errors }}
+                        {% endif %}
+                    </form>
+                {% endif %}
+    
+            </div>
+    
+        </div>
 
-            {% endif %}
         {% endfor %}
-{% else %}
-
-    <!-- <div class="content-card content-card-space white-bg">
-        <p>No notices to display at this time</p>
-    </div> -->
-
-{% endif %}
+    {% endif %}
 
 {% endblock %}

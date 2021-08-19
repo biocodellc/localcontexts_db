@@ -1,9 +1,8 @@
 from django import template
 from institutions.models import Institution
 from researchers.models import Researcher
-from helpers.models import NoticeStatus
-from bclabels.models import BCNotice
-from tklabels.models import TKNotice
+from communities.models import Community
+from helpers.models import NoticeStatus, Notice
 
 register = template.Library()
 
@@ -23,12 +22,18 @@ def define(val=None):
 # TODO: what if there are 2 notices?
 @register.simple_tag
 def which_communities_notified(project):
-    if project.project_bcnotice.all().exists():
-        bcnotice = BCNotice.objects.get(project=project)
-        statuses = NoticeStatus.objects.filter(bcnotice=bcnotice)
+    if project.project_notice.all().exists():
+        notice = Notice.objects.get(project=project)
+        statuses = NoticeStatus.objects.filter(notice=notice)
         return statuses
 
-    elif project.project_tknotice.all().exists():
-        tknotice = TKNotice.objects.get(project=project)
-        statuses = NoticeStatus.objects.filter(tknotice=tknotice)
-        return statuses
+def discoverable_project(user, project):
+    # Is user in..
+    # If project privacy is discoverable...
+    # Notified Communities
+    # placed_by_institution
+    # placed_by_researcher
+    # project creator
+    # If status exists
+    
+    return True
