@@ -8,17 +8,14 @@ from django.template.loader import render_to_string
 
 from .utils import check_member_role
 from projects.utils import add_to_contributors, set_project_privacy
-from bclabels.utils import set_bcnotice_defaults
-from tklabels.utils import set_tknotice_defaults
+from helpers.utils import set_notice_defaults
 
 from .models import Institution
 from researchers.models import Researcher
 from projects.models import Project, ProjectContributors, ProjectPerson
-from bclabels.models import BCNotice
-from tklabels.models import TKNotice
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
-from helpers.models import NoticeComment, NoticeStatus
+from helpers.models import NoticeComment, NoticeStatus, Notice
 
 from accounts.models import UserAffiliation
 
@@ -133,12 +130,10 @@ def institution_activity(request, pk):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         form = NoticeCommentForm(request.POST or None)
-        bcnotices = BCNotice.objects.filter(placed_by_institution=institution)
-        tknotices = TKNotice.objects.filter(placed_by_institution=institution)
-
+        notices = Notice.objects.filter(placed_by_institution=institution)
+        
         if request.method == 'POST':
-            bcnotice_uuid = request.POST.get('bcnotice-uuid')
-            tknotice_uuid = request.POST.get('tknotice-uuid')
+            notice_id = request.POST.get('notice-id')
 
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
@@ -146,12 +141,9 @@ def institution_activity(request, pk):
             if form.is_valid():
                 data = form.save(commit=False)
 
-                if bcnotice_uuid:
-                    bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
-                    data.bcnotice = bcnotice
-                else:
-                    tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
-                    data.tknotice = tknotice
+                if notice_id:
+                    notice = Notice.objects.get(id=notice_id)
+                    data.notice = notice
 
                 data.sender = request.user
                 data.community = community
@@ -159,9 +151,8 @@ def institution_activity(request, pk):
                 return redirect('institution-activity', institution.id)
 
         context = {
+            'notices': notices,
             'institution': institution,
-            'bcnotices': bcnotices,
-            'tknotices': tknotices,
             'form': form,
             'member_role': member_role,
         }
@@ -240,13 +231,13 @@ def create_project(request, pk):
                 institution.projects.add(data)
 
                 notices_selected = request.POST.getlist('checkbox-notice')
-                for notice in notices_selected:
-                    if notice == 'bcnotice':
-                        bcnotice = BCNotice.objects.create(placed_by_institution=institution, project=data)
-                        set_bcnotice_defaults(bcnotice)
-                    if notice == 'tknotice':
-                        tknotice = TKNotice.objects.create(placed_by_institution=institution, project=data)
-                        set_tknotice_defaults(tknotice)
+                for selected in notices_selected:
+                    if selected == 'bcnotice':
+                        notice = Notice.objects.create(notice_type='biocultural', placed_by_institution=institution, project=data)
+                        set_notice_defaults(notice)
+                    if selected == 'tknotice':
+                        notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_institution=institution, project=data)
+                        set_notice_defaults(notice)
 
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')
@@ -311,10 +302,7 @@ def notify_communities(request, pk, proj_id):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         project = Project.objects.get(id=proj_id)
-
-        bcnotice_exists = BCNotice.objects.filter(project=project).exists()
-        tknotice_exists = TKNotice.objects.filter(project=project).exists()
-
+        notice_exists = Notice.objects.filter(project=project).exists()
         communities = Community.objects.all()
 
         if request.method == "POST":
@@ -329,46 +317,25 @@ def notify_communities(request, pk, proj_id):
             for community_id in communities_selected:
                 community = Community.objects.get(id=community_id)
                 
-                # add community to bcnotice instance
-                if bcnotice_exists:
-                    bcnotices = BCNotice.objects.filter(project=project)
+                # add community to notice instance
+                if notice_exists:
+                    notices = Notice.objects.filter(project=project)
                     notice_status = NoticeStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
-                    for bcnotice in bcnotices:
-                        bcnotice.communities.add(community)
-                        bcnotice.save()
+                    for notice in notices:
+                        notice.communities.add(community)
+                        notice.save()
 
                         # Create notice status
-                        notice_status.bcnotice = bcnotice
+                        notice_status.notice = notice
                         notice_status.save()
 
                         # Create first comment for notice
-                        NoticeComment.objects.create(bcnotice=bcnotice, community=community, sender=request.user, message=message)
+                        NoticeComment.objects.create(notice=notice, community=community, sender=request.user, message=message)
 
                         # Create notification
-                        reference_id = str(bcnotice.unique_id)
-                        title =  "A BC Notice has been placed by " + str(institution.institution_name) + '.'
+                        reference_id = str(notice.id)
+                        title =  "A Notice has been placed by " + str(institution.institution_name) + '.'
                         ActionNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
-                
-                # add community to tknotice instance
-                if tknotice_exists:
-                    tknotices = TKNotice.objects.filter(project=project)
-                    notice_status = NoticeStatus.objects.create(community=community, seen=False)
-                    for tknotice in tknotices:
-                        tknotice.communities.add(community)
-                        tknotice.save()
-
-                        # Create notice status
-                        notice_status.tknotice = tknotice
-                        notice_status.save()
-
-                        # Create first comment for notice
-                        NoticeComment.objects.create(tknotice=tknotice, community=community, sender=request.user, message=message)
-
-                        # Create notification
-                        reference_id = str(tknotice.unique_id)
-                        title =  "A TK Notice has been placed by " + str(institution.institution_name) + '.'
-                        ActionNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
-
             
             return redirect('institution-projects', institution.id)
 

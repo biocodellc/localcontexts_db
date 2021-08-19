@@ -9,10 +9,10 @@ from django.template.loader import render_to_string
 from mimetypes import guess_type
 
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation, NoticeStatus
+from helpers.models import LabelTranslation, NoticeStatus, Notice
 from notifications.models import ActionNotification
-from bclabels.models import BCNotice, BCLabel
-from tklabels.models import TKNotice, TKLabel
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
 from projects.models import ProjectContributors, Project, ProjectPerson
 
 from bclabels.forms import CustomizeBCLabelForm, ApproveAndEditBCLabelForm
@@ -177,126 +177,66 @@ def community_activity(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        bcnotices = BCNotice.objects.filter(communities=community)
-        tknotices = TKNotice.objects.filter(communities=community)
+        notices = Notice.objects.filter(communities=community)
 
         # Form: Notify project contributor if notice was seen
         if request.method == "POST" and "notify-btn" in request.POST:
-            bcnotice_uuid = request.POST.get('bcnotice-uuid')
-            tknotice_uuid = request.POST.get('tknotice-uuid')
+            notice_id = request.POST.get('notice-id')
 
-            if bcnotice_uuid != None and bcnotice_uuid != 'placeholder':
-                bcnotice_status = request.POST.get('bcnotice-status')
+            if notice_id != None and notice_id != 'placeholder':
+                notice_status = request.POST.get('notice-status')
 
-                bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
-                reference_id = str(bcnotice.unique_id)
-                statuses = NoticeStatus.objects.filter(bcnotice=bcnotice, community=community)
+                notice = Notice.objects.get(id=notice_id)
+                reference_id = notice.id
+                statuses = NoticeStatus.objects.filter(notice=notice, community=community)
 
                 for status in statuses:
-                    if bcnotice_status == 'seen':
+                    if notice_status == 'seen':
                         status.seen = True
                         status.save()
 
-                    if bcnotice_status == 'pending':
+                    if notice_status == 'pending':
                         status.seen = True
                         status.status = 'pending'
                         status.save()
 
-                        truncated_project_title = str(bcnotice.project.title)[0:30]
-                        title = community.community_name + ' is in the process of applying Labels to your BC Notice: ' + truncated_project_title
-                        if bcnotice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
-                        if bcnotice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=bcnotice.placed_by_researcher, notification_type='Activity', reference_id=reference_id)
+                        truncated_project_title = str(notice.project.title)[0:30]
+                        title = community.community_name + ' is in the process of applying Labels to your Notice: ' + truncated_project_title
+                        if notice.placed_by_institution:
+                            ActionNotification.objects.create(title=title, institution=notice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
+                        if notice.placed_by_researcher:
+                            ActionNotification.objects.create(title=title, researcher=notice.placed_by_researcher, notification_type='Activity', reference_id=reference_id)
 
-                    if bcnotice_status == 'not_pending':
+                    if notice_status == 'not_pending':
                         status.seen = True
                         status.status = 'not_pending'
                         status.save()
 
-                        truncated_project_title = str(bcnotice.project.title)[0:30]
-                        title = community.community_name + ' will not be applying Labels to your BC Notice: ' + truncated_project_title
-                        if bcnotice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=bcnotice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
-                        if bcnotice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=bcnotice.placed_by_researcher, notification_type='Activity', reference_id=reference_id)
+                        truncated_project_title = str(notice.project.title)[0:30]
+                        title = community.community_name + ' will not be applying Labels to your Notice: ' + truncated_project_title
+                        if notice.placed_by_institution:
+                            ActionNotification.objects.create(title=title, institution=notice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
+                        if notice.placed_by_researcher:
+                            ActionNotification.objects.create(title=title, researcher=notice.placed_by_researcher, notification_type='Activity', reference_id=reference_id)
                         
-                return redirect('community-activity', community.id)
-
-            if tknotice_uuid != None and tknotice_uuid != 'placeholder':
-                tknotice_status = request.POST.get('tknotice-status')
-
-                tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
-                reference_id = str(tknotice.unique_id)
-                statuses = NoticeStatus.objects.filter(tknotice=tknotice, community=community)
-
-                for status in statuses:
-                    if tknotice_status == 'seen':
-                        status.seen = True
-                        status.save()
-
-                    if tknotice_status == 'pending':
-                        status.seen = True
-                        status.status = 'pending'
-                        status.save()
-
-                        truncated_project_title = str(tknotice.project.title)[0:30]
-                        title = community.community_name + ' is in the process of applying Labels to your TK Notice: ' + truncated_project_title
-                        if tknotice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
-                        if tknotice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=tknotice.placed_by_researcher, notification_type='Activity', reference_id=reference_id)
-
-                    if tknotice_status == 'not_pending':
-                        status.seen = True
-                        status.status = 'not_pending'
-                        status.save()
-                        
-                        truncated_project_title = str(tknotice.project.title)[0:30]
-                        title = community.community_name + ' will not be applying Labels to your TK Notice: ' + truncated_project_title
-                        if tknotice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=tknotice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
-                        if tknotice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=tknotice.placed_by_researcher, notification_type='Activity', reference_id=reference_id)
-
                 return redirect('community-activity', community.id)
 
         # Form: Add comment to notice
         elif request.method == "POST" and "add-comment-btn" in request.POST:
-            bcnotice_uuid = request.POST.get('bcnotice-uuid')
-            tknotice_uuid = request.POST.get('tknotice-uuid')
+            notice_id = request.POST.get('notice-id')
 
             # Which notice ?
-            bcnotice_exists = BCNotice.objects.filter(unique_id=bcnotice_uuid).exists()
-            tknotice_exists = TKNotice.objects.filter(unique_id=tknotice_uuid).exists()
+            notice_exists = Notice.objects.filter(id=notice_id).exists()
 
             form = NoticeCommentForm(request.POST or None)
 
-            if bcnotice_exists:
-                bcnotice = BCNotice.objects.get(unique_id=bcnotice_uuid)
-                status = NoticeStatus.objects.get(bcnotice=bcnotice, community=community)
+            if notice_exists:
+                notice = Notice.objects.get(id=notice_id)
+                status = NoticeStatus.objects.get(notice=notice, community=community)
 
                 if form.is_valid():
                     data = form.save(commit=False)
-                    data.bcnotice = bcnotice
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-
-                    # If message is sent, set notice status to 'Seen'
-                    if status.seen == False:
-                        status.seen = True
-                        status.save()
-
-                    return redirect('community-activity', community.id)
-            
-            if tknotice_exists:
-                tknotice = TKNotice.objects.get(unique_id=tknotice_uuid)
-                status = NoticeStatus.objects.get(tknotice=tknotice, community=community)
-
-                if form.is_valid():
-                    data = form.save(commit=False)
-                    data.tknotice = tknotice
+                    data.notice = notice
                     data.sender = request.user
                     data.community = community
                     data.save()
@@ -312,8 +252,7 @@ def community_activity(request, pk):
             form = NoticeCommentForm()
 
             context = {
-                'bcnotices': bcnotices,
-                'tknotices': tknotices,
+                'notices': notices,
                 'community': community,
                 'member_role': member_role,
                 'form': form,
@@ -623,8 +562,7 @@ def apply_labels(request, pk, project_uuid):
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
 
-    bcnotice = project.project_bcnotice.all()
-    tknotice = project.project_tknotice.all()
+    notices = project.project_notice.all()
 
     # Define Notification attrs
     reference_id = str(project.unique_id)
@@ -653,7 +591,7 @@ def apply_labels(request, pk, project_uuid):
                 tklabel = TKLabel.objects.get(unique_id=tklabel_uuid)
                 project.tklabels.add(tklabel)
             
-            if bcnotice or tknotice:
+            if notices:
                 # add community to project contributors
                 contributors = ProjectContributors.objects.get(project=project)
                 contributors.communities.add(community)
@@ -663,22 +601,13 @@ def apply_labels(request, pk, project_uuid):
                 ActionNotification.objects.create(title=comm_title, notification_type='Projects', community=community, reference_id=reference_id)
 
             # If BC Notice exists
-            if bcnotice:
-                for bc in bcnotice:
+            if notices:
+                for n in notices:
                     # send notification to either institution or researcher
-                    if bc.placed_by_institution:
-                        ActionNotification.objects.create(title=title, institution=bc.placed_by_institution, notification_type='Labels', reference_id=reference_id)
-                    if bc.placed_by_researcher:
-                        ActionNotification.objects.create(title=title, researcher=bc.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
-
-            # If TK Notice exists
-            if tknotice:
-                for tk in tknotice:
-                    # send notification to either institution or researcher
-                    if tk.placed_by_institution:
-                        ActionNotification.objects.create(title=title, institution=tk.placed_by_institution, notification_type='Labels', reference_id=reference_id)
-                    if tk.placed_by_researcher:
-                        ActionNotification.objects.create(title=title, researcher=tk.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
+                    if n.placed_by_institution:
+                        ActionNotification.objects.create(title=title, institution=n.placed_by_institution, notification_type='Labels', reference_id=reference_id)
+                    if n.placed_by_researcher:
+                        ActionNotification.objects.create(title=title, researcher=n.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
 
             return redirect('community-projects', community.id)
 
@@ -687,8 +616,7 @@ def apply_labels(request, pk, project_uuid):
         'project': project,
         'bclabels': bclabels,
         'tklabels': tklabels,
-        'bcnotice': bcnotice,
-        'tknotice': tknotice,
+        'notices': notices,
     }
     return render(request, 'communities/apply-labels.html', context)
 
