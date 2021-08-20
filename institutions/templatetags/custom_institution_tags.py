@@ -43,14 +43,11 @@ def notice_status_exists(project, community):
 
     # If it does, get the notice
     if notice_exists:
-        notice = Notice.objects.get(project=project)
+        notices = Notice.objects.filter(project=project)
+        for notice in notices:
         # See if this notice has a status with target community
-        notice_status_exists = NoticeStatus.objects.filter(notice=notice, community=community).exists()
-
-        if notice_status_exists:
-            return True
-        else:
-            return False
+            notice_status_exists = NoticeStatus.objects.filter(notice=notice, community=community).exists()
+            return notice_status_exists
     else:
         return False
 

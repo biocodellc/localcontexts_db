@@ -26,8 +26,10 @@
                 <div class="w-10">
                     {% if notice.notice_type == 'biocultural' %}
                         <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
-                    {% endif %}
-                    {% if notice.notice_type == 'traditional_knowledge' %}
+                    {% elif notice.notice_type == 'traditional_knowledge' %}
+                        <img src="{% static 'images/notices/tk-notice.png' %}" alt="TK Notice: a black square with white letters TK in the middle">
+                    {% elif notice.notice_type == 'traditional_knowledge' and notice.notice_type == 'biocultural'  %}
+                        <img src="{% static 'images/notices/bc-notice.png' %}" alt="BC Notice: black square with BC in white letters in the middle">
                         <img src="{% static 'images/notices/tk-notice.png' %}" alt="TK Notice: a black square with white letters TK in the middle">
                     {% endif %}
                 </div>
@@ -59,11 +61,11 @@
                             <form method="POST" action="">
                                 {% csrf_token %}
                                 <input id="notice-id-input-{{ notice.id }}" type="hidden" value="placeholder" name="notice-id">
-                                <input id="status-selection-input-{{ notice.id }}" type="hidden" value="placeholder" name="bnotice-status">
+                                <input id="status-selection-input-{{ notice.id }}" type="hidden" value="placeholder" name="notice-status">
     
                                 <div><span class="weight-500">What would you like to do with this notice? </span></div>
                                 <div class="flex-this">
-                                    <div class="margin-right-1"><select id="select-{{ notice.id }}" onchange="setBCNoticeUUID(this)">
+                                    <div class="margin-right-1"><select id="select-{{ notice.id }}" onchange="setNoticeID(this)">
     
                                         {% for status in notice.notice_status.all %}
                                             {% if status.community == community %}

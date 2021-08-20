@@ -320,8 +320,8 @@ def notify_communities(request, pk, proj_id):
                 # add community to notice instance
                 if notice_exists:
                     notices = Notice.objects.filter(project=project)
-                    notice_status = NoticeStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
                     for notice in notices:
+                        notice_status = NoticeStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
                         notice.communities.add(community)
                         notice.save()
 

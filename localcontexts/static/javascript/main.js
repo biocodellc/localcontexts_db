@@ -962,26 +962,12 @@ function cancelCommunitySelection(elem) {
 }
 
 // Communities: Activity: Notify 
-function setBCNoticeUUID(elem) {
+function setNoticeID(elem) {
     let elementId = elem.id
     let noticeID = elementId.slice(7)
     let statusSelect = document.getElementById(elementId)
     let noticeIdInput = document.getElementById(`notice-id-input-${noticeID}`)
     let statusSelectedInput = document.getElementById(`status-selection-input-${noticeID}`)
-
-    // Set first hidden value to notice UUID
-    noticeIdInput.value = noticeID
-    // Set second hidden value to value of option selected
-    statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
-}
-
-// Communities: Activity: Notify 
-function setTKNoticeUUID(elem) {
-    let elementId = elem.id
-    let noticeID = elementId.slice(7)
-    let statusSelect = document.getElementById(elementId)
-    let noticeIdInput = document.getElementById(`tknotice-id-input-${noticeID}`)
-    let statusSelectedInput = document.getElementById(`tkstatus-selection-input-${noticeID}`)
 
     // Set first hidden value to notice UUID
     noticeIdInput.value = noticeID
