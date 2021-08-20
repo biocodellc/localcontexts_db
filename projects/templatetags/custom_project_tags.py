@@ -19,13 +19,13 @@ def define(val=None):
     # To use: {% define 'oldVariable' as newVariable %}
   return val
 
-# TODO: what if there are 2 notices?
 @register.simple_tag
 def which_communities_notified(project):
     if project.project_notice.all().exists():
-        notice = Notice.objects.get(project=project)
-        statuses = NoticeStatus.objects.filter(notice=notice)
-        return statuses
+        notices = Notice.objects.filter(project=project)
+        for notice in notices:
+            statuses = NoticeStatus.objects.filter(notice=notice)
+            return statuses
 
 def discoverable_project(user, project):
     # Is user in..
