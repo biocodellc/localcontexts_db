@@ -3,6 +3,7 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from communities.models import Community
 from helpers.models import NoticeStatus, Notice
+from projects.models import Project
 
 register = template.Library()
 
@@ -27,13 +28,32 @@ def which_communities_notified(project):
             statuses = NoticeStatus.objects.filter(notice=notice)
             return statuses
 
-def discoverable_project(user, project):
-    # Is user in..
-    # If project privacy is discoverable...
-    # Notified Communities
-    # placed_by_institution
-    # placed_by_researcher
-    # project creator
-    # If status exists
+@register.simple_tag
+def discoverable_project_view(user, project_uuid):
+    project = Project.objects.get(unique_id=project_uuid)
+    contributing_institutions = project.project_contributors.institutions.all()
+    contributing_communities = project.project_contributors.communities.all()
+    contributing_researchers = project.project_contributors.researchers.all()
     
-    return True
+    if user == project.project_creator:
+        return True
+
+    elif user.profile.is_researcher:  #is user a researcher and is this researcher a contributor
+        for researcher in contributing_researchers:
+            return user == researcher.user
+
+    elif project.project_notice.all(): # is user in notified communities
+        for notice in project.project_notice.all():
+            for community in notice.communities.all():
+                return community.is_user_in_community(user)
+
+    else:
+        # is user in contributing institutions
+        for institution in contributing_institutions:
+            user_in_institution = institution.is_user_in_institution(user)
+            return user_in_institution
+
+        # is user in contributing communities
+        for community in contributing_communities:
+            user_in_community = community.is_user_in_community(user)
+            return user_in_community
