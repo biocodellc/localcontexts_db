@@ -1,5 +1,7 @@
 {% extends 'base.html' %} {% block title %} | View Project {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
 {% include 'partials/_auth-header.html' %}
+{% discoverable_project_view request.user project.unique_id as user_can_view %}
+
 
 <section class="grey-bg">
 
@@ -8,11 +10,16 @@
         {% include 'partials/_project.html' %}
 
     {% elif project.project_privacy == 'Discoverable' %}
-
         <!-- Logged in user -->
         {% if request.user.is_authenticated %}
-            <!-- Project notice status community user?  -->
-            {% include 'partials/_project.html' %}
+            {% if user_can_view %}
+                {% include 'partials/_project.html' %}
+            {% else %}
+            <!-- TODO: can people view just labels that are attached? -->
+                <div class="content-card-v2 content-card-space white-bg">
+                    <h3>This project can only be viewed by contributors.</h3>
+                </div>
+            {% endif %}
         {% endif %}
 
     {% elif project.project_privacy == 'Private' %}

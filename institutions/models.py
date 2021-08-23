@@ -40,6 +40,12 @@ class Institution(models.Model):
     def get_viewers(self):
         return self.viewers.all()
 
+    def is_user_in_institution(self, user):
+        if user in self.viewers.all() or user in self.editors.all() or user in self.admins.all() or user == self.institution_creator:
+            return True
+        else:
+            return False
+
     def __str__(self):
         return str(self.institution_name)
 
