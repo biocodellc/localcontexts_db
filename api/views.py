@@ -22,7 +22,7 @@ def apiOverview(request, format=None):
 
 @api_view(['GET'])
 def projects(request):
-    projects = Project.objects.filter(project_privacy='Public')
+    projects = Project.objects.exclude(project_privacy='Private')
     serializer = ProjectOverviewSerializer(projects, many=True)
     return Response(serializer.data)
 
