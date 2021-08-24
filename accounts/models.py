@@ -9,8 +9,8 @@ from institutions.models import Institution
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     profile_pic = models.ImageField(upload_to='photos/', blank=True, null=True, default='default.png')
-    city_or_town = models.CharField(verbose_name='city or town', max_length=80, blank=True, null=True)
-    state_or_province = models.CharField(verbose_name='state or province', max_length=100, blank=True, null=True)
+    city_town = models.CharField(verbose_name='city or town', max_length=80, blank=True, null=True)
+    state_province_region = models.CharField(verbose_name='state or province', max_length=100, blank=True, null=True)
     country = CountryField(blank=True, null=True)
     job_title = models.CharField(verbose_name='job title', max_length=80, blank=True, null=True)
     affiliation = models.CharField(verbose_name='affiliation', max_length=60, blank=True, null=True)

@@ -30,16 +30,19 @@
 
                                 <div class="w-100 flex-this form-one">
                                     <div class="w-30 margin-right-1">
-                                        {{ update_form.city_or_town.label }} <br>
-                                        {{ update_form.city_or_town }}
-                                    </div>
-                                    <div class="w-30 margin-right-1">
-                                        {{ update_form.state_or_province.label }} <br>
-                                        {{ update_form.state_or_province }}
+                                        <label for="state_province_region">State, Province, or Region</label> <br>
+                                        {{ update_form.state_province_region }}
                                     </div>
                                     <div class="w-30">
                                         {{ update_form.country.label }} <br>
                                         {{ update_form.country }}
+                                    </div>
+                                </div>
+
+                                <div class="flex-this w-100 form-one">
+                                    <div class="w-30 margin-right-1">
+                                        <label for="community_entity"> Community Entity </label><br>                                           
+                                        {{ update_form.community_entity }}
                                     </div>
                                 </div>
 

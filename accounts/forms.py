@@ -50,13 +50,13 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['job_title', 'affiliation', 'preferred_language', 'city_or_town', 'state_or_province', 'country']
+        fields = ['job_title', 'affiliation', 'preferred_language', 'city_town', 'state_province_region', 'country']
         widgets = {
             'job_title': forms.TextInput(attrs={'class': 'w-100'}),
             'affiliation': forms.TextInput(attrs={'class': 'w-100'}),
             'preferred_language': forms.TextInput(attrs={'class': 'w-100'}),
-            'city_or_town': forms.TextInput(attrs={'class': 'w-100'}),
-            'state_or_province': forms.TextInput(attrs={'class': 'w-100'}),
+            'city_town': forms.TextInput(attrs={'class': 'w-100'}),
+            'state_province_region': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
 class ResendEmailActivationForm(forms.Form):

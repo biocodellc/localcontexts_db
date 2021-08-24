@@ -18,7 +18,7 @@
             </div>
     
             <div>
-                <div class="w-30">{{ form.name }}</div>
+                <div class="w-30"><p class="bold">{% if bclabel_name %}{{ bclabel_name }}{% endif %}{% if tklabel_name %}{{ tklabel_name }}{% endif %}</p></div>
                 <div>{{ form.default_text }}</div>
 
                 {{ formset.management_form }}
