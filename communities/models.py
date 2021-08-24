@@ -15,6 +15,7 @@ def get_file_path(self, filename):
 class Community(models.Model):
     community_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     community_name = models.CharField(max_length=80, null=True, unique=True)
+    community_entity = models.CharField(max_length=200, null=True, blank=True)
     contact_name = models.CharField(max_length=80, null=True, blank=True)
     contact_email = models.EmailField(max_length=254, null=True, blank=True)
     image = models.ImageField(upload_to='users/community-images', blank=True, null=True)
