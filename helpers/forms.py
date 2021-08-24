@@ -7,8 +7,8 @@ AddLabelTranslationFormSet = modelformset_factory(
     fields=('title', 'language', 'translation', ),
     extra=1,
     widgets = {
-            'title': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Translated title'}),
-            'language': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Language'}),
+            'title': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Customized label name'}),
+            'language': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'What language is this written in?'}),
             'translation': forms.Textarea(attrs={'class': 'w-100 margin-top-1 margin-bottom-2', 'style': 'height: 150px; padding: 10px;'}),
     }
 )
@@ -18,8 +18,8 @@ UpdateBCLabelTranslationFormSet = inlineformset_factory(
     fields=('title', 'language', 'translation',),
     extra=0,
     widgets = {
-        'title': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Translated title'}),
-        'language': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Language'}),
+        'title': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Customized label name'}),
+        'language': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'What language is this written in?'}),
         'translation': forms.Textarea(attrs={'class': 'w-100 margin-top-1 margin-bottom-2', 'style': 'height: 150px; padding: 10px;'}),
     }
 )
@@ -29,8 +29,8 @@ UpdateTKLabelTranslationFormSet = inlineformset_factory(
     fields=('title', 'language', 'translation',),
     extra=0,
     widgets = {
-        'title': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Translated title'}),
-        'language': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Language'}),
+        'title': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Customized label name'}),
+        'language': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'What language is this written in?'}),
         'translation': forms.Textarea(attrs={'class': 'w-100 margin-top-1 margin-bottom-2', 'style': 'height: 150px; padding: 10px;'}),
     }
 )

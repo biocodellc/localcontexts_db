@@ -59,7 +59,7 @@ var openToCollabName = 'BC Open to Collaboration (BC OC)'
 var openToCommercializationName = ' BC Open to Commercialization (BC C)'
 var researchUseName = 'BC Research Use (BC R)'
 var consentVerifiedName = 'BC Consent Verified (BC CV)'
-var consentNonVerifiedName = 'BC Consent Verified (BC CNV)'
+var consentNonVerifiedName = 'BC Consent Non-Verified (BC CNV)'
 var clanName = 'BC Clan (BC CL)'
 var outreachName = 'BC Outreach (BC O)'
 var nonCommercialName = 'BC Non-Commercial (BC NC)'
@@ -332,125 +332,156 @@ if (parentDiv) {
 }
 
 function populateTemplate(id) {
-    let title = document.getElementById('label-title-name')
+    let title = document.getElementById('label-name-p')
     let templateText = document.getElementById('label-template-text')
+    let hiddenInput = document.getElementById('input-label-name')
+
     switch (id) {
         case 'bcr':
-            title.value = researchUseName
+            title.innerHTML = researchUseName
+            hiddenInput.value = researchUseName
             templateText.textContent = researchUseText
             break;
         case 'bccv':
-            title.value = consentVerifiedName
+            title.innerHTML = consentVerifiedName
+            hiddenInput.value = consentVerifiedName
             templateText.textContent = consentVerifiedText
             break;
         case 'bcocomm':
-            title.value = openToCommercializationName
+            title.innerHTML = openToCommercializationName
+            hiddenInput.value = openToCommercializationName
             templateText.textContent = openToCommercializationText
             break;
         case 'bcocoll':
-            title.value = openToCollabName
+            title.innerHTML = openToCollabName
+            hiddenInput.value = openToCollabName
             templateText.textContent = openToCollabText
             break;
         case 'bcmc':
-            title.value = multipleCommunityName
+            title.innerHTML = multipleCommunityName
+            hiddenInput.value = multipleCommunityName
             templateText.textContent = multipleCommunityText
             break;
         case 'bcp':
-            title.value = provenanceName
+            title.innerHTML = provenanceName
+            hiddenInput.value = provenanceName
             templateText.textContent = provenanceText
             break;
 
         case 'bccl':
-            title.value = clanName
+            title.innerHTML = clanName
+            hiddenInput.value = clanName
             templateText.textContent = clanText
             break;
         case 'bco':
-            title.value = outreachName
+            title.innerHTML = outreachName
+            hiddenInput.value = outreachName
             templateText.textContent = outreachText
             break;
         case 'bccnv':
-            title.value = consentNonVerifiedName
+            title.innerHTML = consentNonVerifiedName
+            hiddenInput.value = consentNonVerifiedName
             templateText.textContent = consentNonVerifiedText
             break;
         case 'bcnc':
-            title.value = nonCommercialName
+            title.innerHTML = nonCommercialName
+            hiddenInput.value = nonCommercialName
             templateText.textContent = nonCommercialText
             break;
                                                             
         case 'tka':
-            title.value = tkAttributionName
+            title.innerHTML = tkAttributionName
+            hiddenInput.value = tkAttributionName
             templateText.textContent = tkAttributionText
             break;
         case 'tkcl':
-            title.value = tkClanName
+            title.innerHTML = tkClanName
+            hiddenInput.value = tkClanName
             templateText.textContent = tkClanText
             break;
         case 'tkf':
-            title.value = tkFamilyName
+            title.innerHTML = tkFamilyName
+            hiddenInput.value = tkFamilyName
             templateText.textContent = tkFamilyText
             break;
         case 'tkmc':
-            title.value = tkMultipleCommunityName
+            title.innerHTML = tkMultipleCommunityName
+            hiddenInput.value = tkMultipleCommunityName
             templateText.textContent = tkMultipleCommunityText
             break;
         case 'tko':
-            title.value = tkOutreachName
+            title.innerHTML = tkOutreachName
+            hiddenInput.value = tkOutreachName
             templateText.textContent = tkOutreachText
             break;
         case 'tknv':
-            title.value = tkNonVerifiedName
+            title.innerHTML = tkNonVerifiedName
+            hiddenInput.value = tkNonVerifiedName
             templateText.textContent = tkNonVerifiedText
             break;
         case 'tkv':
-            title.value = tkVerifiedName
+            title.innerHTML = tkVerifiedName
+            hiddenInput.value = tkVerifiedName
             templateText.textContent = tkVerifiedText
             break;
         case 'tknc':
-            title.value = tkNonCommercialName
+            title.innerHTML = tkNonCommercialName
+            hiddenInput.value = tkNonCommercialName
             templateText.textContent = tkNonCommercialText
             break;
         case 'tkoc':
-            title.value = tkCommercialName
+            title.innerHTML = tkCommercialName
+            hiddenInput.value = tkCommercialName
             templateText.textContent = tkOpenToCommercializationText
             break;
         case 'tkcs':
-            title.value = tkCulturallySensitiveName
+            title.innerHTML = tkCulturallySensitiveName
+            hiddenInput.value = tkCulturallySensitiveName
             templateText.textContent = tkCulturallySensitiveText
             break;
         case 'tkcv':
-            title.value = tkCommunityVoiceName
+            title.innerHTML = tkCommunityVoiceName
+            hiddenInput.value = tkCommunityVoiceName
             templateText.textContent = tkCommunityVoiceText
             break;
         case 'tkco':
-            title.value = tkCommunityUseOnlyName
+            title.innerHTML = tkCommunityUseOnlyName
+            hiddenInput.value = tkCommunityUseOnlyName
             templateText.textContent = tkCommunityUseOnlyText
             break;
         case 'tks':
-            title.value = tkSeasonalName
+            title.innerHTML = tkSeasonalName
+            hiddenInput.value = tkSeasonalName
             templateText.textContent = tkSeasonalText
             break;
         case 'tkwg':
-            title.value = tkWomenGeneralName
+            title.innerHTML = tkWomenGeneralName
+            hiddenInput.value = tkWomenGeneralName
             templateText.textContent = tkWomenGeneralText
             break;
         case 'tkmg':
-            title.value = tkMenGeneralName
+            title.innerHTML = tkMenGeneralName
+            hiddenInput.value = tkMenGeneralName
             templateText.textContent = tkMenGeneralText
             break;
         case 'tkmr':
-            title.value = tkMenRestrictedName
+            title.innerHTML = tkMenRestrictedName
+            hiddenInput.value = tkMenRestrictedName
             templateText.textContent = tkMenRestrictedText
             break;
         case 'tkwr':
-            title.value = tkWomenRestrictedName
+            title.innerHTML = tkWomenRestrictedName
+            hiddenInput.value = tkWomenRestrictedName
             templateText.textContent = tkWomenRestrictedText
             break;
         case 'tkss':
-            title.value = tkSecretSacredName
+            title.innerHTML = tkSecretSacredName
+            hiddenInput.value = tkSecretSacredName
             templateText.textContent = tkSecretSacredText
             break;
         case 'tkcb':
-            title.value = tkOpenToCollaborationName
+            title.innerHTML = tkOpenToCollaborationName
+            hiddenInput.value = tkOpenToCollaborationName
             templateText.textContent = tkOpenToCollaborationText
             break;
                                                                                                                 

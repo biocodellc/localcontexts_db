@@ -345,9 +345,11 @@ def customize_label(request, pk, label_type):
 
             elif request.method == "POST":
                 formset = AddLabelTranslationFormSet(request.POST)
+                label_name = request.POST.get('input-label-name')
 
                 if form.is_valid() and formset.is_valid():
                     label_form = form.save(commit=False)
+                    label_form.name = label_name
                     label_form.label_type = tk_type
                     label_form.community = community
                     label_form.img_url = img_url
@@ -378,9 +380,11 @@ def customize_label(request, pk, label_type):
 
             elif request.method == "POST":
                 formset = AddLabelTranslationFormSet(request.POST)
+                label_name = request.POST.get('input-label-name')
 
                 if form.is_valid() and formset.is_valid():
                     label_form = form.save(commit=False)
+                    label_form.name = label_name
                     label_form.label_type = bc_type
                     label_form.community = community
                     label_form.img_url = img_url
@@ -418,13 +422,17 @@ def approve_label(request, pk, label_id):
     if member_role == False or member_role == 'viewer':
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        bclabel_name = ''
+        tklabel_name = ''
         if bclabel_exists:
             bclabel = BCLabel.objects.get(unique_id=label_id)
+            bclabel_name = bclabel.name
             form = ApproveAndEditBCLabelForm(request.POST or None, instance=bclabel)
             formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
 
         if tklabel_exists:
             tklabel = TKLabel.objects.get(unique_id=label_id)
+            tklabel_name = tklabel.name
             form = ApproveAndEditTKLabelForm(request.POST or None, instance=tklabel)
             formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
         
@@ -449,6 +457,8 @@ def approve_label(request, pk, label_id):
             'member_role': member_role,
             'form': form,
             'formset': formset,
+            'tklabel_name': tklabel_name,
+            'bclabel_name': bclabel_name,
         }
         return render(request, 'communities/approve-label.html', context)
 
