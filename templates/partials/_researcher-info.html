@@ -115,7 +115,7 @@
                     </div>
                     <div>
                         <p class="black-text dashcard-subheader">Researcher | {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% endif %}<br>
-                            Location: {% if researcher.user.profile.city_or_town %} {{ researcher.user.profile.city_or_town }}, {% endif %} {% if researcher.user.profile.state_or_province %} {{ researcher.user.profile.state_or_province }}, {% endif %} {% if researcher.user.profile.country.name %} {{ researcher.user.profile.country.name }}{% endif %}
+                            Location: {% if researcher.user.profile.city_town %} {{ researcher.user.profile.city_town }}, {% endif %} {% if researcher.user.profile.state_province_region %} {{ researcher.user.profile.state_province_region }}, {% endif %} {% if researcher.user.profile.country.name %} {{ researcher.user.profile.country.name }}{% endif %}
                         </p>
                     </div>
 

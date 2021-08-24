@@ -22,7 +22,7 @@
                                 <h3 class="dashcard-h3 darkteal-text">{{ researcher.user.get_full_name }}</h3>
                             </div>
                             <div>
-                                <p class="black-text dashcard-subheader">Researcher | Location: {% if researcher.user.profile.city_or_town %} {{ researcher.user.profile.city_or_town }}, {% endif %} {% if researcher.user.profile.state_or_province %} {{ researcher.user.profile.state_or_province }}, {% endif %} {% if researcher.user.profile.country.name %} {{ researcher.user.profile.country.name }}{% endif %}</p>
+                                <p class="black-text dashcard-subheader">Researcher | Location: {% if researcher.user.profile.city_town %} {{ researcher.user.profile.city_town }}, {% endif %} {% if researcher.user.profile.state_province_region %} {{ researcher.user.profile.state_province_region }}, {% endif %} {% if researcher.user.profile.country.name %} {{ researcher.user.profile.country.name }}{% endif %}</p>
                             </div>
                             <div>
                                 <p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p>
@@ -52,7 +52,7 @@
                                     <h3 class="dashcard-h3 darkteal-text">{{ community }}</h3>
                                 </div>
                                 <div>
-                                    <p class="black-text dashcard-subheader">Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %} | Location: {% if community.city_or_town %} {{ community.city_or_town }}, {% endif %} {% if community.state_or_province %} {{ community.state_or_province }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}</p>
+                                    <p class="black-text dashcard-subheader">Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %} | Location: {% if community.city_town %} {{ community.city_town }}, {% endif %} {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}</p>
                                 </div>
                                 <div>
                                     <p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p>
@@ -83,7 +83,7 @@
                                 <h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3>
                             </div>
                             <div>
-                                <p class="black-text dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | Location: {% if institution.city_or_town %} {{ institution.city_or_town }}, {% endif %} {% if institution.state_or_province %} {{ institution.state_or_province }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}</p>
+                                <p class="black-text dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | Location: {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}</p>
                             </div>
                             <div>
                                 <p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p>

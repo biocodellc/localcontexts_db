@@ -112,7 +112,7 @@
                             {% if member_role == 'admin' %} Administrator {% endif %}
                             {% if member_role == 'editor' %} Editor {% endif %}
                             {% if member_role == 'viewer' %} Viewer {% endif %} |
-                            Location: {% if community.city_or_town %} {{ community.city_or_town }}, {% endif %} {% if community.state_or_province %} {{ community.state_or_province }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}</p>
+                            Location: {% if community.city_town %} {{ community.city_town }}, {% endif %} {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}</p>
                     </div>
                     <div>
                         <p class="dashcard-description description-sm">{% if community.description %}{{ community.description }} {% else %} No description provided. {% endif %}</p>
