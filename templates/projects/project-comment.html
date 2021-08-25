@@ -1,25 +1,21 @@
 {% load static %}
 
+<p class="bold">Comments</p>
 {% if notice.message %}
 <div>
-    <p class="weight-500">Comments</p>
     <hr>
     {% if notice.placed_by_institution %}
         <span class="weight-500">{{ notice.placed_by_institution.institution_name }}</span>
         <span class="grey-text">{{ notice.created|date:'m/d/Y' }}</span><br>
 
-        <p>
-            {{ notice.message }}
-        </p>
+        <p>{{ notice.message }}</p>
     {% endif %}
 
     {% if notice.placed_by_researcher %}
         <span class="weight-500">{{ notice.placed_by_researcher.user.get_full_name }}</span>
         <span class="grey-text">{{ notice.created|date:'m/d/Y' }}</span><br>
 
-        <p>
-            {{ notice.message }}
-        </p>
+        <p>{{ notice.message }}</p>
     {% endif %}
 </div>
 {% endif %}
@@ -30,9 +26,7 @@
         <div>
             <span class="weight-500">{{ comment.sender.get_full_name }}</span>
             <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-            <p>
-                {{ comment.message }}
-            </p>
+            <p>{{ comment.message }}</p>
         </div>
     {% endif %}
 {% endfor %}

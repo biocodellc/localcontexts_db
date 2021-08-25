@@ -502,7 +502,7 @@ function showMore(elem) {
     } else {
         elem.innerHTML = 'Show More <i class="fa fa-angle-down" aria-hidden="true"></i>'
         expandDiv.style.height = "0"
-        contentCard.style.height = "201px"
+        contentCard.style.height = "auto"
     }
 }
 
