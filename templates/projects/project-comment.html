@@ -1,0 +1,60 @@
+{% load static %}
+
+{% if notice.message %}
+<div>
+    <p class="weight-500">Comments</p>
+    <hr>
+    {% if notice.placed_by_institution %}
+        <span class="weight-500">{{ notice.placed_by_institution.institution_name }}</span>
+        <span class="grey-text">{{ notice.created|date:'m/d/Y' }}</span><br>
+
+        <p>
+            {{ notice.message }}
+        </p>
+    {% endif %}
+
+    {% if notice.placed_by_researcher %}
+        <span class="weight-500">{{ notice.placed_by_researcher.user.get_full_name }}</span>
+        <span class="grey-text">{{ notice.created|date:'m/d/Y' }}</span><br>
+
+        <p>
+            {{ notice.message }}
+        </p>
+    {% endif %}
+</div>
+{% endif %}
+
+{% if notice.notice_comment.all %}
+{% for comment in notice.notice_comment.all %}
+    {% if community == comment.community %}
+        <div>
+            <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+            <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+            <p>
+                {{ comment.message }}
+            </p>
+        </div>
+    {% endif %}
+{% endfor %}
+{% endif %}
+
+{% if member_role == 'viewer' %}
+
+{% else %}
+    <form method="POST" action="">
+        {% csrf_token %}
+        <input type="hidden" value="{{ notice.id }}" name="notice-id">
+        <div class="flex-this row">
+            <div class="w-100">
+                {{ form.message }}
+            </div>
+            <div style="margin-left:-55px; margin-top:7px;">
+                <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
+            </div>
+        </div>
+
+        {% if form.errors %}
+            {{ form.errors }}
+        {% endif %}
+    </form>
+{% endif %}

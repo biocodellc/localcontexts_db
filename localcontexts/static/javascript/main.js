@@ -506,6 +506,23 @@ function showMoreNotice(elem) {
     }
 }
 
+// Project Overview Page
+function showMore(elem) {
+    let idToMatch = elem.id
+    let expandDiv = document.getElementById(`expand-div-${idToMatch}`)
+    let contentCard = document.getElementById(`full-div-card-${idToMatch}`)
+
+    if (expandDiv.style.height == "0px") {
+        elem.innerHTML = 'Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>'
+        expandDiv.style.height = "auto"
+        contentCard.style.height = "auto"
+    } else {
+        elem.innerHTML = 'Show More <i class="fa fa-angle-down" aria-hidden="true"></i>'
+        expandDiv.style.height = "0"
+        contentCard.style.height = "201px"
+    }
+}
+
 // Community: Projects
 function showMoreProject(elem) {
     let contribID = elem.id
