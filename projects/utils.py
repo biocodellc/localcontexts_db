@@ -12,12 +12,3 @@ def add_to_contributors(contributors, project, institutions_list, researchers_li
         for researcher_id in researchers_list:
             res = Researcher.objects.get(id=researcher_id)
             contributors.researchers.add(res)
-
-def set_project_privacy(project, privacy_level):
-    if privacy_level == 'public':
-        project.project_privacy = 'Public'
-    if privacy_level == 'discoverable':
-        project.project_privacy = 'Discoverable'
-    if privacy_level == 'private':
-        project.project_privacy = 'Private'
-        return project

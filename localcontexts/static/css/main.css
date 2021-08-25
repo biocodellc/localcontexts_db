@@ -53,7 +53,7 @@ body {
     min-height: 100%;
 }
 
-.ul-no-bullets {
+.ul-no-bullets, #id_project_privacy {
     list-style-type: none;
 }
 
