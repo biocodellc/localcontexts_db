@@ -29,17 +29,6 @@ def community_notifications(community):
     notifications = ActionNotification.objects.filter(community=community)
     return notifications
 
-# TODO: do we need this?
-# @register.simple_tag
-# def project_has_labels_from_current_community(project_id, community):
-#     project = Project.objects.get(id=project_id)
-#     bclabels_exist = project.bclabels.filter(community=community).exists()
-#     tklabels_exist = project.tklabels.filter(community=community).exists()
-#     if bclabels_exist or tklabels_exist:
-#         return True
-#     else:
-#         return False
-
 @register.simple_tag
 def unread_notifications(community):
     notifications_exist = ActionNotification.objects.filter(community=community, viewed=False).exists()

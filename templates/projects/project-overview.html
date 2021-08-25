@@ -78,7 +78,7 @@
                 {% endif %}
 
                 <!-- TODO: can't see this button if labels applied to project, also only seen by creator of project -->
-                {% if project.bclabels.all or project.tklabels.all %}
+                {% if project.bc_labels.all or project.tk_labels.all %}
 
                 {% else %}
                     {% if request.user == project.project_creator %}

@@ -595,11 +595,11 @@ def apply_labels(request, pk, project_uuid):
 
             for bclabel_uuid in bclabels_selected:
                 bclabel = BCLabel.objects.get(unique_id=bclabel_uuid)
-                project.bclabels.add(bclabel)
+                project.bc_labels.add(bclabel)
 
             for tklabel_uuid in tklabels_selected:
                 tklabel = TKLabel.objects.get(unique_id=tklabel_uuid)
-                project.tklabels.add(tklabel)
+                project.tk_labels.add(tklabel)
             
             if notices:
                 # add community to project contributors

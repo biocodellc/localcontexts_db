@@ -180,8 +180,8 @@
     <div class="margin-right-1 margin-left-1">
         <div><p class="p-24 bold">Project Labels</p></div>
 
-        {% if project.bclabels.all %}
-            {% for bclabel in project.bclabels.all %}
+        {% if project.bc_labels.all %}
+            {% for bclabel in project.bc_labels.all %}
 
                 <div>
                     <div class="flex-this">
@@ -205,8 +205,8 @@
             {% endfor %}
         {% endif %}
 
-        {% if project.tklabels.all %}
-        {% for tklabel in project.tklabels.all %}
+        {% if project.tk_labels.all %}
+        {% for tklabel in project.tk_labels.all %}
 
             <div>
                 <div class="flex-this">
