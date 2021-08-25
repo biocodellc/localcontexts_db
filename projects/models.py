@@ -44,8 +44,8 @@ class Project(models.Model):
     tk_labels = models.ManyToManyField("tklabels.TKLabel", verbose_name="TK Labels", blank=True, related_name="project_tklabels")
 
     def has_labels(self):
-        bc_labels = self.bclabels.count()
-        tk_labels = self.tklabels.count()
+        bc_labels = self.bc_labels.count()
+        tk_labels = self.tk_labels.count()
         if bc_labels + tk_labels > 0:
             return True
         else:
