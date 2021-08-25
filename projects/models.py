@@ -18,7 +18,7 @@ class Project(models.Model):
         ('Discoverable', 'Discoverable'),
         ('Private', 'Private')
     }
-    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, db_index=True)
     project_creator = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="project_creator")
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
     project_privacy = models.CharField(max_length=20, null=True, choices=PRIVACY_LEVEL)
@@ -40,8 +40,8 @@ class Project(models.Model):
     publication_date_ongoing = models.BooleanField(default=False, blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     date_modified = models.DateTimeField(auto_now=True, null=True)
-    bc_labels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_bclabels")
-    tk_labels = models.ManyToManyField("tklabels.TKLabel", verbose_name="TK Labels", blank=True, related_name="project_tklabels")
+    bc_labels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_bclabels", db_index=True)
+    tk_labels = models.ManyToManyField("tklabels.TKLabel", verbose_name="TK Labels", blank=True, related_name="project_tklabels", db_index=True)
 
     def has_labels(self):
         bc_labels = self.bc_labels.count()

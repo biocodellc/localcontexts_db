@@ -25,12 +25,12 @@ class Community(models.Model):
     state_province_region = models.CharField(verbose_name='state or province', max_length=100, blank=True, null=True)
     country = CountryField(blank=True, null=True)
     website = models.URLField(max_length=150, blank=True, null=True)
-    admins = models.ManyToManyField(User, blank=True, related_name="admins")
-    editors = models.ManyToManyField(User, blank=True, related_name="editors")
-    viewers = models.ManyToManyField(User, blank=True, related_name="viewers")
+    admins = models.ManyToManyField(User, blank=True, related_name="admins", db_index=True)
+    editors = models.ManyToManyField(User, blank=True, related_name="editors", db_index=True)
+    viewers = models.ManyToManyField(User, blank=True, related_name="viewers", db_index=True)
     is_publicly_listed = models.BooleanField(default=False, null=True)
     is_approved = models.BooleanField(default=False, null=True)
-    projects = models.ManyToManyField('projects.Project', blank=True, related_name="community_projects")
+    projects = models.ManyToManyField('projects.Project', blank=True, related_name="community_projects", db_index=True)
 
     def get_member_count(self):
         admins = self.admins.count()
