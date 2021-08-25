@@ -108,21 +108,20 @@
                     </div>
                 </div>
             </div>
-            
-            {% if project.project_notice.all %}
-                {% for notice in project.project_notice.all %}
-                    <div class="flex-this row">
-                        {% if notice.notice_type == 'biocultural' %}
-                            <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                        {% elif notice.notice_type == 'traditional_knowledge' %}
-                            <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                        {% elif notice.notice_type == 'traditional_knowledge' and notice.notice_type == 'biocultural' %}
-                            <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                            <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-            {% endif %}
+            <div class="flex-this row">
+                {% if project.project_notice.all %}
+                    {% for notice in project.project_notice.all %}
+                            {% if notice.notice_type == 'biocultural' %}
+                                <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                            {% elif notice.notice_type == 'traditional_knowledge' %}
+                                <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                            {% elif notice.notice_type == 'traditional_knowledge' and notice.notice_type == 'biocultural' %}
+                                <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                            {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
 
     </div>
@@ -130,7 +129,9 @@
     <div id="expand-div-{{ project.unique_id }}" style="height: 0; overflow:hidden;">
         {% if project.project_notice.all %}
             {% for notice in project.project_notice.all %}
-                {% include 'projects/project-status.html'%}
+                {% if community %}
+                    {% include 'projects/project-status.html'%}
+                {% endif %}
                 {% include 'projects/project-comment.html'%}
             {% endfor %}
         {% endif %}        

@@ -404,11 +404,11 @@ def projects(request, pk):
                         status.save()
 
                         truncated_project_title = str(notice.project.title)[0:30]
-                        title = community.community_name + ' is in the process of applying Labels to your Notice: ' + truncated_project_title
+                        title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
                         if notice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=notice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
+                            ActionNotification.objects.create(title=title, institution=notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
                         if notice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=notice.placed_by_researcher, notification_type='Activity', reference_id=reference_id)
+                            ActionNotification.objects.create(title=title, researcher=notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
 
                     if notice_status == 'not_pending':
                         status.seen = True
@@ -416,11 +416,11 @@ def projects(request, pk):
                         status.save()
 
                         truncated_project_title = str(notice.project.title)[0:30]
-                        title = community.community_name + ' will not be applying Labels to your Notice: ' + truncated_project_title
+                        title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
                         if notice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=notice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
+                            ActionNotification.objects.create(title=title, institution=notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
                         if notice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=notice.placed_by_researcher, notification_type='Activity', reference_id=reference_id)
+                            ActionNotification.objects.create(title=title, researcher=notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
                         
                 return redirect('community-projects', community.id)
 

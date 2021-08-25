@@ -36,7 +36,7 @@ def connect_researcher(request):
 
         return render(request, 'researchers/connect-researcher.html', {'form': form})
     else:
-        return redirect('researcher-activity', researcher.id)
+        return redirect('researcher-projects', researcher.id)
 
 @login_required(login_url='login')
 def update_researcher(request, pk):
@@ -69,8 +69,9 @@ def researcher_notices(request, pk):
     }
     return render(request, 'researchers/notices.html', context)
 
+
 @login_required(login_url='login')
-def researcher_activity(request, pk):
+def researcher_projects(request, pk):
     researcher = Researcher.objects.get(id=pk)
     notices = Notice.objects.filter(placed_by_researcher=researcher)
     form = NoticeCommentForm(request.POST or None)
@@ -91,21 +92,14 @@ def researcher_activity(request, pk):
             data.community = community
             data.save()
             
-            return redirect('researcher-activity', researcher.id)
+            return redirect('researcher-project', researcher.id)
 
     context = {
         'notices': notices,
         'researcher': researcher,
         'form': form,
     }
-    return render(request, 'researchers/activity.html', context)
-
-
-@login_required(login_url='login')
-def researcher_projects(request, pk):
-    researcher = Researcher.objects.get(id=pk)
-    return render(request, 'researchers/projects.html', {'researcher': researcher,})
-
+    return render(request, 'researchers/project.html', context)
 
 # Create Project
 @login_required(login_url='login')
@@ -210,7 +204,7 @@ def notify_communities(request, pk, proj_id):
                 # Create notification
                 reference_id = str(notice.id)
                 title =  "A Notice has been placed by " + str(researcher.user.get_full_name) + '.'
-                ActionNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
+                ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
         
         return redirect('researcher-projects', researcher.id)
 

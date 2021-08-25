@@ -7,7 +7,7 @@
 
         {% if researcher %}
             <div class="dashcard">
-                <a href="{% url 'researcher-activity' researcher.id %}">
+                <a href="{% url 'researcher-projects' researcher.id %}">
                     <div class="flex-this">
 
                         <div class="dashcard-img-container">
@@ -68,7 +68,7 @@
     {% if user_institutions %}
         {% for institution in user_institutions %}
             <div class="dashcard">
-                <a href="{% url 'institution-activity' institution.id %}">
+                <a href="{% url 'institution-projects' institution.id %}">
                     <div class="flex-this">
 
                         <div class="dashcard-img-container">

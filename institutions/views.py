@@ -120,44 +120,6 @@ def institution_notices(request, pk):
     else:
         return render(request, 'institutions/notices.html', {'institution': institution, 'member_role': member_role,})
 
-# Activity
-@login_required(login_url='login')
-def institution_activity(request, pk):
-    institution = Institution.objects.get(id=pk)
-
-    member_role = check_member_role(request.user, institution)
-    if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'institutions/restricted.html', {'institution': institution})
-    else:
-        form = NoticeCommentForm(request.POST or None)
-        notices = Notice.objects.filter(placed_by_institution=institution)
-        
-        if request.method == 'POST':
-            notice_id = request.POST.get('notice-id')
-
-            community_id = request.POST.get('community-id')
-            community = Community.objects.get(id=community_id)
-
-            if form.is_valid():
-                data = form.save(commit=False)
-
-                if notice_id:
-                    notice = Notice.objects.get(id=notice_id)
-                    data.notice = notice
-
-                data.sender = request.user
-                data.community = community
-                data.save()
-                return redirect('institution-activity', institution.id)
-
-        context = {
-            'notices': notices,
-            'institution': institution,
-            'form': form,
-            'member_role': member_role,
-        }
-        return render(request, 'institutions/activity.html', context)
-
 # Members
 @login_required(login_url='login')
 def institution_members(request, pk):
@@ -199,8 +161,31 @@ def institution_projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
+        form = NoticeCommentForm(request.POST or None)
+        notices = Notice.objects.filter(placed_by_institution=institution)
+        
+        if request.method == 'POST':
+            notice_id = request.POST.get('notice-id')
+
+            community_id = request.POST.get('community-id')
+            community = Community.objects.get(id=community_id)
+
+            if form.is_valid():
+                data = form.save(commit=False)
+
+                if notice_id:
+                    notice = Notice.objects.get(id=notice_id)
+                    data.notice = notice
+
+                data.sender = request.user
+                data.community = community
+                data.save()
+                return redirect('institution-projects', institution.id)
+
         context = {
+            'notices': notices,
             'institution': institution,
+            'form': form,
             'member_role': member_role,
         }
         return render(request, 'institutions/projects.html', context)
@@ -333,7 +318,7 @@ def notify_communities(request, pk, proj_id):
                         # Create notification
                         reference_id = str(notice.id)
                         title =  "A Notice has been placed by " + str(institution.institution_name) + '.'
-                        ActionNotification.objects.create(community=community, notification_type='Activity', reference_id=reference_id, sender=request.user, title=title)
+                        ActionNotification.objects.create(community=community, notification_type='Project', reference_id=reference_id, sender=request.user, title=title)
             
             return redirect('institution-projects', institution.id)
 

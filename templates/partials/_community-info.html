@@ -37,20 +37,14 @@
                                     {% if n.notification_type == 'Labels' %}
                                         <a href="{% url 'community-labels' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsReadCommunity(this); return true;">
                                     {% endif %}
-                                    {% if n.notification_type == 'Activity' %}
+                                    {% if n.notification_type == 'Projects' %}
                                         {% if n.reference_id %}
                                             <a href="{% anchor 'community-projects' n.reference_id community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsReadCommunity(this); return true;">
                                         {% else %}
                                             <a href="{% url 'community-projects' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsReadCommunity(this); return true;">
                                         {% endif %}
                                     {% endif %}
-                                    {% if n.notification_type == 'Projects' %}
-                                        {% if n.reference_id %}
-                                            <a href="{% anchor_project 'community-projects' n.reference_id community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsReadCommunity(this); return true;">
-                                        {% else %}
-                                            <a href="{% url 'community-projects' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsReadCommunity(this); return true;">
-                                        {% endif %}
-                                    {% endif %}
+
                                     {% if n.notification_type == 'Connections' %}
                                         <a href="#" id="{{ community.id }}_{{ n.id }}" onclick="markAsReadCommunity(this); return true;">
                                     {% endif %}

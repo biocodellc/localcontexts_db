@@ -35,22 +35,12 @@
                             {% for n in notifications %}
 
                                 <div class="border-bottom-solid-teal">
-                                    {% if n.notification_type == 'Labels' %}
+                                    {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
                                         {% if n.reference_id %}
-                                            <a href="{% anchor_project 'researcher-projects' n.reference_id researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
+                                            <a href="{% anchor 'researcher-projects' n.reference_id researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
                                         {% else %}
                                             <a href="{% url 'researcher-projects' researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
                                         {% endif %}
-                                    {% endif %}
-                                    {% if n.notification_type == 'Activity' %}
-                                        {% if n.reference_id %}
-                                            <a href="{% anchor 'researcher-activity' n.reference_id researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
-                                        {% else %}
-                                            <a href="{% url 'researcher-activity' researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
-                                        {% endif %}
-                                    {% endif %}
-                                    {% if n.notification_type == 'Projects' %}
-                                        <a href="{% url 'researcher-projects' researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
                                     {% endif %}
                                     {% if n.notification_type == 'Connections' %}
                                         <a href="#" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">

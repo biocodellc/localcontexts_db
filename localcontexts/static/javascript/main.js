@@ -489,24 +489,7 @@ function populateTemplate(id) {
 
 }
 
-// Community: Activity
-function showMoreNotice(elem) {
-    let noticeID = elem.id
-    let expandDiv = document.getElementById(`expand-notice-${noticeID}`)
-    let contentCard = document.getElementById(`full-notice-card-${noticeID}`)
-
-    if (expandDiv.style.height == "0px") {
-        elem.innerHTML = 'Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>'
-        expandDiv.style.height = "auto"
-        contentCard.style.height = "auto"
-    } else {
-        elem.innerHTML = 'Show More <i class="fa fa-angle-down" aria-hidden="true"></i>'
-        expandDiv.style.height = "0"
-        contentCard.style.height = "201px"
-    }
-}
-
-// Project Overview Page
+// Show more content: Project Overview Page
 function showMore(elem) {
     let idToMatch = elem.id
     let expandDiv = document.getElementById(`expand-div-${idToMatch}`)
@@ -523,25 +506,8 @@ function showMore(elem) {
     }
 }
 
-// Community: Projects
-function showMoreProject(elem) {
-    let contribID = elem.id
-    let expandDiv = document.getElementById(`expand-contrib-${contribID}`)
-    let contentCard = document.getElementById(`full-contrib-card-${contribID}`)
-
-    if (expandDiv.style.height == "0px") {
-        elem.innerHTML = 'Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>'
-        expandDiv.style.height = "auto"
-        contentCard.style.height = "auto"
-    } else {
-        elem.innerHTML = 'Show More <i class="fa fa-angle-down" aria-hidden="true"></i>'
-        expandDiv.style.height = "0"
-        contentCard.style.height = "auto"
-    }
-}
-
 // Community: create project
-// Community: Activity : apply labels
+// Community: apply labels
 function displayDefaultText(elem) {
     let isChecked = elem.checked
     let labelID = elem.id
