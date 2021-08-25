@@ -28,10 +28,7 @@
                     </div>
         
                     <div class="margin-bottom-1 margin-top-1">
-                        <p class="no-bottom-margin">What is the privacy level of this project?</p><br>
-                        <input type="radio" name="privacy_level" value="public"> <label for="public">Public: Can be seen by anyone within and outside of the Local Contexts Hub</label><br>
-                        <input type="radio" name="privacy_level" value="discoverable"> <label for="discoverable">Discoverable: Can be seen by profiles in the Local Contexts Hub only</label><br>
-                        <input type="radio" name="privacy_level" value="private"> <label for="private">Private: Can only be seen by Local Contexts profiles that have been notified of the project</label><br>
+                        {{ form.project_privacy.label }} <br> {{ form.project_privacy }}
                     </div>
         
                     <h3>Project Details</h3>

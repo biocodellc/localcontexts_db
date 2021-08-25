@@ -23,7 +23,7 @@ from helpers.forms import NoticeCommentForm
 
 from bclabels.utils import check_bclabel_type, assign_bclabel_img
 from tklabels.utils import check_tklabel_type, assign_tklabel_img
-from projects.utils import add_to_contributors, set_project_privacy
+from projects.utils import add_to_contributors
 
 from .forms import *
 from .models import *
@@ -167,97 +167,6 @@ def add_member(request, pk):
             'member_role': member_role,
         }
         return render(request, 'communities/add-member.html', context)
-
-# Activity / Notices
-@login_required(login_url='login')
-def community_activity(request, pk):
-    community = Community.objects.get(id=pk)
-
-    member_role = check_member_role(request.user, community)
-    if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
-    else:
-        notices = Notice.objects.filter(communities=community)
-
-        # Form: Notify project contributor if notice was seen
-        if request.method == "POST" and "notify-btn" in request.POST:
-            notice_id = request.POST.get('notice-id')
-
-            if notice_id != None and notice_id != 'placeholder':
-                notice_status = request.POST.get('notice-status')
-
-                notice = Notice.objects.get(id=notice_id)
-                reference_id = notice.id
-                statuses = NoticeStatus.objects.filter(notice=notice, community=community)
-
-                for status in statuses:
-                    if notice_status == 'seen':
-                        status.seen = True
-                        status.save()
-
-                    if notice_status == 'pending':
-                        status.seen = True
-                        status.status = 'pending'
-                        status.save()
-
-                        truncated_project_title = str(notice.project.title)[0:30]
-                        title = community.community_name + ' is in the process of applying Labels to your Notice: ' + truncated_project_title
-                        if notice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=notice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
-                        if notice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=notice.placed_by_researcher, notification_type='Activity', reference_id=reference_id)
-
-                    if notice_status == 'not_pending':
-                        status.seen = True
-                        status.status = 'not_pending'
-                        status.save()
-
-                        truncated_project_title = str(notice.project.title)[0:30]
-                        title = community.community_name + ' will not be applying Labels to your Notice: ' + truncated_project_title
-                        if notice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=notice.placed_by_institution, notification_type='Activity', reference_id=reference_id)
-                        if notice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=notice.placed_by_researcher, notification_type='Activity', reference_id=reference_id)
-                        
-                return redirect('community-activity', community.id)
-
-        # Form: Add comment to notice
-        elif request.method == "POST" and "add-comment-btn" in request.POST:
-            notice_id = request.POST.get('notice-id')
-
-            # Which notice ?
-            notice_exists = Notice.objects.filter(id=notice_id).exists()
-
-            form = NoticeCommentForm(request.POST or None)
-
-            if notice_exists:
-                notice = Notice.objects.get(id=notice_id)
-                status = NoticeStatus.objects.get(notice=notice, community=community)
-
-                if form.is_valid():
-                    data = form.save(commit=False)
-                    data.notice = notice
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-
-                    # If message is sent, set notice status to 'Seen'
-                    if status.seen == False:
-                        status.seen = True
-                        status.save()
-
-                    return redirect('community-activity', community.id)
-
-        else:
-            form = NoticeCommentForm()
-
-            context = {
-                'notices': notices,
-                'community': community,
-                'member_role': member_role,
-                'form': form,
-            }
-            return render(request, 'communities/activity.html', context)
 
 # Labels Main
 @login_required(login_url='login')
@@ -471,11 +380,87 @@ def projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        context = {
-            'community': community, 
-            'member_role': member_role,
-        }
-        return render(request, 'communities/projects.html', context)
+        notices = Notice.objects.filter(communities=community)
+
+        # Form: Notify project contributor if notice was seen
+        if request.method == "POST" and "notify-btn" in request.POST:
+            notice_id = request.POST.get('notice-id')
+
+            if notice_id != None and notice_id != 'placeholder':
+                notice_status = request.POST.get('notice-status')
+
+                notice = Notice.objects.get(id=notice_id)
+                reference_id = notice.id
+                statuses = NoticeStatus.objects.filter(notice=notice, community=community)
+
+                for status in statuses:
+                    if notice_status == 'seen':
+                        status.seen = True
+                        status.save()
+
+                    if notice_status == 'pending':
+                        status.seen = True
+                        status.status = 'pending'
+                        status.save()
+
+                        truncated_project_title = str(notice.project.title)[0:30]
+                        title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                        if notice.placed_by_institution:
+                            ActionNotification.objects.create(title=title, institution=notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
+                        if notice.placed_by_researcher:
+                            ActionNotification.objects.create(title=title, researcher=notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
+
+                    if notice_status == 'not_pending':
+                        status.seen = True
+                        status.status = 'not_pending'
+                        status.save()
+
+                        truncated_project_title = str(notice.project.title)[0:30]
+                        title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                        if notice.placed_by_institution:
+                            ActionNotification.objects.create(title=title, institution=notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
+                        if notice.placed_by_researcher:
+                            ActionNotification.objects.create(title=title, researcher=notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
+                        
+                return redirect('community-projects', community.id)
+
+        # Form: Add comment to notice
+        elif request.method == "POST" and "add-comment-btn" in request.POST:
+            notice_id = request.POST.get('notice-id')
+
+            # Which notice ?
+            notice_exists = Notice.objects.filter(id=notice_id).exists()
+
+            form = NoticeCommentForm(request.POST or None)
+
+            if notice_exists:
+                notice = Notice.objects.get(id=notice_id)
+                status = NoticeStatus.objects.get(notice=notice, community=community)
+
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.notice = notice
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+
+                    # If message is sent, set notice status to 'Seen'
+                    if status.seen == False:
+                        status.seen = True
+                        status.save()
+
+                    return redirect('community-projects', community.id)
+
+        else:
+            form = NoticeCommentForm()
+
+            context = {
+                'notices': notices,
+                'community': community,
+                'member_role': member_role,
+                'form': form,
+            }
+            return render(request, 'communities/projects.html', context)
 
 # Create Project
 @login_required(login_url='login')
@@ -497,9 +482,7 @@ def create_project(request, pk):
             formset = ProjectPersonFormset(request.POST)
 
             if form.is_valid() and formset.is_valid():
-                privacy_radio_value = request.POST.get('privacy_level')
                 data = form.save(commit=False)
-                set_project_privacy(data, privacy_radio_value)
                 data.project_creator = request.user
                 data.save()
 
@@ -595,11 +578,11 @@ def apply_labels(request, pk, project_uuid):
 
             for bclabel_uuid in bclabels_selected:
                 bclabel = BCLabel.objects.get(unique_id=bclabel_uuid)
-                project.bclabels.add(bclabel)
+                project.bc_labels.add(bclabel)
 
             for tklabel_uuid in tklabels_selected:
                 tklabel = TKLabel.objects.get(unique_id=tklabel_uuid)
-                project.tklabels.add(tklabel)
+                project.tk_labels.add(tklabel)
             
             if notices:
                 # add community to project contributors

@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block title %} | Projects {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
 
-<div class="content-card-v2 content-card-space white-bg">
+<div id="full-div-card-{{ project.unique_id }}" class="content-card-v2 content-card-space white-bg">
     <div id="project-unique-{{ project.unique_id}}" class="flex-this space-between" style="scroll-margin-top: 8em;">
 
         <div class="w-60 flex-this column">
@@ -42,7 +42,6 @@
         </div>
 
         <div class="w-40 flex-this column align-right margin-top-16">
-
             <div class="flex-this margin-bottom-16 w-100 flex-end">
                 
                 {% if community %}
@@ -77,50 +76,74 @@
                     {% endif %}
                 {% endif %}
 
-                <!-- TODO: can't see this button if labels applied to project, also only seen by creator of project -->
-                {% if project.bclabels.all or project.tklabels.all %}
-
-                {% else %}
-                    {% if request.user == project.project_creator %}
-                            <div class="margin-right-1">
-                                {% if community %}
-                                    <a href="{% url 'edit-project' community.id project.unique_id %}" class="action-btn">
-                                        Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
-                                {% endif %}
-                                {% if institution %}
-                                    <a href="{% url 'inst-edit-project' institution.id project.unique_id %}" class="action-btn">
-                                        Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
-                                {% endif %}                        
-                                {% if researcher %}
-                                    <a href="{% url 'researcher-edit-project' researcher.id project.unique_id %}" class="action-btn">
-                                        Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
-                                {% endif %}                        
-                            </div>
-                        {% endif %}
-                {% endif %}
-
-                <div>
+                <div class="margin-right-1">
                     <a href="{% url 'view-project' project.unique_id %}" class="white-btn">Open Project <i class="fa fa-long-arrow-right"></i></a>
                 </div>
+
+                <div class="text-align-right">
+                    <div class="white-btn"><a id="{{ project.unique_id }}" onclick='showMore(this)' class="darkteal-text pointer">
+                            Show More <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+
             </div>
             <div class="flex-this row">
                 {% if project.project_notice.all %}
                     {% for notice in project.project_notice.all %}
-                        {% if notice.notice_type == 'biocultural' %}
-                            <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                        {% elif notice.notice_type == 'traditional_knowledge' %}
-                            <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                        {% elif notice.notice_type == 'traditional_knowledge' and notice.notice_type == 'biocultural' %}
-                            <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                            <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                        {% endif %}
+                            {% if notice.notice_type == 'biocultural' %}
+                                <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                            {% elif notice.notice_type == 'traditional_knowledge' %}
+                                <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                            {% elif notice.notice_type == 'traditional_knowledge' and notice.notice_type == 'biocultural' %}
+                                <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                            {% endif %}
                     {% endfor %}
                 {% endif %}
             </div>
-
         </div>
 
     </div>
+
+    <div id="expand-div-{{ project.unique_id }}" style="height: 0; overflow:hidden;">
+        <div class="flex-this column">
+            <!-- TODO: can't see this button if labels applied to project, also only seen by creator of project -->  
+            {% if project.bc_labels.all or project.tk_labels.all %}
+
+            {% else %}
+                <div class="w-20">
+                    {% if request.user == project.project_creator %}
+                        <div class="margin-right-1">
+                            {% if community %}
+                                <a href="{% url 'edit-project' community.id project.unique_id %}" class="action-btn">
+                                    Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
+                            {% endif %}
+                            {% if institution %}
+                                <a href="{% url 'inst-edit-project' institution.id project.unique_id %}" class="action-btn">
+                                    Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
+                            {% endif %}                        
+                            {% if researcher %}
+                                <a href="{% url 'researcher-edit-project' researcher.id project.unique_id %}" class="action-btn">
+                                    Edit Project <i class="fa fa-cog" aria-hidden="true"></i></a>
+                            {% endif %}                        
+                        </div>
+                    {% endif %}            
+                </div>
+            {% endif %}
+    
+            {% if project.project_notice.all %}
+                {% for notice in project.project_notice.all %}
+                    {% if community %}
+                        {% include 'projects/project-status.html'%}
+                    {% endif %}
+                    {% include 'projects/project-comment.html'%}
+                {% endfor %}
+            {% endif %}  
+        </div>
+    
+    </div>
+
+
 </div>
 
 {% endblock%}

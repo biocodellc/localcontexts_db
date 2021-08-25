@@ -63,10 +63,10 @@ class ProjectOverviewSerializer(serializers.ModelSerializer):
         fields = ('unique_id', 'title',)
     
 class ProjectSerializer(serializers.ModelSerializer):
-    bclabels = BCLabelSerializer(many=True)
-    tklabels = TKLabelSerializer(many=True)
+    bc_labels = BCLabelSerializer(many=True)
+    tk_labels = TKLabelSerializer(many=True)
     notice = NoticeSerializer(source="project_notice", many=True)
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'title', 'notice', 'bclabels', 'tklabels')
+        fields = ('unique_id', 'title', 'notice', 'bc_labels', 'tk_labels')

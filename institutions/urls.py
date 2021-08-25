@@ -9,7 +9,6 @@ urlpatterns = [
     path('institution/dashboard/update/<str:pk>/', views.update_institution, name="update-institution"),
 
     path('institution/notices/<str:pk>/', views.institution_notices, name="institution-notices"),
-    path('institution/activity/<str:pk>/', views.institution_activity, name="institution-activity"),
 
     path('institution/members/<str:pk>/', views.institution_members, name="institution-members"),
     path('institution/members/add/<str:pk>/', views.add_member, name="add-institution-member"),

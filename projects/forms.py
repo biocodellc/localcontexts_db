@@ -2,14 +2,22 @@ from django import forms
 from django.forms import modelformset_factory
 import datetime
 from .models import Project, ProjectContributors, ProjectPerson
+from django.utils.translation import ugettext_lazy as _
 
 class DateInput(forms.DateInput):
     input_type = 'date'
 
 class CreateProjectForm(forms.ModelForm):
+    PRIVACY = (
+        ('Public', 'Public: Can be seen by anyone within and outside of the Local Contexts Hub'),
+        ('Discoverable', 'Discoverable: Can be seen by authenticated contributors of the project only'),
+        ('Private', 'Private: Can only be seen by project creator'),
+    )
+    project_privacy = forms.ChoiceField(label=_('What is the privacy level of this project?'), choices=PRIVACY, widget=forms.RadioSelect())
+
     class Meta:
         model = Project
-        fields = ['title', 'project_type', 'description', 'url', 'publication_date', 'publication_date_ongoing', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation']
+        fields = ['title', 'project_type', 'project_privacy', 'description', 'url', 'publication_date', 'publication_date_ongoing', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation']
         widgets = {
             'publication_date': DateInput(),
             'title': forms.TextInput(attrs={'class': 'w-100'}),
@@ -34,9 +42,16 @@ ProjectPersonFormset = modelformset_factory(
 )
 
 class EditProjectForm(forms.ModelForm):
+    PRIVACY = (
+        ('Public', 'Public: Can be seen by anyone within and outside of the Local Contexts Hub'),
+        ('Discoverable', 'Discoverable: Can be seen by authenticated contributors of the project only'),
+        ('Private', 'Private: Can only be seen by project creator'),
+    )
+    project_privacy = forms.ChoiceField(label=_('What is the privacy level of this project?*'), choices=PRIVACY, widget=forms.RadioSelect())
+
     class Meta:
         model = Project
-        fields = ['title', 'project_type', 'description', 'url', 'publication_date', 'publication_date_ongoing', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation']
+        fields = ['title', 'project_type', 'project_privacy', 'description', 'url', 'publication_date', 'publication_date_ongoing', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation']
         widgets = {
             'publication_date': DateInput(),
             'title': forms.TextInput(attrs={'class': 'w-100'}),

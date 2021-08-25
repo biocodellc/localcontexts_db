@@ -40,12 +40,12 @@ class Project(models.Model):
     publication_date_ongoing = models.BooleanField(default=False, blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     date_modified = models.DateTimeField(auto_now=True, null=True)
-    bclabels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_labels")
-    tklabels = models.ManyToManyField("tklabels.TKLabel", verbose_name="TK Labels", blank=True, related_name="project_tklabels")
+    bc_labels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_bclabels")
+    tk_labels = models.ManyToManyField("tklabels.TKLabel", verbose_name="TK Labels", blank=True, related_name="project_tklabels")
 
     def has_labels(self):
-        bc_labels = self.bclabels.count()
-        tk_labels = self.tklabels.count()
+        bc_labels = self.bc_labels.count()
+        tk_labels = self.tk_labels.count()
         if bc_labels + tk_labels > 0:
             return True
         else:

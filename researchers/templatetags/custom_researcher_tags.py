@@ -14,11 +14,7 @@ def researcher_notifications(researcher):
 
 @register.simple_tag
 def anchor(url_name, section_id, researcher_id):
-    return reverse(url_name, kwargs={'pk': researcher_id}) + "#full-notice-card-" + str(section_id)
-
-@register.simple_tag
-def anchor_project(url_name, unique_id, researcher_id):
-    return reverse(url_name, kwargs={'pk': researcher_id}) + "#project-unique-" + str(unique_id)
+    return reverse(url_name, kwargs={'pk': researcher_id}) + "project-unique-" + str(section_id)
 
 @register.simple_tag
 def get_notices_count(researcher):
