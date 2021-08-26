@@ -37,6 +37,14 @@ def discoverable_project_view(user, project_uuid):
     
     if user == project.project_creator:
         return True
+    
+    elif project.community_projects.all(): # is user a part of the community created project
+        for community in project.community_projects.all():
+            return community.is_user_in_community(user)
+    
+    elif project.institution_projects.all(): # is user a part of the institution created project
+        for institution in project.institution_projects.all():
+            return institution.is_user_in_institution(user)
 
     elif user.profile.is_researcher:  #is user a researcher and is this researcher a contributor
         for researcher in contributing_researchers:
