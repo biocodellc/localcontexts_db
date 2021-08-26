@@ -1024,6 +1024,12 @@ if (window.location.href.includes('researcher/projects/create-project') || windo
     })()
 }
 
+function toggleMeatballMenu(elem) {
+    let slicedID = elem.id.slice(9)
+    document.getElementById(`meatball-content-${slicedID}`).classList.toggle('hide')
+    document.getElementById(`meatball-content-${slicedID}`).classList.toggle('show')
+}
+
 function toggleNotifications() {
     document.getElementById('notification-v2').classList.toggle('show')
 

@@ -167,11 +167,6 @@ input:focus {
     color:#ff0000;
 }
 
-.hl {
-    background-color: #007385;
-    color: #fff;
-}
-
 /* BACKGROUND COLORS */
 
 .orange-bg {
@@ -257,6 +252,38 @@ input:focus {
     margin-bottom: 0;
 }
 
+.margin-top-8 {
+    margin-top: 8px;
+}
+
+.margin-bottom-8 {
+    margin-bottom: 8px;
+}
+
+.margin-left-8 {
+    margin-left: 8px;
+}
+
+.margin-right-8 {
+    margin-right: 8px;
+}
+
+.margin-left-16 {
+    margin-left: 16px;
+}
+
+.margin-right-16 {
+    margin-right: 16px;
+}
+
+.margin-top-16 {
+    margin-top: 16px;
+}
+
+.margin-bottom-16 {
+    margin-bottom: 16px;
+}
+
 .no-top-pad {
     padding-top: 0;
 }
@@ -297,25 +324,6 @@ input:focus {
     padding-left: 0;
 }
 
-.margin-top-8 {
-    margin-top: 8px;
-}
-
-.margin-bottom-8 {
-    margin-bottom: 8px;
-}
-
-.margin-left-16 {
-    margin-left: 16px;
-}
-
-.margin-top-16 {
-    margin-top: 16px;
-}
-
-.margin-bottom-16 {
-    margin-bottom: 16px;
-}
 /* BORDERS */
 
 .border-bottom-dash-teal {
@@ -1075,3 +1083,33 @@ input:focus {
     visibility: visible;
     opacity: 1;
   }
+
+  /* Meatball menu Project Overview */
+.meatball {
+    cursor: pointer;   
+    margin: 30px 0px 5px 10px;
+}
+
+.meatball-dropdown-content {
+    position: absolute;
+    padding: 10px;
+    background-color: #fff;
+    opacity: 1;
+    z-index: 1;
+    height: auto;
+    width: 150px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+    left: 0;
+    margin-top: 10px;
+    margin-left: -70px;
+}
+
+.meatball-dropdown-content span {
+    display: block;
+    cursor: pointer;
+}
+
+.meatball-dropdown-content span:hover {
+    background-color: #dafaf4;
+}
