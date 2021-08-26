@@ -27,9 +27,12 @@ def connect_researcher(request):
     if researcher == False:
         if request.method == "POST":
             if form.is_valid():
+                orcid_id = request.POST.get('orcidId')
+                orcid_token = request.POST.get('orcidIdToken')
+                
                 data = form.save(commit=False)
                 data.user = request.user
-                orcid_id = request.POST.get('orcidId')
+                data.orcid_auth_token = orcid_token
                 data.orcid = orcid_id
                 data.save()
                 return redirect('dashboard')
@@ -92,14 +95,14 @@ def researcher_projects(request, pk):
             data.community = community
             data.save()
             
-            return redirect('researcher-project', researcher.id)
+            return redirect('researcher-projects', researcher.id)
 
     context = {
         'notices': notices,
         'researcher': researcher,
         'form': form,
     }
-    return render(request, 'researchers/project.html', context)
+    return render(request, 'researchers/projects.html', context)
 
 # Create Project
 @login_required(login_url='login')
