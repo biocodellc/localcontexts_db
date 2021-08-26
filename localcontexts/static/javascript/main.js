@@ -495,13 +495,14 @@ function showMore(elem) {
     let expandDiv = document.getElementById(`expand-div-${idToMatch}`)
     let contentCard = document.getElementById(`full-div-card-${idToMatch}`)
 
-    if (expandDiv.style.height == "0px") {
+   expandDiv.classList.toggle('hide')
+   expandDiv.classList.toggle('show')
+
+    if (expandDiv.classList.contains('show')) {
         elem.innerHTML = 'Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>'
-        expandDiv.style.height = "auto"
         contentCard.style.height = "auto"
     } else {
         elem.innerHTML = 'Show More <i class="fa fa-angle-down" aria-hidden="true"></i>'
-        expandDiv.style.height = "0"
         contentCard.style.height = "auto"
     }
 }
@@ -1024,6 +1025,7 @@ if (window.location.href.includes('researcher/projects/create-project') || windo
     })()
 }
 
+// Project Overview meatball menu
 function toggleMeatballMenu(elem) {
     let slicedID = elem.id.slice(9)
     document.getElementById(`meatball-content-${slicedID}`).classList.toggle('hide')
