@@ -53,29 +53,6 @@
                     {% endif %}
                 {% endif%}
 
-                {% if institution %}
-                    {% if project in institution.projects.all %}
-                        {% if member_role == 'viewer' %}
-                        {% else %}
-                            <div class="margin-right-1">
-                                <a href="{% url 'notify-communities' institution.id project.id %}" class="action-btn">
-                                    Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                        {% endif %}
-                    {% endif %}
-                {% endif %}
-
-                {% if researcher %}
-                    {% if project in researcher.projects.all %}
-                        <div class="margin-right-1">
-                            <a href="{% url 'researcher-notify-communities' researcher.id project.id %}" class="action-btn">
-                                Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
-                            </a>
-                        </div>
-                    {% endif %}
-                {% endif %}
-
                 <div class="margin-right-1">
                     <a href="{% url 'view-project' project.unique_id %}" class="white-btn">View Project <i class="fa fa-long-arrow-right"></i></a>
                 </div>
@@ -123,14 +100,14 @@
                     {% else %}
                         <div class="flex-this flex-end w-60">
                     {% endif %}
-                            {% for notice in project.project_notice.all %}
-                                {% if notice.notice_type == 'biocultural' %}
-                                    <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                {% elif notice.notice_type == 'traditional_knowledge' %}
-                                    <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
+                        {% for notice in project.project_notice.all %}
+                            {% if notice.notice_type == 'biocultural' %}
+                                <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                            {% elif notice.notice_type == 'traditional_knowledge' %}
+                                <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 {% endif %}
             </div>
         </div>
@@ -138,6 +115,46 @@
     </div>
 
     <div id="expand-div-{{ project.unique_id }}" class="hide">
+
+        {% if researcher or institution %}
+            <div class="flex-this space-between border-top-solid-teal">
+
+                <div class="w-70 margin-top-16">
+                    <h3 class="no-bottom-margin no-top-margin">Notify Communities</h3>
+                    <p>
+                        Listed below is an overview of the communities you have notified for this project. Here you can monitor the status on their decision that they make based on this project. The formal replies might be... <br><br>
+                        <strong>Labels Pending:</strong> Which means that the community is going to apply Labels to this project or..<br>
+                        <strong>No - Labels Pending:</strong> Which means that the community is not going to apply Labels to this project.<br><br>
+                        You can message these communities directly in this section. Please remember to be kind. 
+                    </p>
+                </div>
+
+                <div class="flex-this flex-end w-40 margin-top-16">
+                    {% if institution %}
+                        {% if project in institution.projects.all %}
+                            {% if member_role == 'viewer' %}
+                            {% else %}
+                                <div class="margin-right-1">
+                                    <a href="{% url 'notify-communities' institution.id project.id %}" class="action-btn">
+                                        Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if researcher %}
+                        {% if project in researcher.projects.all %}
+                            <div class="margin-right-1">
+                                <a href="{% url 'researcher-notify-communities' researcher.id project.id %}" class="action-btn">
+                                    Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>            
+            </div>
+        {% endif %}
 
         <div class="flex-this column">
             {% if project.project_notice.all %}
