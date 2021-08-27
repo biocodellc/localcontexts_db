@@ -51,9 +51,7 @@
             {% if contrib.project in institution.projects.all %}
             {% else %}
                 {% define contrib.project as project %}
-
                 {% include 'projects/project-overview.html' %}
-
             {% endif %}
         {% endfor %}
     {% endif %}
@@ -100,8 +98,16 @@
             {% endif %}
         {% endfor %}
     {% endif %}
-{% endif %}
 
+    <!-- Projects a community has been notified of (community in notice) -->
+    {% if notices %}
+        {% for notice in notices %}
+            {% define notice.project as project %}
+            {% include 'projects/project-overview.html' %}
+        {% endfor %}
+    {% endif %}
+
+{% endif %}
 
 
 {% endblock %}

@@ -1,22 +1,28 @@
 {% extends 'reg-base.html' %} {% block title %} | Connect {% endblock %} {% load static %} {% block card %}
     
 <div class="flex-this column w-90">
+    <div class="margin-bottom-1 flex-this space-between">
+        <h2 class="darkteal-text">Researcher Account</h2>  
+        <div class="margin-top-16">or <a class="darkteal-text" href="{% url 'select-account' %}">Back to choose an account</a>  </div>
+    </div>
     <div>
-        <h2 class="darkteal-text no-top-margin">Researcher Account</h2>
         <p class="no-top-margin no-bottom-margin">A researcher is a person who carries out academic or scientific research independently or in an institution, such as archive, library, museum, historical society, gallery, data repository, or university.</p>
     </div>
 
-    <div><p>Please provide us with your Orcid ID. An ORCID provides a persistent digital identifier (an ORCID iD) that you own and control. Learn more <a href="https://orcid.org/" target="_blank">here</a>.</p></div>
-
-    <form action="{% url 'connect-researcher' %}" method="POST" class="flex-this column w-100">
+    <form action="{% url 'connect-researcher' %}" method="POST" class="flex-this column w-100" id="createResearcher">
         {% csrf_token %}
 
-        <!-- Leave for local testing -->
-        <!-- <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="http://localhost:8000/researchers/connect-researcher/"></div> -->
-        <!-- Prod sandbox orcid -->   
-        <!-- <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div> -->
+        <div class="flex-this space-between">
+            <div class="w-50"><p>We encourage you to have an ORCiD ID. <br>You can <a href="https://orcid.org/" target="_blank">read more about ORCiD here</a>.</p></div>
+            
+            <!-- Leave for local testing -->
+            <!-- <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="http://localhost:8000/researchers/connect-researcher/"></div> -->
+            <!-- Prod sandbox orcid -->   
+            <!-- <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div> -->
 
-        <div id="orcidWidget" data-clientid='APP-IBW6UOF5FGJG0ODB' data-env="production" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div>
+            <!-- PROD ORCID -->
+            <div id="orcidWidget" data-clientid='APP-IBW6UOF5FGJG0ODB' data-env="production" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div>
+        </div>
 
         <div>
             <label for="primary_institution">Primary Institution</label>
@@ -43,9 +49,34 @@
             </div>
     
             <div class="text-align-right">
-                <button class="action-btn margin-top-2 ">Get Started <i class="fa fa-long-arrow-right"></i></button>
+                <button id="submitResearcher" class="action-btn margin-top-2">Get Started <i class="fa fa-long-arrow-right"></i></button>
             </div>
         </div>
+
+        <div id="ORCIDmodal" class="modal" style="display: none;">
+
+            <div class="orcid-modal flex-this column w-100">
+                <div class="flex-this flex-end">
+                    <div id="closeORCIDmodal" class="margin-right-8 action-btn">Close X</div>
+                </div>
+                <div class="add-member-modal-content w-100">
+        
+                    <div>
+                        <h2 class="no-top-margin" style="color: #333333;">Just checking...</h2>  
+                        <p>
+                            Are you sure you don’t want to add an ORCiD to your account? <br><br>
+
+                            By linking this we can connect projects you create in here with your ID outside of Local Contexts Hub.
+                        </p>  
+                    </div>
+                    <div class="flex-this w-100 text-align-center">
+                        <div id="continueNoOrcidBtn" class="white-btn">Continue</div>    
+                    </div>
+        
+                </div>
+            </div>
+        </div>
+
     </form>
 
 </div>
