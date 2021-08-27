@@ -1,8 +1,11 @@
 {% extends 'reg-base.html' %} {% block title %} | Connect {% endblock %} {% load static %} {% block card %}
     
 <div class="flex-this column w-90">
+    <div class="margin-bottom-1 flex-this space-between">
+        <h2 class="darkteal-text">Researcher Account</h2>  
+        <div class="margin-top-16">or <a class="darkteal-text" href="{% url 'select-account' %}">Back to choose an account</a>  </div>
+    </div>
     <div>
-        <h2 class="darkteal-text no-top-margin">Researcher Account</h2>
         <p class="no-top-margin no-bottom-margin">A researcher is a person who carries out academic or scientific research independently or in an institution, such as archive, library, museum, historical society, gallery, data repository, or university.</p>
     </div>
 
