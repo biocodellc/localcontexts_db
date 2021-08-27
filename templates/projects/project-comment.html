@@ -1,54 +1,74 @@
 {% load static %}
+<div class="border-top-solid-teal">
+    <h3 class="no-bottom-margin">Comments</h3>
 
-<p class="bold">Comments</p>
-{% if notice.message %}
-<div>
-    <hr>
-    {% if notice.placed_by_institution %}
-        <span class="weight-500">{{ notice.placed_by_institution.institution_name }}</span>
-        <span class="grey-text">{{ notice.created|date:'m/d/Y' }}</span><br>
+    {% if researcher or institution %}
+        {% if notice.notice_status.all %}
+            {% for status in notice.notice_status.all %}
 
-        <p>{{ notice.message }}</p>
-    {% endif %}
+                <div><p><span class="bold">{{ status.community }}</span> -- Status: {{ status.status }}</p></div>
 
-    {% if notice.placed_by_researcher %}
-        <span class="weight-500">{{ notice.placed_by_researcher.user.get_full_name }}</span>
-        <span class="grey-text">{{ notice.created|date:'m/d/Y' }}</span><br>
+                {% if status.community.comment_community.all %}
+                    {% for comment in status.community.comment_community.all %}
+                        <div>
+                            <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                            <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                            <p>{{ comment.message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
 
-        <p>{{ notice.message }}</p>
-    {% endif %}
-</div>
-{% endif %}
+                {% if member_role == 'viewer' %} {% else %}
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ status.community.id }}" name="community-id">
+                        <input type="hidden" value="{{ notice.id }}" name="notice-id">
+                        <div class="flex-this row">
+                            <div class="w-100">{{ form.message }}</div>
+                            <div class="margin-left-1"><button class="action-btn" name="add-comment-btn">Send</button></div>
+                        </div>
+                        {% if form.errors %} {{ form.errors }} {% endif %}
+                    </form>
+                {% endif %}  
 
-{% if notice.notice_comment.all %}
-{% for comment in notice.notice_comment.all %}
-    {% if community == comment.community %}
-        <div>
-            <span class="weight-500">{{ comment.sender.get_full_name }}</span>
-            <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-            <p>{{ comment.message }}</p>
-        </div>
-    {% endif %}
-{% endfor %}
-{% endif %}
-
-{% if member_role == 'viewer' %}
-
-{% else %}
-    <form method="POST" action="">
-        {% csrf_token %}
-        <input type="hidden" value="{{ notice.id }}" name="notice-id">
-        <div class="flex-this row">
-            <div class="w-100">
-                {{ form.message }}
-            </div>
-            <div style="margin-left:-55px; margin-top:7px;">
-                <button style="border: none; color:teal; background-color:#fff; cursor: pointer;" name="add-comment-btn">Send</button>
-            </div>
-        </div>
-
-        {% if form.errors %}
-            {{ form.errors }}
+            {% endfor %}
         {% endif %}
-    </form>
-{% endif %}
+    {% endif %}
+
+    {% if community %}
+
+    {% if notice.notice_comment.all %}
+
+        <div>
+            <p><span class="bold">
+            {% if notice.placed_by_researcher %} {{ notice.placed_by_researcher.user.get_full_name }} {% endif %}
+            {% if notice.placed_by_institution %} {{ notice.placed_by_institution.institution_name }} {% endif %}
+        </span></p>
+    </div>
+
+        {% for comment in notice.notice_comment.all %}
+            {% if community == comment.community %}
+                <div>
+                    <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                    <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                    <p>{{ comment.message }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {% if member_role == 'viewer' %} {% else %}
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input type="hidden" value="{{ notice.id }}" name="notice-id">
+                <div class="flex-this row">
+                    <div class="w-100">{{ form.message }}</div>
+                    <div class="margin-left-1"><button class="action-btn" name="add-comment-btn">Send</button></div>
+                </div>
+                {% if form.errors %} {{ form.errors }} {% endif %}
+            </form>
+        {% endif %}  
+    {% endif %}
+
+    {% endif %}
+
+</div>

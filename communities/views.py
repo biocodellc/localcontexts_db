@@ -381,6 +381,7 @@ def projects(request, pk):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         notices = Notice.objects.filter(communities=community)
+        form = NoticeCommentForm(request.POST or None)
 
         # Form: Notify project contributor if notice was seen
         if request.method == "POST" and "notify-btn" in request.POST:
@@ -431,8 +432,6 @@ def projects(request, pk):
             # Which notice ?
             notice_exists = Notice.objects.filter(id=notice_id).exists()
 
-            form = NoticeCommentForm(request.POST or None)
-
             if notice_exists:
                 notice = Notice.objects.get(id=notice_id)
                 status = NoticeStatus.objects.get(notice=notice, community=community)
@@ -451,16 +450,13 @@ def projects(request, pk):
 
                     return redirect('community-projects', community.id)
 
-        else:
-            form = NoticeCommentForm()
-
-            context = {
-                'notices': notices,
-                'community': community,
-                'member_role': member_role,
-                'form': form,
-            }
-            return render(request, 'communities/projects.html', context)
+        context = {
+            'notices': notices,
+            'community': community,
+            'member_role': member_role,
+            'form': form,
+        }
+        return render(request, 'communities/projects.html', context)
 
 # Create Project
 @login_required(login_url='login')

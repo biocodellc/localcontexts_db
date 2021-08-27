@@ -66,10 +66,7 @@ def update_researcher(request, pk):
 @login_required(login_url='login')
 def researcher_notices(request, pk):
     researcher = Researcher.objects.get(id=pk)
-
-    context = {
-        'researcher': researcher,
-    }
+    context = {'researcher': researcher,}
     return render(request, 'researchers/notices.html', context)
 
 
@@ -81,8 +78,8 @@ def researcher_projects(request, pk):
 
     if request.method == 'POST':
         notice_id = request.POST.get('notice-id')
-        community_id = request.POST.get('community-id')
-        community = Community.objects.get(id=community_id)
+        # community_id = request.POST.get('community-id')
+        # community = Community.objects.get(id=community_id)
 
         if form.is_valid():
             data = form.save(commit=False)
@@ -92,7 +89,7 @@ def researcher_projects(request, pk):
                 data.notice = notice
 
             data.sender = request.user
-            data.community = community
+            # data.community = community
             data.save()
             
             return redirect('researcher-projects', researcher.id)

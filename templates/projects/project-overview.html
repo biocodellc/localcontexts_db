@@ -27,18 +27,6 @@
                     {% endif %}
                 </div>
             </div>
-
-            {% which_communities_notified project as statuses %}
-            {% if statuses %}
-                <div>
-                    <p>
-                        <span class="bold">Communities Notified</span><br>
-                        {% for status in statuses %}
-                            {{ status.community.community_name }}<br>
-                        {% endfor %}
-                    </p>
-                </div>
-            {% endif %}
         </div>
 
         <div class="w-40 flex-this column align-right margin-top-16">
@@ -157,6 +145,21 @@
         {% endif %}
 
         <div class="flex-this column">
+
+            {% which_communities_notified project as statuses %}
+            {% if statuses %}
+                <div>
+                    <p>
+                        <span class="bold">Communities Notified</span><br>
+                        {% for status in statuses %}
+                            {{ status.community.community_name }} - Seen: {{ status.seen }} - {{ status.status}} <br>
+                        {% endfor %}
+                    </p>
+                </div>
+
+            {% endif %}
+
+
             {% if project.project_notice.all %}
                 {% for notice in project.project_notice.all %}
                     {% if community %}
