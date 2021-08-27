@@ -1021,6 +1021,16 @@ input:focus {
     height: 550px;
 }
 
+/* ORCID MODAL */
+.orcid-modal {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 5px;
+    width: 436px;
+    height: 295px;
+}
+
   /* Tooltips */
   /* Tooltip container */
 .tooltip {
