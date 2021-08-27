@@ -6,18 +6,20 @@
         <p class="no-top-margin no-bottom-margin">A researcher is a person who carries out academic or scientific research independently or in an institution, such as archive, library, museum, historical society, gallery, data repository, or university.</p>
     </div>
 
-    <div><p>Please provide us with your Orcid ID. An ORCID provides a persistent digital identifier (an ORCID iD) that you own and control. Learn more <a href="https://orcid.org/" target="_blank">here</a>.</p></div>
-
     <form action="{% url 'connect-researcher' %}" method="POST" class="flex-this column w-100" id="createResearcher">
         {% csrf_token %}
 
-        <!-- Leave for local testing -->
-        <!-- <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="http://localhost:8000/researchers/connect-researcher/"></div> -->
-        <!-- Prod sandbox orcid -->   
-        <!-- <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div> -->
+        <div class="flex-this space-between">
+            <div class="w-50"><p>We encourage you to have an ORCiD ID. <br>You can <a href="https://orcid.org/" target="_blank">read more about ORCiD here</a>.</p></div>
+            
+            <!-- Leave for local testing -->
+            <!-- <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="http://localhost:8000/researchers/connect-researcher/"></div> -->
+            <!-- Prod sandbox orcid -->   
+            <!-- <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div> -->
 
-        <!-- PROD ORCID -->
-        <div id="orcidWidget" data-clientid='APP-IBW6UOF5FGJG0ODB' data-env="production" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div>
+            <!-- PROD ORCID -->
+            <div id="orcidWidget" data-clientid='APP-IBW6UOF5FGJG0ODB' data-env="production" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div>
+        </div>
 
         <div>
             <label for="primary_institution">Primary Institution</label>
