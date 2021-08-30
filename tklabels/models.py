@@ -27,6 +27,7 @@ class TKLabel(models.Model):
         ('women_restricted', 'women_restricted'),  
         ('secret_sacred', 'secret_sacred'),  
         ('open_to_collaboration', 'open_to_collaboration'),  
+        ('creative', 'creative'),  
     )
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="tklabel_creator")

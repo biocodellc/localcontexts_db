@@ -105,4 +105,6 @@ def get_tklabel_img_url(img_type, *args, **kwargs):
         image_path = 'images/tk-labels/tk-outreach.png'
     elif img_type =='tkcb':
         image_path = 'images/tk-labels/tk-open-to-collaboration.png'
+    elif img_type =='tkcr':
+        image_path = 'images/tk-labels/tk-creative.png'
     return static(image_path)
