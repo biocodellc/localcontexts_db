@@ -1031,7 +1031,7 @@ input:focus {
     height: 295px;
 }
 
-  /* Tooltips */
+  /* TOOLTIPS */
   /* Tooltip container */
 .tooltip {
     position: relative;
@@ -1054,7 +1054,7 @@ input:focus {
     background-color: #EF6C00;
     color: #fff;
     text-align: center;
-    padding: 10px 0;
+    padding: 10px 7px;
     border-radius: 5px;
   
     /* Position the tooltip text */

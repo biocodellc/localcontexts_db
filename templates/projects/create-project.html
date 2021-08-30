@@ -15,7 +15,7 @@
         
             <div class="margin-top-16">
                 <h2>Create a Local Contexts Project</h2>
-                <p>A Local Contexts project supports the application of the Local Contexts Notices to a traditional knowledge materials your group would like to share. </p>
+                <p>A Local Contexts project supports the application of the Local Contexts Notices to traditional knowledge materials your group would like to share. </p>
         
                 <h3>Project Overview</h3>
         
@@ -23,12 +23,15 @@
                     {% csrf_token %}
         
                     <div class="border-bottom-dash-teal padding-bottom-1">
-                        <label>What type of project are you applying the Notice to?*</label><br>
+                        <label>
+                            {% if community %} What type of project are you applying Labels to?* {% else %} What type of project are you applying a Notice to?* {% endif %}
+                        </label>
+                        <br>
                         {{ form.project_type }} <br>
                     </div>
         
                     <div class="margin-bottom-1 margin-top-1">
-                        {{ form.project_privacy.label }} <br> {{ form.project_privacy }}
+                        {{ form.project_privacy.label }}* <br> {{ form.project_privacy }}
                     </div>
         
                     <h3>Project Details</h3>
@@ -37,12 +40,20 @@
                         Please try to keep this section as informative as you can.
                     </p>
                     <div class="padding-bottom-1 w-50">
-                        <label>Project Title*</label><br>
+                        <label>Project Title*</label>
+                        <div class="tooltip"><strong>?</strong>
+                            <span class="tooltiptext">The project title should relate to the subject that is being captured in this project</span>
+                        </div>
+                        <br>
                         {{ form.title }} <br>
                     </div>
         
                     <div class="padding-bottom-1 w-50">
-                        <label>Project Description*</label><br>
+                        <label>Project Description*</label>
+                        <div class="tooltip"><strong>?</strong>
+                            <span class="tooltiptext">The description can be thought of as an abstract or short summary of the project</span>
+                        </div>
+                        <br>
                         {{ form.description }} <br>
                     </div>
         
@@ -61,7 +72,11 @@
         
         
                     <div class="padding-bottom-1 w-50">
-                        <label>Project Link (if applicable)</label><br>
+                        <label>Project Link (if applicable)</label>
+                        <div class="tooltip"><strong>?</strong>
+                            <span class="tooltiptext">A relevant link to the object entry, collection or database</span>
+                        </div>
+                        <br>
                         {{ form.url }} <br>
                     </div>
         
@@ -77,7 +92,11 @@
                     </div>
         
                     <div class="padding-bottom-1 w-50">
-                        <label>Recommended Citation</label><br>
+                        <label>Recommended Citation</label>
+                        <div class="tooltip"><strong>?</strong>
+                            <span class="tooltiptext">Recommended citation is how you would like this project to be credited or cited, such as in a publication</span>
+                        </div>
+                        <br>
                         {{ form.recommended_citation }} <br>
                     </div>
         
@@ -89,12 +108,20 @@
                     </p>
         
                     <div class="padding-bottom-1 w-50">
-                        <label>Project Data GUID</label><br>
+                        <label>Project Data GUID</label>
+                        <div class="tooltip"><strong>?</strong>
+                            <span class="tooltiptext">A globally unique identifier for the data in this project. Recommended to use a resolvable URL containing a DOI or ARK identifier. Coming soon is the ability to generate a DOI here. GEOME does not automatically assign identifiers for all datasets since many datasets have been given GUIDs elsewhere</span>
+                        </div>
+                        <br>
                         {{ form.project_data_guid }} <br>
                     </div>
         
                     <div class="padding-bottom-1 w-50">
-                        <label>Project DOI</label><br>
+                        <label>Project DOI</label>
+                        <div class="tooltip"><strong>?</strong>
+                            <span class="tooltiptext">A globally unique identifier for a publication</span>
+                        </div>
+                        <br>
                         {{ form.publication_doi }} <br>
                     </div>
 

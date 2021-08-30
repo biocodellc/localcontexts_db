@@ -9,9 +9,11 @@ class Project(models.Model):
     TYPES = (
         ('Item', 'Item'),
         ('Collection', 'Collection'),
+        ('Sample', 'Sample'),
         ('Expedition', 'Expedition'),
         ('Publication', 'Publication'),
-        ('Sample', 'Sample'),
+        ('Exhibition', 'Exhibition'),
+        ('Other', 'Other'),
     )
     PRIVACY_LEVEL = {
         ('Public', 'Public'),
