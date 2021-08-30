@@ -37,6 +37,8 @@ def check_tklabel_type(label):
         return 'secret_sacred'
     if label == 'tkcb':
         return 'open_to_collaboration'
+    if label == 'tkcr':
+        return 'creative'
     if label == 'placeholder':
         return False
 

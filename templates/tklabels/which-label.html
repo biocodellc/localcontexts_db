@@ -154,4 +154,12 @@
             {% endif %}
         {% endif %}
 
+        {% if tklabel.label_type == 'creative' %}
+            {% if tklabel.is_approved == False %}
+                <img class="opacity-4 img-sizedown-151-116" src="{% static 'images/tk-labels/tk-creative.png' %}" alt="TK Creative (TK CR) Label">
+            {% else %}
+                <img class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-creative.png' %}" alt="TK Creative (TK CR) Label">
+            {% endif %}
+        {% endif %}
+
     </div>

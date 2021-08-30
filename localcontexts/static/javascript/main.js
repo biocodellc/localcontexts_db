@@ -107,6 +107,7 @@ var tkMenRestrictedName = 'TK Men Restricted (TK MR)'
 var tkWomenRestrictedName = 'TK Women Restricted (TK WR)'
 var tkSecretSacredName = 'TK Secret / Sacred (TK SS)'
 var tkOpenToCollaborationName = 'TK Open to Collaboration (TK CB)'
+var tkCreativeName = 'TK Creative (TK CR)'
 
 var tkAttributionUse = 'This label should be used when you would like anyone who uses this material to know who the correct sources, custodians, owners are. This is especially useful if this material has been wrongly attributed or important names of the people involved in making this material or safeguarding this material, are missing. This label allows you to correct historical mistakes in terms of naming and acknowledging the legitimate authorities for this material. This label asks for future users to also apply the correct names and attribution.'
 var tkClanUse = 'This Label should be used when you would like external users to know that this material is subject to conditions for circulation relating to clan membership and or is according to protocols for clan relationships. Because these conditions have not historically been recognized, this Label helps make these conditions for use and circulation clearer. Specifically, the Label asks future users to respect culturally specific rules of use and to make informed decisions about using this type of material.'
@@ -127,6 +128,7 @@ var tkMenRestrictedUse = 'This label should be used when you want to let externa
 var tkWomenRestrictedUse = 'This label should be used when you want to let external users know that the material circulating freely is actually of a highly restricted nature. This is a women’s highly restricted label and indicates that there are restrictions of access and use based on customary law. This label can be used to help external users recognize that with this material there are very specific protocols and conditions of use. This label is designed to recognize that some knowledge is gendered, and that certain knowledge expressions can only be shared among specific members of the community. Only authorized [and/or initiated] women within the community should be using this material.'
 var tkSecretSacredUse = 'This label should be used when you want to let external users know that the material that is openly circulating contains secret/sacred information and that it has specific conditions of access and use. These conditions potentially include restrictions upon access. Using this label helps to alert external users that this material is special and requires respectful and careful treatment. It asks users to make different decisions about using it and, importantly, to discuss any potential use with you.'
 var tkOpenToCollaborationUse = 'This Label is being used to indicate that the community is open to research collaborations. With this Label, future opportunities for collaboration and engagement are supported.'
+var tkCreativeUse = 'This Label should be used when an individual artist or author would like to clearly connect creative practices with traditional knowledge deriving from their own community. While an individual artist or author has standard copyright and creative commons licenses available to use, this Label helps make clear that a creative practice is also deeply connected to a collective responsibility around the use and sharing of traditional knowledge.'
 
 var tkAttributionText = 'This label is being used to correct historical mistakes or exclusions pertaining to this material. This is especially in relation to the names of the people involved in performing or making this work and/or correctly naming the community from which it originally derives. As a user you are being asked to also apply the correct attribution in any future use of this work.'
 var tkClanText = 'This Label is being used to indicate that this material is traditionally and usually not publicly available. The Label lets future users know that this material has specific conditions for use and sharing because of clan membership and/or relationships. This material is not, and never was, free, public and available for everyone. This Label asks viewers of these materials to respect the cultural values and expectations about circulation and use defined by designated clans, members and their internal relations.'
@@ -147,7 +149,7 @@ var tkMenRestrictedText = 'This material has specific gender restrictions on acc
 var tkWomenRestrictedText = 'This material has specific gender restrictions on access. It is regarded as important secret and/or ceremonial material that has community-based laws in relation to who can access it. Given its nature it is only to be accessed and used by authorized [and initiated] women in the community. If you are an external third party user and you have accessed this material, you are requested to not download, copy, remix or otherwise circulate this material to others. This material is not freely available within the community and it therefore should not be considered freely available outside the community. This label asks you to think about whether you should be using this material and to respect different cultural values and expectations about circulation and use.'
 var tkSecretSacredText = 'This label is being used to indicate that this material is traditionally and usually not publicly available because it contains important secret or sacred components. The label is correcting a misunderstanding about the significance of this material and therefore its circulation conditions. It is letting users know that because of its secret/sacred status it is not, and was never free, public and available for everyone at anytime. This label asks you to think about whether you should be using this material and to respect different cultural values and expectations about circulation and use.'
 var tkOpenToCollaborationText = 'This Label is being used to make clear [community name or authorizing body] is open to future engagement, collaboration, and partnership around research opportunities.'
-
+var tkCreativeText = 'This Label is being used to acknowledge the relationship between the creative practices of [name] and [community name] and the associated cultural responsibilities.'
 
 // Expand BC Labels Card in Community: Labels -> select-labels
 function showBCLabelInfo() {
@@ -312,7 +314,7 @@ function whichTKImgClicked(val) {
     var inputProt = document.getElementById('tk-label-value-type-prot')
     var inputPerms = document.getElementById('tk-label-value-type-perms')
 
-    if(val == 'tka' || val == 'tkcl' || val == 'tkf' || val == 'tkmc' || val == 'tkcv') {
+    if(val == 'tka' || val == 'tkcl' || val == 'tkf' || val == 'tkmc' || val == 'tkcv' || val == 'tkcr') {
         inputProv.value = val
     } else if (val == 'tks' || val == 'tkwg' || val == 'tkmg' || val == 'tkmr' || val == 'tkwr' || val == 'tkcs' || val == 'tkss') {
         inputProt.value = val
@@ -484,7 +486,11 @@ function populateTemplate(id) {
             hiddenInput.value = tkOpenToCollaborationName
             templateText.textContent = tkOpenToCollaborationText
             break;
-                                                                                                                
+        case 'tkcr':
+            title.innerHTML = tkCreativeName
+            hiddenInput.value = tkCreativeName
+            templateText.textContent = tkCreativeText
+            break;
     }
 
 }
@@ -738,6 +744,13 @@ function expandTKLabel(img) {
             titlePerms.textContent = tkOpenToCollaborationName
             templateTextPerms.textContent = tkOpenToCollaborationText
             whyUseLabelTextPerms.textContent = tkOpenToCollaborationUse
+            break;
+        case 'tkcr':
+            openInfoDiv(infoProv)
+            whichTKImgClicked('tkcr')
+            titleProv.textContent = tkCreativeName
+            templateTextProv.textContent = tkCreativeText
+            whyUseLabelTextProv.textContent = tkCreativeUse
             break;
     }
 
@@ -1108,7 +1121,7 @@ function copyToClipboard() {
 }
 
 // Connect-researcher: ORCiD popup
-let createResearcherBtn = document.getElementById('submitResearcher')
+var createResearcherBtn = document.getElementById('submitResearcher')
 if (createResearcherBtn) {
     createResearcherBtn.addEventListener('click', function(event) {
         event.preventDefault()
