@@ -27,7 +27,9 @@
                             <div class="w-100">{{ form.message }}</div>
                             <div class="margin-left-1"><button class="action-btn" name="add-comment-btn">Send</button></div>
                         </div>
-                        {% if form.errors %} {{ form.errors }} {% endif %}
+                        {% if form.errors %}
+                            <small class="red-text"> {{ form.errors }}</small>
+                        {% endif %}
                     </form>
                 {% endif %}  
 
@@ -64,7 +66,9 @@
                     <div class="w-100">{{ form.message }}</div>
                     <div class="margin-left-1"><button class="action-btn" name="add-comment-btn">Send</button></div>
                 </div>
-                {% if form.errors %} {{ form.errors }} {% endif %}
+                {% if form.errors %}
+                    <small class="red-text"> {{ form.errors }}</small>
+                {% endif %}
             </form>
         {% endif %}  
     {% endif %}

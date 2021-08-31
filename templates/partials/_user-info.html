@@ -8,9 +8,9 @@
         <div class="flex-this dash-btn-container space-between">
             <div><a onclick="showUserNotifications(this)" class="action-btn">Notifications <i class="fa fa-bell" aria-hidden="true"></i></a></div>
             {% if 'update-profile' in request.path %}
-                <div><a href="{% url 'update-profile' %}" class="active-dash-driver-btn">My Profile <i class="fa fa-user" aria-hidden="true"></i></a></div>
+                <div><a href="{% url 'update-profile' %}" class="active-dash-driver-btn">Settings <i class="fa fa-user" aria-hidden="true"></i></a></div>
             {% else %}
-            <div><a href="{% url 'update-profile' %}" class="white-text action-btn">My Profile <i class="fa fa-user" aria-hidden="true"></i></a></div>
+            <div><a href="{% url 'update-profile' %}" class="white-text action-btn">Settings <i class="fa fa-user" aria-hidden="true"></i></a></div>
             {% endif %}
         </div>
 
