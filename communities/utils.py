@@ -9,7 +9,6 @@ def checkif_community_in_user_community(user, community):
     community_list = u.communities.all()
 
     if community in community_list:
-        print('################# USER ALREADY A MEMBER ########################')
         return True
     else:
         return False
@@ -33,16 +32,9 @@ def check_member_role(user, community):
 
         elif user in viewers:
             return 'viewer'
-        else:
-            print('something went wrong, user does not have a role.')
     else:
         return False
 
 def checkif_invite_exists(user, community):
     invite = InviteMember.objects.filter(receiver=user, community=community).exists()
-
-    if invite:
-        print(" #########   INVITATION ALREADY EXISTS  ######### ")
-        return True
-    else:
-        return False   
+    return invite

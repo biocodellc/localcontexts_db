@@ -15,78 +15,80 @@
                 >> {{ researcher.user.get_full_name }}
             </div>
 
-            <!-- Notifications -->
-            <div class="flex-this w-20 space-between">
-                <div class="dropdown">
-                    <a onclick="toggleNotifications()" class="darkteal-text pointer dropbtn"> 
-                        Notifications 
-                        {% if unread_exist %}
-                            <i class="fa fa-bell orange-text" aria-hidden="true"></i>
-                        {% else %}
-                            <i class="fa fa-bell-o" aria-hidden="true"></i>
-                        {% endif %}
-                    </a>
-                        <div id="notification-v2" class="notification-dropdown-content">
-                        <div class="border-bottom-solid-teal center-text">
-                            <span class="orange-text weight-500">{{ researcher.user.get_full_name }} Notifications</span>
-                        </div>
+            {% if user_can_view %}
+                <!-- Notifications -->
+                <div class="flex-this w-20 space-between">
+                    <div class="dropdown">
+                        <a onclick="toggleNotifications()" class="darkteal-text pointer dropbtn"> 
+                            Notifications 
+                            {% if unread_exist %}
+                                <i class="fa fa-bell orange-text" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="fa fa-bell-o" aria-hidden="true"></i>
+                            {% endif %}
+                        </a>
+                            <div id="notification-v2" class="notification-dropdown-content">
+                            <div class="border-bottom-solid-teal center-text">
+                                <span class="orange-text weight-500">{{ researcher.user.get_full_name }} Notifications</span>
+                            </div>
 
-                        {% if notifications %}
-                            {% for n in notifications %}
+                            {% if notifications %}
+                                {% for n in notifications %}
 
-                                <div class="border-bottom-solid-teal">
-                                    {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
-                                        {% if n.reference_id %}
-                                            <a href="{% anchor 'researcher-projects' n.reference_id researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
-                                        {% else %}
-                                            <a href="{% url 'researcher-projects' researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
+                                    <div class="border-bottom-solid-teal">
+                                        {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
+                                            {% if n.reference_id %}
+                                                <a href="{% anchor 'researcher-projects' n.reference_id researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
+                                            {% else %}
+                                                <a href="{% url 'researcher-projects' researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
+                                            {% endif %}
                                         {% endif %}
-                                    {% endif %}
-                                    {% if n.notification_type == 'Connections' %}
-                                        <a href="#" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
-                                    {% endif %}
-                                        <div class="flex-this space-between margin-top-1">
-                                            <div>
-                                                <span id="notification-label-tag-{{ n.id }}"
-                                                    {% if n.viewed %} 
-                                                        class="notification-type-tag grey white-text font-size-12"
-                                                    {% else %}
-                                                        class="notification-type-tag orange-bg white-text font-size-12"
+                                        {% if n.notification_type == 'Connections' %}
+                                            <a href="#" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
+                                        {% endif %}
+                                            <div class="flex-this space-between margin-top-1">
+                                                <div>
+                                                    <span id="notification-label-tag-{{ n.id }}"
+                                                        {% if n.viewed %} 
+                                                            class="notification-type-tag grey white-text font-size-12"
+                                                        {% else %}
+                                                            class="notification-type-tag orange-bg white-text font-size-12"
+                                                        {% endif %}
+                                                    >
+                                                    {% if n.notification_type == 'Notices' %}
+                                                        Notices
                                                     {% endif %}
-                                                >
-                                                {% if n.notification_type == 'Notices' %}
-                                                    Notices
-                                                {% endif %}
-                                                {% if n.notification_type == 'Labels' %}
-                                                    Labels
-                                                {% endif %}
-                                                {% if n.notification_type == 'Activity' %}
-                                                    Activity
-                                                {% endif %}
-                                                {% if n.notification_type == 'Projects' %}
-                                                    Projects
-                                                {% endif %}
-                                                {% if n.notification_type == 'Connections' %}
-                                                    Connections
-                                                {% endif %}
-                                            </span></div>
-                                            <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
-                                        </div>
-        
-                                        <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
-                                    </a>
-                                </div>
+                                                    {% if n.notification_type == 'Labels' %}
+                                                        Labels
+                                                    {% endif %}
+                                                    {% if n.notification_type == 'Activity' %}
+                                                        Activity
+                                                    {% endif %}
+                                                    {% if n.notification_type == 'Projects' %}
+                                                        Projects
+                                                    {% endif %}
+                                                    {% if n.notification_type == 'Connections' %}
+                                                        Connections
+                                                    {% endif %}
+                                                </span></div>
+                                                <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
+                                            </div>
+            
+                                            <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
+                                        </a>
+                                    </div>
 
-                            {% endfor %}
-                        {% endif %}
+                                {% endfor %}
+                            {% endif %}
 
+                        </div>
                     </div>
-                </div>
 
-                <div>
-                    <a href="{% url 'researcher-update' researcher.id %}" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
+                    {% if user_can_view %}
+                        <div><a href="{% url 'researcher-update' researcher.id %}" class="darkteal-text"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a></div>
+                    {% endif %}
                 </div>
-            </div>
+            {% endif %}
             
         </div>
             <!-- Image, headers, description -->
