@@ -1,0 +1,22 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
+<section class="grey-bg">
+    {% if community %}
+        {% include 'partials/_community-info.html' %}
+        {% include 'partials/_subnav.html' %}
+        {% block community_content %}{% endblock %}
+    {% endif %}
+
+    {% if institution %}
+        {% include 'partials/_institution-info.html' %}
+        {% include 'partials/_subnav.html' %}
+        {% block institution_content %}{% endblock %}
+    {% endif %}
+
+    {% if researcher %}
+        {% include 'partials/_researcher-info.html' %}
+        {% include 'partials/_subnav.html' %}
+        {% block researcher_content %}{% endblock %}
+    {% endif %}
+</section>
+{% include 'partials/_auth-footer.html' %}
+{% endblock %}
