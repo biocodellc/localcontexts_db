@@ -1,4 +1,4 @@
-{% extends 'research-base.html' %} {% block title %} | Projects {% endblock %}{% load static %}{% load custom_researcher_tags %}{% block researcher_content %}
+{% extends 'sub-base.html' %} {% block title %} | Projects {% endblock %}{% load static %}{% load custom_researcher_tags %}{% block researcher_content %}
 {% researcher_contributing_projects researcher as researcher_projects_contrib %}
 
     {% include 'projects/projects.html' %}
