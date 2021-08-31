@@ -1,24 +1,31 @@
 <!-- footer for when the user is authenticated -->
 {% load static %}
 
-<footer id="auth-footer-container" class="white-text flex-this column">
+<footer class="auth-footer-container white-text flex-this column">
 
-    <div id="auth-footer-content">
-        <h4 class="weight-500">
+    <div class="auth-footer-content">
+        <div>
             <a class="white-text" href="https://localcontexts.org/contact/"> Contact Us </a> | 
             <a class="white-text" href="https://localcontexts.org/about/about-local-contexts/">About Us</a> | 
             <a class="white-text" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/LC%20Privacy%20Policy.pdf" target="_blank">Privacy Policy <i class="fa fa-external-link" aria-hidden="true"></i></a> | 
             <a class="white-text" href="{% url 'api-overview' %}">API</a>
-        </h4>
+        </div>
 
-        <h4 id="underline" class="weight-500"> Creative Commons License</h4>
-        <p class="landing-p">
-            This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.<br> 
-    
-            All images and marks are subject to copyright and trademark protection. <br>
-    
-            All educational material is being shared collaboratively but does not constitute binding legal advice.
-        </p>
+        <div class="no-top-margin flex-this socials-container">
+            <div class="margin-right-16 socials"><a href="https://twitter.com/localcontexts" class="white-text"><i class="fa fa-twitter" aria-hidden="true"></i></a></div>
+            <div class="margin-right-16 socials"><a href="https://instagram.com/localcontexts" class="white-text"><i class="fa fa-instagram" aria-hidden="true"></i></a></div>
+            <div class="margin-right-16 socials"><a href="https://www.facebook.com/localcontexts" class="white-text"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></div>
+        </div>
+
+        <div>
+            <h4 class="underline weight-500"> Creative Commons License</h4>
+            <p class="no-bottom-margin">
+                This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.<br> 
+                All images and marks are subject to copyright and trademark protection. <br>
+                All educational material is being shared collaboratively but does not constitute binding legal advice.
+            </p>            
+        </div>
+
     </div>
 
     {% include 'snippets/footer-logos.html' %}
