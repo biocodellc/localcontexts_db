@@ -78,6 +78,7 @@ def researcher_projects(request, pk):
 
     if request.method == 'POST':
         notice_id = request.POST.get('notice-id')
+        # TODO: Fix this
         # community_id = request.POST.get('community-id')
         # community = Community.objects.get(id=community_id)
 
