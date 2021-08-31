@@ -193,7 +193,9 @@
 
                     {% endif %}
         
-                    {{ form.errors }}
+                    {% if form.errors %}
+                        <small class="red-text"> {{ form.errors }}</small>
+                    {% endif %}
                     <button class="action-btn margin-top-2 ">Save Project</button>
         
                 </form>

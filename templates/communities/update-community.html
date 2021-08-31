@@ -83,7 +83,7 @@
 
                                 {% include 'partials/_alerts.html' %}
                                 {% if update_form.errors %}
-                                    {{ update_form.errors }}
+                                    <small class="red-text"> {{ update_form.errors }}</small>
                                 {% endif %}
 
                             <div class="margin-bottom-8">
