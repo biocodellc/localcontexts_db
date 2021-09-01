@@ -22,11 +22,8 @@ def define(val=None):
 
 @register.simple_tag
 def which_communities_notified(project):
-    if project.project_notice.all().exists():
-        notices = Notice.objects.filter(project=project)
-        for notice in notices:
-            statuses = ProjectStatus.objects.filter(project=project)
-            return statuses
+    statuses = project.project_status.all()
+    return statuses
 
 @register.simple_tag
 def discoverable_project_view(user, project_uuid):

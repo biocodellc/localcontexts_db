@@ -3,8 +3,8 @@
     <h3 class="no-bottom-margin">Comments</h3>
 
     {% if researcher or institution %}
-        {% if notice.notice_status.all %}
-            {% for status in notice.notice_status.all %}
+        {% if project.project_status.all %}
+            {% for status in project.project_status.all %}
 
                 <div><p><span class="bold">{{ status.community }}</span> -- Status: {{ status.status }}</p></div>
 
@@ -38,42 +38,40 @@
     {% endif %}
 
     {% if community %}
+        {% if project.project_comment.all %}
 
-    {% if project.project_comment.all %}
+            <div>
+                    <p><span class="bold">
+                    {% if project.project_notice.placed_by_researcher %} {{ project.project_notice.placed_by_researcher.user.get_full_name }} {% endif %}
+                    {% if project.project_notice.placed_by_institution %} {{ project.project_notice.placed_by_institution.institution_name }} {% endif %}
+                </span></p>
+            </div>
 
-        <div>
-            <p><span class="bold">
-            {% if project.project_notice.placed_by_researcher %} {{ project.project_notice.placed_by_researcher.user.get_full_name }} {% endif %}
-            {% if project.project_notice.placed_by_institution %} {{ project.project_notice.placed_by_institution.institution_name }} {% endif %}
-        </span></p>
-    </div>
-
-        {% for comment in project.project_comment.all %}
-            {% if community == comment.community %}
-                <div>
-                    <span class="weight-500">{{ comment.sender.get_full_name }}</span>
-                    <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-                    <p>{{ comment.message }}</p>
-                </div>
-            {% endif %}
-        {% endfor %}
-
-        {% if member_role == 'viewer' %} {% else %}
-            <form method="POST" action="">
-                {% csrf_token %}
-                <!-- <input type="hidden" value="{{ notice.id }}" name="notice-id"> -->
-                <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
-                <div class="flex-this row">
-                    <div class="w-100">{{ form.message }}</div>
-                    <div class="margin-left-1"><button class="action-btn" name="add-comment-btn">Send</button></div>
-                </div>
-                {% if form.errors %}
-                    <small class="red-text"> {{ form.errors }}</small>
+            {% for comment in project.project_comment.all %}
+                {% if community == comment.community %}
+                    <div>
+                        <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                        <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                        <p>{{ comment.message }}</p>
+                    </div>
                 {% endif %}
-            </form>
-        {% endif %}  
-    {% endif %}
+            {% endfor %}
 
+            {% if member_role == 'viewer' %} {% else %}
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <!-- <input type="hidden" value="{{ notice.id }}" name="notice-id"> -->
+                    <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
+                    <div class="flex-this row">
+                        <div class="w-100">{{ form.message }}</div>
+                        <div class="margin-left-1"><button class="action-btn" name="add-comment-btn">Send</button></div>
+                    </div>
+                    {% if form.errors %}
+                        <small class="red-text"> {{ form.errors }}</small>
+                    {% endif %}
+                </form>
+            {% endif %}  
+        {% endif %}
     {% endif %}
 
 </div>

@@ -989,16 +989,17 @@ function cancelCommunitySelection(elem) {
     inputDivToRemove.innerHTML = ``
 }
 
-// Communities: Activity: Notify 
-function setNoticeID(elem) {
+// Communities: Projects: Notify status
+function setProjectUUID(elem) {
     let elementId = elem.id
-    let noticeID = elementId.slice(7)
+    let projectID = elementId.slice(7)
     let statusSelect = document.getElementById(elementId)
-    let noticeIdInput = document.getElementById(`notice-id-input-${noticeID}`)
-    let statusSelectedInput = document.getElementById(`status-selection-input-${noticeID}`)
+    let projectIdInput = document.getElementById(`project-id-input-${projectID}`)
+    let statusSelectedInput = document.getElementById(`status-selection-input-${projectID}`)
 
-    // Set first hidden value to notice UUID
-    noticeIdInput.value = noticeID
+    // Set first hidden value to project UUID
+    projectIdInput.value = projectID
+    console.log(projectIdInput)
     // Set second hidden value to value of option selected
     statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
 }

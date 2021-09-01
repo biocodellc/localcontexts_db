@@ -390,7 +390,7 @@ def projects(request, pk):
             if project_uuid != None and project_uuid != 'placeholder':
                 project_status = request.POST.get('project-status')
 
-                project = Project.objects.get(id=project_uuid)
+                project = Project.objects.get(unique_id=project_uuid)
                 reference_id = project.unique_id
                 statuses = ProjectStatus.objects.filter(project=project, community=community)
 
@@ -404,24 +404,26 @@ def projects(request, pk):
                         status.status = 'pending'
                         status.save()
 
-                        truncated_project_title = str(project.title)[0:30]
-                        title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
-                        if project.project_notice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=project.project_notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
-                        if project.project_notice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=project.project_notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
+                        # TODO: Fix these
+                        # truncated_project_title = str(project.title)[0:30]
+                        # title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                        # if project.project_notice.placed_by_institution:
+                        #     ActionNotification.objects.create(title=title, institution=project.project_notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
+                        # if project.project_notice.placed_by_researcher:
+                        #     ActionNotification.objects.create(title=title, researcher=project.project_notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
 
                     if project_status == 'not_pending':
                         status.seen = True
                         status.status = 'not_pending'
                         status.save()
 
-                        truncated_project_title = str(project.project_notice.project.title)[0:30]
-                        title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
-                        if project.project_notice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=project.project_notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
-                        if project.project_notice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=project.project_notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
+                        # TODO: Fix these
+                        # truncated_project_title = str(project.project_notice.project.title)[0:30]
+                        # title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                        # if project.project_notice.placed_by_institution:
+                        #     ActionNotification.objects.create(title=title, institution=project.project_notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
+                        # if project.project_notice.placed_by_researcher:
+                        #     ActionNotification.objects.create(title=title, researcher=project.project_notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
                         
                 return redirect('community-projects', community.id)
 
@@ -430,10 +432,10 @@ def projects(request, pk):
             project_id = request.POST.get('project-uuid')
 
             # Which project ?
-            project_exists = Project.objects.filter(id=project_id).exists()
+            project_exists = Project.objects.filter(unique_id=project_id).exists()
 
             if project_exists:
-                project = Project.objects.get(id=project_id)
+                project = Project.objects.get(unique_id=project_id)
                 status = ProjectStatus.objects.get(project=project, community=community)
 
                 if form.is_valid():

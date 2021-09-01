@@ -158,12 +158,13 @@
 
             {% endif %}
 
+            {% if community %}
+                {% include 'projects/project-status.html'%}
+            {% endif %}
+
 
             {% if project.project_notice.all %}
                 {% for notice in project.project_notice.all %}
-                    {% if community %}
-                        {% include 'projects/project-status.html'%}
-                    {% endif %}
                     {% include 'projects/project-comment.html'%}
                 {% endfor %}
             {% endif %}  
