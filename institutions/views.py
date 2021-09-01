@@ -285,7 +285,7 @@ def edit_project(request, institution_id, project_uuid):
 
 # Notify Communities of Project
 @login_required(login_url='login')
-def notify_communities(request, pk, proj_id):
+def notify_others(request, pk, proj_id):
     institution = Institution.objects.get(id=pk)
 
     member_role = check_member_role(request.user, institution)
@@ -293,7 +293,6 @@ def notify_communities(request, pk, proj_id):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         project = Project.objects.get(id=proj_id)
-        # notice_exists = project.project_notice.all().exists()
         communities = Community.objects.all()
 
         if request.method == "POST":

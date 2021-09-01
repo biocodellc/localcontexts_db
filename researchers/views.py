@@ -206,7 +206,7 @@ def edit_project(request, researcher_id, project_uuid):
 
 # Notify Communities of Project
 @login_required(login_url='login')
-def notify_communities(request, pk, proj_id):
+def notify_others(request, pk, proj_id):
     researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:

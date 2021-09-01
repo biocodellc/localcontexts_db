@@ -122,7 +122,7 @@
                             {% if member_role == 'viewer' %}
                             {% else %}
                                 <div class="margin-right-1">
-                                    <a href="{% url 'notify-communities' institution.id project.id %}" class="action-btn">
+                                    <a href="{% url 'institution-notify-others' institution.id project.id %}" class="action-btn">
                                         Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
                                     </a>
                                 </div>
@@ -133,7 +133,7 @@
                     {% if researcher %}
                         {% if project in researcher.projects.all %}
                             <div class="margin-right-1">
-                                <a href="{% url 'researcher-notify-communities' researcher.id project.id %}" class="action-btn">
+                                <a href="{% url 'researcher-notify-others' researcher.id project.id %}" class="action-btn">
                                     Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
                                 </a>
                             </div>

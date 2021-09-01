@@ -1,0 +1,115 @@
+{% load static %}
+
+<div class="content-card-v2 content-card-space white-bg">
+    <div class="flex-this space-between">
+
+        <div class="w-60 flex-this column">
+            <div>
+                <h2 class="no-bottom-margin no-top-margin">Notify Others</h2>
+                <p>Once you have created a project, you can send this project to communities, institutions or researchers that could be interested in this project.</p>
+            </div>
+
+            <!-- title -->
+            <div><h3 class="no-bottom-margin no-top-margin">{{ project.title }}</h3></div>
+            <div><p>{{ project.date_added|date:'M d, Y' }} | 
+                {{ project.project_type }} | 
+                {{ project.project_privacy }}
+                </p>
+            </div>
+            
+            <div class="margin-bottom-16">
+                <div class="flex-this">
+                    {% if project.publication_doi %}
+                        <div class="margin-right-1">
+                            {% if not 'https://' in project.publication_doi %}
+                                <a href="https://doi.org/{{ project.publication_doi }}" class="green-btn">{{ project.publication_doi }} <i class="fa fa-external-link" aria-hidden="true"></i></a></div>
+                            {% else %}
+                                <a href="{{ project.publication_doi }}" class="green-btn">{{ project.publication_doi }} <i class="fa fa-external-link" aria-hidden="true"></i></a></div>
+                            {% endif %}
+                    {% endif %}
+                    {% if project.url %}
+                        <div><a href="{{ project.url }}" class="green-btn">Project Link <i class="fa fa-external-link" aria-hidden="true"></i></a></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="w-40 flex-this column align-right margin-top-16">
+
+            <div class="flex-this margin-bottom-16 w-100 flex-end">
+                <div><a href="{% url 'view-project' project.unique_id %}" class="white-btn">View Project <i class="fa fa-long-arrow-right"></i></a></div>
+            </div>
+            <div>
+                {% if notices %}
+                    {% for notice in notices %}
+                        {% if notice.notice_type == 'biocultural' %}
+                            <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                        {% endif %}
+                        {% if notice.notice_type == 'traditional_knowledge' %}
+                            <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+    <div class="content-card-v2 content-card-space white-bg">
+
+        <h4 class="no-top-margin">Send Requests</h4>
+        <p>
+            By notifying relevant communities, they are able to see what this project is and decide whether or not they would like to add their Labels to this project. After your organisation has entered the communities you would like to to send these requests too, you can monitor and communicate with them in the requests section.<br><br>
+            Please choose who you would like to notify of this project.</p>
+
+        <form method="POST" action="">
+            {% csrf_token %}
+
+            {% if communities %}
+            <label>Search our register</label><br>
+
+            <select id="communities-select" class="width-492" onchange="selectCommunities()">
+                    <option>Select a Community</option>
+
+                    {% for community in communities %}
+                        {% if project.project_status %}
+                            {% if project.project_status.community == community %}
+                            {% else %}
+                                {% if community.is_publicly_listed %}
+                                    <option id="{{ community.id }}">{{ community.community_name }}</option>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+            </select>
+                
+            <p class="weight-500">Selected</p>
+            {% for community in communities %}
+                <div id="selected-community-{{ community.id }}" style="height: 0px; overflow: hidden;">
+                        <div class="selected-community flex-this row space-between">
+                            <div>
+                                <p class="center-name">{{community.community_name}}</p>
+                            </div>
+                            <div>
+                                <p id="close-{{ community.id }}" class="close-x darkteal-text pointer" onclick="cancelCommunitySelection(this)">&times;</p>
+                            </div>
+                        </div>
+                </div>
+                <div id="comm-id-input-{{ community.id }}" style="display: none;"></div>
+                {% endfor %}
+            {% endif %}
+        
+            <div class="margin-top-1">
+                <label>Send a message with this request</label><br>
+                <textarea name="notice_message" style="width: 700px; height: 150px;"></textarea>
+            </div>
+        
+            <button class="action-btn margin-top-2">Notify <i class="fa fa-users" aria-hidden="true"></i></button>
+
+        </form>
+    </div>
+
+    

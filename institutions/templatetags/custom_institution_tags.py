@@ -33,24 +33,6 @@ def get_projects_count(institution_id):
     return projects_count
 
 @register.simple_tag
-def project_status_exists(project_uuid, community):
-    # Check if project exists
-    project_exists = Project.objects.filter(unique_id=project_uuid).exists()
-
-    # If it does, get the project
-    if project_exists:
-        project = Project.objects.get(unique_id=project_uuid)
-        # See if this project has a status with target community
-        project_status_exists = ProjectStatus.objects.filter(project=project, community=community).exists()
-
-        if project_status_exists:
-            return True
-        else:
-            return False
-    else:
-        return False
-
-@register.simple_tag
 def institution_contributing_projects(institution):
     contributors = ProjectContributors.objects.filter(institutions=institution)
     return contributors
