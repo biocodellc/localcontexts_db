@@ -40,6 +40,10 @@ class EntitiesNotified(models.Model):
 
     def __str__(self):
         return str(self.project.title)
+    
+    class Meta:
+        verbose_name = "Entities Notified"
+        verbose_name_plural = "Entities Notified"
 
 class LabelTranslation(models.Model):
     bclabel = models.ForeignKey(BCLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="bclabel_translation")

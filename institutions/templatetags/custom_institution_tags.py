@@ -33,17 +33,20 @@ def get_projects_count(institution_id):
     return projects_count
 
 @register.simple_tag
-def notice_status_exists(project, community):
-    # Check if bc notice of target project exists
-    notice_exists = Notice.objects.filter(project=project).exists()
+def project_status_exists(project_uuid, community):
+    # Check if project exists
+    project_exists = Project.objects.filter(unique_id=project_uuid).exists()
 
-    # If it does, get the notice
-    if notice_exists:
-        notices = Notice.objects.filter(project=project)
-        for notice in notices:
-        # See if this notice has a status with target community
-            notice_status_exists = ProjectStatus.objects.filter(notice=notice, community=community).exists()
-            return notice_status_exists
+    # If it does, get the project
+    if project_exists:
+        project = Project.objects.get(unique_id=project_uuid)
+        # See if this project has a status with target community
+        project_status_exists = ProjectStatus.objects.filter(project=project, community=community).exists()
+
+        if project_status_exists:
+            return True
+        else:
+            return False
     else:
         return False
 

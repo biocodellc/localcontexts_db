@@ -485,6 +485,9 @@ def create_project(request, pk):
                 # Add project to community projects
                 community.projects.add(data)
 
+                #Create EntitiesNotified instance for the project
+                EntitiesNotified.objects.create(project=data)
+
                 # Get a project contrubutor object and add community to it.
                 contributors = ProjectContributors.objects.get(project=data)
                 contributors.communities.add(community)

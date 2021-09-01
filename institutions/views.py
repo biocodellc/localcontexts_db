@@ -213,6 +213,9 @@ def create_project(request, pk):
                 # Add project to institution projects
                 institution.projects.add(data)
 
+                #Create EntitiesNotified instance for the project
+                EntitiesNotified.objects.create(project=data)
+
                 # Create notice for project
                 notices_selected = request.POST.getlist('checkbox-notice')
                 if len(notices_selected) > 1:
@@ -290,7 +293,7 @@ def notify_communities(request, pk, proj_id):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         project = Project.objects.get(id=proj_id)
-        notice_exists = Notice.objects.filter(project=project).exists()
+        # notice_exists = project.project_notice.all().exists()
         communities = Community.objects.all()
 
         if request.method == "POST":

@@ -66,10 +66,10 @@
                 <option>Select a Community</option>
 
                 {% for community in communities %}
-                    <!-- Custom templates to check if status for this project exists for notice -->
-                    {% notice_status_exists project community as notice_status %}
+                    <!-- Custom templates to check if status for this project exists -->
+                    {% project_status_exists project.unique_id community as project_status %}
 
-                    {% if notice_status %}
+                    {% if project_status %}
                     {% else %}
                         {% if community.is_publicly_listed %}
                             <option id="{{ community.id }}">{{ community.community_name }}</option>
