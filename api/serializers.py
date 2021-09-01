@@ -55,7 +55,7 @@ class NoticeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notice
-        fields = ('notice_type', 'img_url', 'default_text', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
+        fields = ('notice_type', 'bc_img_url', 'bc_default_text', 'tk_img_url', 'tk_default_text', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
 
 class ProjectOverviewSerializer(serializers.ModelSerializer):
     class Meta:
