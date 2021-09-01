@@ -15,12 +15,12 @@ from researchers.models import Researcher
 from projects.models import Project, ProjectContributors, ProjectPerson
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
-from helpers.models import NoticeComment, NoticeStatus, Notice
+from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified
 
 from accounts.models import UserAffiliation
 
 from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
-from helpers.forms import NoticeCommentForm
+from helpers.forms import ProjectCommentForm
 from communities.forms import InviteMemberForm, JoinRequestForm
 from .forms import CreateInstitutionForm, UpdateInstitutionForm, CreateInstitutionNoRorForm
 
@@ -161,11 +161,11 @@ def institution_projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
-        form = NoticeCommentForm(request.POST or None)
-        notices = Notice.objects.filter(placed_by_institution=institution)
+        form = ProjectCommentForm(request.POST or None)
+        institution_notified = EntitiesNotified.objects.filter(institutions=institution)
         
         if request.method == 'POST':
-            notice_id = request.POST.get('notice-id')
+            project_uuid = request.POST.get('project-uuid')
 
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
@@ -173,9 +173,9 @@ def institution_projects(request, pk):
             if form.is_valid():
                 data = form.save(commit=False)
 
-                if notice_id:
-                    notice = Notice.objects.get(id=notice_id)
-                    data.notice = notice
+                if project_uuid:
+                    project = Project.objects.get(id=project_uuid)
+                    data.project = project
 
                 data.sender = request.user
                 data.community = community
@@ -183,7 +183,7 @@ def institution_projects(request, pk):
                 return redirect('institution-projects', institution.id)
 
         context = {
-            'notices': notices,
+            'institution_notified': institution_notified,
             'institution': institution,
             'form': form,
             'member_role': member_role,
@@ -213,14 +213,22 @@ def create_project(request, pk):
                 # Add project to institution projects
                 institution.projects.add(data)
 
+                #Create EntitiesNotified instance for the project
+                EntitiesNotified.objects.create(project=data)
+
+                # Create notice for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                for selected in notices_selected:
-                    if selected == 'bcnotice':
-                        notice = Notice.objects.create(notice_type='biocultural', placed_by_institution=institution, project=data)
-                        set_notice_defaults(notice)
-                    if selected == 'tknotice':
-                        notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_institution=institution, project=data)
-                        set_notice_defaults(notice)
+                if len(notices_selected) > 1:
+                    notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_institution=institution, project=data)
+                    set_notice_defaults(notice)
+                else:
+                    for selected in notices_selected:
+                        if selected == 'bcnotice':
+                            notice = Notice.objects.create(notice_type='biocultural', placed_by_institution=institution, project=data)
+                            set_notice_defaults(notice)
+                        elif selected == 'tknotice':
+                            notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_institution=institution, project=data)
+                            set_notice_defaults(notice)
 
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')
@@ -285,7 +293,7 @@ def notify_communities(request, pk, proj_id):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         project = Project.objects.get(id=proj_id)
-        notice_exists = Notice.objects.filter(project=project).exists()
+        # notice_exists = project.project_notice.all().exists()
         communities = Community.objects.all()
 
         if request.method == "POST":
@@ -304,7 +312,7 @@ def notify_communities(request, pk, proj_id):
                 if notice_exists:
                     notices = Notice.objects.filter(project=project)
                     for notice in notices:
-                        notice_status = NoticeStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
+                        notice_status = ProjectStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
                         notice.communities.add(community)
                         notice.save()
 
@@ -313,7 +321,7 @@ def notify_communities(request, pk, proj_id):
                         notice_status.save()
 
                         # Create first comment for notice
-                        NoticeComment.objects.create(notice=notice, community=community, sender=request.user, message=message)
+                        ProjectComment.objects.create(notice=notice, community=community, sender=request.user, message=message)
 
                         # Create notification
                         reference_id = str(notice.id)

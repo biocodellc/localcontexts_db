@@ -2,7 +2,7 @@ from django import template
 from institutions.models import Institution
 from researchers.models import Researcher
 from communities.models import Community
-from helpers.models import NoticeStatus, Notice
+from helpers.models import ProjectStatus, Notice
 from projects.models import Project
 
 register = template.Library()
@@ -22,11 +22,8 @@ def define(val=None):
 
 @register.simple_tag
 def which_communities_notified(project):
-    if project.project_notice.all().exists():
-        notices = Notice.objects.filter(project=project)
-        for notice in notices:
-            statuses = NoticeStatus.objects.filter(notice=notice)
-            return statuses
+    statuses = project.project_status.all()
+    return statuses
 
 @register.simple_tag
 def discoverable_project_view(user, project_uuid):
