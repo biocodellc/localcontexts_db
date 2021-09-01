@@ -1,7 +1,7 @@
 from django import template
 from django.urls import reverse
 from notifications.models import ActionNotification
-from helpers.models import NoticeStatus, Notice
+from helpers.models import ProjectStatus, Notice
 from researchers.models import Researcher
 from projects.models import ProjectContributors
 
@@ -41,7 +41,7 @@ def notice_status_exists(project, community):
     if notice_exists:
         notice = Notice.objects.get(project=project)
         # See if this notice has a status with target community
-        notice_status_exists = NoticeStatus.objects.filter(notice=notice, community=community).exists()
+        notice_status_exists = ProjectStatus.objects.filter(notice=notice, community=community).exists()
 
         if notice_status_exists:
             return True

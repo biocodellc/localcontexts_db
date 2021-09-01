@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Notice, LabelTranslation, NoticeComment, NoticeStatus
+from .models import Notice, LabelTranslation, ProjectComment, ProjectStatus
 
 class NoticeAdmin(admin.ModelAdmin):
     list_display = ('project', 'notice_type', 'placed_by_researcher', 'placed_by_institution', 'created', )
@@ -7,14 +7,14 @@ class NoticeAdmin(admin.ModelAdmin):
 class LabelTranslationAdmin(admin.ModelAdmin):
     list_display = ('language', 'title', 'translation', )
 
-class NoticeCommentAdmin(admin.ModelAdmin):
-    list_display = ('notice', 'sender', 'community', 'message', 'created')
+class ProjectCommentAdmin(admin.ModelAdmin):
+    list_display = ('project', 'sender', 'community', 'message', 'created')
 
-class NoticeStatusAdmin(admin.ModelAdmin):
-    list_display = ('notice', 'community', 'seen', 'status')
+class ProjectStatusAdmin(admin.ModelAdmin):
+    list_display = ('project', 'community', 'seen', 'status')
 
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(LabelTranslation, LabelTranslationAdmin)
-admin.site.register(NoticeComment, NoticeCommentAdmin)
-admin.site.register(NoticeStatus, NoticeStatusAdmin)
+admin.site.register(ProjectComment, ProjectCommentAdmin)
+admin.site.register(ProjectStatus, ProjectStatusAdmin)
 

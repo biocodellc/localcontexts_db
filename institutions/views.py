@@ -15,12 +15,12 @@ from researchers.models import Researcher
 from projects.models import Project, ProjectContributors, ProjectPerson
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
-from helpers.models import NoticeComment, NoticeStatus, Notice
+from helpers.models import ProjectComment, ProjectStatus, Notice
 
 from accounts.models import UserAffiliation
 
 from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
-from helpers.forms import NoticeCommentForm
+from helpers.forms import ProjectCommentForm
 from communities.forms import InviteMemberForm, JoinRequestForm
 from .forms import CreateInstitutionForm, UpdateInstitutionForm, CreateInstitutionNoRorForm
 
@@ -161,7 +161,7 @@ def institution_projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
-        form = NoticeCommentForm(request.POST or None)
+        form = ProjectCommentForm(request.POST or None)
         notices = Notice.objects.filter(placed_by_institution=institution)
         
         if request.method == 'POST':
@@ -304,7 +304,7 @@ def notify_communities(request, pk, proj_id):
                 if notice_exists:
                     notices = Notice.objects.filter(project=project)
                     for notice in notices:
-                        notice_status = NoticeStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
+                        notice_status = ProjectStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
                         notice.communities.add(community)
                         notice.save()
 
@@ -313,7 +313,7 @@ def notify_communities(request, pk, proj_id):
                         notice_status.save()
 
                         # Create first comment for notice
-                        NoticeComment.objects.create(notice=notice, community=community, sender=request.user, message=message)
+                        ProjectComment.objects.create(notice=notice, community=community, sender=request.user, message=message)
 
                         # Create notification
                         reference_id = str(notice.id)

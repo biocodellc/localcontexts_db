@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from mimetypes import guess_type
 
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation, NoticeStatus, Notice
+from helpers.models import LabelTranslation, ProjectStatus, Notice
 from notifications.models import ActionNotification
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
@@ -19,7 +19,7 @@ from bclabels.forms import CustomizeBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomizeTKLabelForm, ApproveAndEditTKLabelForm
 from helpers.forms import AddLabelTranslationFormSet, UpdateBCLabelTranslationFormSet, UpdateTKLabelTranslationFormSet
 from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
-from helpers.forms import NoticeCommentForm
+from helpers.forms import ProjectCommentForm
 
 from bclabels.utils import check_bclabel_type, assign_bclabel_img
 from tklabels.utils import check_tklabel_type, assign_tklabel_img
@@ -381,7 +381,7 @@ def projects(request, pk):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         notices = Notice.objects.filter(communities=community)
-        form = NoticeCommentForm(request.POST or None)
+        form = ProjectCommentForm(request.POST or None)
 
         # Form: Notify project contributor if notice was seen
         if request.method == "POST" and "notify-btn" in request.POST:
@@ -392,7 +392,7 @@ def projects(request, pk):
 
                 notice = Notice.objects.get(id=notice_id)
                 reference_id = notice.id
-                statuses = NoticeStatus.objects.filter(notice=notice, community=community)
+                statuses = ProjectStatus.objects.filter(notice=notice, community=community)
 
                 for status in statuses:
                     if notice_status == 'seen':
@@ -434,7 +434,7 @@ def projects(request, pk):
 
             if notice_exists:
                 notice = Notice.objects.get(id=notice_id)
-                status = NoticeStatus.objects.get(notice=notice, community=community)
+                status = ProjectStatus.objects.get(notice=notice, community=community)
 
                 if form.is_valid():
                     data = form.save(commit=False)

@@ -9,11 +9,11 @@ from helpers.utils import set_notice_defaults
 from communities.models import Community
 from institutions.models import Institution
 from notifications.models import ActionNotification
-from helpers.models import NoticeStatus, NoticeComment, Notice
+from helpers.models import ProjectStatus, ProjectComment, Notice
 from projects.models import ProjectContributors, Project, ProjectPerson
 
 from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
-from helpers.forms import NoticeCommentForm
+from helpers.forms import ProjectCommentForm
 
 from .models import Researcher
 from .forms import *
@@ -89,7 +89,7 @@ def researcher_projects(request, pk):
         return redirect('researcher-restricted', researcher.id)
     else:
         notices = Notice.objects.filter(placed_by_researcher=researcher)
-        form = NoticeCommentForm(request.POST or None)
+        form = ProjectCommentForm(request.POST or None)
 
         if request.method == 'POST':
             notice_id = request.POST.get('notice-id')
@@ -224,7 +224,7 @@ def notify_communities(request, pk, proj_id):
             # add community to notice instance
             if notice_exists:
                 notices = Notice.objects.filter(project=project)
-                notice_status = NoticeStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
+                notice_status = ProjectStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
                 for notice in notices:
                     notice.communities.add(community)
                     notice.save()
@@ -234,7 +234,7 @@ def notify_communities(request, pk, proj_id):
                     notice_status.save()
 
                     # Create first comment for notice
-                    NoticeComment.objects.create(notice=notice, community=community, sender=request.user, message=message)
+                    ProjectComment.objects.create(notice=notice, community=community, sender=request.user, message=message)
 
                     # Create notification
                     reference_id = str(notice.id)

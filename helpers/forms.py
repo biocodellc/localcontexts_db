@@ -35,9 +35,9 @@ UpdateTKLabelTranslationFormSet = inlineformset_factory(
     }
 )
 
-class NoticeCommentForm(forms.ModelForm):
+class ProjectCommentForm(forms.ModelForm):
     class Meta:
-        model = NoticeComment
+        model = ProjectComment
         fields = ['message']
         widgets = {
             'message': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Add Comment'})
