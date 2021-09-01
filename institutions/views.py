@@ -162,7 +162,7 @@ def institution_projects(request, pk):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         form = ProjectCommentForm(request.POST or None)
-        # institution_notified = EntitiesNotified.objects.filter(institutions=institution)
+        institution_notified = EntitiesNotified.objects.filter(institutions=institution)
         
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
@@ -183,7 +183,7 @@ def institution_projects(request, pk):
                 return redirect('institution-projects', institution.id)
 
         context = {
-            # 'institution_notified': institution_notified,
+            'institution_notified': institution_notified,
             'institution': institution,
             'form': form,
             'member_role': member_role,

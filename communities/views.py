@@ -380,7 +380,7 @@ def projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        # community_notified = EntitiesNotified.objects.filter(communities=community)
+        community_notified = EntitiesNotified.objects.filter(communities=community)
         form = ProjectCommentForm(request.POST or None)
 
         # Form: Notify project contributor if project was seen
@@ -451,7 +451,7 @@ def projects(request, pk):
                     return redirect('community-projects', community.id)
 
         context = {
-            # 'community_notified': community_notified,
+            'community_notified': community_notified,
             'community': community,
             'member_role': member_role,
             'form': form,

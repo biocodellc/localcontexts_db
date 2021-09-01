@@ -35,8 +35,8 @@ class Notice(models.Model):
 class EntitiesNotified(models.Model):
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_notified", db_index=True)
     communities = models.ManyToManyField(Community, blank=True, related_name="communities_notified", db_index=True)
-    institutions = models.ManyToManyField(Community, blank=True, related_name="institutions_notified", db_index=True)
-    researchers = models.ManyToManyField(Community, blank=True, related_name="researchers_notified", db_index=True)
+    institutions = models.ManyToManyField(Institution, blank=True, related_name="institutions_notified", db_index=True)
+    researchers = models.ManyToManyField(Researcher, blank=True, related_name="researchers_notified", db_index=True)
 
     def __str__(self):
         return str(self.project.title)

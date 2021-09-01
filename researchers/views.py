@@ -88,30 +88,30 @@ def researcher_projects(request, pk):
     if user_can_view == False:
         return redirect('researcher-restricted', researcher.id)
     else:
-        notices = Notice.objects.filter(placed_by_researcher=researcher)
         form = ProjectCommentForm(request.POST or None)
+        researcher_notified = EntitiesNotified.objects.filter(researchers=researcher)
 
         if request.method == 'POST':
-            notice_id = request.POST.get('notice-id')
-            # TODO: Fix this
-            # community_id = request.POST.get('community-id')
-            # community = Community.objects.get(id=community_id)
+            project_uuid = request.POST.get('project-uuid')
+
+            community_id = request.POST.get('community-id')
+            community = Community.objects.get(id=community_id)
 
             if form.is_valid():
                 data = form.save(commit=False)
 
-                if notice_id:
-                    notice = Notice.objects.get(id=notice_id)
-                    data.notice = notice
+                if project_uuid:
+                    project = Project.objects.get(id=project_uuid)
+                    data.project = project
 
                 data.sender = request.user
-                # data.community = community
+                data.community = community
                 data.save()
                 
                 return redirect('researcher-projects', researcher.id)
 
         context = {
-            'notices': notices,
+            'researcher_notified': researcher_notified,
             'researcher': researcher,
             'form': form,
             'user_can_view': user_can_view,

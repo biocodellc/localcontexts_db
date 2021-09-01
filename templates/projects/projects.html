@@ -56,6 +56,14 @@
         {% endfor %}
     {% endif %}
 
+    <!-- Projects an institution has been notified of (institution in entities notified) -->
+    {% if institution_notified %}
+        {% for notified in institution_notified %}
+            {% define notified.project as project %}
+            {% include 'projects/project-overview.html' %}
+        {% endfor %}
+    {% endif %}
+
 {% endif %}
 
 {% if researcher %}
@@ -77,6 +85,15 @@
             {% endif %}
         {% endfor %}
     {% endif %}
+
+        <!-- Projects a researcher has been notified of (researcher in entities notified) -->
+    {% if researcher_notified %}
+        {% for notified in researcher_notified %}
+            {% define notified.project as project %}
+            {% include 'projects/project-overview.html' %}
+        {% endfor %}
+    {% endif %}
+
 {% endif %}
 
 {% if community %}
@@ -99,8 +116,13 @@
         {% endfor %}
     {% endif %}
 
-    <!-- TODO: Projects a community has been notified of (community in entities notified) -->
-
+    <!-- Projects a community has been notified of (community in entities notified) -->
+    {% if community_notified %}
+        {% for notified in community_notified %}
+            {% define notified.project as project %}
+            {% include 'projects/project-overview.html' %}
+        {% endfor %}
+    {% endif %}
 
 {% endif %}
 
