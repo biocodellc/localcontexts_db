@@ -3,20 +3,18 @@
         <div class="flex-this space-between margin-bottom-16">
             <div class="w-80">
 
-                {% if member_role == 'viewer' %}
-
-                {% else %}
+                {% if member_role == 'viewer' %}{% else %}
 
                     <form method="POST" action="">
                         {% csrf_token %}
-                        <input id="notice-id-input-{{ notice.id }}" type="hidden" value="placeholder" name="notice-id">
-                        <input id="status-selection-input-{{ notice.id }}" type="hidden" value="placeholder" name="notice-status">
+                        <input id="notice-id-input-{{ project.unique_id }}" type="hidden" value="placeholder" name="project-uuid">
+                        <input id="status-selection-input-{{ project.unique_id }}" type="hidden" value="placeholder" name="project-status">
 
                         <div><span class="weight-500">What would you like to do with this notice? </span></div>
                         <div class="flex-this">
-                            <div class="margin-right-1"><select id="select-{{ notice.id }}" onchange="setNoticeID(this)">
+                            <div class="margin-right-1"><select id="select-{{ project.unique_id }}" onchange="setNoticeID(this)">
 
-                                {% for status in notice.notice_status.all %}
+                                {% for status in project.project_status.all %}
                                     {% if status.community == community %}
 
                                         {% if not status.seen and status.status == None %}

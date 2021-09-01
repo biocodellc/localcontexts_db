@@ -15,7 +15,7 @@ from researchers.models import Researcher
 from projects.models import Project, ProjectContributors, ProjectPerson
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
-from helpers.models import ProjectComment, ProjectStatus, Notice
+from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified
 
 from accounts.models import UserAffiliation
 
@@ -162,10 +162,10 @@ def institution_projects(request, pk):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         form = ProjectCommentForm(request.POST or None)
-        notices = Notice.objects.filter(placed_by_institution=institution)
+        # institution_notified = EntitiesNotified.objects.filter(institutions=institution)
         
         if request.method == 'POST':
-            notice_id = request.POST.get('notice-id')
+            project_uuid = request.POST.get('project-uuid')
 
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
@@ -173,9 +173,9 @@ def institution_projects(request, pk):
             if form.is_valid():
                 data = form.save(commit=False)
 
-                if notice_id:
-                    notice = Notice.objects.get(id=notice_id)
-                    data.notice = notice
+                if project_uuid:
+                    project = Project.objects.get(id=project_uuid)
+                    data.project = project
 
                 data.sender = request.user
                 data.community = community
@@ -183,7 +183,7 @@ def institution_projects(request, pk):
                 return redirect('institution-projects', institution.id)
 
         context = {
-            'notices': notices,
+            # 'institution_notified': institution_notified,
             'institution': institution,
             'form': form,
             'member_role': member_role,
@@ -213,14 +213,19 @@ def create_project(request, pk):
                 # Add project to institution projects
                 institution.projects.add(data)
 
+                # Create notice for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                for selected in notices_selected:
-                    if selected == 'bcnotice':
-                        notice = Notice.objects.create(notice_type='biocultural', placed_by_institution=institution, project=data)
-                        set_notice_defaults(notice)
-                    if selected == 'tknotice':
-                        notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_institution=institution, project=data)
-                        set_notice_defaults(notice)
+                if len(notices_selected) > 1:
+                    notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_institution=institution, project=data)
+                    set_notice_defaults(notice)
+                else:
+                    for selected in notices_selected:
+                        if selected == 'bcnotice':
+                            notice = Notice.objects.create(notice_type='biocultural', placed_by_institution=institution, project=data)
+                            set_notice_defaults(notice)
+                        elif selected == 'tknotice':
+                            notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_institution=institution, project=data)
+                            set_notice_defaults(notice)
 
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')

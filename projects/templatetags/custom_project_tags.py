@@ -25,7 +25,7 @@ def which_communities_notified(project):
     if project.project_notice.all().exists():
         notices = Notice.objects.filter(project=project)
         for notice in notices:
-            statuses = ProjectStatus.objects.filter(notice=notice)
+            statuses = ProjectStatus.objects.filter(project=project)
             return statuses
 
 @register.simple_tag

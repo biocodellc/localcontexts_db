@@ -39,16 +39,16 @@
 
     {% if community %}
 
-    {% if notice.notice_comment.all %}
+    {% if project.project_comment.all %}
 
         <div>
             <p><span class="bold">
-            {% if notice.placed_by_researcher %} {{ notice.placed_by_researcher.user.get_full_name }} {% endif %}
-            {% if notice.placed_by_institution %} {{ notice.placed_by_institution.institution_name }} {% endif %}
+            {% if project.project_notice.placed_by_researcher %} {{ project.project_notice.placed_by_researcher.user.get_full_name }} {% endif %}
+            {% if project.project_notice.placed_by_institution %} {{ project.project_notice.placed_by_institution.institution_name }} {% endif %}
         </span></p>
     </div>
 
-        {% for comment in notice.notice_comment.all %}
+        {% for comment in project.project_comment.all %}
             {% if community == comment.community %}
                 <div>
                     <span class="weight-500">{{ comment.sender.get_full_name }}</span>
@@ -61,7 +61,8 @@
         {% if member_role == 'viewer' %} {% else %}
             <form method="POST" action="">
                 {% csrf_token %}
-                <input type="hidden" value="{{ notice.id }}" name="notice-id">
+                <!-- <input type="hidden" value="{{ notice.id }}" name="notice-id"> -->
+                <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
                 <div class="flex-this row">
                     <div class="w-100">{{ form.message }}</div>
                     <div class="margin-left-1"><button class="action-btn" name="add-comment-btn">Send</button></div>
