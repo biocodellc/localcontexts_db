@@ -83,15 +83,14 @@
 
             <div class="flex-this row margin-top-8 w-50 flex-end">
                 {% if project.project_notice.all %}
-                    {% if project.project_notice.all.count > 1 %}
-                        <div class="flex-this space-between w-60">
-                    {% else %}
-                        <div class="flex-this flex-end w-60">
-                    {% endif %}
+                    <div class="flex-this flex-end w-60">
                         {% for notice in project.project_notice.all %}
                             {% if notice.notice_type == 'biocultural' %}
                                 <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
                             {% elif notice.notice_type == 'traditional_knowledge' %}
+                                <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                            {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                                <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
                                 <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
                             {% endif %}
                         {% endfor %}
@@ -159,12 +158,13 @@
 
             {% endif %}
 
+            {% if community %}
+                {% include 'projects/project-status.html'%}
+            {% endif %}
+
 
             {% if project.project_notice.all %}
                 {% for notice in project.project_notice.all %}
-                    {% if community %}
-                        {% include 'projects/project-status.html'%}
-                    {% endif %}
                     {% include 'projects/project-comment.html'%}
                 {% endfor %}
             {% endif %}  

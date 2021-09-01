@@ -9,11 +9,11 @@ from helpers.utils import set_notice_defaults
 from communities.models import Community
 from institutions.models import Institution
 from notifications.models import ActionNotification
-from helpers.models import NoticeStatus, NoticeComment, Notice
+from helpers.models import ProjectStatus, ProjectComment, Notice, EntitiesNotified
 from projects.models import ProjectContributors, Project, ProjectPerson
 
 from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
-from helpers.forms import NoticeCommentForm
+from helpers.forms import ProjectCommentForm
 
 from .models import Researcher
 from .forms import *
@@ -88,30 +88,30 @@ def researcher_projects(request, pk):
     if user_can_view == False:
         return redirect('researcher-restricted', researcher.id)
     else:
-        notices = Notice.objects.filter(placed_by_researcher=researcher)
-        form = NoticeCommentForm(request.POST or None)
+        form = ProjectCommentForm(request.POST or None)
+        researcher_notified = EntitiesNotified.objects.filter(researchers=researcher)
 
         if request.method == 'POST':
-            notice_id = request.POST.get('notice-id')
-            # TODO: Fix this
-            # community_id = request.POST.get('community-id')
-            # community = Community.objects.get(id=community_id)
+            project_uuid = request.POST.get('project-uuid')
+
+            community_id = request.POST.get('community-id')
+            community = Community.objects.get(id=community_id)
 
             if form.is_valid():
                 data = form.save(commit=False)
 
-                if notice_id:
-                    notice = Notice.objects.get(id=notice_id)
-                    data.notice = notice
+                if project_uuid:
+                    project = Project.objects.get(id=project_uuid)
+                    data.project = project
 
                 data.sender = request.user
-                # data.community = community
+                data.community = community
                 data.save()
                 
                 return redirect('researcher-projects', researcher.id)
 
         context = {
-            'notices': notices,
+            'researcher_notified': researcher_notified,
             'researcher': researcher,
             'form': form,
             'user_can_view': user_can_view,
@@ -140,14 +140,21 @@ def create_project(request, pk):
                 # Add project to researcher projects
                 researcher.projects.add(data)
 
+                #Create EntitiesNotified instance for the project
+                EntitiesNotified.objects.create(project=data)
+
                 notices_selected = request.POST.getlist('checkbox-notice')
-                for selected in notices_selected:
-                    if selected == 'bcnotice':
-                        notice = Notice.objects.create(notice_type='biocultural', placed_by_researcher=researcher, project=data)
-                        set_notice_defaults(notice)
-                    if selected == 'tknotice':
-                        notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_researcher=researcher, project=data)
-                        set_notice_defaults(notice)
+                if len(notices_selected) > 1:
+                    notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_researcher=researcher, project=data)
+                    set_notice_defaults(notice)
+                else:
+                    for selected in notices_selected:
+                        if selected == 'bcnotice':
+                            notice = Notice.objects.create(notice_type='biocultural', placed_by_researcher=researcher, project=data)
+                            set_notice_defaults(notice)
+                        elif selected == 'tknotice':
+                            notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_researcher=researcher, project=data)
+                            set_notice_defaults(notice)
 
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')
@@ -206,7 +213,7 @@ def notify_communities(request, pk, proj_id):
         return redirect('researcher-restricted', researcher.id)
     else:
         project = Project.objects.get(id=proj_id)
-        notice_exists = Notice.objects.filter(project=project).exists()
+        notify_entities = EntitiesNotified.objects.get(project=project)
         communities = Community.objects.all()
 
         if request.method == "POST":
@@ -220,26 +227,21 @@ def notify_communities(request, pk, proj_id):
 
             for community_id in communities_selected:
                 community = Community.objects.get(id=community_id)
-                
-            # add community to notice instance
-            if notice_exists:
-                notices = Notice.objects.filter(project=project)
-                notice_status = NoticeStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
-                for notice in notices:
-                    notice.communities.add(community)
-                    notice.save()
 
-                    # Create notice status
-                    notice_status.notice = notice
-                    notice_status.save()
+                # Add each selected community to notify entities instance
+                notify_entities.communities.add(community)
+                notify_entities.save()
 
-                    # Create first comment for notice
-                    NoticeComment.objects.create(notice=notice, community=community, sender=request.user, message=message)
+                # Create project status
+                ProjectStatus.objects.create(project=project, community=community, seen=False)
 
-                    # Create notification
-                    reference_id = str(notice.id)
-                    title =  "A Notice has been placed by " + str(researcher.user.get_full_name) + '.'
-                    ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
+                # Create first comment for project
+                ProjectComment.objects.create(project=project, community=community, sender=request.user, message=message)
+
+                # Create notification
+                reference_id = str(project.unique_id)
+                title =  "A Notice has been placed by " + str(researcher.user.get_full_name) + '.'
+                ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
             
             return redirect('researcher-projects', researcher.id)
 

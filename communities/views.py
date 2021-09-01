@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from mimetypes import guess_type
 
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation, NoticeStatus, Notice
+from helpers.models import LabelTranslation, ProjectStatus, Notice, EntitiesNotified
 from notifications.models import ActionNotification
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
@@ -19,7 +19,7 @@ from bclabels.forms import CustomizeBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomizeTKLabelForm, ApproveAndEditTKLabelForm
 from helpers.forms import AddLabelTranslationFormSet, UpdateBCLabelTranslationFormSet, UpdateTKLabelTranslationFormSet
 from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
-from helpers.forms import NoticeCommentForm
+from helpers.forms import ProjectCommentForm
 
 from bclabels.utils import check_bclabel_type, assign_bclabel_img
 from tklabels.utils import check_tklabel_type, assign_tklabel_img
@@ -380,65 +380,67 @@ def projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        notices = Notice.objects.filter(communities=community)
-        form = NoticeCommentForm(request.POST or None)
+        community_notified = EntitiesNotified.objects.filter(communities=community)
+        form = ProjectCommentForm(request.POST or None)
 
-        # Form: Notify project contributor if notice was seen
+        # Form: Notify project contributor if project was seen
         if request.method == "POST" and "notify-btn" in request.POST:
-            notice_id = request.POST.get('notice-id')
+            project_uuid = request.POST.get('project-uuid')
 
-            if notice_id != None and notice_id != 'placeholder':
-                notice_status = request.POST.get('notice-status')
+            if project_uuid != None and project_uuid != 'placeholder':
+                project_status = request.POST.get('project-status')
 
-                notice = Notice.objects.get(id=notice_id)
-                reference_id = notice.id
-                statuses = NoticeStatus.objects.filter(notice=notice, community=community)
+                project = Project.objects.get(unique_id=project_uuid)
+                reference_id = project.unique_id
+                statuses = ProjectStatus.objects.filter(project=project, community=community)
 
                 for status in statuses:
-                    if notice_status == 'seen':
+                    if project_status == 'seen':
                         status.seen = True
                         status.save()
 
-                    if notice_status == 'pending':
+                    if project_status == 'pending':
                         status.seen = True
                         status.status = 'pending'
                         status.save()
 
-                        truncated_project_title = str(notice.project.title)[0:30]
-                        title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
-                        if notice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
-                        if notice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
+                        # TODO: Fix these
+                        # truncated_project_title = str(project.title)[0:30]
+                        # title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                        # if project.project_notice.placed_by_institution:
+                        #     ActionNotification.objects.create(title=title, institution=project.project_notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
+                        # if project.project_notice.placed_by_researcher:
+                        #     ActionNotification.objects.create(title=title, researcher=project.project_notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
 
-                    if notice_status == 'not_pending':
+                    if project_status == 'not_pending':
                         status.seen = True
                         status.status = 'not_pending'
                         status.save()
 
-                        truncated_project_title = str(notice.project.title)[0:30]
-                        title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
-                        if notice.placed_by_institution:
-                            ActionNotification.objects.create(title=title, institution=notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
-                        if notice.placed_by_researcher:
-                            ActionNotification.objects.create(title=title, researcher=notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
+                        # TODO: Fix these
+                        # truncated_project_title = str(project.project_notice.project.title)[0:30]
+                        # title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                        # if project.project_notice.placed_by_institution:
+                        #     ActionNotification.objects.create(title=title, institution=project.project_notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
+                        # if project.project_notice.placed_by_researcher:
+                        #     ActionNotification.objects.create(title=title, researcher=project.project_notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
                         
                 return redirect('community-projects', community.id)
 
         # Form: Add comment to notice
         elif request.method == "POST" and "add-comment-btn" in request.POST:
-            notice_id = request.POST.get('notice-id')
+            project_id = request.POST.get('project-uuid')
 
-            # Which notice ?
-            notice_exists = Notice.objects.filter(id=notice_id).exists()
+            # Which project ?
+            project_exists = Project.objects.filter(unique_id=project_id).exists()
 
-            if notice_exists:
-                notice = Notice.objects.get(id=notice_id)
-                status = NoticeStatus.objects.get(notice=notice, community=community)
+            if project_exists:
+                project = Project.objects.get(unique_id=project_id)
+                status = ProjectStatus.objects.get(project=project, community=community)
 
                 if form.is_valid():
                     data = form.save(commit=False)
-                    data.notice = notice
+                    data.project = project
                     data.sender = request.user
                     data.community = community
                     data.save()
@@ -451,7 +453,7 @@ def projects(request, pk):
                     return redirect('community-projects', community.id)
 
         context = {
-            'notices': notices,
+            'community_notified': community_notified,
             'community': community,
             'member_role': member_role,
             'form': form,
@@ -484,6 +486,9 @@ def create_project(request, pk):
 
                 # Add project to community projects
                 community.projects.add(data)
+
+                #Create EntitiesNotified instance for the project
+                EntitiesNotified.objects.create(project=data)
 
                 # Get a project contrubutor object and add community to it.
                 contributors = ProjectContributors.objects.get(project=data)
