@@ -55,9 +55,7 @@
                     <a onclick="toggleMeatballMenu(this)" id="meatball-{{ project.unique_id }}" class="meatball"><i class="fa fa-ellipsis-h darkteal-text" style="font-size: 24px;"></i></a>
                     <div id="meatball-content-{{ project.unique_id }}" class="meatball-dropdown-content hide"> 
                         <span class="darkteal-text"> 
-                            {% if project.bc_labels.all or project.tk_labels.all %}
-
-                            {% else %}
+                            {% if project.bc_labels.all or project.tk_labels.all %}{% else %}
                                     {% if request.user == project.project_creator %}
                                         <div class="margin-right-1">
                                             {% if community %}
@@ -90,7 +88,7 @@
                             {% elif notice.notice_type == 'traditional_knowledge' %}
                                 <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
                             {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                                <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
                                 <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
                             {% endif %}
                         {% endfor %}
