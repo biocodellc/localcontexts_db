@@ -20,59 +20,89 @@
     <form method="POST" action="" id="createProjectForm">
         {% csrf_token %}
 
+        <!-- Project Notices -->
         {% if institution or researcher %}
-            <div class="content-card-v2 content-card-space white-bg">      
+            <div class="content-card-v2 content-card-space white-bg">   
+
                 <h3>Project Notice</h3>
                 <p>Apply Local Contexts Notice(s) to this project.</p><br>
-            
+
                 <div class="flex-this w-20 space-between margin-left-16">     
                     <div class="flex-this column center-text">
                         <div><img src="{% static 'images/notices/tk-notice.png' %}" width="73px" alt="black square with white letters TK in the middle"></div>
                         <div><p id="tkTitle" class="grey-text">Traditional<br> Knowledge Notice</p></div>
-                        <div class="notice-checkbox-container"><input id="tk-notice" onclick="showDescription()" value="tknotice" type="checkbox" name="checkbox-notice"> <span class="margin-left-8">Select</span></div>
+                        <div class="notice-checkbox-container">
+                            {% if notice %}
+                                {% if notice.notice_type == 'traditional_knowledge' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                                    <input id="tk-notice" onclick="showDescription()" value="tknotice" type="checkbox" name="checkbox-notice" checked> 
+                                {% else %}
+                                    <input id="tk-notice" onclick="showDescription()" value="tknotice" type="checkbox" name="checkbox-notice"> 
+                                {% endif %}
+                            {% else %}
+                                <input id="tk-notice" onclick="showDescription()" value="tknotice" type="checkbox" name="checkbox-notice"> 
+                            {% endif %}
+                            <span class="margin-left-8">Select</span></div>
                     </div>
             
                     <div class="flex-this column center-text margin-left-16">
                         <div><img src="{% static 'images/notices/bc-notice.png' %}" width="73px" alt="black square with white letters BC in the middle"></div>
                         <div><p id="bcTitle" class="grey-text">Biocultural<br> Notice</p></div>
-                        <div class="notice-checkbox-container"><input id="bc-notice" onclick="showDescription()" value="bcnotice" type="checkbox" name="checkbox-notice"><span class="margin-left-8">Select</span></div>
+                        <div class="notice-checkbox-container">
+                            {% if notice %}
+                                {% if notice.notice_type == 'biocultural' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                                    <input id="bc-notice" onclick="showDescription()" value="bcnotice" type="checkbox" name="checkbox-notice" checked>
+                                {% else %}
+                                    <input id="bc-notice" onclick="showDescription()" value="bcnotice" type="checkbox" name="checkbox-notice">
+                                {% endif %}
+                            {% else %}
+                                <input id="bc-notice" onclick="showDescription()" value="bcnotice" type="checkbox" name="checkbox-notice">
+                            {% endif %}
+                            <span class="margin-left-8">Select</span></div>
                     </div>
                 </div>
-            
+
                 <h3>Notice Text</h3>
-            
-                <div id="show-notice-description-tk" style="display: none;">
+                {% if notice %}
+                    {% if notice.notice_type == 'traditional_knowledge' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                        <div id="show-notice-description-tk" style="display: block;">
+                    {% else %}
+                        <div id="show-notice-description-tk" style="display: none;">
+                    {% endif %}
+                {% else %}
+                    <div id="show-notice-description-tk" style="display: none;">
+                {% endif %}
                     <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                        <div class="w-15 pad-top-1">
-                            <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle">
-                        </div>
-            
+                        <div class="w-15 pad-top-1"><img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle"></div>
                         <div class="w-80 pad-top-1">
                             <h3 class="weight-500 no-top-margin">Traditional Knowledge Notice</h3>
-                            <p>
-                                The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated. <br> For more information about the TK Notices click <a href="https://localcontexts.org/notice/tk-notice/" target="_blank"><span class="darkteal-text">here</span></a>.
-                            </p>
+                            <p>The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated. <br> For more information about the TK Notices click <a href="https://localcontexts.org/notice/tk-notice/" target="_blank"><span class="darkteal-text">here</span></a>.</p>
                         </div>
                     </div>
                 </div>
             
-                <div id="show-notice-description-bc" style="display: none;">
+                {% if notice %}
+                    {% if notice.notice_type == 'biocultural' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                        <div id="show-notice-description-bc" style="display: block;">
+                    {% else %}
+                        <div id="show-notice-description-bc" style="display: none;">
+                    {% endif %}
+                {% else %}
+                    <div id="show-notice-description-bc" style="display: none;">
+                {% endif %}
+
                     <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                        <div class="w-15 pad-top-1">
-                            <img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle">
-                        </div>
-            
+                        <div class="w-15 pad-top-1"><img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle"></div>
                         <div class="w-80 pad-top-1">
                             <h3 class="weight-500 no-top-margin">Biocultural Notice</h3>
-                            <p>
-                                The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated. <br> For more information about the BC Notices click <a href="https://localcontexts.org/notice/bc-notice/" target="_blank"><span class="darkteal-text">here</span></a>.
-                            </p>
+                            <p>The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated. <br> For more information about the BC Notices click <a href="https://localcontexts.org/notice/bc-notice/" target="_blank"><span class="darkteal-text">here</span></a>.</p>
                         </div>
                     </div>
                 </div>
+
             </div>
         {% endif %} 
 
+        <!-- Project Overview -->
         <div class="content-card-v2 content-card-space white-bg">
             <h3>Project Overview</h3>
             <p>Define the type of project this research is and who can have visibility of this project.</p>
@@ -83,6 +113,7 @@
         </div>
         </div>
 
+        <!-- Project Details -->
         <div class="content-card-v2 content-card-space white-bg">
             <h3>Project Details</h3>
             <p>What is the high level information for this project?</p>
@@ -114,6 +145,7 @@
             </div>
         </div>
 
+        <!-- Project Contacts -->
         <div class="content-card-v2 content-card-space white-bg">
             <h3>Project Contacts</h3>
             <p>Who is involved with this project?</p>
@@ -132,6 +164,7 @@
             {% include 'partials/_add-contributors.html'%}
         </div>
 
+        <!-- Project Identifiers -->
         <div class="content-card-v2 content-card-space white-bg">
             <h3>Project Identifiers</h3>
             <p>This is an optional step to apply identifiers associated with this dataset. Please choose from the suggested options below and add accordingly.</p>
@@ -164,8 +197,8 @@
             </div>
         </div>
 
+        <!-- Project Visibility/Privacy -->
         <div class="content-card-v2 content-card-space white-bg">
-
             <h3>Visibility</h3>
 
             <div class="margin-bottom-1 margin-top-1">
@@ -176,7 +209,6 @@
                 <small class="red-text"> {{ form.errors }}</small>
             {% endif %}
             <button class="action-btn margin-top-2 ">Save Project</button>
-
         </div>
     </form>
 

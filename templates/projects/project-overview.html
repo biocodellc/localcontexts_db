@@ -151,15 +151,16 @@
                     <p>
                         <span class="bold">Communities Notified</span><br>
                         {% for status in statuses %}
-                            {{ status.community.community_name }} - Seen: {{ status.seen }} - {{ status.status}} <br>
+                            {{ status.community.community_name }} <br>
                         {% endfor %}
                     </p>
                 </div>
-
             {% endif %}
 
             {% if community %}
-                {% include 'projects/project-status.html'%}
+                {% if project in community.projects.all %} {% else %}
+                    {% include 'projects/project-status.html'%}
+                {% endif %}
             {% endif %}
 
 

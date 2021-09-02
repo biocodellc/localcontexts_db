@@ -264,21 +264,58 @@ def create_project(request, pk):
 def edit_project(request, institution_id, project_uuid):
     institution = Institution.objects.get(id=institution_id)
     project = Project.objects.get(unique_id=project_uuid)
+    notice_exists = Notice.objects.filter(project=project)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         form = EditProjectForm(request.POST or None, instance=project)
+        if notice_exists:
+            notice = Notice.objects.get(project=project)
+        else:
+            notice = None
 
         if request.method == 'POST':
             if form.is_valid():
                 data = form.save(commit=False)
                 data.save()
+
+            # Which notices were selected to change
+            notices_selected = request.POST.getlist('checkbox-notice')
+            # If both notices were selected, check to see if notice exists
+            # If not, create new notice delete old one
+            if len(notices_selected) > 1:
+                notice_exists_both = Notice.objects.filter(project=project, notice_type='biocultural_and_traditional_knowledge').exists()
+                if not notice_exists_both:
+                    notice_both = Notice.objects.create(project=project, notice_type='biocultural_and_traditional_knowledge', placed_by_institution=institution)
+                    set_notice_defaults(notice_both)
+                    notice.delete()
+            else:
+                # If one notice was selected, check if it already exists
+                # If not, create new notice, delete old one
+                for selected in notices_selected:
+                    if selected == 'bcnotice':
+                        notice_exists_bc = Notice.objects.filter(project=project, notice_type='biocultural').exists()
+                        if not notice_exists_bc:
+                            bc_notice = Notice.objects.create(project=project, notice_type='biocultural', placed_by_institution=institution)
+                            set_notice_defaults(bc_notice)
+                            notice.delete()
+
+                    elif selected == 'tknotice':
+                        notice_exists_tk = Notice.objects.filter(project=project, notice_type='traditional_knowledge').exists()
+                        if not notice_exists_tk:
+                            tk_notice = Notice.objects.create(project=project, notice_type='traditional_knowledge', placed_by_institution=institution)
+                            set_notice_defaults(tk_notice)
+                            notice.delete()
+
+            return redirect('institution-projects', institution.id)
+
         context = {
             'member_role': member_role,
             'institution': institution, 
             'project': project, 
+            'notice': notice, 
             'form': form,
         }
         return render(request, 'institutions/edit-project.html', context)
