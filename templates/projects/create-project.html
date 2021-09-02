@@ -23,31 +23,23 @@
         {% if institution or researcher %}
             <div class="content-card-v2 content-card-space white-bg">      
                 <h3>Project Notice</h3>
-                <p>Select Notice(s)</p><br>
+                <p>Apply Local Contexts Notice(s) to this project.</p><br>
             
-                <div class="flex-this">     
+                <div class="flex-this w-20 space-between margin-left-16">     
                     <div class="flex-this column center-text">
-                        <div>
-                            <input id="tk-notice" onclick="showDescription()" value="tknotice" type="checkbox" name="checkbox-notice">
-                        </div>
-                        <div>
-                            <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle">
-                        </div>
-                        <div><p class="grey-text">Traditional<br> Knowledge<br> Notice</p></div>
+                        <div><img src="{% static 'images/notices/tk-notice.png' %}" width="73px" alt="black square with white letters TK in the middle"></div>
+                        <div><p id="tkTitle" class="grey-text">Traditional<br> Knowledge Notice</p></div>
+                        <div class="notice-checkbox-container"><input id="tk-notice" onclick="showDescription()" value="tknotice" type="checkbox" name="checkbox-notice"> <span class="margin-left-8">Select</span></div>
                     </div>
             
-                    <div class="flex-this column center-text pad-left-1-5">
-                        <div>
-                            <input id="bc-notice" onclick="showDescription()" value="bcnotice" type="checkbox" name="checkbox-notice">
-                        </div>
-                        <div>
-                            <img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle">
-                        </div>
-                        <div><p class="grey-text">Biocultural<br> Notice</p></div>
+                    <div class="flex-this column center-text margin-left-16">
+                        <div><img src="{% static 'images/notices/bc-notice.png' %}" width="73px" alt="black square with white letters BC in the middle"></div>
+                        <div><p id="bcTitle" class="grey-text">Biocultural<br> Notice</p></div>
+                        <div class="notice-checkbox-container"><input id="bc-notice" onclick="showDescription()" value="bcnotice" type="checkbox" name="checkbox-notice"><span class="margin-left-8">Select</span></div>
                     </div>
                 </div>
             
-                <p>Notice Description</p>
+                <h3>Notice Text</h3>
             
                 <div id="show-notice-description-tk" style="display: none;">
                     <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
