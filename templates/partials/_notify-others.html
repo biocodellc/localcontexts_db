@@ -75,13 +75,15 @@
                     <option>Select a Community</option>
 
                     {% for community in communities %}
-                        {% if project.project_status %}
-                            {% if project.project_status.community == community %}
-                            {% else %}
-                                {% if community.is_publicly_listed %}
-                                    <option id="{{ community.id }}">{{ community.community_name }}</option>
+                        {% if project.project_status.all %}
+                            {% for status in project.project_status.all %}
+                                {% if status.community == community %}
+                                {% else %}
+                                    {% if community.is_publicly_listed %}
+                                        <option id="{{ community.id }}">{{ community.community_name }}</option>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
+                            {% endfor %}
                         {% endif %}
                     {% endfor %}
             </select>

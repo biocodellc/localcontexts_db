@@ -15,7 +15,7 @@
     </div>
 </div>
 
-<div class="content-card content-card-space white-bg">
+<div class="content-card-v2 content-card-space white-bg">
     
     <div class="flex-this margin-right-1 margin-left-1">
         <div class="flex-this column w-60">
@@ -170,34 +170,28 @@
         <div class="margin-right-1 margin-left-1">
             <div><p class="p-24 bold">Project Labels</p></div>
 
-            {% if project.bc_labels.all %}
-                {% for bclabel in project.bc_labels.all %}
-
-                    <div>
-                        <div class="flex-this">
-                            <div class="small-label pad-top-1-5">
-                                {% include 'bclabels/which-label.html' %}
-                            </div>
-                            <div class="pad-left-2">
-                                <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
-                                <p class="weight-500"> {{ bclabel.name }} </p>
-                                <p>
-                                    {{ bclabel.default_text}}
-                                </p>
-
-                                {% include 'partials/_label-translation.html' %}
-
-                            </div>
+        {% if project.bc_labels.all %}
+            {% for bclabel in project.bc_labels.all %}
+                <div>
+                    <div class="flex-this">
+                        <div class="small-label pad-top-1-5">
+                            {% include 'bclabels/which-label.html' %}
                         </div>
-                        <div class="border-bottom-solid-teal margin-top-1"></div>
+                        <div class="pad-left-2">
+                            <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
+                            <p class="weight-500"> {{ bclabel.name }} </p>
+                            <p>{{ bclabel.default_text}}</p>
+
+                            {% include 'partials/_label-translation.html' %}
+                        </div>
                     </div>
+                    <div class="border-bottom-solid-teal margin-top-1"></div>
+                </div>
+            {% endfor %}
+        {% endif %}
 
-                {% endfor %}
-            {% endif %}
-
-            {% if project.tk_labels.all %}
+        {% if project.tk_labels.all %}
             {% for tklabel in project.tk_labels.all %}
-
                 <div>
                     <div class="flex-this">
                         <div class="small-label pad-top-1-5">
@@ -206,17 +200,13 @@
                         <div class="pad-left-2">
                             <p class="darkteal-text">Label shared by {{ tklabel.community.community_name }} </p>
                             <p class="weight-500"> {{ tklabel.name }} </p>
-                            <p>
-                                {{ tklabel.default_text}}
-                            </p>
+                            <p>{{ tklabel.default_text}}</p>
 
                             {% include 'partials/_label-translation.html' %}
-
                         </div>
                     </div>
                     <div class="border-bottom-solid-teal margin-top-1"></div>
                 </div>
-
             {% endfor %}
         {% endif %}
 
@@ -224,3 +214,16 @@
     {% endif %}
 
 </div>
+
+{% if project.project_creator == request.user %}
+    {% if project.project_comment.all %}
+        <div class="content-card-v2 content-card-space white-bg">
+            <h3>Comments</h3>
+            {% for comment in project.project_comment.all %}
+                {{ comment.community }}
+                {{ comment.sender }}<br>
+                {{ comment.message }}<br>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}
