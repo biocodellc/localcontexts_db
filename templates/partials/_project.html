@@ -15,7 +15,7 @@
     </div>
 </div>
 
-<div class="content-card content-card-space white-bg">
+<div class="content-card-v2 content-card-space white-bg">
     
     <div class="flex-this margin-right-1 margin-left-1">
         <div class="flex-this column w-60">
@@ -128,7 +128,6 @@
                                 <img src="{% static 'images/placeholders/placeholder-img.png' %}" width="74px" height="42px">
                             </div>
                         </div>
-
                     </div>
                 {% endif %}
 
@@ -137,52 +136,42 @@
     
     </div>
 
-    <div class="margin-right-1 margin-left-1">
-        <div><p class="p-24 bold">Project Notice</p></div>
-
         {% if project.project_notice.all %}
-            {% for notice in project.project_notice.all %}
+            <div class="margin-right-1 margin-left-1">
+                <div><p class="p-24 bold">Project Notice</p></div>
 
-                {% if notice.notice_type == 'biocultural' %}
-                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                        <div class="w-15 pad-top-1">
-                            <img src="{% static 'images/notices/bc-notice.png' %}" width="78" height="78" alt="black square with white letters BC in the middle">
-                        </div>
-        
-                        <div class="w-80 pad-top-1">
-                            <h3 class="weight-500 no-top-margin">Biocultural Notice</h3>
-                                <p>
-                                    The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated. <br> For more information about the BC Notices click <a href="https://localcontexts.org/notice/bc-notice/" target="_blank"><span class="darkteal-text">here</span></a>.
-                                </p>
-                        </div>
-                    </div>
-                {% endif %}
+                {% for notice in project.project_notice.all %}
 
-                {% if notice.notice_type == 'traditional_knowledge' %}
-                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                        <div class="w-15 pad-top-1">
-                            <img src="{% static 'images/notices/tk-notice.png' %}" width="78" height="78" alt="black square with white letters TK in the middle">
+                    {% if notice.notice_type == 'biocultural' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                        <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
+                            <div class="w-15 pad-top-1"><img src="{{ notice.bc_img_url }}" width="78" height="78" alt="black square with white letters BC in the middle"></div>
+                            <div class="w-80 pad-top-1">
+                                <h3 class="weight-500 no-top-margin">Biocultural Notice</h3>
+                                <p>{{ notice.bc_default_text}}</p>
+                            </div>
                         </div>
+                    {% endif %}
 
-                        <div class="w-80 pad-top-1">
-                            <h3 class="weight-500 no-top-margin">Traditional Knowledge Notice</h3>
-                                <p>
-                                    The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated. <br> For more information about the TK Notices click <a href="https://localcontexts.org/notice/tk-notice/" target="_blank"><span class="darkteal-text">here</span></a>.
-                                </p>
+                    {% if notice.notice_type == 'traditional_knowledge' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                        <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
+                            <div class="w-15 pad-top-1"><img src="{{ notice.tk_img_url }}" width="78" height="78" alt="black square with white letters TK in the middle"></div>
+                            <div class="w-80 pad-top-1">
+                                <h3 class="weight-500 no-top-margin">Traditional Knowledge Notice</h3>
+                                <p>{{ notice.tk_default_text}}</p>
+                            </div>
                         </div>
-                    </div>
-                {% endif %}
-                
-            {% endfor %}
+                    {% endif %}
+                    
+                {% endfor %}
+            </div>
         {% endif %}
-    </div>
 
-    <div class="margin-right-1 margin-left-1">
-        <div><p class="p-24 bold">Project Labels</p></div>
+    {% if project.bc_labels.all or project.tk_labels.all %}
+        <div class="margin-right-1 margin-left-1">
+            <div><p class="p-24 bold">Project Labels</p></div>
 
         {% if project.bc_labels.all %}
             {% for bclabel in project.bc_labels.all %}
-
                 <div>
                     <div class="flex-this">
                         <div class="small-label pad-top-1-5">
@@ -191,45 +180,75 @@
                         <div class="pad-left-2">
                             <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
                             <p class="weight-500"> {{ bclabel.name }} </p>
-                            <p>
-                                {{ bclabel.default_text}}
-                            </p>
+                            <p>{{ bclabel.default_text}}</p>
 
                             {% include 'partials/_label-translation.html' %}
-
                         </div>
                     </div>
                     <div class="border-bottom-solid-teal margin-top-1"></div>
                 </div>
-
             {% endfor %}
         {% endif %}
 
         {% if project.tk_labels.all %}
-        {% for tklabel in project.tk_labels.all %}
+            {% for tklabel in project.tk_labels.all %}
+                <div>
+                    <div class="flex-this">
+                        <div class="small-label pad-top-1-5">
+                            {% include 'tklabels/which-label.html' %}
+                        </div>
+                        <div class="pad-left-2">
+                            <p class="darkteal-text">Label shared by {{ tklabel.community.community_name }} </p>
+                            <p class="weight-500"> {{ tklabel.name }} </p>
+                            <p>{{ tklabel.default_text}}</p>
 
-            <div>
-                <div class="flex-this">
-                    <div class="small-label pad-top-1-5">
-                        {% include 'tklabels/which-label.html' %}
+                            {% include 'partials/_label-translation.html' %}
+                        </div>
                     </div>
-                    <div class="pad-left-2">
-                        <p class="darkteal-text">Label shared by {{ tklabel.community.community_name }} </p>
-                        <p class="weight-500"> {{ tklabel.name }} </p>
-                        <p>
-                            {{ tklabel.default_text}}
-                        </p>
-
-                        {% include 'partials/_label-translation.html' %}
-
-                    </div>
+                    <div class="border-bottom-solid-teal margin-top-1"></div>
                 </div>
-                <div class="border-bottom-solid-teal margin-top-1"></div>
-            </div>
+            {% endfor %}
+        {% endif %}
 
-        {% endfor %}
+        </div>
     {% endif %}
 
-    </div>
-
 </div>
+
+<!-- TODO: add users that are also contributors -->
+{% if project.project_creator == request.user %}
+    {% if project.project_comment.all %}
+        <div class="content-card-v2 content-card-space white-bg">
+
+            <h3>Comments History</h3>
+            <div>
+                {% if project.project_status.all %}
+                    {% for status in project.project_status.all %}
+
+                        <div class="flex-this space-between w-100 margin-top-16">
+                            <div><p><span class="bold">{{ status.community }}</span></p></div>
+                            <div><p class="grey-text"><em>Status: 
+                                {% if status.seen and status.status == None %} Seen
+                                {% elif status.seen and status.status == 'pending' %} Labels Pending
+                                {% elif status.seen and status.status == 'not_pending' %} No Labels Pending
+                                {% else %} Sent
+                                {% endif %}</em></p></div>    
+                        </div>
+
+                        {% if status.community.comment_community.all %}
+                            {% for comment in status.community.comment_community.all %}
+                                <div>
+                                    <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                    <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                    <p>{{ comment.message }}</p>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+        </div>
+    {% endif %}
+{% endif %}

@@ -190,15 +190,53 @@ def edit_project(request, researcher_id, project_uuid):
         return redirect('researcher-restricted', researcher.id)
     else:
         project = Project.objects.get(unique_id=project_uuid)
+        notice_exists = Notice.objects.filter(project=project)
         form = EditProjectForm(request.POST or None, instance=project)
+
+        # Check to see if notice exists for this project and pass to template
+        if notice_exists:
+            notice = Notice.objects.get(project=project)
+        else:
+            notice = None
 
         if request.method == 'POST':
             if form.is_valid():
                 data = form.save(commit=False)
                 data.save()
+            
+            # Which notices were selected to change
+            notices_selected = request.POST.getlist('checkbox-notice')
+            # If both notices were selected, check to see if notice exists
+            # If not, create new notice delete old one
+            if len(notices_selected) > 1:
+                notice_exists_both = Notice.objects.filter(project=project, notice_type='biocultural_and_traditional_knowledge').exists()
+                if not notice_exists_both:
+                    notice_both = Notice.objects.create(project=project, notice_type='biocultural_and_traditional_knowledge', placed_by_researcher=researcher)
+                    set_notice_defaults(notice_both)
+                    notice.delete()
+            else:
+                # If one notice was selected, check if it already exists
+                # If not, create new notice, delete old one
+                for selected in notices_selected:
+                    if selected == 'bcnotice':
+                        notice_exists_bc = Notice.objects.filter(project=project, notice_type='biocultural').exists()
+                        if not notice_exists_bc:
+                            bc_notice = Notice.objects.create(project=project, notice_type='biocultural', placed_by_researcher=researcher)
+                            set_notice_defaults(bc_notice)
+                            notice.delete()
+
+                    elif selected == 'tknotice':
+                        notice_exists_tk = Notice.objects.filter(project=project, notice_type='traditional_knowledge').exists()
+                        if not notice_exists_tk:
+                            tk_notice = Notice.objects.create(project=project, notice_type='traditional_knowledge', placed_by_researcher=researcher)
+                            set_notice_defaults(tk_notice)
+                            notice.delete()
+            return redirect('researcher-projects', researcher.id)    
+
         context = {
             'researcher': researcher, 
             'project': project, 
+            'notice': notice,
             'form': form, 
             'user_can_view': user_can_view,
         }
@@ -206,7 +244,7 @@ def edit_project(request, researcher_id, project_uuid):
 
 # Notify Communities of Project
 @login_required(login_url='login')
-def notify_communities(request, pk, proj_id):
+def notify_others(request, pk, proj_id):
     researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
@@ -240,7 +278,7 @@ def notify_communities(request, pk, proj_id):
 
                 # Create notification
                 reference_id = str(project.unique_id)
-                title =  "A Notice has been placed by " + str(researcher.user.get_full_name) + '.'
+                title =  "A Notice has been placed by " + str(researcher.user.get_full_name()) + '.'
                 ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
             
             return redirect('researcher-projects', researcher.id)

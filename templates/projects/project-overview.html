@@ -55,9 +55,7 @@
                     <a onclick="toggleMeatballMenu(this)" id="meatball-{{ project.unique_id }}" class="meatball"><i class="fa fa-ellipsis-h darkteal-text" style="font-size: 24px;"></i></a>
                     <div id="meatball-content-{{ project.unique_id }}" class="meatball-dropdown-content hide"> 
                         <span class="darkteal-text"> 
-                            {% if project.bc_labels.all or project.tk_labels.all %}
-
-                            {% else %}
+                            {% if project.bc_labels.all or project.tk_labels.all %}{% else %}
                                     {% if request.user == project.project_creator %}
                                         <div class="margin-right-1">
                                             {% if community %}
@@ -90,7 +88,7 @@
                             {% elif notice.notice_type == 'traditional_knowledge' %}
                                 <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
                             {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                                <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
                                 <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
                             {% endif %}
                         {% endfor %}
@@ -122,7 +120,7 @@
                             {% if member_role == 'viewer' %}
                             {% else %}
                                 <div class="margin-right-1">
-                                    <a href="{% url 'notify-communities' institution.id project.id %}" class="action-btn">
+                                    <a href="{% url 'institution-notify-others' institution.id project.id %}" class="action-btn">
                                         Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
                                     </a>
                                 </div>
@@ -133,7 +131,7 @@
                     {% if researcher %}
                         {% if project in researcher.projects.all %}
                             <div class="margin-right-1">
-                                <a href="{% url 'researcher-notify-communities' researcher.id project.id %}" class="action-btn">
+                                <a href="{% url 'researcher-notify-others' researcher.id project.id %}" class="action-btn">
                                     Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -151,15 +149,16 @@
                     <p>
                         <span class="bold">Communities Notified</span><br>
                         {% for status in statuses %}
-                            {{ status.community.community_name }} - Seen: {{ status.seen }} - {{ status.status}} <br>
+                            {{ status.community.community_name }} <br>
                         {% endfor %}
                     </p>
                 </div>
-
             {% endif %}
 
             {% if community %}
-                {% include 'projects/project-status.html'%}
+                {% if project in community.projects.all %} {% else %}
+                    {% include 'projects/project-status.html'%}
+                {% endif %}
             {% endif %}
 
 

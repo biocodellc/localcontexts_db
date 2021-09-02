@@ -33,24 +33,6 @@ def unread_notifications(researcher):
     return unread_notifications_exist
 
 @register.simple_tag
-def project_status_exists(project_uuid, community):
-    # Check if project exists
-    project_exists = Project.objects.filter(unique_id=project_uuid).exists()
-
-    # If it does, get the project
-    if project_exists:
-        project = Project.objects.get(unique_id=project_uuid)
-        # See if this project has a status with target community
-        project_status_exists = ProjectStatus.objects.filter(project=project, community=community).exists()
-
-        if project_status_exists:
-            return True
-        else:
-            return False
-    else:
-        return False
-
-@register.simple_tag
 def researcher_contributing_projects(researcher):
     contributors = ProjectContributors.objects.filter(researchers=researcher)
     return contributors

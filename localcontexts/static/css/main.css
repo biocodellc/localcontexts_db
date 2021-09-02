@@ -844,6 +844,22 @@ input:focus {
 
 /* Add project */
 
+.notice-checkbox-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #9CA3AF;
+    width: 137px;
+    height: 46px;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.notice-checkbox-container span {
+    color: #1F2937;
+}
+
 .select-notice {
     margin-right: 15px;
     margin-top: 15px;

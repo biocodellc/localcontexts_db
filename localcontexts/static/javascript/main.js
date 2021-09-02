@@ -831,9 +831,8 @@ function showDescription() {
     let tkInput = document.getElementById('tk-notice')
     let tkDescriptionDiv = document.getElementById('show-notice-description-tk')
     let bcDescriptionDiv = document.getElementById('show-notice-description-bc')
-
-    let tkTarget = tkInput.parentElement.nextElementSibling.nextElementSibling.firstElementChild
-    let bcTarget = bcInput.parentElement.nextElementSibling.nextElementSibling.firstElementChild
+    let tkTarget = document.getElementById('tkTitle')
+    let bcTarget = document.getElementById('bcTitle')
 
     if (bcInput.checked && tkInput.checked) {
         tkTarget.classList.add('darkteal-text')

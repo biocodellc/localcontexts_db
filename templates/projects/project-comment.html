@@ -8,16 +8,11 @@
                 <div class="flex-this space-between w-100 margin-top-16">
                     <div><p><span class="bold">{{ status.community }}</span></p></div>
                     <div><p class="grey-text"><em>Status: 
-                        {% if status.seen and status.status == None %}
-                            Seen
-                        {% elif status.seen and status.status == 'pending' %}
-                            Labels Pending
-                        {% elif status.seen and status.status == 'not_pending' %}
-                            No Labels Pending
-                        {% else %}
-                            Sent
-                        {% endif %}
-                        </em></p></div>    
+                        {% if status.seen and status.status == None %} Seen
+                        {% elif status.seen and status.status == 'pending' %} Labels Pending
+                        {% elif status.seen and status.status == 'not_pending' %} No Labels Pending
+                        {% else %} Sent
+                        {% endif %}</em></p></div>    
                 </div>
 
                 {% if status.community.comment_community.all %}
