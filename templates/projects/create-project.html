@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block title %} | Create Project {% endblock %} {% load static %} {% block content %}
 
-        <div class="content-card content-card-space white-bg">
+        <div class="content-card-v2 content-card-space white-bg">
             <div>
                 {% if community %}
                     <small><a class="darkteal-text" href="{% url 'community-projects' community.id %}">Projects</a> <span class="grey-text"> >> Create New Project</span></small>
@@ -12,194 +12,181 @@
                     <small><a class="darkteal-text" href="{% url 'researcher-projects' researcher.id %}">Projects</a> <span class="grey-text"> >> Create New Project</span></small>
                 {% endif %}
             </div>
-        
-            <div class="margin-top-16">
-                <h2>Create a Local Contexts Project</h2>
-                <p>A Local Contexts project supports the application of the Local Contexts Notices to traditional knowledge materials your group would like to share. </p>
-        
-                <h3>Project Overview</h3>
-        
-                <form method="POST" action="" id="createProjectForm">
-                    {% csrf_token %}
-        
-                    <div class="border-bottom-dash-teal padding-bottom-1">
-                        <label>
-                            {% if community %} What type of project are you applying Labels to?* {% else %} What type of project are you applying a Notice to?* {% endif %}
-                        </label>
-                        <br>
-                        {{ form.project_type }} <br>
-                    </div>
-        
-                    <div class="margin-bottom-1 margin-top-1">
-                        {{ form.project_privacy.label }}* <br> {{ form.project_privacy }}
-                    </div>
-        
-                    <h3>Project Details</h3>
-                    <p>
-                        The information provided here will be shared to other entities your institution chooses to share with.<br>
-                        Please try to keep this section as informative as you can.
-                    </p>
-                    <div class="padding-bottom-1 w-50">
-                        <label>Project Title*</label>
-                        <div class="tooltip"><strong>?</strong>
-                            <span class="tooltiptext">The project title should relate to the subject that is being captured in this project</span>
-                        </div>
-                        <br>
-                        {{ form.title }} <br>
-                    </div>
-        
-                    <div class="padding-bottom-1 w-50">
-                        <label>Project Description*</label>
-                        <div class="tooltip"><strong>?</strong>
-                            <span class="tooltiptext">The description can be thought of as an abstract or short summary of the project</span>
-                        </div>
-                        <br>
-                        {{ form.description }} <br>
-                    </div>
-        
-                    <div class="padding-bottom-1 flex-this w-50 space-between">
+            <h2 class="no-bottom-margin">Create a Local Contexts Project</h2>
+            <p>A Local Context Project describes the research that Notice(s) or Label(s) can be applied to.</p>
+
+        </div>
+
+    <form method="POST" action="" id="createProjectForm">
+        {% csrf_token %}
+
+        {% if institution or researcher %}
+            <div class="content-card-v2 content-card-space white-bg">      
+                <h3>Project Notice</h3>
+                <p>Select Notice(s)</p><br>
+            
+                <div class="flex-this">     
+                    <div class="flex-this column center-text">
                         <div>
-                            <label>Project date</label><br>
-                            {{ form.publication_date }} <br>
+                            <input id="tk-notice" onclick="showDescription()" value="tknotice" type="checkbox" name="checkbox-notice">
                         </div>
-                        <div class="margin-top-16">
-                            <p>OR</p>
+                        <div>
+                            <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle">
                         </div>
-                        <div class="margin-top-16">
-                            <p>{{ form.publication_date_ongoing }} <label>Ongoing project</label></p>
+                        <div><p class="grey-text">Traditional<br> Knowledge<br> Notice</p></div>
+                    </div>
+            
+                    <div class="flex-this column center-text pad-left-1-5">
+                        <div>
+                            <input id="bc-notice" onclick="showDescription()" value="bcnotice" type="checkbox" name="checkbox-notice">
+                        </div>
+                        <div>
+                            <img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle">
+                        </div>
+                        <div><p class="grey-text">Biocultural<br> Notice</p></div>
+                    </div>
+                </div>
+            
+                <p>Notice Description</p>
+            
+                <div id="show-notice-description-tk" style="display: none;">
+                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
+                        <div class="w-15 pad-top-1">
+                            <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle">
+                        </div>
+            
+                        <div class="w-80 pad-top-1">
+                            <h3 class="weight-500 no-top-margin">Traditional Knowledge Notice</h3>
+                            <p>
+                                The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated. <br> For more information about the TK Notices click <a href="https://localcontexts.org/notice/tk-notice/" target="_blank"><span class="darkteal-text">here</span></a>.
+                            </p>
                         </div>
                     </div>
-        
-        
-                    <div class="padding-bottom-1 w-50">
-                        <label>Project Link (if applicable)</label>
-                        <div class="tooltip"><strong>?</strong>
-                            <span class="tooltiptext">A relevant link to the object entry, collection or database</span>
+                </div>
+            
+                <div id="show-notice-description-bc" style="display: none;">
+                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
+                        <div class="w-15 pad-top-1">
+                            <img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle">
                         </div>
-                        <br>
-                        {{ form.url }} <br>
-                    </div>
-        
-                    <div class="padding-bottom-1 w-50">
-                        <label>Project Contact Name* </label><br>
-                        {{ form.project_contact }} <br>
-                    </div>
-        
-        
-                    <div class="padding-bottom-1 w-50">
-                        <label>Project Contact Email*</label><br>
-                        {{ form.project_contact_email }} <br>
-                    </div>
-        
-                    <div class="padding-bottom-1 w-50">
-                        <label>Recommended Citation</label>
-                        <div class="tooltip"><strong>?</strong>
-                            <span class="tooltiptext">Recommended citation is how you would like this project to be credited or cited, such as in a publication</span>
+            
+                        <div class="w-80 pad-top-1">
+                            <h3 class="weight-500 no-top-margin">Biocultural Notice</h3>
+                            <p>
+                                The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated. <br> For more information about the BC Notices click <a href="https://localcontexts.org/notice/bc-notice/" target="_blank"><span class="darkteal-text">here</span></a>.
+                            </p>
                         </div>
-                        <br>
-                        {{ form.recommended_citation }} <br>
                     </div>
-        
-                    {% include 'partials/_add-contributors.html'%}
-        
-                    <h3>Project Metadata</h3>
-                    <p>
-                        The project metadata is the key information of how to access data relevant to the project. This will only be shown internally.
-                    </p>
-        
-                    <div class="padding-bottom-1 w-50">
-                        <label>Project Data GUID</label>
-                        <div class="tooltip"><strong>?</strong>
-                            <span class="tooltiptext">A globally unique identifier for the data in this project. Recommended to use a resolvable URL containing a DOI or ARK identifier. Coming soon is the ability to generate a DOI here. GEOME does not automatically assign identifiers for all datasets since many datasets have been given GUIDs elsewhere</span>
-                        </div>
-                        <br>
-                        {{ form.project_data_guid }} <br>
-                    </div>
-        
-                    <div class="padding-bottom-1 w-50">
-                        <label>Project DOI</label>
-                        <div class="tooltip"><strong>?</strong>
-                            <span class="tooltiptext">A globally unique identifier for a publication</span>
-                        </div>
-                        <br>
-                        {{ form.publication_doi }} <br>
-                    </div>
+                </div>
+            </div>
+        {% endif %} 
 
-                    {% if institution or researcher %}
-                    
-                        <h3>Project Notice</h3>
-                        <p>Select Notice(s)</p><br>
-            
-                        <div class="flex-this">
-                            
-                            <div class="flex-this column center-text">
-                                <div>
-                                    <input id="tk-notice" onclick="showDescription()" value="tknotice" type="checkbox" name="checkbox-notice">
-                                </div>
-                                <div>
-                                    <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle">
-                                </div>
-                                <div>
-                                    <p class="grey-text">Traditional<br> Knowledge<br> Notice</p>
-                                </div>
-                            </div>
-            
-                            <div class="flex-this column center-text pad-left-1-5">
-                                <div>
-                                    <input id="bc-notice" onclick="showDescription()" value="bcnotice" type="checkbox" name="checkbox-notice">
-                                </div>
-                                <div>
-                                    <img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle">
-                                </div>
-                                <div>
-                                    <p class="grey-text">Biocultural<br> Notice</p>
-                                </div>
-                            </div>
-            
-                        </div>
-            
-            
-                        <p>Notice Description</p>
-            
-                        <div id="show-notice-description-tk" style="display: none;">
-                            <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                                <div class="w-15 pad-top-1">
-                                    <img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle">
-                                </div>
-            
-                                <div class="w-80 pad-top-1">
-                                    <h3 class="weight-500 no-top-margin">Traditional Knowledge Notice</h3>
-                                    <p>
-                                        The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated. <br> For more information about the TK Notices click <a href="https://localcontexts.org/notice/tk-notice/" target="_blank"><span class="darkteal-text">here</span></a>.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-            
-                        <div id="show-notice-description-bc" style="display: none;">
-                            <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                                <div class="w-15 pad-top-1">
-                                    <img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle">
-                                </div>
-            
-                                <div class="w-80 pad-top-1">
-                                    <h3 class="weight-500 no-top-margin">Biocultural Notice</h3>
-                                    <p>
-                                        The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated. <br> For more information about the BC Notices click <a href="https://localcontexts.org/notice/bc-notice/" target="_blank"><span class="darkteal-text">here</span></a>.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                    {% endif %}
-        
-                    {% if form.errors %}
-                        <small class="red-text"> {{ form.errors }}</small>
-                    {% endif %}
-                    <button class="action-btn margin-top-2 ">Save Project</button>
-        
-                </form>
+        <div class="content-card-v2 content-card-space white-bg">
+            <h3>Project Overview</h3>
+            <p>Define the type of project this research is and who can have visibility of this project.</p>
+            <div class="w-40">
+                {{ form.project_type.label }} <br>
+                {{ form.project_type }}
             </div>
         </div>
+        </div>
+
+        <div class="content-card-v2 content-card-space white-bg">
+            <h3>Project Details</h3>
+            <p>What is the high level information for this project?</p>
+            <div class="padding-bottom-1 w-50">
+                <label>Project Title*</label>
+                <div class="tooltip"><strong>?</strong>
+                    <span class="tooltiptext">The project title should relate to the subject that is being captured in this project</span>
+                </div>
+                <br>
+                {{ form.title }} <br>
+            </div>
+
+            <div class="padding-bottom-1 w-50">
+                <label>Project Description*</label>
+                <div class="tooltip"><strong>?</strong>
+                    <span class="tooltiptext">The description can be thought of as an abstract or short summary of the project</span>
+                </div>
+                <br>
+                {{ form.description }} <br>
+            </div>
+
+            <div class="padding-bottom-1 w-50">
+                <label>Project Link (if applicable)</label>
+                <div class="tooltip"><strong>?</strong>
+                    <span class="tooltiptext">A relevant link to the object entry, collection or database</span>
+                </div>
+                <br>
+                {{ form.url }} <br>
+            </div>
+        </div>
+
+        <div class="content-card-v2 content-card-space white-bg">
+            <h3>Project Contacts</h3>
+            <p>Who is involved with this project?</p>
+
+            <div class="padding-bottom-1 w-50">
+                <label>Project Contact Name* </label><br>
+                {{ form.project_contact }} <br>
+            </div>
+
+
+            <div class="padding-bottom-1 w-50">
+                <label>Project Contact Email*</label><br>
+                {{ form.project_contact_email }} <br>
+            </div>
+
+            {% include 'partials/_add-contributors.html'%}
+        </div>
+
+        <div class="content-card-v2 content-card-space white-bg">
+            <h3>Project Identifiers</h3>
+            <p>This is an optional step to apply identifiers associated with this dataset. Please choose from the suggested options below and add accordingly.</p>
+
+            <div class="padding-bottom-1 w-50">
+                <label>Project Data GUID</label>
+                <div class="tooltip"><strong>?</strong>
+                    <span class="tooltiptext">A globally unique identifier for the data in this project. Recommended to use a resolvable URL containing a DOI or ARK identifier. Coming soon is the ability to generate a DOI here. GEOME does not automatically assign identifiers for all datasets since many datasets have been given GUIDs elsewhere</span>
+                </div>
+                <br>
+                {{ form.project_data_guid }} <br>
+            </div>
+
+            <div class="padding-bottom-1 w-50">
+                <label>Project DOI</label>
+                <div class="tooltip"><strong>?</strong>
+                    <span class="tooltiptext">A globally unique identifier for a publication</span>
+                </div>
+                <br>
+                {{ form.publication_doi }} <br>
+            </div>
+
+            <div class="padding-bottom-1 w-50">
+                <label>Recommended Citation</label>
+                <div class="tooltip"><strong>?</strong>
+                    <span class="tooltiptext">Recommended citation is how you would like this project to be credited or cited, such as in a publication</span>
+                </div>
+                <br>
+                {{ form.recommended_citation }} <br>
+            </div>
+        </div>
+
+        <div class="content-card-v2 content-card-space white-bg">
+
+            <h3>Visibility</h3>
+
+            <div class="margin-bottom-1 margin-top-1">
+                {{ form.project_privacy.label }} <br> {{ form.project_privacy }}
+            </div>
+
+            {% if form.errors %}
+                <small class="red-text"> {{ form.errors }}</small>
+            {% endif %}
+            <button class="action-btn margin-top-2 ">Save Project</button>
+
+        </div>
+    </form>
+
 
 {% endblock %}
