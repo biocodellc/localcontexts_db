@@ -168,29 +168,13 @@ def add_member(request, pk):
         }
         return render(request, 'communities/add-member.html', context)
 
-# Labels Main
-@login_required(login_url='login')
-def community_labels(request, pk):
-    community = Community.objects.get(id=pk)
-    bclabels = BCLabel.objects.filter(community=community)
-    tklabels = TKLabel.objects.filter(community=community)
-
-    member_role = check_member_role(request.user, community)
-    if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
-    else:
-        context = {
-            'community': community,
-            'member_role': member_role,
-            'bclabels': bclabels,
-            'tklabels': tklabels,
-        }
-        return render(request, 'communities/labels.html', context)
-
 # Select Labels to Customize
 @login_required(login_url='login')
 def select_label(request, pk):
     community = Community.objects.get(id=pk)
+    bclabels = BCLabel.objects.filter(community=community)
+    tklabels = TKLabel.objects.filter(community=community)
+
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -220,6 +204,8 @@ def select_label(request, pk):
         context = {
             'community': community,
             'member_role': member_role,
+            'bclabels': bclabels,
+            'tklabels': tklabels,
         }
 
         return render(request, 'communities/select-label.html', context)
@@ -275,7 +261,7 @@ def customize_label(request, pk, label_type):
                     title = "A TK Label was customized by " + request.user.get_full_name() + " and is waiting approval by another member of the community."
                     ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
-                    return redirect('community-labels', community.id)
+                    return redirect('select-label', community.id)
 
         # BCLabel
         if label_type.startswith('bc'):
@@ -310,7 +296,7 @@ def customize_label(request, pk, label_type):
                     title = "A BC Label was customized by " + request.user.get_full_name()
                     ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
-                    return redirect('community-labels', community.id)
+                    return redirect('select-label', community.id)
             
         context = {
             'member_role': member_role,
@@ -359,7 +345,7 @@ def approve_label(request, pk, label_id):
                 title = "A Label was approved by " + request.user.get_full_name()
                 ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
-                return redirect('community-labels', community.id)
+                return redirect('select-label', community.id)
 
         context = {
             'community': community,

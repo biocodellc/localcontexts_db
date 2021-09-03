@@ -2,7 +2,7 @@
     <div class="comm-nav-links flex-this">
 
         {% if community %}
-            <a href="{% url 'community-labels' community.id %}">
+            <a href="{% url 'select-label' community.id %}">
                 <div class="{% if 'labels' in request.path %} active-nav {% endif %}">Labels</div>
             </a>
             <a href="{% url 'community-projects' community.id %}">
