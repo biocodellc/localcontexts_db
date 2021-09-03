@@ -4,7 +4,11 @@
 
 <div class="padding-bottom-1 flex-this row">
     <div>
-        <label for="contributors">Project Contributors</label><br>
+        <label for="contributors">Project Contributors</label>
+        <div class="tooltip"><strong>?</strong>
+            <span class="tooltiptext">Key contributors to the generation and curation of the data and/or material</span>
+        </div>
+        <br>
         <input id="contributor-input" list="contributors" name="contributors" placeholder="Select a contributor from the hub">
         <datalist id="contributors">
             {% if all_researchers %}

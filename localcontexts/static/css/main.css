@@ -1066,7 +1066,6 @@ input:focus {
   .tooltip .tooltiptext {
     visibility: hidden;
     width: 330px;
-    min-height: 84px;
     background-color: #EF6C00;
     color: #fff;
     text-align: center;
