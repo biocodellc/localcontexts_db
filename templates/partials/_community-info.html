@@ -35,7 +35,7 @@
                                 <div class="border-bottom-solid-teal">
                                     <!-- TODO: add custom anchor tag with referenceid -->
                                     {% if n.notification_type == 'Labels' %}
-                                        <a href="{% url 'community-labels' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsReadCommunity(this); return true;">
+                                        <a href="{% url 'select-label' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsReadCommunity(this); return true;">
                                     {% endif %}
                                     {% if n.notification_type == 'Projects' %}
                                         {% if n.reference_id %}

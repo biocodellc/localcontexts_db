@@ -16,6 +16,175 @@
     </p>
 </div>
 
+<div class="content-card content-card-space white-bg">
+
+    <div class="flex-this space-between">
+        {% if bclabels or tklabels %}
+
+            <div>
+                <h2>Customized Labels</h2>
+                <p>You currently have {{ bclabels.count }} BC Labels and {{ tklabels.count }} TK Labels customized</p>
+            </div>
+        {% else %}
+            <div>
+                <h2>Customized Labels</h2>
+                <p>You currently have no labels customized</p>
+            </div>
+            <div class="flex-this align-center">
+                {% if member_role == 'viewer' %}
+
+                {% else %}
+                <a class="action-btn margin-top-2 " href="{% url 'select-label' community.id %}">
+                    Customize a Label     <i class="fa fa-long-arrow-right"></i>
+                </a>
+                {% endif %}
+            </div>
+
+        {% endif %}
+    </div>
+    
+    <div class="flex-this wrap">
+        <!-- UNAPPROVED BCLABELS -->
+        {% if bclabels %}
+            {% for bclabel in bclabels %}
+                {% if bclabel.is_approved == False %}
+                    <div class="w-20 custom-labels">
+                        <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
+                            <p class="darkteal-text">Waiting approval*</p>
+                                <div>
+                                    {% include 'bclabels/which-label.html' %}
+                                    <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color grey-text">{{ bclabel.name }}</p>
+                                </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <!-- UNAPPROVED TK LABELS -->
+        {% if tklabels %}
+            {% for tklabel in tklabels %}
+                {% if tklabel.is_approved == False %}
+                    <div class="w-20 custom-labels">
+                        <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
+                            <p class="darkteal-text">Waiting approval*</p>
+                                <div>
+                                    {% include 'tklabels/which-label.html' %}
+                                    <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
+                                </div>  
+                        </div>
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+        {% endif %}
+
+        <!-- APPROVED BC LABELS -->
+        {% if bclabels %}
+            {% for bclabel in bclabels %}
+                {% if bclabel.is_approved == True %}
+                    <div class="w-20 custom-labels">
+                        <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="approved-label center-text pointer">
+                            {% include 'bclabels/which-label.html' %}
+                            <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color grey-text">{{ bclabel.name }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <!-- APPROVED TKLABELS -->
+        {% if tklabels %}
+            {% for tklabel in tklabels %}
+                {% if tklabel.is_approved == True %}
+                    <div class="w-20 custom-labels">
+                        <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="approved-label center-text pointer">
+                            {% include 'tklabels/which-label.html' %}
+                            <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+    </div>
+
+    {% if bclabels %}
+        {% for bclabel in bclabels %}
+            <div id="open-div-{{ bclabel.unique_id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
+                <div class="border-top-solid-teal border-bottom-solid-teal padding-bottom-1">
+                    {% if bclabel.is_approved %}
+                        <h3 class="darkteal-text">{{ bclabel.name }}</h3>
+                        <p>{{ bclabel.default_text }}</p>
+
+                        {% include 'partials/_label-translation.html' %}
+
+                    {% else %}
+                        <div class="flex-this space-between">
+                            <div>
+                                <h3 class="darkteal-text">{{ bclabel.name }}</h3>
+                            </div>
+                            {% if bclabel.created_by == request.user or member_role == 'viewer' %}
+
+                            {% else %}
+                                <div class="margin-top-1">
+                                    <a href="{% url 'approve-label' community.id bclabel.unique_id %}">
+                                        <div class="action-btn margin-top-2 ">Review Label</div>
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                        </div>
+                        <div>
+                            <p>{{ bclabel.default_text }}</p>
+                        </div>
+
+                        {% include 'partials/_label-translation.html' %}
+
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if tklabels %}
+    {% for tklabel in tklabels %}
+        <div id="open-div-{{ tklabel.unique_id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
+            <div class="border-top-solid-teal border-bottom-solid-teal padding-bottom-1">
+                {% if tklabel.is_approved %}
+                    <h3 class="darkteal-text">{{ tklabel.name }}</h3>
+                    <p>{{ tklabel.default_text }}</p>
+
+                    {% include 'partials/_label-translation.html' %}
+
+                {% else %}
+                    <div class="flex-this space-between">
+                        <div>
+                            <h3 class="darkteal-text">{{ tklabel.name }}</h3>
+                        </div>
+                        {% if tklabel.created_by == request.user or member_role == 'viewer' %}
+
+                        {% else %}
+                            <div class="margin-top-1">
+                                <a href="{% url 'approve-label' community.id tklabel.unique_id %}">
+                                    <div class="action-btn margin-top-2 ">Review Label</div>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <p>{{ tklabel.default_text }}</p>
+                    </div>
+                    {% include 'partials/_label-translation.html' %}
+
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    {% endif %}
+
+</div>
+
 
 <!-- TK Label Card -->
 <div id="collapsed-tkcard" class="content-card-v2 content-card-space white-bg flex-this column">
