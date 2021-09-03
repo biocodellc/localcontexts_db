@@ -1,10 +1,22 @@
 {% extends 'sub-base.html' %} {% block title %} | Customize {% endblock %}{% load static %} {% block community_content %}
 
-<div class="content-card content-card-space white-bg">
-    <div class="margin-bottom-16">
-        <h2 class="orange-text">Labels</h2>
-        <p>These customized Labels your community create can be applied to projects. Learn more about projects <a href="#" class="darkteal-text">here</a>.</p>
-    
+<div class="content-card-v2 content-card-space white-bg">
+    <div class="w-70">
+        <h2>Customize a Label</h2>
+        <p>Now that you have selected a Label to customize this Label will now sit in this bucket where you can store all of the Labels your account customizes. The Label is currently faded to indicate there is still some work to do to customize and make this Label your own. </p>
+        <strong>How this process works:</strong>
+        <ol>
+            <li>Select a Label to Customize</li>
+            <li>Customize the template text and add a Label title.</li>
+            <li>Get another member in your community to approve the new template text and title.</li>
+            <li>Start applying these Labels to projects involving traditional knowledge.</li>
+        </ol> 
+    </div>
+</div>
+
+<div class="content-card-v2 content-card-space white-bg">
+    <h3>Step 1. Select a Label to customize</h3>
+    <div class="margin-bottom-16 margin-top-16">    
         <div class="center-text w-20">
         {% if label_type == 'bcr' %}
             <div id="target-img-div">
@@ -219,22 +231,23 @@
 
         </div>
     </div>
+    </div>
 
-    <div class="flex-this column border-top-solid-teal border-bottom-solid-teal">
+    <div class="content-card-v2 content-card-space white-bg">
+
+    <div class="flex-this column border-bottom-solid-teal">
 
         <form method="POST" action="">
                 {% csrf_token %}
-                <div><h3 class="no-bottom-margin">Step 1: Customize Label</h3></div>
+                <div><h3 class="no-bottom-margin">Step 2. Customize Label</h3></div>
                 <div>
-                    <p class="w-60">
-                        <span class="bold">How this works:</span> This Label should be customized to suit the values and principles of your community. We encourage you to keep these broad as your can so that it can be used for multiple projects. 
-                    </p>
+                    <p class="w-80">
+                        You can edit the Label template text, and add a local name that reflects your community alongside the Label name.                    </p>
                     <div class="w-30 margin-bottom-16">
                         <input id="input-label-name" type="hidden" value="" name="input-label-name">
-                        <p class="bold" id="label-name-p"></p>
                     </div>
                     <div class="w-80">
-                        <label for="default_text">Label description</label>
+                        <label for="default_text">Label text</label>
                         {{ form.default_text }}
                     </div>
                 </div>
@@ -248,11 +261,11 @@
                         {{ hidden }}
                     {% endfor %}
                         <div class="flex-this column margin-top-16">
-                            <div class="flex-this w-80 space-between">
-                                <div class="w-30">{{ tran_form.title }}</div>
-                                <div class="w-30">{{ tran_form.language }}</div>
+                            <div class="flex-this w-80">
+                                <div class="w-30 margin-right-16"><label>Local name</label><br>{{ tran_form.title }}</div>
+                                <div class="w-30"><label>What language is this written in?</label><br>{{ tran_form.language }}</div>
                             </div>
-                            <div class="w-80">{{ tran_form.translation }}</div>
+                            <div class="w-80"><label>Translated text</label><br>{{ tran_form.translation }}</div>
                         </div>
                 {% endfor %}
 

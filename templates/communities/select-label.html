@@ -1,24 +1,19 @@
 {% extends 'sub-base.html' %} {% block title %} | Select Label {% endblock %}{% load static %} {% load custom_tags%} {% block community_content %}
 
 <div class="content-card-v2 content-card-space white-bg">
-    <h2>TK and BC Labels</h2>
-    <p>
-        The TK and BC Labels are an initiative for Indigenous communities and local organizations. The Labels allow communities to express local and specific conditions for engaging and sharing traditional knowledge that are consistent with already existing community rules, governance and protocols for using, sharing and circulating knowledge and data. <br>
-    </p>
-    <strong>How this works:</strong>
-    <ol>
-         <li>Select a Label from the TK and BC Labels below.</li>
-         <li>Customize the template text provided to support the vision of your community.</li>
-         <li>Apply these Labels to research and traditional knowledge projects.</li>
-    </ol> 
-    <p>
-        The template text is intended to be customized by each community – giving the Labels specificity and context. The title of each TK Label can be translated into one or more languages and displayed in addition to the default Label title. The TK Label icons are not to be altered.  This is to ensure national and international recognition and integrity across content and collection management systems, online repositories, websites, and physical exhibits, learn more about TK Labels.
-    </p>
+
+    <div class="w-70">
+        <h2>TK and BC Labels</h2>
+        <p>The TK and BC Labels are an initiative for Indigenous communities and local organizations. The Labels allow communities to express local and specific conditions for engaging and sharing traditional knowledge that are consistent with already existing community rules, governance and protocols for using, sharing and circulating knowledge and data. 
+            <br><br>
+            <strong>To start customizing Labels select from the options below!</strong></p>
+    </div>
+
 </div>
 
 <div class="content-card-v2 content-card-space white-bg">
 
-    <div class="flex-this space-between">
+    <div class="w-80">
         {% if bclabels or tklabels %}
 
             <div>
@@ -28,16 +23,7 @@
         {% else %}
             <div>
                 <h2>Customized Labels</h2>
-                <p>You currently have no labels customized</p>
-            </div>
-            <div class="flex-this align-center">
-                {% if member_role == 'viewer' %}
-
-                {% else %}
-                <a class="action-btn margin-top-2 " href="{% url 'select-label' community.id %}">
-                    Customize a Label     <i class="fa fa-long-arrow-right"></i>
-                </a>
-                {% endif %}
+                <p>Once you have selected a Label to customize from the options below (Traditional Knowledge Labels and Biocultural Local) and customize them, they will appear here.</p>
             </div>
 
         {% endif %}
