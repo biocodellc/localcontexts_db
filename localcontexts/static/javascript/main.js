@@ -336,127 +336,158 @@ if (parentDiv) {
 function populateTemplate(id) {
     let templateText = document.getElementById('label-template-text')
     let hiddenInput = document.getElementById('input-label-name')
+    let whyUseText = document.getElementById('whyUseText')
 
     switch (id) {
         case 'bcr':
+            whyUseText.textContent = researchUse
             hiddenInput.value = researchUseName
             templateText.textContent = researchUseText
             break;
         case 'bccv':
+            whyUseText.textContent = consentVerifiedUse
             hiddenInput.value = consentVerifiedName
             templateText.textContent = consentVerifiedText
             break;
         case 'bcocomm':
+            whyUseText.textContent = openToCommUse
             hiddenInput.value = openToCommercializationName
             templateText.textContent = openToCommercializationText
             break;
         case 'bcocoll':
+            whyUseText.textContent = openToCollabUse
             hiddenInput.value = openToCollabName
             templateText.textContent = openToCollabText
             break;
         case 'bcmc':
+            whyUseText.textContent = multipleCommUse
             hiddenInput.value = multipleCommunityName
             templateText.textContent = multipleCommunityText
             break;
         case 'bcp':
+            whyUseText.textContent = provenanceUse
             hiddenInput.value = provenanceName
             templateText.textContent = provenanceText
             break;
 
         case 'bccl':
+            whyUseText.textContent = clanUse
             hiddenInput.value = clanName
             templateText.textContent = clanText
             break;
         case 'bco':
+            whyUseText.textContent = outreachUse
             hiddenInput.value = outreachName
             templateText.textContent = outreachText
             break;
         case 'bccnv':
+            whyUseText.textContent = consentNonVerifiedUse
             hiddenInput.value = consentNonVerifiedName
             templateText.textContent = consentNonVerifiedText
             break;
         case 'bcnc':
+            whyUseText.textContent = nonCommercialUse
             hiddenInput.value = nonCommercialName
             templateText.textContent = nonCommercialText
             break;
                                                             
         case 'tka':
+            whyUseText.textContent = tkAttributionUse
             hiddenInput.value = tkAttributionName
             templateText.textContent = tkAttributionText
             break;
         case 'tkcl':
+            whyUseText.textContent = tkClanUse
             hiddenInput.value = tkClanName
             templateText.textContent = tkClanText
             break;
         case 'tkf':
+            whyUseText.textContent = tkFamilyUse
             hiddenInput.value = tkFamilyName
             templateText.textContent = tkFamilyText
             break;
         case 'tkmc':
+            whyUseText.textContent = tkMultipleCommunityUse
             hiddenInput.value = tkMultipleCommunityName
             templateText.textContent = tkMultipleCommunityText
             break;
         case 'tko':
+            whyUseText.textContent = tkOutreachUse
             hiddenInput.value = tkOutreachName
             templateText.textContent = tkOutreachText
             break;
         case 'tknv':
+            whyUseText.textContent = tkNonVerifiedUse
             hiddenInput.value = tkNonVerifiedName
             templateText.textContent = tkNonVerifiedText
             break;
         case 'tkv':
+            whyUseText.textContent = tkVerifiedUse
             hiddenInput.value = tkVerifiedName
             templateText.textContent = tkVerifiedText
             break;
         case 'tknc':
+            whyUseText.textContent = tkNonCommercialUse
             hiddenInput.value = tkNonCommercialName
             templateText.textContent = tkNonCommercialText
             break;
         case 'tkoc':
+            whyUseText.textContent = tkOpenToCommercializationUse
             hiddenInput.value = tkCommercialName
             templateText.textContent = tkOpenToCommercializationText
             break;
         case 'tkcs':
+            whyUseText.textContent = tkCulturallySensitiveUse
             hiddenInput.value = tkCulturallySensitiveName
             templateText.textContent = tkCulturallySensitiveText
             break;
         case 'tkcv':
+            whyUseText.textContent = tkCommunityVoiceUse
             hiddenInput.value = tkCommunityVoiceName
             templateText.textContent = tkCommunityVoiceText
             break;
         case 'tkco':
+            whyUseText.textContent = tkCommunityUseOnlyUse
             hiddenInput.value = tkCommunityUseOnlyName
             templateText.textContent = tkCommunityUseOnlyText
             break;
         case 'tks':
+            whyUseText.textContent = tkSeasonalUse
             hiddenInput.value = tkSeasonalName
             templateText.textContent = tkSeasonalText
             break;
         case 'tkwg':
+            whyUseText.textContent = tkWomenGeneralUse
             hiddenInput.value = tkWomenGeneralName
             templateText.textContent = tkWomenGeneralText
             break;
         case 'tkmg':
+            whyUseText.textContent = tkMenGeneralUse
             hiddenInput.value = tkMenGeneralName
             templateText.textContent = tkMenGeneralText
             break;
         case 'tkmr':
+            whyUseText.textContent = tkMenRestrictedUse
             hiddenInput.value = tkMenRestrictedName
             templateText.textContent = tkMenRestrictedText
             break;
         case 'tkwr':
+            whyUseText.textContent = tkWomenRestrictedUse
             hiddenInput.value = tkWomenRestrictedName
             templateText.textContent = tkWomenRestrictedText
             break;
         case 'tkss':
+            whyUseText.textContent = tkSecretSacredUse
             hiddenInput.value = tkSecretSacredName
             templateText.textContent = tkSecretSacredText
             break;
         case 'tkcb':
+            whyUseText.textContent = tkOpenToCollaborationUse
             hiddenInput.value = tkOpenToCollaborationName
             templateText.textContent = tkOpenToCollaborationText
             break;
         case 'tkcr':
+            whyUseText.textContent = tkCreativeUse
             hiddenInput.value = tkCreativeName
             templateText.textContent = tkCreativeText
             break;
