@@ -11,7 +11,6 @@ urlpatterns = [
     path('community/members/<str:pk>/', views.community_members, name="members"),
     path('community/members/add/<str:pk>/', views.add_member, name="add-member"),
     
-    path('community/labels/<str:pk>/', views.community_labels, name="community-labels"),
     path('community/labels/select/<str:pk>/', views.select_label, name="select-label"),
     path('community/labels/select/label-exists/<str:pk>/', views.label_exists, name="label-exists"),
 
