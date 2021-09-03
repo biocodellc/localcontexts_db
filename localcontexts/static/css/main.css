@@ -517,12 +517,11 @@ input:focus {
     font-size:25px;
 }
 
-.teal-text-background {
-    color: #fff;
-    background-color: #007385;
-    border: 1px solid #007385;
-    box-sizing: border-box;
-    border-radius: 10px;
+/* Customize label */
+.about-this-label {
+    border: 1px solid #A09D9D;
+    border-radius: 17px;
+    margin: auto;
 }
 
 /* ALERTS / MESSAGES */
@@ -1066,7 +1065,6 @@ input:focus {
   .tooltip .tooltiptext {
     visibility: hidden;
     width: 330px;
-    min-height: 84px;
     background-color: #EF6C00;
     color: #fff;
     text-align: center;

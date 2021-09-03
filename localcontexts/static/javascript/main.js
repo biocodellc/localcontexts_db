@@ -334,160 +334,160 @@ if (parentDiv) {
 }
 
 function populateTemplate(id) {
-    let title = document.getElementById('label-name-p')
     let templateText = document.getElementById('label-template-text')
     let hiddenInput = document.getElementById('input-label-name')
+    let whyUseText = document.getElementById('whyUseText')
 
     switch (id) {
         case 'bcr':
-            title.innerHTML = researchUseName
+            whyUseText.textContent = researchUse
             hiddenInput.value = researchUseName
             templateText.textContent = researchUseText
             break;
         case 'bccv':
-            title.innerHTML = consentVerifiedName
+            whyUseText.textContent = consentVerifiedUse
             hiddenInput.value = consentVerifiedName
             templateText.textContent = consentVerifiedText
             break;
         case 'bcocomm':
-            title.innerHTML = openToCommercializationName
+            whyUseText.textContent = openToCommUse
             hiddenInput.value = openToCommercializationName
             templateText.textContent = openToCommercializationText
             break;
         case 'bcocoll':
-            title.innerHTML = openToCollabName
+            whyUseText.textContent = openToCollabUse
             hiddenInput.value = openToCollabName
             templateText.textContent = openToCollabText
             break;
         case 'bcmc':
-            title.innerHTML = multipleCommunityName
+            whyUseText.textContent = multipleCommUse
             hiddenInput.value = multipleCommunityName
             templateText.textContent = multipleCommunityText
             break;
         case 'bcp':
-            title.innerHTML = provenanceName
+            whyUseText.textContent = provenanceUse
             hiddenInput.value = provenanceName
             templateText.textContent = provenanceText
             break;
 
         case 'bccl':
-            title.innerHTML = clanName
+            whyUseText.textContent = clanUse
             hiddenInput.value = clanName
             templateText.textContent = clanText
             break;
         case 'bco':
-            title.innerHTML = outreachName
+            whyUseText.textContent = outreachUse
             hiddenInput.value = outreachName
             templateText.textContent = outreachText
             break;
         case 'bccnv':
-            title.innerHTML = consentNonVerifiedName
+            whyUseText.textContent = consentNonVerifiedUse
             hiddenInput.value = consentNonVerifiedName
             templateText.textContent = consentNonVerifiedText
             break;
         case 'bcnc':
-            title.innerHTML = nonCommercialName
+            whyUseText.textContent = nonCommercialUse
             hiddenInput.value = nonCommercialName
             templateText.textContent = nonCommercialText
             break;
                                                             
         case 'tka':
-            title.innerHTML = tkAttributionName
+            whyUseText.textContent = tkAttributionUse
             hiddenInput.value = tkAttributionName
             templateText.textContent = tkAttributionText
             break;
         case 'tkcl':
-            title.innerHTML = tkClanName
+            whyUseText.textContent = tkClanUse
             hiddenInput.value = tkClanName
             templateText.textContent = tkClanText
             break;
         case 'tkf':
-            title.innerHTML = tkFamilyName
+            whyUseText.textContent = tkFamilyUse
             hiddenInput.value = tkFamilyName
             templateText.textContent = tkFamilyText
             break;
         case 'tkmc':
-            title.innerHTML = tkMultipleCommunityName
+            whyUseText.textContent = tkMultipleCommunityUse
             hiddenInput.value = tkMultipleCommunityName
             templateText.textContent = tkMultipleCommunityText
             break;
         case 'tko':
-            title.innerHTML = tkOutreachName
+            whyUseText.textContent = tkOutreachUse
             hiddenInput.value = tkOutreachName
             templateText.textContent = tkOutreachText
             break;
         case 'tknv':
-            title.innerHTML = tkNonVerifiedName
+            whyUseText.textContent = tkNonVerifiedUse
             hiddenInput.value = tkNonVerifiedName
             templateText.textContent = tkNonVerifiedText
             break;
         case 'tkv':
-            title.innerHTML = tkVerifiedName
+            whyUseText.textContent = tkVerifiedUse
             hiddenInput.value = tkVerifiedName
             templateText.textContent = tkVerifiedText
             break;
         case 'tknc':
-            title.innerHTML = tkNonCommercialName
+            whyUseText.textContent = tkNonCommercialUse
             hiddenInput.value = tkNonCommercialName
             templateText.textContent = tkNonCommercialText
             break;
         case 'tkoc':
-            title.innerHTML = tkCommercialName
+            whyUseText.textContent = tkOpenToCommercializationUse
             hiddenInput.value = tkCommercialName
             templateText.textContent = tkOpenToCommercializationText
             break;
         case 'tkcs':
-            title.innerHTML = tkCulturallySensitiveName
+            whyUseText.textContent = tkCulturallySensitiveUse
             hiddenInput.value = tkCulturallySensitiveName
             templateText.textContent = tkCulturallySensitiveText
             break;
         case 'tkcv':
-            title.innerHTML = tkCommunityVoiceName
+            whyUseText.textContent = tkCommunityVoiceUse
             hiddenInput.value = tkCommunityVoiceName
             templateText.textContent = tkCommunityVoiceText
             break;
         case 'tkco':
-            title.innerHTML = tkCommunityUseOnlyName
+            whyUseText.textContent = tkCommunityUseOnlyUse
             hiddenInput.value = tkCommunityUseOnlyName
             templateText.textContent = tkCommunityUseOnlyText
             break;
         case 'tks':
-            title.innerHTML = tkSeasonalName
+            whyUseText.textContent = tkSeasonalUse
             hiddenInput.value = tkSeasonalName
             templateText.textContent = tkSeasonalText
             break;
         case 'tkwg':
-            title.innerHTML = tkWomenGeneralName
+            whyUseText.textContent = tkWomenGeneralUse
             hiddenInput.value = tkWomenGeneralName
             templateText.textContent = tkWomenGeneralText
             break;
         case 'tkmg':
-            title.innerHTML = tkMenGeneralName
+            whyUseText.textContent = tkMenGeneralUse
             hiddenInput.value = tkMenGeneralName
             templateText.textContent = tkMenGeneralText
             break;
         case 'tkmr':
-            title.innerHTML = tkMenRestrictedName
+            whyUseText.textContent = tkMenRestrictedUse
             hiddenInput.value = tkMenRestrictedName
             templateText.textContent = tkMenRestrictedText
             break;
         case 'tkwr':
-            title.innerHTML = tkWomenRestrictedName
+            whyUseText.textContent = tkWomenRestrictedUse
             hiddenInput.value = tkWomenRestrictedName
             templateText.textContent = tkWomenRestrictedText
             break;
         case 'tkss':
-            title.innerHTML = tkSecretSacredName
+            whyUseText.textContent = tkSecretSacredUse
             hiddenInput.value = tkSecretSacredName
             templateText.textContent = tkSecretSacredText
             break;
         case 'tkcb':
-            title.innerHTML = tkOpenToCollaborationName
+            whyUseText.textContent = tkOpenToCollaborationUse
             hiddenInput.value = tkOpenToCollaborationName
             templateText.textContent = tkOpenToCollaborationText
             break;
         case 'tkcr':
-            title.innerHTML = tkCreativeName
+            whyUseText.textContent = tkCreativeUse
             hiddenInput.value = tkCreativeName
             templateText.textContent = tkCreativeText
             break;

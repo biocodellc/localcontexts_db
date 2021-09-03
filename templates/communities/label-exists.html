@@ -20,7 +20,9 @@
     <div style="margin:auto 0;">
         <div class="flex-this space-between">
             <div><h2>Biocultural (BC) Labels</h2></div>
-            <div><a class="darkteal-text pointer"> <span id="show-more-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a></div>
+            <div>
+                <div class="white-btn"><a class="darkteal-text pointer"> <span id="show-more-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a></div>
+            </div>
         </div>
     </div>
 </div>
@@ -30,7 +32,9 @@
     <div style="margin:auto 0;">
         <div class="flex-this space-between">
             <div><h2>Traditional Knowledge (TK) Labels</h2></div>
-            <div><a class="darkteal-text pointer"> <span id="show-more-tk-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a></div>
+            <div class="white-btn">
+                <div><a class="darkteal-text pointer"> <span id="show-more-tk-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a></div>
+            </div>
         </div>
     </div>
 </div>
@@ -40,7 +44,7 @@
         <div id="close-modal" class="close-modal-btn w-100"> <a class="darkteal-text" href="{% url 'select-label' community.id %}"><span>&times;</span></a></div>
         <div class="add-member-modal-content">
             <p>A Label of this type has already been customized by your community.</p>
-            <div class="w-40"><a class="action-btn margin-top-2 " href="{% url 'community-labels' community.id %}">Go to customized Labels</a></div>
+            <div class="w-40"><a class="action-btn margin-top-2 " href="{% url 'select-label' community.id %}">Go to customized Labels</a></div>
         </div>
     </div>
 </div>
