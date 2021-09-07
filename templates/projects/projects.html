@@ -45,23 +45,20 @@
         {% endfor %}
     {% endif %}
 
-<!-- Projects where institution is a contributor -->
-    {% if institution_projects_contrib %}
+    <!-- Projects an institution has been notified of (institution in entities notified) or institution is contributor -->
+    {% if institution_notified %}
+        {% for notified in institution_notified %}
+            {% define notified.project as project %}
+            {% include 'projects/project-overview.html' %}
+        {% endfor %}
+    {% elif institution_projects_contrib %}
         {% for contrib in institution_projects_contrib %}
             {% if contrib.project in institution.projects.all %}
             {% else %}
                 {% define contrib.project as project %}
                 {% include 'projects/project-overview.html' %}
             {% endif %}
-        {% endfor %}
-    {% endif %}
-
-    <!-- Projects an institution has been notified of (institution in entities notified) -->
-    {% if institution_notified %}
-        {% for notified in institution_notified %}
-            {% define notified.project as project %}
-            {% include 'projects/project-overview.html' %}
-        {% endfor %}
+        {% endfor %}    
     {% endif %}
 
 {% endif %}
@@ -72,25 +69,22 @@
     {% if researcher.projects %}
         {% for project in researcher.projects.all %}
             {% include 'projects/project-overview.html' %}
-        {% endfor%}
+        {% endfor %}
     {% endif %}
 
-    <!-- Projects where researcher is a contributor -->
-    {% if researcher_projects_contrib %}
+        <!-- Projects a researcher has been notified of (researcher in entities notified) or researcher is a contributor-->
+    {% if researcher_notified %}
+        {% for notified in researcher_notified %}
+            {% define notified.project as project %}
+            {% include 'projects/project-overview.html' %}
+        {% endfor %}
+    {% elif researcher_projects_contrib %}
         {% for contrib in researcher_projects_contrib %}
             {% if contrib.project in researcher.projects.all %}
             {% else %}
                 {% define contrib.project as project %}
                 {% include 'projects/project-overview.html' %}
             {% endif %}
-        {% endfor %}
-    {% endif %}
-
-        <!-- Projects a researcher has been notified of (researcher in entities notified) -->
-    {% if researcher_notified %}
-        {% for notified in researcher_notified %}
-            {% define notified.project as project %}
-            {% include 'projects/project-overview.html' %}
         {% endfor %}
     {% endif %}
 
@@ -105,22 +99,20 @@
         {% endfor %}
     {% endif %}
 
-<!-- Projects where community is a contributor -->
-    {% if community_projects_contrib %}
+
+    <!-- Projects a community has been notified of (community in entities notified) or community is a contributor-->
+    {% if community_notified %}
+        {% for notified in community_notified %}
+            {% define notified.project as project %}
+            {% include 'projects/project-overview.html' %}
+        {% endfor %}
+    {% elif community_projects_contrib %}
         {% for contrib in community_projects_contrib %}
             {% if contrib.project in community.projects.all %}
             {% else %}
                 {% define contrib.project as project %}
                 {% include 'projects/project-overview.html' %}
             {% endif %}
-        {% endfor %}
-    {% endif %}
-
-    <!-- Projects a community has been notified of (community in entities notified) -->
-    {% if community_notified %}
-        {% for notified in community_notified %}
-            {% define notified.project as project %}
-            {% include 'projects/project-overview.html' %}
         {% endfor %}
     {% endif %}
 
