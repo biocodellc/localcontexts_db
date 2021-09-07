@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import *
 
 class NoticeAdmin(admin.ModelAdmin):
-    list_display = ('project', 'notice_type', 'placed_by_researcher', 'placed_by_institution', 'created', )
+    list_display = ('project', 'notice_type', 'placed_by_researcher', 'placed_by_institution', 'created', 'archived' )
 
 class LabelTranslationAdmin(admin.ModelAdmin):
     list_display = ('language', 'title', 'translation', )

@@ -138,9 +138,10 @@
 
         {% if project.project_notice.all %}
             <div class="margin-right-1 margin-left-1">
-                <div><p class="p-24 bold">Project Notice</p></div>
 
                 {% for notice in project.project_notice.all %}
+                {% if notice.archived %} {% else %}
+                    <div><p class="p-24 bold">Project Notice</p></div>
 
                     {% if notice.notice_type == 'biocultural' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
                         <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
@@ -161,6 +162,7 @@
                             </div>
                         </div>
                     {% endif %}
+                {% endif %}
                     
                 {% endfor %}
             </div>
