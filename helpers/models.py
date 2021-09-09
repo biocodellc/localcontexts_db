@@ -21,6 +21,7 @@ class Notice(models.Model):
     bc_default_text = models.TextField(null=True, blank=True)
     tk_img_url = models.URLField(blank=True, null=True)
     tk_default_text = models.TextField(null=True, blank=True)
+    archived = models.BooleanField(default=False, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
 

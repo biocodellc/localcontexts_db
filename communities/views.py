@@ -583,6 +583,9 @@ def apply_labels(request, pk, project_uuid):
             # If BC Notice exists
             if notices:
                 for n in notices:
+                    # Archive notice
+                    n.archived = True
+                    n.save()
                     # send notification to either institution or researcher
                     if n.placed_by_institution:
                         ActionNotification.objects.create(title=title, institution=n.placed_by_institution, notification_type='Labels', reference_id=reference_id)
