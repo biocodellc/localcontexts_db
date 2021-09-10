@@ -15,13 +15,16 @@
                         {% endif %}</em></p></div>    
                 </div>
 
-                {% if status.community.comment_community.all %}
-                    {% for comment in status.community.comment_community.all %}
-                        <div>
-                            <span class="weight-500">{{ comment.sender.get_full_name }}</span>
-                            <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-                            <p>{{ comment.message }}</p>
-                        </div>
+                <!-- TODO: FIX THIS, ORGANIZE MESSAGES BY COMMUNITY -->
+                {% if project.project_comment.all %}
+                    {% for comment in project.project_comment.all %}
+                        {% if comment.community.community_name in status.community.community_name %}
+                            <div>
+                                <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                <p>{{ comment.message }}</p>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
 
@@ -29,7 +32,7 @@
                     <form method="POST" action="">
                         {% csrf_token %}
                         <input type="hidden" value="{{ status.community.id }}" name="community-id">
-                        <input type="hidden" value="{{ notice.id }}" name="notice-id">
+                        <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
                         <div class="flex-this row">
                             <div class="w-100">{{ form.message }}</div>
                             <div class="margin-left-1"><button class="action-btn" name="add-comment-btn">Send</button></div>
