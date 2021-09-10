@@ -364,7 +364,7 @@ def notify_others(request, pk, proj_id):
                         # Create notification
                         reference_id = str(project.unique_id)
                         title =  "A Notice has been placed by " + str(institution.institution_name) + '.'
-                        ActionNotification.objects.create(community=community, notification_type='Project', reference_id=reference_id, sender=request.user, title=title)
+                        ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
             
             return redirect('institution-projects', institution.id)
 
