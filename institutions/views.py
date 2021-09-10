@@ -174,7 +174,7 @@ def institution_projects(request, pk):
                 data = form.save(commit=False)
 
                 if project_uuid:
-                    project = Project.objects.get(id=project_uuid)
+                    project = Project.objects.get(unique_id=project_uuid)
                     data.project = project
 
                 data.sender = request.user
@@ -324,13 +324,14 @@ def edit_project(request, institution_id, project_uuid):
 @login_required(login_url='login')
 def notify_others(request, pk, proj_id):
     institution = Institution.objects.get(id=pk)
+    project = Project.objects.get(id=proj_id)
+    notice_exists = Notice.objects.filter(project=project)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
-        project = Project.objects.get(id=proj_id)
-        communities = Community.objects.all()
+        communities = Community.objects.filter(is_approved=True, is_publicly_listed=True)
 
         if request.method == "POST":
             # Set private project to discoverable
@@ -348,21 +349,22 @@ def notify_others(request, pk, proj_id):
                 if notice_exists:
                     notices = Notice.objects.filter(project=project)
                     for notice in notices:
-                        notice_status = ProjectStatus.objects.create(community=community, seen=False) # Creates a notice status for each community
-                        notice.communities.add(community)
-                        notice.save()
+                        # Add communities that were notified to entities_notified instance
+                        entities_notified = EntitiesNotified.objects.get(project=project)
+                        entities_notified.communities.add(community)
+                        entities_notified.save()
 
-                        # Create notice status
-                        notice_status.notice = notice
-                        notice_status.save()
+                        # Create project status
+                        project_status = ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
+                        project_status.save()
 
                         # Create first comment for notice
-                        ProjectComment.objects.create(notice=notice, community=community, sender=request.user, message=message)
+                        ProjectComment.objects.create(project=project, community=community, sender=request.user, message=message)
 
                         # Create notification
-                        reference_id = str(notice.id)
+                        reference_id = str(project.unique_id)
                         title =  "A Notice has been placed by " + str(institution.institution_name) + '.'
-                        ActionNotification.objects.create(community=community, notification_type='Project', reference_id=reference_id, sender=request.user, title=title)
+                        ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
             
             return redirect('institution-projects', institution.id)
 

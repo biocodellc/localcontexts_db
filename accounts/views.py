@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib import messages, auth
 from django.views.generic import View
+from django.contrib.auth.views import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user
@@ -191,7 +193,6 @@ def create_profile(request):
 
 @login_required(login_url='login')
 def update_profile(request):
-    #TODO: add a password reset form and account deactivation
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(
@@ -213,9 +214,24 @@ def update_profile(request):
 
     context = {
         'user_form': user_form,
-        'profile_form': profile_form
+        'profile_form': profile_form,
     }
     return render(request, 'accounts/update-profile.html', context)
+
+@login_required(login_url='login')
+def change_password(request):
+    form = PasswordChangeForm(request.user, request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.add_message(request, messages.SUCCESS, 'Password Successfully Changed!')
+            return redirect('change-password')
+        else:
+            messages.add_message(request, messages.ERROR, 'Something went wrong')
+            return redirect('change-password')
+    return render(request, 'accounts/change-password.html', {'form':form,})
+    
 
 @login_required(login_url='login')
 def deactivate_user(request):

@@ -71,8 +71,8 @@ class ProjectComment(models.Model):
         return 'Comment {} by {}'.format(self.message, self.community)
 
     class Meta:
-        verbose_name = 'Notice Comment'
-        verbose_name_plural = 'Notice Comments'
+        verbose_name = 'Project Comment'
+        verbose_name_plural = 'Project Comments'
         ordering = ('created',)
 
 class ProjectStatus(models.Model):
@@ -89,5 +89,5 @@ class ProjectStatus(models.Model):
         return f"{self.community} - {self.seen} - {self.status}"
 
     class Meta:
-        verbose_name = 'Notice Status'
-        verbose_name_plural = 'Notice Statuses'
+        verbose_name = 'Project Status'
+        verbose_name_plural = 'Project Statuses'

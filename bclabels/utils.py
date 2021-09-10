@@ -38,12 +38,12 @@ def assign_bclabel_img(label_type):
     if label_type == 'bcp':
         return baseURL + 'bc-provenance.png'
     if label_type == 'bccl':
-        return 'bc-clan.png'
+        return baseURL + 'bc-clan.png'
     if label_type == 'bco':
-        return 'bc-outreach.png'
+        return baseURL + 'bc-outreach.png'
     if label_type == 'bccnv':
-        return 'bc-consent-non-verified.png'
+        return baseURL + 'bc-consent-non-verified.png'
     if label_type == 'bcnc':
-        return 'bc-non-commercial.png'
+        return baseURL + 'bc-non-commercial.png'
     if label_type == 'placeholder':
         return None

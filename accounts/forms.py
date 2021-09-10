@@ -46,7 +46,6 @@ class UserUpdateForm(forms.ModelForm):
             'last_name': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
-
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile

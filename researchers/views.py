@@ -252,7 +252,7 @@ def notify_others(request, pk, proj_id):
     else:
         project = Project.objects.get(id=proj_id)
         notify_entities = EntitiesNotified.objects.get(project=project)
-        communities = Community.objects.all()
+        communities = Community.objects.filter(is_approved=True, is_publicly_listed=True)
 
         if request.method == "POST":
             # Set private project to discoverable

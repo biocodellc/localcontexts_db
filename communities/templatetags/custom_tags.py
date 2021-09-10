@@ -18,7 +18,7 @@ def get_label_count(community):
 
 @register.simple_tag
 def anchor(url_name, section_id, community_id):
-    return reverse(url_name, kwargs={'pk': community_id}) + "project-unique-" + str(section_id)
+    return reverse(url_name, kwargs={'pk': community_id}) + "#project-unique-" + str(section_id)
 
 @register.simple_tag
 def community_notifications(community):
