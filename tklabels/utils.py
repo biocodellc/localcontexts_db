@@ -85,8 +85,3 @@ def assign_tklabel_img(label_type):
         return baseURL + 'tk-open-to-collaboration.png'
     if label_type == 'placeholder':
         return None
-
-def set_tknotice_defaults(tknotice):
-    tknotice.img_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/tk-notice.png'
-    tknotice.default_text = 'The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated.'
-    tknotice.save()  
