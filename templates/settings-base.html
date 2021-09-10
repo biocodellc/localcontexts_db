@@ -38,6 +38,19 @@
                         </div>
                     </a>
 
+                    <a href="{% url 'change-password' %}">
+                        {% if 'change-password' in request.path %} 
+                        <div class="flex-this side-nav-item selected">
+                        {% else %}
+                        <div class="flex-this side-nav-item grey-text">
+                        {% endif %}
+                            <div class="w-20 margin-right-1"><i class="fa fa-key" aria-hidden="true"></i></div>
+                            <div class="w-80">
+                                <p class="no-top-margin"><strong>Password</strong><br>Change your password</p>
+                            </div>  
+                        </div>
+                    </a>
+
                     <a href="{% url 'deactivate-user' %}">
                         {% if 'deactivate' in request.path %} 
                         <div class="flex-this side-nav-item selected">
