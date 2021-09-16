@@ -17,164 +17,203 @@
 </div>
 
 {% if community %}
-<div class="content-card-v2 content-card-space white-bg">
-    <div>
-        <h2 class="darkteal-text no-top-margin">
-        {% if community.community_creator.get_full_name %}
-            {{ community.community_creator.get_full_name }}
-        {% else %}
-            {{ community.community_creator }}
-        {% endif %}
-        </h2>
-
-        <p class="no-bottom-margin">
-            <span class="bold">Role</span> | Administrator <br><br>
-            <span class="bold">Job title</span> | {{ community.community_creator.profile.job_title }} <br><br>
-        </p>
-    </div>
-</div>
-
-{% for admin in community.get_admins %}
     <div class="content-card-v2 content-card-space white-bg">
-        <div>
-            <h2 class="darkteal-text no-top-margin">
-                {% if admin.get_full_name %}
-                    {{ admin.get_full_name }}
-                {% else %}
-                    {{ admin }}
-                {% endif %}
-            </h2>
-
-            <p class="no-bottom-margin">
-                <span class="bold">Role</span> | Administrator <br><br>
-                <span class="bold">Job title</span> | {{ admin.profile.job_title }} <br><br>
-            </p>
-        </div>
-    </div>
-{% endfor %}
-
-{% for editor in community.get_editors %}
-    <div class="content-card-v2 content-card-space white-bg">
-        <div>
-            <h2 class="darkteal-text no-top-margin">
-                {% if editor.get_full_name %}
-                    {{ editor.get_full_name }}
-                {% else %}
-                    {{ editor }}
-                {% endif %}
-            </h2>
-
-            <p class="no-bottom-margin">
-                <span class="bold">Role</span> | Editor <br><br>
-                <span class="bold">Job title</span> | {{ editor.profile.job_title }} <br><br>
-            </p>
-        </div>
-    </div>
-{% endfor %}
-
-{% for viewer in community.get_viewers %}
-    <div class="content-card-v2 content-card-space white-bg">
-        <div>
-            <h2 class="darkteal-text no-top-margin">
-                {% if viewer.get_full_name %}
-                    {{ viewer.get_full_name }}
-                {% else %}
-                    {{ viewer }}
-                {% endif %}
-            </h2>
-
-            <p class="no-bottom-margin">
-                <span class="bold">Role</span> | Viewer <br><br>
-                <span class="bold">Job title</span> | {{ viewer.profile.job_title }} <br><br>
-            </p>
-        </div>
-    </div>
-{% endfor %}
-
-{% if member_role == 'admin' or member_role == 'editor' %}
-    <div>
-        <a href="{% url 'add-member' community.id %}">
-            <div class="flex-this add-member-card">
-            <div class="w-100 add-member">
-                <h4 class="darkteal-text weight-500">+ Add a Member </h4>
-            </div>
-            </div>
-        </a>
-    </div>
-{% endif %}
-{% endif %}
-
-{% if institution %}
-    <div class="content-card-v2 content-card-space white-bg">
-        <div>
-            <h2 class="darkteal-text no-top-margin">
-            {% if institution.institution_creator.get_full_name %}
-                {{ institution.institution_creator.get_full_name }}
-            {% else %}
-                {{ institution.institution_creator }}
-            {% endif %}
-            </h2>
-
-            <p class="no-bottom-margin">
-                <span class="bold">Role</span> | Administrator <br><br>
-                <span class="bold">Job title</span> | {{ institution.institution_creator.profile.job_title }} <br><br>
-            </p>
-        </div>
-    </div>
-
-    {% for admin in institution.get_admins %}
-        <div class="content-card-v2 content-card-space white-bg">
+        <div class="flex-this space-between">
             <div>
                 <h2 class="darkteal-text no-top-margin">
-                    {% if admin.get_full_name %}
-                        {{ admin.get_full_name }}
-                    {% else %}
-                        {{ admin }}
-                    {% endif %}
+                    {% if community.community_creator.get_full_name %}{{ community.community_creator.get_full_name }}{% else %}{{ community.community_creator }}{% endif %}
                 </h2>
 
                 <p class="no-bottom-margin">
                     <span class="bold">Role</span> | Administrator <br><br>
-                    <span class="bold">Job title</span> | {{ admin.profile.job_title }} <br><br>
+                    <span class="bold">Job title</span> | {{ community.community_creator.profile.job_title }} <br><br>
                 </p>
+            </div>
+            <div class="dropdown">
+                <a onclick="toggleMeatballMenu(this)" id="meatball-{{ community.community_creator.id }}" class="meatball"><i class="fa fa-ellipsis-h darkteal-text" style="font-size: 24px;"></i></a>
+                <div id="meatball-content-{{ community.community_creator.id }}" class="meatball-dropdown-content hide"> 
+                    <span class="darkteal-text">Remove member</span>
+                </div>
+            </div>       
+        </div>
+    </div>
+
+    {% for admin in community.get_admins %}
+        <div class="content-card-v2 content-card-space white-bg">
+            <div class="flex-this space-between">
+                <div>
+                    <h2 class="darkteal-text no-top-margin">
+                        {% if admin.get_full_name %}{{ admin.get_full_name }}{% else %}{{ admin }}{% endif %}
+                    </h2>
+
+                    <p class="no-bottom-margin">
+                        <span class="bold">Role</span> | Administrator <br><br>
+                        <span class="bold">Job title</span> | {{ admin.profile.job_title }} <br><br>
+                    </p>
+                </div>            
+            </div>
+            <div class="dropdown">
+                <a onclick="toggleMeatballMenu(this)" id="meatball-{{ admin.id }}" class="meatball"><i class="fa fa-ellipsis-h darkteal-text" style="font-size: 24px;"></i></a>
+                <div id="meatball-content-{{ admin.id }}" class="meatball-dropdown-content hide"> 
+                    <span class="darkteal-text">Remove member</span>
+                </div>
+            </div> 
+        </div>
+    {% endfor %}
+
+    {% for editor in community.get_editors %}
+        <div class="content-card-v2 content-card-space white-bg">
+            <div class="flex-this space-between">
+                <div>
+                    <h2 class="darkteal-text no-top-margin">
+                        {% if editor.get_full_name %}{{ editor.get_full_name }}{% else %}{{ editor }}{% endif %}
+                    </h2>
+
+                    <p class="no-bottom-margin">
+                        <span class="bold">Role</span> | Editor <br><br>
+                        <span class="bold">Job title</span> | {{ editor.profile.job_title }} <br><br>
+                    </p>
+                </div>
+                <div class="dropdown">
+                    <a onclick="toggleMeatballMenu(this)" id="meatball-{{ editor.id }}" class="meatball"><i class="fa fa-ellipsis-h darkteal-text" style="font-size: 24px;"></i></a>
+                    <div id="meatball-content-{{ editor.id }}" class="meatball-dropdown-content hide"> 
+                        <span class="darkteal-text">Remove member</span>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    {% endfor %}
+
+    {% for viewer in community.get_viewers %}
+        <div class="content-card-v2 content-card-space white-bg">
+            <div class="flex-this space-between">
+                <div>
+                    <h2 class="darkteal-text no-top-margin">
+                        {% if viewer.get_full_name %}{{ viewer.get_full_name }}{% else %}{{ viewer }}{% endif %}
+                    </h2>
+
+                    <p class="no-bottom-margin">
+                        <span class="bold">Role</span> | Viewer <br><br>
+                        <span class="bold">Job title</span> | {{ viewer.profile.job_title }} <br><br>
+                    </p>
+                </div>
+                <div class="dropdown">
+                    <a onclick="toggleMeatballMenu(this)" id="meatball-{{ viewer.id }}" class="meatball"><i class="fa fa-ellipsis-h darkteal-text" style="font-size: 24px;"></i></a>
+                    <div id="meatball-content-{{ viewer.id }}" class="meatball-dropdown-content hide"> 
+                        <!-- <span class="darkteal-text">Change role</span> -->
+                        <span class="darkteal-text">Remove member</span>
+                    </div>
+                </div>             
+            </div>
+        </div>
+    {% endfor %}
+
+    {% if member_role == 'admin' or member_role == 'editor' %}
+        <div>
+            <a href="{% url 'add-member' community.id %}">
+                <div class="flex-this add-member-card">
+                <div class="w-100 add-member">
+                    <h4 class="darkteal-text weight-500">+ Add a Member </h4>
+                </div>
+                </div>
+            </a>
+        </div>
+    {% endif %}
+{% endif %}
+
+{% if institution %}
+    <div class="content-card-v2 content-card-space white-bg">
+        <div class="flex-this space-between">
+            <div>
+                <h2 class="darkteal-text no-top-margin">
+                    {% if institution.institution_creator.get_full_name %}{{ institution.institution_creator.get_full_name }}{% else %}{{ institution.institution_creator }}{% endif %}
+                </h2>
+
+                <p class="no-bottom-margin">
+                    <span class="bold">Role</span> | Administrator <br><br>
+                    <span class="bold">Job title</span> | {{ institution.institution_creator.profile.job_title }} <br><br>
+                </p>
+            </div>
+            <div class="dropdown">
+                <a onclick="toggleMeatballMenu(this)" id="meatball-{{ institution.institution_creator.id }}" class="meatball"><i class="fa fa-ellipsis-h darkteal-text" style="font-size: 24px;"></i></a>
+                <div id="meatball-content-{{ institution.institution_creator.id }}" class="meatball-dropdown-content hide"> 
+                    <span class="darkteal-text">Remove member</span>
+                </div>
+            </div>             
+        </div>
+
+    </div>
+
+    {% for admin in institution.get_admins %}
+        <div class="content-card-v2 content-card-space white-bg">
+            <div class="flex-this space-between">
+                <div>
+                    <h2 class="darkteal-text no-top-margin">
+                        {% if admin.get_full_name %}{{ admin.get_full_name }}{% else %}{{ admin }}{% endif %}
+                    </h2>
+
+                    <p class="no-bottom-margin">
+                        <span class="bold">Role</span> | Administrator <br><br>
+                        <span class="bold">Job title</span> | {{ admin.profile.job_title }} <br><br>
+                    </p>
+                </div>
+                <div class="dropdown">
+                    <a onclick="toggleMeatballMenu(this)" id="meatball-{{ admin.id }}" class="meatball"><i class="fa fa-ellipsis-h darkteal-text" style="font-size: 24px;"></i></a>
+                    <div id="meatball-content-{{ admin.id }}" class="meatball-dropdown-content hide"> 
+                        <span class="darkteal-text">Remove member</span>
+                    </div>
+                </div>  
             </div>
         </div>
     {% endfor %}
 
     {% for editor in institution.get_editors %}
         <div class="content-card-v2 content-card-space white-bg">
-            <div>
-                <h2 class="darkteal-text no-top-margin">
-                    {% if editor.get_full_name %}
-                        {{ editor.get_full_name }}
-                    {% else %}
-                        {{ editor }}
-                    {% endif %}
-                </h2>
+            <div class="flex-this space-between">
+                <div>
+                    <h2 class="darkteal-text no-top-margin">
+                        {% if editor.get_full_name %}{{ editor.get_full_name }}{% else %}{{ editor }}{% endif %}
+                    </h2>
 
-                <p class="no-bottom-margin">
-                    <span class="bold">Role</span> | Editor <br><br>
-                    <span class="bold">Job title</span> | {{ editor.profile.job_title }} <br><br>
-                </p>
+                    <p class="no-bottom-margin">
+                        <span class="bold">Role</span> | Editor <br><br>
+                        <span class="bold">Job title</span> | {{ editor.profile.job_title }} <br><br>
+                    </p>
+                </div>
+                <div class="dropdown">
+                    <a onclick="toggleMeatballMenu(this)" id="meatball-{{ editor.id }}" class="meatball"><i class="fa fa-ellipsis-h darkteal-text" style="font-size: 24px;"></i></a>
+                    <div id="meatball-content-{{ editor.id }}" class="meatball-dropdown-content hide"> 
+                        <span class="darkteal-text">Remove member</span>
+                    </div>
+                </div> 
             </div>
+ 
         </div>
     {% endfor %}
 
     {% for viewer in institution.get_viewers %}
         <div class="content-card-v2 content-card-space white-bg">
-            <div>
-                <h2 class="darkteal-text no-top-margin">
-                    {% if viewer.get_full_name %}
-                        {{ viewer.get_full_name }}
-                    {% else %}
-                        {{ viewer }}
-                    {% endif %}
-                </h2>
+            <div class="flex-this space-between">
+                <div>
+                    <h2 class="darkteal-text no-top-margin">
+                        {% if viewer.get_full_name %}
+                            {{ viewer.get_full_name }}
+                        {% else %}
+                            {{ viewer }}
+                        {% endif %}
+                    </h2>
 
-                <p class="no-bottom-margin">
-                    <span class="bold">Role</span> | Viewer <br><br>
-                    <span class="bold">Job title</span> | {{ viewer.profile.job_title }} <br><br>
-                </p>
+                    <p class="no-bottom-margin">
+                        <span class="bold">Role</span> | Viewer <br><br>
+                        <span class="bold">Job title</span> | {{ viewer.profile.job_title }} <br><br>
+                    </p>
+                </div>
+                <div class="dropdown">
+                    <a onclick="toggleMeatballMenu(this)" id="meatball-{{ viewer.id }}" class="meatball"><i class="fa fa-ellipsis-h darkteal-text" style="font-size: 24px;"></i></a>
+                    <div id="meatball-content-{{ viewer.id }}" class="meatball-dropdown-content hide"> 
+                        <span class="darkteal-text">Remove member</span>
+                    </div>
+                </div>  
             </div>
         </div>
     {% endfor %}
