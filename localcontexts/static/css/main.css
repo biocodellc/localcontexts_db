@@ -667,7 +667,6 @@ input:focus {
     padding: 19px 20px;
 }
 
-
 .comm-nav-links a {
     color: #A09D9D;
 }
@@ -679,33 +678,9 @@ input:focus {
 }
 
 /* COMMUNITY DASHBOARD: MEMBERS PAGE */
-.community-member-card, .add-member-card {
+.add-member-card {
     max-height: 75px;
     min-height: 75px;
-}
-
-.community-member-card {
-    margin-top: 1%;
-    margin-bottom: 1%;
-}
-
-.color-section {
-   border-radius: 5px 0px 0px 5px;
-   min-width: 17px;
-   max-width: 17px; 
-   padding: 0;
-   margin: 0;
-}
-
-.member-name {
-    height: 100%;
-    padding-left: 1.5%;
-    margin: auto;
-}
-
-.member-role {
-    text-align: right;
-    padding-right: 2%;
 }
 
 /* ADD MEMBER MODAL */
