@@ -168,6 +168,27 @@ def add_member(request, pk):
         }
         return render(request, 'communities/add-member.html', context)
 
+@login_required(login_url='login')
+def remove_member(request, pk, member_id):
+    community = Community.objects.get(id=pk)
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        if request.method == 'POST':
+            member = User.objects.get(id=member_id)
+            # what role does member have
+            # remove from role
+            # remove community from userAffiloiation instance
+
+        context = {
+            'community': community,
+            'member_role': member_role,
+        }
+        return render(request, 'communities/remove-member.html', context)
+
+
 # Select Labels to Customize
 @login_required(login_url='login')
 def select_label(request, pk):

@@ -47,9 +47,9 @@ def discoverable_project_view(user, project_uuid):
         for researcher in contributing_researchers:
             return user == researcher.user
 
-    elif project.project_notice.all(): # is user in notified communities
-        for notice in project.project_notice.all():
-            for community in notice.communities.all():
+    elif project.project_notified.all(): # is user in notified communities
+        for notified in project.project_notified.all():
+            for community in notified.communities.all():
                 return community.is_user_in_community(user)
 
     else:
