@@ -129,6 +129,24 @@ def institution_members(request, pk):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         return render(request, 'institutions/members.html', {'institution': institution, 'member_role': member_role,})
+    
+@login_required(login_url='login')
+def remove_member(request, pk, member_id):
+    institution = Institution.objects.get(id=pk)
+    member = User.objects.get(id=member_id)
+    # what role does member have
+    # remove from role
+    if member in institution.admins.all():
+        institution.admins.remove(member)
+    if member in institution.editors.all():
+        institution.editors.remove(member)
+    if member in institution.viewers.all():
+        institution.viewers.remove(member)
+
+    # remove institution from userAffiloiation instance
+    affiliation = UserAffiliation.objects.get(user=member)
+    affiliation.institutions.remove(institution)
+    return redirect('institution-members', institution.id)
 
 @login_required(login_url='login')
 def add_member(request, pk):
