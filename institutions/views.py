@@ -17,6 +17,7 @@ from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
 from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified
 
+from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
 
 from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm

@@ -8,6 +8,8 @@ from django.template.loader import render_to_string
 
 from mimetypes import guess_type
 
+from django.contrib.auth.models import User
+
 from accounts.models import UserAffiliation
 from helpers.models import LabelTranslation, ProjectStatus, Notice, EntitiesNotified
 from notifications.models import ActionNotification
