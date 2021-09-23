@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('institution/members/<str:pk>/', views.institution_members, name="institution-members"),
     path('institution/members/add/<str:pk>/', views.add_member, name="add-institution-member"),
-    # path('institution/members/remove/<str:pk>/<str:member_id>', views.remove_member, name="remove-institution-member"),
+    path('institution/members/remove/<str:pk>/<str:member_id>', views.remove_member, name="remove-institution-member"),
 
     path('institution/projects/<str:pk>/', views.institution_projects, name="institution-projects"),
     path('institution/projects/create-project/<str:pk>/', views.create_project, name="inst-create-project"),

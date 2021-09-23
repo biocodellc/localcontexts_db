@@ -8,6 +8,8 @@ from django.template.loader import render_to_string
 
 from mimetypes import guess_type
 
+from django.contrib.auth.models import User
+
 from accounts.models import UserAffiliation
 from helpers.models import LabelTranslation, ProjectStatus, Notice, EntitiesNotified
 from notifications.models import ActionNotification
@@ -121,7 +123,6 @@ def update_community(request, pk):
 @login_required(login_url='login')
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
-
     member_role = check_member_role(request.user, community)
     return render(request, 'communities/members.html', {'community': community, 'member_role': member_role, })
 
@@ -171,23 +172,20 @@ def add_member(request, pk):
 @login_required(login_url='login')
 def remove_member(request, pk, member_id):
     community = Community.objects.get(id=pk)
+    member = User.objects.get(id=member_id)
+    # what role does member have
+    # remove from role
+    if member in community.admins.all():
+        community.admins.remove(member)
+    if member in community.editors.all():
+        community.editors.remove(member)
+    if member in community.viewers.all():
+        community.viewers.remove(member)
 
-    member_role = check_member_role(request.user, community)
-    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
-    else:
-        if request.method == 'POST':
-            member = User.objects.get(id=member_id)
-            # what role does member have
-            # remove from role
-            # remove community from userAffiloiation instance
-
-        context = {
-            'community': community,
-            'member_role': member_role,
-        }
-        return render(request, 'communities/remove-member.html', context)
-
+    # remove community from userAffiloiation instance
+    affiliation = UserAffiliation.objects.get(user=member)
+    affiliation.communities.remove(community)
+    return redirect('members', community.id)
 
 # Select Labels to Customize
 @login_required(login_url='login')
