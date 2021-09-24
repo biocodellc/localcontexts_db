@@ -159,15 +159,9 @@ function showBCLabelInfo() {
     let header = document.getElementById('bclabels-title-vertical')
 
     if (labelContainer.style.height == "0px") {
-        // header.style.margin = "0"
-        // fullCard.style.height = "460px"
-        // fullCard.style.transition = "height 0.5s"
-        // labelContainer.style.height = "460px"
-
         header.style.margin = "0"
         fullCard.style.height = "auto"
         labelContainer.style.height = "auto"
-
         span.innerHTML = `Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>`
     } else {
         header.style.margin = "auto 0"
@@ -194,88 +188,118 @@ function expandBCLabel(img) {
         }
     })
 
-    // Expand full card
-    let info = document.getElementById('bclabel-info')
     let fullCard = document.getElementById('collapsed-card')
     let labelContainer = document.getElementById('expand-bclabels')
+    let targetImg = img.id
 
-    if (info.style.height == "0px") {
-        labelContainer.style.height = "auto"
-        info.style.height = "auto"
-        fullCard.style.height = "auto"
-    } else {
-        labelContainer.style.height = "auto"
-        info.style.height = "0px"
-        fullCard.style.height = "auto"
+    // Provenance
+    let infoProv = document.getElementById('bclabel-info-prov')
+    let titleProv = document.getElementById('bc-label-title-prov')
+    let templateTextProv = document.getElementById('label-template-text-bc-prov')
+    let whyUseLabelTextProv = document.getElementById('why-use-this-label-bc-prov')
+
+    // Protocols
+    let infoProt = document.getElementById('bclabel-info-prot')
+    let titleProt = document.getElementById('bc-label-title-prot')
+    let templateTextProt = document.getElementById('label-template-text-bc-prot')
+    let whyUseLabelTextProt = document.getElementById('why-use-this-label-bc-prot')
+
+    // Permissions
+    let infoPerms = document.getElementById('bclabel-info-perm')
+    let titlePerms = document.getElementById('bc-label-title-perm')
+    let templateTextPerms = document.getElementById('label-template-text-bc-perm')
+    let whyUseLabelTextPerms = document.getElementById('why-use-this-label-bc-perm')
+
+    function openBCInfoDiv(targetDiv) {
+        if (targetDiv.style.height == "0px") {
+            labelContainer.style.height = "auto"
+            targetDiv.style.height = "auto"
+            fullCard.style.height = "auto"
+        } else {
+            labelContainer.style.height = "auto"
+            targetDiv.style.height = "0px"
+            fullCard.style.height = "auto"
+        }       
     }
 
+
     // Set content based on which Label was selected
-    let targetImg = img.id
-    let title = document.getElementById('bc-label-title')
-    let templateText = document.getElementById('label-template-text')
-    let whyUseLabelText = document.getElementById('why-use-this-label')
 
     switch (targetImg) {
-        case 'bcr':
-            whichBCImgClicked('bcr')
-            title.textContent = researchUseName
-            templateText.textContent = researchUseText
-            whyUseLabelText.textContent = researchUse
-            break;
+        // Protocols
         case 'bccv':
+            openBCInfoDiv(infoProt)
             whichBCImgClicked('bccv')
-            title.textContent = consentVerifiedName
-            templateText.textContent = consentVerifiedText
-            whyUseLabelText.textContent = consentVerifiedUse
-            break;
-        case 'bcocomm':
-            whichBCImgClicked('bcocomm')
-            title.textContent = openToCommercializationName
-            templateText.textContent = openToCommercializationText
-            whyUseLabelText.textContent = openToCommUse
-            break;
-        case 'bcocoll':
-            whichBCImgClicked('bcocoll')
-            title.textContent = openToCollabName
-            templateText.textContent = openToCollabText
-            whyUseLabelText.textContent = openToCollabUse
-            break;
-        case 'bcmc':
-            whichBCImgClicked('bcmc')
-            title.textContent = multipleCommunityName
-            templateText.textContent = multipleCommunityText
-            whyUseLabelText.textContent = multipleCommUse
-            break;
-        case 'bcp':
-            whichBCImgClicked('bcp')
-            title.textContent = provenanceName
-            templateText.textContent = provenanceText
-            whyUseLabelText.textContent = provenanceUse
-            break;
-
-        case 'bccl':
-            whichBCImgClicked('bccl')
-            title.textContent = clanName
-            templateText.textContent = clanText
-            whyUseLabelText.textContent = clanUse
-            break;
-        case 'bco':
-            whichBCImgClicked('bco')
-            title.textContent = outreachName
-            templateText.textContent = outreachText
-            whyUseLabelText.textContent = outreachUse
+            titleProt.textContent = consentVerifiedName
+            templateTextProt.textContent = consentVerifiedText
+            whyUseLabelTextProt.textContent = consentVerifiedUse
             break;
         case 'bccnv':
+            openBCInfoDiv(infoProt)
             whichBCImgClicked('bccnv')
-            title.textContent = consentNonVerifiedName
-            templateText.textContent = consentNonVerifiedText
-            whyUseLabelText.textContent = consentNonVerifiedUse
+            titleProt.textContent = consentNonVerifiedName
+            templateTextProt.textContent = consentNonVerifiedText
+            whyUseLabelTextProt.textContent = consentNonVerifiedUse
+            break;
+
+        // Provenance
+        case 'bcmc':
+            openBCInfoDiv(infoProv)
+            whichBCImgClicked('bcmc')
+            titleProv.textContent = multipleCommunityName
+            templateTextProv.textContent = multipleCommunityText
+            whyUseLabelTextProv.textContent = multipleCommUse
+            break;
+        case 'bcp':
+            openBCInfoDiv(infoProv)
+            whichBCImgClicked('bcp')
+            titleProv.textContent = provenanceName
+            templateTextProv.textContent = provenanceText
+            whyUseLabelTextProv.textContent = provenanceUse
+            break;
+        case 'bccl':
+            openBCInfoDiv(infoProv)
+            whichBCImgClicked('bccl')
+            titleProv.textContent = clanName
+            templateTextProv.textContent = clanText
+            whyUseLabelTextProv.textContent = clanUse
+            break;
+
+        // Permissions
+        case 'bcr':
+            openBCInfoDiv(infoPerms)
+            whichBCImgClicked('bcr')
+            titlePerms.textContent = researchUseName
+            templateTextPerms.textContent = researchUseText
+            whyUseLabelTextPerms.textContent = researchUse
+            break;
+        case 'bco':
+            openBCInfoDiv(infoPerms)
+            whichBCImgClicked('bco')
+            titlePerms.textContent = outreachName
+            templateTextPerms.textContent = outreachText
+            whyUseLabelTextPerms.textContent = outreachUse
             break;
         case 'bcnc':
+            openBCInfoDiv(infoPerms)
             whichBCImgClicked('bcnc')
-            title.textContent = nonCommercialName
-            templateText.textContent = nonCommercialText
-            whyUseLabelText.textContent = nonCommercialUse
+            titlePerms.textContent = nonCommercialName
+            templateTextPerms.textContent = nonCommercialText
+            whyUseLabelTextPerms.textContent = nonCommercialUse
+            break;
+        case 'bcocomm':
+            openBCInfoDiv(infoPerms)
+            whichBCImgClicked('bcocomm')
+            titlePerms.textContent = openToCommercializationName
+            templateTextPerms.textContent = openToCommercializationText
+            whyUseLabelTextPerms.textContent = openToCommUse
+            break;
+        case 'bcocoll':
+            openBCInfoDiv(infoPerms)
+            whichBCImgClicked('bcocoll')
+            titlePerms.textContent = openToCollabName
+            templateTextPerms.textContent = openToCollabText
+            whyUseLabelTextPerms.textContent = openToCollabUse
             break;
     }
 
@@ -283,8 +307,17 @@ function expandBCLabel(img) {
 
 //  Assign input value based on which bc label image is selected in Community: select-labels
 function whichBCImgClicked(val) {
-    var input = document.getElementById('bc-label-value-type')
-    input.value = val
+    var inputProv = document.getElementById('bc-label-value-type-prov')
+    var inputProt = document.getElementById('bc-label-value-type-prot')
+    var inputPerms = document.getElementById('bc-label-value-type-perm')
+
+    if (val == 'bcp' || val == 'bcmc' || val == 'bccl')  {
+        inputProv.value = val
+    } else if (val == 'bccv' || val == 'bccnv') {
+        inputProt.value = val
+    } else if (val == 'bcr' || val == 'bcocoll' || val == 'bcocomm' || val == 'bco' || val == 'bcnc') {
+        inputPerms.value = val
+    }
     displayExpandedImage(val)
 }
 
@@ -316,9 +349,9 @@ function whichTKImgClicked(val) {
 
     if(val == 'tka' || val == 'tkcl' || val == 'tkf' || val == 'tkmc' || val == 'tkcv' || val == 'tkcr') {
         inputProv.value = val
-    } else if (val == 'tks' || val == 'tkwg' || val == 'tkmg' || val == 'tkmr' || val == 'tkwr' || val == 'tkcs' || val == 'tkss') {
+    } else if (val == 'tkv' || val == 'tknv' || val == 'tks' || val == 'tkwg' || val == 'tkmg' || val == 'tkmr' || val == 'tkwr' || val == 'tkcs' || val == 'tkss') {
         inputProt.value = val
-    } else if (val == 'tkv' || val == 'tknv' || val == 'tkoc' || val == 'tknc' || val == 'tkco' || val == 'tko' || val == 'tkcb') {
+    } else if (val == 'tkoc' || val == 'tknc' || val == 'tkco' || val == 'tko' || val == 'tkcb') {
         inputPerms.value = val
     }
 
@@ -645,6 +678,20 @@ function expandTKLabel(img) {
             break;
 
         // Protocols Labels
+        case 'tknv':
+            openInfoDiv(infoProt)
+            whichTKImgClicked('tknv')
+            titleProt.textContent = tkNonVerifiedName
+            templateTextProt.textContent = tkNonVerifiedText
+            whyUseLabelTextProt.textContent = tkNonVerifiedUse
+            break;
+        case 'tkv':
+            openInfoDiv(infoProt)
+            whichTKImgClicked('tkv')
+            titleProt.textContent = tkVerifiedName
+            templateTextProt.textContent = tkVerifiedText
+            whyUseLabelTextProt.textContent = tkVerifiedUse
+            break;
         case 'tks':
             openInfoDiv(infoProt)
             whichTKImgClicked('tks')
@@ -702,20 +749,6 @@ function expandTKLabel(img) {
             titlePerms.textContent = tkOutreachName
             templateTextPerms.textContent = tkOutreachText
             whyUseLabelTextPerms.textContent = tkOutreachUse
-            break;
-        case 'tknv':
-            openInfoDiv(infoPerms)
-            whichTKImgClicked('tknv')
-            titlePerms.textContent = tkNonVerifiedName
-            templateTextPerms.textContent = tkNonVerifiedText
-            whyUseLabelTextPerms.textContent = tkNonVerifiedUse
-            break;
-        case 'tkv':
-            openInfoDiv(infoPerms)
-            whichTKImgClicked('tkv')
-            titlePerms.textContent = tkVerifiedName
-            templateTextPerms.textContent = tkVerifiedText
-            whyUseLabelTextPerms.textContent = tkVerifiedUse
             break;
         case 'tknc':
             openInfoDiv(infoPerms)
