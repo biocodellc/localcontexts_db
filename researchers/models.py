@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxLengthValidator
 
 class Researcher(models.Model):
     user = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
@@ -7,7 +8,7 @@ class Researcher(models.Model):
     image = models.ImageField(upload_to='users/researcher-images', blank=True, null=True)
     contact_email = models.EmailField(blank=True, null=True)
     contact_number = models.CharField(max_length=15, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True, validators=[MaxLengthValidator(200)])
     website = models.URLField(max_length=150, blank=True, null=True)
     primary_institution = models.CharField(max_length=250, null=True, blank=True)
     projects = models.ManyToManyField('projects.Project', blank=True, related_name="researcher_projects")
