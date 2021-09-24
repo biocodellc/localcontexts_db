@@ -316,9 +316,9 @@ function whichTKImgClicked(val) {
 
     if(val == 'tka' || val == 'tkcl' || val == 'tkf' || val == 'tkmc' || val == 'tkcv' || val == 'tkcr') {
         inputProv.value = val
-    } else if (val == 'tks' || val == 'tkwg' || val == 'tkmg' || val == 'tkmr' || val == 'tkwr' || val == 'tkcs' || val == 'tkss') {
+    } else if (val == 'tkv' || val == 'tknv' || val == 'tks' || val == 'tkwg' || val == 'tkmg' || val == 'tkmr' || val == 'tkwr' || val == 'tkcs' || val == 'tkss') {
         inputProt.value = val
-    } else if (val == 'tkv' || val == 'tknv' || val == 'tkoc' || val == 'tknc' || val == 'tkco' || val == 'tko' || val == 'tkcb') {
+    } else if (val == 'tkoc' || val == 'tknc' || val == 'tkco' || val == 'tko' || val == 'tkcb') {
         inputPerms.value = val
     }
 
@@ -645,6 +645,20 @@ function expandTKLabel(img) {
             break;
 
         // Protocols Labels
+        case 'tknv':
+            openInfoDiv(infoProt)
+            whichTKImgClicked('tknv')
+            titleProt.textContent = tkNonVerifiedName
+            templateTextProt.textContent = tkNonVerifiedText
+            whyUseLabelTextProt.textContent = tkNonVerifiedUse
+            break;
+        case 'tkv':
+            openInfoDiv(infoProt)
+            whichTKImgClicked('tkv')
+            titleProt.textContent = tkVerifiedName
+            templateTextProt.textContent = tkVerifiedText
+            whyUseLabelTextProt.textContent = tkVerifiedUse
+            break;
         case 'tks':
             openInfoDiv(infoProt)
             whichTKImgClicked('tks')
@@ -702,20 +716,6 @@ function expandTKLabel(img) {
             titlePerms.textContent = tkOutreachName
             templateTextPerms.textContent = tkOutreachText
             whyUseLabelTextPerms.textContent = tkOutreachUse
-            break;
-        case 'tknv':
-            openInfoDiv(infoPerms)
-            whichTKImgClicked('tknv')
-            titlePerms.textContent = tkNonVerifiedName
-            templateTextPerms.textContent = tkNonVerifiedText
-            whyUseLabelTextPerms.textContent = tkNonVerifiedUse
-            break;
-        case 'tkv':
-            openInfoDiv(infoPerms)
-            whichTKImgClicked('tkv')
-            titlePerms.textContent = tkVerifiedName
-            templateTextPerms.textContent = tkVerifiedText
-            whyUseLabelTextPerms.textContent = tkVerifiedUse
             break;
         case 'tknc':
             openInfoDiv(infoPerms)

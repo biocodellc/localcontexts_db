@@ -315,6 +315,15 @@
 
                 <div class="w-100 flex-this wrap">
                     <div class="center-text w-15 margin-left-1 margin-right-1">
+                        <div><img id="tkv" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-verified.png' %}" alt="TK Verified (TK V) Label"></div>
+                        <div class="toggle-txt-color grey-text"><p>TK Verified <br> (TK V) </p></div>
+                    </div>
+    
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
+                        <div><img id="tknv" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-non-verified.png' %}" alt="TK Non-Verified (TK NV) Label"></div>
+                        <div class="toggle-txt-color grey-text"><p>TK Non-Verified <br> (TK NV) </p></div>
+                    </div>
+                    <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tks" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-seasonal.png' %}" alt="TK Seasonal (TK S) Label"></div>
                         <div class="toggle-txt-color grey-text"><p>TK Seasonal <br> (TK S) </p></div>
                     </div>
@@ -356,7 +365,12 @@
             <div id="tklabel-info-prot" class="flex-this margin-bottom-2 border-top-solid-teal border-bottom-solid-teal" style="height:0px; overflow: hidden;">
 
                 <div class="w-20 margin-right-1 margin-top-1" style="text-align: right;">
-
+                    <div id="tklabel-expanded-img-tknv" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tknv' %}" class="default-label-img">
+                    </div>
+                    <div id="tklabel-expanded-img-tkv" class="tk-img-div" style="display: none;">
+                        <img src="{% get_tklabel_img_url 'tkv' %}" class="default-label-img">
+                    </div>
                     <div id="tklabel-expanded-img-tks" class="tk-img-div" style="display: none;">
                         <img src="{% get_tklabel_img_url 'tks' %}" class="default-label-img">
                     </div>
@@ -423,16 +437,6 @@
                 </div>
 
                 <div class="flex-this wrap">
-
-                    <div class="center-text w-15 margin-left-1 margin-right-1">
-                        <div><img id="tkv" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-verified.png' %}" alt="TK Verified (TK V) Label"></div>
-                        <div class="toggle-txt-color grey-text"><p>TK Verified <br> (TK V) </p></div>
-                    </div>
-    
-                    <div class="center-text w-15 margin-left-1 margin-right-1">
-                        <div><img id="tknv" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-non-verified.png' %}" alt="TK Non-Verified (TK NV) Label"></div>
-                        <div class="toggle-txt-color grey-text"><p>TK Non-Verified <br> (TK NV) </p></div>
-                    </div>
     
                     <div class="center-text w-15 margin-left-1 margin-right-1">
                         <div><img id="tkoc" onclick="expandTKLabel(this)" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-commercial.png' %}" alt="TK Open to Commercialization (TK OC) Label"></div>
@@ -469,12 +473,6 @@
                 <div class="w-20 margin-right-1 margin-top-1" style="text-align: right;">
                     <div id="tklabel-expanded-img-tko" class="tk-img-div" style="display: none;">
                         <img src="{% get_tklabel_img_url 'tko' %}" class="default-label-img">
-                    </div>
-                    <div id="tklabel-expanded-img-tknv" class="tk-img-div" style="display: none;">
-                        <img src="{% get_tklabel_img_url 'tknv' %}" class="default-label-img">
-                    </div>
-                    <div id="tklabel-expanded-img-tkv" class="tk-img-div" style="display: none;">
-                        <img src="{% get_tklabel_img_url 'tkv' %}" class="default-label-img">
                     </div>
                     <div id="tklabel-expanded-img-tknc" class="tk-img-div" style="display: none;">
                         <img src="{% get_tklabel_img_url 'tknc' %}" class="default-label-img">
