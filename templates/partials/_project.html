@@ -4,8 +4,8 @@
     <div class="flex-this space-between">
         <div class="flex-this column w-100">
             <div class="margin-top-1">
-                <p class="p-24 bold">Project Archive</p>
-                <p>Listed below is an archive of all of the information that is associated with this project.<br>
+                <p class="p-24 bold">Project View</p>
+                <p>Listed below is the information that is associated with this project.<br>
                     If you would like to edit this project again, you can do so until a community has applied a Label to this project. </p>
             </div>
         </div>
@@ -216,41 +216,3 @@
     {% endif %}
 
 </div>
-
-<!-- TODO: add users that are also contributors -->
-{% if project.project_creator == request.user %}
-    {% if project.project_comment.all %}
-        <div class="content-card-v2 content-card-space white-bg">
-
-            <h3>Comments History</h3>
-            <div>
-                {% if project.project_status.all %}
-                    {% for status in project.project_status.all %}
-
-                        <div class="flex-this space-between w-100 margin-top-16">
-                            <div><p><span class="bold">{{ status.community }}</span></p></div>
-                            <div><p class="grey-text"><em>Status: 
-                                {% if status.seen and status.status == None %} Seen
-                                {% elif status.seen and status.status == 'pending' %} Labels Pending
-                                {% elif status.seen and status.status == 'not_pending' %} No Labels Pending
-                                {% else %} Sent
-                                {% endif %}</em></p></div>    
-                        </div>
-
-                        {% if status.community.comment_community.all %}
-                            {% for comment in status.community.comment_community.all %}
-                                <div>
-                                    <span class="weight-500">{{ comment.sender.get_full_name }}</span>
-                                    <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-                                    <p>{{ comment.message }}</p>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-
-                    {% endfor %}
-                {% endif %}
-            </div>
-
-        </div>
-    {% endif %}
-{% endif %}
