@@ -1,10 +1,10 @@
 <div class="content-card-v2 content-card-space white-bg">
     <div class="border-bottom-solid-teal">
         <h2>Members</h2>
-        <p>Manage roles within this account and add new members below.</p>
+        <p>Manage responsibilities within this account and add new members below.</p>
     </div>
     <div>
-        <h3>What roles are there in the Local Contexts Hub?</h3>
+        <h3>What responsibilities are there in the Local Contexts Hub?</h3>
         <p>
             <span class="bold">Administrator</span><br>
             An administrator can accept new members on behalf of the community. They take care of administrative tasks to help build a sustainable workspace.<br><br>
@@ -25,8 +25,8 @@
                 </h2>
 
                 <p class="no-bottom-margin">
-                    <span class="bold">Role</span> | Administrator <br><br>
-                    <span class="bold">Job title</span> | {{ community.community_creator.profile.job_title }} <br><br>
+                    <span class="bold">Responsibility</span> | Administrator <br><br>
+                    <span class="bold">Job title</span> | {{ community.community_creator.profile.position }} <br><br>
                 </p>
             </div>    
         </div>
@@ -41,19 +41,20 @@
                     </h2>
 
                     <p class="no-bottom-margin">
-                        <span class="bold">Role</span> | Administrator <br><br>
-                        <span class="bold">Job title</span> | {{ admin.profile.job_title }} <br><br>
+                        <span class="bold">Responsibility</span> | Administrator <br><br>
+                        <span class="bold">Job title</span> | {{ admin.profile.position }} <br><br>
                     </p>
                 </div>            
+
+                {% if member_role == 'admin' or request.user == community.community_creator %}
+                    <div class="dropdown">
+                        <a onclick="toggleMeatballMenu(this)" id="meatball-{{ admin.id }}" class="meatball"><i class="fa fa-ellipsis-h darkteal-text" style="font-size: 24px;"></i></a>
+                        <div id="meatball-content-{{ admin.id }}" class="meatball-dropdown-content hide"> 
+                            <a href="{% url 'remove-member' community.id admin.id %}"><span class="darkteal-text">Remove member</span></a>
+                        </div>
+                    </div> 
+                {% endif %}
             </div>
-            {% if member_role == 'admin' or request.user == community.community_creator %}
-                <div class="dropdown">
-                    <a onclick="toggleMeatballMenu(this)" id="meatball-{{ admin.id }}" class="meatball"><i class="fa fa-ellipsis-h darkteal-text" style="font-size: 24px;"></i></a>
-                    <div id="meatball-content-{{ admin.id }}" class="meatball-dropdown-content hide"> 
-                        <a href="{% url 'remove-member' community.id admin.id %}"><span class="darkteal-text">Remove member</span></a>
-                    </div>
-                </div> 
-            {% endif %}
         </div>
     {% endfor %}
 
@@ -66,8 +67,8 @@
                     </h2>
 
                     <p class="no-bottom-margin">
-                        <span class="bold">Role</span> | Editor <br><br>
-                        <span class="bold">Job title</span> | {{ editor.profile.job_title }} <br><br>
+                        <span class="bold">Responsibility</span> | Editor <br><br>
+                        <span class="bold">Job title</span> | {{ editor.profile.position }} <br><br>
                     </p>
                 </div>
                 {% if member_role == 'admin' or request.user == community.community_creator %}
@@ -91,8 +92,8 @@
                     </h2>
 
                     <p class="no-bottom-margin">
-                        <span class="bold">Role</span> | Viewer <br><br>
-                        <span class="bold">Job title</span> | {{ viewer.profile.job_title }} <br><br>
+                        <span class="bold">Responsibility</span> | Viewer <br><br>
+                        <span class="bold">Job title</span> | {{ viewer.profile.position }} <br><br>
                     </p>
                 </div>
                 {% if member_role == 'admin' or request.user == community.community_creator %}
@@ -130,8 +131,8 @@
                 </h2>
 
                 <p class="no-bottom-margin">
-                    <span class="bold">Role</span> | Administrator <br><br>
-                    <span class="bold">Job title</span> | {{ institution.institution_creator.profile.job_title }} <br><br>
+                    <span class="bold">Responsibility</span> | Administrator <br><br>
+                    <span class="bold">Job title</span> | {{ institution.institution_creator.profile.position }} <br><br>
                 </p>
             </div>          
         </div>
@@ -147,8 +148,8 @@
                     </h2>
 
                     <p class="no-bottom-margin">
-                        <span class="bold">Role</span> | Administrator <br><br>
-                        <span class="bold">Job title</span> | {{ admin.profile.job_title }} <br><br>
+                        <span class="bold">Responsibility</span> | Administrator <br><br>
+                        <span class="bold">Job title</span> | {{ admin.profile.position }} <br><br>
                     </p>
                 </div>
                 {% if member_role == 'admin' or request.user == institution.institution_creator %}
@@ -172,8 +173,8 @@
                     </h2>
 
                     <p class="no-bottom-margin">
-                        <span class="bold">Role</span> | Editor <br><br>
-                        <span class="bold">Job title</span> | {{ editor.profile.job_title }} <br><br>
+                        <span class="bold">Responsibility</span> | Editor <br><br>
+                        <span class="bold">Job title</span> | {{ editor.profile.position }} <br><br>
                     </p>
                 </div>
                 {% if member_role == 'admin' or request.user == institution.institution_creator %}
@@ -202,8 +203,8 @@
                     </h2>
 
                     <p class="no-bottom-margin">
-                        <span class="bold">Role</span> | Viewer <br><br>
-                        <span class="bold">Job title</span> | {{ viewer.profile.job_title }} <br><br>
+                        <span class="bold">Responsibility</span> | Viewer <br><br>
+                        <span class="bold">Job title</span> | {{ viewer.profile.position }} <br><br>
                     </p>
                 </div>
                 {% if member_role == 'admin' or request.user == institution.institution_creator %}

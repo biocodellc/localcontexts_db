@@ -30,9 +30,9 @@ class UserCreateProfileForm(forms.ModelForm):
 class ProfileCreationForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['job_title']
+        fields = ['position']
         widgets = {
-            'job_title': forms.TextInput(attrs={'style': 'width: 100%;'}),
+            'position': forms.TextInput(attrs={'style': 'width: 100%;'}),
         }
 
 # updating user instance (same as above but includes email)
@@ -49,9 +49,9 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['job_title', 'affiliation', 'preferred_language', 'city_town', 'state_province_region', 'country']
+        fields = ['position', 'affiliation', 'preferred_language', 'city_town', 'state_province_region', 'country']
         widgets = {
-            'job_title': forms.TextInput(attrs={'class': 'w-100'}),
+            'position': forms.TextInput(attrs={'class': 'w-100'}),
             'affiliation': forms.TextInput(attrs={'class': 'w-100'}),
             'preferred_language': forms.TextInput(attrs={'class': 'w-100'}),
             'city_town': forms.TextInput(attrs={'class': 'w-100'}),
