@@ -23,6 +23,7 @@ class Project(models.Model):
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, db_index=True)
     project_creator = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="project_creator")
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
+    other_type = models.CharField(max_length=60, null=True, blank=True)
     project_privacy = models.CharField(max_length=20, null=True, choices=PRIVACY_LEVEL)
     title = models.CharField(max_length=300, null=True)
     description = models.TextField(null=True)
