@@ -15,7 +15,6 @@
 
     <div class="w-80">
         {% if bclabels or tklabels %}
-
             <div>
                 <h2>Customized Labels</h2>
                 <p>You currently have {{ bclabels.count }} BC Labels and {{ tklabels.count }} TK Labels customized</p>
@@ -25,7 +24,6 @@
                 <h2>Customized Labels</h2>
                 <p>Once you have selected a Label to customize from the options below (Traditional Knowledge Labels and Biocultural Labels) and customize them, they will appear here.</p>
             </div>
-
         {% endif %}
     </div>
     
@@ -36,7 +34,13 @@
                 {% if bclabel.is_approved == False %}
                     <div class="w-20 custom-labels">
                         <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
-                            <p class="darkteal-text">Waiting approval*</p>
+                            <p class="darkteal-text">
+                                {% if request.user == bclabel.created_by or member_role == 'viewer' %} 
+                                    Waiting approval * 
+                                {% else %} 
+                                    Review for approval *
+                                {% endif %}
+                            </p>
                                 <div>
                                     {% include 'bclabels/which-label.html' %}
                                     <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color grey-text">{{ bclabel.name }}</p>
@@ -53,7 +57,12 @@
                 {% if tklabel.is_approved == False %}
                     <div class="w-20 custom-labels">
                         <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
-                            <p class="darkteal-text">Waiting approval*</p>
+                            <p class="darkteal-text">{% if request.user == tklabel.created_by or member_role == 'viewer' %} 
+                                    Waiting approval * 
+                                {% else %} 
+                                    Review for approval *
+                                {% endif %}
+                            </p>
                                 <div>
                                     {% include 'tklabels/which-label.html' %}
                                     <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color grey-text">{{ tklabel.name }}</p>

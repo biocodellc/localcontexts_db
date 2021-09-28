@@ -1,15 +1,14 @@
 {% extends 'sub-base.html' %} {% block title %} | Approve Label {% endblock %}{% load static %} {% block community_content %}
 
 <div class="content-card content-card-space white-bg">
-    <h3 class="orange-text no-bottom-margin">Customized Labels</h3>
-
         <form method="POST" action="">
             {% csrf_token %}
             <div class="flex-this space-between">
                     
                 <div>
-                    <h3 class="darkteal-text">Approve Label</h3>
-                    <p>These Labels need to be approved by a secondary person (admin or editor) from the community.</p>
+                    <h3 class="darkteal-text no-top-margin">Approve Label</h3>
+                    <p>Unapproved Labels need to be approved by a secondary person (admin or editor) from the community. <br>
+                        By approving this Label your community will now be able to apply these to Local Contexts projects.</p>
                 </div>
                 <div>
                     <button class="action-btn margin-top-2 ">Approve Label</button>

@@ -20,13 +20,14 @@ class CreateProjectForm(forms.ModelForm):
         ('Other', 'Other'),
     )
     project_privacy = forms.ChoiceField(label=_('What is the privacy level of this project?'), choices=PRIVACY, widget=forms.RadioSelect())
-    project_type = forms.ChoiceField(label=_('What type of project are you creating?*'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
+    project_type = forms.ChoiceField(label=_('What type of project are you applying Notices or Labels to? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
 
     class Meta:
         model = Project
-        fields = ['title', 'project_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation']
+        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-100'}),
+            'other_type': forms.TextInput(attrs={'class': 'w-100'}),
             'description': forms.Textarea(attrs={'rows': 4, 'class': 'w-100'}),
             'project_contact': forms.TextInput(attrs={'class': 'w-100'}),
             'project_contact_email': forms.TextInput(attrs={'class': 'w-100'}),
@@ -62,13 +63,14 @@ class EditProjectForm(forms.ModelForm):
         ('Other', 'Other'),
     )
     project_privacy = forms.ChoiceField(label=_('What is the privacy level of this project?'), choices=PRIVACY, widget=forms.RadioSelect())
-    project_type = forms.ChoiceField(label=_('What type of project are you creating?*'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
+    project_type = forms.ChoiceField(label=_('What type of project are you applying Notices or Labels to? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
 
     class Meta:
         model = Project
-        fields = ['title', 'project_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation']
+        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-100'}),
+            'other_type': forms.TextInput(attrs={'class': 'w-100'}),
             'description': forms.Textarea(attrs={'rows': 4, 'class': 'w-100'}),
             'project_contact': forms.TextInput(attrs={'class': 'w-100'}),
             'project_contact_email': forms.TextInput(attrs={'class': 'w-100'}),

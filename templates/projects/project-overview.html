@@ -147,9 +147,13 @@
             {% if statuses %}
                 <div>
                     <p>
-                        <span class="bold">Communities Notified</span><br>
+                        <span class="bold">Communities Notified - Status</span><br>
                         {% for status in statuses %}
-                            {{ status.community.community_name }} <br>
+                            {{ status.community.community_name }} -- 
+                            {% if not status.seen and status.status == None %} Sent <br>{% endif %}
+                            {% if status.seen and status.status == None %} Seen <br>{% endif %}                            
+                            {% if status.seen and status.status == 'pending' %} Labels Pending <br>{% endif %}
+                            {% if status.seen and status.status == 'not_pending' %} No Labels Pending <br>{% endif %}
                         {% endfor %}
                     </p>
                 </div>

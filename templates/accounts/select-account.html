@@ -17,7 +17,12 @@
                 <a href="{% url 'create-community' %}"><div class="white-btn-select"><span>Create</span></div></a>
             </div>
             <div class="account-card margin-left-1 margin-right-1">
-                <p><strong>Institution Account</strong></p>
+                <div class="flex-this">
+                    <div><p><strong>Institution Account</strong></p></div>
+                    <div class="tooltip" style="margin-top: 15px; margin-left: 5px;"><strong>i</strong>
+                        <span class="tooltiptext">Institutions include archives, libraries, museums, historical societies, galleries, data repositories, and universities.</span>
+                    </div>
+                </div>
                 <div class="flex-this">
                     <div class="margin-right-1"><img class="tiny-notice" src="{% static 'images/notices/tk-notice.png' %}"></div>
                     <div class="margin-left-16"><img class="tiny-notice" src="{% static 'images/notices/ci-open-to-collaborate.png' %}"></div>

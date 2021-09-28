@@ -895,6 +895,19 @@ function showDescription() {
 
 }
 
+// CREATE PROJECT: PROJECT TYPE OTHER: TOGGLE VISIBILITY
+var projectTypeSelect = document.getElementById('id_project_type')
+if (projectTypeSelect) {
+    projectTypeSelect.addEventListener('change', function() {
+        let otherTypeField = document.getElementById('otherTypeField')
+        if (projectTypeSelect.value == 'Other') {
+            otherTypeField.style.display = 'block'
+        } else {
+            otherTypeField.style.display = 'none'
+        }
+    })
+}
+
 // Institutions: projects: notify communities - select desired communities
 function selectCommunities() {
     let select = document.getElementById('communities-select')
