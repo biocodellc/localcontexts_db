@@ -30,12 +30,13 @@ class ValidateCommunityForm(forms.ModelForm):
 class UpdateCommunityForm(forms.ModelForm):
     class Meta:
         model = Community
-        fields = ['contact_name', 'contact_email', 'community_entity', 'state_province_region', 'country', 'is_publicly_listed', 'image']
+        fields = ['contact_name', 'contact_email', 'community_entity', 'city_town', 'state_province_region', 'country', 'image']
         widgets = {
             'community_entity': forms.TextInput(attrs={'class': 'w-100'}),
             'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
             'contact_email': forms.EmailInput(attrs={'class': 'w-100'}),
             'state_province_region': forms.TextInput(attrs={'class': 'w-100'}),
+            'city_town': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
 class InviteMemberForm(forms.ModelForm):
