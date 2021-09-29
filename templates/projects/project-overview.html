@@ -80,26 +80,46 @@
             </div>
 
             <div class="flex-this row margin-top-8 w-50 flex-end">
-                {% if project.project_notice.all %}
-                    <div class="flex-this flex-end w-60">
-                        {% for notice in project.project_notice.all %}
-                            {% if notice.notice_type == 'biocultural' %}
-                                <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                            {% elif notice.notice_type == 'traditional_knowledge' %}
-                                <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                            {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                                <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                            {% endif %}
+                {% if project.tk_labels.all or project.bc_labels.all %}
+                    {% if project.tk_labels.all %}
+                        {% for tklabel in project.tk_labels.all %}
+                            {% include 'tklabels/mini-labels.html' %}
                         {% endfor %}
-                    </div>
+                    {% endif %}
+
+                    {% if project.bc_labels.all %}
+                        {% for bclabel in project.bc_labels.all %}
+                            {% include 'bclabels/mini-labels.html' %}
+                        {% endfor %}
+                    {% endif %}
+                {% else %}
+                    {% if project.project_notice.all %}
+                        <div class="flex-this flex-end w-60">
+                            {% for notice in project.project_notice.all %}
+                                {% if notice.notice_type == 'biocultural' %}
+                                    <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                {% elif notice.notice_type == 'traditional_knowledge' %}
+                                    <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                                    <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                    <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 {% endif %}
+
             </div>
         </div>
 
     </div>
 
     <div id="expand-div-{{ project.unique_id }}" class="hide">
+
+        <div class="w-70">
+            <h3>Project description</h3>
+            <p>{{ project.description }}</p>
+        </div>
 
         {% if researcher or institution %}
             <div class="flex-this space-between border-top-solid-teal">
