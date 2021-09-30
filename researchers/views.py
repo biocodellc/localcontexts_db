@@ -171,6 +171,10 @@ def create_project(request, pk):
                 for instance in instances:
                     instance.project = data
                     instance.save()
+                
+                # Send notification
+                title = 'Your project has been created, remember to notify a community of your project.'
+                ActionNotification.objects.create(title=title, sender=request.user, notification_type='Projects', researcher=researcher, reference_id=data.unique_id)
 
                 return redirect('researcher-projects', researcher.id)
 
