@@ -1,8 +1,7 @@
 envi/
 
-setupHeroku.sh
-setupLocal.sh
 env.sh
+env-localdev.sh
 env-localprod.sh
 env-local.sh
 

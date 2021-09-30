@@ -27,13 +27,17 @@ DEBUG = os.environ['DEBUG_VALUE'] == 'True'
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+
     'localcontexts.herokuapp.com',
+    
     'biocode-localcontests-db-stage.uc.r.appspot.com',
     'default.biocode-localcontests-db-stage.appspot.com',
     'biocode-localcontests-db-stage.appspot.com',
     'anth-ja77-local-contexts-8985.uc.r.appspot.com',
     'default.anth-ja77-local-contexts-8985.appspot.com',
     'anth-ja77-local-contexts-8985.appspot.com',
+
+    'anth-ja77-lc-dev-42d5.uc.r.appspot.com',
 ]
 
 # https://docs.djangoproject.com/en/3.1/ref/settings/#std:setting-ADMINS

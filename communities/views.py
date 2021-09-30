@@ -642,7 +642,6 @@ def apply_labels(request, pk, project_uuid):
         'project': project,
         'bclabels': bclabels,
         'tklabels': tklabels,
-        'notices': notices,
     }
     return render(request, 'communities/apply-labels.html', context)
 

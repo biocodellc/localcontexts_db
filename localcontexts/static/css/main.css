@@ -1111,3 +1111,27 @@ input:focus {
 .meatball-dropdown-content span:hover {
     background-color: #dafaf4;
 }
+
+
+/* View Project: Researcher hover */
+.researcher-hover {
+    cursor: pointer;
+    position: relative;
+}
+
+.researcher-hover-info {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+    border: 1px solid #eeecec;
+    position: absolute;
+    background-color: #eeecec;
+    color: #333333;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.researcher-hover:hover .researcher-hover-info {
+    visibility: visible;
+    opacity: 1;
+}

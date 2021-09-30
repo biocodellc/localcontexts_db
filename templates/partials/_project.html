@@ -4,7 +4,7 @@
     <div class="flex-this space-between">
         <div class="flex-this column w-100">
             <div class="margin-top-1">
-                <p class="p-24 bold">Project View</p>
+                <p class="p-24 bold no-top-margin">Project View</p>
                 <p>Listed below is the information that is associated with this project.<br>
                     If you would like to edit this project again, you can do so until a community has applied a Label to this project. </p>
             </div>
@@ -54,7 +54,23 @@
 
                         {% if project.project_contributors.researchers %}
                             {% for researcher in project.project_contributors.researchers.all %}
-                                <li>{{ researcher.user.get_full_name }} | Researcher <br></li>
+                                <li>
+                                    <div class="researcher-hover">
+                                        {% if researcher.orcid %}
+                                            <a class="darkteal-text" itemprop="sameAs" content="{{ researcher.orcid }}" href="{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
+                                                <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="margin-top:2.5px;" alt="ORCID iD icon">
+                                            </a>
+                                        {% endif %}
+                                        {{ researcher.user.get_full_name }} | Researcher
+                                        <div class="researcher-hover-info">
+                                            <p>
+                                                <strong>Primary Institution Affiliation:</strong> {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% else %} None specified {% endif %}<br>
+                                                <strong>About:</strong> {% if researcher.description %} {{ researcher.description }} {% else %} No description available{% endif %}
+                                            </p>
+                                            
+                                        </div>
+                                    </div>
+                                </li>
                             {% endfor %}
                         {% endif %}
                         {% if project.additional_contributors %}

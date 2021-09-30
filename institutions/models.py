@@ -13,7 +13,6 @@ class Institution(models.Model):
     image = models.ImageField(upload_to='users/institution-images', blank=True, null=True)
     description = models.TextField(null=True, blank=True, validators=[MaxLengthValidator(200)])
     institution_id = models.CharField(max_length=80, blank=True, null=True)
-    contact_number = models.CharField(max_length=15, null=True, blank=True)
     city_town = models.CharField(max_length=80, blank=True, null=True)
     state_province_region = models.CharField(verbose_name='state or province', max_length=100, blank=True, null=True)
     country = CountryField(blank=True, null=True)

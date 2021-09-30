@@ -13,11 +13,11 @@ class ConnectResearcherForm(forms.ModelForm):
 class UpdateResearcherForm(forms.ModelForm):
     class Meta:
         model = Researcher
-        fields = '__all__'
+        fields = ['primary_institution', 'contact_email', 'website', 'description', 'image']
         exclude = ['user']
         widgets = {
             'contact_email': forms.TextInput(attrs={'class': 'w-100'}),
-            'contact_number': forms.TextInput(attrs={'class': 'w-100'}),
             'website': forms.TextInput(attrs={'class': 'w-100'}),
             'primary_institution': forms.TextInput(attrs={'class': 'w-100'}),
+            'description': forms.Textarea(attrs={'class': 'w-100', 'rows': 3,}),
         }
