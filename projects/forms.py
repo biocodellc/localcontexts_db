@@ -20,7 +20,7 @@ class CreateProjectForm(forms.ModelForm):
         ('Other', 'Other'),
     )
     project_privacy = forms.ChoiceField(label=_('What is the privacy level of this project?'), choices=PRIVACY, widget=forms.RadioSelect())
-    project_type = forms.ChoiceField(label=_('What type of project are you applying Notices or Labels to? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
+    project_type = forms.ChoiceField(label=_('Which of the following reflects your Local Contexts project? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
 
     class Meta:
         model = Project
@@ -63,7 +63,7 @@ class EditProjectForm(forms.ModelForm):
         ('Other', 'Other'),
     )
     project_privacy = forms.ChoiceField(label=_('What is the privacy level of this project?'), choices=PRIVACY, widget=forms.RadioSelect())
-    project_type = forms.ChoiceField(label=_('What type of project are you applying Notices or Labels to? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
+    project_type = forms.ChoiceField(label=_('Which of the following reflects your Local Contexts project? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
 
     class Meta:
         model = Project

@@ -277,6 +277,7 @@ def customize_label(request, pk, label_type):
                         instance.tklabel = label_form
                         instance.save()
                     
+                    # Create notification
                     title = "A TK Label was customized by " + request.user.get_full_name() + " and is waiting approval by another member of the community."
                     ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
@@ -312,7 +313,8 @@ def customize_label(request, pk, label_type):
                         instance.bclabel = label_form
                         instance.save()
 
-                    title = "A BC Label was customized by " + request.user.get_full_name()
+                    # Send notification
+                    title = "A BC Label was customized by " + request.user.get_full_name() + " and is waiting approval by another member of the community."
                     ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
                     return redirect('select-label', community.id)
@@ -398,37 +400,50 @@ def projects(request, pk):
                 project = Project.objects.get(unique_id=project_uuid)
                 reference_id = project.unique_id
                 statuses = ProjectStatus.objects.filter(project=project, community=community)
+                truncated_project_title = str(project.title)[0:30]
 
                 for status in statuses:
                     if project_status == 'seen':
                         status.seen = True
                         status.save()
 
+                        # Send Notification
+                        title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
+                        if project.project_notice.all():
+                            for notice in project.project_notice.all():
+                                ActionNotification.objects.create(sender=request.user, title=title, institution=notice.placed_by_institution, notification_type='Projects', reference_id=reference_id)
+                        if project.project_notice.all():
+                            for notice in project.project_notice.all():
+                                ActionNotification.objects.create(sender=request.user, title=title, researcher=notice.placed_by_researcher, notification_type='Projects', reference_id=reference_id)
+
+
                     if project_status == 'pending':
                         status.seen = True
                         status.status = 'pending'
                         status.save()
 
-                        # TODO: Fix these
-                        # truncated_project_title = str(project.title)[0:30]
-                        # title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
-                        # if project.project_notice.placed_by_institution:
-                        #     ActionNotification.objects.create(title=title, institution=project.project_notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
-                        # if project.project_notice.placed_by_researcher:
-                        #     ActionNotification.objects.create(title=title, researcher=project.project_notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
+                        # Send Notification
+                        title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                        if project.project_notice.all():
+                            for notice in project.project_notice.all():
+                                ActionNotification.objects.create(sender=request.user, title=title, institution=notice.placed_by_institution, notification_type='Projects', reference_id=reference_id)
+                        if project.project_notice.all():
+                            for notice in project.project_notice.all():
+                                ActionNotification.objects.create(sender=request.user, title=title, researcher=notice.placed_by_researcher, notification_type='Projects', reference_id=reference_id)
 
                     if project_status == 'not_pending':
                         status.seen = True
                         status.status = 'not_pending'
                         status.save()
-
-                        # TODO: Fix these
-                        # truncated_project_title = str(project.project_notice.project.title)[0:30]
-                        # title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
-                        # if project.project_notice.placed_by_institution:
-                        #     ActionNotification.objects.create(title=title, institution=project.project_notice.placed_by_institution, notification_type='Project', reference_id=reference_id)
-                        # if project.project_notice.placed_by_researcher:
-                        #     ActionNotification.objects.create(title=title, researcher=project.project_notice.placed_by_researcher, notification_type='Project', reference_id=reference_id)
+                       
+                        # Send Notification
+                        title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                        if project.project_notice.all():
+                            for notice in project.project_notice.all():
+                                ActionNotification.objects.create(sender=request.user, title=title, institution=notice.placed_by_institution, notification_type='Projects', reference_id=reference_id)
+                        if project.project_notice.all():
+                            for notice in project.project_notice.all():
+                                ActionNotification.objects.create(sender=request.user, title=title, researcher=notice.placed_by_researcher, notification_type='Projects', reference_id=reference_id)
                         
                 return redirect('community-projects', community.id)
 
@@ -442,6 +457,7 @@ def projects(request, pk):
             if project_exists:
                 project = Project.objects.get(unique_id=project_id)
                 status = ProjectStatus.objects.get(project=project, community=community)
+                truncated_project_title = str(project.title)[0:30]
 
                 if form.is_valid():
                     data = form.save(commit=False)
@@ -454,6 +470,16 @@ def projects(request, pk):
                     if status.seen == False:
                         status.seen = True
                         status.save()
+
+                        # Send Notification
+                        title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
+                        if project.project_notice.all():
+                            for notice in project.project_notice.all():
+                                ActionNotification.objects.create(sender=request.user, title=title, institution=notice.placed_by_institution, notification_type='Projects', reference_id=reference_id)
+                        if project.project_notice.all():
+                            for notice in project.project_notice.all():
+                                ActionNotification.objects.create(sender=request.user, title=title, researcher=notice.placed_by_researcher, notification_type='Projects', reference_id=reference_id)
+
 
                     return redirect('community-projects', community.id)
 
@@ -511,12 +537,10 @@ def create_project(request, pk):
                     instance.project = data
                     instance.save()
 
-                # Maybe there's a better way to do this? using project unique id instead of contrib id?
-                # Has to be a contrib id for the js to work. Rework this maybe?
-                # contrib = ProjectContributors.objects.get(project=data)
+                # Send notification
                 truncated_project_title = str(data.title)[0:30]
                 title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + truncated_project_title + ' ...'
-                # ActionNotification.objects.create(reference_id=contrib.id, title=title, sender=request.user, community=community, notification_type='Projects')
+                ActionNotification.objects.create(title=title, sender=request.user, community=community, notification_type='Projects', reference_id=data.unique_id)
                 return redirect('community-projects', community.id)
         
         context = {

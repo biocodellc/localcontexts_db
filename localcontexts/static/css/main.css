@@ -922,6 +922,12 @@ input:focus {
     height: 116px;
 }
 
+/* Project Overview:Labels  */
+.img-sizedown-small {
+    width: 82px;
+    height: 62px;
+}
+
 /* Institution: Notify */
 .selected-community {
     margin-top: 5px;
