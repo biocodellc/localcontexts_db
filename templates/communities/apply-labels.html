@@ -7,14 +7,18 @@
         <div class="w-60 flex-this column">
             <div>
                 <h2 class="no-bottom-margin no-top-margin">Apply Labels</h2>
-                <p>Please choose from your customized Labels below. Descriptions will appear on Label selection.</p>
+                <p>Please choose from your customized Labels below. Select a Label to see description.</p>
             </div>
 
             <!-- title -->
-            <div><h3 class="no-bottom-margin no-top-margin">{{ project.title }}</h3></div>
+            <div><h2 class="no-bottom-margin no-top-margin">{{ project.title }}</h2></div>
             <div><p>{{ project.date_added|date:'M d, Y' }} | 
                 {{ project.project_type }} | 
-                {{ project.project_privacy }}
+                {{ project.project_privacy }}<br>
+                Created: {{ project.project_creator.get_full_name }} 
+                {% if project.community_projects.all %} {% for community in project.community_projects.all %} at {{ community }} | Community {% endfor %} {% endif %}
+                {% if project.institution_projects.all %} {% for institution in project.institution_projects.all %} at {{ institution }} | Institution {% endfor %} {% endif %}
+                {% if project.researcher_projects.all %} {% for researcher in project.researcher_projects.all %} | Researcher {% endfor %} {% endif %}
                 </p>
             </div>
             
@@ -40,17 +44,37 @@
             <div class="flex-this margin-bottom-16 w-100 flex-end">
                 <div><a href="{% url 'view-project' project.unique_id %}" class="white-btn">View Project <i class="fa fa-long-arrow-right"></i></a></div>
             </div>
-            <div>
-                {% if notices %}
-                    {% for notice in notices %}
-                        {% if notice.notice_type == 'biocultural' %}
-                            <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                        {% endif %}
-                        {% if notice.notice_type == 'traditional_knowledge' %}
-                            <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                        {% endif %}
-                    {% endfor %}
+
+            <div class="flex-this row margin-top-8 w-50 flex-end">
+                {% if project.tk_labels.all or project.bc_labels.all %}
+                    {% if project.tk_labels.all %}
+                        {% for tklabel in project.tk_labels.all %}
+                            {% include 'tklabels/mini-labels.html' %}
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if project.bc_labels.all %}
+                        {% for bclabel in project.bc_labels.all %}
+                            {% include 'bclabels/mini-labels.html' %}
+                        {% endfor %}
+                    {% endif %}
+                {% else %}
+                    {% if project.project_notice.all %}
+                        <div class="flex-this flex-end w-60">
+                            {% for notice in project.project_notice.all %}
+                                {% if notice.notice_type == 'biocultural' %}
+                                    <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                {% elif notice.notice_type == 'traditional_knowledge' %}
+                                    <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                                    <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                    <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 {% endif %}
+
             </div>
 
         </div>
@@ -60,48 +84,72 @@
 
 
 <div class="content-card-v2 content-card-space white-bg">
-    <div class="flex-this column w-90">
+    <div class="flex-this column w-100">
 
-        <h2 class="no-top-margin">Select Labels</h2>
+        <h2 class="no-top-margin">Select Customized Labels</h2>
 
-        <div>
-            <form method="POST" action="">
-                {% csrf_token %}
+        <form method="POST" action="">
+            {% csrf_token %}
 
-                <div class="flex-this wrap">
-                    {% if bclabels %}
-                        {% for bclabel in bclabels %}
-                            <div class="w-20 wrap center-text margin-top-1">
-                                <div>
-                                    <input id="checked-label-{{ bclabel.unique_id }}" onclick="displayDefaultText(this)" value="{{ bclabel.unique_id }}" type="checkbox" name="selected_bclabels">
+            <div class="flex-this">
+
+                <!-- BC Label column -->
+                <div class="w-50">
+                    <h3 class="no-top-margin">BC Labels</h3> 
+
+                    <div class="flex-this wrap">
+                        {% if bclabels %}
+                            {% for bclabel in bclabels %}
+                                <div class="w-40 center-text margin-top-1">
+                                    <div class="flex-this column">
+                                        <div class="label-margin">
+                                            {% include 'bclabels/which-label.html' %}
+                                            <span id="label-name-{{ bclabel.unique_id }}" class="grey-text">{{ bclabel.name }}</span>
+                                        </div> 
+
+                                        <div class="notice-checkbox-container margin-bottom-8 auto-margin margin-top-16">
+                                            <input id="checked-label-{{ bclabel.unique_id }}" onclick="displayDefaultText(this)" value="{{ bclabel.unique_id }}" type="checkbox" name="selected_bclabels">
+                                            <span class="margin-left-8">Select</span>
+                                        </div>       
+                                    </div>
                                 </div>
-                                <div class="label-margin">
-                                    {% include 'bclabels/which-label.html' %}
-                                    <span id="label-name-{{ bclabel.unique_id }}" class="grey-text">{{ bclabel.name }}</span>
-                                </div>
-                            </div>
-
-                        {% endfor %}
-                    {% endif %}
-
-                    {% if tklabels %}
-                        {% for tklabel in tklabels %}
-                            <div class="w-20 wrap center-text margin-top-1">
-
-                                <div>
-                                    <input id="checked-label-{{ tklabel.unique_id }}" onclick="displayDefaultText(this)" value="{{ tklabel.unique_id }}" type="checkbox" name="selected_tklabels">
-                                </div>
-                                <div class="label-margin">
-                                    {% include 'tklabels/which-label.html' %}
-                                    <span id="label-name-{{ tklabel.unique_id }}" class="grey-text">{{ tklabel.name }}</span>
-                                </div>
-                            </div>
-
-                        {% endfor %}
-                    {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Your community has not customized any BC Labels yet.
+                        {% endif %}                        
+                    </div>
                 </div>
 
-                <p>Label Description</p>
+                    <!-- TK Label Column -->
+                    <div class="w-50">
+                        <h3 class="no-top-margin">TK Labels</h3> 
+
+                        <div class="flex-this wrap">
+                            {% if tklabels %}
+                                {% for tklabel in tklabels %}
+                                    <div class="w-40 center-text margin-top-1">
+                                        <div class="flex-this column">
+                                            <div class="label-margin">
+                                                {% include 'tklabels/which-label.html' %}
+                                                <span id="label-name-{{ tklabel.unique_id }}" class="grey-text">{{ tklabel.name }}</span>
+                                            </div> 
+    
+                                            <div class="notice-checkbox-container margin-bottom-8 auto-margin margin-top-16">
+                                                <input id="checked-label-{{ tklabel.unique_id }}" onclick="displayDefaultText(this)" value="{{ tklabel.unique_id }}" type="checkbox" name="selected_tklabels">
+                                                <span class="margin-left-8">Select</span>
+                                            </div>       
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                Your community has not customized any TK Labels yet.
+                            {% endif %}                        
+                        </div>
+
+
+
+                    </div>
+                </div>
 
                 {% if bclabels %}
                     {% for bclabel in bclabels %}
@@ -148,7 +196,7 @@
 
                 <div><button class="action-btn margin-top-2">Apply Labels to project <i class="fa fa-check" aria-hidden="true"></i></button></div>
             </form>
-        </div>
+
 
     </div>
 </div>
