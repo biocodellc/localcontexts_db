@@ -56,10 +56,10 @@ def create_community(request):
     form = CreateCommunityForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.community_creator = request.user
-            obj.save()
-            return redirect('confirm-community', obj.id)
+            data = form.save(commit=False)
+            data.community_creator = request.user
+            data.save()
+            return redirect('confirm-community', data.id)
     return render(request, 'communities/create-community.html', {'form': form})
 
 # Confirm Community
@@ -70,11 +70,11 @@ def confirm_community(request, community_id):
     form = ConfirmCommunityForm(request.POST or None, request.FILES, instance=community)
     if request.method == "POST":
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.save()
+            data = form.save(commit=False)
+            data.save()
 
             # https://docs.djangoproject.com/en/dev/topics/email/#the-emailmessage-class
-            template = render_to_string('snippets/community-application.html', { 'obj' : obj })
+            template = render_to_string('snippets/community-application.html', { 'data' : data })
 
             email = EmailMessage(
                 'New Community Application',
@@ -83,7 +83,7 @@ def confirm_community(request, community_id):
                 [settings.SITE_ADMIN_EMAIL], 
             )
             if request.FILES:
-                uploaded_file = obj.support_document
+                uploaded_file = data.support_document
                 file_type = guess_type(uploaded_file.name)
                 email.attach(uploaded_file.name, uploaded_file.read(), file_type[0])
             email.send()

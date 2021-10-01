@@ -57,7 +57,6 @@ def create_institution(request):
             else:
                 data.institution_name = name
                 data.institution_creator = request.user
-                data.is_approved = True
                 data.save()
                 return redirect('confirm-institution', data.id)
     return render(request, 'institutions/create-institution.html', {'form': form})
@@ -69,11 +68,11 @@ def confirm_institution(request, institution_id):
     form = ConfirmInstitutionForm(request.POST or None, request.FILES, instance=institution)
     if request.method == "POST":
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.save()
+            data = form.save(commit=False)
+            data.save()
 
             # https://docs.djangoproject.com/en/dev/topics/email/#the-emailmessage-class
-            template = render_to_string('snippets/institution-application.html', { 'obj' : obj })
+            template = render_to_string('snippets/institution-application.html', { 'data' : data })
 
             email = EmailMessage(
                 'New Institution Application',
@@ -82,7 +81,7 @@ def confirm_institution(request, institution_id):
                 [settings.SITE_ADMIN_EMAIL], 
             )
             if request.FILES:
-                uploaded_file = obj.support_document
+                uploaded_file = data.support_document
                 file_type = guess_type(uploaded_file.name)
                 email.attach(uploaded_file.name, uploaded_file.read(), file_type[0])
             email.send()
@@ -99,7 +98,6 @@ def create_institution_noror(request):
             data = form.save(commit=False)
             data.institution_creator = request.user
             data.is_ror = False
-            data.is_approved = False
             data.save()
 
             template = render_to_string('snippets/institution-application.html', { 'data' : data })
