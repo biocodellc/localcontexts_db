@@ -3,14 +3,20 @@ from django.contrib.auth.models import User
 from researchers.models import Researcher
 from django_countries.fields import CountryField
 from django.core.validators import MaxLengthValidator
+import uuid
+import os
 
+def institution_img_path(self, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (str(uuid.uuid4()), ext)
+    return os.path.join('users/institution-images', filename)  
 
 class Institution(models.Model):
     institution_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     institution_name = models.CharField(max_length=80, null=True, unique=True)
     contact_name = models.CharField(max_length=80, null=True)
     contact_email = models.EmailField(max_length=254, null=True)
-    image = models.ImageField(upload_to='users/institution-images', blank=True, null=True)
+    image = models.ImageField(upload_to=institution_img_path, blank=True, null=True)
     description = models.TextField(null=True, blank=True, validators=[MaxLengthValidator(200)])
     institution_id = models.CharField(max_length=80, blank=True, null=True)
     city_town = models.CharField(max_length=80, blank=True, null=True)

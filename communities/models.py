@@ -12,13 +12,18 @@ def get_file_path(self, filename):
     filename = "%s.%s" % (str(uuid.uuid4()), ext)
     return os.path.join('communities/support-files', filename)  
 
+def community_img_path(self, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (str(uuid.uuid4()), ext)
+    return os.path.join('users/community-images', filename)
+
 class Community(models.Model):
     community_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     community_name = models.CharField(max_length=80, null=True, unique=True)
     community_entity = models.CharField(max_length=200, null=True, blank=True)
     contact_name = models.CharField(max_length=80, null=True, blank=True)
     contact_email = models.EmailField(max_length=254, null=True, blank=True)
-    image = models.ImageField(upload_to='users/community-images', blank=True, null=True)
+    image = models.ImageField(upload_to=community_img_path, blank=True, null=True)
     support_document = models.FileField(upload_to=get_file_path, blank=True, null=True)
     description = models.TextField(null=True, blank=True, validators=[MaxLengthValidator(200)])
     city_town = models.CharField(max_length=80, blank=True, null=True)
