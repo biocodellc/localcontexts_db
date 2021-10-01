@@ -82,10 +82,6 @@
                                     <option id="{{ community.id }}">{{ community.community_name }}</option>
                                 {% endif %}
                             {% endfor %}
-                        {% else %}
-                            {% if community.is_publicly_listed %}
-                                <option id="{{ community.id }}">{{ community.community_name }}</option>
-                            {% endif %}
                         {% endif %}
                     {% endfor %}
             </select>

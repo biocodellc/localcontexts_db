@@ -35,6 +35,9 @@ def connect_researcher(request):
                 data.orcid_auth_token = orcid_token
                 data.orcid = orcid_id
                 data.save()
+
+                # Mark current user as researcher
+                request.user.profile.is_researcher = True
                 return redirect('dashboard')
 
         return render(request, 'researchers/connect-researcher.html', {'form': form})
@@ -256,7 +259,7 @@ def notify_others(request, pk, proj_id):
     else:
         project = Project.objects.get(id=proj_id)
         notify_entities = EntitiesNotified.objects.get(project=project)
-        communities = Community.objects.filter(is_approved=True, is_publicly_listed=True)
+        communities = Community.objects.filter(is_approved=True)
 
         if request.method == "POST":
             # Set private project to discoverable

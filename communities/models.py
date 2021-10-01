@@ -33,7 +33,6 @@ class Community(models.Model):
     admins = models.ManyToManyField(User, blank=True, related_name="admins", db_index=True)
     editors = models.ManyToManyField(User, blank=True, related_name="editors", db_index=True)
     viewers = models.ManyToManyField(User, blank=True, related_name="viewers", db_index=True)
-    is_publicly_listed = models.BooleanField(default=False, null=True)
     is_approved = models.BooleanField(default=False, null=True)
     projects = models.ManyToManyField('projects.Project', blank=True, related_name="community_projects", db_index=True)
 

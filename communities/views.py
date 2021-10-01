@@ -34,7 +34,7 @@ from .utils import *
 # Connect
 @login_required(login_url='login')
 def connect_community(request):
-    communities = Community.objects.all()
+    communities = Community.objects.filter(is_approved=True)
     form = JoinRequestForm(request.POST or None)
 
     if request.method == 'POST':
@@ -56,25 +56,25 @@ def create_community(request):
     form = CreateCommunityForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.community_creator = request.user
-            obj.save()
-            return redirect('validate-community', obj.id)
+            data = form.save(commit=False)
+            data.community_creator = request.user
+            data.save()
+            return redirect('confirm-community', data.id)
     return render(request, 'communities/create-community.html', {'form': form})
 
-# Validate Community
+# Confirm Community
 @login_required(login_url='login')
-def validate_community(request, community_id):
+def confirm_community(request, community_id):
     community = Community.objects.get(id=community_id)
 
-    form = ValidateCommunityForm(request.POST or None, request.FILES, instance=community)
+    form = ConfirmCommunityForm(request.POST or None, request.FILES, instance=community)
     if request.method == "POST":
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.save()
+            data = form.save(commit=False)
+            data.save()
 
             # https://docs.djangoproject.com/en/dev/topics/email/#the-emailmessage-class
-            template = render_to_string('snippets/community-application.html', { 'obj' : obj })
+            template = render_to_string('snippets/community-application.html', { 'data' : data })
 
             email = EmailMessage(
                 'New Community Application',
@@ -83,13 +83,13 @@ def validate_community(request, community_id):
                 [settings.SITE_ADMIN_EMAIL], 
             )
             if request.FILES:
-                uploaded_file = obj.support_document
+                uploaded_file = data.support_document
                 file_type = guess_type(uploaded_file.name)
                 email.attach(uploaded_file.name, uploaded_file.read(), file_type[0])
             email.send()
 
             return redirect('dashboard')
-    return render(request, 'communities/validate-community.html', {'form': form})
+    return render(request, 'accounts/confirm-account.html', {'form': form, 'community': community,})
 
 # Update Community / Settings
 @login_required(login_url='login')
