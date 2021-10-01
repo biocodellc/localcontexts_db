@@ -22,10 +22,11 @@ def get_notices_count(researcher):
     return notice_count
 
 @register.simple_tag
-def get_projects_count(researcher_id):
-    researcher = Researcher.objects.get(id=researcher_id)
-    project_count = researcher.projects.count()
-    return project_count
+def get_labels_count(researcher):
+    count = 0
+    for project in researcher.projects.all():
+        count = project.bc_labels.count() + project.tk_labels.count()
+    return count
 
 @register.simple_tag
 def unread_notifications(researcher):

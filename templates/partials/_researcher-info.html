@@ -1,7 +1,5 @@
 {% load static %}{% load custom_researcher_tags %}
 {% researcher_notifications researcher as notifications %}
-{% get_notices_count researcher as total_notices %}
-{% get_projects_count researcher.id as total_projects %}
 {% unread_notifications researcher as unread_exist %}
 
     <div class="dashcard auto-margin">
@@ -145,27 +143,18 @@
                 <!-- Count cards -->
                 <div class="flex-this column stats-card-container">
 
+                    <!-- Count of Labels applied to researcher projects -->
+                    {% get_labels_count researcher as total_labels %}
                     <div class="stats-card flex-this space-between">
-                        <div>
-                            <p>
-                                {% if total_notices < 10 %} 0{{ total_notices }} {% else %} {{ total_notices }} {% endif %}
-                            </p>
-                        </div>
-                        <div>
-                            <span>Notices</span>
-                        </div>
+                        <div><p>{% if total_labels < 10 %} 0{{ total_labels }} {% else %} {{ total_labels }} {% endif %}</p></div>
+                        <div><span>Labels</span></div>
                     </div>
-    
-                    <div class="stats-card flex-this space-between">
-                        <div>
-                            <p>
-                                {% if total_projects < 10 %} 0{{ total_projects }} {% else %} {{ total_projects }} {% endif %}
-                            </p>
-                        </div>
 
-                        <div>
-                            <span>Projects</span>
-                        </div>
+                    <!-- Count of notices placed by researcher -->
+                    {% get_notices_count researcher as total_notices %}
+                    <div class="stats-card flex-this space-between">
+                        <div><p>{% if total_notices < 10 %} 0{{ total_notices }} {% else %} {{ total_notices }} {% endif %}</p></div>
+                        <div><span>Notices</span></div>
                     </div>
     
                     <div class="stats-card flex-this space-between">

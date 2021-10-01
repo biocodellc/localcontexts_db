@@ -27,10 +27,12 @@ def get_notices_count(institution):
     return notice_count
 
 @register.simple_tag
-def get_projects_count(institution_id):
-    target_institution = Institution.objects.get(id=institution_id)
-    projects_count = target_institution.projects.count()
-    return projects_count
+def get_labels_count(institution):
+    count = 0
+    for project in institution.projects.all():
+        count = project.bc_labels.count() + project.tk_labels.count()
+    return count
+
 
 @register.simple_tag
 def institution_contributing_projects(institution):

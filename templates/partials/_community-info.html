@@ -118,42 +118,30 @@
                     <div class="stats-card flex-this space-between">
                         <div>
                             <p>
-                                {% get_label_count community.id as label_count %}
-                                {% if label_count < 10 %}
-                                    0{{ label_count }}
-                                {% else %}
-                                    {{ label_count }}
-                                {% endif %}
+                                <!-- How many Labels has the community applied to projects -->
+                                {% get_label_count community as label_count %}
+                                {% if label_count < 10 %}0{{ label_count }}{% else %}{{ label_count }}{% endif %}
                             </p>
                         </div>
-                        <div>
-                            <span>Labels</span>
-                        </div>
+                        <div><span>Labels</span></div>
                     </div>
     
                     <div class="stats-card flex-this space-between">
                         <div>
                             <p>
-                                {% if community.get_member_count < 10 %}
-                                    0{{ community.get_member_count }}
-                                {% else %}
-                                    {{ community.get_member_count }}
-                                {% endif %}
+                                <!-- Notices that a community has been notified about -->
+                                {% community_notified_count community as notice_count %}
+                                {% if notice_count < 10 %}0{{ notice_count }}{% else %}{{ notice_count }}{% endif %}
                             </p>
                         </div>
-
-                        <div>
-                            <span>Members</span>
-                        </div>
+                        <div><span>Notices</span></div>
                     </div>
     
                     <div class="stats-card flex-this space-between">
                         <div>
                             <p></p>
                         </div>
-                        <div>
-                            <span>Connections</span>
-                        </div>
+                        <div><span>Connections</span></div>
                     </div>
                 </div>
 
