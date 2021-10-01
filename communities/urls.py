@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     path('connect-community/', views.connect_community, name="connect-community"),
     path('create-community/', views.create_community, name="create-community"),
-    path('validate-community/<str:community_id>/', views.validate_community, name="validate-community"),
+    path('confirm-community/<str:community_id>/', views.confirm_community, name="confirm-community"),
 
     path('community/dashboard/update/<str:pk>/', views.update_community, name="update-community"),
 

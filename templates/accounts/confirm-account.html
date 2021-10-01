@@ -1,10 +1,15 @@
-{% extends 'reg-base.html' %} {% block title %} | Create Community {% endblock %}{% load static %} {% block card %}
+{% extends 'reg-base.html' %} {% block title %} | Confirmation Step {% endblock %}{% load static %} {% block card %}
     
 <div class="flex-this column w-90">
     <div class="margin-bottom-1">
         <h2 class="darkteal-text">Confirmation step</h2>
         <p>
-            As this account will be able to apply Labels on behalf of the community it should be approved by an appropriate governance entity. You can provide contact details for an appropriate representative to confirm the establishment of this account for your community or upload a letter of support.
+            {% if community %}
+                As this account will be able to apply Labels on behalf of the community it should be approved by an appropriate governance entity. You can provide contact details for an appropriate representative to confirm the establishment of this account for your community or upload a letter of support.
+            {% endif %}
+            {% if institution %}
+                Institution confirmation step content
+            {% endif %}
         </p>    
     </div>
     
@@ -14,12 +19,20 @@
         <div class="flex-this space-between margin-right-1">
             <div class="w-50 margin-right-1">
                 <div>
-                    <label for="contact_name">Community Contact Name</label>
+                    <label for="contact_name">
+                        {% if community %} Community {% endif %} 
+                        {% if institution %} Institution {% endif %} 
+                        Contact Name
+                    </label>
                     {{ form.contact_name }}
                 </div>
         
                 <div class="margin-top-1">
-                    <label for="contact_email">Community Contact Email</label>
+                    <label for="contact_email">
+                        {% if community %} Community {% endif %} 
+                        {% if institution %} Institution {% endif %} 
+                        Contact Email
+                    </label>
                     {{ form.contact_email }}
                 </div>
             </div>
@@ -32,12 +45,9 @@
             </div>
         </div>
 
-
         {% if form.errors %}
             <small class="red-text">{{form.errors}}</small>
         {% endif %}
-
-        {% include 'partials/_alerts.html' %}
 
         <div class="text-align-right">
             <button class="action-btn margin-top-2 ">Get Started <i class="fa fa-long-arrow-right"></i></button>

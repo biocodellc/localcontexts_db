@@ -28,6 +28,15 @@ class CreateInstitutionNoRorForm(forms.ModelForm):
             'state_province_region': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
+class ConfirmInstitutionForm(forms.ModelForm):
+    class Meta:
+        model = Institution
+        fields = ['contact_name', 'contact_email', 'support_document']
+        widgets = {
+            'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
+            'contact_email': forms.EmailInput(attrs={'class': 'w-100', 'required': 'required'}),
+        }
+
 class UpdateInstitutionForm(forms.ModelForm):
     class Meta:
         model = Institution

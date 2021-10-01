@@ -34,7 +34,7 @@ from .utils import *
 # Connect
 @login_required(login_url='login')
 def connect_community(request):
-    communities = Community.objects.all()
+    communities = Community.objects.filter(is_approved=True)
     form = JoinRequestForm(request.POST or None)
 
     if request.method == 'POST':
@@ -59,15 +59,15 @@ def create_community(request):
             obj = form.save(commit=False)
             obj.community_creator = request.user
             obj.save()
-            return redirect('validate-community', obj.id)
+            return redirect('confirm-community', obj.id)
     return render(request, 'communities/create-community.html', {'form': form})
 
-# Validate Community
+# Confirm Community
 @login_required(login_url='login')
-def validate_community(request, community_id):
+def confirm_community(request, community_id):
     community = Community.objects.get(id=community_id)
 
-    form = ValidateCommunityForm(request.POST or None, request.FILES, instance=community)
+    form = ConfirmCommunityForm(request.POST or None, request.FILES, instance=community)
     if request.method == "POST":
         if form.is_valid():
             obj = form.save(commit=False)
@@ -89,7 +89,7 @@ def validate_community(request, community_id):
             email.send()
 
             return redirect('dashboard')
-    return render(request, 'communities/validate-community.html', {'form': form})
+    return render(request, 'accounts/confirm-account.html', {'form': form, 'community': community,})
 
 # Update Community / Settings
 @login_required(login_url='login')

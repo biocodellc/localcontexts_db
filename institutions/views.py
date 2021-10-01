@@ -6,11 +6,11 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
-from .utils import check_member_role
+from .utils import *
 from projects.utils import add_to_contributors
 from helpers.utils import set_notice_defaults
 
-from .models import Institution
+from .models import *
 from researchers.models import Researcher
 from projects.models import Project, ProjectContributors, ProjectPerson
 from communities.models import Community, JoinRequest
@@ -23,7 +23,7 @@ from accounts.models import UserAffiliation
 from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
 from helpers.forms import ProjectCommentForm
 from communities.forms import InviteMemberForm, JoinRequestForm
-from .forms import CreateInstitutionForm, UpdateInstitutionForm, CreateInstitutionNoRorForm
+from .forms import *
 
 @login_required(login_url='login')
 def connect_institution(request):
@@ -59,8 +59,37 @@ def create_institution(request):
                 data.institution_creator = request.user
                 data.is_approved = True
                 data.save()
-                return redirect('dashboard')
+                return redirect('confirm-institution', data.id)
     return render(request, 'institutions/create-institution.html', {'form': form})
+
+@login_required(login_url='login')
+def confirm_institution(request, institution_id):
+    institution = Institution.objects.get(id=institution_id)
+
+    form = ConfirmInstitutionForm(request.POST or None, request.FILES, instance=institution)
+    if request.method == "POST":
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+
+            # https://docs.djangoproject.com/en/dev/topics/email/#the-emailmessage-class
+            template = render_to_string('snippets/institution-application.html', { 'obj' : obj })
+
+            email = EmailMessage(
+                'New Institution Application',
+                template,
+                settings.EMAIL_HOST_USER, 
+                [settings.SITE_ADMIN_EMAIL], 
+            )
+            if request.FILES:
+                uploaded_file = obj.support_document
+                file_type = guess_type(uploaded_file.name)
+                email.attach(uploaded_file.name, uploaded_file.read(), file_type[0])
+            email.send()
+
+            return redirect('dashboard')
+    return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
+
 
 @login_required(login_url='login')
 def create_institution_noror(request):
@@ -75,7 +104,7 @@ def create_institution_noror(request):
 
             template = render_to_string('snippets/institution-application.html', { 'data' : data })
             send_mail(
-                'New Institution Application', 
+                'New Institution Application -- non-ROR', 
                 template, 
                 settings.EMAIL_HOST_USER, 
                 [settings.SITE_ADMIN_EMAIL], 
