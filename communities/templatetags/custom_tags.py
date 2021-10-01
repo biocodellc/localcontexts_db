@@ -6,15 +6,33 @@ from tklabels.models import TKLabel
 from notifications.models import ActionNotification
 from communities.models import Community
 from projects.models import Project, ProjectContributors
+from helpers.models import EntitiesNotified
 
 register = template.Library()
 
 @register.simple_tag
 def get_label_count(community):
-    bclabels = BCLabel.objects.filter(community=community).count()
-    tklabels = TKLabel.objects.filter(community=community).count()
-    total_labels = bclabels + tklabels
-    return total_labels
+    # find all labels of this community that have been applied to projects
+    count = 0
+    projects = Project.objects.all()
+    for project in projects:
+        bclabels = project.bc_labels.all()
+        tklabels = project.tk_labels.all()
+        for bclabel in bclabels:
+            if bclabel.community == community:
+                count += 1
+        for tklabel in tklabels:
+            if tklabel.community == community:
+                count += 1
+    return count
+
+@register.simple_tag
+def community_notified_count(community):
+    count = 0
+    for en in EntitiesNotified.objects.all():
+        if community in en.communities.all():
+            count += 1
+    return count
 
 @register.simple_tag
 def anchor(url_name, section_id, community_id):

@@ -1,7 +1,5 @@
 {% load static %}{% load custom_institution_tags %}
 {% institution_notifications institution as notifications %}
-{% get_notices_count institution as total_notices %}
-{% get_projects_count institution.id as total_projects %}
 {% unread_notifications institution as unread_exist %}
 
     <div class="dashcard auto-margin">
@@ -77,7 +75,6 @@
 
                 {% if member_role == 'viewer' or member_role == 'editor' %}
                 {% else %}
-
                     <div>
                         <a href="{% url 'update-institution' institution.id%}" class="darkteal-text"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
                     </div>
@@ -114,37 +111,25 @@
                 <!-- Count cards -->
                 <div class="flex-this column stats-card-container">
 
+                    <!-- Count of Labels that have been applied to institution projects -->
+                    {% get_labels_count institution as total_labels %}
                     <div class="stats-card flex-this space-between">
-                        <div>
-                            <p>
-                                {% if total_notices < 10 %} 0{{ total_notices }} {% else %} {{ total_notices }} {% endif %}
-
-                            </p>
-                        </div>
-                        <div>
-                            <span>Notices</span>
-                        </div>
+                        <div><p>{% if total_labels < 10 %} 0{{ total_labels }} {% else %} {{ total_labels }} {% endif %}</p></div>
+                        <div><span>Labels</span></div>
                     </div>
-    
+                    
+                    <!-- Count of Notices institution has placed -->
+                    {% get_notices_count institution as total_notices %}
                     <div class="stats-card flex-this space-between">
-                        <div>
-                            <p>
-                                {% if total_projects < 10 %} 0{{ total_projects }} {% else %} {{ total_projects }} {% endif %}
-                            </p>
-                        </div>
-
-                        <div>
-                            <span>Projects</span>
-                        </div>
+                        <div><p>{% if total_notices < 10 %} 0{{ total_notices }} {% else %} {{ total_notices }} {% endif %}</p></div>
+                        <div><span>Notices</span></div>
                     </div>
     
                     <div class="stats-card flex-this space-between">
                         <div>
                             <p></p>
                         </div>
-                        <div>
-                            <span>Connections</span>
-                        </div>
+                        <div><span>Connections</span></div>
                     </div>
                 </div>
 
