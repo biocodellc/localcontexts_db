@@ -27,7 +27,7 @@ from .forms import *
 
 @login_required(login_url='login')
 def connect_institution(request):
-    institutions = Institution.objects.all()
+    institutions = Institution.objects.filter(is_approved=True)
     form = JoinRequestForm(request.POST or None)
 
     if request.method == 'POST':
@@ -377,7 +377,7 @@ def notify_others(request, pk, proj_id):
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
-        communities = Community.objects.filter(is_approved=True, is_publicly_listed=True)
+        communities = Community.objects.filter(is_approved=True)
 
         if request.method == "POST":
             # Set private project to discoverable
