@@ -35,6 +35,9 @@ def connect_researcher(request):
                 data.orcid_auth_token = orcid_token
                 data.orcid = orcid_id
                 data.save()
+
+                # Mark current user as researcher
+                request.user.profile.is_researcher = True
                 return redirect('dashboard')
 
         return render(request, 'researchers/connect-researcher.html', {'form': form})

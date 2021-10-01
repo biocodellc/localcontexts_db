@@ -5,8 +5,16 @@
 <div class="flex-this column w-80 border-left margin-right-1">
     <div>
         <h3>Accounts</h3>
-        <p>Manage the accounts you are a member of down below.</p>
+        <p>You can join or create accounts here.</p>
     </div>
+
+    <div><a class="darkteal-text" href="{% url 'organization-registry' %}"> View the Local Contexts Registry</a></div>
+    <div><a class="darkteal-text" href="{% url 'create-community' %}"> Create a Community Account</a></div>
+    <div><a class="darkteal-text" href="{% url 'create-institution' %}"> Create an Institution Account</a></div>
+    {% if request.user.profile.is_researcher %}
+    {% else %}
+        <div><a class="darkteal-text" href="{% url 'connect-researcher' %}"> Connect a Researcher Account</a></div>
+    {% endif %}
 
 </div>
 
