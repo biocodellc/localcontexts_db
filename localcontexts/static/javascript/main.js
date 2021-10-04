@@ -55,7 +55,7 @@ function customText(imgDiv) {
 // BC Content
 var provenanceName = 'BC Provenance (BC P)'
 var multipleCommunityName = 'BC Multiple Communities (BC MC)'
-var openToCollabName = 'BC Open to Collaboration (BC OC)'
+var openToCollabName = 'BC Open to Collaboration (BC CB)'
 var openToCommercializationName = ' BC Open to Commercialization (BC C)'
 var researchUseName = 'BC Research Use (BC R)'
 var consentVerifiedName = 'BC Consent Verified (BC CV)'
@@ -287,16 +287,16 @@ function expandBCLabel(img) {
             templateTextPerms.textContent = nonCommercialText
             whyUseLabelTextPerms.textContent = nonCommercialUse
             break;
-        case 'bcocomm':
+        case 'bcoc':
             openBCInfoDiv(infoPerms)
-            whichBCImgClicked('bcocomm')
+            whichBCImgClicked('bcoc')
             titlePerms.textContent = openToCommercializationName
             templateTextPerms.textContent = openToCommercializationText
             whyUseLabelTextPerms.textContent = openToCommUse
             break;
-        case 'bcocoll':
+        case 'bccb':
             openBCInfoDiv(infoPerms)
-            whichBCImgClicked('bcocoll')
+            whichBCImgClicked('bccb')
             titlePerms.textContent = openToCollabName
             templateTextPerms.textContent = openToCollabText
             whyUseLabelTextPerms.textContent = openToCollabUse
@@ -315,7 +315,7 @@ function whichBCImgClicked(val) {
         inputProv.value = val
     } else if (val == 'bccv' || val == 'bccnv') {
         inputProt.value = val
-    } else if (val == 'bcr' || val == 'bcocoll' || val == 'bcocomm' || val == 'bco' || val == 'bcnc') {
+    } else if (val == 'bcr' || val == 'bccb' || val == 'bcoc' || val == 'bco' || val == 'bcnc') {
         inputPerms.value = val
     }
     displayExpandedImage(val)
@@ -382,12 +382,12 @@ function populateTemplate(id) {
             hiddenInput.value = consentVerifiedName
             templateText.textContent = consentVerifiedText
             break;
-        case 'bcocomm':
+        case 'bcoc':
             whyUseText.textContent = openToCommUse
             hiddenInput.value = openToCommercializationName
             templateText.textContent = openToCommercializationText
             break;
-        case 'bcocoll':
+        case 'bccb':
             whyUseText.textContent = openToCollabUse
             hiddenInput.value = openToCollabName
             templateText.textContent = openToCollabText

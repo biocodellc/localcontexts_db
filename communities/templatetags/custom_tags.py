@@ -60,9 +60,9 @@ def get_bclabel_img_url(img_type, *args, **kwargs):
         image_path = 'images/bc-labels/bc-research-use.png'
     elif img_type =='bccv':
         image_path = 'images/bc-labels/bc-consent-verified.png'
-    elif img_type =='bcocoll':
+    elif img_type =='bccb':
         image_path = 'images/bc-labels/bc-open-to-collaboration.png'
-    elif img_type =='bcocomm':
+    elif img_type =='bcoc':
         image_path = 'images/bc-labels/bc-open-to-commercialization.png'
     elif img_type =='bcp':
         image_path = 'images/bc-labels/bc-provenance.png'

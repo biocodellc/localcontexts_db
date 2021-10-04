@@ -3,9 +3,9 @@ def check_bclabel_type(label):
         return 'consent_verified'
     if label == 'bcr':
         return 'research'
-    if label == 'bcocomm':
+    if label == 'bcoc':
         return 'commercialization'
-    if label == 'bcocoll':
+    if label == 'bccb':
         return 'collaboration'
     if label == 'bcmc':
         return 'multiple_community'
@@ -29,9 +29,9 @@ def assign_bclabel_img(label_type):
         return baseURL + 'bc-consent-verified.png'
     if label_type == 'bcr':
         return baseURL + 'bc-research-use.png' 
-    if label_type == 'bcocomm':
+    if label_type == 'bcoc':
         return baseURL + 'bc-open-to-commercialization.png'
-    if label_type == 'bcocoll':
+    if label_type == 'bccb':
         return baseURL + 'bc-open-to-collaboration.png'
     if label_type == 'bcmc':
         return baseURL + 'bc-multiple-community.png'
