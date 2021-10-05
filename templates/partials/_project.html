@@ -119,36 +119,8 @@
             </div>
         </div>
         
-        <!-- PROJECT IMAGES -->
-        <div class="w-40 flex-this column">
-            <div class="text-align-right margin-top-16">
+        <!-- PROJECT IMAGES WILL GO HERE -->
 
-                {% if project.project_image %}
-                    <div><img src="{{ project.project_image.url }}" width="320px" height="180px"></div>
-                {% else %}
-                    <div class="w-100">
-                        <img src="{% static 'images/placeholders/placeholder-img.png' %}" width="320px" height="180px">
-                    </div>
-                    <div class="flex-this w-100">
-                        <div class="flex-this row space-between w-70" style="margin-left:auto; width: 320px;">
-                            <div class="margin-right-1">
-                                <img src="{% static 'images/placeholders/placeholder-img.png' %}" width="74px" height="42px">
-                            </div>
-                            <div class="margin-right-1">
-                                <img src="{% static 'images/placeholders/placeholder-img.png' %}" width="74px" height="42px">
-                            </div>
-                            <div class="margin-right-1">
-                                <img src="{% static 'images/placeholders/placeholder-img.png' %}" width="74px" height="42px">
-                            </div>
-                            <div>
-                                <img src="{% static 'images/placeholders/placeholder-img.png' %}" width="74px" height="42px">
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-
-            </div>
-        </div>
     
     </div>
 
