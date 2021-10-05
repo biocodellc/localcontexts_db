@@ -82,6 +82,8 @@
                                     <option id="{{ community.id }}">{{ community.community_name }}</option>
                                 {% endif %}
                             {% endfor %}
+                        {% else %}
+                            <option id="{{ community.id }}">{{ community.community_name }}</option>
                         {% endif %}
                     {% endfor %}
             </select>
