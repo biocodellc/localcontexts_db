@@ -27,14 +27,6 @@ class UserCreateProfileForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name']
 
-class ProfileCreationForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['position']
-        widgets = {
-            'position': forms.TextInput(attrs={'style': 'width: 100%;'}),
-        }
-
 # updating user instance (same as above but includes email)
 class UserUpdateForm(forms.ModelForm):
     class Meta:
@@ -44,6 +36,17 @@ class UserUpdateForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'w-100'}),
             'first_name': forms.TextInput(attrs={'class': 'w-100'}),
             'last_name': forms.TextInput(attrs={'class': 'w-100'}),
+        }
+
+class ProfileCreationForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['position', 'affiliation', 'city_town', 'state_province_region', 'country']
+        widgets = {
+            'position': forms.TextInput(attrs={'style': 'width: 100%;'}),
+            'affiliation': forms.TextInput(attrs={'class': 'w-100'}),
+            'city_town': forms.TextInput(attrs={'class': 'w-100'}),
+            'state_province_region': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
 class ProfileUpdateForm(forms.ModelForm):
