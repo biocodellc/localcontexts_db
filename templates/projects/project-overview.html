@@ -131,9 +131,9 @@
                 <div class="w-70 margin-top-16">
                     <h3 class="no-bottom-margin no-top-margin">Notify Communities</h3>
                     <p>
-                        Listed below is an overview of the communities you have notified for this project. Here you can monitor the status on their decision that they make based on this project. The formal replies might be... <br><br>
-                        <strong>Labels Pending:</strong> Which means that the community is going to apply Labels to this project or..<br>
-                        <strong>No - Labels Pending:</strong> Which means that the community is not going to apply Labels to this project.<br><br>
+                        Listed below is an overview of the communities you have notified for this Project. Here you can monitor the status on their decision that they make based on this Project. The formal replies might be... <br><br>
+                        <strong>Labels Pending:</strong> Which means that the community is going to apply Labels to this Project or..<br>
+                        <strong>No - Labels Pending:</strong> Which means that the community is not going to apply Labels to this Project.<br><br>
                         You can message these communities directly in this section. Please remember to be kind. 
                     </p>
                 </div>
@@ -141,7 +141,7 @@
                 <div class="flex-this flex-end w-40 margin-top-16">
                     {% if institution %}
                         {% if institution.is_approved == False %}
-                            <small class="margin-right-1 w-50 no-top-margin">In order to notify communities of your project, your institution must be confirmed first.</small>
+                            <small class="margin-right-1 w-50 no-top-margin">In order to notify communities of your Project, your institution must be confirmed first.</small>
                         {% else %}
                             {% if project in institution.projects.all %}
                                 {% if member_role == 'viewer' %}

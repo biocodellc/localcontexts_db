@@ -89,7 +89,7 @@
         <h2 class="no-top-margin">Select Customized Labels</h2>
         <p class="no-top-margin w-70">
             {% if bclabels or tklabels %}
-                Your community can apply Labels to projects, please choose from your customized Labels below.<br>
+                Your community can apply Labels to Projects, please choose from your customized Labels below.<br>
                 If you would like to customize more Labels, you can do so <a class="darkteal-text" href="{% url 'select-label' community.id %}">here</a>.</p>
             {% else %}
                 It looks like currently you do not have any Labels customized. To customize a new Label, click <a class="darkteal-text" href="{% url 'select-label' community.id %}">here</a>.
@@ -202,7 +202,7 @@
                 {% endif %}
 
                 {% if bclabels or tklabels %}
-                    <div><button class="action-btn margin-top-2">Apply Labels to project <i class="fa fa-check" aria-hidden="true"></i></button></div>
+                    <div><button class="action-btn margin-top-2">Apply Labels to Project <i class="fa fa-check" aria-hidden="true"></i></button></div>
                 {% endif %}
             </form>
 
