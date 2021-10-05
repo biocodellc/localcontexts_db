@@ -22,17 +22,39 @@
                 </div>
             </div>
 
+            <div class="flex-this w-100 space-between margin-top-1">
+                <div class="w-50 margin-right-1"> 
+                    <label for="position">Position </label>
+                    {{ profile_form.position }}
+                </div>
+                <div class="w-50 margin-left-1">
+                    <label for="affiliation">Affiliation</label>
+                    {{ profile_form.affiliation }}
+                </div>
+            </div>
+
+            <div class="flex-this w-100 space-between margin-top-1">
+                <div class="w-50 margin-right-1"> 
+                    <label for="city_town">Town or City </label>
+                        {{ profile_form.city_town }}
+                </div>
+                <div class="w-50 margin-left-1">
+                    <label for="state_province_region">State, Province, or Region</label>
+                        {{ profile_form.state_province_region }}
+                </div>
+            </div>
+
             <div class="w-100 pad-top-1-5">
-                <label for="position">Position </label>
-                {{ profile_form.position }}
+                <label for="country">Country </label><br>
+                {{ profile_form.country }}
             </div>
 
         </div>
 
-
         <div class="text-align-right">
-            <button class="action-btn margin-top-2 ">Continue <i class="fa fa-long-arrow-right"></i></button>
-        </div>
+            <button class="action-btn margin-top-2" style="float: right;">Continue <i class="fa fa-long-arrow-right"></i></button>
+        </div>   
+
     </form>
 </div>
 {% endif %}
