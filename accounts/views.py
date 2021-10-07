@@ -126,6 +126,9 @@ def logout(request):
         auth.logout(request)
         return redirect('login')
 
+def landing(request):
+    return redirect('login')
+
 @login_required(login_url='login')
 def registration_reason(request):
     return render(request, 'accounts/select-account.html')
