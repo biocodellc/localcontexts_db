@@ -8,7 +8,7 @@
             <div id="progress-ul-container" class="flex-this">
                 <ul id="progress-ul" class="flex-this column ul-no-bullets">
                     <li>
-                        {% if '/accounts/register' in request.path %}
+                        {% if '/register' in request.path %}
                             {% include 'snippets/bullet-big.html'%}
                         {% else %}
                             {% include 'snippets/bullet.html'%}
@@ -16,7 +16,7 @@
                         Register
                     </li>
                     <li>
-                        {% if 'accounts/verify' in request.path %}
+                        {% if '/verify' in request.path %}
                             {% include 'snippets/bullet-big.html'%}
                         {% else %}
                             {% include 'snippets/bullet.html'%}
@@ -24,7 +24,7 @@
                             Verify email
                     </li>
                     <li>
-                        {% if 'accounts/create-profile' in request.path %}
+                        {% if '/create-profile' in request.path %}
                             {% include 'snippets/bullet-big.html'%}
                         {% else %}
                             {% include 'snippets/bullet.html'%}
@@ -32,7 +32,7 @@
                         Create your personal profile
                     </li>
                     <li>
-                        {% if '/accounts/select-account/' in request.path %}
+                        {% if '/select-account/' in request.path %}
                             {% include 'snippets/bullet-big.html'%}
                         {% else %}
                             {% include 'snippets/bullet.html'%}

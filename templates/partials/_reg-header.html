@@ -13,7 +13,7 @@
     <nav class="generic-nav flex-this">
         <ul class="flex-this generic-nav-ul ul-no-bullets">
 
-            {% if request.get_full_path == "/accounts/registry/" %}
+            {% if request.get_full_path == "/registry/" %}
                 <li><a id="active-link" class="white-text upper" href="{% url 'organization-registry' %}">Local Contexts Registry</a></li>
             {% else %}
                 <li><a class="white-text upper" href="{% url 'organization-registry' %}">Local Contexts Registry</a></li>
@@ -35,7 +35,7 @@
                 </div>
 
             {% else %}
-                {% if request.get_full_path == "/accounts/register/" %}
+                {% if request.get_full_path == "/register/" %}
                     <li><a id="active-link" class="white-text upper" href="{% url 'register' %}">Register</a></li>
                 {% else %}
                     <li><a class="white-text upper" href="{% url 'register' %}">Register</a></li>
