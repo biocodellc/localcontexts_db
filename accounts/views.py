@@ -72,14 +72,14 @@ class ActivateAccountView(View):
         if user is not None and generate_token.check_token(user, token):
             user.is_active=True
             user.save()
-            messages.add_message(request, messages.INFO, 'Account activation successful. You may now log in.')
+            messages.add_message(request, messages.INFO, 'Profile activation successful. You may now log in.')
             return redirect('login')
         return render(request, 'snippets/activate-failed.html', status=401)
 
 @unauthenticated_user
 def verify(request):
     if not request.user.is_anonymous:
-        return HttpResponseRedirect('/accounts/dashboard/')
+        return HttpResponseRedirect('/dashboard')
 
     form = ResendEmailActivationForm(request.POST or None)
     if request.method == 'POST':
