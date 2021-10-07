@@ -1,8 +1,9 @@
 # localcontexts_db
+Prod Link:
+- [Local Contexts Hub](https://localcontextshub.org/login/)
 Branches:
-- [Master](https://anth-ja77-local-contexts-8985.uc.r.appspot.com/accounts/login/?next=/accounts/dashboard/) Final location and config of LocalContexts 
+- [Master](https://anth-ja77-local-contexts-8985.uc.r.appspot.com/login/?next=/dashboard/) Final location and config of LocalContexts 
 - Develop: dev branch for pushing changes
-- [heroku-demo](https://localcontexts.herokuapp.com/) Heroku config for live demo of 
 
 ## Getting Started
 What you need to run this app:
@@ -68,7 +69,7 @@ In order to make migrations or migrate the production database:
 ## Running the Server
 ```python manage.py runserver```
 
-Locally, the app will start on port 8000, go to `8000/accounts/login` or `8000/accounts/register` to see the application.
+Locally, the app will start on port 8000, go to `8000/login` or `8000/register` to see the application.
 
 Configuration can be found in the `settings.py` file.
 Database models are located in `/<app name>/models.py`.

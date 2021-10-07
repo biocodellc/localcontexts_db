@@ -15,7 +15,7 @@
 
         <nav class="generic-nav flex-this">
             <ul class="flex-this generic-nav-ul ul-no-bullets">
-                {% if request.get_full_path == "/accounts/registry/" %}
+                {% if request.get_full_path == "/registry/" %}
                     <li><a id="active-link" class="white-text upper" href="{% url 'organization-registry' %}">Local Contexts Registry</a></li>
                 {% else %}
                     <li><a class="white-text upper" href="{% url 'organization-registry' %}">Local Contexts Registry</a></li>
@@ -23,7 +23,7 @@
                 
                 {% if user.is_authenticated %}
 
-                    {% if "/accounts/dashboard/" in request.path or "/accounts/update-profile/" in request.path %}
+                    {% if "/dashboard/" in request.path or "/update-profile/" in request.path %}
                         <li><a id="active-link" class="white-text upper" href="{% url 'dashboard' %}">My Profile</a></li>
                     {% else %}
                         <li><a class="white-text upper" href="{% url 'dashboard' %}">My Profile</a></li>
