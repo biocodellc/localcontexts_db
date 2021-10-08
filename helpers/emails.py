@@ -25,6 +25,18 @@ def send_simple_email(to_email, subject, template):
             "html": template}
     )
 
+# Send email with attachment
+def send_email_with_attachment(file, to_email, subject, template):
+    return requests.post(
+        settings.MAILGUN_BASE_URL,
+        auth=("api", settings.MAILGUN_API_KEY),
+        files=[("attachment", (file.name, file.read())),],
+        data={"from": "Local Contexts Hub <no-reply@localcontextshub.org>",
+              "to": to_email,
+            #   "bcc": "bar@example.com",
+              "subject": subject,
+              "html": template})
+
 def email_exists(email):
     email_exists = User.objects.filter(email=email).exists()
     return email_exists
@@ -54,3 +66,4 @@ def resend_activation_email(request, active_users):
     })
 
     send_simple_email(to_email, 'Activate Your Local Contexts Hub Profile', message)
+    
