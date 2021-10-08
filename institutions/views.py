@@ -73,13 +73,18 @@ def confirm_institution(request, institution_id):
             data = form.save(commit=False)
             data.save()
 
-            template = render_to_string('snippets/institution-application.html', { 'data' : data })
+            subject = ''
+            if data.is_ror:
+                subject = 'New Institution Application'
+            else:
+                subject = 'New Institution Application -- non-ROR'
 
+            template = render_to_string('snippets/institution-application.html', { 'data' : data })
             if request.FILES:
                 uploaded_file = data.support_document
-                send_email_with_attachment(uploaded_file, settings.SITE_ADMIN_EMAIL, 'New Institution Application', template )
+                send_email_with_attachment(uploaded_file, settings.SITE_ADMIN_EMAIL, subject, template )
             else:
-                send_simple_email(settings.SITE_ADMIN_EMAIL, 'New Institution Application', template)
+                send_simple_email(settings.SITE_ADMIN_EMAIL, subject, template)
 
             return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
@@ -94,16 +99,8 @@ def create_institution_noror(request):
             data.institution_creator = request.user
             data.is_ror = False
             data.save()
-
-            template = render_to_string('snippets/institution-application.html', { 'data' : data })
-            send_mail(
-                'New Institution Application -- non-ROR', 
-                template, 
-                settings.EMAIL_HOST_USER, 
-                [settings.SITE_ADMIN_EMAIL], 
-                fail_silently=False)
         
-            return redirect('dashboard')
+            return redirect('confirm-institution', data.id)
     return render(request, 'institutions/create-institution-noror.html', {'form': form,})
 
 # Update institution
