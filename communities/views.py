@@ -9,7 +9,6 @@ from django.template.loader import render_to_string
 from mimetypes import guess_type
 
 from django.contrib.auth.models import User
-
 from accounts.models import UserAffiliation
 from helpers.models import LabelTranslation, ProjectStatus, Notice, EntitiesNotified
 from notifications.models import ActionNotification
@@ -26,6 +25,8 @@ from helpers.forms import ProjectCommentForm
 from bclabels.utils import check_bclabel_type, assign_bclabel_img
 from tklabels.utils import check_tklabel_type, assign_tklabel_img
 from projects.utils import add_to_contributors
+
+from helpers.emails import send_email_with_attachment, send_simple_email
 
 from .forms import *
 from .models import *
@@ -73,20 +74,13 @@ def confirm_community(request, community_id):
             data = form.save(commit=False)
             data.save()
 
-            # https://docs.djangoproject.com/en/dev/topics/email/#the-emailmessage-class
             template = render_to_string('snippets/community-application.html', { 'data' : data })
-
-            email = EmailMessage(
-                'New Community Application',
-                template,
-                settings.EMAIL_HOST_USER, 
-                [settings.SITE_ADMIN_EMAIL], 
-            )
+        
             if request.FILES:
                 uploaded_file = data.support_document
-                file_type = guess_type(uploaded_file.name)
-                email.attach(uploaded_file.name, uploaded_file.read(), file_type[0])
-            email.send()
+                send_email_with_attachment(uploaded_file, settings.SITE_ADMIN_EMAIL, 'New Community Application', template )
+            else:
+                send_simple_email(settings.SITE_ADMIN_EMAIL, 'New Community Application', template)
 
             return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'community': community,})

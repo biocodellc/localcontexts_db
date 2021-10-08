@@ -25,6 +25,8 @@ from helpers.forms import ProjectCommentForm
 from communities.forms import InviteMemberForm, JoinRequestForm
 from .forms import *
 
+from helpers.emails import send_email_with_attachment, send_simple_email
+
 @login_required(login_url='login')
 def connect_institution(request):
     institutions = Institution.objects.filter(is_approved=True)
@@ -71,20 +73,13 @@ def confirm_institution(request, institution_id):
             data = form.save(commit=False)
             data.save()
 
-            # https://docs.djangoproject.com/en/dev/topics/email/#the-emailmessage-class
             template = render_to_string('snippets/institution-application.html', { 'data' : data })
 
-            email = EmailMessage(
-                'New Institution Application',
-                template,
-                settings.EMAIL_HOST_USER, 
-                [settings.SITE_ADMIN_EMAIL], 
-            )
             if request.FILES:
                 uploaded_file = data.support_document
-                file_type = guess_type(uploaded_file.name)
-                email.attach(uploaded_file.name, uploaded_file.read(), file_type[0])
-            email.send()
+                send_email_with_attachment(uploaded_file, settings.SITE_ADMIN_EMAIL, 'New Institution Application', template )
+            else:
+                send_simple_email(settings.SITE_ADMIN_EMAIL, 'New Institution Application', template)
 
             return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})

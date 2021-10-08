@@ -12,7 +12,7 @@ from .decorators import unauthenticated_user
 from django.conf import settings
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
-from helpers.emails import send_activation_email, resend_activation_email, generate_token
+from helpers.emails import email_exists, send_activation_email, resend_activation_email, generate_token
 
 from django.contrib.auth.models import User
 from communities.models import Community, JoinRequest
@@ -20,9 +20,10 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from notifications.models import UserNotification
 
+from researchers.utils import is_user_researcher
+
 from .models import *
 from .forms import *
-from .utils import *
 
 # Captcha validation imports
 import urllib
@@ -259,7 +260,7 @@ def invite_user(request):
             obj.sender = request.user
             check_email = email_exists(obj.email)
 
-            if check_email == True:
+            if check_email:
                 messages.add_message(request, messages.INFO, 'This email is already in use')
                 return redirect('invite')
             else: 
