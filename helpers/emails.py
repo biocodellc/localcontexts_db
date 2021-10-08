@@ -45,7 +45,7 @@ def email_exists(email):
 def send_activation_email(request, user):
     # Remember the current location
     current_site=get_current_site(request)
-    template = render_to_string('snippets/activate.html', 
+    template = render_to_string('snippets/emails/activate.html', 
     {
         'user': user,
         'domain':current_site.domain,
@@ -58,7 +58,7 @@ def send_activation_email(request, user):
 def resend_activation_email(request, active_users):
     to_email= active_users[0].email
     current_site = get_current_site(request)
-    message = render_to_string('snippets/activate.html', {
+    message = render_to_string('snippets/emails/activate.html', {
         'user': active_users[0],
         'domain': current_site.domain,
         'uid': urlsafe_base64_encode(force_bytes(active_users[0].pk)),
@@ -66,4 +66,8 @@ def resend_activation_email(request, active_users):
     })
 
     send_simple_email(to_email, 'Activate Your Local Contexts Hub Profile', message)
-    
+
+def send_welcome_email(user):   
+    subject = 'Welcome to Local Contexts Hub!'
+    template = render_to_string('snippets/emails/welcome.html')
+    send_simple_email(user.email, subject, template)

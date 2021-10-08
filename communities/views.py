@@ -74,7 +74,7 @@ def confirm_community(request, community_id):
             data = form.save(commit=False)
             data.save()
 
-            template = render_to_string('snippets/community-application.html', { 'data' : data })
+            template = render_to_string('snippets/emails/community-application.html', { 'data' : data })
         
             if request.FILES:
                 uploaded_file = data.support_document

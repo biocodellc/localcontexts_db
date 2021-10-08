@@ -12,7 +12,6 @@ from .decorators import unauthenticated_user
 from django.conf import settings
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
-from helpers.emails import email_exists, send_activation_email, resend_activation_email, generate_token
 
 from django.contrib.auth.models import User
 from communities.models import Community, JoinRequest
@@ -22,6 +21,7 @@ from notifications.models import UserNotification
 
 from researchers.utils import is_user_researcher
 
+from helpers.emails import *
 from .models import *
 from .forms import *
 
@@ -110,6 +110,8 @@ def login(request):
         if user is not None:
             if not user.last_login:
                 auth.login(request, user)
+                # Welcome email
+                send_welcome_email(user)
                 return redirect('create-profile')
             else:
                 auth.login(request, user)
@@ -266,7 +268,7 @@ def invite_user(request):
             else: 
                 messages.add_message(request, messages.SUCCESS, 'Invitation Sent!')
                 current_site=get_current_site(request)
-                template = render_to_string('snippets/invite-new-user.html', { 
+                template = render_to_string('snippets/emails/invite-new-user.html', { 
                     'obj': obj, 
                     'domain': current_site.domain, 
                 })
