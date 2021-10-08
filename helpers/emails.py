@@ -32,7 +32,7 @@ def email_exists(email):
     email_exists = User.objects.filter(email=email).exists()
     return email_exists
 
-def send_activation_email(request, user, to_email):
+def send_activation_email(request, user):
     # Remember the current location
     current_site=get_current_site(request)
     template = render_to_string('snippets/activate.html', 
@@ -42,21 +42,7 @@ def send_activation_email(request, user, to_email):
         'uid':urlsafe_base64_encode(force_bytes(user.pk)),
         'token': generate_token.make_token(user)
     })
-    send_simple_email(to_email, 'Activate Your Local Contexts Hub Profile', template)
-
-    # !! Keep until Prod testing works !!
-    # email_contents = EmailMessage(
-    #     #Email subject
-    #     'Activate Your Local Contexts Hub Account',
-    #     #Body of the email
-    #     template,
-    #     #Sender
-    #     settings.EMAIL_HOST_USER,
-    #     #Recipient, in list to send to multiple addresses at a time.
-    #     [to_email]
-    # )
-    # email_contents.fail_silently=False
-    # email_contents.send()
+    send_simple_email(user.email, 'Activate Your Local Contexts Hub Profile', template)
 
 
 def resend_activation_email(request, active_users):
@@ -69,8 +55,5 @@ def resend_activation_email(request, active_users):
         'uid': urlsafe_base64_encode(force_bytes(active_users[0].pk)),
         'token': generate_token.make_token(active_users[0]),
     })
-    
-    # !! Keep until Prod testing works !!
-    # active_users[0].email_user(email_subject, message)
 
     send_simple_email(to_email, 'Activate Your Local Contexts Hub Profile', message)

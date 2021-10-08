@@ -52,8 +52,7 @@ def register(request):
                 user.is_active = False
                 user.save()
 
-                to_email = form.cleaned_data.get('email')
-                send_activation_email(request, user, to_email)
+                send_activation_email(request, user)
                 return redirect('verify')
             else:
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
