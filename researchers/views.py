@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from accounts.utils import is_user_researcher
 from projects.utils import add_to_contributors
 from helpers.utils import set_notice_defaults
 

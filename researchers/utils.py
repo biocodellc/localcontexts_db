@@ -2,6 +2,13 @@ from projects.models import ProjectContributors
 from helpers.models import Notice
 from .models import Researcher
 
+def is_user_researcher(user):
+    target_user = Researcher.objects.filter(user=user).exists()
+    if target_user:
+        return Researcher.objects.get(user=user)
+    else:
+        return False
+
 def get_projects_count(researcher):
     contrib_count = ProjectContributors.objects.filter(researcher=researcher).count()
     return contrib_count
