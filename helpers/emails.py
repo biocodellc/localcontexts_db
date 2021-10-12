@@ -35,6 +35,10 @@ def send_email_with_attachment(file, to_email, subject, template):
               "subject": subject,
               "html": template})
 
+"""
+    EMAILS FOR ACCOUNTS APP
+"""
+
 # Registration: User Activation email
 def send_activation_email(request, user):
     # Remember the current location
