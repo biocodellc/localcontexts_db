@@ -1,16 +1,11 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
-from django.core.mail import send_mail, EmailMessage
 from django.template.loader import render_to_string
-
-from mimetypes import guess_type
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation, ProjectStatus, Notice, EntitiesNotified
+from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified
 from notifications.models import ActionNotification
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
@@ -469,10 +464,10 @@ def projects(request, pk):
                         title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
                         if project.project_notice.all():
                             for notice in project.project_notice.all():
-                                ActionNotification.objects.create(sender=request.user, title=title, institution=notice.placed_by_institution, notification_type='Projects', reference_id=reference_id)
+                                ActionNotification.objects.create(sender=request.user, title=title, institution=notice.placed_by_institution, notification_type='Projects', reference_id=notice.project.unique_id)
                         if project.project_notice.all():
                             for notice in project.project_notice.all():
-                                ActionNotification.objects.create(sender=request.user, title=title, researcher=notice.placed_by_researcher, notification_type='Projects', reference_id=reference_id)
+                                ActionNotification.objects.create(sender=request.user, title=title, researcher=notice.placed_by_researcher, notification_type='Projects', reference_id=notice.project.unique_id)
 
 
                     return redirect('community-projects', community.id)

@@ -1,11 +1,9 @@
 from django.conf import settings
 from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 import requests
-
-from django.contrib.auth.models import User
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 class TokenGenerator(PasswordResetTokenGenerator):
@@ -37,10 +35,6 @@ def send_email_with_attachment(file, to_email, subject, template):
               "subject": subject,
               "html": template})
 
-def email_exists(email):
-    email_exists = User.objects.filter(email=email).exists()
-    return email_exists
-
 # Registration: User Activation email
 def send_activation_email(request, user):
     # Remember the current location
@@ -64,10 +58,19 @@ def resend_activation_email(request, active_users):
         'uid': urlsafe_base64_encode(force_bytes(active_users[0].pk)),
         'token': generate_token.make_token(active_users[0]),
     })
-
     send_simple_email(to_email, 'Activate Your Local Contexts Hub Profile', message)
 
+# User has activated account and has logged in: Welcome email
 def send_welcome_email(user):   
     subject = 'Welcome to Local Contexts Hub!'
     template = render_to_string('snippets/emails/welcome.html')
     send_simple_email(user.email, subject, template)
+
+# Email to invite user to join the hub
+def send_invite_user_email(request, data):
+    current_site=get_current_site(request)
+    template = render_to_string('snippets/emails/invite-new-user.html', { 
+        'data': data, 
+        'domain': current_site.domain, 
+    })
+    send_simple_email(data.email, 'You have been invited to join the Local Contexts Hub', template)

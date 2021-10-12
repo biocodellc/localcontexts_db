@@ -1,11 +1,27 @@
 {% autoescape off %}
-{{ obj.sender.get_full_name }} has invited you to join Local Contexts.
 
-They included a message:
-{{ obj.message }}
+<h3>{{ data.sender.get_full_name }} has invited you to join the Local Contexts Hub</h3>
 
-Click on this link or copy it into your browser to register:
+<p>
+    Message included with the invitation:<br>
+    {{ data.message }}<br><br>
 
-http://{{domain}}{% url 'register' %}
+    <strong>What is the Hub?</strong><br>
+    The Hub is a web portal that allows communities to adapt the Local Contexts <a href="https://localcontexts.org/labels/traditional-knowledge-labels/" target="_blank">Traditional Knowledge Labels</a> and <a href="https://localcontexts.org/labels/biocultural-labels/" target="_blank">Biocultural Labels</a> to contextual needs so that they can be shared and implemented nationally and internationally. The Local Context Hub also allows researchers and institutions to generate <a href="https://localcontexts.org/notices/aboutnotices/" target="_blank">Notices</a>. The tools featured within the Hub support the proper recognition of Indigenous rights and interests through collaboration between communities and institutions and/or communities and researchers. 
+    <br><br>
+
+    <strong>Next steps?</strong><br>
+    Click on this link or copy it into your browser to register:<br>
+
+    http://{{domain}}{% url 'register' %}
+
+    <br><br>
+    Thank you,<br>
+    The Local Contexts Team <br>
+    <a href="https://twitter.com/localcontexts">Twitter</a>
+    <a href="https://instagram.com/localcontexts">Instagram</a>
+    <a href="https://www.facebook.com/LocalContextsOrg/">Facebook</a>
+
+</p>
 
 {% endautoescape %}

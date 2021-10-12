@@ -11,12 +11,11 @@ from .decorators import unauthenticated_user
 # For emails
 from django.conf import settings
 from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_text
 
 from django.contrib.auth.models import User
 from communities.models import Community, JoinRequest
 from institutions.models import Institution
-from researchers.models import Researcher
 from notifications.models import UserNotification
 
 from researchers.utils import is_user_researcher
@@ -258,28 +257,16 @@ def invite_user(request):
     invite_form = SignUpInvitationForm(request.POST or None)
     if request.method == "POST":
         if invite_form.is_valid():
-            obj = invite_form.save(commit=False)
-            obj.sender = request.user
-            check_email = email_exists(obj.email)
+            data = invite_form.save(commit=False)
+            data.sender = request.user
+            email_exists = User.objects.filter(email=data.email).exists()
 
-            if check_email:
+            if email_exists:
                 messages.add_message(request, messages.INFO, 'This email is already in use')
                 return redirect('invite')
             else: 
                 messages.add_message(request, messages.SUCCESS, 'Invitation Sent!')
-                current_site=get_current_site(request)
-                template = render_to_string('snippets/emails/invite-new-user.html', { 
-                    'obj': obj, 
-                    'domain': current_site.domain, 
-                })
-
-                send_mail(
-                    "You've been invited to join the Local Contexts Hub",
-                    template,
-                    settings.EMAIL_HOST_USER,
-                    [obj.email],
-                    fail_silently=False)
-                
+                send_invite_user_email(request, data)
                 return redirect('invite')
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 
