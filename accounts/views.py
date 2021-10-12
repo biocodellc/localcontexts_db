@@ -291,12 +291,19 @@ def organization_registry(request):
                 join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
                 join_request.save()
 
+                # Send email to institution creator
+                send_join_request_email_admin(request.user, target_institution)
+
             if comm_btn_id:
                 target_community = Community.objects.get(id=comm_btn_id)
                 main_admin = target_community.community_creator
 
                 req = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
                 req.save()
+
+                # Send email to community creator
+                send_join_request_email_admin(request.user, target_community)
+
             
             return redirect('organization-registry')
 

@@ -1,3 +1,4 @@
+from communities.models import Community
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
@@ -78,6 +79,18 @@ def send_invite_user_email(request, data):
         'domain': current_site.domain, 
     })
     send_simple_email(data.email, 'You have been invited to join the Local Contexts Hub', template)
+
+def send_join_request_email_admin(user, organization):
+    template = render_to_string('snippets/emails/join-request.html', {
+        'user': user,
+        'organization': organization,
+    })
+    # Check if organization instance is community model
+    is_community = isinstance(organization, Community)
+    if is_community:
+        send_simple_email(organization.community_creator.email, 'Someone has requested to join your community', template)
+    else:
+        send_simple_email(organization.institution_creator.email, 'Someone has requested to join your institution', template)
 
 """
     EMAILS FOR INSTITUTION APP
