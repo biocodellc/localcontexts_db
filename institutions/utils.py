@@ -1,7 +1,8 @@
 from accounts.models import UserAffiliation
 from .models import Institution
+from communities.models import InviteMember
 
-def check_member_role(user, institution):
+def check_member_role_institution(user, institution):
     u = UserAffiliation.objects.get(user=user)
     institution_list = u.institutions.all()
 
@@ -24,3 +25,14 @@ def check_member_role(user, institution):
             print('something went wrong, user does not have a role.')
     else:
         return False
+
+def is_institution_in_user_institutions(user, institution):
+    u = UserAffiliation.objects.get(user=user)
+    institutions_list = u.institutions.all()
+    if institution in institutions_list:
+        return True
+    else:
+        return False
+
+def does_institution_invite_exist(user, institution):
+    return InviteMember.objects.filter(receiver=user, institution=institution).exists()

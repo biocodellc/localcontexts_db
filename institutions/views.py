@@ -106,7 +106,7 @@ def create_institution_noror(request):
 def update_institution(request, pk):
     institution = Institution.objects.get(id=pk)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
@@ -132,7 +132,7 @@ def update_institution(request, pk):
 def institution_notices(request, pk):
     institution = Institution.objects.get(id=pk)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
@@ -142,7 +142,7 @@ def institution_notices(request, pk):
 @login_required(login_url='login')
 def institution_members(request, pk):
     institution = Institution.objects.get(id=pk)
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
@@ -170,30 +170,48 @@ def remove_member(request, pk, member_id):
 def add_member(request, pk):
     institution = Institution.objects.get(id=pk)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         form = InviteMemberForm(request.POST or None)
         if request.method == 'POST':
             receiver = request.POST.get('receiver')
-            if form.is_valid():
-                data = form.save(commit=False)
-                data.sender = request.user
-                data.status = 'sent'
-                data.institution = institution
-                data.save()
-                messages.add_message(request, messages.INFO, 'Invitation Sent!')
+            user_in_institution = is_institution_in_user_institutions(receiver, institution)
+
+            if user_in_institution == False: # If user is not an institution member
+                check_invitation = does_institution_invite_exist(receiver, institution)
+
+                if check_invitation == False: # If invitation does not exist, save form
+                    if form.is_valid():
+                        data = form.save(commit=False)
+                        data.sender = request.user
+                        data.status = 'sent'
+                        data.institution = institution
+                        data.save()
+                        messages.add_message(request, messages.INFO, 'Invitation Sent!')
+                        return redirect('institution-members', institution.id)
+                else: 
+                    messages.add_message(request, messages.INFO, 'This user has already been invited to this institution.')
+                    return render(request, 'institutions/add-member.html', {'institution': institution, 'form': form,})
+            else:
+                messages.add_message(request, messages.ERROR, 'This user is already a member of this institution.')
                 return render(request, 'institutions/add-member.html', {'institution': institution, 'form': form,})
-            
-        return render(request, 'institutions/add-member.html', {'institution': institution, 'form': form,})
+
+
+        context = { 
+            'institution': institution,
+            'form': form,
+            'member_role': member_role,
+        }    
+        return render(request, 'institutions/add-member.html', context)
 
 # Projects
 @login_required(login_url='login')
 def institution_projects(request, pk):
     institution = Institution.objects.get(id=pk)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
@@ -231,7 +249,7 @@ def institution_projects(request, pk):
 def create_project(request, pk):
     institution = Institution.objects.get(id=pk)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
@@ -302,7 +320,7 @@ def edit_project(request, institution_id, project_uuid):
     project = Project.objects.get(unique_id=project_uuid)
     notice_exists = Notice.objects.filter(project=project)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
@@ -363,7 +381,7 @@ def notify_others(request, pk, proj_id):
     project = Project.objects.get(id=proj_id)
     notice_exists = Notice.objects.filter(project=project)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
