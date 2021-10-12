@@ -21,7 +21,7 @@ from bclabels.utils import check_bclabel_type, assign_bclabel_img
 from tklabels.utils import check_tklabel_type, assign_tklabel_img
 from projects.utils import add_to_contributors
 
-from helpers.emails import send_email_with_attachment, send_simple_email
+from helpers.emails import *
 
 from .forms import *
 from .models import *
@@ -135,12 +135,13 @@ def add_member(request, pk):
 
                 if check_invitation == False: # If invitation does not exist, save form.
                     if form.is_valid():
-                        obj = form.save(commit=False)
-                        obj.sender = request.user
-                        obj.status = 'sent'
-                        obj.community = community
-                        obj.save()
-
+                        data = form.save(commit=False)
+                        data.sender = request.user
+                        data.status = 'sent'
+                        data.community = community
+                        data.save()
+                        # Send email to target user
+                        send_community_invite_email(data, community)
                         messages.add_message(request, messages.INFO, 'Invitation Sent!')
                         return redirect('members', community.id)
 

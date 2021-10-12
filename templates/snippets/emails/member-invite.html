@@ -1,0 +1,29 @@
+{% autoescape off %}
+
+<h3>{{ data.sender.get_full_name }} has invited you to join the 
+    {% if institution %}
+        institution {{ data.institution.institution_name }} 
+    {% endif %}
+    {% if community %}
+        community {{ data.community.community_name }}
+    {% endif %}
+
+</h3>
+
+<p>
+    Message included with the invitation:<br>
+    {{ data.message }}<br><br>
+
+    <strong>Next steps?</strong><br>
+    Login <a href="https://localcontextshub.org/login/" target="_blank">here</a> to Local Contexts Hub and go to My Profile, then Notifications to see and respond to your invitation.
+
+    <br><br>
+    Thank you,<br>
+    The Local Contexts Team <br>
+    <a href="https://twitter.com/localcontexts">Twitter</a>
+    <a href="https://instagram.com/localcontexts">Instagram</a>
+    <a href="https://www.facebook.com/LocalContextsOrg/">Facebook</a>
+
+</p>
+
+{% endautoescape %}

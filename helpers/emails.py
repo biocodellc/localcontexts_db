@@ -78,3 +78,26 @@ def send_invite_user_email(request, data):
         'domain': current_site.domain, 
     })
     send_simple_email(data.email, 'You have been invited to join the Local Contexts Hub', template)
+
+"""
+    EMAILS FOR INSTITUTION APP
+"""
+
+def send_institution_invite_email(data, institution):
+    template = render_to_string('snippets/emails/member-invite.html', { 
+        'data': data,
+        'institution': institution 
+    })
+    send_simple_email(data.receiver.email, 'You have been invited to join an institution', template)
+    
+
+"""
+    EMAILS FOR COMMUNITY APP
+"""
+
+def send_community_invite_email(data, community):
+    template = render_to_string('snippets/emails/member-invite.html', { 
+        'data': data,
+        'community': community 
+    })
+    send_simple_email(data.receiver.email, 'You have been invited to join a community', template)

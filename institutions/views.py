@@ -23,7 +23,7 @@ from helpers.forms import ProjectCommentForm
 from communities.forms import InviteMemberForm, JoinRequestForm
 from .forms import *
 
-from helpers.emails import send_email_with_attachment, send_simple_email
+from helpers.emails import *
 
 @login_required(login_url='login')
 def connect_institution(request):
@@ -189,6 +189,8 @@ def add_member(request, pk):
                         data.status = 'sent'
                         data.institution = institution
                         data.save()
+                        # Send email to target user
+                        send_institution_invite_email(data, institution)
                         messages.add_message(request, messages.INFO, 'Invitation Sent!')
                         return redirect('institution-members', institution.id)
                 else: 
