@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from django.conf import settings
-from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string
 
 from .utils import *
@@ -11,9 +10,8 @@ from projects.utils import add_to_contributors
 from helpers.utils import set_notice_defaults
 
 from .models import *
-from researchers.models import Researcher
 from projects.models import Project, ProjectContributors, ProjectPerson
-from communities.models import Community, JoinRequest
+from communities.models import Community
 from notifications.models import ActionNotification
 from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified
 
