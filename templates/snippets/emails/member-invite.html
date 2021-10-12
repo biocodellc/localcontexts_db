@@ -7,7 +7,14 @@
     {% if community %}
         community {{ data.community.community_name }}
     {% endif %}
-
+     as  
+    {% if data.role == 'admin' %}
+        an Administrator
+    {% elif data.role == 'editor' %}
+        an Editor
+    {% else %}
+        a Viewer
+    {% endif %}
 </h3>
 
 <p>
