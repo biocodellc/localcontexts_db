@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
-from PIL import Image
 
 from communities.models import Community
 from institutions.models import Institution

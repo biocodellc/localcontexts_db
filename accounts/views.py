@@ -267,6 +267,8 @@ def invite_user(request):
             else: 
                 messages.add_message(request, messages.SUCCESS, 'Invitation Sent!')
                 send_invite_user_email(request, data)
+                # Save invitation instance
+                data.save()
                 return redirect('invite')
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 
