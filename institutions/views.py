@@ -39,6 +39,10 @@ def connect_institution(request):
         data.institution = institution
         data.user_to = institution.institution_creator
         data.save()
+
+        # Send institution creator email
+        send_join_request_email_admin(request.user, institution)
+        
         return redirect('dashboard')
     context = { 'institutions': institutions, 'form': form,}
     return render(request, 'institutions/connect-institution.html', context)

@@ -80,6 +80,8 @@ def send_invite_user_email(request, data):
     })
     send_simple_email(data.email, 'You have been invited to join the Local Contexts Hub', template)
 
+# Anywhere JoinRequest instance is created, 
+# will email community or institution creator that someone wants to join the organization
 def send_join_request_email_admin(user, organization):
     template = render_to_string('snippets/emails/join-request.html', {
         'user': user,
