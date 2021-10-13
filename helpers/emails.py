@@ -110,6 +110,7 @@ def send_institution_invite_email(data, institution):
     EMAILS FOR COMMUNITY APP
 """
 
+# Inviting a user to join community
 def send_community_invite_email(data, community):
     template = render_to_string('snippets/emails/member-invite.html', { 
         'data': data,
@@ -117,6 +118,7 @@ def send_community_invite_email(data, community):
     })
     send_simple_email(data.receiver.email, 'You have been invited to join a community', template)
 
+# When Labels have been applied to a Project
 def send_email_labels_applied(project, community):
     template = render_to_string('snippets/emails/labels-applied.html', {
         'project': project,
