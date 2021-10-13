@@ -617,7 +617,7 @@ def apply_labels(request, pk, project_uuid):
                 comm_title = 'Labels have been applied to the project ' + truncated_project_title + ' ...'
                 ActionNotification.objects.create(title=comm_title, notification_type='Projects', community=community, reference_id=reference_id)
 
-            # If BC Notice exists
+            # If Notice exists
             if notices:
                 for n in notices:
                     # Archive notice
@@ -629,6 +629,8 @@ def apply_labels(request, pk, project_uuid):
                     if n.placed_by_researcher:
                         ActionNotification.objects.create(title=title, researcher=n.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
 
+            # send email to project creator
+            send_email_labels_applied(project, community)
             return redirect('community-projects', community.id)
 
     context = {

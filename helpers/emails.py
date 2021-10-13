@@ -116,3 +116,10 @@ def send_community_invite_email(data, community):
         'community': community 
     })
     send_simple_email(data.receiver.email, 'You have been invited to join a community', template)
+
+def send_email_labels_applied(project, community):
+    template = render_to_string('snippets/emails/labels-applied.html', {
+        'project': project,
+        'community': community,
+    })
+    send_simple_email(project.project_creator.email, 'A community has applied Labels to your Project', template)
