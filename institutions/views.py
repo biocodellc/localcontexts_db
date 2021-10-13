@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from django.conf import settings
-from django.core.mail import EmailMessage, send_mail
 from django.template.loader import render_to_string
 
 from .utils import *
@@ -11,9 +10,8 @@ from projects.utils import add_to_contributors
 from helpers.utils import set_notice_defaults
 
 from .models import *
-from researchers.models import Researcher
 from projects.models import Project, ProjectContributors, ProjectPerson
-from communities.models import Community, JoinRequest
+from communities.models import Community
 from notifications.models import ActionNotification
 from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified
 
@@ -25,7 +23,7 @@ from helpers.forms import ProjectCommentForm
 from communities.forms import InviteMemberForm, JoinRequestForm
 from .forms import *
 
-from helpers.emails import send_email_with_attachment, send_simple_email
+from helpers.emails import *
 
 @login_required(login_url='login')
 def connect_institution(request):
@@ -73,13 +71,18 @@ def confirm_institution(request, institution_id):
             data = form.save(commit=False)
             data.save()
 
-            template = render_to_string('snippets/institution-application.html', { 'data' : data })
+            subject = ''
+            if data.is_ror:
+                subject = 'New Institution Application'
+            else:
+                subject = 'New Institution Application -- non-ROR'
 
+            template = render_to_string('snippets/emails/institution-application.html', { 'data' : data })
             if request.FILES:
                 uploaded_file = data.support_document
-                send_email_with_attachment(uploaded_file, settings.SITE_ADMIN_EMAIL, 'New Institution Application', template )
+                send_email_with_attachment(uploaded_file, settings.SITE_ADMIN_EMAIL, subject, template )
             else:
-                send_simple_email(settings.SITE_ADMIN_EMAIL, 'New Institution Application', template)
+                send_simple_email(settings.SITE_ADMIN_EMAIL, subject, template)
 
             return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
@@ -94,16 +97,8 @@ def create_institution_noror(request):
             data.institution_creator = request.user
             data.is_ror = False
             data.save()
-
-            template = render_to_string('snippets/institution-application.html', { 'data' : data })
-            send_mail(
-                'New Institution Application -- non-ROR', 
-                template, 
-                settings.EMAIL_HOST_USER, 
-                [settings.SITE_ADMIN_EMAIL], 
-                fail_silently=False)
         
-            return redirect('dashboard')
+            return redirect('confirm-institution', data.id)
     return render(request, 'institutions/create-institution-noror.html', {'form': form,})
 
 # Update institution
@@ -111,7 +106,7 @@ def create_institution_noror(request):
 def update_institution(request, pk):
     institution = Institution.objects.get(id=pk)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
@@ -137,7 +132,7 @@ def update_institution(request, pk):
 def institution_notices(request, pk):
     institution = Institution.objects.get(id=pk)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
@@ -147,7 +142,7 @@ def institution_notices(request, pk):
 @login_required(login_url='login')
 def institution_members(request, pk):
     institution = Institution.objects.get(id=pk)
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
@@ -175,30 +170,50 @@ def remove_member(request, pk, member_id):
 def add_member(request, pk):
     institution = Institution.objects.get(id=pk)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         form = InviteMemberForm(request.POST or None)
         if request.method == 'POST':
             receiver = request.POST.get('receiver')
-            if form.is_valid():
-                data = form.save(commit=False)
-                data.sender = request.user
-                data.status = 'sent'
-                data.institution = institution
-                data.save()
-                messages.add_message(request, messages.INFO, 'Invitation Sent!')
+            user_in_institution = is_institution_in_user_institutions(receiver, institution)
+
+            if user_in_institution == False: # If user is not an institution member
+                check_invitation = does_institution_invite_exist(receiver, institution)
+
+                if check_invitation == False: # If invitation does not exist, save form
+                    if form.is_valid():
+                        data = form.save(commit=False)
+                        data.sender = request.user
+                        data.status = 'sent'
+                        data.institution = institution
+                        data.save()
+                        # Send email to target user
+                        send_institution_invite_email(data, institution)
+                        messages.add_message(request, messages.INFO, 'Invitation Sent!')
+                        return redirect('institution-members', institution.id)
+                else: 
+                    messages.add_message(request, messages.INFO, 'This user has already been invited to this institution.')
+                    return render(request, 'institutions/add-member.html', {'institution': institution, 'form': form,})
+            else:
+                messages.add_message(request, messages.ERROR, 'This user is already a member of this institution.')
                 return render(request, 'institutions/add-member.html', {'institution': institution, 'form': form,})
-            
-        return render(request, 'institutions/add-member.html', {'institution': institution, 'form': form,})
+
+
+        context = { 
+            'institution': institution,
+            'form': form,
+            'member_role': member_role,
+        }    
+        return render(request, 'institutions/add-member.html', context)
 
 # Projects
 @login_required(login_url='login')
 def institution_projects(request, pk):
     institution = Institution.objects.get(id=pk)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
@@ -236,7 +251,7 @@ def institution_projects(request, pk):
 def create_project(request, pk):
     institution = Institution.objects.get(id=pk)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
@@ -307,7 +322,7 @@ def edit_project(request, institution_id, project_uuid):
     project = Project.objects.get(unique_id=project_uuid)
     notice_exists = Notice.objects.filter(project=project)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
@@ -368,7 +383,7 @@ def notify_others(request, pk, proj_id):
     project = Project.objects.get(id=proj_id)
     notice_exists = Notice.objects.filter(project=project)
 
-    member_role = check_member_role(request.user, institution)
+    member_role = check_member_role_institution(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:

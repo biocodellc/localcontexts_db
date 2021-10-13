@@ -6,7 +6,6 @@ from projects.utils import add_to_contributors
 from helpers.utils import set_notice_defaults
 
 from communities.models import Community
-from institutions.models import Institution
 from notifications.models import ActionNotification
 from helpers.models import ProjectStatus, ProjectComment, Notice, EntitiesNotified
 from projects.models import ProjectContributors, Project, ProjectPerson

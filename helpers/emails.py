@@ -1,11 +1,10 @@
+from communities.models import Community
 from django.conf import settings
 from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 import requests
-
-from django.contrib.auth.models import User
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 class TokenGenerator(PasswordResetTokenGenerator):
@@ -37,15 +36,15 @@ def send_email_with_attachment(file, to_email, subject, template):
               "subject": subject,
               "html": template})
 
-def email_exists(email):
-    email_exists = User.objects.filter(email=email).exists()
-    return email_exists
+"""
+    EMAILS FOR ACCOUNTS APP
+"""
 
 # Registration: User Activation email
 def send_activation_email(request, user):
     # Remember the current location
     current_site=get_current_site(request)
-    template = render_to_string('snippets/activate.html', 
+    template = render_to_string('snippets/emails/activate.html', 
     {
         'user': user,
         'domain':current_site.domain,
@@ -58,12 +57,60 @@ def send_activation_email(request, user):
 def resend_activation_email(request, active_users):
     to_email= active_users[0].email
     current_site = get_current_site(request)
-    message = render_to_string('snippets/activate.html', {
+    message = render_to_string('snippets/emails/activate.html', {
         'user': active_users[0],
         'domain': current_site.domain,
         'uid': urlsafe_base64_encode(force_bytes(active_users[0].pk)),
         'token': generate_token.make_token(active_users[0]),
     })
-
     send_simple_email(to_email, 'Activate Your Local Contexts Hub Profile', message)
+
+# User has activated account and has logged in: Welcome email
+def send_welcome_email(user):   
+    subject = 'Welcome to Local Contexts Hub!'
+    template = render_to_string('snippets/emails/welcome.html')
+    send_simple_email(user.email, subject, template)
+
+# Email to invite user to join the hub
+def send_invite_user_email(request, data):
+    current_site=get_current_site(request)
+    template = render_to_string('snippets/emails/invite-new-user.html', { 
+        'data': data, 
+        'domain': current_site.domain, 
+    })
+    send_simple_email(data.email, 'You have been invited to join the Local Contexts Hub', template)
+
+def send_join_request_email_admin(user, organization):
+    template = render_to_string('snippets/emails/join-request.html', {
+        'user': user,
+        'organization': organization,
+    })
+    # Check if organization instance is community model
+    is_community = isinstance(organization, Community)
+    if is_community:
+        send_simple_email(organization.community_creator.email, 'Someone has requested to join your community', template)
+    else:
+        send_simple_email(organization.institution_creator.email, 'Someone has requested to join your institution', template)
+
+"""
+    EMAILS FOR INSTITUTION APP
+"""
+
+def send_institution_invite_email(data, institution):
+    template = render_to_string('snippets/emails/member-invite.html', { 
+        'data': data,
+        'institution': institution 
+    })
+    send_simple_email(data.receiver.email, 'You have been invited to join an institution', template)
     
+
+"""
+    EMAILS FOR COMMUNITY APP
+"""
+
+def send_community_invite_email(data, community):
+    template = render_to_string('snippets/emails/member-invite.html', { 
+        'data': data,
+        'community': community 
+    })
+    send_simple_email(data.receiver.email, 'You have been invited to join a community', template)

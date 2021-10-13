@@ -11,17 +11,16 @@ from .decorators import unauthenticated_user
 # For emails
 from django.conf import settings
 from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_text
-from helpers.emails import email_exists, send_activation_email, resend_activation_email, generate_token
+from django.utils.encoding import force_text
 
 from django.contrib.auth.models import User
 from communities.models import Community, JoinRequest
 from institutions.models import Institution
-from researchers.models import Researcher
 from notifications.models import UserNotification
 
 from researchers.utils import is_user_researcher
 
+from helpers.emails import *
 from .models import *
 from .forms import *
 
@@ -110,6 +109,8 @@ def login(request):
         if user is not None:
             if not user.last_login:
                 auth.login(request, user)
+                # Welcome email
+                send_welcome_email(user)
                 return redirect('create-profile')
             else:
                 auth.login(request, user)
@@ -256,28 +257,18 @@ def invite_user(request):
     invite_form = SignUpInvitationForm(request.POST or None)
     if request.method == "POST":
         if invite_form.is_valid():
-            obj = invite_form.save(commit=False)
-            obj.sender = request.user
-            check_email = email_exists(obj.email)
+            data = invite_form.save(commit=False)
+            data.sender = request.user
+            email_exists = User.objects.filter(email=data.email).exists()
 
-            if check_email:
+            if email_exists:
                 messages.add_message(request, messages.INFO, 'This email is already in use')
                 return redirect('invite')
             else: 
                 messages.add_message(request, messages.SUCCESS, 'Invitation Sent!')
-                current_site=get_current_site(request)
-                template = render_to_string('snippets/invite-new-user.html', { 
-                    'obj': obj, 
-                    'domain': current_site.domain, 
-                })
-
-                send_mail(
-                    "You've been invited to join the Local Contexts Hub",
-                    template,
-                    settings.EMAIL_HOST_USER,
-                    [obj.email],
-                    fail_silently=False)
-                
+                send_invite_user_email(request, data)
+                # Save invitation instance
+                data.save()
                 return redirect('invite')
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 
@@ -300,12 +291,19 @@ def organization_registry(request):
                 join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
                 join_request.save()
 
+                # Send email to institution creator
+                send_join_request_email_admin(request.user, target_institution)
+
             if comm_btn_id:
                 target_community = Community.objects.get(id=comm_btn_id)
                 main_admin = target_community.community_creator
 
                 req = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
                 req.save()
+
+                # Send email to community creator
+                send_join_request_email_admin(request.user, target_community)
+
             
             return redirect('organization-registry')
 
