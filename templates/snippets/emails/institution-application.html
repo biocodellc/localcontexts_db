@@ -1,12 +1,20 @@
 {% autoescape off %}
-{{ data.institution_creator.get_full_name }} ({{ data.institution_creator }}) has applied to create a institution.
+<h3>
+    {{ data.institution_creator.get_full_name }} ({{ data.institution_creator }}) has applied to create a institution.
+</h3>
 
-Institution Name: {{ data.institution_name }}
-City or Town: {{ data.city_town }}
-State, Province, or Region: {{ data.state_province_region}}
-Country: {{ data.country.name }}
-Contact Name: {{ data.contact_name }}
-Contact Email: {{ data.contact_email }}
-Description: {{ data.description }}
+<p>
+    Institution Name: {{ data.institution_name }}<br>
+    City or Town: {{ data.city_town }}<br>
+    State, Province, or Region: {{ data.state_province_region}}<br>
+    Country: {{ data.country.name }}<br>
+    Contact Name: {{ data.contact_name }}<br>
+    Contact Email: {{ data.contact_email }}<br>
+    Description: {{ data.description }}<br>
+    <br><br>
+    {% if data.is_ror == False %}
+        If you would like to add this institution to ROR, you can fill out <a href="https://docs.google.com/forms/d/e/1FAIpQLSdJYaMTCwS7muuTa-B_CnAtCSkKzt19lkirAKG4u7umH9Nosg/viewform" target="_blank">this form</a>.
+    {% endif %}
+</p>
 
 {% endautoescape %}

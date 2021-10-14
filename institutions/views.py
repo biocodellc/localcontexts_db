@@ -77,9 +77,9 @@ def confirm_institution(request, institution_id):
 
             subject = ''
             if data.is_ror:
-                subject = 'New Institution Application'
+                subject = 'New Institution Application: ' + str(data.institution_name)
             else:
-                subject = 'New Institution Application -- non-ROR'
+                subject = 'New Institution Application (non-ROR): ' + str(data.institution_name)
 
             send_hub_admins_application_email(institution, data, subject)
             return redirect('dashboard')

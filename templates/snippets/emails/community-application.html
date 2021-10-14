@@ -1,12 +1,16 @@
 {% autoescape off %}
-{{ data.community_creator.get_full_name }} ({{ data.community_creator }}) has applied to create a community.
+<h3>
+    {{ data.community_creator.get_full_name }} ({{ data.community_creator }}) has applied to create a community.
+</h3>
 
-Community Name: {{ data.community_name }}
-Community Entity: {{ data.community_entity }}
-State, Province, or Region: {{ data.state_province_region}}
-Country: {{ data.country.name }}
-Contact Name: {{ data.contact_name }}
-Contact Email: {{ data.contact_email }}
-Description: {{ data.description }}
+<p>
+    Community Name: {{ data.community_name }}<br>
+    Community Entity: {{ data.community_entity }}<br>
+    State, Province, or Region: {{ data.state_province_region}}<br>
+    Country: {{ data.country.name }}<br>
+    Contact Name: {{ data.contact_name }}<br>
+    Contact Email: {{ data.contact_email }}<br>
+    Description: {{ data.description }}   <br>
+</p>
 
 {% endautoescape %}
