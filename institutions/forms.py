@@ -39,10 +39,11 @@ class ConfirmInstitutionForm(forms.ModelForm):
 class UpdateInstitutionForm(forms.ModelForm):
     class Meta:
         model = Institution
-        fields = ['contact_name', 'contact_email', 'city_town', 'state_province_region', 'country', 'image']
+        fields = ['contact_name', 'contact_email', 'city_town', 'state_province_region', 'country', 'image', 'description']
         widgets = {
             'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
             'contact_email': forms.EmailInput(attrs={'class': 'w-100'}),
             'state_province_region': forms.TextInput(attrs={'class': 'w-100'}),
             'city_town': forms.TextInput(attrs={'class': 'w-100'}),
+            'description': forms.Textarea(attrs={'class': 'w-100', 'rows': 3,}),
         }
