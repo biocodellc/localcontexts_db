@@ -81,13 +81,7 @@ def confirm_institution(request, institution_id):
             else:
                 subject = 'New Institution Application -- non-ROR'
 
-            template = render_to_string('snippets/emails/institution-application.html', { 'data' : data })
-            if request.FILES:
-                uploaded_file = data.support_document
-                send_email_with_attachment(uploaded_file, settings.SITE_ADMIN_EMAIL, subject, template )
-            else:
-                send_simple_email(settings.SITE_ADMIN_EMAIL, subject, template)
-
+            send_hub_admins_application_email(institution, data, subject)
             return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
 

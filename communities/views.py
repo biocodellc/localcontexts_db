@@ -73,14 +73,7 @@ def confirm_community(request, community_id):
             data = form.save(commit=False)
             data.save()
 
-            template = render_to_string('snippets/emails/community-application.html', { 'data' : data })
-        
-            if request.FILES:
-                uploaded_file = data.support_document
-                send_email_with_attachment(uploaded_file, settings.SITE_ADMIN_EMAIL, 'New Community Application', template )
-            else:
-                send_simple_email(settings.SITE_ADMIN_EMAIL, 'New Community Application', template)
-
+            send_hub_admins_application_email(community, data, 'New Community Application')
             return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'community': community,})
 

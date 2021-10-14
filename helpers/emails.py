@@ -5,6 +5,8 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 import requests
+from django.contrib.auth.models import User
+
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 class TokenGenerator(PasswordResetTokenGenerator):
@@ -35,6 +37,34 @@ def send_email_with_attachment(file, to_email, subject, template):
             #   "bcc": "bar@example.com",
               "subject": subject,
               "html": template})
+
+# Send all Institution and community applications to the hub_admins group or the site admin
+def send_hub_admins_application_email(organization, data, subject):
+    template = ''
+    is_community = isinstance(organization, Community)
+    if is_community:
+        template = render_to_string('snippets/emails/community-application.html', { 'data' : data })
+    else: 
+        template = render_to_string('snippets/emails/institution-application.html', { 'data' : data })
+
+    # if admin group exists:
+    if User.objects.filter(groups__name='hub_admins').exists():
+        emails = [settings.SITE_ADMIN_EMAIL]
+        admin_group = User.objects.filter(groups__name='hub_admins')
+        for admin in admin_group:
+            emails.append(admin.email)
+        
+        # If file, send as attachment
+        if data.support_document:
+            send_email_with_attachment(data.support_document, emails, subject, template)
+        else:
+            send_simple_email(emails, subject, template)
+    else:
+        # Send to site admin only
+        if data.support_document:
+            send_email_with_attachment(data.support_document, settings.SITE_ADMIN_EMAIL, subject, template)
+        else:
+            send_simple_email(settings.SITE_ADMIN_EMAIL, subject, template)
 
 """
     EMAILS FOR ACCOUNTS APP
