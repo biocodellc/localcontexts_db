@@ -39,6 +39,10 @@ def connect_institution(request):
         data.institution = institution
         data.user_to = institution.institution_creator
         data.save()
+
+        # Send institution creator email
+        send_join_request_email_admin(request.user, institution)
+        
         return redirect('dashboard')
     context = { 'institutions': institutions, 'form': form,}
     return render(request, 'institutions/connect-institution.html', context)
@@ -73,17 +77,11 @@ def confirm_institution(request, institution_id):
 
             subject = ''
             if data.is_ror:
-                subject = 'New Institution Application'
+                subject = 'New Institution Application: ' + str(data.institution_name)
             else:
-                subject = 'New Institution Application -- non-ROR'
+                subject = 'New Institution Application (non-ROR): ' + str(data.institution_name)
 
-            template = render_to_string('snippets/emails/institution-application.html', { 'data' : data })
-            if request.FILES:
-                uploaded_file = data.support_document
-                send_email_with_attachment(uploaded_file, settings.SITE_ADMIN_EMAIL, subject, template )
-            else:
-                send_simple_email(settings.SITE_ADMIN_EMAIL, subject, template)
-
+            send_hub_admins_application_email(institution, data, subject)
             return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
 

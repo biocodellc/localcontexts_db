@@ -42,6 +42,10 @@ def connect_community(request):
         data.community = community
         data.user_to = community.community_creator
         data.save()
+
+        # Send community creator email
+        send_join_request_email_admin(request.user, community)
+
         return redirect('dashboard')
     context = { 'communities': communities, 'form': form,}
     return render(request, 'communities/connect-community.html', context)
@@ -69,14 +73,8 @@ def confirm_community(request, community_id):
             data = form.save(commit=False)
             data.save()
 
-            template = render_to_string('snippets/emails/community-application.html', { 'data' : data })
-        
-            if request.FILES:
-                uploaded_file = data.support_document
-                send_email_with_attachment(uploaded_file, settings.SITE_ADMIN_EMAIL, 'New Community Application', template )
-            else:
-                send_simple_email(settings.SITE_ADMIN_EMAIL, 'New Community Application', template)
-
+            subject = 'New Community Application: ' + str(data.community_name)
+            send_hub_admins_application_email(community, data, subject)
             return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'community': community,})
 
@@ -613,7 +611,7 @@ def apply_labels(request, pk, project_uuid):
                 comm_title = 'Labels have been applied to the project ' + truncated_project_title + ' ...'
                 ActionNotification.objects.create(title=comm_title, notification_type='Projects', community=community, reference_id=reference_id)
 
-            # If BC Notice exists
+            # If Notice exists
             if notices:
                 for n in notices:
                     # Archive notice
@@ -625,6 +623,8 @@ def apply_labels(request, pk, project_uuid):
                     if n.placed_by_researcher:
                         ActionNotification.objects.create(title=title, researcher=n.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
 
+            # send email to project creator
+            send_email_labels_applied(project, community)
             return redirect('community-projects', community.id)
 
     context = {
