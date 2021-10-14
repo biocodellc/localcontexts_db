@@ -62,28 +62,21 @@
         <div id="close-modal" class="close-modal-btn w-100"> <a class="darkteal-text" href="{% url 'create-institution' %}"><span>&times;</span></a></div>
         <div class="add-member-modal-content w-100">
 
-            <div>
-                <h2 class="darkteal-text">Institution Application Form</h2>  
-                <p>Apply to create an account for an institution.</p>  
+            <div class="no-top-margin">
+                <h2 class="darkteal-text no-top-margin">Institution Creation Form</h2>  
+                <p>Create an institution that is not on the ROR list.</p>  
             </div>
 
             <form method="POST" action="{% url 'create-institution-noror' %}">
                 {% csrf_token %}
                 <div class="flex-this column w-100">
 
-                    <label class="pad-top-1-5" for="country">Institution Name</label>
+                    <label for="institution_name">Institution Name</label>
                     {{ form.institution_name }}
 
-                    <div class="w-100 flex-this">
-                        <div class="w-50 pad-top-1-5 margin-right-1">
-                            <label for="contact_name">Contact Name</label><br>
-                            {{ form.contact_name }}
-                        </div>
-                        
-                        <div class="w-50 pad-top-1-5">
-                            <label for="contact_email">Contact Email</label><br>
-                            {{ form.contact_email }}
-                        </div>
+                    <div class="w-100 margin-top-1">
+                        <label for="description">Description</label><br>
+                        {{ form.description }}
                     </div>
 
                     <div class="w-100 flex-this space-between">
@@ -104,14 +97,19 @@
                         {{ form.country }} 
                     </div>
 
-                    {% if form.errors %}
-                        <small class="red-text">{{ form.errors }}</small>
-                    {% endif %}
-                    {% include 'partials/_alerts.html' %}
-        
-                    <div class="text-align-right margin-top-8">
-                        <button class="action-btn margin-top-2 ">Apply to create an institution</button>
+                    <div class="flex-this space-between">
+                        <div>
+                            {% if form.errors %}
+                                <small class="red-text">{{ form.errors }}</small>
+                            {% endif %}
+                            {% include 'partials/_alerts.html' %}                            
+                        </div>
+            
+                        <div class="text-align-right">
+                            <button class="action-btn margin-top-2 ">Continue <i class="fa fa-long-arrow-right"></i></button>
+                        </div>                        
                     </div>
+
 
                 </div>
 
