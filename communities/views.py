@@ -14,7 +14,7 @@ from projects.models import ProjectContributors, Project, ProjectPerson
 from bclabels.forms import CustomizeBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomizeTKLabelForm, ApproveAndEditTKLabelForm
 from helpers.forms import AddLabelTranslationFormSet, UpdateBCLabelTranslationFormSet, UpdateTKLabelTranslationFormSet
-from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
+from projects.forms import *
 from helpers.forms import ProjectCommentForm
 
 from bclabels.utils import check_bclabel_type, assign_bclabel_img
@@ -517,7 +517,7 @@ def create_project(request, pk):
                 institutions_selected = request.POST.getlist('selected_institutions')
                 researchers_selected = request.POST.getlist('selected_researchers')
 
-                add_to_contributors(contributors, data, institutions_selected, researchers_selected)
+                add_to_contributors(contributors, institutions_selected, researchers_selected)
                 
                 # Project person formset
                 instances = formset.save(commit=False)
@@ -552,17 +552,34 @@ def edit_project(request, community_id, project_uuid):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         form = EditProjectForm(request.POST or None, instance=project)
+        formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
+        contributors = ProjectContributors.objects.get(project=project)
 
         if request.method == 'POST':
-            if form.is_valid():
+            if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
                 data.save()
+
+                instances = formset.save(commit=False)
+                for instance in instances:
+                    instance.project = data
+                    instance.save()
+
+                # Get lists of contributors entered in form
+                institutions_selected = request.POST.getlist('selected_institutions')
+                researchers_selected = request.POST.getlist('selected_researchers')
+
+                # Add selected contributors to the ProjectContributors object
+                add_to_contributors(contributors, institutions_selected, researchers_selected)
+                return redirect('community-projects', community.id)
 
         context = {
             'member_role': member_role,
             'community': community, 
             'project': project, 
             'form': form,
+            'formset': formset,
+            'contributors': contributors,
         }
         return render(request, 'communities/edit-project.html', context)
 

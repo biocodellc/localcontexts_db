@@ -10,7 +10,7 @@ from notifications.models import ActionNotification
 from helpers.models import ProjectStatus, ProjectComment, Notice, EntitiesNotified
 from projects.models import ProjectContributors, Project, ProjectPerson
 
-from projects.forms import CreateProjectForm, ProjectPersonFormset, EditProjectForm
+from projects.forms import *
 from helpers.forms import ProjectCommentForm
 
 from .models import Researcher
@@ -165,7 +165,7 @@ def create_project(request, pk):
                 contributors = ProjectContributors.objects.get(project=data)
                 contributors.researchers.add(researcher)
                 # Add selected contributors to the ProjectContributors object
-                add_to_contributors(contributors, data, institutions_selected, researchers_selected)
+                add_to_contributors(contributors, institutions_selected, researchers_selected)
 
                 # Project person formset
                 instances = formset.save(commit=False)
@@ -197,6 +197,8 @@ def edit_project(request, researcher_id, project_uuid):
         project = Project.objects.get(unique_id=project_uuid)
         notice_exists = Notice.objects.filter(project=project)
         form = EditProjectForm(request.POST or None, instance=project)
+        formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
+        contributors = ProjectContributors.objects.get(project=project)
 
         # Check to see if notice exists for this project and pass to template
         if notice_exists:
@@ -205,37 +207,49 @@ def edit_project(request, researcher_id, project_uuid):
             notice = None
 
         if request.method == 'POST':
-            if form.is_valid():
+            if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
                 data.save()
-            
-            # Which notices were selected to change
-            notices_selected = request.POST.getlist('checkbox-notice')
-            # If both notices were selected, check to see if notice exists
-            # If not, create new notice delete old one
-            if len(notices_selected) > 1:
-                notice_exists_both = Notice.objects.filter(project=project, notice_type='biocultural_and_traditional_knowledge').exists()
-                if not notice_exists_both:
-                    notice_both = Notice.objects.create(project=project, notice_type='biocultural_and_traditional_knowledge', placed_by_researcher=researcher)
-                    set_notice_defaults(notice_both)
-                    notice.delete()
-            else:
-                # If one notice was selected, check if it already exists
-                # If not, create new notice, delete old one
-                for selected in notices_selected:
-                    if selected == 'bcnotice':
-                        notice_exists_bc = Notice.objects.filter(project=project, notice_type='biocultural').exists()
-                        if not notice_exists_bc:
-                            bc_notice = Notice.objects.create(project=project, notice_type='biocultural', placed_by_researcher=researcher)
-                            set_notice_defaults(bc_notice)
-                            notice.delete()
 
-                    elif selected == 'tknotice':
-                        notice_exists_tk = Notice.objects.filter(project=project, notice_type='traditional_knowledge').exists()
-                        if not notice_exists_tk:
-                            tk_notice = Notice.objects.create(project=project, notice_type='traditional_knowledge', placed_by_researcher=researcher)
-                            set_notice_defaults(tk_notice)
-                            notice.delete()
+                instances = formset.save(commit=False)
+                for instance in instances:
+                    instance.project = data
+                    instance.save()
+
+                # Get lists of contributors entered in form
+                institutions_selected = request.POST.getlist('selected_institutions')
+                researchers_selected = request.POST.getlist('selected_researchers')
+
+                # Add selected contributors to the ProjectContributors object
+                add_to_contributors(contributors, institutions_selected, researchers_selected)
+            
+                # Which notices were selected to change
+                notices_selected = request.POST.getlist('checkbox-notice')
+                # If both notices were selected, check to see if notice exists
+                # If not, create new notice delete old one
+                if len(notices_selected) > 1:
+                    notice_exists_both = Notice.objects.filter(project=project, notice_type='biocultural_and_traditional_knowledge').exists()
+                    if not notice_exists_both:
+                        notice_both = Notice.objects.create(project=project, notice_type='biocultural_and_traditional_knowledge', placed_by_researcher=researcher)
+                        set_notice_defaults(notice_both)
+                        notice.delete()
+                else:
+                    # If one notice was selected, check if it already exists
+                    # If not, create new notice, delete old one
+                    for selected in notices_selected:
+                        if selected == 'bcnotice':
+                            notice_exists_bc = Notice.objects.filter(project=project, notice_type='biocultural').exists()
+                            if not notice_exists_bc:
+                                bc_notice = Notice.objects.create(project=project, notice_type='biocultural', placed_by_researcher=researcher)
+                                set_notice_defaults(bc_notice)
+                                notice.delete()
+
+                        elif selected == 'tknotice':
+                            notice_exists_tk = Notice.objects.filter(project=project, notice_type='traditional_knowledge').exists()
+                            if not notice_exists_tk:
+                                tk_notice = Notice.objects.create(project=project, notice_type='traditional_knowledge', placed_by_researcher=researcher)
+                                set_notice_defaults(tk_notice)
+                                notice.delete()
             return redirect('researcher-projects', researcher.id)    
 
         context = {
@@ -243,6 +257,8 @@ def edit_project(request, researcher_id, project_uuid):
             'project': project, 
             'notice': notice,
             'form': form, 
+            'formset': formset,
+            'contributors': contributors,
             'user_can_view': user_can_view,
         }
         return render(request, 'researchers/edit-project.html', context)
