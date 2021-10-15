@@ -31,15 +31,41 @@
 {% include 'partials/_add-projectperson.html'%}
 
 <p class="weight-500">Selected Contributors</p>
+
+<!-- If edit project -->
+{% if contributors %}
+
+    {% for researcher in contributors.researchers.all %}
+        <div id="selected-researcher-{{ researcher.id }}" style="height: auto; overflow: hidden;">
+            <div class="selected-community flex-this row space-between">
+                <div><p class="center-name">{{ researcher.user.get_full_name }}</p></div>
+                <div><p id="close-res-{{ researcher.id }}" class="close-x darkteal-text pointer" onclick="cancelResearcherSelection(this)">&times;</p></div>
+            </div>
+        </div>
+        <div id="res-id-input-{{ researcher.id }}" style="display: none;">
+            <input type="hidden" value="{{ researcher.id }}" name="selected_researchers">
+        </div>
+    {% endfor %}
+
+    {% for institution in contributors.institutions.all %}
+        <div id="selected-institution-{{ institution.id }}" style="height: auto; overflow: hidden;">
+            <div class="selected-community flex-this row space-between">
+                <div><p class="center-name">{{ institution.institution_name }}</p></div>
+                <div><p id="close-inst-{{ institution.id }}" class="close-x darkteal-text pointer" onclick="cancelInstitutionSelection(this)">&times;</p></div>
+            </div>
+        </div>
+        <div id="inst-id-input-{{ institution.id }}" style="display: none;">
+            <input type="hidden" value="{{ institution.id }}" name="selected_institutions">
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- If create project -->
 {% for researcher in all_researchers %}
     <div id="selected-researcher-{{ researcher.id }}" style="height: 0px; overflow: hidden;">
         <div class="selected-community flex-this row space-between">
-            <div>
-                <p class="center-name">{{ researcher.user.get_full_name }}</p>
-            </div>
-            <div>
-                <p id="close-res-{{ researcher.id }}" class="close-x darkteal-text pointer" onclick="cancelResearcherSelection(this)">&times;</p>
-            </div>
+            <div><p class="center-name">{{ researcher.user.get_full_name }}</p></div>
+            <div><p id="close-res-{{ researcher.id }}" class="close-x darkteal-text pointer" onclick="cancelResearcherSelection(this)">&times;</p></div>
         </div>
     </div>
     <div id="res-id-input-{{ researcher.id }}" style="display: none;"></div>
@@ -48,12 +74,8 @@
 {% for institution in all_institutions %}
     <div id="selected-institution-{{ institution.id }}" style="height: 0px; overflow: hidden;">
         <div class="selected-community flex-this row space-between">
-            <div>
-                <p class="center-name">{{ institution.institution_name }}</p>
-            </div>
-            <div>
-                <p id="close-inst-{{ institution.id }}" class="close-x darkteal-text pointer" onclick="cancelInstitutionSelection(this)">&times;</p>
-            </div>
+            <div><p class="center-name">{{ institution.institution_name }}</p></div>
+            <div><p id="close-inst-{{ institution.id }}" class="close-x darkteal-text pointer" onclick="cancelInstitutionSelection(this)">&times;</p></div>
         </div>
     </div>
     <div id="inst-id-input-{{ institution.id }}" style="display: none;"></div>

@@ -10,7 +10,7 @@
      <div>
          <label for="institution-search">Search our institution register</label><br>
          {% if institutions %}
-            <input id="selectedOrganizationInputList" list="institutions" name="institutions" class="w-100">
+            <input id="selectedOrganizationInputList" list="institutions" name="institutions" class="w-100" placeholder="Select an institution from the hub">
             <datalist id="institutions">
                 {% for institution in institutions %}
                     <option value="{{ institution.institution_name }}">

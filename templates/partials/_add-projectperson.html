@@ -4,6 +4,7 @@
 <div class="flex-this column">
 
     {% for f in formset %}
+    {{ f.id }}
 
         {% for hidden in f.hidden_fields %}
             {{ hidden }}

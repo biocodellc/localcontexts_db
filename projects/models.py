@@ -54,6 +54,16 @@ class Project(models.Model):
         else:
             return False
 
+    def has_notice(self):
+        if self.project_notice.all().exists():
+            for notice in self.project_notice.all():
+                if notice.archived:
+                    return False
+                else:
+                    return True
+        else:
+            return False
+
     def __str__(self):
         return self.title
     

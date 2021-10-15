@@ -30,7 +30,11 @@ def projects(request):
 def project_detail(request, unique_id):
     project = Project.objects.get(unique_id=unique_id)
     if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable':
-        serializer = ProjectSerializer(project, many=False)
+        if project.has_notice():
+            serializer = ProjectSerializer(project, many=False)
+        else:
+            serializer = ProjectNoNoticeSerializer(project, many=False)
+        
         return Response(serializer.data)
     else:
         raise PermissionDenied({"message":"You don't have permission to view this project",

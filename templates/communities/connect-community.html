@@ -10,7 +10,7 @@
      <div>
          <label for="community-search">Search our community register</label><br>
          {% if communities %}
-            <input id="selectedOrganizationInputList" list="communities" name="communities" class="w-100">
+            <input id="selectedOrganizationInputList" list="communities" name="communities" class="w-100"  placeholder="Select a community from the hub">
             <datalist id="communities">
                 {% for community in communities %}
                     <option value="{{ community.community_name }}">

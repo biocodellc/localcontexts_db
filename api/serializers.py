@@ -61,12 +61,20 @@ class ProjectOverviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ('unique_id', 'title',)
-    
+
+# Notices only   
 class ProjectSerializer(serializers.ModelSerializer):
-    bc_labels = BCLabelSerializer(many=True)
-    tk_labels = TKLabelSerializer(many=True)
     notice = NoticeSerializer(source="project_notice", many=True)
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'title', 'notice', 'bc_labels', 'tk_labels')
+        fields = ('unique_id', 'title', 'notice')
+
+# Labels only
+class ProjectNoNoticeSerializer(serializers.ModelSerializer):
+    bc_labels = BCLabelSerializer(many=True)
+    tk_labels = TKLabelSerializer(many=True)
+
+    class Meta:
+        model = Project
+        fields = ('unique_id', 'title', 'bc_labels', 'tk_labels')

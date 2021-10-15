@@ -1,6 +1,5 @@
 from django import forms
-from django.forms import modelformset_factory
-import datetime
+from django.forms import modelformset_factory, inlineformset_factory
 from .models import Project, ProjectContributors, ProjectPerson
 from django.utils.translation import ugettext_lazy as _
 
@@ -37,6 +36,7 @@ class CreateProjectForm(forms.ModelForm):
             'url': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
+# Create Project Person
 ProjectPersonFormset = modelformset_factory(
     ProjectPerson,
     fields=('name', 'email' ),
@@ -44,7 +44,20 @@ ProjectPersonFormset = modelformset_factory(
     widgets = {
         'name': forms.TextInput(attrs={'size': 35, 'placeholder': 'Contributor name'}),
         'email': forms.EmailInput(attrs={'size': 35, 'placeholder': 'Contributor email'}),
-    }
+    },
+    can_delete=True
+)
+
+# Edit Project Person
+ProjectPersonFormsetInline = inlineformset_factory(
+    Project, 
+    ProjectPerson, 
+    extra=1,
+    fields=('name', 'email'),
+    widgets = {
+        'name': forms.TextInput(attrs={'size': 35, 'placeholder': 'Contributor name'}),
+        'email': forms.EmailInput(attrs={'size': 35, 'placeholder': 'Contributor email'}),
+    },
 )
 
 class EditProjectForm(forms.ModelForm):
