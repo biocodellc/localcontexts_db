@@ -338,7 +338,6 @@ def hub_counter(request):
     reg_total = community_count + institution_count + researcher_count
 
     # Notices
-    notices_total = Notice.objects.count()
     bc_notice_count = 0
     tk_notice_count = 0
     for notice in Notice.objects.all():
@@ -349,6 +348,8 @@ def hub_counter(request):
         if notice.notice_type == 'biocultural_and_traditional_knowledge':
             bc_notice_count += 1
             tk_notice_count += 1
+            
+    notices_total = bc_notice_count + tk_notice_count
 
     # Projects
     community_projects = 0
