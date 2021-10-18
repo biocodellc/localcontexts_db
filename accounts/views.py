@@ -6,6 +6,8 @@ from django.contrib.auth.views import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 
 from django.contrib.auth.decorators import login_required
+
+from projects.models import Project
 from .decorators import unauthenticated_user
 
 # For emails
@@ -16,6 +18,10 @@ from django.utils.encoding import force_text
 from django.contrib.auth.models import User
 from communities.models import Community, JoinRequest
 from institutions.models import Institution
+from researchers.models import Researcher
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
+from helpers.models import Notice
 from notifications.models import UserNotification
 
 from researchers.utils import is_user_researcher
@@ -23,6 +29,7 @@ from researchers.utils import is_user_researcher
 from helpers.emails import *
 from .models import *
 from .forms import *
+import datetime
 
 # Captcha validation imports
 import urllib
@@ -322,3 +329,75 @@ def organization_registry(request):
     }
     return render(request, 'accounts/registry.html', context)
 
+# Hub stats page
+def hub_counter(request):
+    # Registered
+    community_count = Community.objects.count()
+    institution_count = Institution.objects.count()
+    researcher_count = Researcher.objects.count()
+    reg_total = community_count + institution_count + researcher_count
+
+    # Notices
+    notices_total = Notice.objects.count()
+    bc_notice_count = 0
+    tk_notice_count = 0
+    for notice in Notice.objects.all():
+        if notice.notice_type == 'biocultural':
+            bc_notice_count += 1
+        if notice.notice_type == 'traditional_knowledge':
+            tk_notice_count += 1
+        if notice.notice_type == 'biocultural_and_traditional_knowledge':
+            bc_notice_count += 1
+            tk_notice_count += 1
+
+    # Projects
+    community_projects = 0
+    institution_projects = 0
+    researcher_projects = 0
+
+    # Community projects
+    for community in Community.objects.all():
+        comm_count = community.projects.count()
+        community_projects += comm_count
+    
+    # Institution projects
+    for institution in Institution.objects.all():
+        inst_count = institution.projects.count()
+        institution_projects += inst_count
+
+    # Researcher projects
+    for researcher in Researcher.objects.all():
+        res_count = researcher.projects.count()
+        researcher_projects += res_count
+
+    projects_count = Project.objects.count()
+
+    # Labels
+    bclabels_count = BCLabel.objects.count()
+    tklabels_count = TKLabel.objects.count()
+    total_labels = bclabels_count + tklabels_count
+
+    current_datetime = datetime.datetime.now()
+
+    context = {
+        'community_count': community_count,
+        'researcher_count': researcher_count,
+        'institution_count': institution_count,
+        'reg_total': reg_total,
+
+        'bc_notice_count': bc_notice_count,
+        'tk_notice_count': tk_notice_count,
+        'notices_total': notices_total,
+
+        'community_projects': community_projects,
+        'institution_projects': institution_projects,
+        'researcher_projects': researcher_projects,
+        'projects_count': projects_count,
+
+        'bclabels_count': bclabels_count,
+        'tklabels_count': tklabels_count, 
+        'total_labels': total_labels,
+        'current_datetime': current_datetime,
+    }
+    
+    return render(request, 'accounts/totals-count.html', context)
