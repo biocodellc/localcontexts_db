@@ -13,7 +13,7 @@
     <div><a class="darkteal-text" href="{% url 'create-institution' %}"> Create an Institution Account</a></div>
     {% if request.user.profile.is_researcher %}
     {% else %}
-        <div><a class="darkteal-text" href="{% url 'connect-researcher' %}"> Connect a Researcher Account</a></div>
+        <div><a class="darkteal-text" href="{% url 'connect-researcher' %}"> Create your Researcher Account</a></div>
     {% endif %}
 
 </div>
