@@ -47,9 +47,10 @@ def send_hub_admins_application_email(organization, data, subject):
     else: 
         template = render_to_string('snippets/emails/institution-application.html', { 'data' : data })
 
+    emails = [settings.SITE_ADMIN_EMAIL, 'support@localcontexts.org']
+
     # if admin group exists:
     if User.objects.filter(groups__name='hub_admins').exists():
-        emails = [settings.SITE_ADMIN_EMAIL]
         admin_group = User.objects.filter(groups__name='hub_admins')
         for admin in admin_group:
             emails.append(admin.email)
@@ -60,11 +61,11 @@ def send_hub_admins_application_email(organization, data, subject):
         else:
             send_simple_email(emails, subject, template)
     else:
-        # Send to site admin only
+        # Send to site admin and support only
         if data.support_document:
-            send_email_with_attachment(data.support_document, settings.SITE_ADMIN_EMAIL, subject, template)
+            send_email_with_attachment(data.support_document, emails, subject, template)
         else:
-            send_simple_email(settings.SITE_ADMIN_EMAIL, subject, template)
+            send_simple_email(emails, subject, template)
 
 """
     EMAILS FOR ACCOUNTS APP
