@@ -4,13 +4,18 @@
 </h3>
 
 <p>
-    Community Name: {{ data.community_name }}<br>
-    Community Entity: {{ data.community_entity }}<br>
-    State, Province, or Region: {{ data.state_province_region}}<br>
-    Country: {{ data.country.name }}<br>
     Contact Name: {{ data.contact_name }}<br>
-    Contact Email: {{ data.contact_email }}<br>
-    Description: {{ data.description }}   <br>
+    {% if data.contact_email == data.community_creator.email %}
+        Contact Email: {{ data.contact_email }}<br>
+    {% else %}
+        Contact Email: {{ data.contact_email }}<br>
+        Community Account Creator Email: {{ data.community_creator.email }}<br><br>
+    {% endif %}
+
+    Community Name: {{ data.community_name }} <br>
+    Community Entity: {{ data.community_entity }} <br>
+    Location: {{ data.state_province_region}} {{ data.country.name }}<br>
+    Description: {{ data.description }}  <br>
 </p>
 
 {% endautoescape %}
