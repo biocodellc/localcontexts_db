@@ -4,14 +4,19 @@
 </h3>
 
 <p>
-    Institution Name: {{ data.institution_name }}<br>
-    City or Town: {{ data.city_town }}<br>
-    State, Province, or Region: {{ data.state_province_region}}<br>
-    Country: {{ data.country.name }}<br>
     Contact Name: {{ data.contact_name }}<br>
-    Contact Email: {{ data.contact_email }}<br>
+    {% if data.contact_email == data.institution_creator.email %}
+        Contact Email: {{ data.contact_email }}<br>
+    {% else %}
+        Contact Email: {{ data.contact_email }}<br>
+        Institution Account Creator Email: {{ data.institution_creator.email }}<br><br>
+    {% endif %}
+
+    Institution Name: {{ data.institution_name }}<br>
+    Location: {{ data.city_town }} {{ data.state_province_region }} {{ data.country.name }}<br>
     Description: {{ data.description }}<br>
     <br><br>
+    
     {% if data.is_ror == False %}
         If you would like to add this institution to ROR, you can fill out <a href="https://docs.google.com/forms/d/e/1FAIpQLSdJYaMTCwS7muuTa-B_CnAtCSkKzt19lkirAKG4u7umH9Nosg/viewform" target="_blank">this form</a>.
     {% endif %}

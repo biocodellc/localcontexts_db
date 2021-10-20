@@ -34,6 +34,7 @@ class Community(models.Model):
     editors = models.ManyToManyField(User, blank=True, related_name="editors", db_index=True)
     viewers = models.ManyToManyField(User, blank=True, related_name="viewers", db_index=True)
     is_approved = models.BooleanField(default=False, null=True)
+    approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="community_approver")
     projects = models.ManyToManyField('projects.Project', blank=True, related_name="community_projects", db_index=True)
 
     def get_member_count(self):
