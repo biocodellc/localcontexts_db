@@ -1159,6 +1159,7 @@ if (createResearcherBtn) {
     })    
 }
 
+// Deactivate user popup in user settings
 var deactivateAccountBtn = document.getElementById('submitDeactivation')
 if (deactivateAccountBtn) {
     deactivateAccountBtn.addEventListener('click', function(event) {
