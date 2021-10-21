@@ -18,6 +18,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, re_path
 
+admin.site.site_header = 'Local Contexts Hub administration'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
