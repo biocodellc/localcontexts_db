@@ -30,7 +30,8 @@ def get_notices_count(institution):
 def get_labels_count(institution):
     count = 0
     for project in institution.projects.all():
-        count = project.bc_labels.count() + project.tk_labels.count()
+        if project.has_labels():
+            count += 1
     return count
 
 
