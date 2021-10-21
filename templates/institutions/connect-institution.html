@@ -14,10 +14,13 @@
             <datalist id="institutions">
                 {% for institution in institutions %}
                     <option value="{{ institution.institution_name }}">
+                    <input type="hidden" value="{{ institution.institution_name }}" class="nameToCheck" name="check_inst_name_hidden_input">
                 {% endfor %}
             </datalist>
          {% endif %}
      </div>
+
+     {% include 'partials/_alerts.html' %}
 
      <div class="flex-this space-between margin-top-1">
          <div><a class="darkteal-text" href="{% url 'create-institution' %}">Or create an institution account</a></div>

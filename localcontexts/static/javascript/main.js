@@ -1099,9 +1099,13 @@ function setCommunity() {
 
 var joinBtn = document.getElementById('openJoinRequestModalBtn')
 if (joinBtn) {
+    let nameToCheckInput = document.querySelector('.nameToCheck')
+
     joinBtn.addEventListener('click', function(e) {
         if (!inputList.value) {
             alert('Please select an organization from the list')
+        } else if (nameToCheckInput.value != inputList.value) {
+            alert('This organization is not yet registered in the Hub')
         } else {
             e.preventDefault()
             // handle when inputlist value is ''
