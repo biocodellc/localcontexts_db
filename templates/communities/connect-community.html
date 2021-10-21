@@ -14,6 +14,7 @@
             <datalist id="communities">
                 {% for community in communities %}
                     <option value="{{ community.community_name }}">
+                    <input type="hidden" value="{{ community.community_name }}" class="nameToCheck" name="check_comm_name_hidden_input">
                 {% endfor %}
             </datalist>
          {% endif %}
