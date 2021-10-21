@@ -1,15 +1,36 @@
 {% extends 'settings-base.html' %}{% load static %}
 
 {% block settings %}
+<form id="deactivateUserForm" method="POST">
+
     <div class="flex-this column w-80 border-left margin-right-1">
         <div><h3>Deactivate Your Profile</h3></div>
 
         <div class="w-70 margin-bottom-2">
             <p class="no-top-margin">Please note that you will not be able to sign-in after deactivation. Your profile and its associated data will be deleted 30 days after deactivation.</p>
-            <form method="POST">
                 {% csrf_token %}
-                <button class="white-btn">Deactivate Profile</button>
-            </form>
+                <button id="submitDeactivation" class="white-btn">Deactivate Profile</button>
         </div>
     </div>
+
+    <div id="deactivationModal" class="modal" style="display: none;" >
+
+        <div class="orcid-modal flex-this column w-100">
+            <div class="add-member-modal-content w-100">
+    
+                <div>
+                    <h2 class="no-top-margin" style="color: #333333;">Are you sure?</h2>  
+                    <p>Are you sure you want to deactivate your profile? <br><br>
+                        This cannot be undone and you will be automatically logged out. <br></p>  
+                </div>
+                <div class="flex-this w-100 text-align-center">
+                    <div id="continueDeactivationBtn" class="white-btn margin-right-1">Yes, deactivate my profile</div>    
+                    <div id="closeDeactivationModal" class="margin-left-1 action-btn">Cancel</div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+</form>
+
 {% endblock %}

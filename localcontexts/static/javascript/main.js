@@ -1159,3 +1159,21 @@ if (createResearcherBtn) {
     })    
 }
 
+var deactivateAccountBtn = document.getElementById('submitDeactivation')
+if (deactivateAccountBtn) {
+    deactivateAccountBtn.addEventListener('click', function(event) {
+        event.preventDefault()
+        let deactivationModal = document.getElementById('deactivationModal')
+        deactivationModal.style.display = 'block'
+
+        let cancelBtn = document.getElementById('closeDeactivationModal')
+        cancelBtn.addEventListener('click', function(event) { deactivationModal.style.display = 'none' })
+
+        let continueDeactivationBtn = document.getElementById('continueDeactivationBtn')
+        continueDeactivationBtn.addEventListener('click', function(){ document.getElementById('deactivateUserForm').submit() })
+
+    })
+
+
+}
+
