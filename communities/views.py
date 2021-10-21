@@ -34,19 +34,24 @@ def connect_community(request):
     form = JoinRequestForm(request.POST or None)
 
     if request.method == 'POST':
-        community_id = request.POST.get('organization_name')
-        community = Community.objects.get(community_name=community_id)
+        community_name = request.POST.get('organization_name')
+        if Community.objects.filter(community_name=community_name).exists():
+            community = Community.objects.get(community_name=community_name)
 
-        data = form.save(commit=False)
-        data.user_from = request.user
-        data.community = community
-        data.user_to = community.community_creator
-        data.save()
+            data = form.save(commit=False)
+            data.user_from = request.user
+            data.community = community
+            data.user_to = community.community_creator
+            data.save()
 
-        # Send community creator email
-        send_join_request_email_admin(request.user, community)
+            # Send community creator email
+            send_join_request_email_admin(request.user, community)
 
-        return redirect('dashboard')
+            return redirect('dashboard')
+        else:
+            messages.add_message(request, messages.ERROR, 'Community not in registry')
+            return redirect('connect-community')
+
     context = { 'communities': communities, 'form': form,}
     return render(request, 'communities/connect-community.html', context)
 
