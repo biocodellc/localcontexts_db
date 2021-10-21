@@ -32,18 +32,23 @@ def connect_institution(request):
 
     if request.method == 'POST':
         institution_name = request.POST.get('organization_name')
-        institution = Institution.objects.get(institution_name=institution_name)
+        if Institution.objects.filter(institution_name=institution_name).exists():
+            institution = Institution.objects.get(institution_name=institution_name)
 
-        data = form.save(commit=False)
-        data.user_from = request.user
-        data.institution = institution
-        data.user_to = institution.institution_creator
-        data.save()
+            data = form.save(commit=False)
+            data.user_from = request.user
+            data.institution = institution
+            data.user_to = institution.institution_creator
+            data.save()
 
-        # Send institution creator email
-        send_join_request_email_admin(request.user, institution)
-        
-        return redirect('dashboard')
+            # Send institution creator email
+            send_join_request_email_admin(request.user, institution)
+            
+            return redirect('dashboard')
+        else:
+            messages.add_message(request, messages.ERROR, 'Institution not in registry')
+            return redirect('connect-institution')
+
     context = { 'institutions': institutions, 'form': form,}
     return render(request, 'institutions/connect-institution.html', context)
 

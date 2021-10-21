@@ -25,7 +25,8 @@ def get_notices_count(researcher):
 def get_labels_count(researcher):
     count = 0
     for project in researcher.projects.all():
-        count = project.bc_labels.count() + project.tk_labels.count()
+        if project.has_labels():
+            count += 1
     return count
 
 @register.simple_tag

@@ -17,6 +17,7 @@ def apiOverview(request, format=None):
         'projects by username': '/projects/users/<USERNAME>',
         'projects by institution id': '/projects/institutions/<INSTITUTION_ID>',
         'projects by researcher id': '/projects/researchers/<RESEARCHER_ID>',
+        'API Documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
     }
     return Response(api_urls)
 
