@@ -48,3 +48,4 @@ class TKLabel(models.Model):
         verbose_name = 'TK Label'
         verbose_name_plural = 'TK Labels'
         ordering = ('-created',)
+
