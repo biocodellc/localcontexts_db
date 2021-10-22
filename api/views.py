@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import permissions
 from rest_framework.exceptions import PermissionDenied
+from rest_framework import status
 
 from .serializers import *
 from bclabels.models import BCLabel
@@ -29,17 +30,20 @@ def projects(request):
 
 @api_view(['GET'])
 def project_detail(request, unique_id):
-    project = Project.objects.get(unique_id=unique_id)
-    if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable':
-        if project.has_notice():
-            serializer = ProjectSerializer(project, many=False)
+    try:
+        project = Project.objects.get(unique_id=unique_id)
+        if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable':
+            if project.has_notice():
+                serializer = ProjectSerializer(project, many=False)
+            else:
+                serializer = ProjectNoNoticeSerializer(project, many=False)
+            
+            return Response(serializer.data)
         else:
-            serializer = ProjectNoNoticeSerializer(project, many=False)
-        
-        return Response(serializer.data)
-    else:
-        raise PermissionDenied({"message":"You don't have permission to view this project",
-                                "unique_id": unique_id})
+            raise PermissionDenied({"message":"You don't have permission to view this project",
+                                    "unique_id": unique_id})
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def projects_by_user(request, username):
