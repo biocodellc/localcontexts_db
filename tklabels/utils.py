@@ -83,5 +83,7 @@ def assign_tklabel_img(label_type):
         return baseURL + 'tk-secret-sacred.png'
     if label_type == 'tkcb':
         return baseURL + 'tk-open-to-collaboration.png'
+    if label_type =='tkcr':
+        return baseURL + 'tk-creative.png'
     if label_type == 'placeholder':
         return None
