@@ -30,7 +30,7 @@
     </head>
 
     <body>
-        {% if 'anth-ja77-lc-dev-42d5' in request.get_host  or 'localhost' in request.get_host %}
+        {% if 'anth-ja77-lc-dev-42d5' in request.get_host %}
             {% include 'partials/banners/_sandbox-banner.html' %}
             <div style="margin-bottom: 53px;"></div>
         {% endif %}
