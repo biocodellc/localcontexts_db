@@ -30,8 +30,12 @@
     </head>
 
     <body>
+        {% if 'anth-ja77-lc-dev-42d5' in request.get_host  or 'localhost' in request.get_host %}
+            {% include 'partials/banners/_sandbox-banner.html' %}
+            <div style="margin-bottom: 53px;"></div>
+        {% endif %}
         {% block content %} {% endblock %}
-        {% include 'partials/_cookie-banner.html' %}
+        {% include 'partials/banners/_cookie-banner.html' %}
         <script src='https://www.google.com/recaptcha/api.js'></script>
         <script src="{% static 'javascript/main.js' %}" type="text/javascript"></script>
         <script src="{% static 'javascript/xhr.js' %}" type="text/javascript"></script>
