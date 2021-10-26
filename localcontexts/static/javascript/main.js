@@ -2,24 +2,15 @@
 var dismissBtn = document.getElementById('close-btn')
 var messageDiv = document.getElementById('alert-message')
 
-if (dismissBtn) {
-    dismissBtn.addEventListener('click', () => {
-        messageDiv.style.display = 'none'
-    })
-}
+if (dismissBtn) { dismissBtn.addEventListener('click', () => { messageDiv.style.display = 'none'}) }
 
 // Password fields in registration form
 var passwordField = document.getElementById('id_password1')
 var helpTextDiv = document.getElementById('help-text-pw')
 
 if (passwordField ) {
-    passwordField.addEventListener('focusin', (event) => {
-        helpTextDiv.style.display = 'block' 
-      })
-    
-    passwordField.addEventListener('focusout', (event) => {
-        helpTextDiv.style.display = 'none' 
-    })
+    passwordField.addEventListener('focusin', (event) => { helpTextDiv.style.display = 'block' })
+    passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
 // Show customized label text in community: labels
@@ -1172,9 +1163,61 @@ if (deactivateAccountBtn) {
 
         let continueDeactivationBtn = document.getElementById('continueDeactivationBtn')
         continueDeactivationBtn.addEventListener('click', function(){ document.getElementById('deactivateUserForm').submit() })
+    })
+}
 
+if (window.location.href.includes('registry')) {
+    // Filter Registry
+    const filterbyCommunities = document.getElementById('filterCommunities')
+    const filterbyInstitutions = document.getElementById('filterInstitutions')
+    const filterbyAll = document.getElementById('filterAll')
+    let institutions = document.querySelectorAll('.institutions-filter')
+    let communities = document.querySelectorAll('.communities-filter')
+
+
+    filterbyCommunities.addEventListener('click', () => {
+        institutions.forEach(institution => {
+            institution.classList.remove('show')
+            institution.classList.add('hide')
+        })
+
+        communities.forEach(community => {
+            if (community.classList.contains('hide')) {
+                community.classList.remove('hide')
+                community.classList.add('show')
+            }
+        })
     })
 
+    filterbyInstitutions.addEventListener('click', () => {
+        communities.forEach(community => {
+            community.classList.remove('show')
+            community.classList.add('hide')
 
+        })
+
+        institutions.forEach(institution => {
+            if (institution.classList.contains('hide')) {
+                institution.classList.remove('hide')
+                institution.classList.add('show')
+            }
+        })
+    })
+    
+    filterbyAll.addEventListener('click', () => {
+        communities.forEach(community => {
+            if (community.classList.contains('hide')) {
+                community.classList.remove('hide')
+                community.classList.add('show')
+            }
+        })
+
+        institutions.forEach(institution => {
+            if (institution.classList.contains('hide')) {
+                institution.classList.remove('hide')
+                institution.classList.add('show')
+            }
+        })
+    })
 }
 
