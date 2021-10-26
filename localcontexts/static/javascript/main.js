@@ -998,7 +998,6 @@ function setProjectUUID(elem) {
 
     // Set first hidden value to project UUID
     projectIdInput.value = projectID
-    console.log(projectIdInput)
     // Set second hidden value to value of option selected
     statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
 }
@@ -1076,20 +1075,19 @@ function showUserNotifications(btn) {
 }
 
 
-var inputList = document.getElementById('selectedOrganizationInputList')
+if (window.location.href.includes('connect-community') || window.location.href.includes('connect-institution')) {
 
-if (inputList) {
+    let inputList = document.getElementById('selectedOrganizationInputList')
     inputList.addEventListener('change', setCommunity)
     inputList.addEventListener('click', setCommunity)
-}
 
-function setCommunity() {
-    let hiddenCommunityInput = document.getElementById('hidden-target-input')
-    hiddenCommunityInput.value = inputList.value
-}
+    function setCommunity() {
+        let hiddenCommunityInput = document.getElementById('hidden-target-input')
+        hiddenCommunityInput.value = inputList.value
+    }
 
-var joinBtn = document.getElementById('openJoinRequestModalBtn')
-if (joinBtn) {
+    // Join an organization
+    const joinBtn = document.getElementById('openJoinRequestModalBtn')
     let nameToCheckInput = document.querySelector('.nameToCheck')
 
     joinBtn.addEventListener('click', function(e) {
@@ -1111,7 +1109,9 @@ if (joinBtn) {
             }
         }
     })
-}
+}   
+
+
 
 // Copy text to clipboard
 function copyToClipboard() {
@@ -1125,8 +1125,9 @@ function copyToClipboard() {
 }
 
 // Connect-researcher: ORCiD popup
-var createResearcherBtn = document.getElementById('submitResearcher')
-if (createResearcherBtn) {
+if (window.location.href.includes('connect-researcher')) {
+    const createResearcherBtn = document.getElementById('submitResearcher')
+
     createResearcherBtn.addEventListener('click', function(event) {
         event.preventDefault()
         let hiddenORCIDInput = document.getElementById('orcidId')
@@ -1147,8 +1148,10 @@ if (createResearcherBtn) {
             let continueBtn = document.getElementById('continueNoOrcidBtn')
             continueBtn.addEventListener('click', function(event) { document.getElementById('createResearcher').submit() })
         }
-    })    
+    })  
 }
+  
+
 
 // Deactivate user popup in user settings
 var deactivateAccountBtn = document.getElementById('submitDeactivation')

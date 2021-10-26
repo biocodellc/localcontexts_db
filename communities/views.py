@@ -66,7 +66,7 @@ def create_community(request):
             data.community_creator = request.user
 
             # If in test site, approve immediately, skip confirmation step
-            if dev_prod_or_local(request.get_host) == 'DEV':
+            if dev_prod_or_local(request.get_host()) == 'DEV':
                 data.is_approved = True
                 data.save()
                 return redirect('dashboard')

@@ -65,7 +65,7 @@ def create_institution(request):
                 data.institution_creator = request.user
 
                 # If in test site, approve immediately, skip confirmation step
-                if dev_prod_or_local(request.get_host):
+                if dev_prod_or_local(request.get_host()) == 'DEV':
                     data.is_approved = True
                     data.save()
                     return redirect('dashboard')
@@ -82,16 +82,22 @@ def confirm_institution(request, institution_id):
     if request.method == "POST":
         if form.is_valid():
             data = form.save(commit=False)
-            data.save()
-
-            subject = ''
-            if data.is_ror:
-                subject = 'New Institution Application: ' + str(data.institution_name)
+            # If in test site, approve immediately, skip confirmation step
+            if dev_prod_or_local(request.get_host()) == 'DEV':
+                data.is_approved = True
+                data.save()
+                return redirect('dashboard')
             else:
-                subject = 'New Institution Application (non-ROR): ' + str(data.institution_name)
+                data.save()
 
-            send_hub_admins_application_email(institution, data, subject)
-            return redirect('dashboard')
+                subject = ''
+                if data.is_ror:
+                    subject = 'New Institution Application: ' + str(data.institution_name)
+                else:
+                    subject = 'New Institution Application (non-ROR): ' + str(data.institution_name)
+
+                send_hub_admins_application_email(institution, data, subject)
+                return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
 
 
