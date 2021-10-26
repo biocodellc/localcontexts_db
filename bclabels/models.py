@@ -38,3 +38,4 @@ class BCLabel(models.Model):
         verbose_name = 'BC Label'
         verbose_name_plural = 'BC Labels'
         ordering = ('-created',)
+

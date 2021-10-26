@@ -14,10 +14,10 @@ from projects.models import Project
 def apiOverview(request, format=None):
     api_urls = {
         'projects': reverse('api-projects', request=request, format=format),
-        'project detail view': '/projects/<PROJECT_UNIQUE_ID>',
-        'projects by username': '/projects/users/<USERNAME>',
-        'projects by institution id': '/projects/institutions/<INSTITUTION_ID>',
-        'projects by researcher id': '/projects/researchers/<RESEARCHER_ID>',
+        'project detail view': '/projects/<PROJECT_UNIQUE_ID>/',
+        'projects by username': '/projects/users/<USERNAME>/',
+        'projects by institution id': '/projects/institutions/<INSTITUTION_ID>/',
+        'projects by researcher id': '/projects/researchers/<RESEARCHER_ID>/',
         'API Documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
     }
     return Response(api_urls)

@@ -14,16 +14,24 @@
 
         <div class="flex-this space-between">
             <div class="w-50"><p>We encourage you to have an ORCiD ID. <br>You can <a href="https://orcid.org/" target="_blank">read more about ORCiD here</a>.</p></div>
-            
-            <!-- Leave for local testing -->
-            <!-- <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="http://localhost:8000/researchers/connect-researcher/"></div> -->
-            <!-- Prod sandbox orcid -->   
-            <!-- <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div> -->
 
-            <!-- PROD ORCID -->
-            <!-- <div id="orcidWidget" data-clientid='APP-IBW6UOF5FGJG0ODB' data-env="production" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div> -->
-            <div id="orcidWidget" data-clientid='APP-IBW6UOF5FGJG0ODB' data-env="production" data-redirecturi="https://localcontextshub.org/researchers/connect-researcher/"></div>
+            <!-- Show ORCiD widget based on hostname -->
+            {% if 'localcontextshub' in request.get_host %}
+                <div id="orcidWidget" data-clientid='APP-IBW6UOF5FGJG0ODB' data-env="production" data-redirecturi="https://localcontextshub.org/researchers/connect-researcher/"></div>
+            {% elif 'localhost' in request.get_host %}
+                <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="http://localhost:8000/researchers/connect-researcher/"></div>
+            {% elif 'anth-ja77-local-contexts-8985' in request.get_host %}
+                <div id="orcidWidget" data-clientid='APP-IBW6UOF5FGJG0ODB' data-env="production" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div>
+            {% elif 'anth-ja77-lc-dev-42d5' in request.get_host %}
+                <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="https://anth-ja77-lc-dev-42d5.uc.r.appspot.com/researchers/connect-researcher/"></div>
+            {% endif %}
         </div>
+
+        {% if 'anth-ja77-lc-dev-42d5' in request.get_host %}
+            <small class="bold">Please note that since this is a test site, the ORCiD used will be the <a class="darkteal-text" href="https://sandbox.orcid.org/">sandbox version</a>.</small><br>
+        {% elif 'localhost' in request.get_host %}
+            <small class="bold">Localhost uses the <a class="darkteal-text" href="https://sandbox.orcid.org/">sandbox version</a> of ORCiD.</small><br>
+        {% endif %}
 
         <div>
             <label for="primary_institution">Primary Institution</label>

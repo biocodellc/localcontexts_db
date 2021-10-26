@@ -20,6 +20,7 @@ from helpers.forms import ProjectCommentForm
 from bclabels.utils import check_bclabel_type, assign_bclabel_img
 from tklabels.utils import check_tklabel_type, assign_tklabel_img
 from projects.utils import add_to_contributors
+from helpers.utils import dev_prod_or_local
 
 from helpers.emails import *
 
@@ -63,8 +64,15 @@ def create_community(request):
         if form.is_valid():
             data = form.save(commit=False)
             data.community_creator = request.user
-            data.save()
-            return redirect('confirm-community', data.id)
+
+            # If in test site, approve immediately, skip confirmation step
+            if dev_prod_or_local(request.get_host()) == 'DEV':
+                data.is_approved = True
+                data.save()
+                return redirect('dashboard')
+            else:
+                data.save()
+                return redirect('confirm-community', data.id)
     return render(request, 'communities/create-community.html', {'form': form})
 
 # Confirm Community

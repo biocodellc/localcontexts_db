@@ -280,8 +280,8 @@ def invite_user(request):
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 
 def organization_registry(request):
-    communities = Community.objects.filter(is_approved=True)
-    institutions = Institution.objects.filter(is_approved=True)
+    communities = Community.objects.filter(is_approved=True).order_by('community_name')
+    institutions = Institution.objects.filter(is_approved=True).order_by('institution_name')
 
     if request.user.is_authenticated:
         user_institutions = UserAffiliation.objects.get(user=request.user).institutions.all()

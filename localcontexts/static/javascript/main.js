@@ -2,24 +2,15 @@
 var dismissBtn = document.getElementById('close-btn')
 var messageDiv = document.getElementById('alert-message')
 
-if (dismissBtn) {
-    dismissBtn.addEventListener('click', () => {
-        messageDiv.style.display = 'none'
-    })
-}
+if (dismissBtn) { dismissBtn.addEventListener('click', () => { messageDiv.style.display = 'none'}) }
 
 // Password fields in registration form
 var passwordField = document.getElementById('id_password1')
 var helpTextDiv = document.getElementById('help-text-pw')
 
 if (passwordField ) {
-    passwordField.addEventListener('focusin', (event) => {
-        helpTextDiv.style.display = 'block' 
-      })
-    
-    passwordField.addEventListener('focusout', (event) => {
-        helpTextDiv.style.display = 'none' 
-    })
+    passwordField.addEventListener('focusin', (event) => { helpTextDiv.style.display = 'block' })
+    passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
 // Show customized label text in community: labels
@@ -1007,7 +998,6 @@ function setProjectUUID(elem) {
 
     // Set first hidden value to project UUID
     projectIdInput.value = projectID
-    console.log(projectIdInput)
     // Set second hidden value to value of option selected
     statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
 }
@@ -1085,20 +1075,19 @@ function showUserNotifications(btn) {
 }
 
 
-var inputList = document.getElementById('selectedOrganizationInputList')
+if (window.location.href.includes('connect-community') || window.location.href.includes('connect-institution')) {
 
-if (inputList) {
+    let inputList = document.getElementById('selectedOrganizationInputList')
     inputList.addEventListener('change', setCommunity)
     inputList.addEventListener('click', setCommunity)
-}
 
-function setCommunity() {
-    let hiddenCommunityInput = document.getElementById('hidden-target-input')
-    hiddenCommunityInput.value = inputList.value
-}
+    function setCommunity() {
+        let hiddenCommunityInput = document.getElementById('hidden-target-input')
+        hiddenCommunityInput.value = inputList.value
+    }
 
-var joinBtn = document.getElementById('openJoinRequestModalBtn')
-if (joinBtn) {
+    // Join an organization
+    const joinBtn = document.getElementById('openJoinRequestModalBtn')
     let nameToCheckInput = document.querySelector('.nameToCheck')
 
     joinBtn.addEventListener('click', function(e) {
@@ -1120,7 +1109,9 @@ if (joinBtn) {
             }
         }
     })
-}
+}   
+
+
 
 // Copy text to clipboard
 function copyToClipboard() {
@@ -1134,8 +1125,9 @@ function copyToClipboard() {
 }
 
 // Connect-researcher: ORCiD popup
-var createResearcherBtn = document.getElementById('submitResearcher')
-if (createResearcherBtn) {
+if (window.location.href.includes('connect-researcher')) {
+    const createResearcherBtn = document.getElementById('submitResearcher')
+
     createResearcherBtn.addEventListener('click', function(event) {
         event.preventDefault()
         let hiddenORCIDInput = document.getElementById('orcidId')
@@ -1156,8 +1148,10 @@ if (createResearcherBtn) {
             let continueBtn = document.getElementById('continueNoOrcidBtn')
             continueBtn.addEventListener('click', function(event) { document.getElementById('createResearcher').submit() })
         }
-    })    
+    })  
 }
+  
+
 
 // Deactivate user popup in user settings
 var deactivateAccountBtn = document.getElementById('submitDeactivation')
@@ -1172,9 +1166,61 @@ if (deactivateAccountBtn) {
 
         let continueDeactivationBtn = document.getElementById('continueDeactivationBtn')
         continueDeactivationBtn.addEventListener('click', function(){ document.getElementById('deactivateUserForm').submit() })
+    })
+}
 
+if (window.location.href.includes('registry')) {
+    // Filter Registry
+    const filterbyCommunities = document.getElementById('filterCommunities')
+    const filterbyInstitutions = document.getElementById('filterInstitutions')
+    const filterbyAll = document.getElementById('filterAll')
+    let institutions = document.querySelectorAll('.institutions-filter')
+    let communities = document.querySelectorAll('.communities-filter')
+
+
+    filterbyCommunities.addEventListener('click', () => {
+        institutions.forEach(institution => {
+            institution.classList.remove('show')
+            institution.classList.add('hide')
+        })
+
+        communities.forEach(community => {
+            if (community.classList.contains('hide')) {
+                community.classList.remove('hide')
+                community.classList.add('show')
+            }
+        })
     })
 
+    filterbyInstitutions.addEventListener('click', () => {
+        communities.forEach(community => {
+            community.classList.remove('show')
+            community.classList.add('hide')
 
+        })
+
+        institutions.forEach(institution => {
+            if (institution.classList.contains('hide')) {
+                institution.classList.remove('hide')
+                institution.classList.add('show')
+            }
+        })
+    })
+    
+    filterbyAll.addEventListener('click', () => {
+        communities.forEach(community => {
+            if (community.classList.contains('hide')) {
+                community.classList.remove('hide')
+                community.classList.add('show')
+            }
+        })
+
+        institutions.forEach(institution => {
+            if (institution.classList.contains('hide')) {
+                institution.classList.remove('hide')
+                institution.classList.add('show')
+            }
+        })
+    })
 }
 

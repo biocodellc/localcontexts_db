@@ -2,12 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from django.conf import settings
-from django.template.loader import render_to_string
-
 from .utils import *
 from projects.utils import add_to_contributors
-from helpers.utils import set_notice_defaults
+from helpers.utils import set_notice_defaults, dev_prod_or_local
 
 from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson
@@ -66,8 +63,15 @@ def create_institution(request):
             else:
                 data.institution_name = name
                 data.institution_creator = request.user
-                data.save()
-                return redirect('confirm-institution', data.id)
+
+                # If in test site, approve immediately, skip confirmation step
+                if dev_prod_or_local(request.get_host()) == 'DEV':
+                    data.is_approved = True
+                    data.save()
+                    return redirect('dashboard')
+                else:
+                    data.save()
+                    return redirect('confirm-institution', data.id)
     return render(request, 'institutions/create-institution.html', {'form': form})
 
 @login_required(login_url='login')
@@ -78,16 +82,22 @@ def confirm_institution(request, institution_id):
     if request.method == "POST":
         if form.is_valid():
             data = form.save(commit=False)
-            data.save()
-
-            subject = ''
-            if data.is_ror:
-                subject = 'New Institution Application: ' + str(data.institution_name)
+            # If in test site, approve immediately, skip confirmation step
+            if dev_prod_or_local(request.get_host()) == 'DEV':
+                data.is_approved = True
+                data.save()
+                return redirect('dashboard')
             else:
-                subject = 'New Institution Application (non-ROR): ' + str(data.institution_name)
+                data.save()
 
-            send_hub_admins_application_email(institution, data, subject)
-            return redirect('dashboard')
+                subject = ''
+                if data.is_ror:
+                    subject = 'New Institution Application: ' + str(data.institution_name)
+                else:
+                    subject = 'New Institution Application (non-ROR): ' + str(data.institution_name)
+
+                send_hub_admins_application_email(institution, data, subject)
+                return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
 
 
