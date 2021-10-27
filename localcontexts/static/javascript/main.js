@@ -43,11 +43,16 @@ function customText(imgDiv) {
     })
 }
 
+fetch('../static/json/Labels.json')
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(err => console.log(err))
+
 // BC Content
 var provenanceName = 'BC Provenance (BC P)'
 var multipleCommunityName = 'BC Multiple Communities (BC MC)'
 var openToCollabName = 'BC Open to Collaboration (BC CB)'
-var openToCommercializationName = ' BC Open to Commercialization (BC C)'
+var openToCommercializationName = 'BC Open to Commercialization (BC OC)'
 var researchUseName = 'BC Research Use (BC R)'
 var consentVerifiedName = 'BC Consent Verified (BC CV)'
 var consentNonVerifiedName = 'BC Consent Non-Verified (BC CNV)'
