@@ -1,5 +1,5 @@
 {
-    "bclabels": [
+    "bcLabels": [
         {
             "id": 1,
             "labelName": "BC Provenance (BC P)",
@@ -102,7 +102,7 @@
         }
 
     ],
-    "tklabels": [
+    "tkLabels": [
         {
             "id": 1,
             "labelName": "TK Attribution (TK A)",
