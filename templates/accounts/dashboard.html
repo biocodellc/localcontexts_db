@@ -15,7 +15,6 @@
                     If you'd like to join existing communities and institutions, check out the <a class="darkteal-text" href="{% url 'organization-registry' %}">Local Contexts Registry</a>.<br>
                     You can also connect your researcher account by clicking <a class="darkteal-text" href="{% url 'connect-researcher' %}">here</a>.<br>
                     <small>All of the above plus account creation can also be done through your user settings.</small>
-
                 </p>
             </div>
         {% endif %}
@@ -33,15 +32,11 @@
                             {% endif %}
                         </div>
                         <div class="flex-this column dashcard-text-container">
-                            <div>
-                                <h3 class="dashcard-h3 darkteal-text">{{ researcher.user.get_full_name }}</h3>
-                            </div>
+                            <div><h3 class="dashcard-h3 darkteal-text">{{ researcher.user.get_full_name }}</h3></div>
                             <div>
                                 <p class="black-text dashcard-subheader">Researcher | Location: {% if researcher.user.profile.city_town %} {{ researcher.user.profile.city_town }}, {% endif %} {% if researcher.user.profile.state_province_region %} {{ researcher.user.profile.state_province_region }}, {% endif %} {% if researcher.user.profile.country.name %} {{ researcher.user.profile.country.name }}{% endif %}</p>
                             </div>
-                            <div>
-                                <p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p>
-                            </div>
+                            <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p></div>
                         </div>
 
                     </div>
@@ -63,15 +58,11 @@
                                 {% endif %}
                             </div>
                             <div class="flex-this column dashcard-text-container">
-                                <div>
-                                    <h3 class="dashcard-h3 darkteal-text">{{ community }}</h3>
-                                </div>
+                                <div><h3 class="dashcard-h3 darkteal-text">{{ community }}</h3></div>
                                 <div>
                                     <p class="black-text dashcard-subheader">Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %} | Location: {% if community.city_town %} {{ community.city_town }}, {% endif %} {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}</p>
                                 </div>
-                                <div>
-                                    <p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p>
-                                </div>
+                                <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
                             </div>
 
                         </div>
@@ -85,7 +76,6 @@
             <div class="dashcard">
                 <a href="{% url 'institution-projects' institution.id %}">
                     <div class="flex-this">
-
                         <div class="dashcard-img-container">
                             {% if institution.image %}
                                 <img class="profile-img" src="{{ institution.image.url }}" alt="{{ institution.institution_name }} image">
@@ -94,17 +84,12 @@
                             {% endif %}
                         </div>
                         <div class="flex-this column dashcard-text-container">
-                            <div>
-                                <h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3>
-                            </div>
+                            <div><h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3></div>
                             <div>
                                 <p class="black-text dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | Location: {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}</p>
                             </div>
-                            <div>
-                                <p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p>
-                            </div>
+                            <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p></div>
                         </div>
-
                     </div>
                 </a>
             </div>
@@ -112,9 +97,6 @@
     {% endif %}
 
     </section>
-
-
-
 
 </div>
 {% include 'partials/_auth-footer.html' %}

@@ -16,43 +16,41 @@
               <form method="POST" action="">
                   {% csrf_token %}
       
-                  <div class="flex-this"> 
-                      <div class="w-50">
-                        <div> 
-                            {{ form.receiver.label }} <br>
-                            {{ form.receiver }} 
-                          </div>
-                          <div>
-                            <label>Responsibility</label><br>
-                            {{ form.role }} 
-                          </div>
-                      </div>
-
-
-                      <div class="w-50">
-                        <div>
-                            {{ form.message.label }}<br>
-                            {{ form.message }}
+                    <div class="flex-this"> 
+                        <div class="w-50">
+                            <div> 
+                                {{ form.receiver.label }} <br>
+                                {{ form.receiver }} 
+                            </div>
+                            <div>
+                                <label>Responsibility</label><br>
+                                {{ form.role }} 
+                            </div>
                         </div>
-                      </div>
-                  </div>
 
-                  <p>- Only Admins and Editors have access to create and manage labels.<br></p>
+
+                        <div class="w-50">
+                            <div>
+                                {{ form.message.label }}<br>
+                                {{ form.message }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>- Only Admins and Editors have access to create and manage labels.<br></p>
 
                   
-                <div class="flex-this w-100">
-                    <div class="w-50">
-                        <!-- Alerts -->
-                        {% include 'partials/_alerts.html' %}
-                        <button class="action-btn margin-top-2 " type="submit">Send Invitation </button>
-                    </div>
+                    <div class="flex-this w-100">
+                        <div class="w-50">
+                            <!-- Alerts -->
+                            {% include 'partials/_alerts.html' %}
+                            <button class="action-btn margin-top-2 " type="submit">Send Invitation </button>
+                        </div>
 
-                    <div class="w-50 pad-top-1-5 right-text">
-                            <small>
-                                Looking for someone who isn't on this list? <br><a href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.
-                            </small>
+                        <div class="w-50 pad-top-1-5 right-text">
+                            <small>Looking for someone who isn't on this list? <br><a href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.</small>
+                        </div>
                     </div>
-                </div>
 
                 </form>
             </div>
