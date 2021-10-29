@@ -413,54 +413,49 @@ function openLabelInfoDiv(targetDiv, divToCloseOne, divToCloseTwo) {
     }
 }
 
-// function closeLabelInfoDiv(targetDiv, type, category) {
-//     let btn = document.getElementById(`close-${type}-${category}`)
-//     btn.addEventListener('click', () => {
-//         targetDiv.classList.remove('show')
-//         targetDiv.classList.add('hide')
-//     })
-// }
-
 function closeLabelInfoDiv(targetBtn) {
+    // Divs to close
     let infoTKProv = document.getElementById('tklabel-info-prov')
     let infoTKProt = document.getElementById('tklabel-info-prot')
-    let infoTKPerms = document.getElementById('tklabel-info-perm')
-
+    let infoTKPerm = document.getElementById('tklabel-info-perm')
     let infoBCProv = document.getElementById('bclabel-info-prov')
     let infoBCProt = document.getElementById('bclabel-info-prot')
-    let infoBCPerms = document.getElementById('bclabel-info-perm')
+    let infoBCPerm = document.getElementById('bclabel-info-perm')
 
-    let a = targetBtn.id.includes('tk-prov')
-    let b = targetBtn.id.includes('bc-prov')
-    let c = targetBtn.id.includes('tk-prot')
-    let d = targetBtn.id.includes('bc-prot')
-    let e = targetBtn.id.includes('tk-perm')
-    let f = targetBtn.id.includes('bc-perm')
+    let btnId = targetBtn.id
+
+    // Check if target button includes str in id
+    let tkProv = btnId.includes('tk-prov')
+    let bcProv = btnId.includes('bc-prov')
+    let tkProt = btnId.includes('tk-prot')
+    let bcProt = btnId.includes('bc-prot')
+    let tkPerm = btnId.includes('tk-perm')
+    let bcPerm = btnId.includes('bc-perm')
 
     switch(true) {
-        case a:
+        case tkProv:
             infoTKProv.classList.remove('show')
             infoTKProv.classList.add('hide')        
             break;
-        case b:
+        case bcProv:
             infoBCProv.classList.remove('show')
             infoBCProv.classList.add('hide')        
             break;
-        case c:
+        case tkProt:
             infoTKProt.classList.remove('show')
             infoTKProt.classList.add('hide')
             break;
-        case d:
+        case bcProt:
             infoBCProt.classList.remove('show')
             infoBCProt.classList.add('hide')
             break;
-        case e:
-            infoTKPerms.classList.remove('show')
-            infoTKPerms.classList.add('hide')
+        case tkPerm:
+            infoTKPerm.classList.remove('show')
+            infoTKPerm.classList.add('hide')
             break;
-        case f:
-            infoBCPerms.classList.remove('show')
-            infoBCPerms.classList.add('hide')
+        case bcPerm:
+            infoBCPerm.classList.remove('show')
+            infoBCPerm.classList.add('hide')
             break;
     }
 }
