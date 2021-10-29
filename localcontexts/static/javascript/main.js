@@ -179,29 +179,29 @@ function expandBCLabel(img) {
                     // get label category, then get the button for that section
                     // disable the btn
                     if (label.labelCategory == 'provenance') {
-                        btnBCProv.disabled = true
+                        btnBCProv.setAttribute("disabled","disabled")
                         btnBCProv.classList.remove('action-btn')
                         btnBCProv.classList.add('disabled-btn')
                     } else if (label.labelCategory == 'protocol') {
-                        btnBCProt.disabled = true
+                        btnBCProt.setAttribute("disabled","disabled")
                         btnBCProt.classList.remove('action-btn')
                         btnBCProt.classList.add('disabled-btn')
                     } else if (label.labelCategory == 'permission') {
-                        btnBCPerms.disabled = true
+                        btnBCPerms.setAttribute("disabled","disabled")
                         btnBCPerms.classList.remove('action-btn')
                         btnBCPerms.classList.add('disabled-btn')
                     }
                 } else {
                     if (label.labelCategory == 'provenance') {
-                        btnBCProv.disabled = false
+                        btnBCProv.removeAttribute("disabled")
                         btnBCProv.classList.remove('disabled-btn')
                         btnBCProv.classList.add('action-btn')
                     } else if (label.labelCategory == 'protocol') {
-                        btnBCProt.disabled = false
+                        btnBCProt.removeAttribute("disabled")
                         btnBCProt.classList.remove('disabled-btn')
                         btnBCProt.classList.add('action-btn')
                     } else if (label.labelCategory == 'permission') {
-                        btnBCPerms.disabled = false
+                        btnBCPerms.removeAttribute("disabled")
                         btnBCPerms.classList.remove('disabled-btn')
                         btnBCPerms.classList.add('action-btn')
                     }
@@ -427,32 +427,33 @@ function expandTKLabel(img) {
         inputs.forEach(input => {
             if (label.labelCode == targetLabelCode) {
                 if (input.value == label.labelType) {
+                    console.log(input.value, label.labelType)
                     // get label category, then get the button for that section
                     // disable the btn
                     if (label.labelCategory == 'provenance') {
-                        btnTKProv.disabled = true
+                        btnTKProv.setAttribute("disabled","disabled")
                         btnTKProv.classList.remove('action-btn')
                         btnTKProv.classList.add('disabled-btn')
                     } else if (label.labelCategory == 'protocol') {
-                        btnTKProt.disabled = true
+                        btnTKProt.setAttribute("disabled","disabled")
                         btnTKProt.classList.remove('action-btn')
                         btnTKProt.classList.add('disabled-btn')
                     } else if (label.labelCategory == 'permission') {
-                        btnTKPerms.disabled = true
+                        btnTKPerms.setAttribute("disabled","disabled")
                         btnTKPerms.classList.remove('action-btn')
                         btnTKPerms.classList.add('disabled-btn')
                     }
                 } else {
                     if (label.labelCategory == 'provenance') {
-                        btnTKProv.disabled = false
+                        btnTKProv.removeAttribute("disabled")
                         btnTKProv.classList.remove('disabled-btn')
                         btnTKProv.classList.add('action-btn')
                     } else if (label.labelCategory == 'protocol') {
-                        btnTKProt.disabled = false
+                        btnTKProt.removeAttribute("disabled")
                         btnTKProt.classList.remove('disabled-btn')
                         btnTKProt.classList.add('action-btn')
                     } else if (label.labelCategory == 'permission') {
-                        btnTKPerms.disabled = false
+                        btnTKPerms.removeAttribute("disabled")
                         btnTKPerms.classList.remove('disabled-btn')
                         btnTKPerms.classList.add('action-btn')
                     }
