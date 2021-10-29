@@ -1,9 +1,9 @@
 # localcontexts_db
 Prod Link:
-- [Local Contexts Hub](https://localcontextshub.org/login/)
+- [Local Contexts Hub](https://localcontextshub.org/)
 Branches:
-- [Master](https://anth-ja77-local-contexts-8985.uc.r.appspot.com/login/?next=/dashboard/) Final location and config of LocalContexts 
-- Develop: dev branch for pushing changes
+- [Master](https://anth-ja77-local-contexts-8985.uc.r.appspot.com/)
+- [Develop](https://anth-ja77-lc-dev-42d5.uc.r.appspot.com/)
 
 ## Getting Started
 What you need to run this app:
@@ -39,9 +39,9 @@ Once in virtualenv, in the project root run:
 Set localcontexts Environment Variables using EXPORT Statements
 This will set local environment variables accessible via PYTHON
 
-```source setupHeroku.sh``` sets up environment variables for heroku hosted database
 ```source env-local.sh``` sets up environment variables for locally hosted database
 ```source env-localprod.sh``` sets up environment variables for production database to access it locally
+```source env-localdev.sh``` sets up environment variables for development/testing database to access it locally
 
 ## Migration
 ```
@@ -69,7 +69,7 @@ In order to make migrations or migrate the production database:
 ## Running the Server
 ```python manage.py runserver```
 
-Locally, the app will start on port 8000, go to `8000/login` or `8000/register` to see the application.
+Locally, the app will start on port 8000.
 
 Configuration can be found in the `settings.py` file.
 Database models are located in `/<app name>/models.py`.
