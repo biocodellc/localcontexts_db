@@ -195,7 +195,6 @@ def select_label(request, pk):
     bclabels = BCLabel.objects.filter(community=community)
     tklabels = TKLabel.objects.filter(community=community)
 
-
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
@@ -203,23 +202,12 @@ def select_label(request, pk):
         if request.method == "POST":
             bclabel_type = request.POST.get('bclabel-type')
             tklabel_type = request.POST.get('tk-label-type')
-            
-            # check if type already exists
+
             if bclabel_type:
-                bctype = check_bclabel_type(bclabel_type)
-                type_exists = BCLabel.objects.filter(community=community, label_type=bctype).exists()
-                if type_exists:
-                    return redirect('label-exists', community.id)
-                else:
-                    return redirect('customize-label', community.id, bclabel_type)
+                return redirect('customize-label', community.id, bclabel_type)
 
             if tklabel_type:
-                tktype = check_tklabel_type(tklabel_type)
-                type_exists = TKLabel.objects.filter(community=community, label_type=tktype).exists()
-                if type_exists:
-                    return redirect('label-exists', community.id)
-                else:
-                    return redirect('customize-label', community.id, tklabel_type)
+                return redirect('customize-label', community.id, tklabel_type)
         
         context = {
             'community': community,
@@ -229,16 +217,6 @@ def select_label(request, pk):
         }
 
         return render(request, 'communities/select-label.html', context)
-
-@login_required(login_url='login')
-def label_exists(request, pk):
-    community = Community.objects.get(id=pk)
-    member_role = check_member_role_community(request.user, community)
-    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
-    else:
-        context = {'community': community, 'member_role': member_role,}
-        return render(request, 'communities/label-exists.html', context)
 
 @login_required(login_url='login')
 def customize_label(request, pk, label_type):

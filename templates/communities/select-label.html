@@ -180,6 +180,17 @@
 
 </div>
 
+{% if tklabels %}
+    {% for tklabel in tklabels %}
+        <input type="hidden" value="{{ tklabel.label_type }}" class="checkTKLabelType">
+    {% endfor %}
+{% endif %}
+{% if bclabels %}
+    {% for bclabel in bclabels %}
+        <input type="hidden" value="{{ bclabel.label_type }}" class="checkBCLabelType">
+    {% endfor %}
+{% endif %}
+
 
 <!-- TK Label Card -->
 <div id="collapsed-tkcard" class="content-card-v2 content-card-space white-bg flex-this column">
@@ -304,7 +315,7 @@
                                 {% if member_role == 'viewer' %}
 
                                 {% else %}
-                                    <button class="action-btn margin-top-2 ">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
+                                    <button id="btnTKProv" class="action-btn margin-top-2 ">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
                                 {% endif %}
                             </div>
                         </div>
@@ -428,7 +439,7 @@
                                 {% if member_role == 'viewer' %}
     
                                 {% else %}
-                                    <button class="action-btn margin-top-2 ">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
+                                    <button id="btnTKProt" class="action-btn margin-top-2 ">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
                                 {% endif %}
                             </div>
                         </div>
@@ -518,11 +529,11 @@
                                 <p id="label-template-text-tk-perms"></p>
                             </div>
 
-                            <div class="right-text">
+                            <div>
                                 {% if member_role == 'viewer' %}
 
                                 {% else %}
-                                    <button class="action-btn margin-top-2 ">Customize Label <i class="fa fa-long-arrow-right"></i></button>
+                                    <button id="btnTKPerms" class="action-btn margin-top-2">Customize Label <i class="fa fa-long-arrow-right"></i></button>
                                 {% endif %}
                             </div>
                         </div>
@@ -635,7 +646,7 @@
                             {% if member_role == 'viewer' %}
     
                             {% else %}
-                                <button class="action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
+                                <button id="btnBCProv" class="action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
                             {% endif %}
                         </div>
                     </form>
@@ -702,7 +713,7 @@
                             {% if member_role == 'viewer' %}
     
                             {% else %}
-                                <button class="action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
+                                <button id="btnBCProt" class="action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
                             {% endif %}
                         </div>
                     </form>
@@ -799,7 +810,7 @@
                         {% if member_role == 'viewer' %}
 
                         {% else %}
-                            <button class="action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
+                            <button id="btnBCPerms" class="action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
                         {% endif %}
                     </div>
                 </form>

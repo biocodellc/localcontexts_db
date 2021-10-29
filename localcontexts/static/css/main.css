@@ -472,6 +472,15 @@ input:focus {
     display: block;
 }
 
+.disabled-btn {
+    display: block;
+    padding: 8px 16px;
+    background: #F3F4F6;
+    border-radius: 4px;
+    border: none;
+    color: #4B5563,
+}
+
 /* Community: select-labels: Listen and Example btns */
 .green-btn {
     background-color:#468076;
