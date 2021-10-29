@@ -92,8 +92,6 @@ function expandBCLabel(img) {
         }
     })
 
-    let fullCard = document.getElementById('collapsed-card')
-    let labelContainer = document.getElementById('expand-bclabels')
     let targetImg = img.id
 
     // Provenance
@@ -119,18 +117,6 @@ function expandBCLabel(img) {
     let inputProt = document.getElementById('bc-label-value-type-prot')
     let inputPerms = document.getElementById('bc-label-value-type-perm')
 
-    function openBCInfoDiv(targetDiv) {
-        if (targetDiv.style.height == "0px") {
-            labelContainer.style.height = "auto"
-            targetDiv.style.height = "auto"
-            fullCard.style.height = "auto"
-        } else {
-            labelContainer.style.height = "auto"
-            targetDiv.style.height = "0px"
-            fullCard.style.height = "auto"
-        }       
-    }
-
     fetchLabels('bc').then(populateBCLabel)
 
     // Set content based on which Label was selected
@@ -138,10 +124,10 @@ function expandBCLabel(img) {
         data.forEach(bclabel => {
             if (bclabel.labelCode == targetImg) { 
                 displayExpandedImage(targetImg)
-                checkBCLabelExists(bclabel, targetImg)
+                checkLabelExists(bclabel, targetImg, 'BC')
 
                 if (bclabel.labelCategory == 'protocol') {
-                    openBCInfoDiv(infoProt)
+                    openLabelInfoDiv(infoProt, infoProv, infoPerms)
                     //  Assign input value based on which bc label image is selected
                     inputProt.value = targetImg
                     titleProt.textContent = bclabel.labelName
@@ -149,14 +135,14 @@ function expandBCLabel(img) {
                     whyUseLabelTextProt.textContent = bclabel.whyUseThisLabel  
                 
                 } else if (bclabel.labelCategory == 'provenance') {
-                    openBCInfoDiv(infoProv)
+                    openLabelInfoDiv(infoProv, infoProt, infoPerms)
                     inputProv.value = targetImg
                     titleProv.textContent = bclabel.labelName
                     templateTextProv.textContent = bclabel.labelDefaultText
                     whyUseLabelTextProv.textContent = bclabel.whyUseThisLabel
 
                 } else if (bclabel.labelCategory == 'permission') {
-                    openBCInfoDiv(infoPerms)
+                    openLabelInfoDiv(infoPerms, infoProt, infoProv)
                     inputPerms.value = targetImg
                     titlePerms.textContent = bclabel.labelName
                     templateTextPerms.textContent = bclabel.labelDefaultText
@@ -166,68 +152,70 @@ function expandBCLabel(img) {
         })
     }
 
-    function checkBCLabelExists(label, targetLabelCode) {
-        let btnBCProv = document.getElementById('btnBCProv')
-        let btnBCProt = document.getElementById('btnBCProt')
-        let btnBCPerms = document.getElementById('btnBCPerms')
+}
 
-        // Takes all hidden inputs with the label_type of labels that have already been created by the community
-        let inputs = Array.from(document.querySelectorAll('.checkBCLabelType'))
-        let values = []
-        inputs.forEach(input => values.push(input.value))
+// Will disable "customize Label" btn if Label exists (select-labels)
+function checkLabelExists(label, selectedLabelCode, labelType) {
+    let btnTKProv = document.getElementById(`btn${labelType}Prov`)
+    let btnTKProt = document.getElementById(`btn${labelType}Prot`)
+    let btnTKPerms = document.getElementById(`btn${labelType}Perms`)
 
-        if (label.labelCode == targetLabelCode) {
-            if (values.includes(label.labelType)) {
-                console.log(label.labelType)
-                if (label.labelCategory == 'provenance') {
-                    btnBCProv.setAttribute("disabled","disabled")
-                    btnBCProv.classList.remove('action-btn')
-                    btnBCProv.classList.add('disabled-btn')
-                } else if (label.labelCategory == 'protocol') {
-                    btnBCProt.setAttribute("disabled","disabled")
-                    btnBCProt.classList.remove('action-btn')
-                    btnBCProt.classList.add('disabled-btn')
-                } else if (label.labelCategory == 'permission') {
-                    btnBCPerms.setAttribute("disabled","disabled")
-                    btnBCPerms.classList.remove('action-btn')
-                    btnBCPerms.classList.add('disabled-btn')
-                }
-            }  else {
-                if (label.labelCategory == 'provenance') {
-                    btnBCProv.removeAttribute("disabled")
-                    btnBCProv.classList.remove('disabled-btn')
-                    btnBCProv.classList.add('action-btn')
-                } else if (label.labelCategory == 'protocol') {
-                    btnBCProt.removeAttribute("disabled")
-                    btnBCProt.classList.remove('disabled-btn')
-                    btnBCProt.classList.add('action-btn')
-                } else if (label.labelCategory == 'permission') {
-                    btnBCPerms.removeAttribute("disabled")
-                    btnBCPerms.classList.remove('disabled-btn')
-                    btnBCPerms.classList.add('action-btn')
-                }
+    // Takes all hidden inputs with the label_type of labels that have already been created by the community
+    let inputs = Array.from(document.querySelectorAll(`.check${labelType}LabelType`))
+    let values = []
+    inputs.forEach(input => values.push(input.value))
+
+    if (label.labelCode == selectedLabelCode) {
+        if (values.includes(label.labelType)) {
+            if (label.labelCategory == 'provenance') {
+                btnTKProv.setAttribute("disabled","disabled")
+                btnTKProv.classList.remove('action-btn')
+                btnTKProv.classList.add('disabled-btn')
+            } else if (label.labelCategory == 'protocol') {
+                btnTKProt.setAttribute("disabled","disabled")
+                btnTKProt.classList.remove('action-btn')
+                btnTKProt.classList.add('disabled-btn')
+            } else if (label.labelCategory == 'permission') {
+                btnTKPerms.setAttribute("disabled","disabled")
+                btnTKPerms.classList.remove('action-btn')
+                btnTKPerms.classList.add('disabled-btn')
+            }
+        }  else {
+            if (label.labelCategory == 'provenance') {
+                btnTKProv.removeAttribute("disabled")
+                btnTKProv.classList.remove('disabled-btn')
+                btnTKProv.classList.add('action-btn')
+            } else if (label.labelCategory == 'protocol') {
+                btnTKProt.removeAttribute("disabled")
+                btnTKProt.classList.remove('disabled-btn')
+                btnTKProt.classList.add('action-btn')
+            } else if (label.labelCategory == 'permission') {
+                btnTKPerms.removeAttribute("disabled")
+                btnTKPerms.classList.remove('disabled-btn')
+                btnTKPerms.classList.add('action-btn')
             }
         }
     }
-
 }
 
 // Display Label images that was clicked in the expanded Div
-function displayExpandedImage(type) {
+function displayExpandedImage(labelCode) {
     let imgArray
 
-    if (type.startsWith('b')) {
+    if (labelCode.startsWith('b')) {
         imgArray = Array.from(document.querySelectorAll('.bc-img-div'))
-    } else if (type.startsWith('t')) {
+    } else if (labelCode.startsWith('t')) {
         imgArray = Array.from(document.querySelectorAll('.tk-img-div'))
     }
 
     for (let i = 0; i < imgArray.length; i ++) {
-        // take the id and split it, compare type to the split
-        if (imgArray[i].id.slice(21) == type) {
-            imgArray[i].style.display = 'block'
+        // take the id and split it, compare labelCode to the split
+        if (imgArray[i].id.slice(21) == labelCode) {
+            imgArray[i].classList.remove('hide')
+            imgArray[i].classList.add('show')
         } else {
-            imgArray[i].style.display = 'none'
+            imgArray[i].classList.remove('show')
+            imgArray[i].classList.add('hide')
         }
     }
 }
@@ -311,7 +299,7 @@ function displayDefaultText(elem) {
 }
 
 
-// TK Labels : community -> customize -> select labels
+// TK Labels : community -> labels -> select labels
 function showTKLabelInfo() {
     let labelContainer = document.getElementById('expand-tklabels')
     let span = document.getElementById('show-more-tk-down')
@@ -345,9 +333,7 @@ function expandTKLabel(img) {
         }
     })
 
-    let labelContainer = document.getElementById('expand-tklabels')
-    let fullCard = document.getElementById('collapsed-tkcard')
-    let targetImg = img.id
+    const targetImg = img.id
 
     // Provanance
     let infoProv = document.getElementById('tklabel-info-prov')
@@ -362,26 +348,15 @@ function expandTKLabel(img) {
     let whyUseLabelTextProt = document.getElementById('why-use-this-label-tk-prot')
 
     // Permissions
-    let infoPerms = document.getElementById('tklabel-info-perms')
-    let titlePerms = document.getElementById('tk-label-title-perms')
-    let templateTextPerms = document.getElementById('label-template-text-tk-perms')
-    let whyUseLabelTextPerms = document.getElementById('why-use-this-label-tk-perms')
+    let infoPerms = document.getElementById('tklabel-info-perm')
+    let titlePerms = document.getElementById('tk-label-title-perm')
+    let templateTextPerms = document.getElementById('label-template-text-tk-perm')
+    let whyUseLabelTextPerms = document.getElementById('why-use-this-label-tk-perm')
 
+    // Hidden inputs to store Label selected value
     let inputProv = document.getElementById('tk-label-value-type-prov')
     let inputProt = document.getElementById('tk-label-value-type-prot')
-    let inputPerms = document.getElementById('tk-label-value-type-perms')
-
-    function openInfoDiv(targetDiv) {
-        if (targetDiv.style.height == "0px") {
-            labelContainer.style.height = "auto"
-            targetDiv.style.height = "auto"
-            fullCard.style.height = "auto"
-        } else {
-            labelContainer.style.height = "auto"
-            targetDiv.style.height = "0px"
-            fullCard.style.height = "auto"
-        }
-    }
+    let inputPerms = document.getElementById('tk-label-value-type-perm')
 
     fetchLabels('tk').then(populateTKLabel)
 
@@ -389,10 +364,10 @@ function expandTKLabel(img) {
         data.forEach(tklabel => {
             if (tklabel.labelCode == targetImg) {
                 displayExpandedImage(targetImg)
-                checkTKLabelExists(tklabel, targetImg)
+                checkLabelExists(tklabel, targetImg, 'TK')
 
                 if (tklabel.labelCategory == 'protocol') {
-                    openInfoDiv(infoProt)
+                    openLabelInfoDiv(infoProt, infoProv, infoPerms)
                     //  Assign input value based on which tk label image is selected
                     inputProt.value = targetImg
                     titleProt.textContent = tklabel.labelName
@@ -400,14 +375,14 @@ function expandTKLabel(img) {
                     whyUseLabelTextProt.textContent = tklabel.whyUseThisLabel       
 
                 } else if (tklabel.labelCategory == 'provenance') {
-                    openInfoDiv(infoProv)
+                    openLabelInfoDiv(infoProv, infoProt, infoPerms)
                     inputProv.value = targetImg
                     titleProv.textContent = tklabel.labelName
                     templateTextProv.textContent = tklabel.labelDefaultText
                     whyUseLabelTextProv.textContent = tklabel.whyUseThisLabel
 
                 } else if (tklabel.labelCategory == 'permission') {
-                    openInfoDiv(infoPerms)
+                    openLabelInfoDiv(infoPerms, infoProt, infoProv)
                     inputPerms.value = targetImg
                     titlePerms.textContent = tklabel.labelName
                     templateTextPerms.textContent = tklabel.labelDefaultText
@@ -416,50 +391,73 @@ function expandTKLabel(img) {
             }
         })
     }
+}
 
-    function checkTKLabelExists(label, targetLabelCode) {
-        let btnTKProv = document.getElementById('btnTKProv')
-        let btnTKProt = document.getElementById('btnTKProt')
-        let btnTKPerms = document.getElementById('btnTKPerms')
-
-        // Takes all hidden inputs with the label_type of labels that have already been created by the community
-        let inputs = Array.from(document.querySelectorAll('.checkTKLabelType'))
-        let values = []
-        inputs.forEach(input => values.push(input.value))
-
-        if (label.labelCode == targetLabelCode) {
-            if (values.includes(label.labelType)) {
-                if (label.labelCategory == 'provenance') {
-                    btnTKProv.setAttribute("disabled","disabled")
-                    btnTKProv.classList.remove('action-btn')
-                    btnTKProv.classList.add('disabled-btn')
-                } else if (label.labelCategory == 'protocol') {
-                    btnTKProt.setAttribute("disabled","disabled")
-                    btnTKProt.classList.remove('action-btn')
-                    btnTKProt.classList.add('disabled-btn')
-                } else if (label.labelCategory == 'permission') {
-                    btnTKPerms.setAttribute("disabled","disabled")
-                    btnTKPerms.classList.remove('action-btn')
-                    btnTKPerms.classList.add('disabled-btn')
-                }
-            }  else {
-                if (label.labelCategory == 'provenance') {
-                    btnTKProv.removeAttribute("disabled")
-                    btnTKProv.classList.remove('disabled-btn')
-                    btnTKProv.classList.add('action-btn')
-                } else if (label.labelCategory == 'protocol') {
-                    btnTKProt.removeAttribute("disabled")
-                    btnTKProt.classList.remove('disabled-btn')
-                    btnTKProt.classList.add('action-btn')
-                } else if (label.labelCategory == 'permission') {
-                    btnTKPerms.removeAttribute("disabled")
-                    btnTKPerms.classList.remove('disabled-btn')
-                    btnTKPerms.classList.add('action-btn')
-                }
-            }
-        }
+// When Label is clicked to be customized, show details
+function openLabelInfoDiv(targetDiv, divToCloseOne, divToCloseTwo) {
+    // Open target div 
+    if (targetDiv.classList.contains('hide')) {
+        targetDiv.classList.remove('hide')
+        targetDiv.classList.add('show')
     }
 
+    // Close other two divs if open
+    if (divToCloseOne.classList.contains('show')) {
+        divToCloseOne.classList.remove('show')
+        divToCloseOne.classList.add('hide')
+    }
+
+    if (divToCloseTwo.classList.contains('show')) {
+        divToCloseTwo.classList.remove('show')
+        divToCloseTwo.classList.add('hide')
+    }
+}
+
+function closeLabelInfoDiv(targetBtn) {
+    // Divs to close
+    let infoTKProv = document.getElementById('tklabel-info-prov')
+    let infoTKProt = document.getElementById('tklabel-info-prot')
+    let infoTKPerm = document.getElementById('tklabel-info-perm')
+    let infoBCProv = document.getElementById('bclabel-info-prov')
+    let infoBCProt = document.getElementById('bclabel-info-prot')
+    let infoBCPerm = document.getElementById('bclabel-info-perm')
+
+    let btnId = targetBtn.id
+
+    // Check if target button includes str in id
+    let tkProv = btnId.includes('tk-prov')
+    let bcProv = btnId.includes('bc-prov')
+    let tkProt = btnId.includes('tk-prot')
+    let bcProt = btnId.includes('bc-prot')
+    let tkPerm = btnId.includes('tk-perm')
+    let bcPerm = btnId.includes('bc-perm')
+
+    switch(true) {
+        case tkProv:
+            infoTKProv.classList.remove('show')
+            infoTKProv.classList.add('hide')        
+            break;
+        case bcProv:
+            infoBCProv.classList.remove('show')
+            infoBCProv.classList.add('hide')        
+            break;
+        case tkProt:
+            infoTKProt.classList.remove('show')
+            infoTKProt.classList.add('hide')
+            break;
+        case bcProt:
+            infoBCProt.classList.remove('show')
+            infoBCProt.classList.add('hide')
+            break;
+        case tkPerm:
+            infoTKPerm.classList.remove('show')
+            infoTKPerm.classList.add('hide')
+            break;
+        case bcPerm:
+            infoBCPerm.classList.remove('show')
+            infoBCPerm.classList.add('hide')
+            break;
+    }
 }
 
 // Institutions: create-projects : show notice descriptions
