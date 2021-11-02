@@ -1,54 +1,48 @@
 {% extends 'sub-base.html' %} {% block title %} | Approve Label {% endblock %}{% load static %} {% block community_content %}
 
-<div class="content-card content-card-space white-bg">
-        <form method="POST" action="">
-            {% csrf_token %}
-            <div class="flex-this space-between">
-                    
+    <form method="POST" action="">
+        {% csrf_token %}
+
+        <div class="content-card-v2 content-card-space white-bg">
+            <div class="flex-this space-between">    
                 <div>
-                    <h3 class="darkteal-text no-top-margin">Approve Label</h3>
+                    <h2 class="no-bottom-margin no-top-margin">Approve Label</h2>
                     <p>Unapproved Labels need to be approved by a secondary person (admin or editor) from the community. <br>
-                        By approving this Label your community will now be able to apply these to Local Contexts Projects.</p>
+                        By approving this Label your community will now be able to apply these to Local Contexts Projects.
+                    </p>
                 </div>
                 <div>
-                    <button class="action-btn margin-top-2 ">Approve Label</button>
-                    <a href="{% url 'select-label' community.id %}" class="action-btn margin-top-2 ">Back</a>
+                    <p>Approve Label?</p>
+                    <div class="flex-this space-between">
+                        <div>
+                            <button class="action-btn margin-top-2" name="approve_label_yes">Yes</button>
+                        </div>
+                        <div>
+                            <button id="displayLabelNote" class="white-btn margin-top-2">No</button>
+                        </div>                        
+                    </div>
                 </div>
             </div>
-    
+        </div>
+
+        <div id="labelNoteDiv" class="content-card-v2 content-card-space white-bg hide">
+            <div class="margin-top-8">
+                <h4 class="no-top-margin">Please add a note to request changes or give reason for not approving this Label.</h4>
+                <div>{{ form.note }}</div>
+                <div><button class="action-btn" name="create_label_note">Send</button></div>
+            </div>            
+        </div>
+
+
+        <div class="content-card-v2 content-card-space white-bg">    
             <div>
-                <div class="w-30"><p class="bold">{% if bclabel_name %}{{ bclabel_name }}{% endif %}{% if tklabel_name %}{{ tklabel_name }}{% endif %}</p></div>
-                <div>{{ form.default_text }}</div>
-
-                {{ formset.management_form }}
-                {% for tran_form in formset %}
-                    {% for hidden in tran_form.hidden_fields %}
-                        {{ hidden }}
-                    {% endfor %}
-
-                    <div class="flex-this column">
-                        <div class="flex-this space-between">
-                            <div class="w-30">
-                                {{ tran_form.title }}
-                            </div>
-                            <div class="w-30">
-                                {{ tran_form.language }}
-                            </div>
-                        </div>
-                        {{ tran_form.translation }}
-                    </div>
-                {% endfor %}
-                {% if formset.errors %}
-                    {% for error in formset.errors %}
-                        <div>
-                            <small style="color:red;"> {{ error }}</small>
-                        </div>
-                    {% endfor %}
-                {% endif %}
+                <div class="w-30">
+                    <p class="bold">{% if bclabel.name %}{{ bclabel.name }}{% endif %}{% if tklabel.name %}{{ tklabel.name }}{% endif %}</p>
+                </div>
+                <div>{% if bclabel %}{{ bclabel.default_text }}{% endif %}{% if tklabel %}{{ tklabel.default_text }}{% endif %}</div>
             </div>
-
-
-        </form>
-</div>
+        </div>
+        
+    </form>
 
 {% endblock %}

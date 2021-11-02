@@ -13,7 +13,7 @@ from projects.models import ProjectContributors, Project, ProjectPerson
 
 from bclabels.forms import CustomizeBCLabelForm, ApproveAndEditBCLabelForm
 from tklabels.forms import CustomizeTKLabelForm, ApproveAndEditTKLabelForm
-from helpers.forms import AddLabelTranslationFormSet, UpdateBCLabelTranslationFormSet, UpdateTKLabelTranslationFormSet
+from helpers.forms import AddLabelTranslationFormSet, LabelNoteForm, UpdateBCLabelTranslationFormSet, UpdateTKLabelTranslationFormSet
 from projects.forms import *
 from helpers.forms import ProjectCommentForm
 
@@ -317,45 +317,54 @@ def approve_label(request, pk, label_id):
     if member_role == False or member_role == 'viewer':
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        bclabel_name = ''
-        tklabel_name = ''
+        bclabel = ''
+        tklabel = ''
         if bclabel_exists:
             bclabel = BCLabel.objects.get(unique_id=label_id)
-            bclabel_name = bclabel.name
-            form = ApproveAndEditBCLabelForm(request.POST or None, instance=bclabel)
-            formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
-
         if tklabel_exists:
             tklabel = TKLabel.objects.get(unique_id=label_id)
-            tklabel_name = tklabel.name
-            form = ApproveAndEditTKLabelForm(request.POST or None, instance=tklabel)
-            formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
         
-        if request.method == "POST":
-            if form.is_valid() and formset.is_valid():
-                label_form = form.save(commit=False)
-                label_form.is_approved = True
-                label_form.approved_by = request.user
-                label_form.save()
+        form = LabelNoteForm(request.POST or None)
+        if request.method == 'POST':
+            # If not approved, mark not approved and who it was by
+            if 'create_label_note' in request.POST:
+                data = form.save(commit=False)
+                data.sender = request.user
+                if bclabel:
+                    data.bclabel = bclabel
+                    bclabel.is_approved = False
+                    bclabel.approved_by = request.user
+                    bclabel.save()
+                if tklabel:
+                    data.tklabel = tklabel
+                    tklabel.is_approved = False
+                    tklabel.approved_by = request.user
+                    tklabel.save()
 
-                instances = formset.save(commit=False)
-                for instance in instances:
-                    instance.save()
-
-                title = "A Label was approved by " + request.user.get_full_name()
-                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
-
+                data.save()
                 return redirect('select-label', community.id)
 
+            # If approved, save Label
+            elif 'approve_label_yes' in request.POST:
+                if bclabel:
+                    bclabel.is_approved = True
+                    bclabel.approved_by = request.user
+                    bclabel.save()
+                if tklabel:
+                    tklabel.is_approved = True
+                    tklabel.approved_by = request.user
+                    tklabel.save()
+                return redirect('select-label', community.id)
+        
         context = {
             'community': community,
             'member_role': member_role,
+            'bclabel': bclabel,
+            'tklabel': tklabel,
             'form': form,
-            'formset': formset,
-            'tklabel_name': tklabel_name,
-            'bclabel_name': bclabel_name,
         }
         return render(request, 'communities/approve-label.html', context)
+
 
 # Projects Main
 @login_required(login_url='login')

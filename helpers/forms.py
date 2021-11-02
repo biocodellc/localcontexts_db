@@ -42,3 +42,11 @@ class ProjectCommentForm(forms.ModelForm):
         widgets = {
             'message': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Add Comment'})
         }
+
+class LabelNoteForm(forms.ModelForm):
+    class Meta:
+        model = LabelNote
+        fields = ['note']
+        widgets = {
+            'note': forms.Textarea(attrs={'class': 'w-100 margin-bottom-2', 'style': 'height: 150px; padding: 10px;', 'placeholder': 'Add Note About This Label'}),
+        }

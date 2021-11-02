@@ -258,6 +258,15 @@ function populateTemplate(id) {
 
 }
 
+// Approve Label: show note div
+var noBtn = document.getElementById('displayLabelNote')
+noBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    let div = document.getElementById('labelNoteDiv')
+    div.classList.remove('hide')
+    div.classList.add('show')
+})
+
 // Show more content: Project Overview Page
 function showMore(elem) {
     let idToMatch = elem.id
