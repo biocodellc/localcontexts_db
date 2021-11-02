@@ -27,7 +27,14 @@
 
         <div id="labelNoteDiv" class="content-card-v2 content-card-space white-bg hide">
             <div class="margin-top-8">
-                <h4 class="no-top-margin">Please add a note to request changes or give reason for not approving this Label.</h4>
+                <div class="flex-this space-between margin-bottom-8">
+                    <div>
+                        <h4 class="no-top-margin">Please add a note to request changes or give reason for not approving this Label.</h4>
+                    </div>
+                    <div>
+                        <button id="closeNoteDiv" class="white-btn">Close X</button>
+                    </div>
+                </div>
                 <div>{{ form.note }}</div>
                 <div><button class="action-btn" name="create_label_note">Send</button></div>
             </div>            
