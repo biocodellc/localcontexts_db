@@ -25,6 +25,44 @@
             </div>
         </div>
 
+        <div class="content-card-v2 content-card-space white-bg"> 
+
+            <div class="flex-this margin-bottom-8 margin-top-8 about-this-label">
+                <div class="w-20 margin-left-16 margin-top-16 margin-bottom-16">
+                    {% if bclabel %}
+                        {% include 'bclabels/which-label.html' %}
+                    {% endif %}
+                    {% if tklabel %}
+                        {% include 'tklabels/which-label.html' %}
+                    {% endif %}
+                </div>   
+                <div class="w-90 margin-right-16">
+                    <div><p class="bold">{% if bclabel.name %}{{ bclabel.name }}{% endif %}{% if tklabel.name %}{{ tklabel.name }}{% endif %}</p></div>
+                    <div>{% if bclabel %}{{ bclabel.default_text }}{% endif %}{% if tklabel %}{{ tklabel.default_text }}{% endif %}</div>
+                    
+                    {% if bclabel %}
+                        {% if bclabel.bclabel_translation.all %}
+                            {% for translation in bclabel.bclabel_translation.all %}
+                                <div><p class="bold">{{ translation.title }} | {{ translation.language }}</p></div>
+                                <div class="margin-bottom-16">{{ translation.translation }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if tklabel %}
+                        {% if tklabel.tklabel_translation.all %}
+                            {% for translation in tklabel.tklabel_translation.all %}
+                                <div><p class="bold">{{ translation.title }} | {{ translation.language }}</p> </div>
+                                <div class="margin-bottom-16">{{ translation.translation }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+
+                </div>                
+            </div>
+
+        </div>
+
         <div id="labelNoteDiv" class="content-card-v2 content-card-space white-bg hide">
             <div class="margin-top-8">
                 <div class="flex-this space-between margin-bottom-8">
@@ -36,18 +74,8 @@
                     </div>
                 </div>
                 <div>{{ form.note }}</div>
-                <div><button class="action-btn" name="create_label_note">Send</button></div>
+                <div><button class="action-btn" name="create_label_note">Submit</button></div>
             </div>            
-        </div>
-
-
-        <div class="content-card-v2 content-card-space white-bg">    
-            <div>
-                <div class="w-30">
-                    <p class="bold">{% if bclabel.name %}{{ bclabel.name }}{% endif %}{% if tklabel.name %}{{ tklabel.name }}{% endif %}</p>
-                </div>
-                <div>{% if bclabel %}{{ bclabel.default_text }}{% endif %}{% if tklabel %}{{ tklabel.default_text }}{% endif %}</div>
-            </div>
         </div>
         
     </form>
