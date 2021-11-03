@@ -1,0 +1,38 @@
+{% extends 'sub-base.html' %} {% block title %} | Edit Label {% endblock %}{% load static %} {% load custom_tags%} {% block community_content %}
+
+<div class="content-card-v2 content-card-space white-bg">
+    <div class="w-70">
+        <h2 class="no-top-margin">Edit Label</h2>
+        <p>You can make edits to your Label until it is approved</p>
+    </div>
+</div>
+
+<div class="content-card-v2 content-card-space white-bg">
+
+    <div class="flex-this column border-bottom-solid-teal">
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div>
+                <p class="w-80 bold">
+                    {% if bclabel %} {{ bclabel.name }} {% endif %}
+                    {% if tklabel %} {{ tklabel.name }} {% endif %}
+                </p>
+                <div class="w-80">
+                    <label for="default_text">Label text</label>
+                    {{ form.default_text }}
+                </div>
+            </div>
+
+            <div class="text-align-right margin-bottom-16">
+                <button class="action-btn margin-top-2 ">Save as draft</button> 
+            </div>
+        </form>
+    
+    </div>
+
+</div>
+
+
+
+{% endblock %}

@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.template.loader import render_to_string
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
@@ -11,11 +10,10 @@ from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from projects.models import ProjectContributors, Project, ProjectPerson
 
-from bclabels.forms import CustomizeBCLabelForm, ApproveAndEditBCLabelForm
-from tklabels.forms import CustomizeTKLabelForm, ApproveAndEditTKLabelForm
-from helpers.forms import AddLabelTranslationFormSet, LabelNoteForm, UpdateBCLabelTranslationFormSet, UpdateTKLabelTranslationFormSet
+from helpers.forms import AddLabelTranslationFormSet, LabelNoteForm, ProjectCommentForm, UpdateBCLabelTranslationFormSet, UpdateTKLabelTranslationFormSet
+from bclabels.forms import *
+from tklabels.forms import *
 from projects.forms import *
-from helpers.forms import ProjectCommentForm
 
 from bclabels.utils import check_bclabel_type, assign_bclabel_img
 from tklabels.utils import check_tklabel_type, assign_tklabel_img
@@ -365,6 +363,35 @@ def approve_label(request, pk, label_id):
         }
         return render(request, 'communities/approve-label.html', context)
 
+# Edit Label
+@login_required(login_url='login')
+def edit_label(request, pk, label_id):
+    community = Community.objects.get(id=pk)
+    bclabel = ''
+    tklabel = ''
+    form = ''
+
+    if BCLabel.objects.filter(unique_id=label_id).exists():
+        bclabel = BCLabel.objects.get(unique_id=label_id)
+        form = EditBCLabelForm(request.POST or None, instance=bclabel)
+
+    if TKLabel.objects.filter(unique_id=label_id).exists():
+        tklabel = TKLabel.objects.get(unique_id=label_id)
+        form = EditTKLabelForm(request.POST or None, instance=tklabel)
+    
+    if request.method == 'POST':
+        data = form.save(commit=False)
+        data.save()
+
+        return redirect('select-label', community.id)
+    
+    context = {
+        'community': community,
+        'form': form,
+        'bclabel': bclabel,
+        'tklabel': tklabel,
+    }
+    return render(request, 'communities/edit-label.html', context)
 
 # Projects Main
 @login_required(login_url='login')

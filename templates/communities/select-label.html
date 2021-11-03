@@ -3,7 +3,7 @@
 <div class="content-card-v2 content-card-space white-bg">
 
     <div class="w-70">
-        <h2>TK and BC Labels</h2>
+        <h2 class="no-top-margin">TK and BC Labels</h2>
         <p>The TK and BC Labels are an initiative for Indigenous communities and local organizations. The Labels allow communities to express local and specific conditions for engaging and sharing traditional knowledge that are consistent with already existing community rules, governance and protocols for using, sharing and circulating knowledge and data. 
             <br><br>
             <strong>To start customizing Labels select from the options below.</strong></p>
@@ -31,6 +31,7 @@
         <!-- UNAPPROVED BCLABELS -->
         {% if bclabels %}
             {% for bclabel in bclabels %}
+
                 {% if bclabel.is_approved == False %}
                     <div class="w-20 custom-labels">
                         <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
@@ -41,13 +42,14 @@
                                     Review for approval *
                                 {% endif %}
                             </p>
-                                <div>
-                                    {% include 'bclabels/which-label.html' %}
-                                    <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color grey-text">{{ bclabel.name }}</p>
-                                </div>
+                            <div>
+                                {% include 'bclabels/which-label.html' %}
+                                <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color grey-text">{{ bclabel.name }}</p>
+                            </div>
                         </div>
                     </div>
                 {% endif %}
+
             {% endfor %}
         {% endif %}
 
@@ -107,7 +109,7 @@
     {% if bclabels %}
         {% for bclabel in bclabels %}
             <div id="open-div-{{ bclabel.unique_id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
-                <div class="border-top-solid-teal border-bottom-solid-teal padding-bottom-1">
+                <div class="border-top-solid-teal border-bottom-solid-teal padding-bottom-1 margin-bottom-16 margin-right-8 margin-left-8">
                     {% if bclabel.is_approved %}
                         <h3 class="darkteal-text">{{ bclabel.name }}</h3>
                         <p>{{ bclabel.default_text }}</p>
@@ -119,7 +121,13 @@
                             <div>
                                 <h3 class="darkteal-text">{{ bclabel.name }}</h3>
                             </div>
-                            {% if bclabel.created_by == request.user or member_role == 'viewer' %}
+                            {% if bclabel.created_by == request.user %}
+                                <div class="margin-top-1">
+                                    <a href="{% url 'edit-label' community.id bclabel.unique_id %}">
+                                        <div class="action-btn margin-top-2 ">Edit Label</div>
+                                    </a>
+                                </div>
+                            {% elif member_role == 'viewer'%}
 
                             {% else %}
                                 <div class="margin-top-1">
@@ -136,6 +144,18 @@
 
                         {% include 'partials/_label-translation.html' %}
 
+                        {% if bclabel.bclabel_note.all %}
+                            <h4>A note was added to this Label:</h4>
+                            {% for note in bclabel.bclabel_note.all %}
+                                <div class="margin-top-16">
+                                    <p>
+                                        Approver {{ note.sender.get_full_name }} wrote: <br>
+                                        {{ note.note }}
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
                     {% endif %}
                 </div>
             </div>
@@ -145,7 +165,7 @@
     {% if tklabels %}
     {% for tklabel in tklabels %}
         <div id="open-div-{{ tklabel.unique_id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
-            <div class="border-top-solid-teal border-bottom-solid-teal padding-bottom-1">
+            <div class="border-top-solid-teal border-bottom-solid-teal padding-bottom-1 margin-bottom-16 margin-right-8 margin-left-8">
                 {% if tklabel.is_approved %}
                     <h3 class="darkteal-text">{{ tklabel.name }}</h3>
                     <p>{{ tklabel.default_text }}</p>
@@ -157,7 +177,13 @@
                         <div>
                             <h3 class="darkteal-text">{{ tklabel.name }}</h3>
                         </div>
-                        {% if tklabel.created_by == request.user or member_role == 'viewer' %}
+                        {% if tklabel.created_by == request.user %}
+                            <div class="margin-top-1">
+                                <a href="{% url 'edit-label' community.id tklabel.unique_id %}">
+                                    <div class="action-btn margin-top-2 ">Edit Label</div>
+                                </a>
+                            </div>
+                        {% elif member_role == 'viewer'%}
 
                         {% else %}
                             <div class="margin-top-1">
@@ -171,6 +197,18 @@
                         <p>{{ tklabel.default_text }}</p>
                     </div>
                     {% include 'partials/_label-translation.html' %}
+
+                    {% if tklabel.tklabel_note.all %}
+                        <h4>A note was added to this Label:</h4>
+                        {% for note in tklabel.tklabel_note.all %}
+                            <div class="margin-top-16">
+                                <p>
+                                    Approver {{ note.sender.get_full_name }} wrote: <br>
+                                    {{ note.note }}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
 
                 {% endif %}
             </div>

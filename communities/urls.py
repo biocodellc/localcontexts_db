@@ -16,6 +16,7 @@ urlpatterns = [
 
     path('community/labels/customize/<str:pk>/<str:label_type>', views.customize_label, name="customize-label"),
     path('community/labels/<str:pk>/<str:label_id>/', views.approve_label, name="approve-label"),
+    path('community/labels/edit/<str:pk>/<str:label_id>/', views.edit_label, name="edit-label"),
 
 
     path('community/labels/apply-labels/<str:pk>/<str:project_uuid>', views.apply_labels, name="apply-labels"),
