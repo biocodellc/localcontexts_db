@@ -118,16 +118,15 @@
 
                     {% else %}
                         <div class="flex-this space-between">
-                            <div>
-                                <h3 class="darkteal-text">{{ bclabel.name }}</h3>
-                            </div>
+                            <div><h3 class="darkteal-text">{{ bclabel.name }}</h3></div>
+
                             {% if bclabel.created_by == request.user %}
                                 <div class="margin-top-1">
                                     <a href="{% url 'edit-label' community.id bclabel.unique_id %}">
                                         <div class="action-btn margin-top-2 ">Edit Label</div>
                                     </a>
                                 </div>
-                            {% elif member_role == 'viewer'%}
+                            {% elif member_role == 'viewer' %}
 
                             {% else %}
                                 <div class="margin-top-1">
@@ -138,9 +137,7 @@
                             {% endif %}
 
                         </div>
-                        <div>
-                            <p>{{ bclabel.default_text }}</p>
-                        </div>
+                        <div><p>{{ bclabel.default_text }}</p></div>
 
                         {% include 'partials/_label-translation.html' %}
 
@@ -173,37 +170,40 @@
                     {% include 'partials/_label-translation.html' %}
 
                 {% else %}
+
                     <div class="flex-this space-between">
-                        <div>
-                            <h3 class="darkteal-text">{{ tklabel.name }}</h3>
-                        </div>
+                        <div><h3 class="darkteal-text">{{ tklabel.name }}</h3></div>
+
                         {% if tklabel.created_by == request.user %}
+
                             <div class="margin-top-1">
                                 <a href="{% url 'edit-label' community.id tklabel.unique_id %}">
                                     <div class="action-btn margin-top-2 ">Edit Label</div>
                                 </a>
                             </div>
+
                         {% elif member_role == 'viewer'%}
 
                         {% else %}
+
                             <div class="margin-top-1">
                                 <a href="{% url 'approve-label' community.id tklabel.unique_id %}">
                                     <div class="action-btn margin-top-2 ">Review Label</div>
                                 </a>
                             </div>
+
                         {% endif %}
                     </div>
-                    <div>
-                        <p>{{ tklabel.default_text }}</p>
-                    </div>
+                    <div><p>{{ tklabel.default_text }}</p></div>
+
                     {% include 'partials/_label-translation.html' %}
 
                     {% if tklabel.tklabel_note.all %}
-                        <h4>A note was added to this Label:</h4>
+                        <h4>A note was added to this Label</h4>
                         {% for note in tklabel.tklabel_note.all %}
                             <div class="margin-top-16">
                                 <p>
-                                    Approver {{ note.sender.get_full_name }} wrote: <br>
+                                    Approver {{ note.sender.get_full_name }} wrote: <br><br>
                                     {{ note.note }}
                                 </p>
                             </div>
