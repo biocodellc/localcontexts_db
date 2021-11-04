@@ -326,22 +326,23 @@ def approve_label(request, pk, label_id):
         if request.method == 'POST':
             # If not approved, mark not approved and who it was by
             if 'create_label_note' in request.POST:
-                data = form.save(commit=False)
-                data.sender = request.user
-                if bclabel:
-                    data.bclabel = bclabel
-                    bclabel.is_approved = False
-                    bclabel.approved_by = request.user
-                    bclabel.save()
-                    send_email_label_approved(bclabel)
-                if tklabel:
-                    data.tklabel = tklabel
-                    tklabel.is_approved = False
-                    tklabel.approved_by = request.user
-                    tklabel.save()
-                    send_email_label_approved(tklabel)
-                data.save()
-                return redirect('select-label', community.id)
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.sender = request.user
+                    if bclabel:
+                        data.bclabel = bclabel
+                        bclabel.is_approved = False
+                        bclabel.approved_by = request.user
+                        bclabel.save()
+                        send_email_label_approved(bclabel)
+                    if tklabel:
+                        data.tklabel = tklabel
+                        tklabel.is_approved = False
+                        tklabel.approved_by = request.user
+                        tklabel.save()
+                        send_email_label_approved(tklabel)
+                    data.save()
+                    return redirect('select-label', community.id)
 
             # If approved, save Label
             elif 'approve_label_yes' in request.POST:
@@ -373,24 +374,29 @@ def edit_label(request, pk, label_id):
     bclabel = ''
     tklabel = ''
     form = ''
+    formset = ''
 
     if BCLabel.objects.filter(unique_id=label_id).exists():
         bclabel = BCLabel.objects.get(unique_id=label_id)
         form = EditBCLabelForm(request.POST or None, instance=bclabel)
+        formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
 
     if TKLabel.objects.filter(unique_id=label_id).exists():
         tklabel = TKLabel.objects.get(unique_id=label_id)
         form = EditTKLabelForm(request.POST or None, instance=tklabel)
+        formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
     
     if request.method == 'POST':
-        data = form.save(commit=False)
-        data.save()
+        if form.is_valid() and formset.is_valid():
+            form.save()
+            formset.save()
 
-        return redirect('select-label', community.id)
+            return redirect('select-label', community.id)
     
     context = {
         'community': community,
         'form': form,
+        'formset': formset,
         'bclabel': bclabel,
         'tklabel': tklabel,
     }

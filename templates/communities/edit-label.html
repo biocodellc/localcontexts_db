@@ -24,8 +24,34 @@
                 </div>
             </div>
 
-            <div class="text-align-right margin-bottom-16">
-                <button class="action-btn margin-top-2 ">Save as draft</button> 
+            {{ formset.management_form }}
+            {% if formset %}
+                <div>
+                    <p class="bold">Translated Label text</p>
+                </div>
+                <div class="w-80">
+                    {% for translation_form in formset %}
+                        {% for hidden in translation_form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                        <div class="flex-this space-between">
+                            <div class="w-50">
+                                <label>Customized title</label>
+                                {{ translation_form.title }}
+                            </div>
+                            <div>
+                                <label>Language</label>
+                                {{ translation_form.language }}
+                            </div>
+                        </div>
+                        {{ translation_form.translation }}    
+                    {% endfor %}                
+                </div>
+            {% endif %}
+
+
+            <div class="text-align-right margin-bottom-8">
+                <button class="action-btn margin-top-1">Save as draft</button> 
             </div>
         </form>
     
