@@ -258,6 +258,25 @@ function populateTemplate(id) {
 
 }
 
+// Approve Label: show note div
+if (window.location.href.includes('community/labels/')) {
+    let noBtn = document.getElementById('displayLabelNote')
+    noBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        let div = document.getElementById('labelNoteDiv')
+        div.classList.remove('hide')
+        div.classList.add('show')
+    })
+
+    let closeNoteDivBtn = document.getElementById('closeNoteDiv')
+    closeNoteDivBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        let div = document.getElementById('labelNoteDiv')
+        div.classList.remove('show')
+        div.classList.add('hide')
+    })    
+}
+
 // Show more content: Project Overview Page
 function showMore(elem) {
     let idToMatch = elem.id

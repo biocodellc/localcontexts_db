@@ -1,54 +1,85 @@
 {% extends 'sub-base.html' %} {% block title %} | Approve Label {% endblock %}{% load static %} {% block community_content %}
 
-<div class="content-card content-card-space white-bg">
-        <form method="POST" action="">
-            {% csrf_token %}
-            <div class="flex-this space-between">
-                    
-                <div>
-                    <h3 class="darkteal-text no-top-margin">Approve Label</h3>
-                    <p>Unapproved Labels need to be approved by a secondary person (admin or editor) from the community. <br>
-                        By approving this Label your community will now be able to apply these to Local Contexts Projects.</p>
+    <form method="POST" action="">
+        {% csrf_token %}
+
+        <div class="content-card-v2 content-card-space white-bg">
+            <div class="flex-this space-between">    
+                <div class="w-80">
+                    <h2 class="no-bottom-margin no-top-margin">Approve Label</h2>
+                    <p>Unapproved Labels need to be approved by a secondary person (admin or editor) of the community. <br>
+                        If you would like to request changes to or deny approval for this Label, select 'No', then
+                        include a reason in the textbox that appears.<br><br>
+                        By approving this Label your community will now be able to apply it to the Local Contexts Projects.<br>
+                    </p>
                 </div>
                 <div>
-                    <button class="action-btn margin-top-2 ">Approve Label</button>
-                    <a href="{% url 'select-label' community.id %}" class="action-btn margin-top-2 ">Back</a>
-                </div>
-            </div>
-    
-            <div>
-                <div class="w-30"><p class="bold">{% if bclabel_name %}{{ bclabel_name }}{% endif %}{% if tklabel_name %}{{ tklabel_name }}{% endif %}</p></div>
-                <div>{{ form.default_text }}</div>
-
-                {{ formset.management_form }}
-                {% for tran_form in formset %}
-                    {% for hidden in tran_form.hidden_fields %}
-                        {{ hidden }}
-                    {% endfor %}
-
-                    <div class="flex-this column">
-                        <div class="flex-this space-between">
-                            <div class="w-30">
-                                {{ tran_form.title }}
-                            </div>
-                            <div class="w-30">
-                                {{ tran_form.language }}
-                            </div>
-                        </div>
-                        {{ tran_form.translation }}
-                    </div>
-                {% endfor %}
-                {% if formset.errors %}
-                    {% for error in formset.errors %}
+                    <p>Approve Label?</p>
+                    <div class="flex-this space-between">
                         <div>
-                            <small style="color:red;"> {{ error }}</small>
+                            <button class="action-btn margin-top-2" name="approve_label_yes">Yes</button>
                         </div>
-                    {% endfor %}
-                {% endif %}
+                        <div>
+                            <button id="displayLabelNote" class="white-btn margin-top-2">No</button>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-card-v2 content-card-space white-bg"> 
+
+            <div class="flex-this margin-bottom-8 margin-top-8 about-this-label">
+                <div class="w-20 margin-left-16 margin-top-16 margin-bottom-16">
+                    {% if bclabel %}
+                        {% include 'bclabels/which-label.html' %}
+                    {% endif %}
+                    {% if tklabel %}
+                        {% include 'tklabels/which-label.html' %}
+                    {% endif %}
+                </div>   
+                <div class="w-90 margin-right-16">
+                    <div><p class="bold">{% if bclabel.name %}{{ bclabel.name }}{% endif %}{% if tklabel.name %}{{ tklabel.name }}{% endif %}</p></div>
+                    <div>{% if bclabel %}{{ bclabel.default_text }}{% endif %}{% if tklabel %}{{ tklabel.default_text }}{% endif %}</div>
+                    
+                    {% if bclabel %}
+                        {% if bclabel.bclabel_translation.all %}
+                            {% for translation in bclabel.bclabel_translation.all %}
+                                <div><p class="bold">{{ translation.title }} | {{ translation.language }}</p></div>
+                                <div class="margin-bottom-16">{{ translation.translation }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if tklabel %}
+                        {% if tklabel.tklabel_translation.all %}
+                            {% for translation in tklabel.tklabel_translation.all %}
+                                <div><p class="bold">{{ translation.title }} | {{ translation.language }}</p> </div>
+                                <div class="margin-bottom-16">{{ translation.translation }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+
+                </div>                
             </div>
 
+        </div>
 
-        </form>
-</div>
+        <div id="labelNoteDiv" class="content-card-v2 content-card-space white-bg hide">
+            <div class="margin-top-8">
+                <div class="flex-this space-between margin-bottom-8">
+                    <div>
+                        <h4 class="no-top-margin">Please add a note to request changes or give reason for not approving this Label.</h4>
+                    </div>
+                    <div>
+                        <button id="closeNoteDiv" class="white-btn">Close X</button>
+                    </div>
+                </div>
+                <div>{{ form.note }}</div>
+                <div><button class="action-btn" name="create_label_note">Submit</button></div>
+            </div>            
+        </div>
+        
+    </form>
 
 {% endblock %}

@@ -20,10 +20,14 @@ class EntitiesNotifiedAdmin(admin.ModelAdmin):
     list_display = ('project',)
     search_fields = ('project',)
 
+class LabelNoteAdmin(admin.ModelAdmin):
+    list_display = ('bclabel', 'tklabel', 'sender',)
+
 
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(LabelTranslation, LabelTranslationAdmin)
 admin.site.register(ProjectComment, ProjectCommentAdmin)
 admin.site.register(ProjectStatus, ProjectStatusAdmin)
 admin.site.register(EntitiesNotified, EntitiesNotifiedAdmin)
+admin.site.register(LabelNote, LabelNoteAdmin)
 
