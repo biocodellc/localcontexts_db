@@ -1,0 +1,22 @@
+{% autoescape off %}
+
+    {% if label.is_approved %}
+        <h3>{{ label.approved_by.get_full_name }} has approved your Label {{ label.name }} </h3>
+    {% else %}
+        <h3>{{ label.approved_by.get_full_name }} has not approved your Label {{ label.name }} </h3>
+    {% endif %}
+
+    <p>
+        <strong>Next steps?</strong><br>
+        You can go to your Community account dashboard to view your Label.
+
+        <br><br>
+        Thank you,<br>
+        The Local Contexts Team <br>
+        <a href="https://twitter.com/localcontexts">Twitter</a>
+        <a href="https://instagram.com/localcontexts">Instagram</a>
+        <a href="https://www.facebook.com/LocalContextsOrg/">Facebook</a>
+
+    </p>
+
+{% endautoescape %}

@@ -156,3 +156,12 @@ def send_email_labels_applied(project, community):
         'community': community,
     })
     send_simple_email(project.project_creator.email, 'A community has applied Labels to your Project', template)
+
+# Label has been approved or not
+def send_email_label_approved(label):
+    template = render_to_string('snippets/emails/label-approved.html', { 'label': label })
+
+    if label.is_approved:
+        send_simple_email(label.created_by.email, 'Your Label has been approved', template)
+    else:
+        send_simple_email(label.created_by.email, 'Your Label has not been approved', template)

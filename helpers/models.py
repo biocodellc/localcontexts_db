@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.fields import TextField
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from communities.models import Community
@@ -91,3 +92,16 @@ class ProjectStatus(models.Model):
     class Meta:
         verbose_name = 'Project Status'
         verbose_name_plural = 'Project Statuses'
+
+class LabelNote(models.Model):
+    bclabel = models.ForeignKey(BCLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="bclabel_note")
+    tklabel = models.ForeignKey(TKLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="tklabel_note")
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="note_sender", blank=True)
+    note = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.bclabel} - {self.tklabel} - {self.sender}"
+
+    class Meta:
+        verbose_name = 'Label Note'
+        verbose_name_plural = 'Label Notes'
