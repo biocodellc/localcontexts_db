@@ -333,12 +333,13 @@ def approve_label(request, pk, label_id):
                     bclabel.is_approved = False
                     bclabel.approved_by = request.user
                     bclabel.save()
+                    send_email_label_approved(bclabel)
                 if tklabel:
                     data.tklabel = tklabel
                     tklabel.is_approved = False
                     tklabel.approved_by = request.user
                     tklabel.save()
-
+                    send_email_label_approved(tklabel)
                 data.save()
                 return redirect('select-label', community.id)
 
@@ -348,10 +349,12 @@ def approve_label(request, pk, label_id):
                     bclabel.is_approved = True
                     bclabel.approved_by = request.user
                     bclabel.save()
+                    send_email_label_approved(bclabel)
                 if tklabel:
                     tklabel.is_approved = True
                     tklabel.approved_by = request.user
                     tklabel.save()
+                    send_email_label_approved(tklabel)
                 return redirect('select-label', community.id)
         
         context = {

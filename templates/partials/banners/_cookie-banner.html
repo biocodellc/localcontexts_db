@@ -1,7 +1,7 @@
 {% load static %}
 
 <div class="cookie-container">
-    <p>This website uses cookies to ensure you get the best experience on our website and the Hub.<br>
+    <p>This website uses cookies to ensure you get the best experience on our website and the Hub. 
         To find out more, read our <a href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/LC%20Privacy%20Policy.pdf" target="_blank">Privacy Policy <i class="fa fa-external-link" aria-hidden="true"></i></a>.
     </p>
     <button class="cookie-btn">Got it!</button>
@@ -9,6 +9,8 @@
 
 <style>
     .cookie-container {
+        display: flex;
+        justify-content: space-between;
         position: fixed;
         bottom: -100%;
         left:0;
@@ -35,9 +37,9 @@
         background-color: #e84118;
         border: 0;
         color: #f5f6fa;
-        padding: 12px 48px;
-        font-size: 18px;
-        margin-bottom: 16px;
+        padding: 6px 20px;
+        font-size: 16px;
+        margin: 10px 16px;
         border-radius: 8px;
         cursor: pointer;
     }
