@@ -526,6 +526,13 @@ input:focus {
     margin: auto;
 }
 
+/* Unapproved label note */
+.note-container {
+    border: 1px solid #a5c6ca;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
 /* ALERTS / MESSAGES */
 #alert-message small{
     padding: 5px;

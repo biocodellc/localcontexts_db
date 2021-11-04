@@ -144,7 +144,7 @@
                         {% if bclabel.bclabel_note.all %}
                             <h4>A note was added to this Label:</h4>
                             {% for note in bclabel.bclabel_note.all %}
-                                <div class="margin-top-16">
+                                <div class="margin-top-16 note-container">
                                     <p>
                                         Approver {{ note.sender.get_full_name }} wrote: <br>
                                         {{ note.note }}
@@ -201,9 +201,9 @@
                     {% if tklabel.tklabel_note.all %}
                         <h4>A note was added to this Label</h4>
                         {% for note in tklabel.tklabel_note.all %}
-                            <div class="margin-top-16">
+                            <div class="margin-top-16 note-container">
                                 <p>
-                                    Approver {{ note.sender.get_full_name }} wrote: <br><br>
+                                    {{ note.sender.get_full_name }} wrote: <br><br>
                                     {{ note.note }}
                                 </p>
                             </div>
