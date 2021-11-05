@@ -164,3 +164,12 @@ def send_email_label_approved(label):
         send_simple_email(label.created_by.email, 'Your Label has been approved', template)
     else:
         send_simple_email(label.created_by.email, 'Your Label has not been approved', template)
+
+# TODO: figure out who gets this email
+#  Email for when a comment is added to a project
+# def send_email_project_comment(sender, user, project):
+#     template = render_to_string('snippets/emails/project-comment.html', { 'project': project, 'sender': sender, 'user': user, })
+#     title = 'A comment has been added to a Project'
+    # who gets these emails?
+    # project creator and anyone that has commented?
+    # send_simple_email(project.project_creator.email, title, template)
