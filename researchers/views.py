@@ -13,6 +13,8 @@ from projects.models import ProjectContributors, Project, ProjectPerson
 from projects.forms import *
 from helpers.forms import ProjectCommentForm
 
+from helpers.emails import *
+
 from .models import Researcher
 from .forms import *
 from .utils import *
@@ -301,7 +303,10 @@ def notify_others(request, pk, proj_id):
                 reference_id = str(project.unique_id)
                 title =  "A Notice has been placed by " + str(researcher.user.get_full_name()) + '.'
                 ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
-            
+
+                # Create email
+                send_email_notice_placed(project, community, researcher)
+
             return redirect('researcher-projects', researcher.id)
 
         context = {

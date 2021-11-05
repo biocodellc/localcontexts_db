@@ -1,4 +1,6 @@
 from communities.models import Community
+from institutions.models import Institution
+from researchers.models import Researcher
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
@@ -105,19 +107,13 @@ def send_welcome_email(user):
 # Email to invite user to join the hub
 def send_invite_user_email(request, data):
     current_site=get_current_site(request)
-    template = render_to_string('snippets/emails/invite-new-user.html', { 
-        'data': data, 
-        'domain': current_site.domain, 
-    })
+    template = render_to_string('snippets/emails/invite-new-user.html', { 'data': data, 'domain': current_site.domain, })
     send_simple_email(data.email, 'You have been invited to join the Local Contexts Hub', template)
 
 # Anywhere JoinRequest instance is created, 
 # will email community or institution creator that someone wants to join the organization
 def send_join_request_email_admin(user, organization):
-    template = render_to_string('snippets/emails/join-request.html', {
-        'user': user,
-        'organization': organization,
-    })
+    template = render_to_string('snippets/emails/join-request.html', { 'user': user, 'organization': organization, })
     # Check if organization instance is community model
     is_community = isinstance(organization, Community)
     if is_community:
@@ -130,11 +126,20 @@ def send_join_request_email_admin(user, organization):
 """
 
 def send_institution_invite_email(data, institution):
-    template = render_to_string('snippets/emails/member-invite.html', { 
-        'data': data,
-        'institution': institution 
-    })
+    template = render_to_string('snippets/emails/member-invite.html', { 'data': data, 'institution': institution })
     send_simple_email(data.receiver.email, 'You have been invited to join an institution', template)
+
+# A notice has been applied by researcher or institution
+def send_email_notice_placed(project, community, sender):
+    # Can pass instance of institution or researcher as sender
+    template = render_to_string('snippets/emails/notice-placed.html', { 'project': project, 'sender': sender, })
+    title = ''
+    if isinstance(sender, Institution):
+        title = sender.institution_name + ' has placed a Notice'
+    if isinstance(sender, Researcher):
+        title = sender.user.get_full_name() + ' has placed a Notice'
+    
+    send_simple_email(community.community_creator.email, title, template)
     
 
 """
@@ -143,18 +148,12 @@ def send_institution_invite_email(data, institution):
 
 # Inviting a user to join community
 def send_community_invite_email(data, community):
-    template = render_to_string('snippets/emails/member-invite.html', { 
-        'data': data,
-        'community': community 
-    })
+    template = render_to_string('snippets/emails/member-invite.html', { 'data': data, 'community': community })
     send_simple_email(data.receiver.email, 'You have been invited to join a community', template)
 
 # When Labels have been applied to a Project
 def send_email_labels_applied(project, community):
-    template = render_to_string('snippets/emails/labels-applied.html', {
-        'project': project,
-        'community': community,
-    })
+    template = render_to_string('snippets/emails/labels-applied.html', { 'project': project, 'community': community, })
     send_simple_email(project.project_creator.email, 'A community has applied Labels to your Project', template)
 
 # Label has been approved or not
