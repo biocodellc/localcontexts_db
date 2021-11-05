@@ -36,6 +36,7 @@ class Community(models.Model):
     is_approved = models.BooleanField(default=False, null=True)
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="community_approver")
     projects = models.ManyToManyField('projects.Project', blank=True, related_name="community_projects", db_index=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
     def get_member_count(self):
         admins = self.admins.count()

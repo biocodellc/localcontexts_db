@@ -35,6 +35,7 @@ class Institution(models.Model):
     is_approved = models.BooleanField(default=False, null=True)
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="institution_approver")
     is_ror = models.BooleanField(default=True, null=False)
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
     def get_member_count(self):
         admins = self.admins.count()
