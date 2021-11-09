@@ -931,15 +931,26 @@ if (window.location.href.includes('dashboard')) {
     const modalSteps = document.querySelectorAll('.onboard-step')
 
     let modalStepsNum = 0
-    // If user does not have a last login
-    if (hiddenInput.value == 'login_false') {
-        onboardingModal.classList.remove('hide')
-        onboardingModal.classList.add('show')
+    // If user does not have a last login and nothing is stored on localstorage
+    if (hiddenInput.value == 'login_false' && !localStorage.getItem('closedOnboarding')) {
+        // show modal
+        onboardingModal.classList.replace('hide', 'show')
     } else {
-        onboardingModal.classList.remove('show')
-        onboardingModal.classList.add('hide')
+        // if modal is showing, hide it
+        if (onboardingModal.classList.contains('show')) {
+            onboardingModal.classList.replace('show', 'hide')
+        } else {
+            onboardingModal.classList.add('hide')
+        }
     }
-
+    
+    closeOnboardBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            onboardingModal.classList.add('hide')
+            localStorage.setItem('closedOnboarding', 'true')
+        })
+    })
+   
     nextBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
             modalStepsNum++
@@ -953,20 +964,6 @@ if (window.location.href.includes('dashboard')) {
             modalStep.classList.remove('onboard-step-active')
         })
         modalSteps[modalStepsNum].classList.add('onboard-step-active')
-    }
-
-    closeOnboardBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            onboardingModal.classList.add('hide')
-            localStorage.setItem('closedOnboarding', 'true')
-        })
-    })
-
-    if (!localStorage.getItem('closedOnboarding')) {
-        onboardingModal.classList.add('show')
-    } else {
-        onboardingModal.classList.remove('show')
-        onboardingModal.classList.add('hide')
     }
 }
 
