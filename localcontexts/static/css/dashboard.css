@@ -151,3 +151,78 @@
 .tag-container {
     width: 120px;
 }
+
+/* onboarding modal */
+.onboarding-modal {
+    background-color: #fefefe;
+    margin: 6% auto;
+    border-radius: 5px;
+    width: 1061px;
+    height: 524px;
+}
+
+.onboard-step {
+    display: none;
+}
+
+.onboard-step-active {
+    display: block;
+}
+
+.fit-height {
+    height: 524px;
+}
+
+.onboard-content-margin {
+    margin: 25px;
+}
+
+.close-onboarding-btn {
+    cursor: pointer;
+    border: 1px solid #fff;
+    box-sizing: border-box;
+    border-radius: 4px;
+    width: 98px;
+    height: 40px;
+    padding: 8px 16px;
+    color: #fff;
+    background: none;
+}
+
+.modal-right-half {
+    border-radius: 5px;
+}
+
+.logo-sm-onboard {
+    width: 85px;
+    height: 32px;
+}
+
+.logo-lg-onboard {
+    height: 339px; 
+    width: 255px;
+    margin: 25px 20px;
+}
+
+.onboard-blue-bg {
+    background-color: #B3D5DA;
+}
+
+.section-bar-container {
+    display: flex;
+    align-items: flex-end;
+    height: 120px;
+    margin-top: 20px;
+    margin-right: -25px;
+}
+
+.onboarding-labels {
+    margin-top: 60px;
+    margin-bottom: 40px;
+
+}
+
+.onboarding-labels img {
+    margin: 10px;
+    border-radius: 5px;
+}

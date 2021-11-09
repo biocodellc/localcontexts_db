@@ -1,0 +1,207 @@
+{% load static %}
+<div id="onboardingModal" class="modal hide">
+
+    <div class="onboarding-modal flex-this column w-100">
+
+            <!-- Card 1 : Welcome -->
+            <div class="onboard-step onboard-step-active">
+                <div class="flex-this w-100 fit-height">
+                    <div class="w-50 onboard-content-margin">
+                        <div><img class="logo-sm-onboard" src="{% static 'images/logos/sm-logo-registry.png' %}"></div>
+                        <div><h1 class="darkteal-text">Nice to meet you {% if user.first_name %} {{ user.first_name }}, {% else %} {{ user.username }}, {% endif %}</h1></div>
+                        <div class="w-90">
+                            <p>
+                                Thanks for signing up with us! We look forward to seeing what you create! 
+                                <br><br>
+                                Please allow at least five minutes to complete this tour.
+                            </p>
+                        </div>
+                        <div><button class="btn-next action-btn">Let's get started <i class="fa fa-long-arrow-right"></i></button></div>
+                    </div>
+                    <div class="w-50 orange-bg modal-right-half">
+                        <div class="onboard-content-margin flex-this column">
+                            <div class="right-text"><button class="close-onboarding-btn">Close X</button></div>
+                            <div class="center-text"><img class="logo-lg-onboard" src="{% static 'images/logos/lc-vertical-white-1.png' %}"></div>
+                        </div>
+                    </div>                     
+                </div>
+            </div>
+
+            <!-- Card 2 : Profile -->
+            <div class="onboard-step">
+                <div class="flex-this w-100 fit-height">
+                    <div class="w-50 onboard-content-margin">
+                        <div><img class="logo-sm-onboard" src="{% static 'images/logos/sm-logo-registry.png' %}"></div>
+                        <div><h1 class="darkteal-text">1/6 Your profile</h1></div>
+                        <div class="w-90">
+                            <p>
+                                The profile you create enables you to join multiple accounts on the hub and create accounts on behalf of your community or institution. 
+                                <br><br>
+                                You will be able to access all the different accounts you are a member of from your profile.
+                            </p>
+                        </div>
+                        <div><button class="btn-next action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
+                    </div>
+                    <div class="w-50 onboard-blue-bg modal-right-half">
+                        <div class="onboard-content-margin flex-this column">
+                            <div class="right-text"><button class="close-onboarding-btn">Close X</button></div>
+                        </div>
+                    </div>                     
+                </div>
+            </div>
+
+            <!-- Card 3: Accounts -->
+            <div class="onboard-step">
+                <div class="flex-this w-100 fit-height">
+                    <div class="w-50 onboard-content-margin">
+                        <div><img class="logo-sm-onboard" src="{% static 'images/logos/sm-logo-registry.png' %}"></div>
+                        <div><h1 class="darkteal-text">2/6 Accounts</h1></div>
+                        <div class="w-90">
+                            <p>
+                                There are three types of accounts within the hub these accounts are specifically for Indigenous Communities, Institutions, and Researchers.
+                                <br><br>
+                                Depending on which account you are a member of you could be developing Labels or Notices.
+                            </p>
+                        </div>
+                        <div><button class="btn-next action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
+                    </div>
+                    <div class="w-50 onboard-blue-bg modal-right-half">
+                        <div class="onboard-content-margin flex-this column">
+                            <div class="right-text"><button class="close-onboarding-btn">Close X</button></div>
+                        </div>
+                    </div>                     
+                </div>
+            </div>
+
+            <!-- Card 4: Local Contexts Projects -->
+            <div class="onboard-step">
+                <div class="flex-this w-100 fit-height">
+                    <div class="w-50 onboard-content-margin">
+                        <div><img class="logo-sm-onboard" src="{% static 'images/logos/sm-logo-registry.png' %}"></div>
+                        <div><h1 class="darkteal-text">3/6 Local Contexts Projects</h1></div>
+                        <div class="w-90">
+                            <p>
+                                Local Contexts Projects assist in documenting cultural material on the hub. Institutions and researchers can apply Notices to it, and Indigenous Communities can apply their customized Labels. 
+                                <br><br>
+                                There are various types of projects, such as collections, items, expeditions, exhibitions, or samples.  
+                            </p>
+                        </div>
+                        <div><button class="btn-next action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
+                    </div>
+                    <div class="w-50 onboard-blue-bg modal-right-half">
+                        <div class="onboard-content-margin flex-this column">
+                            <div class="right-text"><button class="close-onboarding-btn">Close X</button></div>
+                            <div class="center-text margin-top-16">
+                                <img src="{% static 'images/onboarding/projects-tk.png' %}">
+                                <img src="{% static 'images/onboarding/projects-label-img.png' %}">
+                            </div>
+                            <div class="section-bar-container"><img src="{% static 'images/onboarding/section-bar-projects.png' %}"></div>
+                        </div>
+                    </div>                     
+                </div>
+            </div>
+
+            <!-- Card 5: Labels -->
+            <div class="onboard-step">
+                <div class="flex-this w-100 fit-height">
+                    <div class="w-50 onboard-content-margin">
+                        <div><img class="logo-sm-onboard" src="{% static 'images/logos/sm-logo-registry.png' %}"></div>
+                        <div><h1 class="darkteal-text">4/6 Labels</h1></div>
+                        <div class="w-90">
+                            <p>
+                                Through the Local Contexts Hub, Indigenous Communities can ensure that their local and traditional protocols are applied to TK & BC Labels to determine how their cultural material is accessed and used going forward.
+                                <br><br>
+                                Community members can customize the template text of the TK & BC Labels in the hub to outline their specific local protocols.
+                            </p>
+                        </div>
+                        <div><button class="btn-next action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
+                    </div>
+                    <div class="w-50 onboard-blue-bg modal-right-half">
+                        <div class="onboard-content-margin flex-this column">
+                            <div class="right-text"><button class="close-onboarding-btn">Close X</button></div>
+                            <div class="center-text margin-top-16 onboarding-labels">
+                                <img src="{% static 'images/onboarding/labels-1.png' %}">
+                                <img src="{% static 'images/onboarding/labels-2.png' %}">
+                            </div>
+                            <div class="section-bar-container"><img src="{% static 'images/onboarding/section-bar-labels.png' %}"></div>
+                        </div>
+                    </div>                     
+                </div>
+            </div>
+
+            <!-- Card 6: Notices -->
+            <div class="onboard-step">
+                <div class="flex-this w-100 fit-height">
+                    <div class="w-50 onboard-content-margin">
+                        <div><img class="logo-sm-onboard" src="{% static 'images/logos/sm-logo-registry.png' %}"></div>
+                        <div><h1 class="darkteal-text">5/6 Notices</h1></div>
+                        <div class="w-90">
+                            <p>
+                                Institutions and researchers can apply Notices to cultural materials they currently protect using the Local contexts Hub.
+                                <br><br>
+                                The Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data.
+                            </p>
+                        </div>
+                        <div><button class="btn-next action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
+                    </div>
+                    <div class="w-50 onboard-blue-bg modal-right-half">
+                        <div class="onboard-content-margin flex-this column">
+                            <div class="right-text"><button class="close-onboarding-btn">Close X</button></div>
+                            <div class="center-text margin-top-16">
+                                <img src="{% static 'images/onboarding/notices.png' %}">
+                            </div>
+                            <div class="section-bar-container"><img src="{% static 'images/onboarding/section-bar-notices.png' %}"></div>
+
+                        </div>
+                    </div>                     
+                </div>
+            </div>
+
+            <!-- Card 7: Members -->
+            <div class="onboard-step">
+                <div class="flex-this w-100 fit-height">
+                    <div class="w-50 onboard-content-margin">
+                        <div><img class="logo-sm-onboard" src="{% static 'images/logos/sm-logo-registry.png' %}"></div>
+                        <div><h1 class="darkteal-text">6/6 Members</h1></div>
+                        <div class="w-90">
+                            <p>
+                                Community and Institutional accounts can have as many members as necessary. There are three types of responsibilities available to each account:
+                                Administrator, Editors and Viewers
+                                <br><br>
+                                There are different permissions associated with each role. To learn more about them, click on the 'Members' tab in the account dashboard.                            </p>
+                        </div>
+                        <div><button class="btn-next action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
+                    </div>
+                    <div class="w-50 onboard-blue-bg modal-right-half">
+                        <div class="onboard-content-margin flex-this column">
+                            <div class="right-text margin-bottom-16"><button class="close-onboarding-btn">Close X</button></div>
+                            <div class="section-bar-container"><img src="{% static 'images/onboarding/section-bar-members.png' %}"></div>
+                        </div>
+                    </div>                     
+                </div>
+            </div>
+
+            <!-- Card 8: Finish -->
+            <div class="onboard-step">
+                <div class="flex-this w-100 fit-height">
+                    <div class="w-50 onboard-content-margin">
+                        <div><img class="logo-sm-onboard" src="{% static 'images/logos/sm-logo-registry.png' %}"></div>
+                        <div><h1 class="darkteal-text">Finished!</h1></div>
+                        <div class="w-90">
+                            <p>
+                                We appreciate you joining us on our tour. 
+                                <br><br>
+                                You can reach us at support@localcontexts.org if you need support during the process.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="w-50 orange-bg modal-right-half">
+                        <div class="onboard-content-margin flex-this column">
+                            <div class="right-text"><button class="close-onboarding-btn">Close X</button></div>
+                            <div class="center-text"><img class="logo-lg-onboard" src="{% static 'images/logos/lc-vertical-white-1.png' %}"></div>
+                        </div>
+                    </div>                     
+                </div>
+            </div>
+    </div>
+</div>
