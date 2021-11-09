@@ -931,10 +931,10 @@ if (window.location.href.includes('dashboard')) {
     const modalSteps = document.querySelectorAll('.onboard-step')
 
     let modalStepsNum = 0
-
-    if (hiddenInput.value == 'true') {
-        onboardingModal.classList.add('show')
+    // If user does not have a last login
+    if (hiddenInput.value == 'login_false') {
         onboardingModal.classList.remove('hide')
+        onboardingModal.classList.add('show')
     } else {
         onboardingModal.classList.remove('show')
         onboardingModal.classList.add('hide')
