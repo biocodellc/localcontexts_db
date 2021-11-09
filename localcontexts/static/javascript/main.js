@@ -8,7 +8,7 @@ if (dismissBtn) { dismissBtn.addEventListener('click', () => { messageDiv.style.
 var passwordField = document.getElementById('id_password1')
 var helpTextDiv = document.getElementById('help-text-pw')
 
-if (passwordField ) {
+if (passwordField) {
     passwordField.addEventListener('focusin', (event) => { helpTextDiv.style.display = 'block' })
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
@@ -19,40 +19,20 @@ function customText(imgDiv) {
     let divs = Array.from(document.querySelectorAll('.div-toggle'))
     // console.log(labelID)
 
-    divs.forEach(div => {
-        if (div.id.includes(labelID) && div.style.height == '0px') {
-            // console.log(div.id)
-            div.style.height = 'auto'
-        } else {
-            div.style.height = '0px'
-        }
-    })
-
+    divs.forEach(div => { if (div.id.includes(labelID) && div.style.height == '0px') { div.style.height = 'auto' } else { div.style.height = '0px' } })
 
     // Toggle text color based on what Label is selected
     let pDivs = Array.from(document.querySelectorAll('.toggle-txt-color'))
     pDivs.forEach(node => {
         let nodeID = node.id
-        if (nodeID.includes(labelID)) {
-            node.classList.add('darkteal-text')
-            node.classList.remove('grey-text')
-        } else {
-            node.classList.remove('darkteal-text')
-            node.classList.add('grey-text')
-        }
+        if (nodeID.includes(labelID)) { node.classList.replace('grey-text', 'darkteal-text') } else { node.classList.replace('darkteal-text', 'grey-text') }
     })
 }
 
 async function fetchLabels(type) {
     const response = await fetch('/static/json/Labels.json')
     const data = await response.json()
-    if (type == 'bc') {
-        return data.bcLabels
-    } else if (type == 'tk') {
-        return data.tkLabels
-    } else if (type == 'both') {
-        return data
-    }
+    if (type == 'bc') { return data.bcLabels } else if (type == 'tk') { return data.tkLabels } else if (type == 'both') { return data }
 }
 
 // Expand BC Labels Card in Community: Labels -> select-labels
@@ -81,16 +61,7 @@ function expandBCLabel(img) {
 
     // Toggle selected Label color 
     let txtDivs = Array.from(document.querySelectorAll('.toggle-txt-color'))
-    txtDivs.forEach(node => {
-        if (node == img.parentElement.nextElementSibling) {
-            node.classList.remove('grey-text')
-            node.classList.add('darkteal-text')
- 
-        } else {
-            node.classList.remove('darkteal-text')
-            node.classList.add('grey-text')
-        }
-    })
+    txtDivs.forEach(node => { if (node == img.parentElement.nextElementSibling) { node.classList.replace('grey-text', 'darkteal-text') } else { node.classList.replace('darkteal-text', 'grey-text') } })
 
     let targetImg = img.id
 
@@ -169,30 +140,24 @@ function checkLabelExists(label, selectedLabelCode, labelType) {
         if (values.includes(label.labelType)) {
             if (label.labelCategory == 'provenance') {
                 btnTKProv.setAttribute("disabled","disabled")
-                btnTKProv.classList.remove('action-btn')
-                btnTKProv.classList.add('disabled-btn')
+                btnTKProv.classList.replace('action-btn', 'disabled-btn')
             } else if (label.labelCategory == 'protocol') {
                 btnTKProt.setAttribute("disabled","disabled")
-                btnTKProt.classList.remove('action-btn')
-                btnTKProt.classList.add('disabled-btn')
+                btnTKProt.classList.replace('action-btn', 'disabled-btn')
             } else if (label.labelCategory == 'permission') {
                 btnTKPerms.setAttribute("disabled","disabled")
-                btnTKPerms.classList.remove('action-btn')
-                btnTKPerms.classList.add('disabled-btn')
+                btnTKPerms.classList.replace('action-btn', 'disabled-btn')
             }
         }  else {
             if (label.labelCategory == 'provenance') {
                 btnTKProv.removeAttribute("disabled")
-                btnTKProv.classList.remove('disabled-btn')
-                btnTKProv.classList.add('action-btn')
+                btnTKProv.classList.replace('disabled-btn', 'action-btn')
             } else if (label.labelCategory == 'protocol') {
                 btnTKProt.removeAttribute("disabled")
-                btnTKProt.classList.remove('disabled-btn')
-                btnTKProt.classList.add('action-btn')
+                btnTKProt.classList.replace('disabled-btn', 'action-btn')
             } else if (label.labelCategory == 'permission') {
                 btnTKPerms.removeAttribute("disabled")
-                btnTKPerms.classList.remove('disabled-btn')
-                btnTKPerms.classList.add('action-btn')
+                btnTKPerms.classList.replace('disabled-btn', 'action-btn')
             }
         }
     }
@@ -210,13 +175,7 @@ function displayExpandedImage(labelCode) {
 
     for (let i = 0; i < imgArray.length; i ++) {
         // take the id and split it, compare labelCode to the split
-        if (imgArray[i].id.slice(21) == labelCode) {
-            imgArray[i].classList.remove('hide')
-            imgArray[i].classList.add('show')
-        } else {
-            imgArray[i].classList.remove('show')
-            imgArray[i].classList.add('hide')
-        }
+        if (imgArray[i].id.slice(21) == labelCode) { imgArray[i].classList.replace('hide', 'show') } else { imgArray[i].classList.replace('show', 'hide') }
     }
 }
 
@@ -272,8 +231,7 @@ if (window.location.href.includes('community/labels/')) {
     closeNoteDivBtn.addEventListener('click', (e) => {
         e.preventDefault()
         let div = document.getElementById('labelNoteDiv')
-        div.classList.remove('show')
-        div.classList.add('hide')
+        div.classList.replace('show', 'hide')
     })    
 }
 
@@ -307,12 +265,10 @@ function displayDefaultText(elem) {
 
     if (isChecked) {
         targetDiv.style.height = 'auto'
-        labelName.classList.remove('grey-text')
-        labelName.classList.add('darkteal-text')
+        labelName.classList.replace('grey-text', 'darkteal-text')
     } else {
         targetDiv.style.height = '0'
-        labelName.classList.remove('darkteal-text')
-        labelName.classList.add('grey-text')
+        labelName.classList.replace('darkteal-text', 'grey-text')
     }
 
 }
@@ -343,13 +299,7 @@ function expandTKLabel(img) {
     // Change Text Color on selected Label
     let txtDivs = Array.from(document.querySelectorAll('.toggle-txt-color'))
     txtDivs.forEach(node => {
-        if (node == img.parentElement.nextElementSibling) {
-            node.classList.remove('grey-text')
-            node.classList.add('darkteal-text')
-        } else {
-            node.classList.remove('darkteal-text')
-            node.classList.add('grey-text')
-        }
+        if (node == img.parentElement.nextElementSibling) { node.classList.replace('grey-text', 'darkteal-text') } else { node.classList.replace('darkteal-text', 'grey-text') }
     })
 
     const targetImg = img.id
@@ -415,21 +365,11 @@ function expandTKLabel(img) {
 // When Label is clicked to be customized, show details
 function openLabelInfoDiv(targetDiv, divToCloseOne, divToCloseTwo) {
     // Open target div 
-    if (targetDiv.classList.contains('hide')) {
-        targetDiv.classList.remove('hide')
-        targetDiv.classList.add('show')
-    }
+    if (targetDiv.classList.contains('hide')) { targetDiv.classList.replace('hide', 'show') }
 
     // Close other two divs if open
-    if (divToCloseOne.classList.contains('show')) {
-        divToCloseOne.classList.remove('show')
-        divToCloseOne.classList.add('hide')
-    }
-
-    if (divToCloseTwo.classList.contains('show')) {
-        divToCloseTwo.classList.remove('show')
-        divToCloseTwo.classList.add('hide')
-    }
+    if (divToCloseOne.classList.contains('show')) { divToCloseOne.classList.replace('show', 'hide') }
+    if (divToCloseTwo.classList.contains('show')) { divToCloseTwo.classList.replace('show', 'hide') }
 }
 
 function closeLabelInfoDiv(targetBtn) {
@@ -453,28 +393,22 @@ function closeLabelInfoDiv(targetBtn) {
 
     switch(true) {
         case tkProv:
-            infoTKProv.classList.remove('show')
-            infoTKProv.classList.add('hide')        
+            infoTKProv.classList.replace('show', 'hide')        
             break;
         case bcProv:
-            infoBCProv.classList.remove('show')
-            infoBCProv.classList.add('hide')        
+            infoBCProv.classList.replace('show', 'hide')        
             break;
         case tkProt:
-            infoTKProt.classList.remove('show')
-            infoTKProt.classList.add('hide')
+            infoTKProt.classList.replace('show', 'hide')
             break;
         case bcProt:
-            infoBCProt.classList.remove('show')
-            infoBCProt.classList.add('hide')
+            infoBCProt.classList.replace('show', 'hide')
             break;
         case tkPerm:
-            infoTKPerm.classList.remove('show')
-            infoTKPerm.classList.add('hide')
+            infoTKPerm.classList.replace('show', 'hide')
             break;
         case bcPerm:
-            infoBCPerm.classList.remove('show')
-            infoBCPerm.classList.add('hide')
+            infoBCPerm.classList.replace('show', 'hide')
             break;
     }
 }
@@ -489,22 +423,18 @@ function showDescription() {
     let bcTarget = document.getElementById('bcTitle')
 
     if (bcInput.checked && tkInput.checked) {
-        tkTarget.classList.add('darkteal-text')
-        tkTarget.classList.remove('grey-text')
-        bcTarget.classList.add('darkteal-text')
-        bcTarget.classList.remove('grey-text')
+        tkTarget.classList.replace('grey-text', 'darkteal-text')
+        bcTarget.classList.replace('grey-text', 'darkteal-text')
         tkDescriptionDiv.style.display = "block"
         bcDescriptionDiv.style.display = "block"
     } else if (bcInput.checked) {
         tkTarget.classList.add('grey-text')
-        bcTarget.classList.add('darkteal-text')
-        bcTarget.classList.remove('grey-text')
+        bcTarget.classList.replace('grey-text', 'darkteal-text')
         bcDescriptionDiv.style.display = "block"
         tkDescriptionDiv.style.display = "none"
     } else if (tkInput.checked) {
         bcTarget.classList.add('grey-text')
-        tkTarget.classList.add('darkteal-text')
-        tkTarget.classList.remove('grey-text')
+        tkTarget.classList.replace('grey-text', 'darkteal-text')
         bcDescriptionDiv.style.display = "none"
         tkDescriptionDiv.style.display = "block"
     } else {
@@ -522,9 +452,9 @@ if (projectTypeSelect) {
     projectTypeSelect.addEventListener('change', function() {
         let otherTypeField = document.getElementById('otherTypeField')
         if (projectTypeSelect.value == 'Other') {
-            otherTypeField.style.display = 'block'
+            otherTypeField.classList.replace('hide', 'show')
         } else {
-            otherTypeField.style.display = 'none'
+            otherTypeField.classList.replace('show', 'hide')
         }
     })
 }
@@ -762,15 +692,7 @@ function toggleNotifications() {
 function showUserNotifications(btn) {
     let div = document.getElementById('userNotifications')
     div.classList.toggle('hide')
-
-    if (div.classList.contains('hide')) {
-        btn.classList.remove('active-dash-driver-btn')
-        btn.classList.add('action-btn')
-    } else {
-        btn.classList.add('active-dash-driver-btn')
-        btn.classList.remove('action-btn')    
-    }
-
+    if (div.classList.contains('hide')) { btn.classList.replace('active-dash-driver-btn', 'action-btn') } else { btn.classList.replace( 'action-btn', 'active-dash-driver-btn') }
 }
 
 
@@ -875,54 +797,23 @@ if (window.location.href.includes('registry')) {
     let institutions = document.querySelectorAll('.institutions-filter')
     let communities = document.querySelectorAll('.communities-filter')
 
-
     filterbyCommunities.addEventListener('click', () => {
-        institutions.forEach(institution => {
-            institution.classList.remove('show')
-            institution.classList.add('hide')
-        })
-
-        communities.forEach(community => {
-            if (community.classList.contains('hide')) {
-                community.classList.remove('hide')
-                community.classList.add('show')
-            }
-        })
+        institutions.forEach(institution => { institution.classList.replace('show', 'hide') })
+        communities.forEach(community => { if (community.classList.contains('hide')) { community.classList.replace('hide', 'show') } })
     })
 
-    filterbyInstitutions.addEventListener('click', () => {
-        communities.forEach(community => {
-            community.classList.remove('show')
-            community.classList.add('hide')
-
-        })
-
-        institutions.forEach(institution => {
-            if (institution.classList.contains('hide')) {
-                institution.classList.remove('hide')
-                institution.classList.add('show')
-            }
-        })
+    filterbyInstitutions.addEventListener('click', () => { 
+        communities.forEach(community => { community.classList.replace('show', 'hide') })
+        institutions.forEach(institution => { if (institution.classList.contains('hide')) { institution.classList.replace('hide', 'show') } })
     })
     
     filterbyAll.addEventListener('click', () => {
-        communities.forEach(community => {
-            if (community.classList.contains('hide')) {
-                community.classList.remove('hide')
-                community.classList.add('show')
-            }
-        })
-
-        institutions.forEach(institution => {
-            if (institution.classList.contains('hide')) {
-                institution.classList.remove('hide')
-                institution.classList.add('show')
-            }
-        })
+        communities.forEach(community => { if (community.classList.contains('hide')) { community.classList.replace('hide', 'show') } })
+        institutions.forEach(institution => { if (institution.classList.contains('hide')) { institution.classList.replace('hide', 'show') } })
     })
 }
 
-//  ONBOARDING MODAL
+//  ONBOARDING MODAL: Shows up in dashboard if user does not have a last_login & there isn't a localstorage item saved
 if (window.location.href.includes('dashboard')) {
     const hiddenInput = document.getElementById('openOnboarding')
     const onboardingModal = document.getElementById('onboardingModal')

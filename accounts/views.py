@@ -332,9 +332,9 @@ def organization_registry(request):
 # Hub stats page
 def hub_counter(request):
     # Registered
-    community_count = Community.objects.count()
-    institution_count = Institution.objects.count()
-    researcher_count = Researcher.objects.count()
+    community_count = Community.objects.count() -  1 # sample community
+    institution_count = Institution.objects.count() - 1 # sample institution
+    researcher_count = Researcher.objects.count() - 1 # admin's researcher account
     reg_total = community_count + institution_count + researcher_count
 
     # Notices
