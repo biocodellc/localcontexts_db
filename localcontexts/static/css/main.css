@@ -745,7 +745,7 @@ input:focus {
     font-size: 36px;
 }
 
-.add-member-modal-content {
+.modal-content-padding {
     padding-left: 40px;
     padding-right: 40px;
 }

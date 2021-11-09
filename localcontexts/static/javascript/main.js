@@ -866,6 +866,7 @@ if (deactivateAccountBtn) {
     })
 }
 
+// REGISTRY FILTERING
 if (window.location.href.includes('registry')) {
     // Filter Registry
     const filterbyCommunities = document.getElementById('filterCommunities')
@@ -919,5 +920,53 @@ if (window.location.href.includes('registry')) {
             }
         })
     })
+}
+
+//  ONBOARDING MODAL
+if (window.location.href.includes('dashboard')) {
+    const hiddenInput = document.getElementById('openOnboarding')
+    const onboardingModal = document.getElementById('onboardingModal')
+    const closeOnboardBtns = document.querySelectorAll('.close-onboarding-btn')
+    const nextBtns = document.querySelectorAll('.btn-next')
+    const modalSteps = document.querySelectorAll('.onboard-step')
+
+    let modalStepsNum = 0
+
+    if (hiddenInput.value == 'true') {
+        onboardingModal.classList.add('show')
+        onboardingModal.classList.remove('hide')
+    } else {
+        onboardingModal.classList.remove('show')
+        onboardingModal.classList.add('hide')
+    }
+
+    nextBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            modalStepsNum++
+            updateModalSteps()
+        })
+    })
+
+    function updateModalSteps() {
+        modalSteps.forEach(modalStep => {
+            modalStep.classList.contains('onboard-step-active') &&
+            modalStep.classList.remove('onboard-step-active')
+        })
+        modalSteps[modalStepsNum].classList.add('onboard-step-active')
+    }
+
+    closeOnboardBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            onboardingModal.classList.add('hide')
+            localStorage.setItem('closedOnboarding', 'true')
+        })
+    })
+
+    if (!localStorage.getItem('closedOnboarding')) {
+        onboardingModal.classList.add('show')
+    } else {
+        onboardingModal.classList.remove('show')
+        onboardingModal.classList.add('hide')
+    }
 }
 

@@ -3,6 +3,14 @@
 
     {% include 'partials/_user-info.html' %}
 
+    {% if user.last_login %}
+        <input id="openOnboarding" value="false" type="hidden">
+    {% else %}
+    <!-- Onboarding modal pops up if user has not logged in before -->
+    <input id="openOnboarding" value="true" type="hidden">
+        {% include 'snippets/onboarding.html' %}
+    {% endif %}
+
     <section class="flex-this column align-center">
 
         {% if not researcher and not user_communities and not user_institutions %}
