@@ -8,7 +8,7 @@ if (dismissBtn) { dismissBtn.addEventListener('click', () => { messageDiv.style.
 var passwordField = document.getElementById('id_password1')
 var helpTextDiv = document.getElementById('help-text-pw')
 
-if (passwordField ) {
+if (passwordField) {
     passwordField.addEventListener('focusin', (event) => { helpTextDiv.style.display = 'block' })
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
@@ -19,10 +19,7 @@ function customText(imgDiv) {
     let divs = Array.from(document.querySelectorAll('.div-toggle'))
     // console.log(labelID)
 
-    divs.forEach(div => {
-        if (div.id.includes(labelID) && div.style.height == '0px') { div.style.height = 'auto' } else { div.style.height = '0px' }
-    })
-
+    divs.forEach(div => { if (div.id.includes(labelID) && div.style.height == '0px') { div.style.height = 'auto' } else { div.style.height = '0px' } })
 
     // Toggle text color based on what Label is selected
     let pDivs = Array.from(document.querySelectorAll('.toggle-txt-color'))
@@ -35,13 +32,7 @@ function customText(imgDiv) {
 async function fetchLabels(type) {
     const response = await fetch('/static/json/Labels.json')
     const data = await response.json()
-    if (type == 'bc') {
-        return data.bcLabels
-    } else if (type == 'tk') {
-        return data.tkLabels
-    } else if (type == 'both') {
-        return data
-    }
+    if (type == 'bc') { return data.bcLabels } else if (type == 'tk') { return data.tkLabels } else if (type == 'both') { return data }
 }
 
 // Expand BC Labels Card in Community: Labels -> select-labels
@@ -70,9 +61,7 @@ function expandBCLabel(img) {
 
     // Toggle selected Label color 
     let txtDivs = Array.from(document.querySelectorAll('.toggle-txt-color'))
-    txtDivs.forEach(node => {
-        if (node == img.parentElement.nextElementSibling) { node.classList.replace('grey-text', 'darkteal-text') } else { node.classList.replace('darkteal-text', 'grey-text') }
-    })
+    txtDivs.forEach(node => { if (node == img.parentElement.nextElementSibling) { node.classList.replace('grey-text', 'darkteal-text') } else { node.classList.replace('darkteal-text', 'grey-text') } })
 
     let targetImg = img.id
 
