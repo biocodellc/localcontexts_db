@@ -16,6 +16,7 @@ class Profile(models.Model):
     preferred_language = models.CharField(verbose_name='preferred language', max_length=80, blank=True, null=True)
     languages_spoken = models.CharField(verbose_name='languages spoken', max_length=150, blank=True, null=True)    
     is_researcher = models.BooleanField(default=False, null=True)
+    onboarding_on = models.BooleanField(default=True, null=True, blank=True)
 
     def __str__(self):
         return str(self.user)

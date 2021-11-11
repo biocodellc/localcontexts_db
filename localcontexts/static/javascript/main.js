@@ -823,7 +823,7 @@ if (window.location.href.includes('dashboard')) {
 
     let modalStepsNum = 0
     // If user does not have a last login and nothing is stored on localstorage
-    if (hiddenInput.value == 'login_false' && !localStorage.getItem('closedOnboarding')) {
+    if (hiddenInput.value == 'true' && !localStorage.getItem('closedOnboarding')) {
         // show modal
         onboardingModal.classList.replace('hide', 'show')
     } else {

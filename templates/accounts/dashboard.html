@@ -3,11 +3,10 @@
 
     {% include 'partials/_user-info.html' %}
 
-    <!-- Onboarding modal pops up if user has not logged in before -->
-    {% if user.last_login %}
-        <input id="openOnboarding" value="login_true" type="hidden">
+    {% if user.profile.onboarding_on %}
+        <input id="openOnboarding" value="true" type="hidden">
     {% else %}
-        <input id="openOnboarding" value="login_false" type="hidden">
+        <input id="openOnboarding" value="false" type="hidden">
     {% endif %}
 
     {% include 'snippets/onboarding.html' %}
