@@ -1,10 +1,11 @@
-from django.db.models.signals import post_save, m2m_changed
-from django.dispatch import receiver, Signal
-from django.contrib.auth.models import User, Group
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
 from communities.models import *
 from .models import *
 from .utils import *
 from django.conf import settings
+from helpers.emails import send_membership_email
 
 # When the instance of invite member form is saved, send target user a notification
 @receiver(post_save, sender=InviteMember)
@@ -55,6 +56,9 @@ def accept_community_invite(sender, instance, **kwargs):
             message = "You now have access to " + str(community) + "'s notices and labels."
             
             UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Accept", community=community, reference_id=ref)
+            
+            # Send email letting user know they are a member
+            send_membership_email(community, receiver_, role)
 
             # Lets sender know their invitation was accepted
             title2 = str(check_full_name(receiver_)) + " has accepted your invitation to join " + str(community) + "!"
@@ -72,6 +76,9 @@ def accept_community_invite(sender, instance, **kwargs):
             message = "You now have access to " + str(institution) + "'s notices and projects."
             
             UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Accept", institution=institution, reference_id=ref)
+
+            # Send email letting user know they are a member
+            send_membership_email(institution, receiver_, role)
 
             # Lets sender know their invitation was accepted
             title2 = str(check_full_name(receiver_)) + " has accepted your invitation to join " + str(institution) + "."
@@ -115,6 +122,7 @@ def accept_user_join_request(sender, instance, created, **kwargs):
         receiver_ = instance.user_to
         sender_ = instance.user_from
         ref = instance.id
+        role = instance.role
 
         if instance.community:
             community = instance.community
@@ -124,6 +132,9 @@ def accept_user_join_request(sender, instance, created, **kwargs):
             message = "Your request to join " + str(community) + " has been accepted and you are now a member"
 
             UserNotification.objects.create(to_user=sender_, from_user=receiver_, title=title, message=message, notification_type="Accept", community=community, reference_id=ref)
+            
+            # Send email letting user know they are a member
+            send_membership_email(community, sender_, role)
 
             # Message to user accepting the join request letting them know user is now a community member.
             title2 = str(check_full_name(sender_)) + " is now a member of " + str(community)
@@ -140,6 +151,9 @@ def accept_user_join_request(sender, instance, created, **kwargs):
             message = "Your request to join " + str(institution) + " has been accepted and you are now a member"
 
             UserNotification.objects.create(to_user=sender_, from_user=receiver_, title=title, message=message, notification_type="Accept", institution=institution, reference_id=ref)
+
+            # Send email letting user know they are a member
+            send_membership_email(institution, sender_, role)
 
             # Message to user accepting the join request letting them know user is now a institution member.
             title2 = str(check_full_name(sender_)) + " is now a member of " + str(institution)
