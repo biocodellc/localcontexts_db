@@ -194,6 +194,13 @@
                                 You can reach us at support@localcontexts.org if you need support during the process.
                             </p>
                         </div>
+                        <div>
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <button class="action-btn">Let's get started <i class="fa fa-long-arrow-right"></i></button>
+                            </form>
+                        </div>
+
                     </div>
                     <div class="w-50 orange-bg modal-right-half">
                         <div class="onboard-content-margin flex-this column">
