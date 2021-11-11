@@ -114,12 +114,18 @@ def send_invite_user_email(request, data):
 # will email community or institution creator that someone wants to join the organization
 def send_join_request_email_admin(user, organization):
     template = render_to_string('snippets/emails/join-request.html', { 'user': user, 'organization': organization, })
+    title = ''
+    send_to_email = ''
     # Check if organization instance is community model
-    is_community = isinstance(organization, Community)
-    if is_community:
-        send_simple_email(organization.community_creator.email, 'Someone has requested to join your community', template)
-    else:
-        send_simple_email(organization.institution_creator.email, 'Someone has requested to join your institution', template)
+    if isinstance(organization, Community):
+        title = str(user.get_full_name()) + ' has requested to join ' + str(organization.community_name) 
+        send_to_email = organization.community_creator.email
+    if isinstance(organization, Institution):
+        title = str(user.get_full_name()) + ' has requested to join ' + str(organization.institution_name) 
+        send_to_email = organization.institution_creator.email
+    
+    send_simple_email(send_to_email, title, template)
+
 
 """
     EMAILS FOR INSTITUTION APP
@@ -127,7 +133,8 @@ def send_join_request_email_admin(user, organization):
 
 def send_institution_invite_email(data, institution):
     template = render_to_string('snippets/emails/member-invite.html', { 'data': data, 'institution': institution })
-    send_simple_email(data.receiver.email, 'You have been invited to join an institution', template)
+    title = 'You have been invited to join ' + str(institution.institution_name)
+    send_simple_email(data.receiver.email, title, template)
 
 # A notice has been applied by researcher or institution
 def send_email_notice_placed(project, community, sender):
@@ -173,3 +180,14 @@ def send_email_label_approved(label):
     # who gets these emails?
     # project creator and anyone that has commented?
     # send_simple_email(project.project_creator.email, title, template)
+
+# You are now a member of institution/community email
+def send_membership_email(organization, receiver, role):
+    template = render_to_string('snippets/emails/membership-info.html', { 'organization': organization, 'role': role, })
+    title = ''
+    if isinstance(organization, Community):
+        title = 'You are now a member of ' + str(organization.community_name)
+    if isinstance(organization, Institution):
+        title = 'You are now a member of ' + str(organization.institution_name)
+
+    send_simple_email(receiver.email, title, template)

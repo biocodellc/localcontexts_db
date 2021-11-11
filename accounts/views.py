@@ -144,39 +144,37 @@ def registration_reason(request):
 @login_required(login_url='login')
 def dashboard(request):
     n = UserNotification.objects.filter(to_user=request.user)
-
-    user_has_community = UserAffiliation.objects.filter(user=request.user).exists()
-    target_communitites = Community.objects.filter(community_creator=request.user)
-    target_institutions = Institution.objects.filter(institution_creator=request.user)
-
     researcher = is_user_researcher(request.user)
-
-    target_user = UserAffiliation.objects.get(user=request.user)
+    current_user = UserAffiliation.objects.get(user=request.user)
 
     # Checks to see if any communities have been created by the current user 
-    for x in target_communitites:
-        target_user.communities.add(x.id)    # and adds them to the UserAffiliation instance
-        target_user.save()
+    user_created_communitites = Community.objects.filter(community_creator=request.user)
+    # and adds them to the UserAffiliation instance
+    for community in user_created_communitites:
+        current_user.communities.add(community.id) 
+        current_user.save()
     
-    for y in target_institutions:
-        target_user.institutions.add(y.id)
-        target_user.save()
+    # Checks to see if any institutions have been created by the current user 
+    user_created_institutions = Institution.objects.filter(institution_creator=request.user)
+    for institution in user_created_institutions:
+        current_user.institutions.add(institution.id)
+        current_user.save()
 
-    if user_has_community:
-        current_user = UserAffiliation.objects.get(user=request.user)
-        user_communities = current_user.communities.all()
-        user_institutions = current_user.institutions.all()
+    user_communities = current_user.communities.all()
+    user_institutions = current_user.institutions.all()
 
-        context = { 
-            'current_user': current_user,
-            'user_communities': user_communities,
-            'user_institutions': user_institutions,
-            'researcher': researcher,
-            'notifications': n,
-        }
-        return render(request, "accounts/dashboard.html", context)
-    else:
-        return render(request, "accounts/dashboard.html")
+    if request.method == 'POST':
+        request.user.profile.onboarding_on = False
+        request.user.profile.save()
+
+    context = { 
+        'current_user': current_user,
+        'user_communities': user_communities,
+        'user_institutions': user_institutions,
+        'researcher': researcher,
+        'notifications': n,
+    }
+    return render(request, "accounts/dashboard.html", context)
 
 @login_required(login_url='login')
 def create_profile(request):
@@ -332,9 +330,9 @@ def organization_registry(request):
 # Hub stats page
 def hub_counter(request):
     # Registered
-    community_count = Community.objects.count()
-    institution_count = Institution.objects.count()
-    researcher_count = Researcher.objects.count()
+    community_count = Community.objects.count() -  1 # sample community
+    institution_count = Institution.objects.count() - 1 # sample institution
+    researcher_count = Researcher.objects.count() - 1 # admin's researcher account
     reg_total = community_count + institution_count + researcher_count
 
     # Notices

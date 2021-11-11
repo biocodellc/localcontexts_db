@@ -38,6 +38,7 @@ def connect_researcher(request):
 
                 # Mark current user as researcher
                 request.user.profile.is_researcher = True
+                request.user.profile.save()
                 return redirect('dashboard')
 
         return render(request, 'researchers/connect-researcher.html', {'form': form})

@@ -1,20 +1,10 @@
 {% autoescape off %}
 
-<h3>{{ data.sender.get_full_name }} has invited you to join the 
-    {% if institution %}
-        institution {{ data.institution.institution_name }} 
-    {% endif %}
-    {% if community %}
-        community {{ data.community.community_name }}
-    {% endif %}
+<h3>{{ data.sender.get_full_name }} has invited you to join  
+    {% if institution %} {{ data.institution.institution_name }} {% endif %}
+    {% if community %} {{ data.community.community_name }} {% endif %}
      as  
-    {% if data.role == 'admin' %}
-        an Administrator
-    {% elif data.role == 'editor' %}
-        an Editor
-    {% else %}
-        a Viewer
-    {% endif %}
+    {% if data.role == 'admin' %} an Administrator {% elif data.role == 'editor' %} an Editor {% else %} a Viewer {% endif %}
 </h3>
 
 <p>
@@ -25,7 +15,6 @@
     Login <a href="https://localcontextshub.org/login/" target="_blank">here</a> to Local Contexts Hub and go to My Profile, then Notifications to see and respond to your invitation.
 
     {% include 'snippets/emails/_footer-snippet.html' %}
-
 </p>
 
 {% endautoescape %}

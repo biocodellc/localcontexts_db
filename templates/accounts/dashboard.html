@@ -3,6 +3,14 @@
 
     {% include 'partials/_user-info.html' %}
 
+    {% if user.profile.onboarding_on %}
+        <input id="openOnboarding" value="true" type="hidden">
+    {% else %}
+        <input id="openOnboarding" value="false" type="hidden">
+    {% endif %}
+
+    {% include 'snippets/onboarding.html' %}
+
     <section class="flex-this column align-center">
 
         {% if not researcher and not user_communities and not user_institutions %}
@@ -34,7 +42,14 @@
                         <div class="flex-this column dashcard-text-container">
                             <div><h3 class="dashcard-h3 darkteal-text">{{ researcher.user.get_full_name }}</h3></div>
                             <div>
-                                <p class="black-text dashcard-subheader">Researcher | Location: {% if researcher.user.profile.city_town %} {{ researcher.user.profile.city_town }}, {% endif %} {% if researcher.user.profile.state_province_region %} {{ researcher.user.profile.state_province_region }}, {% endif %} {% if researcher.user.profile.country.name %} {{ researcher.user.profile.country.name }}{% endif %}</p>
+                                <p class="black-text dashcard-subheader">Researcher | Location: 
+                                    {% if researcher.user.profile.city_town %} {{ researcher.user.profile.city_town }}, {% endif %} 
+                                    {% if researcher.user.profile.state_province_region %} {{ researcher.user.profile.state_province_region }}, {% endif %} 
+                                    {% if researcher.user.profile.country.name %} {{ researcher.user.profile.country.name }}{% endif %}
+                                    {% if not researcher.user.profile.city_town and not researcher.user.profile.state_province_region and not researcher.user.profile.country.name %}
+                                        None specified
+                                    {% endif %}
+                                </p>
                             </div>
                             <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p></div>
                         </div>

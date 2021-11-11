@@ -3,8 +3,7 @@ from helpers.models import Notice
 from .models import Researcher
 
 def is_user_researcher(user):
-    target_user = Researcher.objects.filter(user=user).exists()
-    if target_user:
+    if user.profile.is_researcher:
         return Researcher.objects.get(user=user)
     else:
         return False
