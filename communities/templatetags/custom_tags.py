@@ -1,12 +1,9 @@
 from django import template
 from django.urls import reverse
 from django.templatetags.static import static
-from bclabels.models import BCLabel
-from tklabels.models import TKLabel
 from notifications.models import ActionNotification
-from communities.models import Community
 from projects.models import Project, ProjectContributors
-from helpers.models import EntitiesNotified
+from helpers.models import EntitiesNotified, Connections
 
 register = template.Library()
 
@@ -126,3 +123,8 @@ def get_tklabel_img_url(img_type, *args, **kwargs):
     elif img_type =='tkcr':
         image_path = 'images/tk-labels/tk-creative.png'
     return static(image_path)
+
+@register.simple_tag
+def connections_count(community):
+    connections = Connections.objects.get(community=community)
+    return connections.researchers.count() + connections.institutions.count()
