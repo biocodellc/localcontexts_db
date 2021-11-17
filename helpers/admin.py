@@ -23,6 +23,8 @@ class EntitiesNotifiedAdmin(admin.ModelAdmin):
 class LabelNoteAdmin(admin.ModelAdmin):
     list_display = ('bclabel', 'tklabel', 'sender',)
 
+class ConnectionsAdmin(admin.ModelAdmin):
+    list_display = ('community', 'researcher', 'institution')
 
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(LabelTranslation, LabelTranslationAdmin)
@@ -30,4 +32,5 @@ admin.site.register(ProjectComment, ProjectCommentAdmin)
 admin.site.register(ProjectStatus, ProjectStatusAdmin)
 admin.site.register(EntitiesNotified, EntitiesNotifiedAdmin)
 admin.site.register(LabelNote, LabelNoteAdmin)
+admin.site.register(Connections, ConnectionsAdmin)
 

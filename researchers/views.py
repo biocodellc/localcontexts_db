@@ -7,7 +7,7 @@ from helpers.utils import set_notice_defaults
 
 from communities.models import Community
 from notifications.models import ActionNotification
-from helpers.models import ProjectStatus, ProjectComment, Notice, EntitiesNotified
+from helpers.models import ProjectStatus, ProjectComment, Notice, EntitiesNotified, Connections
 from projects.models import ProjectContributors, Project, ProjectPerson
 
 from projects.forms import *
@@ -35,6 +35,9 @@ def connect_researcher(request):
                 data.orcid_auth_token = orcid_token
                 data.orcid = orcid_id
                 data.save()
+
+                # Create a Connections instance
+                Connections.objects.create(researcher=data)
 
                 # Mark current user as researcher
                 request.user.profile.is_researcher = True

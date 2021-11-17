@@ -1,9 +1,8 @@
 from django import template
 from django.urls import reverse
 from notifications.models import ActionNotification
-from helpers.models import ProjectStatus, Notice
-from researchers.models import Researcher
-from projects.models import ProjectContributors, Project
+from helpers.models import Notice, Connections
+from projects.models import ProjectContributors
 
 register = template.Library()
 
@@ -38,3 +37,8 @@ def unread_notifications(researcher):
 def researcher_contributing_projects(researcher):
     contributors = ProjectContributors.objects.filter(researchers=researcher)
     return contributors
+
+@register.simple_tag
+def connections_count(researcher):
+    connections = Connections.objects.get(researcher=researcher)
+    return connections.communities.count()

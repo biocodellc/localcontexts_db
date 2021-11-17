@@ -4,7 +4,7 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified
+from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections
 from notifications.models import ActionNotification
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
@@ -18,7 +18,7 @@ from projects.forms import *
 from bclabels.utils import check_bclabel_type, assign_bclabel_img
 from tklabels.utils import check_tklabel_type, assign_tklabel_img
 from projects.utils import add_to_contributors
-from helpers.utils import dev_prod_or_local
+from helpers.utils import dev_prod_or_local, add_to_connections
 
 from helpers.emails import *
 
@@ -67,9 +67,13 @@ def create_community(request):
             if dev_prod_or_local(request.get_host()) == 'DEV':
                 data.is_approved = True
                 data.save()
+                # Create a Connections instance
+                Connections.objects.create(community=data)
                 return redirect('dashboard')
             else:
                 data.save()
+                # Create a Connections instance
+                Connections.objects.create(community=data)
                 return redirect('confirm-community', data.id)
     return render(request, 'communities/create-community.html', {'form': form})
 
@@ -672,8 +676,14 @@ def apply_labels(request, pk, project_uuid):
                     n.save()
                     # send notification to either institution or researcher
                     if n.placed_by_institution:
+                        # Add institution to community connections, then add community to institution connections
+                        add_to_connections(community, n.placed_by_institution)
+                        add_to_connections(n.placed_by_institution, community)
                         ActionNotification.objects.create(title=title, institution=n.placed_by_institution, notification_type='Labels', reference_id=reference_id)
                     if n.placed_by_researcher:
+                        # Add researcher to community connections, then add community to researcher connections
+                        add_to_connections(community, n.placed_by_researcher)
+                        add_to_connections(n.placed_by_researcher, community)
                         ActionNotification.objects.create(title=title, researcher=n.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
 
             # send email to project creator
