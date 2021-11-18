@@ -691,6 +691,7 @@ def apply_labels(request, pk, project_uuid):
             return redirect('community-projects', community.id)
 
     context = {
+        'member_role': member_role,
         'community': community,
         'project': project,
         'bclabels': bclabels,
@@ -700,7 +701,18 @@ def apply_labels(request, pk, project_uuid):
 
 def connections(request, pk):
     community = Community.objects.get(id=pk)
-    return render(request, 'communities/connections.html', { 'community': community, })
+
+    member_role = check_member_role_community(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        connections = Connections.objects.get(community=community)
+        context = {
+            'member_role': member_role,
+            'community': community,
+            'connections': connections,
+        }
+        return render(request, 'communities/connections.html', context)
 
 def restricted_view(request, pk):
     community = Community.objects.get(id=pk)

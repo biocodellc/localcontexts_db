@@ -323,7 +323,12 @@ def notify_others(request, pk, proj_id):
 
 def connections(request, pk):
     researcher = Researcher.objects.get(id=pk)
-    return render(request, 'researchers/connections.html', { 'researcher': researcher, })
+    connections = Connections.objects.get(researcher=researcher)
+    context = {
+        'researcher': researcher,
+        'connections': connections,
+    }
+    return render(request, 'researchers/connections.html', context)
 
 def restricted_view(request, pk):
     researcher = Researcher.objects.get(id=pk)

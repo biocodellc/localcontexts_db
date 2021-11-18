@@ -475,8 +475,18 @@ def notify_others(request, pk, proj_id):
 
 def connections(request, pk):
     institution = Institution.objects.get(id=pk)
-    return render(request, 'institutions/connections.html', { 'institution': institution, })
 
+    member_role = check_member_role_institution(request.user, institution)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'institutions/restricted.html', {'institution': institution})
+    else:
+        connections = Connections.objects.get(institution=institution)
+        context = {
+            'member_role': member_role,
+            'institution': institution,
+            'connections': connections,
+        }
+        return render(request, 'institutions/connections.html', context)
 
 def restricted_view(request, pk):
     institution = Institution.objects.get(id=pk)

@@ -1,0 +1,35 @@
+<div class="content-card-v2 content-card-space white-bg">
+
+    <div class="w-70">
+        <h2 class="no-top-margin">Connections</h2>
+        <p>
+            Connections are established when Labels are applied to a Project.
+        </p>
+    </div>
+
+</div>
+
+{% if community %}
+    {% if connections %}
+        {% for institution in connections.institutions.all %}
+            <div class="content-card-v2 content-card-space white-bg">
+                {{ institution.institution_name}}
+            </div>
+        {% endfor %}
+        {% for researcher in connections.researchers.all %}
+            <div class="content-card-v2 content-card-space white-bg">
+                {{ researcher.user.get_full_name}}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endif %}
+
+{% if institution or researcher %}
+    {% if connections %}
+        {% for community in connections.communities.all %}
+            <div class="content-card-v2 content-card-space white-bg">
+                {{ community.community_name}}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endif %}
