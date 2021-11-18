@@ -323,12 +323,17 @@ def notify_others(request, pk, proj_id):
 
 def connections(request, pk):
     researcher = Researcher.objects.get(id=pk)
-    connections = Connections.objects.get(researcher=researcher)
-    context = {
-        'researcher': researcher,
-        'connections': connections,
-    }
-    return render(request, 'researchers/connections.html', context)
+    user_can_view = checkif_user_researcher(researcher, request.user)
+    if user_can_view == False:
+            return redirect('researcher-restricted', researcher.id)
+    else:
+        connections = Connections.objects.get(researcher=researcher)
+        context = {
+            'researcher': researcher,
+            'connections': connections,
+            'user_can_view': user_can_view,
+        }
+        return render(request, 'researchers/connections.html', context)
 
 def restricted_view(request, pk):
     researcher = Researcher.objects.get(id=pk)

@@ -246,10 +246,10 @@ function showMore(elem) {
 
     if (expandDiv.classList.contains('show')) {
         elem.innerHTML = 'Show Less <i class="fa fa-angle-up" aria-hidden="true"></i>'
-        contentCard.style.height = "auto"
+        if (contentCard) { contentCard.style.height = "auto" }
     } else {
         elem.innerHTML = 'Show More <i class="fa fa-angle-down" aria-hidden="true"></i>'
-        contentCard.style.height = "auto"
+        if (contentCard) { contentCard.style.height = "auto" }
     }
 }
 

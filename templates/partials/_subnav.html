@@ -8,11 +8,11 @@
             <a href="{% url 'select-label' community.id %}">
                 <div class="{% if 'labels' in request.path %} active-nav {% endif %}">Labels</div>
             </a>
-            <a href="{% url 'members' community.id %}">
-                <div class="{% if 'members' in request.path %} active-nav {% endif %}">Members</div>
-            </a>
             <a href="{% url 'community-connections' community.id %}">
                 <div class="{% if 'connections' in request.path %} active-nav {% endif %}">Connections</div>
+            </a>
+            <a href="{% url 'members' community.id %}">
+                <div class="{% if 'members' in request.path %} active-nav {% endif %}">Members</div>
             </a>
         {% endif %}
 
@@ -22,24 +22,24 @@
             </a>        
             <a href="{% url 'institution-notices' institution.id %}">
                 <div class="{% if 'notices' in request.path %} active-nav {% endif %}">Notices</div>
-            </a>    
-            <a href="{% url 'institution-members' institution.id %}">
-                <div class="{% if 'member' in request.path %} active-nav {% endif %}">Members</div>
             </a>
             <a href="{% url 'institution-connections' institution.id %}">
                 <div class="{% if 'connections' in request.path %} active-nav {% endif %}">Connections</div>
+            </a>    
+            <a href="{% url 'institution-members' institution.id %}">
+                <div class="{% if 'member' in request.path %} active-nav {% endif %}">Members</div>
             </a>
         {% endif %}
 
         {% if researcher %} 
             <a href="{% url 'researcher-projects' researcher.id %}">
                 <div class="{% if 'projects' in request.path %} active-nav {% endif %}">Projects</div>
-            </a>        
-            <a href="{% url 'researcher-notices' researcher.id %}">
-                <div class="{% if 'notices' in request.path %} active-nav {% endif %}">Notices</div>
             </a>
             <a href="{% url 'researcher-connections' researcher.id %}">
                 <div class="{% if 'connections' in request.path %} active-nav {% endif %}">Connections</div>
+            </a>        
+            <a href="{% url 'researcher-notices' researcher.id %}">
+                <div class="{% if 'notices' in request.path %} active-nav {% endif %}">Notices</div>
             </a>
         {% endif %}
 
