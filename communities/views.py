@@ -698,6 +698,10 @@ def apply_labels(request, pk, project_uuid):
     }
     return render(request, 'communities/apply-labels.html', context)
 
+def connections(request, pk):
+    community = Community.objects.get(id=pk)
+    return render(request, 'communities/connections.html', { 'community': community, })
+
 def restricted_view(request, pk):
     community = Community.objects.get(id=pk)
     return render(request, 'communities/restricted.html', {'community': community, })

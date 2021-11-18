@@ -12,6 +12,8 @@ urlpatterns = [
     path('researcher/projects/edit-project/<str:researcher_id>/<str:project_uuid>', views.edit_project, name="researcher-edit-project"),
     path('researcher/projects/notify/<str:pk>/<str:proj_id>/', views.notify_others, name="researcher-notify-others"),
 
+    path('researcher/connections/<str:pk>/', views.connections, name="researcher-connections"),
+
     path('researcher/restricted/<str:pk>', views.restricted_view, name="researcher-restricted"),
 
 ]

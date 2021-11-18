@@ -20,6 +20,8 @@ urlpatterns = [
     path('institution/projects/edit-project/<str:institution_id>/<str:project_uuid>', views.edit_project, name="inst-edit-project"),
     path('institution/projects/notify/<str:pk>/<str:proj_id>/', views.notify_others, name="institution-notify-others"),
 
+    path('institution/connections/<str:pk>/', views.connections, name="institution-connections"),
+
     path('institution/restricted/<str:pk>/', views.restricted_view, name="institution-restricted"),
 
 ]

@@ -1,7 +1,7 @@
-{% extends 'base.html' %} {% block title %} | Home {% endblock %}{% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
+{% extends 'base.html' %} {% block title %} | Home {% endblock %}{% load static %} {% block content %} {% include 'partials/headers/_auth-header.html' %}
 <div class="grey-bg">
 
-    {% include 'partials/_user-info.html' %}
+    {% include 'partials/infocards/_user-info.html' %}
 
     {% if user.profile.onboarding_on %}
         <input id="openOnboarding" value="true" type="hidden">
@@ -114,5 +114,5 @@
     </section>
 
 </div>
-{% include 'partials/_auth-footer.html' %}
+{% include 'partials/footers/_auth-footer.html' %}
 {% endblock %}

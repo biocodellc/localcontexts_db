@@ -473,6 +473,11 @@ def notify_others(request, pk, proj_id):
         }
         return render(request, 'institutions/notify.html', context)
 
+def connections(request, pk):
+    institution = Institution.objects.get(id=pk)
+    return render(request, 'institutions/connections.html', { 'institution': institution, })
+
+
 def restricted_view(request, pk):
     institution = Institution.objects.get(id=pk)
     return render(request, 'institutions/restricted.html', {'institution': institution, })
