@@ -29,11 +29,13 @@
                     </div>
                 </div>
                 <div id="expand-div-{{ institution.institution_name }}" class="hide">
-                    <p class="no-bottom-margin">
-                        <span class="bold">Description</span> | {{ institution.description }} <br><br>
-                        <span class="bold">Contact Name</span> | {{ institution.contact_name }} <br><br>
-                        <span class="bold">Contact Email</span> | {{ institution.contact_email }} <br><br>
-                    </p>                       
+                    <div class="border-bottom-dash-teal">
+                        <p class="no-bottom-margin">
+                            <span class="bold">Description</span> | {{ institution.description }} <br><br>
+                            <span class="bold">Contact Name</span> | {{ institution.contact_name }} 
+                            <span class="bold margin-left-8">Contact Email</span> | {{ institution.contact_email }} <br><br>
+                        </p>                        
+                    </div>
                 </div>
             </div>
 
@@ -50,10 +52,12 @@
                     </div>
                 </div>
                 <div id="expand-div-{{ researcher.id }}" class="hide">
-                    <p class="no-bottom-margin">
-                        <span class="bold">Description</span> | {{ researcher.description }} <br><br>
-                        <span class="bold">Contact Email</span> | {{ researcher.contact_email }} <br><br>
-                    </p>                       
+                    <div class="border-bottom-dash-teal">
+                        <p class="no-bottom-margin">
+                            <span class="bold">Description</span> | {{ researcher.description }} <br><br>
+                            <span class="bold">Contact Email</span> | {{ researcher.contact_email }} <br><br>
+                        </p>   
+                    </div>                    
                 </div>
             </div>
 
@@ -75,11 +79,13 @@
                     </div>
                 </div>
                 <div id="expand-div-{{ community.community_name }}" class="hide">
-                    <p class="no-bottom-margin">
-                        <span class="bold">Description</span> | {{ community.description }} <br><br>
-                        <span class="bold">Contact Name</span> | {{ community.contact_name }} <br><br>
-                        <span class="bold">Contact Email</span> | {{ community.contact_email }} <br><br>
-                    </p>                       
+                    <div class="border-bottom-dash-teal">
+                        <p class="no-bottom-margin">
+                            <span class="bold">Description</span> | {{ community.description }} <br><br>
+                            <span class="bold">Contact Name</span> | {{ community.contact_name }} <br><br>
+                            <span class="bold">Contact Email</span> | {{ community.contact_email }} <br><br>
+                        </p>      
+                    </div>                 
                 </div>
             </div>
 

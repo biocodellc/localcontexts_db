@@ -26,6 +26,8 @@ from .forms import *
 from .models import *
 from .utils import *
 
+from itertools import chain
+
 # Connect
 @login_required(login_url='login')
 def connect_community(request):
@@ -707,10 +709,17 @@ def connections(request, pk):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         connections = Connections.objects.get(community=community)
+        bclabels = BCLabel.objects.filter(community=community)
+        tklabels = TKLabel.objects.filter(community=community)
+
+        # combine two querysets
+        labels = list(chain(bclabels,tklabels))
+
         context = {
             'member_role': member_role,
             'community': community,
             'connections': connections,
+            'labels': labels,
         }
         return render(request, 'communities/connections.html', context)
 
