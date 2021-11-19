@@ -28,6 +28,11 @@ from .utils import *
 
 from itertools import chain
 
+# pdfs
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
 # Connect
 @login_required(login_url='login')
 def connect_community(request):
@@ -726,3 +731,34 @@ def connections(request, pk):
 def restricted_view(request, pk):
     community = Community.objects.get(id=pk)
     return render(request, 'communities/restricted.html', {'community': community, })
+
+# show community Labels in a PDF
+def labels_pdf(request, pk):
+    # Get approved labels customized by community
+    community = Community.objects.get(id=pk)
+    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
+    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+    # combine two querysets -- this will be the pdf content
+    # labels = list(chain(bclabels,tklabels))
+
+    template_path = 'snippets/pdfs/community-labels.html'
+    context = {'community': community, 'bclabels': bclabels, 'tklabels': tklabels,}
+
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    # if download:
+    response['Content-Disposition'] = 'attachment; filename="labels.pdf"'
+    
+    # if display
+    # response['Content-Disposition'] = 'filename="labels.pdf"'
+
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response

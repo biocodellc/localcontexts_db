@@ -13,15 +13,20 @@
 
 <div class="content-card-v2 content-card-space white-bg">
 
-    <div class="w-80">
+    <div class="w-100">
+        <h2 class="no-bottom-margin no-top-margin">Customized Labels</h2>
+
         {% if bclabels or tklabels %}
-            <div>
-                <h2>Customized Labels</h2>
-                <p>You currently have {{ bclabels.count }} BC Labels and {{ tklabels.count }} TK Labels customized</p>
+            <div class="flex-this space-between">
+                <div>
+                    <p>You currently have {{ bclabels.count }} BC Labels and {{ tklabels.count }} TK Labels customized</p>
+                </div>   
+                <div>
+                    <a class="white-btn" href="{% url 'labels-pdf' community.id %}" target="_blank">View Labels as PDF</a>
+                </div>                     
             </div>
         {% else %}
-            <div>
-                <h2>Customized Labels</h2>
+            <div class="w-60">
                 <p>Once you have selected a Label to customize from the options below (Traditional Knowledge Labels and Biocultural Labels) and customize them, they will appear here.</p>
             </div>
         {% endif %}
