@@ -1,9 +1,6 @@
 import uuid
 from django.db import models
 from communities.models import Community
-from researchers.models import Researcher
-from institutions.models import Institution
-from projects.models import Project
 from django.contrib.auth.models import User
 
 class BCLabel(models.Model):
