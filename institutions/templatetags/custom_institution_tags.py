@@ -1,8 +1,11 @@
 from django import template
 from django.urls import reverse
+from communities.views import projects
 from notifications.models import ActionNotification
 from helpers.models import Notice, Connections
 from projects.models import ProjectContributors
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
 
 register = template.Library()
 
@@ -42,5 +45,24 @@ def institution_contributing_projects(institution):
 def connections_count(institution):
     connections = Connections.objects.get(institution=institution)
     return connections.communities.count()
+
+@register.simple_tag
+def connections_projects_with_labels(community, organization):
+    # get all labels from target community
+    bclabels = BCLabel.objects.filter(community=community)
+    tklabels = TKLabel.objects.filter(community=community)
+
+    target_projects = []
+    for bclabel in bclabels:
+        for project in bclabel.project_bclabels.all():
+            if project in organization.projects.all():
+                target_projects.append(project)
+    for tklabel in tklabels:
+        for project in tklabel.project_tklabels.all():
+            if project in organization.projects.all():
+                target_projects.append(project)
+    
+    projects = set(target_projects)
+    return projects
 
     

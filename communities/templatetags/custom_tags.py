@@ -1,9 +1,13 @@
 from django import template
 from django.urls import reverse
 from django.templatetags.static import static
+from communities.models import Community
+from institutions.models import Institution
 from notifications.models import ActionNotification
 from projects.models import Project, ProjectContributors
 from helpers.models import EntitiesNotified, Connections
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
 
 register = template.Library()
 
@@ -128,3 +132,31 @@ def get_tklabel_img_url(img_type, *args, **kwargs):
 def connections_count(community):
     connections = Connections.objects.get(community=community)
     return connections.researchers.count() + connections.institutions.count()
+
+@register.simple_tag
+def connections_organization_projects(community, organization):
+    # can pass instance of institution or researcher 
+
+    # get all labels from target community
+    bclabels = BCLabel.objects.filter(community=community)
+    tklabels = TKLabel.objects.filter(community=community)
+
+    # set up a storage of projects to check for these labels
+    all_projects = []
+    # if project has particular label from these lists, append project
+    for bclabel in bclabels:
+        for project in bclabel.project_bclabels.all():
+            all_projects.append(project)
+    for tklabel in tklabels:
+        for project in tklabel.project_tklabels.all():
+            all_projects.append(project)
+    
+    # if project is found in target institution projects, append to target list
+    target_projects = []
+    for project in all_projects:
+        if project in organization.projects.all():
+            target_projects.append(project)
+
+    # Removes duplicates from the list
+    projects = set(target_projects)
+    return projects

@@ -1,3 +1,5 @@
+{% load static %}{% load custom_tags %} {% load custom_institution_tags %} {% load custom_researcher_tags %}
+
 <div class="content-card-v2 content-card-space white-bg">
 
     <div class="w-70">
@@ -36,6 +38,16 @@
                             <span class="bold margin-left-8">Contact Email</span> | {{ institution.contact_email }} <br><br>
                         </p>                        
                     </div>
+
+                    <div>
+                        <h2>Projects</h2>
+                        <p>
+                            {% connections_organization_projects community institution as projects%}
+                            {% for project in projects %}
+                                {{ project.title }}
+                            {% endfor %}
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -57,7 +69,18 @@
                             <span class="bold">Description</span> | {{ researcher.description }} <br><br>
                             <span class="bold">Contact Email</span> | {{ researcher.contact_email }} <br><br>
                         </p>   
-                    </div>                    
+                    </div> 
+                    
+                    <div>
+                        <h2>Projects</h2>
+                        <p>
+                            {% connections_organization_projects community researcher as projects%}
+                            {% for project in projects %}
+                                {{ project.title }}
+                            {% endfor %}
+                        </p>
+                    </div>
+
                 </div>
             </div>
 
@@ -85,7 +108,22 @@
                             <span class="bold">Contact Name</span> | {{ community.contact_name }} <br><br>
                             <span class="bold">Contact Email</span> | {{ community.contact_email }} <br><br>
                         </p>      
-                    </div>                 
+                    </div>   
+                    
+                    <div>
+                        <h2>Projects</h2>
+                        <p>
+                            {% if researcher %}
+                                {% connections_projects_with_labels community researcher as projects %}
+                            {% endif %}
+                            {% if institution %}
+                                {% connections_projects_with_labels community institution as projects %}
+                            {% endif %}
+                            {% for project in projects %}
+                                {{ project.title }}
+                            {% endfor %}
+                        </p>
+                    </div>
                 </div>
             </div>
 
