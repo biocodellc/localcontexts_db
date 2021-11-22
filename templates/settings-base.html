@@ -1,9 +1,9 @@
-{% extends 'base.html' %} {% block title %} | Update Profile {% endblock %} {% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
+{% extends 'base.html' %} {% block title %} | Update Profile {% endblock %} {% load static %} {% block content %} {% include 'partials/headers/_auth-header.html' %}
 
 {% if user.is_authenticated %}
 
 <section class="grey-bg">
-    {% include 'partials/_user-info.html' %}
+    {% include 'partials/infocards/_user-info.html' %}
 
         <div class="content-card-v2 content-card-space white-bg flex-this column">
             <h2>User Settings</h2>
@@ -75,5 +75,5 @@
 
 {% endif %}
 
-{% include 'partials/_auth-footer.html' %}
+{% include 'partials/footers/_auth-footer.html' %}
 {% endblock %}

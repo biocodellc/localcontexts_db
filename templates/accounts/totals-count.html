@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} | Home {% endblock %}{% load static %} {% block content %} {% include 'partials/_auth-header.html' %}
+{% extends 'base.html' %} {% block title %} | Home {% endblock %}{% load static %} {% block content %} {% include 'partials/headers/_auth-header.html' %}
 
 <section class="grey-bg">
     <div class="content-card-v2 content-card-space white-bg ">
@@ -65,5 +65,5 @@
     #colorPicker > div:nth-of-type(4) { background-color: #468076;}
 </style>
 
-{% include 'partials/_auth-footer.html' %}
+{% include 'partials/footers/_auth-footer.html' %}
 {% endblock %}

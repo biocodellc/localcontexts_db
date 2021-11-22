@@ -33,7 +33,7 @@
                         {% if institution %} Institution {% endif %} 
                         Contact Email
                     </label>
-                    {{ form.contact_email }}
+                    {{ form.contact_email }} <br>
                 </div>
             </div>
     
@@ -48,6 +48,15 @@
         {% if form.errors %}
             <small class="red-text">{{form.errors}}</small>
         {% endif %}
+        
+        <div class="flex-this">
+            <div class="margin-top-16">
+                <input type="checkbox" required>
+            </div>
+            <p class="no-bottom-margin margin-left-8 w-70">
+                 By checking this box you are agreeing to this contact email being visible in the Registry for Local Contexts Hub users
+            </p>
+        </div>
 
         <div class="text-align-right">
             <button class="action-btn margin-top-2 ">Get Started <i class="fa fa-long-arrow-right"></i></button>

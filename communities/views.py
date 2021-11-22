@@ -4,7 +4,7 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified
+from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections
 from notifications.models import ActionNotification
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
@@ -18,13 +18,20 @@ from projects.forms import *
 from bclabels.utils import check_bclabel_type, assign_bclabel_img
 from tklabels.utils import check_tklabel_type, assign_tklabel_img
 from projects.utils import add_to_contributors
-from helpers.utils import dev_prod_or_local
+from helpers.utils import dev_prod_or_local, add_to_connections
 
 from helpers.emails import *
 
 from .forms import *
 from .models import *
 from .utils import *
+
+from itertools import chain
+
+# pdfs
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 
 # Connect
 @login_required(login_url='login')
@@ -67,9 +74,13 @@ def create_community(request):
             if dev_prod_or_local(request.get_host()) == 'DEV':
                 data.is_approved = True
                 data.save()
+                # Create a Connections instance
+                Connections.objects.create(community=data)
                 return redirect('dashboard')
             else:
                 data.save()
+                # Create a Connections instance
+                Connections.objects.create(community=data)
                 return redirect('confirm-community', data.id)
     return render(request, 'communities/create-community.html', {'form': form})
 
@@ -672,8 +683,14 @@ def apply_labels(request, pk, project_uuid):
                     n.save()
                     # send notification to either institution or researcher
                     if n.placed_by_institution:
+                        # Add institution to community connections, then add community to institution connections
+                        add_to_connections(community, n.placed_by_institution)
+                        add_to_connections(n.placed_by_institution, community)
                         ActionNotification.objects.create(title=title, institution=n.placed_by_institution, notification_type='Labels', reference_id=reference_id)
                     if n.placed_by_researcher:
+                        # Add researcher to community connections, then add community to researcher connections
+                        add_to_connections(community, n.placed_by_researcher)
+                        add_to_connections(n.placed_by_researcher, community)
                         ActionNotification.objects.create(title=title, researcher=n.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
 
             # send email to project creator
@@ -681,6 +698,7 @@ def apply_labels(request, pk, project_uuid):
             return redirect('community-projects', community.id)
 
     context = {
+        'member_role': member_role,
         'community': community,
         'project': project,
         'bclabels': bclabels,
@@ -688,6 +706,59 @@ def apply_labels(request, pk, project_uuid):
     }
     return render(request, 'communities/apply-labels.html', context)
 
+def connections(request, pk):
+    community = Community.objects.get(id=pk)
+
+    member_role = check_member_role_community(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        connections = Connections.objects.get(community=community)
+        bclabels = BCLabel.objects.filter(community=community)
+        tklabels = TKLabel.objects.filter(community=community)
+
+        # combine two querysets
+        labels = list(chain(bclabels,tklabels))
+
+        context = {
+            'member_role': member_role,
+            'community': community,
+            'connections': connections,
+            'labels': labels,
+        }
+        return render(request, 'communities/connections.html', context)
+
 def restricted_view(request, pk):
     community = Community.objects.get(id=pk)
     return render(request, 'communities/restricted.html', {'community': community, })
+
+# show community Labels in a PDF
+def labels_pdf(request, pk):
+    # Get approved labels customized by community
+    community = Community.objects.get(id=pk)
+    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
+    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+    # combine two querysets -- this will be the pdf content
+    # labels = list(chain(bclabels,tklabels))
+
+    template_path = 'snippets/pdfs/community-labels.html'
+    context = {'community': community, 'bclabels': bclabels, 'tklabels': tklabels,}
+
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    # if download:
+    response['Content-Disposition'] = 'attachment; filename="labels.pdf"'
+    
+    # if display
+    # response['Content-Disposition'] = 'filename="labels.pdf"'
+
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response

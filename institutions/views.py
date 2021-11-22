@@ -10,7 +10,7 @@ from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson
 from communities.models import Community
 from notifications.models import ActionNotification
-from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified
+from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified, Connections
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
@@ -68,9 +68,13 @@ def create_institution(request):
                 if dev_prod_or_local(request.get_host()) == 'DEV':
                     data.is_approved = True
                     data.save()
+                    # Create a Connections instance
+                    Connections.objects.create(institution=data)
                     return redirect('dashboard')
                 else:
                     data.save()
+                    # Create a Connections instance
+                    Connections.objects.create(institution=data)
                     return redirect('confirm-institution', data.id)
     return render(request, 'institutions/create-institution.html', {'form': form})
 
@@ -110,6 +114,9 @@ def create_institution_noror(request):
             data.institution_creator = request.user
             data.is_ror = False
             data.save()
+
+            #  Create a Connections instance
+            Connections.objects.create(institution=data)
         
             return redirect('confirm-institution', data.id)
     return render(request, 'institutions/create-institution-noror.html', {'form': form,})
@@ -465,6 +472,21 @@ def notify_others(request, pk, proj_id):
             'member_role': member_role,
         }
         return render(request, 'institutions/notify.html', context)
+
+def connections(request, pk):
+    institution = Institution.objects.get(id=pk)
+
+    member_role = check_member_role_institution(request.user, institution)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'institutions/restricted.html', {'institution': institution})
+    else:
+        connections = Connections.objects.get(institution=institution)
+        context = {
+            'member_role': member_role,
+            'institution': institution,
+            'connections': connections,
+        }
+        return render(request, 'institutions/connections.html', context)
 
 def restricted_view(request, pk):
     institution = Institution.objects.get(id=pk)

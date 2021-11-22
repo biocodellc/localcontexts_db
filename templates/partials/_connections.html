@@ -1,0 +1,148 @@
+{% load static %}{% load custom_tags %} {% load custom_institution_tags %} {% load custom_researcher_tags %}
+
+<div class="content-card-v2 content-card-space white-bg">
+
+    <div class="w-70">
+        <h2 class="no-top-margin">Connections</h2>
+        <p>
+            Connections are established when Labels are applied to a Project.
+            {% if community %}
+            Here you can see all the institutions and researchers that have notified your community of a Project where you have applied Labels.
+            {% endif %}
+            {% if institution or researcher %}
+            Here you can see all the communities that have applied at least one Label to your Projects.
+            {% endif %}
+        </p>
+    </div>
+
+</div>
+
+{% if community %}
+    {% if connections %}
+        {% for institution in connections.institutions.all %}
+
+            <div class="content-card-v2 content-card-space white-bg full-div-card-{{ institution.institution_name }}">
+                <div class="flex-this space-between">
+                    <div>
+                        <h2 class="darkteal-text no-top-margin no-bottom-margin"> {{ institution.institution_name}} </h2>
+                    </div>    
+                    <div>
+                        <span id="{{ institution.institution_name }}" class="white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+                <div id="expand-div-{{ institution.institution_name }}" class="hide">
+                    <div class="border-bottom-dash-teal">
+                        <p class="no-bottom-margin">
+                            <span class="bold">Description</span> | {{ institution.description }} <br><br>
+                            <span class="bold">Contact Name</span> | {{ institution.contact_name }} 
+                            <span class="bold margin-left-8">Contact Email</span> | {{ institution.contact_email }} <br><br>
+                        </p>                        
+                    </div>
+
+                    <div>
+                        <h3> Projects </h3>
+                        <ul>
+                            {% connections_organization_projects community institution as projects%}
+                            {% for project in projects %}
+                                <li>
+                                    <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text">{{ project.title }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+        {% for researcher in connections.researchers.all %}
+
+            <div class="content-card-v2 content-card-space white-bg full-div-card-{{ researcher.id }}">
+                <div class="flex-this space-between">
+                    <div>
+                        <h2 class="darkteal-text no-top-margin no-bottom-margin"> {{ researcher.user.get_full_name }} </h2>
+                    </div>    
+                    <div>
+                        <span id="{{ researcher.id }}" class="white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+                <div id="expand-div-{{ researcher.id }}" class="hide">
+                    <div class="border-bottom-dash-teal">
+                        <p class="no-bottom-margin">
+                            <span class="bold">Description</span> | {{ researcher.description }} <br><br>
+                            <span class="bold">Contact Email</span> | {{ researcher.contact_email }} <br><br>
+                        </p>   
+                    </div> 
+                    
+                    <div>
+                        <h3> Projects </h3>
+                        <p>
+                            <ul>
+                                {% connections_organization_projects community researcher as projects%}
+                                {% for project in projects %}
+                                    <li>
+                                        <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text">{{ project.title }}</a>
+                                    </li>
+                                {% endfor %}                                
+                            </ul>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        {% endfor %}
+    {% endif %}
+{% endif %}
+
+{% if institution or researcher %}
+    {% if connections %}
+        {% for community in connections.communities.all %}
+
+            <div class="content-card-v2 content-card-space white-bg full-div-card-{{ community.community_name }}">
+                <div class="flex-this space-between">
+                    <div>
+                        <h2 class="darkteal-text no-top-margin no-bottom-margin"> {{ community.community_name}} </h2>
+                    </div>    
+                    <div>
+                        <span id="{{ community.community_name }}" class="white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+                <div id="expand-div-{{ community.community_name }}" class="hide">
+                    <div class="border-bottom-dash-teal">
+                        <p class="no-bottom-margin">
+                            <span class="bold">Description</span> | {{ community.description }} <br><br>
+                            <span class="bold">Contact Name</span> | {{ community.contact_name }} 
+                            <span class="bold margin-left-8"> Contact Email</span> | {{ community.contact_email }} <br><br>
+                        </p>      
+                    </div>   
+                    
+                    <div>
+                        <h3> Projects </h3>
+                        <ul>
+                            {% if researcher %}
+                                {% connections_projects_with_labels community researcher as projects %}
+                            {% endif %}
+                            {% if institution %}
+                                {% connections_projects_with_labels community institution as projects %}
+                            {% endif %}
+                            {% for project in projects %}
+                                {% if researcher %}
+                                    <li>
+                                        <a href="{% anchor 'researcher-projects' project.unique_id researcher.id %}" class="darkteal-text">{{ project.title }}</a>
+                                    </li>
+                                {% endif %}
+
+                                {% if institution %}
+                                    <li>
+                                        <a href="{% anchor 'institution-projects' project.unique_id institution.id %}" class="darkteal-text">{{ project.title }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>                           
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+    {% endif %}
+{% endif %}

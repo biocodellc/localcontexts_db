@@ -127,7 +127,10 @@
     
                     <div class="stats-card flex-this space-between">
                         <div>
-                            <p></p>
+                            <p>
+                                {% connections_count institution as connect_count %}
+                                {% if connect_count < 10 %}0{{ connect_count }}{% else %}{{ connect_count }}{% endif %}
+                            </p>
                         </div>
                         <div><span>Connections</span></div>
                     </div>
