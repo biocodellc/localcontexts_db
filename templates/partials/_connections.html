@@ -40,13 +40,15 @@
                     </div>
 
                     <div>
-                        <h2>Projects</h2>
-                        <p>
+                        <h3> Projects </h3>
+                        <ul>
                             {% connections_organization_projects community institution as projects%}
                             {% for project in projects %}
-                                {{ project.title }}
+                                <li>
+                                    <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text">{{ project.title }}</a>
+                                </li>
                             {% endfor %}
-                        </p>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -72,12 +74,16 @@
                     </div> 
                     
                     <div>
-                        <h2>Projects</h2>
+                        <h3> Projects </h3>
                         <p>
-                            {% connections_organization_projects community researcher as projects%}
-                            {% for project in projects %}
-                                {{ project.title }}
-                            {% endfor %}
+                            <ul>
+                                {% connections_organization_projects community researcher as projects%}
+                                {% for project in projects %}
+                                    <li>
+                                        <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text">{{ project.title }}</a>
+                                    </li>
+                                {% endfor %}                                
+                            </ul>
                         </p>
                     </div>
 
@@ -105,14 +111,14 @@
                     <div class="border-bottom-dash-teal">
                         <p class="no-bottom-margin">
                             <span class="bold">Description</span> | {{ community.description }} <br><br>
-                            <span class="bold">Contact Name</span> | {{ community.contact_name }} <br><br>
-                            <span class="bold">Contact Email</span> | {{ community.contact_email }} <br><br>
+                            <span class="bold">Contact Name</span> | {{ community.contact_name }} 
+                            <span class="bold margin-left-8"> Contact Email</span> | {{ community.contact_email }} <br><br>
                         </p>      
                     </div>   
                     
                     <div>
-                        <h2>Projects</h2>
-                        <p>
+                        <h3> Projects </h3>
+                        <ul>
                             {% if researcher %}
                                 {% connections_projects_with_labels community researcher as projects %}
                             {% endif %}
@@ -120,9 +126,19 @@
                                 {% connections_projects_with_labels community institution as projects %}
                             {% endif %}
                             {% for project in projects %}
-                                {{ project.title }}
+                                {% if researcher %}
+                                    <li>
+                                        <a href="{% anchor 'researcher-projects' project.unique_id researcher.id %}" class="darkteal-text">{{ project.title }}</a>
+                                    </li>
+                                {% endif %}
+
+                                {% if institution %}
+                                    <li>
+                                        <a href="{% anchor 'institution-projects' project.unique_id institution.id %}" class="darkteal-text">{{ project.title }}</a>
+                                    </li>
+                                {% endif %}
                             {% endfor %}
-                        </p>
+                        </ul>                           
                     </div>
                 </div>
             </div>
