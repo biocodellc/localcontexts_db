@@ -24,24 +24,12 @@ SECRET_KEY = os.environ['PROD_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ['DEBUG_VALUE'] == 'True'
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'localcontextshub.org',
-    'www.localcontextshub.org',
-    'api.localcontextshub.org',
-
-    'localcontexts.herokuapp.com',
-    
-    'biocode-localcontests-db-stage.uc.r.appspot.com',
-    'default.biocode-localcontests-db-stage.appspot.com',
-    'biocode-localcontests-db-stage.appspot.com',
-    'anth-ja77-local-contexts-8985.uc.r.appspot.com',
-    'default.anth-ja77-local-contexts-8985.appspot.com',
-    'anth-ja77-local-contexts-8985.appspot.com',
-
-    'anth-ja77-lc-dev-42d5.uc.r.appspot.com',
-]
+# SECURITY WARNING: App Engine's security features ensure that it is safe to
+# have ALLOWED_HOSTS = ['*'] when the app is deployed. If you deploy a Django
+# app not on App Engine, make sure to set an appropriate host here.
+# See https://docs.djangoproject.com/en/1.10/ref/settings/
+# Also see https://github.com/GoogleCloudPlatform/python-docs-samples/blob/master/appengine/standard/django/mysite/settings.py
+ALLOWED_HOSTS = ['*']
 
 # https://docs.djangoproject.com/en/3.1/ref/settings/#std:setting-ADMINS
 # For when DEBUG = FALSE, sends emails with site errors
