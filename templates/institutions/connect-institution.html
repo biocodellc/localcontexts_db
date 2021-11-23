@@ -2,12 +2,17 @@
     
 <div class="flex-this column">
 
-    <div class="form-heading flex-this column w-90">
-        <h2 class="darkteal-text margin-bottom-2">Institution Account</h2>
-        <p>Please first check if your institution is already registered. If your institution is not in our register, you can create a new institution account.</p>    
+    {% include 'partials/_alerts.html' %}
+
+    <div class="flex-this column w-100">
+        <div class="flex-this space-between">
+            <div><h2 class="darkteal-text margin-bottom-2">Institution Account</h2></div>
+            <div class="margin-top-16">or <a class="darkteal-text" href="{% url 'select-account' %}">Back to choose an account</a>  </div>
+        </div>
+        <p class="w-90">Please first check if your institution is already registered. If your institution is not in our register, you can create a new institution account.</p>    
     </div>
 
-     <div>
+     <div class="90">
          <label for="institution-search">Search our institution register</label><br>
          {% if institutions %}
             <input id="selectedOrganizationInputList" list="institutions" name="institutions" class="w-100" placeholder="Select an institution from the hub">
@@ -48,8 +53,6 @@
                 <input id="hidden-target-input" type="hidden" value="" name="organization_name">
 
                 <div class="flex-this column w-100">
-
-                    <!-- <label class="pad-top-1-5" for="community">Community Name</label> -->
                     
                         <div class="w-50 pad-top-1-5 margin-right-1">
                             <label class="pad-top-1-5" for="role">Requested Responsibility</label><br>
@@ -64,8 +67,6 @@
                         {% if form.errors %}
                             <small class="red-text">{{ form.errors }}</small>
                         {% endif %}
-
-                    {% include 'partials/_alerts.html' %}
         
                 </div>
                 <div class="text-align-right">
