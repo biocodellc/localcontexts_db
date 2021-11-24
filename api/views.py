@@ -13,12 +13,15 @@ from projects.models import Project
 @api_view(['GET'])
 def apiOverview(request, format=None):
     api_urls = {
-        'projects': reverse('api-projects', request=request, format=format),
-        'project detail view': '/projects/<PROJECT_UNIQUE_ID>/',
+        'projects list': reverse('api-projects', request=request, format=format),
+        'project detail': '/projects/<PROJECT_UNIQUE_ID>/',
         'projects by username': '/projects/users/<USERNAME>/',
         'projects by institution id': '/projects/institutions/<INSTITUTION_ID>/',
         'projects by researcher id': '/projects/researchers/<RESEARCHER_ID>/',
         'API Documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
+        'Usage Guide for TK/BC Notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf',
+        'Usage Guide for Institution Notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf',
+        'Usage Guide for BC and TK Labels': 'COMING SOON',
     }
     return Response(api_urls)
 

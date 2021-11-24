@@ -2,9 +2,14 @@
 
 <div class="flex-this column">
 
-    <div class="form-heading flex-this column w-90">
-        <h2 class="darkteal-text margin-bottom-2">Community Account</h2>
-        <p>Please first check if your community is already registered. If your community is not in our register, you can create a new community account.</p>    
+    {% include 'partials/_alerts.html' %}
+
+    <div class="flex-this column w-100">
+        <div class="flex-this space-between">
+            <div><h2 class="darkteal-text margin-bottom-2">Community Account</h2></div>
+            <div class="margin-top-16">or <a class="darkteal-text" href="{% url 'select-account' %}">Back to choose an account</a>  </div>
+        </div>
+        <p class="w-90">Please first check if your community is already registered. If your community is not in our register, you can create a new community account.</p>    
     </div>
 
      <div>
@@ -36,8 +41,8 @@
 
             <div>
                 <h2 style="color: #333333;">Request to join</h2>  
-                <p>Every profile has various roles within the community. These roles are:<br>
-                    <strong>Administrator:</strong> responsible for carrying out membership responsibilities<br>
+                <p>Every account has various responsibilities within the community. These roles are:<br>
+                    <strong>Administrator:</strong> responsible for adding, editing and removing members<br>
                     <strong>Editor:</strong> responsible for customizing Labels and Projects<br>
                     <strong>Viewer:</strong> can view activity happening on the hub
                 </p>  
@@ -64,8 +69,6 @@
                         {% if form.errors %}
                             <small class="red-text">{{ form.errors }}</small>
                         {% endif %}
-
-                    {% include 'partials/_alerts.html' %}
         
                 </div>
                 <div class="text-align-right">

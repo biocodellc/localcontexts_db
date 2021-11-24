@@ -8,7 +8,7 @@ from helpers.utils import set_notice_defaults, dev_prod_or_local
 
 from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson
-from communities.models import Community
+from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
 from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified, Connections
 
@@ -32,16 +32,23 @@ def connect_institution(request):
         if Institution.objects.filter(institution_name=institution_name).exists():
             institution = Institution.objects.get(institution_name=institution_name)
 
-            data = form.save(commit=False)
-            data.user_from = request.user
-            data.institution = institution
-            data.user_to = institution.institution_creator
-            data.save()
+            # If join request exists or user is already a member, display Error message
+            request_exists = JoinRequest.objects.filter(user_from=request.user, institution=institution).exists()
+            user_is_member = institution.is_user_in_institution(request.user)
 
-            # Send institution creator email
-            send_join_request_email_admin(request.user, institution)
-            
-            return redirect('dashboard')
+            if request_exists or user_is_member:
+                messages.add_message(request, messages.ERROR, "Either you have already sent this request or are currently a member of this institution.")
+                return redirect('connect-institution')
+            else:
+                data = form.save(commit=False)
+                data.user_from = request.user
+                data.institution = institution
+                data.user_to = institution.institution_creator
+                data.save()
+
+                # Send institution creator email
+                send_join_request_email_admin(request.user, institution)
+                return redirect('dashboard')
         else:
             messages.add_message(request, messages.ERROR, 'Institution not in registry')
             return redirect('connect-institution')

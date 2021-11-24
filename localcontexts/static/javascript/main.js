@@ -712,13 +712,14 @@ if (window.location.href.includes('connect-community') || window.location.href.i
     let nameToCheckInput = document.querySelector('.nameToCheck')
 
     joinBtn.addEventListener('click', function(e) {
+        console.log(nameToCheckInput.value, inputList.value)
+        // handle when inputlist value is ''
         if (!inputList.value) {
             alert('Please select an organization from the list')
         } else if (nameToCheckInput.value != inputList.value) {
-            alert('This organization is not yet registered in the Hub')
+            alert('This organization is not registered in the Hub')
         } else {
             e.preventDefault()
-            // handle when inputlist value is ''
             let modal = document.getElementById('joinRequestModal')
             if (modal.style.display == 'none') {
                 modal.style.display = 'block'

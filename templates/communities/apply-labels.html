@@ -115,7 +115,14 @@
                                         </div> 
 
                                         <div class="notice-checkbox-container margin-bottom-8 auto-margin margin-top-16">
-                                            <input id="checked-label-{{ bclabel.unique_id }}" onclick="displayDefaultText(this)" value="{{ bclabel.unique_id }}" type="checkbox" name="selected_bclabels">
+                                            <input 
+                                                id="checked-label-{{ bclabel.unique_id }}" 
+                                                onclick="displayDefaultText(this)" 
+                                                value="{{ bclabel.unique_id }}" 
+                                                type="checkbox" 
+                                                name="selected_bclabels"
+                                                {% if bclabel in project.bc_labels.all %} checked {% endif %}
+                                                >
                                             <span class="margin-left-8">Select</span>
                                         </div>       
                                     </div>
@@ -142,7 +149,14 @@
                                             </div> 
     
                                             <div class="notice-checkbox-container margin-bottom-8 auto-margin margin-top-16">
-                                                <input id="checked-label-{{ tklabel.unique_id }}" onclick="displayDefaultText(this)" value="{{ tklabel.unique_id }}" type="checkbox" name="selected_tklabels">
+                                                <input 
+                                                    id="checked-label-{{ tklabel.unique_id }}" 
+                                                    onclick="displayDefaultText(this)" 
+                                                    value="{{ tklabel.unique_id }}" 
+                                                    type="checkbox" 
+                                                    name="selected_tklabels"
+                                                    {% if tklabel in project.tk_labels.all %} checked {% endif %}
+                                                    >
                                                 <span class="margin-left-8">Select</span>
                                             </div>       
                                         </div>

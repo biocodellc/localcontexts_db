@@ -44,16 +44,23 @@ def connect_community(request):
         if Community.objects.filter(community_name=community_name).exists():
             community = Community.objects.get(community_name=community_name)
 
-            data = form.save(commit=False)
-            data.user_from = request.user
-            data.community = community
-            data.user_to = community.community_creator
-            data.save()
+            # If join request exists or user is already a member, display Error message
+            request_exists = JoinRequest.objects.filter(user_from=request.user, community=community).exists()
+            user_is_member = community.is_user_in_community(request.user)
 
-            # Send community creator email
-            send_join_request_email_admin(request.user, community)
+            if request_exists or user_is_member:
+                messages.add_message(request, messages.ERROR, "Either you have already sent this request or are currently a member of this community.")
+                return redirect('connect-community')
+            else:
+                data = form.save(commit=False)
+                data.user_from = request.user
+                data.community = community
+                data.user_to = community.community_creator
+                data.save()
 
-            return redirect('dashboard')
+                # Send community creator email
+                send_join_request_email_admin(request.user, community)
+                return redirect('dashboard')
         else:
             messages.add_message(request, messages.ERROR, 'Community not in registry')
             return redirect('connect-community')
