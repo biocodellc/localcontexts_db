@@ -1,0 +1,143 @@
+/* SIGNED IN HEADER */
+.header-gradient {
+    background: linear-gradient(180.59deg, #016BA7 0.51%, #058F73 134.01%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 1% 2% 1% 4%;
+}
+
+/* REGISTERING PROCESS HEADER */
+.reg-header {
+    background-color: #3876aa;
+    width: 100%;
+    padding: 1% 2% 1% 4%;
+}
+
+.header-size, .nav-links-div {
+    justify-content: space-between;
+}
+
+/* Active nav link orange underline */
+.active-link:after, .nav-links-div a:not(.active-link, .sign-out-btn, .sign-in-btn):hover:after  {
+    content: '';
+    display: block;
+    margin: -2px auto;
+    width: 60px;
+    text-align: center;
+    border-bottom: 5px solid #EF6C00;
+}
+
+.header-logo {
+    width: 20%;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.header-logo a {
+    margin: 5px;
+    display: block;
+}
+
+.header-logo img {
+    width: 197px;
+    display: block;
+}
+
+.nav-links-div {
+    margin-left: 10px;
+    margin-right: 20px;
+    width: 100%;
+}
+
+.nav-links-div a {
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.nav-links-div a:not(.active-link) {
+    margin-bottom: 5px;
+}
+
+.nav-links-div a:not(.sign-out-btn, .sign-in-btn) {
+    margin: 5px;
+    padding: 5px;
+}
+
+.auth-btn {
+    display: block;
+    margin: 5px;
+    padding: 8px 16px; 
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 5px;
+    font-size: 16px;
+    line-height: 21px;
+    height: 40px;
+    min-width: 115px;
+    max-width: 115px;
+}
+
+.sign-in-btn {
+    text-align: center;
+    color: #fff;
+    background-color: #EF6C00;
+    border: 1px solid #EF6C00;
+}
+
+.sign-out-btn {
+    color: #EF6C00;
+    background-color: #fff;
+    border: 1px solid #fff;
+}
+
+
+/* AUTHENTICATED USER FOOTER */
+.footer-gradient {
+    background: linear-gradient(179.93deg, #045887 -12.22%, #058F73 156.81%);
+    padding: 2.5% 3% 2% 3%;
+}
+
+.auth-footer-content p {
+    max-height: 112px;
+    min-height: 112px;
+    line-height: 19px;
+}
+
+.underline {
+    border-bottom: 1px solid #fff;
+    padding-bottom: 10px;
+}
+
+.socials {
+    height: 50px;
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 30px;
+    margin: 5px;
+}
+
+
+@media screen and (max-width: 817px) {
+    
+    /* HEADER */
+    .header-logo {
+        width: 100%;
+        margin: auto;
+        align-items: center;
+    }
+
+    .header-logo img {
+        display: block;
+        margin: auto;
+    }
+    .header-size, .nav-links-div {
+        justify-content: space-between;
+        flex-direction: column;
+    }
+
+    .generic-nav {
+        width: 100%;
+        margin: auto;
+        justify-content: center;
+    }
+}
