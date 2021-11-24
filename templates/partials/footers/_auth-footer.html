@@ -1,42 +1,44 @@
 <!-- footer for when the user is authenticated -->
 {% load static %}
 
-<footer class="auth-footer-container white-text flex-this column">
+<footer class="footer-gradient white-text flex-this column">
+    
+    <div class="flex-this space-between w-100">
 
-    <div class="auth-footer-content">
-        <div>
-            <a class="white-text" href="https://localcontexts.org/about/about-local-contexts/">About</a> | 
-            <a class="white-text" href="https://localcontexts.org/contact/"> Contact Us</a> | 
-            {% include 'partials/_support-ticket-form.html' %} |
-            <a class="white-text" href="{% url 'api-overview' %}">API</a> |
-            <a class="white-text" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/LC%20Privacy%20Policy.pdf" target="_blank">Privacy Policy <i class="fa fa-external-link" aria-hidden="true"></i></a> | 
-            <a class="white-text" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/Indigenous%20Data%20Sovereignty%20Agreement.pdf" target="_blank">Data Sovereignty Agreement <i class="fa fa-external-link" aria-hidden="true"></i></a>
+        <div class="flex-this column">
+            <div>
+                <a class="white-text" href="https://localcontexts.org/contact/"> Contact Us</a> | 
+                {% include 'partials/_support-ticket-form.html' %} |
+                <a class="white-text" href="{% url 'api-overview' %}">API</a> |
+                <a class="white-text" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/LC%20Privacy%20Policy.pdf" target="_blank">Privacy Policy <i class="fa fa-external-link" aria-hidden="true"></i></a> | 
+                <a class="white-text" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/Indigenous%20Data%20Sovereignty%20Agreement.pdf" target="_blank">Data Sovereignty Agreement <i class="fa fa-external-link" aria-hidden="true"></i></a>
+            </div>
+            <div>
+                <h4 class="underline bold w-100"> Creative Commons License</h4>
+                <p>
+                    This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.<br><br>
+                    All images and marks are subject to copyright and trademark protection.<br>
+                    All educational material is being shared collaboratively but does not constitute binding legal advice.
+                </p>        
+            </div>                
         </div>
 
-        <div class="no-top-margin flex-this socials-container">
-            <div class="margin-right-16 socials"><a href="https://twitter.com/localcontexts" class="white-text"><i class="fa fa-twitter" aria-hidden="true"></i></a></div>
-            <div class="margin-right-16 socials"><a href="https://instagram.com/localcontexts" class="white-text"><i class="fa fa-instagram" aria-hidden="true"></i></a></div>
-            <div class="margin-right-16 socials"><a href="https://www.facebook.com/LocalContextsOrg/" class="white-text"><i class="fa fa-facebook-square" aria-hidden="true"></i></a></div>
-        </div>
-
-        <div>
-            <h4 class="underline weight-500"> Creative Commons License</h4>
-            <p class="no-bottom-margin">
-                This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.<br> 
-                All images and marks are subject to copyright and trademark protection. <br>
-                All educational material is being shared collaboratively but does not constitute binding legal advice.
-            </p>            
-        </div>
-
+        <div class="flex-this">
+            <a href="https://twitter.com/localcontexts" class="white-text socials"><i class="fa fa-twitter" aria-hidden="true"></i></a> 
+            <a href="https://instagram.com/localcontexts" class="white-text socials"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            <a href="https://www.facebook.com/LocalContextsOrg/" class="white-text socials"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
+        </div>  
+        
     </div>
 
-    <div id="footer-logos-wrapper" class="flex-this">
-        <div class="footer-logo-container flex-this row">
+    <div class="w-100 margin-top-16">
+        <div class="flex-this row space-between wrap">
             <div><img src="{% static 'images/footer/Local-Contexts-Logo-White.png' %}" alt="Local Contexts logo"></div>
             <div><img src="{% static 'images/footer/NEH-Preferred-Seal-Transparent820.png' %}" alt="National Endowment for the Humanities logo"></div>
             <div><img src="{% static 'images/footer/nyu_short_white.png' %}" alt="New York University logo"></div>
             <div><img src="{% static 'images/footer/WSU-Logo.png' %} " alt="Washington State University logo"></div>
-            <div><img src="{% static 'images/footer/IDIA_Website_Logo.png' %} " alt="Indigenous Design & Innovation Aotearoa (IDIA) logo"></div><div><img src="{% static 'images/footer/Enrich_without_text.png' %} " alt="ENRICH logo"></div>
+            <div><img src="{% static 'images/footer/IDIA_Website_Logo.png' %} " alt="Indigenous Design & Innovation Aotearoa (IDIA) logo"></div>
+            <div><img src="{% static 'images/footer/Enrich_without_text.png' %} " alt="ENRICH logo"></div>
         </div>
     </div>
 
