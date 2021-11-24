@@ -596,22 +596,14 @@ input:focus {
     padding-bottom: 100px;
 }
 
-/* 404 Page snippet */
+/*  404 500 503 ERROR PAGE cards */
 .page-not-found-card {
-    min-height: 600px;
-    max-height: 600px;
+    min-height: 418px;
+    max-height: 418px;
 }
 
 .page-not-found-card img {
-    margin: auto;
-}
-
-.page-not-found-content {
-    padding: 5%;
-}
-
-.page-not-found-txt, .padded {
-    padding: 3%;
+    width: 322px;
 }
 
 /* Count cards on dashcards on profiles */
