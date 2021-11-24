@@ -709,15 +709,11 @@ if (window.location.href.includes('connect-community') || window.location.href.i
 
     // Join an organization
     const joinBtn = document.getElementById('openJoinRequestModalBtn')
-    let nameToCheckInput = document.querySelector('.nameToCheck')
-
     joinBtn.addEventListener('click', function(e) {
-        console.log(nameToCheckInput.value, inputList.value)
+
         // handle when inputlist value is ''
         if (!inputList.value) {
             alert('Please select an organization from the list')
-        } else if (nameToCheckInput.value != inputList.value) {
-            alert('This organization is not registered in the Hub')
         } else {
             e.preventDefault()
             let modal = document.getElementById('joinRequestModal')
