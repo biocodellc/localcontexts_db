@@ -75,6 +75,8 @@
     height: 40px;
     min-width: 115px;
     max-width: 115px;
+    opacity: 1;
+    transition: 0.3s;
 }
 
 .sign-in-btn {
@@ -88,6 +90,10 @@
     color: #EF6C00;
     background-color: #fff;
     border: 1px solid #fff;
+}
+
+.sign-out-btn:hover, .sign-in-btn:hover {
+    opacity: 0.9;
 }
 
 
