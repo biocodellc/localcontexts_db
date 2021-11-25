@@ -7,11 +7,11 @@
         
         <div class="flex-this dash-btn-container space-between">
             {% if 'update-profile' in request.path or 'manage' in request.path or 'change-password' in request.path or 'deactivate' in request.path %}
-                <div><a href="{% url 'dashboard' %}" class="active-dash-driver-btn">Back to Profile</a></div>
-                <div><a href="{% url 'update-profile' %}" class="active-dash-driver-btn">Settings <i class="fa fa-user" aria-hidden="true"></i></a></div>
+                <div><a href="{% url 'dashboard' %}" class="primary-btn white-btn">Back to Profile</a></div>
+                <div><a href="{% url 'update-profile' %}" class="primary-btn white-btn">Settings <i class="fa fa-user" aria-hidden="true"></i></a></div>
             {% else %}
-                <div><a onclick="showUserNotifications(this)" class="action-btn">Notifications <i class="fa fa-bell" aria-hidden="true"></i></a></div>
-                <div><a href="{% url 'update-profile' %}" class="white-text action-btn">Settings <i class="fa fa-user" aria-hidden="true"></i></a></div>
+                <div><a onclick="showUserNotifications(this)" class="primary-btn action-btn">Notifications <i class="fa fa-bell" aria-hidden="true"></i></a></div>
+                <div><a href="{% url 'update-profile' %}" class="white-text primary-btn action-btn">Settings <i class="fa fa-user" aria-hidden="true"></i></a></div>
             {% endif %}
         </div>
 

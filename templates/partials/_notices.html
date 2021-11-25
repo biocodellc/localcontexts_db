@@ -11,7 +11,7 @@
 
         {% if researcher %}
             <div class="w-15 flex-this align-center">
-                <a class="action-btn margin-top-2 " href="{% url 'researcher-create-project' researcher.id %}">
+                <a class="primary-btn action-btn margin-top-2 " href="{% url 'researcher-create-project' researcher.id %}">
                     Create a Project     <i class="fa fa-long-arrow-right"></i>
                 </a>
             </div>
@@ -21,7 +21,7 @@
             <div class="w-15 flex-this align-center">
                 {% if member_role == 'viewer'%}
                 {% else %}
-                    <a class="action-btn margin-top-2 " href="{% url 'inst-create-project' institution.id %}">
+                    <a class="primary-btn action-btn margin-top-2 " href="{% url 'inst-create-project' institution.id %}">
                         Create a Project     <i class="fa fa-long-arrow-right"></i>
                     </a>
                 {% endif %}

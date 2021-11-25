@@ -14,7 +14,9 @@
                 {% if user.is_authenticated %}
 
                     <a
-                        class="{% if '/dashboard/' in request.path or '/update-profile/' in request.path %} active-link bold {% endif %} white-text upper" 
+                        class="{% if '/dashboard/' in request.path or '/update-profile/' in request.path or '/manage/' in request.path or '/change-password/' in request.path or '/deactivate/' in request.path %} 
+                                    active-link bold 
+                                {% endif %} white-text upper" 
                         href="{% url 'dashboard' %}">My Profile
                     </a>
 
