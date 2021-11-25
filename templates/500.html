@@ -1,23 +1,14 @@
-{% extends 'base.html' %}{% block title %} | 500 Server Error {% endblock %}{% load static %}{% block content %} {% include 'partials/headers/_reg-header.html' %}
+{% extends 'base.html' %}{% block title %} | 500 Server Error {% endblock %}{% load static %}{% block content %} {% include 'partials/headers/_auth-header.html' %}
     <section class="grey-bg">
 
-        <div class="white-bg page-not-found-card content-card">
-    
-            <div class="flex-this row page-not-found-content">
-    
-                <div class="flex-this column page-not-found-img">
-                    <img src="{% static 'images/logos/logo-404.png' %}" alt="404 Local Contexts round logo">
+        <div class="white-bg page-not-found-card content-card flex-this align-center justify-center">
+            <div class="flex-this row align-center w-90">
+                <div class="w-30 center-text"><img src="{% static 'images/logos/logo-404.png' %}" alt="404 Local Contexts round logo"></div>
+                <div class="w-70">
+                    <div><h1 class="orange-text">Sorry!</h1></div>
+                    <div><p>Something went wrong with this page. <br>Try to refresh this page or contact us if the problem persists at <a href="mailto:support@localcontexts.org" class="darkteal-text">support@localcontexts.org</a><br><br>  <strong>Error Code: 500 Internal Server Error</strong></p></div>
                 </div>
-            
-                <div class="flex-this column page-not-found-txt">
-                    <h1 class="orange-text weight-500">Sorry!</h1> 
-                    <h2>Something went wrong with this page. <br>
-                    Try to refresh this page or contact us if the problem persists at <a href="mailto:support@localcontexts.org" class="darkteal-text">support@localcontexts.org</a> </h2>
-                    <p>Code: 500 Internal Server Error</p>
-                </div>
-    
             </div>
-    
         </div>
     
     </section>

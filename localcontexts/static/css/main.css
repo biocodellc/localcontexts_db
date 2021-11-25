@@ -55,7 +55,6 @@ a {
 }
 
 /* FORM INPUTS */
-
 label {
     font-size: 16px;
     line-height: 24px;
@@ -426,39 +425,45 @@ input:focus {
 }
 
 /* ACTION Buttons / Register,Sign in, etc. */
-.action-btn {
+.primary-btn {
+    display: block;
     padding: 8px 16px;
-    background-color: #007385;
-    border: 1px solid #007385;
     border-radius: 5px;
     font-size: 14px;
+    font-weight: bold;
     line-height: 21px;
-    color: #fff;
     cursor: pointer;
-    display: block;
+    transition: 0.3s;
 }
 
-.default-btn {
+.default-btn-width {
     max-width: 110px;
     min-width: 110px;
 }
 
+.action-btn {
+    background-color: #007385;
+    border: 1px solid #007385;
+    color: #fff;
+}
+
+.action-btn:hover {
+    background-color: #338F9D;
+}
+
+.action-btn:active {
+    background-color: #005C6A;
+}
+
 .white-btn {
-    padding: 8px 16px;
-    border-radius: 5px;
-    font-size: 14px;
-    line-height: 21px;
-    font-weight: bold;
     border: 1px solid #007385;
     color: #007385;
     background-color: #fff;
-    cursor: pointer;
-    display: block;
 }
 
 .white-btn:hover {
-    color: #007385;
-    background-color: #fff;
+    background-color: #007385;
+    color: #fff;
 }
 
 .task-complete-btn {
@@ -472,27 +477,31 @@ input:focus {
     display: block;
 }
 
+.task-complete-btn:hover {
+    cursor: default;
+}
+
 .disabled-btn {
-    display: block;
-    padding: 8px 16px;
     background: #F3F4F6;
-    border-radius: 4px;
     border: none;
-    color: #4B5563,
+    color: #4B5563;
+    font-weight: normal;
+    cursor: not-allowed;
 }
 
 /* Community: select-labels: Listen and Example btns */
 .green-btn {
     background-color:#468076;
+    border: 1px solid #468076;
     color: #fff;
-    height: 40px;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    margin-top: 2%;
-    cursor: pointer;
-    font-size: 14px;
-    line-height: 20px;
+}
+
+.green-btn:hover {
+    background-color: #28927E;
+}
+
+.green-btn:active {
+    background-color: #0D6B5A;
 }
 
 /* LISTEN / EXAMPLE btn size */
@@ -596,22 +605,14 @@ input:focus {
     padding-bottom: 100px;
 }
 
-/* 404 Page snippet */
+/*  404 500 503 ERROR PAGE cards */
 .page-not-found-card {
-    min-height: 600px;
-    max-height: 600px;
+    min-height: 418px;
+    max-height: 418px;
 }
 
 .page-not-found-card img {
-    margin: auto;
-}
-
-.page-not-found-content {
-    padding: 5%;
-}
-
-.page-not-found-txt, .padded {
-    padding: 3%;
+    width: 322px;
 }
 
 /* Count cards on dashcards on profiles */
@@ -669,15 +670,21 @@ input:focus {
 }
 
 .comm-nav-links div {
-    margin-left: 12px;
+    width: 130px;
     height: 100%;
-    margin: auto;
     border-radius: 10px;
-    padding: 19px 20px;
+    padding: 19px 15px;
+    text-align: center;
+    transition: 0.3s;
 }
 
 .comm-nav-links a {
     color: #A09D9D;
+    display: inline-block;
+}
+
+.comm-nav-links div:not(.active-nav):hover {
+    font-weight: bold;
 }
 
 /* SUBNAV: ACTIVE */
@@ -1102,6 +1109,12 @@ input:focus {
 .meatball {
     cursor: pointer;   
     margin: 30px 0px 5px 10px;
+    color: #007385;
+    transition: 0.3s;
+}
+
+.meatball:hover {
+    color: #338F9D;
 }
 
 .meatball-dropdown-content {

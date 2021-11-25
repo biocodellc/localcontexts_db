@@ -20,25 +20,12 @@
     width: 22%;
 }
 
-.active-dash-driver-btn {
-    color: #007385;
-    background-color: #fff;
-    border: 1px solid #007385;
-    padding: 8px 16px;
-    border-radius: 5px;
-    font-size: 14px;
-    line-height: 21px;
-    cursor: pointer;
-    display: block;
-}
-
 /* DASH CARDS */
 .dashcard {
     margin-top: 5px;
     margin-bottom: 10px;
     padding: 16px;
     width: 1280px;
-    /* height: 193px; */
     background-color: #fff;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
     border-radius: 10px;

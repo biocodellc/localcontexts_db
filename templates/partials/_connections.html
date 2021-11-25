@@ -27,7 +27,7 @@
                         <h2 class="darkteal-text no-top-margin no-bottom-margin"> {{ institution.institution_name}} </h2>
                     </div>    
                     <div>
-                        <span id="{{ institution.institution_name }}" class="white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                        <span id="{{ institution.institution_name }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
                     </div>
                 </div>
                 <div id="expand-div-{{ institution.institution_name }}" class="hide">
@@ -62,7 +62,7 @@
                         <h2 class="darkteal-text no-top-margin no-bottom-margin"> {{ researcher.user.get_full_name }} </h2>
                     </div>    
                     <div>
-                        <span id="{{ researcher.id }}" class="white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                        <span id="{{ researcher.id }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
                     </div>
                 </div>
                 <div id="expand-div-{{ researcher.id }}" class="hide">
@@ -104,7 +104,7 @@
                         <h2 class="darkteal-text no-top-margin no-bottom-margin"> {{ community.community_name}} </h2>
                     </div>    
                     <div>
-                        <span id="{{ community.community_name }}" class="white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                        <span id="{{ community.community_name }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
                     </div>
                 </div>
                 <div id="expand-div-{{ community.community_name }}" class="hide">

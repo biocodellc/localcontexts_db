@@ -17,7 +17,7 @@
             <!-- Notifications -->
             <div class="flex-this w-30 flex-end">
                 <div class="dropdown">
-                    <a onclick="toggleNotifications()" class="white-btn darkteal-text pointer dropbtn"> 
+                    <a onclick="toggleNotifications()" class="primary-btn white-btn dropbtn"> 
                         Notifications 
                         {% if unread_exist %}
                             <i class="fa fa-bell orange-text" aria-hidden="true"></i>
@@ -80,7 +80,7 @@
                 <!-- Settings -->
                 {% if request.user == community.community_creator %}
                     <div class="margin-left-8">
-                        <a href="{% url 'update-community' community.id %}" class="darkteal-text white-btn"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
+                        <a href="{% url 'update-community' community.id %}" class="darkteal-text primary-btn white-btn"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
                     </div>
                 {% endif %}
             </div>

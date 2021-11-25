@@ -692,7 +692,7 @@ function toggleNotifications() {
 function showUserNotifications(btn) {
     let div = document.getElementById('userNotifications')
     div.classList.toggle('hide')
-    if (div.classList.contains('hide')) { btn.classList.replace('active-dash-driver-btn', 'action-btn') } else { btn.classList.replace( 'action-btn', 'active-dash-driver-btn') }
+    if (div.classList.contains('hide')) { btn.classList.replace('white-btn', 'action-btn') } else { btn.classList.replace( 'action-btn', 'white-btn') }
 }
 
 

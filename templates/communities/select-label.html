@@ -22,7 +22,7 @@
                     <p>You currently have {{ bclabels.count }} BC Labels and {{ tklabels.count }} TK Labels customized</p>
                 </div>   
                 <div>
-                    <a class="white-btn" href="{% url 'labels-pdf' community.id %}" target="_blank">View Labels as PDF</a>
+                    <a class="primary-btn white-btn" href="{% url 'labels-pdf' community.id %}" target="_blank">View Labels as PDF</a>
                 </div>                     
             </div>
         {% else %}
@@ -128,7 +128,7 @@
                             {% if bclabel.created_by == request.user %}
                                 <div class="margin-top-1">
                                     <a href="{% url 'edit-label' community.id bclabel.unique_id %}">
-                                        <div class="action-btn margin-top-2 ">Edit Label</div>
+                                        <div class="primary-btn action-btn margin-top-2 ">Edit Label</div>
                                     </a>
                                 </div>
                             {% elif member_role == 'viewer' %}
@@ -136,7 +136,7 @@
                             {% else %}
                                 <div class="margin-top-1">
                                     <a href="{% url 'approve-label' community.id bclabel.unique_id %}">
-                                        <div class="action-btn margin-top-2 ">Review Label</div>
+                                        <div class="primary-btn action-btn margin-top-2 ">Review Label</div>
                                     </a>
                                 </div>
                             {% endif %}
@@ -183,7 +183,7 @@
 
                             <div class="margin-top-1">
                                 <a href="{% url 'edit-label' community.id tklabel.unique_id %}">
-                                    <div class="action-btn margin-top-2 ">Edit Label</div>
+                                    <div class="primary-btn action-btn margin-top-2 ">Edit Label</div>
                                 </a>
                             </div>
 
@@ -193,7 +193,7 @@
 
                             <div class="margin-top-1">
                                 <a href="{% url 'approve-label' community.id tklabel.unique_id %}">
-                                    <div class="action-btn margin-top-2 ">Review Label</div>
+                                    <div class="primary-btn action-btn margin-top-2 ">Review Label</div>
                                 </a>
                             </div>
 
@@ -245,8 +245,8 @@
                 <h2>Traditional Knowledge (TK) Labels</h2>
             </div>
             <div>
-                <div class="white-btn">
-                    <a onclick='showTKLabelInfo()' class="darkteal-text pointer"> <span id="show-more-tk-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
+                <div class="primary-btn white-btn">
+                    <a onclick='showTKLabelInfo()'> <span id="show-more-tk-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
                 </div>                
             </div>
 
@@ -334,8 +334,8 @@
                             <img src="{% get_tklabel_img_url 'tkcr' %}" class="default-label-img">
                         </div>
                         
-                        <!-- <div><button class="green-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div> -->
-                        <!-- <div><button class="green-btn green-btn-default-size">Example</button></div> -->
+                        <!-- <div><button class="primary-btn green-btn primary-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div> -->
+                        <!-- <div><button class="primary-btn green-btn primary-btn green-btn-default-size">Example</button></div> -->
                     </div>
 
                     <div class="w-80 margin-left-1 margin-bottom-16">
@@ -347,7 +347,7 @@
                                     <div><h3 class="bold" id="tk-label-title-prov" name="tk-label-title"></h3></div>
                                 </div>
 
-                                <div class="margin-top-2"><div id="close-tk-prov" onclick="closeLabelInfoDiv(this)" class="white-btn">Close X</div></div>                                
+                                <div class="margin-top-2"><div id="close-tk-prov" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close X</div></div>                                
                             </div>
 
 
@@ -364,7 +364,7 @@
                                     {% if member_role == 'viewer' %}
 
                                     {% else %}
-                                        <button id="btnTKProv" class="action-btn margin-top-2 ">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
+                                        <button id="btnTKProv" class="primary-btn action-btn margin-top-2 ">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
                                     {% endif %}
                                 </div>
                             </div>
@@ -462,8 +462,8 @@
                             <img src="{% get_tklabel_img_url 'tkss' %}" class="default-label-img">
                         </div>
 
-                        <!-- <div><button class="green-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div> -->
-                        <!-- <div><button class="green-btn green-btn-default-size">Example</button></div> -->
+                        <!-- <div><button class="primary-btn green-btn primary-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div> -->
+                        <!-- <div><button class="primary-btn green-btn primary-btn green-btn-default-size">Example</button></div> -->
                     </div>
 
                     <div class="w-80 margin-left-1 margin-bottom-16">
@@ -474,7 +474,7 @@
                                     <input id="tk-label-value-type-prot" type="hidden" value="placeholder" name="tk-label-type">
                                     <div><h3 class="bold" id="tk-label-title-prot" name="tk-label-title"></h3></div>
                                 </div>
-                                <div class="margin-top-2"><div id="close-tk-prot" onclick="closeLabelInfoDiv(this)" class="white-btn">Close X</div></div>                                
+                                <div class="margin-top-2"><div id="close-tk-prot" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close X</div></div>                                
                             </div>
 
                         
@@ -492,7 +492,7 @@
                                     {% if member_role == 'viewer' %}
         
                                     {% else %}
-                                        <button id="btnTKProt" class="action-btn margin-top-2 ">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
+                                        <button id="btnTKProt" class="primary-btn action-btn margin-top-2 ">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
                                     {% endif %}
                                 </div>
                             </div>
@@ -560,8 +560,8 @@
                             <img src="{% get_tklabel_img_url 'tkcb' %}" class="default-label-img">
                         </div>
 
-                        <!-- <div><button class="green-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div> -->
-                        <!-- <div><button class="green-btn green-btn-default-size">Example</button></div> -->
+                        <!-- <div><button class="primary-btn green-btn primary-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div> -->
+                        <!-- <div><button class="primary-btn green-btn primary-btn green-btn-default-size">Example</button></div> -->
                     </div>
 
                     <div class="w-80 margin-left-1 margin-bottom-16">
@@ -572,7 +572,7 @@
                                     <input id="tk-label-value-type-perm" type="hidden" value="placeholder" name="tk-label-type">
                                     <div><h3 class="bold " id="tk-label-title-perm" name="tk-label-title"></h3></div>
                                 </div>
-                                <div class="margin-top-2"><div id="close-tk-perm" onclick="closeLabelInfoDiv(this)" class="white-btn">Close X</div></div>                                
+                                <div class="margin-top-2"><div id="close-tk-perm" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close X</div></div>                                
                             </div>
 
             
@@ -590,7 +590,7 @@
                                     {% if member_role == 'viewer' %}
 
                                     {% else %}
-                                        <button id="btnTKPerms" class="action-btn margin-top-2">Customize Label <i class="fa fa-long-arrow-right"></i></button>
+                                        <button id="btnTKPerms" class="primary-btn action-btn margin-top-2">Customize Label <i class="fa fa-long-arrow-right"></i></button>
                                     {% endif %}
                                 </div>
                             </div>
@@ -613,8 +613,8 @@
                 <h2>Biocultural (BC) Labels</h2>
             </div>
             <div>
-                <div class="white-btn">
-                    <a onclick='showBCLabelInfo()' class="darkteal-text pointer"> <span id="show-more-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
+                <div class="primary-btn white-btn">
+                    <a onclick='showBCLabelInfo()'> <span id="show-more-down">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span></a>
                 </div>
             </div>
         </div>
@@ -675,8 +675,8 @@
                             <img src="{% get_bclabel_img_url 'bccl' %}" class="default-label-img">
                         </div>
         
-                        <!-- <div><button class="green-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div> -->
-                        <!-- <div><button class="green-btn green-btn-default-size">Example</button></div> -->
+                        <!-- <div><button class="primary-btn green-btn primary-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div> -->
+                        <!-- <div><button class="primary-btn green-btn primary-btn green-btn-default-size">Example</button></div> -->
                     </div>
         
                     <div class="flex-this column w-80 margin-left-1">
@@ -687,7 +687,7 @@
                                     <input id="bc-label-value-type-prov" type="hidden" value="placeholder" name="bclabel-type">
                                     <div><h3 id="bc-label-title-prov" name="bc-label-title"></h3></div>
                                 </div>
-                                <div class="margin-top-2"><div id="close-bc-prov" onclick="closeLabelInfoDiv(this)" class="white-btn">Close X</div></div>                                
+                                <div class="margin-top-2"><div id="close-bc-prov" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close X</div></div>                                
                             </div>
 
             
@@ -706,7 +706,7 @@
                                 {% if member_role == 'viewer' %}
         
                                 {% else %}
-                                    <button id="btnBCProv" class="action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
+                                    <button id="btnBCProv" class="primary-btn action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
                                 {% endif %}
                             </div>
                         </form>
@@ -747,8 +747,8 @@
                             <img src="{% get_bclabel_img_url 'bccnv' %}" class="default-label-img">
                         </div>
         
-                        <!-- <div><button class="green-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div> -->
-                        <!-- <div><button class="green-btn green-btn-default-size">Example</button></div> -->
+                        <!-- <div><button class="primary-btn green-btn primary-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div> -->
+                        <!-- <div><button class="primary-btn green-btn primary-btn green-btn-default-size">Example</button></div> -->
                     </div>
         
                     <div class="flex-this column w-80 margin-left-1">
@@ -759,7 +759,7 @@
                                     <input id="bc-label-value-type-prot" type="hidden" value="placeholder" name="bclabel-type">
                                     <div><h3 id="bc-label-title-prot" name="bc-label-title"></h3></div>
                                 </div>
-                                <div class="margin-top-2"><div id="close-bc-prot" onclick="closeLabelInfoDiv(this)" class="white-btn">Close X</div></div>                                
+                                <div class="margin-top-2"><div id="close-bc-prot" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close X</div></div>                                
                             </div>
 
             
@@ -778,7 +778,7 @@
                                 {% if member_role == 'viewer' %}
         
                                 {% else %}
-                                    <button id="btnBCProt" class="action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
+                                    <button id="btnBCProt" class="primary-btn action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
                                 {% endif %}
                             </div>
                         </form>
@@ -850,8 +850,8 @@
                             <img src="{% get_bclabel_img_url 'bcnc' %}" class="default-label-img">
                         </div>
 
-                        <!-- <div><button class="green-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div> -->
-                        <!-- <div><button class="green-btn green-btn-default-size">Example</button></div> -->
+                        <!-- <div><button class="primary-btn green-btn primary-btn green-btn-default-size">Listen <i class="fa fa-volume-up"></i></button></div> -->
+                        <!-- <div><button class="primary-btn green-btn primary-btn green-btn-default-size">Example</button></div> -->
                     </div>
 
                     <div class="flex-this column w-80 margin-left-1">
@@ -862,7 +862,7 @@
                                     <input id="bc-label-value-type-perm" type="hidden" value="placeholder" name="bclabel-type">
                                     <div><h3 id="bc-label-title-perm" name="bc-label-title"></h3></div>
                                 </div>
-                                <div class="margin-top-2"><div id="close-bc-perm" onclick="closeLabelInfoDiv(this)" class="white-btn">Close X</div></div>                                
+                                <div class="margin-top-2"><div id="close-bc-perm" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close X</div></div>                                
                             </div>
 
             
@@ -881,7 +881,7 @@
                                 {% if member_role == 'viewer' %}
 
                                 {% else %}
-                                    <button id="btnBCPerms" class="action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
+                                    <button id="btnBCPerms" class="primary-btn action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-long-arrow-right"></i></button>
                                 {% endif %}
                             </div>
                         </form>

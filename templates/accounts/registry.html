@@ -57,21 +57,21 @@
                         <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
                     </div>
                     <div class="dashcard-btn-container">
-                                {% if user.is_authenticated %}
-                                    {% join_request_comm community.id request.user as request_exists %}
-                                    {% if request_exists or community in user_communities %}
-                                        <div><p class="task-complete-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></p></div>
-                                    {% else %}
-                                        <form method="POST" action="">
-                                            {% csrf_token %}
-                                            <input type="hidden" value="{{ community.id }}" name="commid">
-                                            <div>
-                                                <button id="btn-{{ community.id }}" class="action-btn">Send request to join</button>
-                                            </div>
-                                        </form>
-                                    {% endif %}
-                                {% else %}
-                                {% endif %}
+                        {% if user.is_authenticated %}
+                            {% join_request_comm community.id request.user as request_exists %}
+                            {% if request_exists or community in user_communities %}
+                                <div><p class="primary-btn task-complete-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></p></div>
+                            {% else %}
+                                <form method="POST" action="">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ community.id }}" name="commid">
+                                    <div>
+                                        <button id="btn-{{ community.id }}" class="primary-btn action-btn">Send request to join</button>
+                                    </div>
+                                </form>
+                            {% endif %}
+                        {% else %}
+                        {% endif %}
                     </div>
 
                 </div>
@@ -103,12 +103,12 @@
                         {% if user.is_authenticated %}
                             {% join_request_inst institution.id request.user as request_exists %}
                             {% if request_exists or institution in user_institutions %}
-                                <div><p class="task-complete-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></p></div>
+                                <div><p class="primary-btn task-complete-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></p></div>
                             {% else %}
                                 <form method="POST" action="">
                                     {% csrf_token %}
                                     <input type="hidden" value="{{ institution.id }}" name="instid">
-                                    <div><button id="btn-{{ institution.id }}" class="action-btn">Send request to join</button></div>
+                                    <div><button id="btn-{{ institution.id }}" class="primary-btn action-btn">Send request to join</button></div>
                                 </form>
                             {% endif %}
                         {% else %}
