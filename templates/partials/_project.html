@@ -138,7 +138,7 @@
                         <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
                             <div class="w-15 pad-top-1"><img src="{{ notice.bc_img_url }}" width="78" height="78" alt="black square with white letters BC in the middle"></div>
                             <div class="w-80 pad-top-1">
-                                <h3 class="weight-500 no-top-margin">Biocultural Notice</h3>
+                                <h3 class="no-top-margin">Biocultural Notice</h3>
                                 <p>{{ notice.bc_default_text}}</p>
                             </div>
                         </div>
@@ -148,7 +148,7 @@
                         <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
                             <div class="w-15 pad-top-1"><img src="{{ notice.tk_img_url }}" width="78" height="78" alt="black square with white letters TK in the middle"></div>
                             <div class="w-80 pad-top-1">
-                                <h3 class="weight-500 no-top-margin">Traditional Knowledge Notice</h3>
+                                <h3 class="no-top-margin">Traditional Knowledge Notice</h3>
                                 <p>{{ notice.tk_default_text}}</p>
                             </div>
                         </div>
@@ -172,7 +172,7 @@
                         </div>
                         <div class="pad-left-2">
                             <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
-                            <p class="weight-500"> {{ bclabel.name }} </p>
+                            <p> {{ bclabel.name }} </p>
                             <p>{{ bclabel.default_text}}</p>
 
                             {% include 'partials/_label-translation.html' %}
@@ -192,7 +192,7 @@
                         </div>
                         <div class="pad-left-2">
                             <p class="darkteal-text">Label shared by {{ tklabel.community.community_name }} </p>
-                            <p class="weight-500"> {{ tklabel.name }} </p>
+                            <p> {{ tklabel.name }} </p>
                             <p>{{ tklabel.default_text}}</p>
 
                             {% include 'partials/_label-translation.html' %}

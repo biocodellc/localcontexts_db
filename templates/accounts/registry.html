@@ -27,32 +27,24 @@
                 <div class="flex-this">
 
                     <div class="dashcard-img-container">
-                        {% if community.image %}
-                            <img class="profile-img" src="{{ community.image.url }}" alt="{{ community.community_name }} image">
-                        {% else %}
-                            <img class="profile-img" src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image">
-                        {% endif %}
+                        <img 
+                            class="profile-img" 
+                            src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
+                            alt="{{ community.community_name }} image"
+                        >
                     </div>
                     <div class="flex-this column dashcard-text-container">
                         <div><h3 class="dashcard-h3 darkteal-text">{{ community }}</h3></div>
                         <div>
-                            <p class="black-text dashcard-subheader">Community | Members: 
-                                {% if community.get_member_count < 10 %}
-                                    0{{ community.get_member_count }}
-                                {% else %}
-                                    {{ community.get_member_count }}
-                                {% endif %} 
-                                    | Location: 
-                                {% if community.city_town %} 
-                                    {{ community.city_town }}, 
-                                {% endif %} 
-                                {% if community.state_province_region %} 
-                                    {{ community.state_province_region }}, 
-                                {% endif %} 
-                                {% if community.country.name %} 
-                                    {{ community.country.name }}
+                            <p class="dashcard-subheader">Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %} | 
+                                Location: {% if community.city_town %} {{ community.city_town }}, {% endif %} {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}
+                                {% if not community.city_town and not community.state_province_region and not community.country %}
+                                    None specified
                                 {% endif %}
                             </p>
+                            {% if user.is_authenticated %}
+                                <p><strong>Email:</strong> {% if community.contact_email %}{{ community.contact_email }}{% endif %}</p>
+                            {% endif %}
                         </div>
                         <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
                     </div>
@@ -85,16 +77,24 @@
                 <div class="flex-this">
 
                     <div class="dashcard-img-container">
-                        {% if institution.image %}
-                            <img class="profile-img" src="{{ institution.image.url }}" alt="{{ institution.institution_name }} image">
-                        {% else %}
-                            <img class="profile-img" src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">
-                        {% endif %}
+                        <img 
+                            class="profile-img" 
+                            src="{% if institution.image %} {{ institution.image.url }} {% else %} {% static 'images/placeholders/institution-place.jpg' %}{% endif %}" 
+                            alt="{{ institution.institution_name }} image"
+                        >
                     </div>
                     <div class="flex-this column dashcard-text-container">
                         <div><h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3></div>
                         <div>
-                            <p class="black-text dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | Location: {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}</p>
+                            <p class="dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | 
+                                Location: {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}
+                                {% if not institution.city_town and not institution.state_province_region and not institution.country %}
+                                    None specified
+                                {% endif %}
+                            </p>
+                            {% if user.is_authenticated %}
+                                <p><strong>Email:</strong> {% if institution.contact_email %}{{ institution.contact_email }}{% endif %}</p>
+                            {% endif %}
                         </div>
                         <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p></div>
                     </div>

@@ -88,17 +88,13 @@
                     {% endfor %}
             </select>
                 
-            <p class="weight-500">Selected</p>
+            <p>Selected</p>
             {% for community in communities %}
                 <div id="selected-community-{{ community.id }}" style="height: 0px; overflow: hidden;">
-                        <div class="selected-community flex-this row space-between">
-                            <div>
-                                <p class="center-name">{{community.community_name}}</p>
-                            </div>
-                            <div>
-                                <p id="close-{{ community.id }}" class="close-x darkteal-text pointer" onclick="cancelCommunitySelection(this)">&times;</p>
-                            </div>
-                        </div>
+                    <div class="selected-community flex-this row space-between">
+                        <div><p class="center-name">{{community.community_name}}</p></div>
+                        <div><p id="close-{{ community.id }}" class="close-x darkteal-text pointer" onclick="cancelCommunitySelection(this)">&times;</p></div>
+                    </div>
                 </div>
                 <div id="comm-id-input-{{ community.id }}" style="display: none;"></div>
                 {% endfor %}

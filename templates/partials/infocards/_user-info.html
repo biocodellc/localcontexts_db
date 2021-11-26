@@ -1,4 +1,5 @@
-{% load static %}
+{% load static %} {% load custom_acct_tags %}
+{% unread_notifications_exist request.user as unread_exist %}
 
 <section class="white-bg dash-driver flex-this space-between">
         <div class="w-70">
@@ -10,7 +11,13 @@
                 <div><a href="{% url 'dashboard' %}" class="primary-btn white-btn">Back to Profile</a></div>
                 <div><a href="{% url 'update-profile' %}" class="primary-btn white-btn">Settings <i class="fa fa-user" aria-hidden="true"></i></a></div>
             {% else %}
-                <div><a onclick="showUserNotifications(this)" class="primary-btn action-btn">Notifications <i class="fa fa-bell" aria-hidden="true"></i></a></div>
+                <div><a onclick="showUserNotifications(this)" class="primary-btn action-btn">
+                    Notifications 
+                    <i 
+                    class="fa {% if unread_exist %} fa-bell orange-text {% else %} fa-bell-o {% endif %}" 
+                    aria-hidden="true"
+                    ></i>
+                </a></div>
                 <div><a href="{% url 'update-profile' %}" class="white-text primary-btn action-btn">Settings <i class="fa fa-user" aria-hidden="true"></i></a></div>
             {% endif %}
         </div>
@@ -20,7 +27,7 @@
 
 <div id="userNotifications" class="white-bg content-card content-card-space noti-card hide">
     <div class="noti-container">
-        <h2 class="no-top-margin no-bottom-margin weight-500 margin-left-1">Notifications</h2>
+        <h2 class="no-top-margin no-bottom-margin margin-left-1">Notifications</h2>
     </div>
     {% if notifications %}
         {% for n in notifications %}

@@ -191,3 +191,16 @@ def send_membership_email(organization, receiver, role):
         title = 'You are now a member of ' + str(organization.institution_name)
 
     send_simple_email(receiver.email, title, template)
+
+# Send email to support when a Researcher connects to the Hub in PRODUCTION
+def send_email_to_support(researcher):
+    template = render_to_string('snippets/emails/researcher-account-connection.html', { 'researcher': researcher })
+
+    name = ''
+    if researcher.user.get_full_name():
+        name = researcher.user.get_full_name()
+    else:
+        name = researcher.user.username
+    
+    title = name + ' has created a Researcher Account'
+    send_simple_email('support@localcontexts.org', title, template)    
