@@ -64,11 +64,11 @@
                         <div class="flex-this">
 
                             <div class="dashcard-img-container">
-                                {% if community.image %}
-                                    <img class="profile-img" src="{{ community.image.url }}" alt="{{ community.community_name }} image">
-                                {% else %}
-                                    <img class="profile-img" src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image">
-                                {% endif %}
+                                <img 
+                                    class="profile-img" 
+                                    src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
+                                    alt="{{ community.community_name }} image"
+                                >
                             </div>
                             <div class="flex-this column dashcard-text-container">
                                 <div><h3 class="dashcard-h3 darkteal-text">{{ community }}</h3></div>
@@ -95,11 +95,11 @@
                 <a href="{% url 'institution-projects' institution.id %}">
                     <div class="flex-this">
                         <div class="dashcard-img-container">
-                            {% if institution.image %}
-                                <img class="profile-img" src="{{ institution.image.url }}" alt="{{ institution.institution_name }} image">
-                            {% else %}
-                                <img class="profile-img" src="{% static 'images/placeholders/institution-place.jpg' %}" alt="{{ institution.institution_name }} image">
-                            {% endif %}
+                            <img 
+                                class="profile-img" 
+                                src="{% if institution.image %} {{ institution.image.url }} {% else %} {% static 'images/placeholders/institution-place.jpg' %}{% endif %}" 
+                                alt="{{ institution.institution_name }} image"
+                            >
                         </div>
                         <div class="flex-this column dashcard-text-container">
                             <div><h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3></div>

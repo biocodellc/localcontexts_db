@@ -1,5 +1,6 @@
 from django import template
 from communities.models import JoinRequest
+from notifications.models import UserNotification
 
 register = template.Library()
 
@@ -12,3 +13,7 @@ def join_request_inst(institution, user):
 def join_request_comm(community, user):
     request_exists = JoinRequest.objects.filter(community=community, user_from=user).exists()
     return request_exists
+
+@register.simple_tag
+def unread_notifications_exist(user):
+    return UserNotification.objects.filter(to_user=user, viewed=False).exists()

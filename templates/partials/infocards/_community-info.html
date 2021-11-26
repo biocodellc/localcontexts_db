@@ -19,15 +19,14 @@
                 <div class="dropdown">
                     <a onclick="toggleNotifications()" class="primary-btn white-btn dropbtn"> 
                         Notifications 
-                        {% if unread_exist %}
-                            <i class="fa fa-bell orange-text" aria-hidden="true"></i>
-                        {% else %}
-                            <i class="fa fa-bell-o" aria-hidden="true"></i>
-                        {% endif %}
+                        <i 
+                        class="fa {% if unread_exist %} fa-bell orange-text {% else %} fa-bell-o {% endif %}" 
+                        aria-hidden="true"
+                        ></i>
                     </a>
                     <div id="notification-v2" class="notification-dropdown-content">
                         <div class="border-bottom-solid-teal center-text">
-                            <span class="orange-text weight-500">{{community.community_name}} Notifications</span>
+                            <span class="orange-text">{{community.community_name}} Notifications</span>
                         </div>
                         {% if notifications %}
                             {% for n in notifications %}
@@ -52,11 +51,7 @@
                                         <div class="flex-this space-between margin-top-1">
                                             <div>
                                                 <span id="notification-label-tag-{{ n.id }}" 
-                                                    {% if n.viewed %} 
-                                                        class="notification-type-tag grey white-text font-size-12"
-                                                    {% else %}
-                                                        class="notification-type-tag orange-bg white-text font-size-12"
-                                                    {% endif %}
+                                                    class="notification-type-tag white-text font-size-12 {% if n.viewed %} grey {% else %} orange-bg {% endif %}"
                                                 >
                                                 {% if n.notification_type == 'Labels' %} Labels {% endif %}
                                                 {% if n.notification_type == 'Activity' %} Activity {% endif %}
@@ -90,16 +85,14 @@
         <div class="flex-this">
 
                 <div class="dashcard-img-container">
-                    {% if community.image %}
-                        <img class="profile-img" src="{{ community.image.url }}" alt="{{ community.community_name }} image">
-                    {% else %}
-                        <img class="profile-img" src="{% static 'images/placeholders/community-place.jpg' %}" alt="{{ community.community_name }} image">
-                    {% endif %}
+                    <img 
+                        class="profile-img" 
+                        src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
+                        alt="{{ community.community_name }} image"
+                    >
                 </div>
                 <div class="flex-this column dashcard-text-container">
-                    <div>
-                        <h3 class="dashcard-h3 darkteal-text">{{ community.community_name }}</h3>
-                    </div>
+                    <div><h3 class="dashcard-h3 darkteal-text">{{ community.community_name }}</h3></div>
                     <div>
                         <p class="black-text dashcard-subheader">Community | 
                             {% if member_role == 'admin' %} Administrator {% endif %}
@@ -107,9 +100,7 @@
                             {% if member_role == 'viewer' %} Viewer {% endif %} |
                             Location: {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}</p>
                     </div>
-                    <div>
-                        <p class="dashcard-description description-sm">{% if community.description %}{{ community.description }} {% else %} No description provided. {% endif %}</p>
-                    </div>
+                    <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }} {% else %} No description provided. {% endif %}</p></div>
                 </div>
 
                 <!-- Count cards -->

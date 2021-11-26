@@ -20,7 +20,7 @@
                     {% for comment in project.project_comment.all %}
                         {% if comment.community.community_name in status.community.community_name %}
                             <div>
-                                <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                                <span>{{ comment.sender.get_full_name }}</span>
                                 <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
                                 <p>{{ comment.message }}</p>
                             </div>
@@ -60,7 +60,7 @@
             {% for comment in project.project_comment.all %}
                 {% if community == comment.community %}
                     <div>
-                        <span class="weight-500">{{ comment.sender.get_full_name }}</span>
+                        <span>{{ comment.sender.get_full_name }}</span>
                         <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
                         <p>{{ comment.message }}</p>
                     </div>
