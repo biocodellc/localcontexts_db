@@ -7,9 +7,7 @@
         <!-- Top Nav -->
         <div class="flex-this w-100 space-between">
             <div class="loc">
-                <a href="{% url 'dashboard' %}" class="darkteal-text">
-                    {{ request.user.get_full_name }}
-                </a> 
+                <a href="{% url 'dashboard' %}" class="darkteal-text"> {{ request.user.get_full_name }}</a> 
                 >> {{ researcher.user.get_full_name }}
             </div>
 
@@ -19,16 +17,15 @@
                     <div class="dropdown">
                         <a onclick="toggleNotifications()" class="primary-btn white-btn dropbtn"> 
                             Notifications 
-                            {% if unread_exist %}
-                                <i class="fa fa-bell orange-text" aria-hidden="true"></i>
-                            {% else %}
-                                <i class="fa fa-bell-o" aria-hidden="true"></i>
-                            {% endif %}
+                            <i 
+                            class="fa fa-bell {% if unread_exist %} orange-text {% endif %}" 
+                            aria-hidden="true"
+                            ></i>
                         </a>
-                            <div id="notification-v2" class="notification-dropdown-content">
-                            <div class="border-bottom-solid-teal center-text">
-                                <span class="orange-text weight-500">{{ researcher.user.get_full_name }} Notifications</span>
-                            </div>
+                        <div id="notification-v2" class="notification-dropdown-content">
+                        <div class="border-bottom-solid-teal center-text">
+                            <span class="orange-text weight-500">{{ researcher.user.get_full_name }} Notifications</span>
+                        </div>
 
                             {% if notifications %}
                                 {% for n in notifications %}
@@ -53,25 +50,14 @@
                                                             class="notification-type-tag orange-bg white-text font-size-12"
                                                         {% endif %}
                                                     >
-                                                    {% if n.notification_type == 'Notices' %}
-                                                        Notices
-                                                    {% endif %}
-                                                    {% if n.notification_type == 'Labels' %}
-                                                        Labels
-                                                    {% endif %}
-                                                    {% if n.notification_type == 'Activity' %}
-                                                        Activity
-                                                    {% endif %}
-                                                    {% if n.notification_type == 'Projects' %}
-                                                        Projects
-                                                    {% endif %}
-                                                    {% if n.notification_type == 'Connections' %}
-                                                        Connections
-                                                    {% endif %}
+                                                    {% if n.notification_type == 'Notices' %} Notices {% endif %}
+                                                    {% if n.notification_type == 'Labels' %} Labels {% endif %}
+                                                    {% if n.notification_type == 'Activity' %} Activity {% endif %}
+                                                    {% if n.notification_type == 'Projects' %} Projects {% endif %}
+                                                    {% if n.notification_type == 'Connections' %} Connections {% endif %}
                                                 </span></div>
                                                 <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
                                             </div>
-            
                                             <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
                                         </a>
                                     </div>
@@ -91,21 +77,20 @@
         </div>
             <!-- Image, headers, description -->
         <div class="flex-this">
-
-                <div class="dashcard-img-container">
-                    {% if researcher.image %}
-                        <img class="profile-img" src="{{ researcher.image.url }}">
-                    {% else %}
-                        <img class="profile-img" src="{% static 'images/placeholders/researcher-place.jpg' %}" alt="researcher image">
-                    {% endif %}
-                </div>
+            <div class="researcher-img-container">
+                <img 
+                    src=" {% if researcher.image %} {{ researcher.image.url }} {% else %} {% static 'images/placeholders/researcher-place.jpg' %} {% endif %}" 
+                    alt="{{ researcher.researcher_name }} image"
+                >
+            </div>
                 <div class="flex-this column dashcard-text-container">
                     <div>
                         <h3 class="dashcard-h3 darkteal-text">{{ researcher.user.get_full_name }}</h3>
                     </div>
                     <div>
-                        <p class="black-text dashcard-subheader">Researcher | {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% endif %}<br>
+                        <p class="dashcard-subheader">Researcher | {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% endif %}<br>
                             Location: {% if researcher.user.profile.city_town %} {{ researcher.user.profile.city_town }}, {% endif %} {% if researcher.user.profile.state_province_region %} {{ researcher.user.profile.state_province_region }}, {% endif %} {% if researcher.user.profile.country.name %} {{ researcher.user.profile.country.name }}{% endif %}
+                            {% if not researcher.user.profile.city_town and not researcher.user.profile.state_province_region and not researcher.user.profile.country %} None specified {% endif %}
                         </p>
                     </div>
 

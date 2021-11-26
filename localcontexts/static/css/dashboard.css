@@ -31,19 +31,22 @@
     border-radius: 10px;
 }
 
-.dashcard-img-container, .dashcard-text-container {
+.dashcard-img-container, .dashcard-text-container, .researcher-img-container {
     margin-right: 20px;
 }
 
-.dashcard-img-container {
+.dashcard-img-container, .profile-img {
     width: 286px;
     height: 160.88px;
 }
 
-.profile-img {
-    width: 286px;
-    height: 160.88px;
+.profile-img, .researcher-img-container img {
     object-fit: cover;
+}
+
+.researcher-img-container, .researcher-img-container img {
+    width: 190px;
+    height: 190px;
 }
 
 .dashcard-text-container {
@@ -51,7 +54,7 @@
 }
 
 .dashcard-h3 {
-    font-weight: 600;
+    font-weight: bold;
     font-size: 24px;
     line-height: 28px;
     margin-top: 0;
@@ -61,6 +64,7 @@
 .dashcard-subheader {
     margin-bottom: 0;
     font-weight: bold;
+    color: #000;
 }
 
 .dashcard-description {
