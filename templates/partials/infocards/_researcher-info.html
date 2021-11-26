@@ -79,7 +79,8 @@
                     alt="{{ researcher.researcher_name }} image"
                 >
             </div>
-                <div class="flex-this column dashcard-text-container">
+
+            <div class="flex-this column dashcard-text-container">
                     <div>
                         <h3 class="dashcard-h3 darkteal-text">{{ researcher.user.get_full_name }}</h3>
                     </div>
@@ -119,37 +120,37 @@
                         <p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p>
                     </div>
 
+            </div>
+
+            <!-- Count cards -->
+            <div class="flex-this column stats-card-container">
+
+                <!-- Count of Labels applied to researcher projects -->
+                {% get_labels_count researcher as total_labels %}
+                <div class="stats-card flex-this space-between">
+                    <div><p>{% if total_labels < 10 %} 0{{ total_labels }} {% else %} {{ total_labels }} {% endif %}</p></div>
+                    <div><span>Labels</span></div>
                 </div>
 
-                <!-- Count cards -->
-                <div class="flex-this column stats-card-container">
-
-                    <!-- Count of Labels applied to researcher projects -->
-                    {% get_labels_count researcher as total_labels %}
-                    <div class="stats-card flex-this space-between">
-                        <div><p>{% if total_labels < 10 %} 0{{ total_labels }} {% else %} {{ total_labels }} {% endif %}</p></div>
-                        <div><span>Labels</span></div>
-                    </div>
-
-                    <!-- Count of notices placed by researcher -->
-                    {% get_notices_count researcher as total_notices %}
-                    <div class="stats-card flex-this space-between">
-                        <div><p>{% if total_notices < 10 %} 0{{ total_notices }} {% else %} {{ total_notices }} {% endif %}</p></div>
-                        <div><span>Notices</span></div>
-                    </div>
+                <!-- Count of notices placed by researcher -->
+                {% get_notices_count researcher as total_notices %}
+                <div class="stats-card flex-this space-between">
+                    <div><p>{% if total_notices < 10 %} 0{{ total_notices }} {% else %} {{ total_notices }} {% endif %}</p></div>
+                    <div><span>Notices</span></div>
+                </div>
     
-                    <div class="stats-card flex-this space-between">
-                        <div>
-                            <p>
-                                {% connections_count researcher as connect_count %}
-                                {% if connect_count < 10 %}0{{ connect_count }}{% else %}{{ connect_count }}{% endif %}
-                            </p>
-                        </div>
-                        <div>
-                            <span>Connections</span>
-                        </div>
+                <div class="stats-card flex-this space-between">
+                    <div>
+                        <p>
+                            {% connections_count researcher as connect_count %}
+                            {% if connect_count < 10 %}0{{ connect_count }}{% else %}{{ connect_count }}{% endif %}
+                        </p>
+                    </div>
+                    <div>
+                        <span>Connections</span>
                     </div>
                 </div>
+            </div>
 
         </div>
 

@@ -50,7 +50,7 @@
 }
 
 .dashcard-text-container {
-    width: 60%;
+    width: 70%;
 }
 
 .dashcard-h3 {
@@ -70,9 +70,9 @@
 .dashcard-description {
     margin-top: 5px;
     margin-bottom: 0;
-    font-weight: 400;
     font-style: normal;
     color: #333;
+    width: 95%;
 }
 
 .description-sm {
