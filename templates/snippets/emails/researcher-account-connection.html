@@ -1,0 +1,23 @@
+{% autoescape off %}
+<h3>
+    {% if researcher.user.get_full_name %}
+        {{ researcher.user.get_full_name }} ({{ researcher.user.username }}) 
+    {% else %}
+        {{ researcher.user.username}}
+    {% endif %}
+    has connected their Researcher Account 
+</h3>
+
+<p>
+    Contact Email:
+    {% if researcher.contact_email %}
+        {{ researcher.contact_email }}<br>
+    {% else %}
+        {{ researcher.user.email }}<br>
+    {% endif %}
+    Primary Institution: {{ researcher.primary_institution }}<br>
+    Description: {{ researcher.description }}<br>
+    <br><br>
+</p>
+
+{% endautoescape %}

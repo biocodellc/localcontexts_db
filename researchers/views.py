@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from projects.utils import add_to_contributors
-from helpers.utils import set_notice_defaults
+from helpers.utils import set_notice_defaults, dev_prod_or_local
 
 from communities.models import Community
 from notifications.models import ActionNotification
@@ -42,6 +42,11 @@ def connect_researcher(request):
                 # Mark current user as researcher
                 request.user.profile.is_researcher = True
                 request.user.profile.save()
+
+                # Send support an email in prod only about a Researcher signing up
+                if dev_prod_or_local(request.get_host()) == 'PROD':
+                    send_email_to_support(data)
+                    
                 return redirect('dashboard')
 
         return render(request, 'researchers/connect-researcher.html', {'form': form})
