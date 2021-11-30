@@ -52,14 +52,12 @@
                         {% if user.is_authenticated %}
                             {% join_request_comm community.id request.user as request_exists %}
                             {% if request_exists or community in user_communities %}
-                                <div><p class="primary-btn task-complete-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></p></div>
+                                <div><p class="primary-btn disabled-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></p></div>
                             {% else %}
-                                <form method="POST" action="">
+                                <form id="communityRegistryForm{{ community.id }}" method="POST" action="">
                                     {% csrf_token %}
                                     <input type="hidden" value="{{ community.id }}" name="commid">
-                                    <div>
-                                        <button id="btn-{{ community.id }}" class="primary-btn action-btn">Send request to join</button>
-                                    </div>
+                                    <div><button id="community-{{ community.id }}" class="primary-btn action-btn">Send request to join</button></div>
                                 </form>
                             {% endif %}
                         {% else %}
@@ -103,12 +101,12 @@
                         {% if user.is_authenticated %}
                             {% join_request_inst institution.id request.user as request_exists %}
                             {% if request_exists or institution in user_institutions %}
-                                <div><p class="primary-btn task-complete-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></p></div>
+                                <div><p class="primary-btn disabled-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></p></div>
                             {% else %}
-                                <form method="POST" action="">
+                                <form id="institutionRegistryForm{{ institution.id }}" method="POST" action="">
                                     {% csrf_token %}
                                     <input type="hidden" value="{{ institution.id }}" name="instid">
-                                    <div><button id="btn-{{ institution.id }}" class="primary-btn action-btn">Send request to join</button></div>
+                                    <div><button id="institution-{{ institution.id }}" class="primary-btn action-btn">Send request to join</button></div>
                                 </form>
                             {% endif %}
                         {% else %}
@@ -119,6 +117,21 @@
             </div>
         {% endfor %}
     {% endif %}
+
+    <div id="registryModal" class="modal hide">
+        <div class="modal-defaults registry-modal flex-this column w-100">
+            <div class="modal-content-padding w-100">
+                <div>
+                    <h2 style="color: #333333;">Just checking...</h2>  
+                    <p>Are you sure you want to send a request to join this account?</p>  
+                </div>
+                <div class="flex-this w-100 text-align-center">
+                    <div id="closeRegistryModal" class="primary-btn white-btn margin-right-1 w-50 center-text">Cancel</div>    
+                    <div id="submitRegistryForm" class="margin-left-1 primary-btn action-btn w-50 center-text">Yes</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </section>
 

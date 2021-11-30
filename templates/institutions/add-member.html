@@ -2,14 +2,14 @@
 
 {% include 'partials/_members.html' %}
 
-<div id="add-member-modal" class="modal" style="display: block;">
+<div class="modal show">
 
-<div class="add-member-modal-wrapper flex-this column w-100">
+<div class="modal-defaults add-member-modal flex-this column w-100">
 
     <div id="close-modal" class="close-modal-btn w-100"> <a class="darkteal-text" href="{% url 'institution-members' institution.id %}"><span>&times;</span></a></div>
     <div class="modal-content-padding w-100">
         <div>
-            <h4>Add Members to <span class="darkteal-text">{{institution.institution_name}}</span></h4>
+            <h4 class="no-top-margin">Add Members to <span class="darkteal-text">{{institution.institution_name}}</span></h4>
         </div>
         <div class="w-100 member-modal-form flex-this column">
           <form method="POST" action="">
@@ -48,7 +48,7 @@
 
                 <div class="w-50 pad-top-1-5 right-text">
                         <small>
-                            Looking for someone who isn't on this list? <br><a href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.
+                            Looking for someone who isn't on this list? <br><a class="darkteal-text" href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.
                         </small>
                 </div>
             </div>
