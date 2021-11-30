@@ -237,50 +237,44 @@
     <div id="memberModal" class="modal hide">
         <div class="modal-defaults add-member-modal flex-this column w-100">
       
-            <div id="close-modal" class="close-modal-btn w-100"><span class="darkteal-text">&times;</span></div>
+            <!-- <div id="close-modal" class="close-modal-btn w-100"><span class="darkteal-text">&times;</span></div> -->
+            <div class="flex-this flex-end close-modal-btn">
+                <div class="margin-right-8 primary-btn white-btn">Close X</div>
+            </div>
             <div class="modal-content-padding w-100">
 
-                <div><h4 class="no-top-margin">Add Members to 
-                    {% if community %}
-                        <span class="darkteal-text">{{ community.community_name }}</span></h4>
-                    {% endif %}
-                    {% if institution %}
-                        <span class="darkteal-text">{{ institution.institution_name }}</span></h4>
-                    {% endif %}
-                </div>
-                <div class="w-100 member-modal-form flex-this column">
+                <h2 class="no-top-margin" style="color: #333333;">Add a new member</h2>  
+                <p>
+                    To invite a new member, please select a user and their proposed responsibility below
+                </p>
+
+                <div class="w-100 flex-this column">
                   <form method="POST" action="">
                       {% csrf_token %}
           
-                        <div class="flex-this"> 
+                        <div class="flex-this column"> 
                             <div class="w-50">
                                 <div> 
-                                    {{ form.receiver.label }} <br>
+                                    <label>Name</label> <br>
                                     {{ form.receiver }} 
                                 </div>
                                 <div>
-                                    <label>Responsibility</label><br>
+                                    <label>Proposed Responsibility</label><br>
                                     {{ form.role }} 
                                 </div>
                             </div>
     
-    
                             <div class="w-50">
-                                <div>
-                                    {{ form.message.label }}<br>
-                                    {{ form.message }}
-                                </div>
+                                <label>Optional Message</label><br>
+                                {{ form.message }}
                             </div>
-                        </div>
-    
-                        <p>- Only Admins and Editors have access to create and manage labels.<br></p>
-    
+                        </div>    
                       
                         <div class="flex-this w-100">
-                            <div class="w-50">
+                            <div class="w-50 margin-top-2">
                                 <!-- Alerts -->
                                 {% include 'partials/_alerts.html' %}
-                                <button class="primary-btn action-btn margin-top-2" type="submit">Send Invitation </button>
+                                <button class="primary-btn action-btn">Send Invitation </button>
                             </div>
     
                             <div class="w-50 pad-top-1-5 right-text">
