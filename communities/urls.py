@@ -9,7 +9,6 @@ urlpatterns = [
     path('community/dashboard/update/<str:pk>/', views.update_community, name="update-community"),
 
     path('community/members/<str:pk>/', views.community_members, name="members"),
-    path('community/members/add/<str:pk>/', views.add_member, name="add-member"),
     path('community/members/remove/<str:pk>/<str:member_id>', views.remove_member, name="remove-member"),
     
     path('community/labels/select/<str:pk>/', views.select_label, name="select-label"),
@@ -17,7 +16,6 @@ urlpatterns = [
     path('community/labels/customize/<str:pk>/<str:label_type>', views.customize_label, name="customize-label"),
     path('community/labels/<str:pk>/<str:label_id>/', views.approve_label, name="approve-label"),
     path('community/labels/edit/<str:pk>/<str:label_id>/', views.edit_label, name="edit-label"),
-
 
     path('community/labels/apply-labels/<str:pk>/<str:project_uuid>', views.apply_labels, name="apply-labels"),
 

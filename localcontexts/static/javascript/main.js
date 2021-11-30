@@ -793,6 +793,16 @@ if (window.location.href.includes('registry')) {
     })       
 }
 
+function openMemberModal() {
+    const memberModal = document.getElementById('memberModal')
+    memberModal.classList.replace('hide', 'show')
+
+    const closeBtn = document.querySelector('.close-modal-btn')
+    closeBtn.onclick = function() {
+        memberModal.classList.replace('show', 'hide')
+    }
+}
+
 // Deactivate user popup in user settings
 var deactivateAccountBtn = document.getElementById('submitDeactivation')
 if (deactivateAccountBtn) {

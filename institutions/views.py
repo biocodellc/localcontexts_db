@@ -173,34 +173,6 @@ def institution_members(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
-        return render(request, 'institutions/members.html', {'institution': institution, 'member_role': member_role,})
-    
-@login_required(login_url='login')
-def remove_member(request, pk, member_id):
-    institution = Institution.objects.get(id=pk)
-    member = User.objects.get(id=member_id)
-    # what role does member have
-    # remove from role
-    if member in institution.admins.all():
-        institution.admins.remove(member)
-    if member in institution.editors.all():
-        institution.editors.remove(member)
-    if member in institution.viewers.all():
-        institution.viewers.remove(member)
-
-    # remove institution from userAffiloiation instance
-    affiliation = UserAffiliation.objects.get(user=member)
-    affiliation.institutions.remove(institution)
-    return redirect('institution-members', institution.id)
-
-@login_required(login_url='login')
-def add_member(request, pk):
-    institution = Institution.objects.get(id=pk)
-
-    member_role = check_member_role_institution(request.user, institution)
-    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
-        return render(request, 'institutions/restricted.html', {'institution': institution})
-    else:
         form = InviteMemberForm(request.POST or None)
         if request.method == 'POST':
             receiver = request.POST.get('receiver')
@@ -233,7 +205,26 @@ def add_member(request, pk):
             'form': form,
             'member_role': member_role,
         }    
-        return render(request, 'institutions/add-member.html', context)
+        return render(request, 'institutions/members.html', context)
+
+    
+@login_required(login_url='login')
+def remove_member(request, pk, member_id):
+    institution = Institution.objects.get(id=pk)
+    member = User.objects.get(id=member_id)
+    # what role does member have
+    # remove from role
+    if member in institution.admins.all():
+        institution.admins.remove(member)
+    if member in institution.editors.all():
+        institution.editors.remove(member)
+    if member in institution.viewers.all():
+        institution.viewers.remove(member)
+
+    # remove institution from userAffiloiation instance
+    affiliation = UserAffiliation.objects.get(user=member)
+    affiliation.institutions.remove(institution)
+    return redirect('institution-members', institution.id)
 
 # Projects
 @login_required(login_url='login')

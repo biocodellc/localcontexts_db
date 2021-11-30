@@ -140,17 +140,8 @@ def update_community(request, pk):
 def community_members(request, pk):
     community = Community.objects.get(id=pk)
     member_role = check_member_role_community(request.user, community)
-    return render(request, 'communities/members.html', {'community': community, 'member_role': member_role, })
-
-# Add member
-@login_required(login_url='login')
-def add_member(request, pk):
-    community = Community.objects.get(id=pk)
-
-    member_role = check_member_role_community(request.user, community)
-    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+    if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
-
     else:
         form = InviteMemberForm(request.POST or None)
         if request.method == "POST":
@@ -171,7 +162,6 @@ def add_member(request, pk):
                         send_community_invite_email(data, community)
                         messages.add_message(request, messages.INFO, 'Invitation Sent!')
                         return redirect('members', community.id)
-
                 else: 
                     messages.add_message(request, messages.INFO, 'This user has already been invited to this community.')
                     return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
@@ -181,10 +171,10 @@ def add_member(request, pk):
 
         context = {
             'community': community,
-            'form': form,
             'member_role': member_role,
+            'form': form,
         }
-        return render(request, 'communities/add-member.html', context)
+        return render(request, 'communities/members.html', context)
 
 @login_required(login_url='login')
 def remove_member(request, pk, member_id):

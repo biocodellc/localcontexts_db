@@ -111,7 +111,7 @@
 
     {% if member_role == 'admin' or member_role == 'editor' %}
         <div>
-            <a href="{% url 'add-member' community.id %}">
+            <a onclick="openMemberModal()">
                 <div class="flex-this add-member-card">
                 <div class="w-100 add-member">
                     <h4 class="darkteal-text">+ Add a Member </h4>
@@ -221,7 +221,7 @@
 
     {% if member_role == 'viewer' %}{% else %}
         <div>
-            <a href="{% url 'add-institution-member' institution.id %}">
+            <a onclick="openMemberModal()">
                 <div class="flex-this add-member-card">
                     <div class="w-100 add-member">
                         <h4 class="darkteal-text">+ Add Members </h4>
@@ -231,3 +231,66 @@
         </div>
     {% endif %}
 {% endif %}
+
+    <!-- ADD MEMBER MODAL -->
+
+    <div id="memberModal" class="modal hide">
+        <div class="modal-defaults add-member-modal flex-this column w-100">
+      
+            <div id="close-modal" class="close-modal-btn w-100"><span class="darkteal-text">&times;</span></div>
+            <div class="modal-content-padding w-100">
+
+                <div><h4 class="no-top-margin">Add Members to 
+                    {% if community %}
+                        <span class="darkteal-text">{{ community.community_name }}</span></h4>
+                    {% endif %}
+                    {% if institution %}
+                        <span class="darkteal-text">{{ institution.institution_name }}</span></h4>
+                    {% endif %}
+                </div>
+                <div class="w-100 member-modal-form flex-this column">
+                  <form method="POST" action="">
+                      {% csrf_token %}
+          
+                        <div class="flex-this"> 
+                            <div class="w-50">
+                                <div> 
+                                    {{ form.receiver.label }} <br>
+                                    {{ form.receiver }} 
+                                </div>
+                                <div>
+                                    <label>Responsibility</label><br>
+                                    {{ form.role }} 
+                                </div>
+                            </div>
+    
+    
+                            <div class="w-50">
+                                <div>
+                                    {{ form.message.label }}<br>
+                                    {{ form.message }}
+                                </div>
+                            </div>
+                        </div>
+    
+                        <p>- Only Admins and Editors have access to create and manage labels.<br></p>
+    
+                      
+                        <div class="flex-this w-100">
+                            <div class="w-50">
+                                <!-- Alerts -->
+                                {% include 'partials/_alerts.html' %}
+                                <button class="primary-btn action-btn margin-top-2" type="submit">Send Invitation </button>
+                            </div>
+    
+                            <div class="w-50 pad-top-1-5 right-text">
+                                <small>Looking for someone who isn't on this list? <br><a class="darkteal-text" href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.</small>
+                            </div>
+                        </div>
+    
+                    </form>
+                </div>
+            </div>
+    
+        </div>
+    </div>
