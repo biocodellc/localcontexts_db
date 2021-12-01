@@ -59,11 +59,16 @@
 
     <div class="modal-defaults noror-modal-box flex-this column w-100">
   
-        <div id="close-modal" class="close-modal-btn w-100"> <a class="darkteal-text" href="{% url 'create-institution' %}"><span>&times;</span></a></div>
+        <div class="flex-this flex-end close-modal-btn">
+            <a class="darkteal-text" href="{% url 'create-institution' %}">
+                <div class="margin-right-8 primary-btn white-btn">Close X</div>
+            </a>
+        </div>
+
         <div class="modal-content-padding w-100">
 
             <div class="no-top-margin">
-                <h2 class="darkteal-text no-top-margin">Institution Creation Form</h2>  
+                <h2 class="no-top-margin">Institution Creation Form</h2>  
                 <p>Create an institution that is not on the ROR list.</p>  
             </div>
 
