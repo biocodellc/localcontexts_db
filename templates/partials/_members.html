@@ -111,7 +111,7 @@
 
     {% if member_role == 'admin' or member_role == 'editor' %}
         <div>
-            <a href="{% url 'add-member' community.id %}">
+            <a onclick="openMemberModal()">
                 <div class="flex-this add-member-card">
                 <div class="w-100 add-member">
                     <h4 class="darkteal-text">+ Add a Member </h4>
@@ -221,7 +221,7 @@
 
     {% if member_role == 'viewer' %}{% else %}
         <div>
-            <a href="{% url 'add-institution-member' institution.id %}">
+            <a onclick="openMemberModal()">
                 <div class="flex-this add-member-card">
                     <div class="w-100 add-member">
                         <h4 class="darkteal-text">+ Add Members </h4>
@@ -231,3 +231,61 @@
         </div>
     {% endif %}
 {% endif %}
+
+    <!-- ADD MEMBER MODAL -->
+
+    <div id="memberModal" class="modal hide">
+        <div class="modal-defaults add-member-modal flex-this column w-100">
+      
+            <div class="flex-this flex-end close-modal">
+                <div class="margin-right-8 primary-btn white-btn">Close X</div>
+            </div>
+            <div class="modal-content-padding w-100">
+
+                <h2 class="no-top-margin" style="color: #333333;">Add a new member</h2>  
+                <p>
+                    To invite a new member, please select a user and their proposed responsibility below
+                </p>
+
+                <div class="w-100 flex-this column">
+                    <form id="addMemberForm" method="POST" action="">
+                        {% csrf_token %}
+            
+                            <div class="flex-this column"> 
+                                <div>
+                                    <div> 
+                                        <label>Name</label> <br>
+                                        {{ form.receiver }} 
+                                    </div>
+                                    <div>
+                                        <label>Proposed Responsibility</label><br>
+                                        {{ form.role }} 
+                                    </div>
+                                </div>
+        
+                                <div>
+                                    <label>Optional Message</label><br>
+                                    {{ form.message }}
+                                </div>
+                            </div>    
+
+                            <!-- Alerts -->
+                            {% include 'partials/_alerts.html' %}
+
+                        
+                            <div class="flex-this w-100 margin-bottom-16">
+                                <div class="w-50 margin-top-2">
+                                    <button class="primary-btn action-btn">Send Invitation </button>
+                                </div>
+        
+                                <div class="w-50 margin-top-2 right-text">
+                                    <small>Looking for someone who isn't on this list? <br><a class="darkteal-text" href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.</small>
+                                </div>
+                            </div>
+        
+                    </form>
+                </div>
+            </div>
+    
+        </div>
+    </div>

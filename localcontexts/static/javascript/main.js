@@ -716,15 +716,15 @@ if (window.location.href.includes('connect-community') || window.location.href.i
             alert('Please select an organization from the list')
         } else {
             e.preventDefault()
-            let modal = document.getElementById('joinRequestModal')
-            if (modal.style.display == 'none') {
-                modal.style.display = 'block'
+            const modal = document.getElementById('joinRequestModal')
+            if (modal.classList.contains('hide')) {
+                modal.classList.replace('hide', 'show')
             }
         
-            let span = document.querySelector('.close-modal')
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
+            const closeModalBtn = document.querySelector('.close-modal-btn')
+            closeModalBtn.addEventListener('click', function() {
+                modal.classList.replace('show', 'hide')
+            })
         }
     })
 }   
@@ -754,11 +754,11 @@ if (window.location.href.includes('connect-researcher')) {
         } else {
             // Show modal
             let modal = document.getElementById('ORCIDmodal')
-            modal.style.display = 'block'
+            modal.classList.replace('hide', 'show')
 
             // Close modal
             let closeBtn = document.getElementById('closeORCIDmodal')
-            closeBtn.addEventListener('click', function(event) { modal.style.display = 'none' })
+            closeBtn.addEventListener('click', function(event) { modal.classList.replace('show', 'hide') })
 
             // Continue without orcid
             let continueBtn = document.getElementById('continueNoOrcidBtn')
@@ -766,8 +766,43 @@ if (window.location.href.includes('connect-researcher')) {
         }
     })  
 }
-  
 
+if (window.location.href.includes('registry')) {
+    const registryModal = document.getElementById('registryModal')
+    const submitJoinRequestFormBtn = document.getElementById('submitRegistryForm')
+
+    const closeRegistryModalBtn = document.getElementById('closeRegistryModal')
+    closeRegistryModalBtn.addEventListener('click', function(e) { registryModal.classList.replace('show', 'hide') })
+
+    document.addEventListener('click', function(e) {
+
+        if (e.target.tagName == 'BUTTON') {
+            e.preventDefault()
+            // show modal
+            registryModal.classList.replace('hide', 'show')
+
+            // get Id and btn type, based on which organization it is, submit
+            if (e.target.id.includes('community')) {
+                let targetId = e.target.id.split('-').pop()
+                submitJoinRequestFormBtn.addEventListener('click', function(e) { document.getElementById(`communityRegistryForm${targetId}`).submit() })    
+            } else if (e.target.id.includes('institution')) {
+                let targetId = e.target.id.split('-').pop()
+                submitJoinRequestFormBtn.addEventListener('click', function(e) { document.getElementById(`institutionRegistryForm${targetId}`).submit() })    
+            }
+        }
+    })       
+}
+
+// Add member modal
+function openMemberModal() {
+    const memberModal = document.getElementById('memberModal')
+    memberModal.classList.replace('hide', 'show')
+
+    const closeBtn = document.querySelector('.close-modal-btn')
+    closeBtn.onclick = function() {
+        memberModal.classList.replace('show', 'hide')
+    }
+}
 
 // Deactivate user popup in user settings
 var deactivateAccountBtn = document.getElementById('submitDeactivation')
@@ -775,10 +810,10 @@ if (deactivateAccountBtn) {
     deactivateAccountBtn.addEventListener('click', function(event) {
         event.preventDefault()
         let deactivationModal = document.getElementById('deactivationModal')
-        deactivationModal.style.display = 'block'
+        deactivationModal.classList.replace('hide', 'show')
 
         let cancelBtn = document.getElementById('closeDeactivationModal')
-        cancelBtn.addEventListener('click', function(event) { deactivationModal.style.display = 'none' })
+        cancelBtn.addEventListener('click', function(event) { deactivationModal.classList.replace('show', 'hide')})
 
         let continueDeactivationBtn = document.getElementById('continueDeactivationBtn')
         continueDeactivationBtn.addEventListener('click', function(){ document.getElementById('deactivateUserForm').submit() })

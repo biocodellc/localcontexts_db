@@ -135,12 +135,12 @@ input:focus {
     color: #007585;
 }
 
-.primary-blue-text {
-    color: #3876aa;
-}
-
 .white-text {
     color: #fff;
+}
+
+.primary-black-text {
+    color: #333;
 }
 
 .black-text {
@@ -179,10 +179,6 @@ input:focus {
 
 .grey {
     background-color: #A09D9D;
-}
-
-.text-background-blue {
-    background-color: rgba(0, 115, 133, 0.04);
 }
 
 /* TEXT */
@@ -455,27 +451,12 @@ input:focus {
     color: #fff;
 }
 
-.task-complete-btn {
-    padding: 8px 16px;
-    border-radius: 5px;
-    font-size: 14px;
-    line-height: 21px;
-    border: 1px solid #007385;
-    color: #007385;
-    background-color: #fff;
-    display: block;
-}
-
-.task-complete-btn:hover {
-    cursor: default;
-}
-
 .disabled-btn {
     background: #F3F4F6;
     border: none;
     color: #4B5563;
     font-weight: normal;
-    cursor: not-allowed;
+    cursor: default;
 }
 
 /* Community: select-labels: Listen and Example btns */
@@ -687,67 +668,18 @@ input:focus {
 
 /* COMMUNITY DASHBOARD: MEMBERS PAGE */
 .add-member-card {
-    max-height: 75px;
-    min-height: 75px;
-}
-
-/* ADD MEMBER MODAL */
-
-.add-member-card {
     border: 2px dashed rgba(0, 115, 133, 0.2);
     margin: 1% auto 1% auto;
+    max-height: 75px;
+    min-height: 75px;
     max-width: 1280px;
     min-width: 1280px;
     border-radius: 10px;
     text-align: center;
     cursor: pointer;
+
 }
 
-.add-member-modal, .close-modal-btn {
-    cursor: pointer;
-}
-
-.modal {
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    overflow: auto;
-    background-color: #fff;
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-.add-member-modal-wrapper {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 5px;
-    width: 70%;
-    height: 420px;
-}
-
-.add-member-modal-wrapper h4 {
-    margin-top:0;
-}
-
-.close-modal-btn {
-    text-align: right;
-    padding-right: 10px;
-    margin-bottom: 0;
-}
-
-.close-modal-btn span {
-    font-size: 36px;
-}
-
-.modal-content-padding {
-    padding-left: 40px;
-    padding-right: 40px;
-}
 
 /* COMMUNITY DASHBOARD: SETTINGS */
 .set-nav {
@@ -964,16 +896,6 @@ input:focus {
     font-size: 1.2em;
 }
 
-/* MODAL check label type in comm:labels:select-label */
-.type-modal-box {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 5px;
-    width: 50%;
-    height: 250px;
-}
-
 /* Notification V2 (Institutions) */
 
 .dropdown {
@@ -1013,26 +935,6 @@ input:focus {
 /* Textbox message add-members */
 .add-member-message {
     width: 100px;
-}
-
-/* CREATE INSTITUTION NO ROR */
-.noror-modal-box {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 5px;
-    width: 50%;
-    height: 550px;
-}
-
-/* ORCID MODAL */
-.orcid-modal {
-    background-color: #fefefe;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 5px;
-    width: 436px;
-    height: 295px;
 }
 
   /* TOOLTIPS */
@@ -1132,7 +1034,6 @@ input:focus {
 .meatball-dropdown-content span:hover {
     background-color: #dafaf4;
 }
-
 
 /* View Project: Researcher hover */
 .researcher-hover {
