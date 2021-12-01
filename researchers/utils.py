@@ -3,7 +3,7 @@ from helpers.models import Notice
 from .models import Researcher
 
 def is_user_researcher(user):
-    if user.profile.is_researcher:
+    if Researcher.objects.filter(user=user).exists():
         return Researcher.objects.get(user=user)
     else:
         return False
@@ -17,8 +17,7 @@ def get_notices_count(researcher):
     return notice_count
 
 def checkif_user_researcher(current_researcher, user):
-    user_is_researcher = Researcher.objects.filter(user=user).exists()
-    if user_is_researcher:
+    if Researcher.objects.filter(user=user).exists():
         researcher = Researcher.objects.get(user=user)
         if current_researcher == researcher:
             return True

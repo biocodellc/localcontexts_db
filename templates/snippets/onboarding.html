@@ -35,7 +35,7 @@
                         <div><h1 class="darkteal-text">1/6 Your profile</h1></div>
                         <div class="w-90">
                             <p>
-                                The profile you create enables you to join multiple accounts on the hub and create accounts on behalf of your community or institution. 
+                                The profile you create enables you to join multiple accounts on the hub and create accounts on behalf of your Indigenous Community, Institution or practice.
                                 <br><br>
                                 You will be able to access all the different accounts you are a member of from your profile.
                             </p>
@@ -45,6 +45,9 @@
                     <div class="w-50 onboard-blue-bg modal-right-half">
                         <div class="onboard-content-margin flex-this column">
                             <div class="right-text"><button class="close-onboarding-btn">Close X</button></div>
+                            <div class="center-text margin-top-16">
+                                <img src="{% static 'images/onboarding/profile-img.png' %}">
+                            </div>
                         </div>
                     </div>                     
                 </div>
@@ -68,6 +71,9 @@
                     <div class="w-50 onboard-blue-bg modal-right-half">
                         <div class="onboard-content-margin flex-this column">
                             <div class="right-text"><button class="close-onboarding-btn">Close X</button></div>
+                            <div class="center-text margin-top-16">
+                                <img src="{% static 'images/onboarding/accounts-img.png' %}">
+                            </div>
                         </div>
                     </div>                     
                 </div>
@@ -81,9 +87,9 @@
                         <div><h1 class="darkteal-text">3/6 Local Contexts Projects</h1></div>
                         <div class="w-90">
                             <p>
-                                Local Contexts Projects assist in documenting cultural material on the hub. Institutions and researchers can apply Notices to it, and Indigenous Communities can apply their customized Labels. 
+                                Local Contexts Projects assist in documenting cultural material on the hub. Institutions and Researchers can apply Notices to it, and Indigenous Communities can apply their customized Labels. 
                                 <br><br>
-                                There are various types of projects, such as collections, items, expeditions, exhibitions, or samples.  
+                                There are various types of Projects, such as collections, items, expeditions, exhibitions, or samples.  
                             </p>
                         </div>
                         <div><button class="btn-next primary-btn action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
@@ -91,10 +97,7 @@
                     <div class="w-50 onboard-blue-bg modal-right-half">
                         <div class="onboard-content-margin flex-this column">
                             <div class="right-text"><button class="close-onboarding-btn">Close X</button></div>
-                            <div class="center-text margin-top-16">
-                                <img src="{% static 'images/onboarding/projects-tk.png' %}">
-                                <img src="{% static 'images/onboarding/projects-label-img.png' %}">
-                            </div>
+                            <div class="center-text margin-top-16"><img src="{% static 'images/onboarding/projects-img.png' %}"></div>
                             <div class="section-bar-container"><img src="{% static 'images/onboarding/section-bar-projects.png' %}"></div>
                         </div>
                     </div>                     
@@ -109,9 +112,9 @@
                         <div><h1 class="darkteal-text">4/6 Labels</h1></div>
                         <div class="w-90">
                             <p>
-                                Through the Local Contexts Hub, Indigenous Communities can ensure that their local and traditional protocols are applied to TK & BC Labels to determine how their cultural material is accessed and used going forward.
+                                The Label descriptions can be customized by Indigenous Communities to ensure that their local and traditional protocols are embedded in those Labels.
                                 <br><br>
-                                Community members can customize the template text of the TK & BC Labels in the hub to outline their specific local protocols.
+                                When communities apply those Labels to relevant projects the labels will be used as an identifier to define how their cultural material is accessed and used going forward.
                             </p>
                         </div>
                         <div><button class="btn-next primary-btn action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
@@ -119,9 +122,8 @@
                     <div class="w-50 onboard-blue-bg modal-right-half">
                         <div class="onboard-content-margin flex-this column">
                             <div class="right-text"><button class="close-onboarding-btn">Close X</button></div>
-                            <div class="center-text margin-top-16 onboarding-labels">
-                                <img src="{% static 'images/onboarding/labels-1.png' %}">
-                                <img src="{% static 'images/onboarding/labels-2.png' %}">
+                            <div class="center-text margin-top-16">
+                                <img src="{% static 'images/onboarding/labels-img.png' %}">
                             </div>
                             <div class="section-bar-container"><img src="{% static 'images/onboarding/section-bar-labels.png' %}"></div>
                         </div>
@@ -137,9 +139,9 @@
                         <div><h1 class="darkteal-text">5/6 Notices</h1></div>
                         <div class="w-90">
                             <p>
-                                Institutions and researchers can apply Notices to cultural materials they currently protect using the Local contexts Hub.
+                                Institutions and Researchers can create projects for Cultural heritage materials they protect and apply Notices to them. 
                                 <br><br>
-                                The Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data.
+                                By applying notices it will assist Indigenous Communities to realise there is Indigenous interests in these collections and data.
                             </p>
                         </div>
                         <div><button class="btn-next primary-btn action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
@@ -147,9 +149,7 @@
                     <div class="w-50 onboard-blue-bg modal-right-half">
                         <div class="onboard-content-margin flex-this column">
                             <div class="right-text"><button class="close-onboarding-btn">Close X</button></div>
-                            <div class="center-text margin-top-16">
-                                <img src="{% static 'images/onboarding/notices.png' %}">
-                            </div>
+                            <div class="center-text margin-top-16"><img src="{% static 'images/onboarding/notices-img.png' %}"></div>
                             <div class="section-bar-container"><img src="{% static 'images/onboarding/section-bar-notices.png' %}"></div>
 
                         </div>
@@ -165,16 +165,21 @@
                         <div><h1 class="darkteal-text">6/6 Members</h1></div>
                         <div class="w-90">
                             <p>
-                                Community and Institutional accounts can have as many members as necessary. There are three types of responsibilities available to each account:
-                                Administrator, Editors and Viewers
-                                <br><br>
-                                There are different permissions associated with each role. To learn more about them, click on the 'Members' tab in the account dashboard.                            </p>
-                        </div>
+                                Community and Institutional accounts can have as many members as necessary. There are three types of roles within the hub that allow different activites and permissions they are:
+                                <ul>
+                                    <li>Administrators</li>
+                                    <li>Editors</li>
+                                    <li>Viewers</li>
+                                </ul>
+                                To learn more about them, click on the 'Members' tab on your account dashboard. 
+                            </p>
+                       </div>
                         <div><button class="btn-next primary-btn action-btn">Next <i class="fa fa-long-arrow-right"></i></button></div>
                     </div>
                     <div class="w-50 onboard-blue-bg modal-right-half">
                         <div class="onboard-content-margin flex-this column">
                             <div class="right-text margin-bottom-16"><button class="close-onboarding-btn">Close X</button></div>
+                            <div class="center-text margin-top-16"><img src="{% static 'images/onboarding/members-img.png' %}"></div>
                             <div class="section-bar-container"><img src="{% static 'images/onboarding/section-bar-members.png' %}"></div>
                         </div>
                     </div>                     
