@@ -64,7 +64,7 @@
 .dashcard-subheader {
     margin-bottom: 0;
     font-weight: bold;
-    color: #000;
+    color: #333;
 }
 
 .dashcard-description {
@@ -205,15 +205,4 @@
     height: 120px;
     margin-top: 20px;
     margin-right: -25px;
-}
-
-.onboarding-labels {
-    margin-top: 60px;
-    margin-bottom: 40px;
-
-}
-
-.onboarding-labels img {
-    margin: 10px;
-    border-radius: 5px;
 }
