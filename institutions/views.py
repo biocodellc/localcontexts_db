@@ -194,11 +194,8 @@ def institution_members(request, pk):
                         return redirect('institution-members', institution.id)
                 else: 
                     messages.add_message(request, messages.INFO, 'This user has already been invited to this institution.')
-                    return render(request, 'institutions/add-member.html', {'institution': institution, 'form': form,})
             else:
                 messages.add_message(request, messages.ERROR, 'This user is already a member of this institution.')
-                return render(request, 'institutions/add-member.html', {'institution': institution, 'form': form,})
-
 
         context = { 
             'institution': institution,

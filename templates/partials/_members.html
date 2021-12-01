@@ -237,8 +237,7 @@
     <div id="memberModal" class="modal hide">
         <div class="modal-defaults add-member-modal flex-this column w-100">
       
-            <!-- <div id="close-modal" class="close-modal-btn w-100"><span class="darkteal-text">&times;</span></div> -->
-            <div class="flex-this flex-end close-modal-btn">
+            <div class="flex-this flex-end close-modal">
                 <div class="margin-right-8 primary-btn white-btn">Close X</div>
             </div>
             <div class="modal-content-padding w-100">
@@ -249,39 +248,41 @@
                 </p>
 
                 <div class="w-100 flex-this column">
-                  <form method="POST" action="">
-                      {% csrf_token %}
-          
-                        <div class="flex-this column"> 
-                            <div class="w-50">
-                                <div> 
-                                    <label>Name</label> <br>
-                                    {{ form.receiver }} 
-                                </div>
+                    <form id="addMemberForm" method="POST" action="">
+                        {% csrf_token %}
+            
+                            <div class="flex-this column"> 
                                 <div>
-                                    <label>Proposed Responsibility</label><br>
-                                    {{ form.role }} 
+                                    <div> 
+                                        <label>Name</label> <br>
+                                        {{ form.receiver }} 
+                                    </div>
+                                    <div>
+                                        <label>Proposed Responsibility</label><br>
+                                        {{ form.role }} 
+                                    </div>
+                                </div>
+        
+                                <div>
+                                    <label>Optional Message</label><br>
+                                    {{ form.message }}
+                                </div>
+                            </div>    
+
+                            <!-- Alerts -->
+                            {% include 'partials/_alerts.html' %}
+
+                        
+                            <div class="flex-this w-100 margin-bottom-16">
+                                <div class="w-50 margin-top-2">
+                                    <button class="primary-btn action-btn">Send Invitation </button>
+                                </div>
+        
+                                <div class="w-50 margin-top-2 right-text">
+                                    <small>Looking for someone who isn't on this list? <br><a class="darkteal-text" href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.</small>
                                 </div>
                             </div>
-    
-                            <div class="w-50">
-                                <label>Optional Message</label><br>
-                                {{ form.message }}
-                            </div>
-                        </div>    
-                      
-                        <div class="flex-this w-100">
-                            <div class="w-50 margin-top-2">
-                                <!-- Alerts -->
-                                {% include 'partials/_alerts.html' %}
-                                <button class="primary-btn action-btn">Send Invitation </button>
-                            </div>
-    
-                            <div class="w-50 pad-top-1-5 right-text">
-                                <small>Looking for someone who isn't on this list? <br><a class="darkteal-text" href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.</small>
-                            </div>
-                        </div>
-    
+        
                     </form>
                 </div>
             </div>

@@ -716,15 +716,15 @@ if (window.location.href.includes('connect-community') || window.location.href.i
             alert('Please select an organization from the list')
         } else {
             e.preventDefault()
-            let modal = document.getElementById('joinRequestModal')
+            const modal = document.getElementById('joinRequestModal')
             if (modal.classList.contains('hide')) {
                 modal.classList.replace('hide', 'show')
             }
         
-            let span = document.querySelector('.close-modal')
-            span.onclick = function() {
+            const closeModalBtn = document.querySelector('.close-modal-btn')
+            closeModalBtn.addEventListener('click', function() {
                 modal.classList.replace('show', 'hide')
-            }
+            })
         }
     })
 }   
@@ -793,6 +793,7 @@ if (window.location.href.includes('registry')) {
     })       
 }
 
+// Add member modal
 function openMemberModal() {
     const memberModal = document.getElementById('memberModal')
     memberModal.classList.replace('hide', 'show')

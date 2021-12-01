@@ -28,10 +28,6 @@
     font-family: 'BCSans', Verdana, sans-serif;
 }
 
-strong {
-    color: #333;
-}
-
 .bold {
     font-weight: bold;
 }
@@ -141,6 +137,10 @@ input:focus {
 
 .white-text {
     color: #fff;
+}
+
+.primary-black-text {
+    color: #333;
 }
 
 .black-text {

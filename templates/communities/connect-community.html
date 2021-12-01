@@ -34,14 +34,16 @@
 
 <div id="joinRequestModal" class="modal hide">
 
-    <div class="modal-defaults noror-modal-box flex-this column w-100">
-  
-        <div id="close-modal" class="close-modal-btn w-100"> <span class="darkteal-text close-modal">&times;</span></div>
-        <div class="modal-content-padding w-100">
+    <div class="modal-defaults join-modal flex-this column w-100">
+        
+        <div class="flex-this flex-end close-modal-btn">
+            <div class="margin-right-8 primary-btn white-btn">Close X</div>
+        </div>
 
+        <div class="modal-content-padding w-100">
             <div>
                 <h2 style="color: #333333;">Request to join</h2>  
-                <p>Every account has various responsibilities within the community. These roles are:<br>
+                <p>Every account has various responsibilities within the community.<br>
                     <strong>Administrator:</strong> responsible for adding, editing and removing members<br>
                     <strong>Editor:</strong> responsible for customizing Labels and Projects<br>
                     <strong>Viewer:</strong> can view activity happening on the hub
@@ -53,10 +55,8 @@
                 <input id="hidden-target-input" type="hidden" value="" name="organization_name">
 
                 <div class="flex-this column w-100">
-
-                    <!-- <label class="pad-top-1-5" for="community">Community Name</label> -->
                     
-                        <div class="w-50 pad-top-1-5 margin-right-1">
+                        <div class="pad-top-1-5 margin-right-1">
                             <label class="pad-top-1-5">Requested Responsibility</label><br>
                             {{ form.role }}
                         </div>

@@ -164,10 +164,8 @@ def community_members(request, pk):
                         return redirect('members', community.id)
                 else: 
                     messages.add_message(request, messages.INFO, 'This user has already been invited to this community.')
-                    return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
             else:
                 messages.add_message(request, messages.ERROR, 'This user is already a member of this community.')
-                return render(request, 'communities/add-member.html', {'community': community, 'form': form,})
 
         context = {
             'community': community,

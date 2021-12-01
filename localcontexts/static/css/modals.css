@@ -39,7 +39,11 @@
 
 .add-member-modal {
     width: 739px;
-    height: 440px;
+}
+
+/* REQUEST TO JOIN COMMUNITY OR INSTUTION IN REGISTRATION PROCESS */
+.join-modal {
+    width: 600px;
 }
 
 /* CREATE INSTITUTION NO ROR */
@@ -57,7 +61,6 @@
 /* USER DEACTIVATION */
 .deactivate-modal {
     width: 436px;
-    height: 295px;
 }
 
 /* REGISTRY */
