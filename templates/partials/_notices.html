@@ -46,16 +46,15 @@
             </div>
             <div class="w-90">
                 <p>
-                    <span class="darkteal-text bold">Template Text</span><br>
+                    <span class="darkteal-text bold">Notice Text</span><br>
                     The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated.
                 </p>         
             </div>
         </div>
     </div>
 
-
     <h2>Biocultural Notice</h2>
-    <div class="flex-this">
+    <div class="flex-this {% if institution %} border-bottom-solid-teal {% endif %}">
         <div><img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with the letters BC in the middle in white"></div>
         <div class="flex-this column margin-left-16">
             <div class="w-90">
@@ -66,11 +65,51 @@
             </div>
             <div class="w-90">
                 <p>
-                    <span class="darkteal-text bold">Template Text</span><br>
+                    <span class="darkteal-text bold">Notice Text</span><br>
                     The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated.            </p>
                 </p>         
             </div>
         </div>
     </div>
 
+    {% if institution %}
+        <h2>Attribution Incomplete Notice</h2>
+        <div class="flex-this border-bottom-solid-teal">
+            <div><img src="{% static 'images/notices/ci-notice-attribution-incomplete.png' %}" width="119px" alt="black square with the letters BC in the middle in white"></div>
+            <div class="flex-this column margin-left-16">
+                <div class="w-90">
+                    <p class="no-top-margin">
+                        <span class="darkteal-text bold">Why Use this Notice?</span><br>
+                        The Attribution Incomplete Notice is attached to a collection or at an item level where there is incomplete, inaccurate, or missing attribution. This Notice indicates to the public that the record and/or metadata is incomplete. Visibly identifying missing attribution within collections is the first step towards correcting existing attribution to include: contributors, collaborators, other authors and/or communities of origin.                    
+                    </p>        
+                </div>
+                <div class="w-90">
+                    <p>
+                        <span class="darkteal-text bold">Notice Text</span><br>
+                        Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution.
+                    </p>         
+                </div>
+            </div>
+        </div>
+
+        <h2>Open to Collaborate Notice</h2>
+        <div class="flex-this">
+            <div><img src="{% static 'images/notices/ci-notice-open-to-collaborate.png' %}" width="119px" alt="black square with the letters BC in the middle in white"></div>
+            <div class="flex-this column margin-left-16">
+                <div class="w-90">
+                    <p class="no-top-margin">
+                        <span class="darkteal-text bold">Why Use this Notice?</span><br>
+                        The Open to Collaborate Notice indicates that an institution is committed to developing new modes of collaboration, engagement, and partnership over Indigenous collections and data that have colonial and/or problematic histories or unclear provenance. This notice indicates an institutional commitment to change and to develop new processes for the care and stewardship of past and future heritage collections.                    
+                    </p>        
+                </div>
+                <div class="w-90">
+                    <p>
+                        <span class="darkteal-text bold">Notice Text</span><br>
+                        Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.                    </p>         
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
 </div>
+
