@@ -413,37 +413,24 @@ function closeLabelInfoDiv(targetBtn) {
     }
 }
 
-// Institutions: create-projects : show notice descriptions
+// Institutions/researchers: create-project: select Notices, show Notice descriptions
 function showDescription() {
-    let bcInput = document.getElementById('bc-notice')
-    let tkInput = document.getElementById('tk-notice')
-    let tkDescriptionDiv = document.getElementById('show-notice-description-tk')
-    let bcDescriptionDiv = document.getElementById('show-notice-description-bc')
-    let tkTarget = document.getElementById('tkTitle')
-    let bcTarget = document.getElementById('bcTitle')
+    let textinputs = document.querySelectorAll('input[type=checkbox]'); 
+    // stores selected inputs in an array
+    let selected = [].filter.call( textinputs, function( el ) {
 
-    if (bcInput.checked && tkInput.checked) {
-        tkTarget.classList.replace('grey-text', 'darkteal-text')
-        bcTarget.classList.replace('grey-text', 'darkteal-text')
-        tkDescriptionDiv.style.display = "block"
-        bcDescriptionDiv.style.display = "block"
-    } else if (bcInput.checked) {
-        tkTarget.classList.add('grey-text')
-        bcTarget.classList.replace('grey-text', 'darkteal-text')
-        bcDescriptionDiv.style.display = "block"
-        tkDescriptionDiv.style.display = "none"
-    } else if (tkInput.checked) {
-        bcTarget.classList.add('grey-text')
-        tkTarget.classList.replace('grey-text', 'darkteal-text')
-        bcDescriptionDiv.style.display = "none"
-        tkDescriptionDiv.style.display = "block"
-    } else {
-        tkTarget.classList.add('grey-text')
-        bcTarget.classList.add('grey-text')
-        bcDescriptionDiv.style.display = "none"
-        tkDescriptionDiv.style.display = "none" 
-    }
+        let target = document.getElementById(`show-description-${el.id}`)
+        let pTag = document.getElementById(`title-${el.id}`)
 
+        if (el.checked) {
+            target.classList.replace('hide', 'show')
+            pTag.classList.replace('grey-text', 'darkteal-text')
+        } else {
+            target.classList.replace('show', 'hide')
+            pTag.classList.replace('darkteal-text', 'grey-text')
+        }
+    });
+    // console.log('selected', selected)
 }
 
 // CREATE PROJECT: PROJECT TYPE OTHER: TOGGLE VISIBILITY

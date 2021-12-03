@@ -4,7 +4,7 @@ from django.contrib import messages
 
 from .utils import *
 from projects.utils import add_to_contributors
-from helpers.utils import set_notice_defaults, dev_prod_or_local
+from helpers.utils import set_notice_defaults, dev_prod_or_local, create_notices
 
 from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson
@@ -287,19 +287,9 @@ def create_project(request, pk):
                 #Create EntitiesNotified instance for the project
                 EntitiesNotified.objects.create(project=data)
 
-                # Create notice for project
+                # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                if len(notices_selected) > 1:
-                    notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_institution=institution, project=data)
-                    set_notice_defaults(notice)
-                else:
-                    for selected in notices_selected:
-                        if selected == 'bcnotice':
-                            notice = Notice.objects.create(notice_type='biocultural', placed_by_institution=institution, project=data)
-                            set_notice_defaults(notice)
-                        elif selected == 'tknotice':
-                            notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_institution=institution, project=data)
-                            set_notice_defaults(notice)
+                create_notices(notices_selected, institution, data)
 
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')

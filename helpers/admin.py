@@ -5,6 +5,10 @@ class NoticeAdmin(admin.ModelAdmin):
     list_display = ('project', 'notice_type', 'placed_by_researcher', 'placed_by_institution', 'created', 'archived' )
     search_fields = ('project',)
 
+class InstitutionNoticeAdmin(admin.ModelAdmin):
+    list_display = ('project', 'notice_type', 'institution', 'created', 'archived' )
+    search_fields = ('project',)
+
 class LabelTranslationAdmin(admin.ModelAdmin):
     list_display = ('language', 'title', 'translation', )
 
@@ -27,6 +31,7 @@ class ConnectionsAdmin(admin.ModelAdmin):
     list_display = ('community', 'researcher', 'institution')
 
 admin.site.register(Notice, NoticeAdmin)
+admin.site.register(InstitutionNotice, InstitutionNoticeAdmin)
 admin.site.register(LabelTranslation, LabelTranslationAdmin)
 admin.site.register(ProjectComment, ProjectCommentAdmin)
 admin.site.register(ProjectStatus, ProjectStatusAdmin)
