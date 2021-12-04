@@ -10,7 +10,7 @@ from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
-from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified, Connections
+from helpers.models import ProjectComment, ProjectStatus, Notice, InstitutionNotice, EntitiesNotified, Connections
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
@@ -404,7 +404,8 @@ def edit_project(request, institution_id, project_uuid):
 def notify_others(request, pk, proj_id):
     institution = Institution.objects.get(id=pk)
     project = Project.objects.get(id=proj_id)
-    notice_exists = Notice.objects.filter(project=project)
+    notice_exists = Notice.objects.filter(project=project).exists()
+    institution_notice_exists = InstitutionNotice.objects.filter(project=project).exists()
 
     member_role = check_member_role_institution(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -425,28 +426,26 @@ def notify_others(request, pk, proj_id):
                 community = Community.objects.get(id=community_id)
                 
                 # add community to notice instance
-                if notice_exists:
-                    notices = Notice.objects.filter(project=project)
-                    for notice in notices:
-                        # Add communities that were notified to entities_notified instance
-                        entities_notified = EntitiesNotified.objects.get(project=project)
-                        entities_notified.communities.add(community)
-                        entities_notified.save()
+                if notice_exists or institution_notice_exists:
+                    # Add communities that were notified to entities_notified instance
+                    entities_notified = EntitiesNotified.objects.get(project=project)
+                    entities_notified.communities.add(community)
+                    entities_notified.save()
 
-                        # Create project status
-                        project_status = ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
-                        project_status.save()
+                    # Create project status
+                    project_status = ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
+                    project_status.save()
 
-                        # Create first comment for notice
-                        ProjectComment.objects.create(project=project, community=community, sender=request.user, message=message)
+                    # Create first comment for notice
+                    ProjectComment.objects.create(project=project, community=community, sender=request.user, message=message)
 
-                        # Create notification
-                        reference_id = str(project.unique_id)
-                        title =  "A Notice has been placed by " + str(institution.institution_name) + '.'
-                        ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
+                    # Create notification
+                    reference_id = str(project.unique_id)
+                    title =  "A Notice has been placed by " + str(institution.institution_name) + '.'
+                    ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
 
-                        # Create email 
-                        send_email_notice_placed(project, community, institution)
+                    # Create email 
+                    send_email_notice_placed(project, community, institution)
             
             return redirect('institution-projects', institution.id)
 
