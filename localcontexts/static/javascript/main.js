@@ -832,12 +832,13 @@ if (window.location.href.includes('registry')) {
     })
 }
 
-//  ONBOARDING MODAL: Shows up in dashboard if user does not have a last_login & there isn't a localstorage item saved
+//  ONBOARDING MODAL: Shows up in dashboard if there isn't a localstorage item saved and onboarding_on is set to true
 if (window.location.href.includes('dashboard')) {
     const hiddenInput = document.getElementById('openOnboarding')
     const onboardingModal = document.getElementById('onboardingModal')
     const closeOnboardBtns = document.querySelectorAll('.close-onboarding-btn')
     const nextBtns = document.querySelectorAll('.btn-next')
+    const backBtns = document.querySelectorAll('.btn-back')
     const modalSteps = document.querySelectorAll('.onboard-step')
 
     let modalStepsNum = 0
@@ -864,6 +865,13 @@ if (window.location.href.includes('dashboard')) {
     nextBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
             modalStepsNum++
+            updateModalSteps()
+        })
+    })
+
+    backBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            modalStepsNum--
             updateModalSteps()
         })
     })
