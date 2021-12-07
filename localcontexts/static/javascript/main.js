@@ -883,5 +883,11 @@ if (window.location.href.includes('dashboard')) {
         })
         modalSteps[modalStepsNum].classList.add('onboard-step-active')
     }
+
+    // When 'tutorial' is clicked, removes localstorage item so onboarding can pop up
+    const onboardingOn = document.getElementById('onboardingOn')
+    onboardingOn.addEventListener('click', function() {
+        localStorage.removeItem('closedOnboarding')
+    })
 }
 
