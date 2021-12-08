@@ -93,14 +93,14 @@ def loop_through_notices(list, institution, project):
 
 
 # Create Notices (institutions)
-def create_notices(selected_notices, institution, project, existing_notice, existsing_inst_notice):
+def create_notices(selected_notices, institution, project, existing_notice, existing_inst_notice):
     # selected_notices would be a list: 
     # attribution_incomplete # open_to_collaborate # bcnotice # tknotice
-
+    
     if existing_notice:
         existing_notice.delete()
-    if existsing_inst_notice:
-        existsing_inst_notice.delete()
+    if existing_inst_notice:
+        existing_inst_notice.delete()
 
     # If Individual notices
     if len(selected_notices) == 1:
