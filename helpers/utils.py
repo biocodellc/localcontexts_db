@@ -93,9 +93,14 @@ def loop_through_notices(list, institution, project):
 
 
 # Create Notices (institutions)
-def create_notices(selected_notices, institution, project):
+def create_notices(selected_notices, institution, project, existing_notice, existsing_inst_notice):
     # selected_notices would be a list: 
     # attribution_incomplete # open_to_collaborate # bcnotice # tknotice
+
+    if existing_notice:
+        existing_notice.delete()
+    if existsing_inst_notice:
+        existsing_inst_notice.delete()
 
     # If Individual notices
     if len(selected_notices) == 1:
@@ -143,4 +148,3 @@ def create_notices(selected_notices, institution, project):
         set_notice_defaults(notice)
         institution_notice = InstitutionNotice.objects.create(notice_type='open_to_collaborate_and_attribution_incomplete', institution=institution, project=project)
         set_notice_defaults(institution_notice)
-
