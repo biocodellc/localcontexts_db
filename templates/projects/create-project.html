@@ -30,47 +30,107 @@
                 <div class="flex-this w-20 space-between margin-left-16">     
                     <div class="flex-this column center-text">
                         <div><img src="{% static 'images/notices/tk-notice.png' %}" width="73px" alt="black square with white letters TK in the middle"></div>
-                        <div><p id="tkTitle" class="grey-text">Traditional<br> Knowledge Notice</p></div>
+                        <div><p id="title-tk-notice" class="grey-text">Traditional<br> Knowledge Notice</p></div>
                         <div class="notice-checkbox-container">
-                            {% if notice %}
-                                {% if notice.notice_type == 'traditional_knowledge' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                                    <input id="tk-notice" onclick="showDescription()" value="tknotice" type="checkbox" name="checkbox-notice" checked> 
-                                {% else %}
-                                    <input id="tk-notice" onclick="showDescription()" value="tknotice" type="checkbox" name="checkbox-notice"> 
+
+                            <input 
+                                id="tk-notice" 
+                                onclick="showDescription()" 
+                                value="tknotice" 
+                                type="checkbox" 
+                                name="checkbox-notice" 
+                                {% if notice %}
+                                    {% if notice.notice_type == 'traditional_knowledge' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                                        checked
+                                    {% endif %}
                                 {% endif %}
-                            {% else %}
-                                <input id="tk-notice" onclick="showDescription()" value="tknotice" type="checkbox" name="checkbox-notice"> 
-                            {% endif %}
-                            <span class="margin-left-8">Select</span></div>
+                            > 
+                        <span class="margin-left-8">Select</span></div>
                     </div>
             
                     <div class="flex-this column center-text margin-left-16">
                         <div><img src="{% static 'images/notices/bc-notice.png' %}" width="73px" alt="black square with white letters BC in the middle"></div>
-                        <div><p id="bcTitle" class="grey-text">Biocultural<br> Notice</p></div>
+                        <div><p id="title-bc-notice" class="grey-text">Biocultural<br> Notice</p></div>
                         <div class="notice-checkbox-container">
-                            {% if notice %}
-                                {% if notice.notice_type == 'biocultural' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                                    <input id="bc-notice" onclick="showDescription()" value="bcnotice" type="checkbox" name="checkbox-notice" checked>
-                                {% else %}
-                                    <input id="bc-notice" onclick="showDescription()" value="bcnotice" type="checkbox" name="checkbox-notice">
+
+                            <input 
+                                id="bc-notice" 
+                                onclick="showDescription()" 
+                                value="bcnotice" 
+                                type="checkbox" 
+                                name="checkbox-notice" 
+                                {% if notice %}
+                                    {% if notice.notice_type == 'biocultural' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                                        checked
+                                    {% endif %}
                                 {% endif %}
-                            {% else %}
-                                <input id="bc-notice" onclick="showDescription()" value="bcnotice" type="checkbox" name="checkbox-notice">
-                            {% endif %}
-                            <span class="margin-left-8">Select</span></div>
+                            >
+
+                        <span class="margin-left-8">Select</span></div>
                     </div>
+
+                    <!-- Institutional Notices -->
+                    {% if institution %}
+                        <div class="flex-this column center-text margin-left-16">
+                            <div><img src="{% static 'images/notices/ci-notice-attribution-incomplete.png' %}" width="73px"></div>
+                            <div><p id="title-attr-notice" class="grey-text">Attribution <br>Incomplete Notice</p></div>
+                            <div class="notice-checkbox-container">
+
+                                <input 
+                                    id="attr-notice" 
+                                    onclick="showDescription()" 
+                                    value="attribution_incomplete" 
+                                    type="checkbox" 
+                                    name="checkbox-notice"
+                                    {% if institution_notice %} 
+                                        {% if institution_notice.notice_type == 'attribution_incomplete' or institution_notice.notice_type == 'open_to_collaborate_and_attribution_incomplete'%} 
+                                            checked 
+                                        {% endif %}
+                                    {% endif %}
+                                >
+
+                                <span class="margin-left-8">Select</span>
+                            </div>
+                        </div>
+
+                        <div class="flex-this column center-text margin-left-16">
+                            <div><img src="{% static 'images/notices/ci-notice-open-to-collaborate.png' %}" width="73px"></div>
+                            <div><p id="title-open-to-collaborate-notice" class="grey-text">Open to <br>Collaborate Notice</p></div>
+                            <div class="notice-checkbox-container">
+
+                                <input 
+                                    id="open-to-collaborate-notice" 
+                                    onclick="showDescription()" 
+                                    value="open_to_collaborate" 
+                                    type="checkbox" 
+                                    name="checkbox-notice"
+                                    {% if institution_notice %} 
+                                        {% if institution_notice.notice_type == 'open_to_collaborate' or institution_notice.notice_type == 'open_to_collaborate_and_attribution_incomplete'%} 
+                                            checked 
+                                        {% endif %}
+                                    {% endif %}
+                                >
+                                
+                                <span class="margin-left-8">Select</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
                 </div>
 
                 <h3>Notice Text</h3>
-                {% if notice %}
-                    {% if notice.notice_type == 'traditional_knowledge' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                        <div id="show-notice-description-tk" style="display: block;">
+                <div 
+                    id="show-description-tk-notice"
+                    {% if notice %} 
+                        {% if notice.notice_type == 'traditional_knowledge' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                            class="show"
+                        {% else %}
+                            class="hide"
+                        {% endif %}
                     {% else %}
-                        <div id="show-notice-description-tk" style="display: none;">
+                        class="hide"
                     {% endif %}
-                {% else %}
-                    <div id="show-notice-description-tk" style="display: none;">
-                {% endif %}
+                >
                     <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
                         <div class="w-15 pad-top-1"><img src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle"></div>
                         <div class="w-80 pad-top-1">
@@ -79,16 +139,19 @@
                         </div>
                     </div>
                 </div>
-            
-                {% if notice %}
-                    {% if notice.notice_type == 'biocultural' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                        <div id="show-notice-description-bc" style="display: block;">
+
+                <div   
+                    id="show-description-bc-notice" 
+                    {% if notice %}
+                        {% if notice.notice_type == 'biocultural' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                            class="show"
+                        {% else %}
+                            class="hide"
+                        {% endif %}
                     {% else %}
-                        <div id="show-notice-description-bc" style="display: none;">
+                        class="hide"
                     {% endif %}
-                {% else %}
-                    <div id="show-notice-description-bc" style="display: none;">
-                {% endif %}
+                >
 
                     <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
                         <div class="w-15 pad-top-1"><img src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle"></div>
@@ -99,7 +162,56 @@
                     </div>
                 </div>
 
-            </div>
+                <div 
+                    id="show-description-attr-notice" 
+                    {% if institution_notice %} 
+                        {% if institution_notice.notice_type == 'attribution_incomplete' or institution_notice.notice_type == 'open_to_collaborate_and_attribution_incomplete' %}
+                            class="show"
+                        {% else %}
+                            class="hide"
+                        {% endif %}
+                    {% else %}
+                        class="hide"
+                    {% endif %}
+                >
+                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
+                        <div class="w-15 pad-top-1"><img src="{% static 'images/notices/ci-notice-attribution-incomplete.png' %}" width="119px" alt="black square with white letters BC in the middle"></div>
+                        <div class="w-80 pad-top-1">
+                            <h3 class="no-top-margin">Attribution Incomplete Notice</h3>
+                            <p>
+                                Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution. <br> 
+                                For more information about the Attribution Incomplete Notice click <a href="https://localcontexts.org/notice/attribution-incomplete/" target="_blank"><span class="darkteal-text">here</span></a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div 
+                    id="show-description-open-to-collaborate-notice" 
+                    {% if institution_notice %} 
+                        {% if institution_notice.notice_type == 'open_to_collaborate' or institution_notice.notice_type == 'open_to_collaborate_and_attribution_incomplete' %}
+                            class="show"
+                        {% else %}
+                            class="hide"
+                        {% endif %}
+                    {% else %}
+                        class="hide"
+                    {% endif %}
+                >
+                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
+                        <div class="w-15 pad-top-1"><img src="{% static 'images/notices/ci-notice-open-to-collaborate.png' %}" width="119px" alt="black square with white letters BC in the middle"></div>
+                        <div class="w-80 pad-top-1">
+                            <h3 class="no-top-margin">Open to Collaborate Notice</h3>
+                            <p>
+                                Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections. <br>
+                                For more information about the Open to Collaborate Notice click <a href="https://localcontexts.org/notice/open-to-collaborate/" target="_blank"><span class="darkteal-text">here</span></a>.
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- end of Notices card-->
         {% endif %} 
 
         <!-- Project Overview -->

@@ -21,7 +21,7 @@ def apiOverview(request, format=None):
         'API Documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
         'Usage Guide for TK/BC Notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf',
         'Usage Guide for Institution Notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf',
-        'Usage Guide for BC and TK Labels': 'COMING SOON',
+        'Usage Guide for BC and TK Labels': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf',
     }
     return Response(api_urls)
 
@@ -50,7 +50,7 @@ def project_detail(request, unique_id):
 
 @api_view(['GET'])
 def projects_by_user(request, username):
-    user = User.objects.get(username=username)
+    user = User.objects.get(username__iexact=username)
     projects = Project.objects.filter(project_creator=user, project_privacy='Public')
     serializer = ProjectOverviewSerializer(projects, many=True)
     return Response(serializer.data)

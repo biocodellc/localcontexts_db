@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.serializers import SerializerMethodField
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
-from helpers.models import Notice
+from helpers.models import Notice, InstitutionNotice
 from projects.models import Project
 from communities.models import Community
 from institutions.models import Institution
@@ -57,6 +57,13 @@ class NoticeSerializer(serializers.ModelSerializer):
         model = Notice
         fields = ('notice_type', 'bc_img_url', 'bc_default_text', 'tk_img_url', 'tk_default_text', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
 
+class InstitutionNoticeSerializer(serializers.ModelSerializer):
+    institution = InstitutionSerializer()
+
+    class Meta:
+        model = InstitutionNotice
+        fields = ('notice_type', 'institution', 'open_to_collaborate_img_url', 'open_to_collaborate_default_text', 'attribution_incomplete_img_url', 'attribution_incomplete_default_text', 'created', 'updated',)
+
 class ProjectOverviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
@@ -65,10 +72,11 @@ class ProjectOverviewSerializer(serializers.ModelSerializer):
 # Notices only   
 class ProjectSerializer(serializers.ModelSerializer):
     notice = NoticeSerializer(source="project_notice", many=True)
+    institution_notice = InstitutionNoticeSerializer(source="project_institutional_notice", many=True)
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'title', 'notice')
+        fields = ('unique_id', 'title', 'notice', 'institution_notice')
 
 # Labels only
 class ProjectNoNoticeSerializer(serializers.ModelSerializer):

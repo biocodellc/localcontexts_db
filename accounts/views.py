@@ -177,6 +177,12 @@ def dashboard(request):
     return render(request, "accounts/dashboard.html", context)
 
 @login_required(login_url='login')
+def onboarding_on(request):
+    request.user.profile.onboarding_on = True
+    request.user.profile.save()
+    return redirect('dashboard')
+
+@login_required(login_url='login')
 def create_profile(request):
     if request.method == 'POST':
         user_form = UserCreateProfileForm(request.POST, instance=request.user)

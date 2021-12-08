@@ -6,7 +6,11 @@
         <div class="margin-top-16">or <a class="darkteal-text" href="{% url 'connect-institution' %}">Request to join an institution account</a>  </div>
     </div>
 
-    <p class="no-bottom-margin no-top-margin">The information you provide here will be displayed in the Local Contexts Registry. This is to ensure others are aware that you are active in the Local Contexts network. Read how your data will managed and protected <a class="darkteal-text" href="#">here</a>.</p>
+    <p class="no-bottom-margin no-top-margin">
+        The institution details provided below will default to a public display in the Local Contexts Registry.
+        The intent is to help others to network with other registered institutions.
+        Providing your details will give consent to publicly being listed on the Registry.
+    </p>
 
     <form action="" method="POST" class="flex-this column w-100">
         {% csrf_token %}

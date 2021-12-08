@@ -413,37 +413,24 @@ function closeLabelInfoDiv(targetBtn) {
     }
 }
 
-// Institutions: create-projects : show notice descriptions
+// Institutions/researchers: create-project: select Notices, show Notice descriptions
 function showDescription() {
-    let bcInput = document.getElementById('bc-notice')
-    let tkInput = document.getElementById('tk-notice')
-    let tkDescriptionDiv = document.getElementById('show-notice-description-tk')
-    let bcDescriptionDiv = document.getElementById('show-notice-description-bc')
-    let tkTarget = document.getElementById('tkTitle')
-    let bcTarget = document.getElementById('bcTitle')
+    let textinputs = document.querySelectorAll('input[type=checkbox]'); 
+    // stores selected inputs in an array
+    let selected = [].filter.call( textinputs, function( el ) {
 
-    if (bcInput.checked && tkInput.checked) {
-        tkTarget.classList.replace('grey-text', 'darkteal-text')
-        bcTarget.classList.replace('grey-text', 'darkteal-text')
-        tkDescriptionDiv.style.display = "block"
-        bcDescriptionDiv.style.display = "block"
-    } else if (bcInput.checked) {
-        tkTarget.classList.add('grey-text')
-        bcTarget.classList.replace('grey-text', 'darkteal-text')
-        bcDescriptionDiv.style.display = "block"
-        tkDescriptionDiv.style.display = "none"
-    } else if (tkInput.checked) {
-        bcTarget.classList.add('grey-text')
-        tkTarget.classList.replace('grey-text', 'darkteal-text')
-        bcDescriptionDiv.style.display = "none"
-        tkDescriptionDiv.style.display = "block"
-    } else {
-        tkTarget.classList.add('grey-text')
-        bcTarget.classList.add('grey-text')
-        bcDescriptionDiv.style.display = "none"
-        tkDescriptionDiv.style.display = "none" 
-    }
+        let target = document.getElementById(`show-description-${el.id}`)
+        let pTag = document.getElementById(`title-${el.id}`)
 
+        if (el.checked) {
+            target.classList.replace('hide', 'show')
+            pTag.classList.replace('grey-text', 'darkteal-text')
+        } else {
+            target.classList.replace('show', 'hide')
+            pTag.classList.replace('darkteal-text', 'grey-text')
+        }
+    });
+    // console.log('selected', selected)
 }
 
 // CREATE PROJECT: PROJECT TYPE OTHER: TOGGLE VISIBILITY
@@ -845,12 +832,13 @@ if (window.location.href.includes('registry')) {
     })
 }
 
-//  ONBOARDING MODAL: Shows up in dashboard if user does not have a last_login & there isn't a localstorage item saved
+//  ONBOARDING MODAL: Shows up in dashboard if there isn't a localstorage item saved and onboarding_on is set to true
 if (window.location.href.includes('dashboard')) {
     const hiddenInput = document.getElementById('openOnboarding')
     const onboardingModal = document.getElementById('onboardingModal')
     const closeOnboardBtns = document.querySelectorAll('.close-onboarding-btn')
     const nextBtns = document.querySelectorAll('.btn-next')
+    const backBtns = document.querySelectorAll('.btn-back')
     const modalSteps = document.querySelectorAll('.onboard-step')
 
     let modalStepsNum = 0
@@ -881,6 +869,13 @@ if (window.location.href.includes('dashboard')) {
         })
     })
 
+    backBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            modalStepsNum--
+            updateModalSteps()
+        })
+    })
+
     function updateModalSteps() {
         modalSteps.forEach(modalStep => {
             modalStep.classList.contains('onboard-step-active') &&
@@ -888,5 +883,11 @@ if (window.location.href.includes('dashboard')) {
         })
         modalSteps[modalStepsNum].classList.add('onboard-step-active')
     }
+
+    // When 'tutorial' is clicked, removes localstorage item so onboarding can pop up
+    const onboardingOn = document.getElementById('onboardingOn')
+    onboardingOn.addEventListener('click', function() {
+        localStorage.removeItem('closedOnboarding')
+    })
 }
 

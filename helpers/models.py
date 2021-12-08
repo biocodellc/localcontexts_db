@@ -34,6 +34,31 @@ class Notice(models.Model):
         verbose_name_plural = 'Notices'
         ordering = ('-created',)
 
+class InstitutionNotice(models.Model):
+    TYPES = (
+        ('open_to_collaborate', 'open_to_collaborate'),
+        ('attribution_incomplete', 'attribution_incomplete'),
+        ('open_to_collaborate_and_attribution_incomplete', 'open_to_collaborate_and_attribution_incomplete')
+    )
+    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_institutional_notice", db_index=True)
+    notice_type = models.CharField(max_length=50, null=True, choices=TYPES)
+    institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
+    open_to_collaborate_img_url = models.URLField(blank=True, null=True)
+    open_to_collaborate_default_text = models.TextField(null=True, blank=True)
+    attribution_incomplete_img_url = models.URLField(blank=True, null=True)
+    attribution_incomplete_default_text = models.TextField(null=True, blank=True)
+    archived = models.BooleanField(default=False, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.project.title)
+    
+    class Meta:
+        verbose_name = 'Institution Notice'
+        verbose_name_plural = 'Institution Notices'
+        ordering = ('-created',)
+
 class EntitiesNotified(models.Model):
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_notified", db_index=True)
     communities = models.ManyToManyField(Community, blank=True, related_name="communities_notified", db_index=True)
