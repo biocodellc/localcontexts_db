@@ -1,0 +1,17 @@
+<!-- Note: template inheritance does not work with xhtml2pdf -->
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{ project.title }} Labels PDF</title>
+        <style>
+            p {
+                font-size: 48px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <p>{{ project.title }}</p>
+    </body>
+</html>

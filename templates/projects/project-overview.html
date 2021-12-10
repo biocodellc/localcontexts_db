@@ -59,35 +59,35 @@
                     <a onclick="toggleMeatballMenu(this)" id="meatball-{{ project.unique_id }}" class="meatball"><i class="fa fa-ellipsis-h" style="font-size: 24px;"></i></a>
                     <div id="meatball-content-{{ project.unique_id }}" class="meatball-dropdown-content hide"> 
 
-                            {% if project.bc_labels.all or project.tk_labels.all %}{% else %}
-                                    {% if request.user == project.project_creator %}
-                                        <span>
-                                            <div class="margin-right-1">
-                                                <a
-                                                    class="darkteal-text"
+                        {% if project.bc_labels.all or project.tk_labels.all %}{% else %}
+                                {% if request.user == project.project_creator %}
+                                    <span>
+                                        <div class="margin-right-1">
+                                            <a
+                                                class="darkteal-text"
 
-                                                    {% if community %}
-                                                        href="{% url 'edit-project' community.id project.unique_id %}"
-                                                    {% endif %}
-                                                    {% if institution %}
-                                                        href="{% url 'inst-edit-project' institution.id project.unique_id %}"
-                                                    {% endif %}                        
-                                                    {% if researcher %}
-                                                        href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
-                                                    {% endif %}   
-                                                >
-                                                    Edit Project <i class="fa fa-edit" aria-hidden="true"></i>
-                                                </a>                   
-                                            </div>                                        
-                                        </span>
-                                    {% endif %}   
-                            {% endif %}
-                            
-                            <span>
-                                <a class="darkteal-text" href="{% url 'download-project-zip' project.unique_id %}">
-                                    Download <i class="fa fa-download" aria-hidden="true"></i>
-                                </a>                                          
-                            </span>
+                                                {% if community %}
+                                                    href="{% url 'edit-project' community.id project.unique_id %}"
+                                                {% endif %}
+                                                {% if institution %}
+                                                    href="{% url 'inst-edit-project' institution.id project.unique_id %}"
+                                                {% endif %}                        
+                                                {% if researcher %}
+                                                    href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
+                                                {% endif %}   
+                                            >
+                                                Edit Project <i class="fa fa-edit" aria-hidden="true"></i>
+                                            </a>                   
+                                        </div>                                        
+                                    </span>
+                                {% endif %}   
+                        {% endif %}
+                        
+                        <span>
+                            <a class="darkteal-text" href="{% url 'download-project-zip' project.unique_id %}">
+                                Download <i class="fa fa-download" aria-hidden="true"></i>
+                            </a>                                          
+                        </span>
                     </div>
                 </div>
 
