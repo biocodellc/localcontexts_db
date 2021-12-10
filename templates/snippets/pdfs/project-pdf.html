@@ -3,15 +3,92 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>{{ project.title }} Labels PDF</title>
+        <title>Project PDF</title>
         <style>
+
+            h1 {
+                font-size: 18px;
+            }
+
             p {
-                font-size: 48px;
+                font-size: 15px;
+                margin-top: 1px;
+            }
+
+            table {
+                padding-top: 10px;
+                padding-bottom: 10px;
+
+                border-bottom-style: solid;
+                border-bottom-color: #007585;
+                border-top-width: 0.5px;
+            }
+
+            .text-width {
+                width: 400px;
+            }
+
+            .no-bottom-margin {
+                margin-bottom: 1px;
+            }
+
+            .image-td {
+                width: 170px;
+                vertical-align: top;
             }
 
         </style>
     </head>
     <body>
-        <p>{{ project.title }}</p>
+        <h1>{{ project.title }}</h1>
+        <p>
+            Date: {{ project.date_added }}<br>
+            Unique ID: {{ project.unique_id }}<br>
+            Created by: {{ project.project_creator.get_full_name }}
+        </p>
+
+        <table>
+            {% if project.bc_labels.all %}
+                {% for bclabel in project.bc_labels.all %}
+                    <tr>
+                        <td class="image-td">
+                            <img src="{{ bclabel.img_url }}" width="200px">
+                        </td>
+                        <td class="text-td">
+                            <h1 class="no-bottom-margin">{{ bclabel.name }}</h1>
+                            <p> {{ bclabel.default_text|linebreaks }} </p> 
+
+                            {% if bclabel.bclabel_translation.all %}
+                                {% for translation in bclabel.bclabel_translation.all %}
+                                    <h1 class="no-bottom-margin">{{ translation.title }} ({{ translation.language }})</h1>
+                                    <p> {{ translation.translation|linebreaks }} </p> 
+                                {% endfor %}
+                            {% endif %} 
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+
+            {% if project.tk_labels.all %}
+                {% for tklabel in project.tk_labels.all %}
+                    <tr>
+                        <td class="image-td">
+                            <img src="{{ tklabel.img_url }}" width="200px">
+                        </td>
+                        <td class="text-td">
+                            <h1 class="no-bottom-margin">{{ tklabel.name }}</h1>
+                            <p> {{ tklabel.default_text|linebreaks }} </p>  
+
+                            {% if tklabel.tklabel_translation.all %}
+                                {% for translation in tklabel.tklabel_translation.all %}
+                                    <h1 class="no-bottom-margin">{{ translation.title }} ({{ translation.language }})</h1>
+                                    <p> {{ translation.translation|linebreaks }} </p> 
+                                {% endfor %}
+                            {% endif %} 
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
     </body>
 </html>
