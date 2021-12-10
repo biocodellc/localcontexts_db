@@ -1,4 +1,5 @@
 import json
+import zipfile
 
 from communities.models import Community
 from institutions.models import Institution
@@ -148,3 +149,9 @@ def create_notices(selected_notices, institution, project, existing_notice, exis
         set_notice_defaults(notice)
         institution_notice = InstitutionNotice.objects.create(notice_type='open_to_collaborate_and_attribution_incomplete', institution=institution, project=project)
         set_notice_defaults(institution_notice)
+
+
+def create_zipfile(files):
+    with zipfile.ZipFile('files.zip', 'a', compression=zipfile.ZIP_DEFLATED) as my_zip:
+        for file in files:
+            my_zip.write(file)
