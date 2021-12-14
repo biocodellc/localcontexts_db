@@ -42,7 +42,7 @@
     <body>
         <h1>{{ project.title }}</h1>
         <p>
-            <strong>Created By:</strong> {{ project.project_creator.get_full_name }}
+            <strong>Created:</strong> {{ project.project_creator.get_full_name }}
             {% if project.community_projects.all %} {% for community in project.community_projects.all %} at {{ community }} | Community {% endfor %} {% endif %}
             {% if project.institution_projects.all %} {% for institution in project.institution_projects.all %} at {{ institution }} | Institution {% endfor %} {% endif %}
             {% if project.researcher_projects.all %} {% for researcher in project.researcher_projects.all %} | Researcher {% endfor %} {% endif %}
