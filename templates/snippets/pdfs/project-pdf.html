@@ -42,9 +42,13 @@
     <body>
         <h1>{{ project.title }}</h1>
         <p>
-            Local Contexts Unique Project ID: {{ project.unique_id }}<br>
-            Created by: {{ project.project_creator.get_full_name }}<br>
-            Date: {{ project.date_added }}<br>
+            <strong>Created By:</strong> {{ project.project_creator.get_full_name }}
+            {% if project.community_projects.all %} {% for community in project.community_projects.all %} at {{ community }} | Community {% endfor %} {% endif %}
+            {% if project.institution_projects.all %} {% for institution in project.institution_projects.all %} at {{ institution }} | Institution {% endfor %} {% endif %}
+            {% if project.researcher_projects.all %} {% for researcher in project.researcher_projects.all %} | Researcher {% endfor %} {% endif %}
+            <br>
+            <strong>Date Added:</strong> {{ project.date_added }}<br>
+            <strong>Local Contexts Unique Project ID:</strong> {{ project.unique_id }}<br>
         </p>
 
         <table>
