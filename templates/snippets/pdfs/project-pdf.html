@@ -42,12 +42,110 @@
     <body>
         <h1>{{ project.title }}</h1>
         <p>
+            Local Contexts Unique Project ID: {{ project.unique_id }}<br>
+            Created by: {{ project.project_creator.get_full_name }}<br>
             Date: {{ project.date_added }}<br>
-            Unique ID: {{ project.unique_id }}<br>
-            Created by: {{ project.project_creator.get_full_name }}
         </p>
 
         <table>
+            {% if project.project_notice.all %}
+                {% for notice in project.project_notice.all %}
+                    {% if not notice.archived %}
+                        {% if notice.notice_type == 'biocultural' %}
+                            <tr>
+                                <td class="image-td">
+                                    <img src="{{ notice.bc_img_url }}" width="200px">
+                                </td>
+                                <td class="text-td">
+                                    <h1 class="no-bottom-margin">Biocultural Notice</h1>
+                                    <p> {{ notice.bc_default_text|linebreaks }} </p> 
+                                </td>                        
+                            </tr>
+                        {% endif %}
+                        {% if notice.notice_type == 'traditional_knowledge' %}
+                            <tr>
+                                <td class="image-td">
+                                    <img src="{{ notice.tk_img_url }}" width="200px">
+                                </td>
+                                <td class="text-td">
+                                    <h1 class="no-bottom-margin">Traditional Knowledge Notice</h1>
+                                    <p> {{ notice.tk_default_text|linebreaks }} </p> 
+                                </td>                        
+                            </tr>
+                        {% endif %}
+                        {% if notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                            <tr>
+                                <td class="image-td">
+                                    <img src="{{ notice.bc_img_url }}" width="200px">
+                                </td>
+                                <td class="text-td">
+                                    <h1 class="no-bottom-margin">Biocultural Notice</h1>
+                                    <p> {{ notice.bc_default_text|linebreaks }} </p> 
+                                </td>                        
+                            </tr>
+                            <tr>
+                                <td class="image-td">
+                                    <img src="{{ notice.tk_img_url }}" width="200px">
+                                </td>
+                                <td class="text-td">
+                                    <h1 class="no-bottom-margin">Traditional Knowledge Notice</h1>
+                                    <p> {{ notice.tk_default_text|linebreaks }} </p> 
+                                </td>                        
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            {% if project.project_institutional_notice.all %}
+                {% for notice in project.project_institutional_notice.all %}
+                    {% if not notice.archived %}
+                        {% if notice.notice_type == 'open_to_collaborate' %}
+                            <tr>
+                                <td class="image-td">
+                                    <img src="{{ notice.open_to_collaborate_img_url }}" width="200px">
+                                </td>
+                                <td class="text-td">
+                                    <h1 class="no-bottom-margin">Open to Collaborate Notice</h1>
+                                    <p> {{ notice.open_to_collaborate_default_text|linebreaks }} </p> 
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% if notice.notice_type == 'attribution_incomplete' %}
+                            <tr>
+                                <td class="image-td">
+                                    <img src="{{ notice.attribution_incomplete_img_url }}" width="200px">
+                                </td>
+                                <td class="text-td">
+                                    <h1 class="no-bottom-margin">Attribution Incomplete Notice</h1>
+                                    <p> {{ notice.attribution_incomplete_default_text|linebreaks }} </p> 
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% if notice.notice_type == 'open_to_collaborate_and_attribution_incomplete' %}
+                            <tr>
+                                <td class="image-td">
+                                    <img src="{{ notice.open_to_collaborate_img_url }}" width="200px">
+                                </td>
+                                <td class="text-td">
+                                    <h1 class="no-bottom-margin">Open to Collaborate Notice</h1>
+                                    <p> {{ notice.open_to_collaborate_default_text|linebreaks }} </p> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="image-td">
+                                    <img src="{{ notice.attribution_incomplete_img_url }}" width="200px">
+                                </td>
+                                <td class="text-td">
+                                    <h1 class="no-bottom-margin">Attribution Incomplete Notice</h1>
+                                    <p> {{ notice.attribution_incomplete_default_text|linebreaks }} </p> 
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
             {% if project.bc_labels.all %}
                 {% for bclabel in project.bc_labels.all %}
                     <tr>
@@ -55,7 +153,7 @@
                             <img src="{{ bclabel.img_url }}" width="200px">
                         </td>
                         <td class="text-td">
-                            <h1 class="no-bottom-margin">{{ bclabel.name }}</h1>
+                            <h1 class="no-bottom-margin">{{ bclabel.name }} ({{ bclabel.community.community_name }})</h1>
                             <p> {{ bclabel.default_text|linebreaks }} </p> 
 
                             {% if bclabel.bclabel_translation.all %}
@@ -76,7 +174,7 @@
                             <img src="{{ tklabel.img_url }}" width="200px">
                         </td>
                         <td class="text-td">
-                            <h1 class="no-bottom-margin">{{ tklabel.name }}</h1>
+                            <h1 class="no-bottom-margin">{{ tklabel.name }} ({{ tklabel.community.community_name }})</h1>
                             <p> {{ tklabel.default_text|linebreaks }} </p>  
 
                             {% if tklabel.tklabel_translation.all %}
