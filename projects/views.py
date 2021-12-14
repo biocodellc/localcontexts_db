@@ -4,6 +4,8 @@ from .models import Project
 from helpers.utils import render_to_pdf, generate_zip
 from django.http import HttpResponse
 import urllib
+import requests
+from io import BytesIO
 
 def view_project(request, unique_id):
     project = Project.objects.get(unique_id=unique_id)
@@ -20,15 +22,12 @@ def download_project_zip(request, unique_id):
     pdf = render_to_pdf(template_path, context)
     files.append((project.title + ".pdf", pdf))
 
-# TODO: fix this
-    # Use instructions location
-    # url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
-    # res = urllib.request.urlretrieve(url)
-    # contents = open(res[0]).read()
-    # f = open('LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf.pdf','w')
-    # f.write(contents)
-    # f.close()
-    # files.append("use_guide.pdf", f)
+    # Usage guide PDF
+    usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
+    response = requests.get(usage_guide_url) 
+    files.append(('BC_TK_Label_Usage_Guide.pdf', response.content))
+
+
 
     full_zip_in_memory = generate_zip(files)
 

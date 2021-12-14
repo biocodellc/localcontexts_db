@@ -9,11 +9,6 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from .models import Connections, Notice, InstitutionNotice
 
-# def create_zipfile(files):
-#     with zipfile.ZipFile('files.zip', 'a', compression=zipfile.ZIP_DEFLATED) as my_zip:
-#         for file in files:
-#             my_zip.write(file)
-
 # h/t: https://stackoverflow.com/questions/59695870/generate-multiple-pdfs-and-zip-them-for-download-all-in-a-single-view
 def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
@@ -25,7 +20,7 @@ def render_to_pdf(template_src, context_dict={}):
     pdf = buffer.getvalue()
     buffer.close()
     if not p.err:
-        return pdf#HttpResponse(result.getvalue(), content_type='application/pdf')
+        return pdf
     return None
 
 def generate_zip(files):
