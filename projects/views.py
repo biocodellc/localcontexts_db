@@ -22,7 +22,7 @@ def download_project_zip(request, unique_id):
     # Create PDF from project context, append to files list
     pdf = render_to_pdf(template_path, context)
     # files.append((project.title + ".pdf", pdf))
-    files.append(("Project_Overview.pdf", pdf))
+    files.append(('Project_Overview.pdf', pdf))
 
     # TODO: 
     # 1. README.txt
@@ -104,6 +104,6 @@ def download_project_zip(request, unique_id):
     full_zip_in_memory = generate_zip(files)
 
     response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename="{}"'.format('project.zip')
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format('LC-Project.zip')
 
     return response
