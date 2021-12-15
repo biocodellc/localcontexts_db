@@ -22,7 +22,6 @@ def download_project_zip(request, unique_id):
 
     # Create PDF from project context, append to files list
     pdf = render_to_pdf(template_path, context)
-    # files.append((project.title + ".pdf", pdf))
     files.append(('Project_Overview.pdf', pdf))
 
     # Label / Notice Files

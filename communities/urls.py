@@ -28,4 +28,6 @@ urlpatterns = [
     path('community/restricted/<str:pk>/', views.restricted_view, name="restricted"),
     
     path('community/labels-pdf/<str:pk>/', views.labels_pdf, name="labels-pdf"),
+    path('community/labels-download/<str:pk>/', views.download_labels, name="download-labels"),
+
 ]

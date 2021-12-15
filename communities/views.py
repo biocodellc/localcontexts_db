@@ -18,7 +18,7 @@ from projects.forms import *
 from bclabels.utils import check_bclabel_type, assign_bclabel_img
 from tklabels.utils import check_tklabel_type, assign_tklabel_img
 from projects.utils import add_to_contributors
-from helpers.utils import dev_prod_or_local, add_to_connections
+from helpers.utils import *
 
 from helpers.emails import *
 
@@ -743,7 +743,7 @@ def labels_pdf(request, pk):
     community = Community.objects.get(id=pk)
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
-    # combine two querysets -- this will be the pdf content
+    # combine two querysets
     # labels = list(chain(bclabels,tklabels))
 
     template_path = 'snippets/pdfs/community-labels.html'
@@ -751,11 +751,12 @@ def labels_pdf(request, pk):
 
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
+
     # if download:
-    response['Content-Disposition'] = 'attachment; filename="labels.pdf"'
+    # response['Content-Disposition'] = 'attachment; filename="labels.pdf"'
     
     # if display
-    # response['Content-Disposition'] = 'filename="labels.pdf"'
+    response['Content-Disposition'] = 'filename="labels.pdf"'
 
     # find the template and render it.
     template = get_template(template_path)
@@ -766,4 +767,63 @@ def labels_pdf(request, pk):
     # if error then show some funy view
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+def download_labels(request, pk):
+    community = Community.objects.get(id=pk)
+    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
+    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+
+    template_path = 'snippets/pdfs/community-labels.html'
+    context = {'community': community, 'bclabels': bclabels, 'tklabels': tklabels,}
+
+    files = []
+
+    # Add PDF to zip
+    pdf = render_to_pdf(template_path, context)
+    files.append(('Labels_Overview.pdf', pdf))
+
+    # Labels Usage guide PDF
+    usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
+    response = requests.get(usage_guide_url) 
+    files.append(('BC_TK_Label_Usage_Guide.pdf', response.content))
+
+    # Add Label images, text and translations
+    for bclabel in bclabels:
+        get_image = requests.get(bclabel.img_url)
+        files.append((bclabel.name + '.png', get_image.content))
+
+        # Default Label text
+        text_content = bclabel.name + '\n' + bclabel.default_text
+        text_addon = []
+
+        if bclabel.bclabel_translation.all():
+            for translation in bclabel.bclabel_translation.all():
+                text_addon.append('\n\n' + translation.title + ' (' + translation.language + ') ' + '\n' + translation.translation)
+            files.append((bclabel.name + '.txt', text_content + '\n'.join(text_addon)))
+        else:
+            files.append((bclabel.name + '.txt', text_content))
+
+    # Add Label images, text and translations
+    for tklabel in tklabels:
+        get_image = requests.get(tklabel.img_url)
+        files.append((tklabel.name + '.png', get_image.content))
+        
+        # Default Label text
+        text_content = tklabel.name + '\n' + tklabel.default_text
+        text_addon = []
+
+        if tklabel.tklabel_translation.all():
+            for translation in tklabel.tklabel_translation.all():
+                text_addon.append('\n\n' + translation.title + ' (' + translation.language + ') ' + '\n' + translation.translation)
+            files.append((tklabel.name + '.txt', text_content + '\n'.join(text_addon)))
+        else:
+            files.append((tklabel.name + '.txt', text_content))
+
+    # Generate zip file 
+    full_zip_in_memory = generate_zip(files)
+
+    response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format('Labels.zip')
+
     return response
