@@ -6,8 +6,6 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework import status
 
 from .serializers import *
-from bclabels.models import BCLabel
-from tklabels.models import TKLabel
 from projects.models import Project
 
 @api_view(['GET'])
