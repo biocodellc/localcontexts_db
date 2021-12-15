@@ -25,7 +25,7 @@
                     <div class="dropdown">
                         <a onclick="toggleMeatballMenu(this)" id="meatball-{{ community.id }}" class="meatball"><i class="fa fa-ellipsis-h" style="font-size: 24px;"></i></a>
                         <div id="meatball-content-{{ community.id }}" class="meatball-dropdown-content hide"> 
-                            <a class="darkteal-text" href="{% url 'labels-pdf' community.id %}" target="_blank">View Label PDF</a>
+                            <a class="darkteal-text" href="{% url 'labels-pdf' community.id %}" target="_blank">View in PDF <i class="fa fa-external-link" aria-hidden="true"></i></a>
                             <a class="darkteal-text" href="{% url 'download-labels' community.id %}">Download <i class="fa fa-download" aria-hidden="true"></i></a>
                         </div>
                     </div> 
