@@ -48,10 +48,13 @@ def project_detail(request, unique_id):
 
 @api_view(['GET'])
 def projects_by_user(request, username):
-    user = User.objects.get(username__iexact=username)
-    projects = Project.objects.filter(project_creator=user, project_privacy='Public')
-    serializer = ProjectOverviewSerializer(projects, many=True)
-    return Response(serializer.data)
+    try:
+        user = User.objects.get(username__iexact=username)
+        projects = Project.objects.filter(project_creator=user, project_privacy='Public')
+        serializer = ProjectOverviewSerializer(projects, many=True)
+        return Response(serializer.data)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def projects_by_institution(request, institution_id):
