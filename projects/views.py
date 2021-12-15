@@ -9,6 +9,7 @@ def view_project(request, unique_id):
     project = Project.objects.get(unique_id=unique_id)
     return render(request, 'projects/view-project.html', {'project': project})
 
+# TODO: Images need to be SVGs
 def download_project_zip(request, unique_id):
     project = Project.objects.get(unique_id=unique_id)
     project_bclabels = project.bc_labels.all()
@@ -23,11 +24,6 @@ def download_project_zip(request, unique_id):
     pdf = render_to_pdf(template_path, context)
     # files.append((project.title + ".pdf", pdf))
     files.append(('Project_Overview.pdf', pdf))
-
-    # TODO: 
-    # 1. README.txt
-    # 2. Label translations
-    # 3. Images need to be SVGs
 
     # Label / Notice Files
     for notice in project.project_notice.all():
@@ -90,15 +86,45 @@ def download_project_zip(request, unique_id):
         response = requests.get(usage_guide_url) 
         files.append(('BC_TK_Label_Usage_Guide.pdf', response.content))
 
+    # Add Label images, text and translations
     for bclabel in project_bclabels:
         get_image = requests.get(bclabel.img_url)
         files.append((bclabel.name + '.png', get_image.content))
-        files.append((bclabel.name + '.txt', bclabel.default_text))
-    
+
+        # Default Label text
+        text_content = bclabel.name + '\n' + bclabel.default_text
+        text_addon = []
+
+        if bclabel.bclabel_translation.all():
+            for translation in bclabel.bclabel_translation.all():
+                text_addon.append('\n\n' + translation.title + ' (' + translation.language + ') ' + '\n' + translation.translation)
+            files.append((bclabel.name + '.txt', text_content + '\n'.join(text_addon)))
+        else:
+            files.append((bclabel.name + '.txt', text_content))
+
+    # Add Label images, text and translations
     for tklabel in project_tklabels:
         get_image = requests.get(tklabel.img_url)
         files.append((tklabel.name + '.png', get_image.content))
-        files.append((tklabel.name + '.txt', tklabel.default_text))
+        
+        # Default Label text
+        text_content = tklabel.name + '\n' + tklabel.default_text
+        text_addon = []
+
+        if tklabel.tklabel_translation.all():
+            for translation in tklabel.tklabel_translation.all():
+                text_addon.append('\n\n' + translation.title + ' (' + translation.language + ') ' + '\n' + translation.translation)
+            files.append((tklabel.name + '.txt', text_content + '\n'.join(text_addon)))
+        else:
+            files.append((tklabel.name + '.txt', text_content))
+    
+    # Create Readme
+    readme_text = 'This folder contains the following files:\n'
+    file_names = []
+    for f in files:
+        file_names.append(f[0])
+    readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guide for details on how to adapt and display the Notices or Labels for your Project.\n\nFor more information, contact Local Contexts at http://localcontexts.org or support@localcontexts.org'
+    files.append(('README.txt', readme_content))
 
     # Generate zip file 
     full_zip_in_memory = generate_zip(files)
