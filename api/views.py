@@ -41,8 +41,7 @@ def project_detail(request, unique_id):
             
             return Response(serializer.data)
         else:
-            raise PermissionDenied({"message":"You don't have permission to view this project",
-                                    "unique_id": unique_id})
+            raise PermissionDenied({"message":"You don't have permission to view this project", "unique_id": unique_id})
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -58,15 +57,20 @@ def projects_by_user(request, username):
 
 @api_view(['GET'])
 def projects_by_institution(request, institution_id):
-    institution = Institution.objects.get(id=institution_id)
-    projects = institution.projects.filter(project_privacy='Public')
-    serializer = ProjectOverviewSerializer(projects, many=True)
-    return Response(serializer.data)
+    try:
+        institution = Institution.objects.get(id=institution_id)
+        projects = institution.projects.filter(project_privacy='Public')
+        serializer = ProjectOverviewSerializer(projects, many=True)
+        return Response(serializer.data)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def projects_by_researcher(request, researcher_id):
-    researcher = Researcher.objects.get(id=researcher_id)
-    projects = researcher.projects.filter(project_privacy='Public')
-    serializers = ProjectOverviewSerializer(projects, many=True)
-    return Response(serializers.data)
-
+    try:
+        researcher = Researcher.objects.get(id=researcher_id)
+        projects = researcher.projects.filter(project_privacy='Public')
+        serializers = ProjectOverviewSerializer(projects, many=True)
+        return Response(serializers.data)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)

@@ -1,8 +1,9 @@
+from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.serializers import SerializerMethodField
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
-from helpers.models import Notice, InstitutionNotice
+from helpers.models import LabelTranslation, Notice, InstitutionNotice
 from projects.models import Project
 from communities.models import Community
 from institutions.models import Institution
@@ -29,22 +30,29 @@ class ResearcherSerializer(serializers.ModelSerializer):
     def get_user(self, obj):
         return str(obj.user.first_name) + ' ' + str(obj.user.last_name)
 
+class LabelTranslationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LabelTranslation
+        fields = ('title', 'language', 'translation')
+    
 class BCLabelSerializer(serializers.ModelSerializer):
     community = SerializerMethodField()
+    translations = LabelTranslationSerializer(source="bclabel_translation", many=True)
 
     class Meta:
         model = BCLabel
-        fields = ('name', 'label_type', 'default_text', 'img_url', 'community', 'created', 'updated')
+        fields = ('name', 'label_type', 'default_text', 'img_url', 'community', 'translations', 'created', 'updated')
     
     def get_community(self, obj):
         return str(obj.community.community_name)
 
 class TKLabelSerializer(serializers.ModelSerializer):
     community = SerializerMethodField()
+    translations = LabelTranslationSerializer(source="tklabel_translation", many=True)
 
     class Meta:
         model = TKLabel
-        fields = ('name', 'label_type', 'default_text', 'img_url', 'community', 'created', 'updated')
+        fields = ('name', 'label_type', 'default_text', 'img_url', 'community', 'translations', 'created', 'updated')
 
     def get_community(self, obj):
         return str(obj.community.community_name)
