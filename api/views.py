@@ -6,8 +6,6 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework import status
 
 from .serializers import *
-from bclabels.models import BCLabel
-from tklabels.models import TKLabel
 from projects.models import Project
 
 @api_view(['GET'])
@@ -43,29 +41,37 @@ def project_detail(request, unique_id):
             
             return Response(serializer.data)
         else:
-            raise PermissionDenied({"message":"You don't have permission to view this project",
-                                    "unique_id": unique_id})
+            raise PermissionDenied({"message":"You don't have permission to view this project", "unique_id": unique_id})
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def projects_by_user(request, username):
-    user = User.objects.get(username__iexact=username)
-    projects = Project.objects.filter(project_creator=user, project_privacy='Public')
-    serializer = ProjectOverviewSerializer(projects, many=True)
-    return Response(serializer.data)
+    try:
+        # user = User.objects.get(username__iexact=username)
+        user = User.objects.get(username=username)
+        projects = Project.objects.filter(project_creator=user, project_privacy='Public')
+        serializer = ProjectOverviewSerializer(projects, many=True)
+        return Response(serializer.data)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def projects_by_institution(request, institution_id):
-    institution = Institution.objects.get(id=institution_id)
-    projects = institution.projects.filter(project_privacy='Public')
-    serializer = ProjectOverviewSerializer(projects, many=True)
-    return Response(serializer.data)
+    try:
+        institution = Institution.objects.get(id=institution_id)
+        projects = institution.projects.filter(project_privacy='Public')
+        serializer = ProjectOverviewSerializer(projects, many=True)
+        return Response(serializer.data)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def projects_by_researcher(request, researcher_id):
-    researcher = Researcher.objects.get(id=researcher_id)
-    projects = researcher.projects.filter(project_privacy='Public')
-    serializers = ProjectOverviewSerializer(projects, many=True)
-    return Response(serializers.data)
-
+    try:
+        researcher = Researcher.objects.get(id=researcher_id)
+        projects = researcher.projects.filter(project_privacy='Public')
+        serializers = ProjectOverviewSerializer(projects, many=True)
+        return Response(serializers.data)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)

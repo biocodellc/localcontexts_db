@@ -1,9 +1,34 @@
 import json
+import zipfile
+from django.template.loader import get_template
+from io import BytesIO
+from xhtml2pdf import pisa
 
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
 from .models import Connections, Notice, InstitutionNotice
+
+# h/t: https://stackoverflow.com/questions/59695870/generate-multiple-pdfs-and-zip-them-for-download-all-in-a-single-view
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html  = template.render(context_dict)
+    buffer = BytesIO()
+    p = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), buffer)
+    pdf = buffer.getvalue()
+    buffer.close()
+    if not p.err:
+        return pdf
+    return None
+
+def generate_zip(files):
+    mem_zip = BytesIO()
+
+    with zipfile.ZipFile(mem_zip, mode="w",compression=zipfile.ZIP_DEFLATED) as zf:
+        for f in files:
+            zf.writestr(f[0], f[1])
+
+    return mem_zip.getvalue()
 
 def set_notice_defaults(notice):
     if isinstance(notice, Notice):
@@ -78,6 +103,7 @@ def add_to_connections(target_org, org):
                 
     connections.save()
 
+# Helper function for creating/updating notices (institutions)
 def loop_through_notices(list, institution, project):
     for selected in list:
         if selected == 'bcnotice':
@@ -92,7 +118,7 @@ def loop_through_notices(list, institution, project):
         set_notice_defaults(notice)
 
 
-# Create Notices (institutions)
+# Create/Update Notices (institutions)
 def create_notices(selected_notices, institution, project, existing_notice, existing_inst_notice):
     # selected_notices would be a list: 
     # attribution_incomplete # open_to_collaborate # bcnotice # tknotice
@@ -148,3 +174,4 @@ def create_notices(selected_notices, institution, project, existing_notice, exis
         set_notice_defaults(notice)
         institution_notice = InstitutionNotice.objects.create(notice_type='open_to_collaborate_and_attribution_incomplete', institution=institution, project=project)
         set_notice_defaults(institution_notice)
+
