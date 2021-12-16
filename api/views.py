@@ -48,7 +48,8 @@ def project_detail(request, unique_id):
 @api_view(['GET'])
 def projects_by_user(request, username):
     try:
-        user = User.objects.get(username__iexact=username)
+        # user = User.objects.get(username__iexact=username)
+        user = User.objects.get(username=username)
         projects = Project.objects.filter(project_creator=user, project_privacy='Public')
         serializer = ProjectOverviewSerializer(projects, many=True)
         return Response(serializer.data)
