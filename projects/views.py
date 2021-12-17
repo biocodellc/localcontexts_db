@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Project
+from helpers.models import Notice, InstitutionNotice
 from helpers.utils import render_to_pdf, generate_zip
 from django.http import HttpResponse
 import requests
@@ -15,17 +16,34 @@ def download_project_zip(request, unique_id):
     project_bclabels = project.bc_labels.all()
     project_tklabels = project.tk_labels.all()
 
+    notice_exists = Notice.objects.filter(project=project).exists()
+    institution_notice_exists = InstitutionNotice.objects.filter(project=project).exists()
+
     template_path = 'snippets/pdfs/project-pdf.html'
     context = {'project': project}
 
     files = []
+
+    # Initialize README TEXT
+    readme_text = ''
+
+    # Set README text if both types of notice present
+    if notice_exists and institution_notice_exists:
+        institution_text = "The Institution Notices are for use by collecting institutions, data repositories and organizations who engage in collaborative curation with Indigenous and other marginalized communities who have been traditionally excluded from processes of documentation and record keeping.\nThe Institution Notices are intended to be displayed prominently on public-facing institutional websites, on digital collections pages and or in finding aids."
+        notice_text = "The BC and TK Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data. The Notices are a mechanism for researchers and institutional staff to identify Indigenous collections and Indigenous interests in data.\n\nThe Notices can function as place-holders on collections, data, or in a sample field until a TK or a BC Label is added by a community."
+        readme_text = notice_text + '\n\n' + institution_text + '\n\nThis folder contains the following files:\n'
+    elif notice_exists and not institution_notice_exists:
+        readme_text = "The BC and TK Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data. The Notices are a mechanism for researchers and institutional staff to identify Indigenous collections and Indigenous interests in data.\n\nThe Notices can function as place-holders on collections, data, or in a sample field until a TK or a BC Label is added by a community. \n\nThis folder contains the following files:\n"
+    elif institution_notice_exists and not notice_exists:
+        readme_text = "The Institution Notices are for use by collecting institutions, data repositories and organizations who engage in collaborative curation with Indigenous and other marginalized communities who have been traditionally excluded from processes of documentation and record keeping.\nThe Institution Notices are intended to be displayed prominently on public-facing institutional websites, on digital collections pages and or in finding aids.\n\nThis folder contains the following files:\n"
 
     # Create PDF from project context, append to files list
     pdf = render_to_pdf(template_path, context)
     files.append(('Project_Overview.pdf', pdf))
 
     # Label / Notice Files
-    for notice in project.project_notice.all():
+    if notice_exists:
+        notice = Notice.objects.get(project=project)
         if not notice.archived:
             # Add Usage Guide
             usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
@@ -53,7 +71,8 @@ def download_project_zip(request, unique_id):
 
 
     # Institution notices
-    for inst_notice in project.project_institutional_notice.all():
+    if institution_notice_exists:
+        inst_notice = InstitutionNotice.objects.get(project=project)
         if not inst_notice.archived:
             # Add Usage Guide
             usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf'
@@ -84,6 +103,9 @@ def download_project_zip(request, unique_id):
         usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf'
         response = requests.get(usage_guide_url) 
         files.append(('BC_TK_Label_Usage_Guide.pdf', response.content))
+
+        # Set readme text
+        readme_text = "The Traditional Knowledge (TK) and Biocultural (BC) Labels reinforce the cultural authority and rights of Indigenous communities. \nThe TK and BC Labels are intended to be displayed prominently on public-facing Indigenous community, researcher and institutional websites, metadata and digital collection's pages.\n\nThis folder contains the following files:\n"
 
     # Add Label images, text and translations
     for bclabel in project_bclabels:
@@ -118,11 +140,10 @@ def download_project_zip(request, unique_id):
             files.append((tklabel.name + '.txt', text_content))
     
     # Create Readme
-    readme_text = 'This folder contains the following files:\n'
     file_names = []
     for f in files:
         file_names.append(f[0])
-    readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guide for details on how to adapt and display the Notices or Labels for your Project.\n\nFor more information, contact Local Contexts at http://localcontexts.org or support@localcontexts.org'
+    readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guide for details on how to adapt and display the Notices or Labels for your Project.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
     files.append(('README.txt', readme_content))
 
     # Generate zip file 
