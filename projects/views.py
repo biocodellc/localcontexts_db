@@ -81,7 +81,7 @@ def download_project_zip(request, unique_id):
 
     if project_bclabels or project_tklabels:
         # Labels Usage guide PDF
-        usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
+        usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf'
         response = requests.get(usage_guide_url) 
         files.append(('BC_TK_Label_Usage_Guide.pdf', response.content))
 
