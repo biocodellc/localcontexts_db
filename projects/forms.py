@@ -5,9 +5,9 @@ from django.utils.translation import ugettext_lazy as _
 
 class CreateProjectForm(forms.ModelForm):
     PRIVACY = (
-        ('Public', 'Public: Can be seen by anyone within and outside of the Local Contexts Hub'),
-        ('Discoverable', 'Discoverable: Can be seen by authenticated contributors of the project only'),
-        ('Private', 'Private: Can only be seen by project creator'),
+        ('Public', 'Public: Accessible to everyone registered with Local Contexts'),
+        ('Discoverable', 'Discoverable: Accessible for accounts that have been notified'),
+        ('Private', 'Private: Can’t be accessed by other accounts on Local Contexts'),
     )
     TYPES = (
         ('Item', 'Item'),

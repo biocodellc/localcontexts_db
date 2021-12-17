@@ -862,6 +862,21 @@ input:focus {
     margin-top: 57px;
 }
 
+/* Project comment boxes */
+.project-comment {
+    margin-bottom: 10px;
+    border: 1px solid teal;
+}
+.project-comment-teal {
+    margin-right: 5px;
+    width: 10px;
+    background-color: #007385;
+}
+
+.project-comment-text {
+    padding: 5px;
+}
+
 /* Customize TK Label page */
 
 .img-sizedown-151-116 {

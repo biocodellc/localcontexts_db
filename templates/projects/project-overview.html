@@ -199,7 +199,7 @@
             {% if statuses %}
                 <div>
                     <p>
-                        <span class="bold">Communities Notified - Status</span><br>
+                        <span class="bold">Communities notified about this project and their status</span><br>
                         {% for status in statuses %}
                             {{ status.community.community_name }} -- 
                             {% if not status.seen and status.status == None %} Sent <br>{% endif %}

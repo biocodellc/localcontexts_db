@@ -784,7 +784,7 @@ def download_labels(request, pk):
     files.append(('Labels_Overview.pdf', pdf))
 
     # Labels Usage guide PDF
-    usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
+    usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf'
     response = requests.get(usage_guide_url) 
     files.append(('BC_TK_Label_Usage_Guide.pdf', response.content))
 
@@ -819,11 +819,19 @@ def download_labels(request, pk):
             files.append((tklabel.name + '.txt', text_content + '\n'.join(text_addon)))
         else:
             files.append((tklabel.name + '.txt', text_content))
+    
+    # Create Readme
+    readme_text = "The Traditional Knowledge (TK) and Biocultural (BC) Labels reinforce the cultural authority and rights of Indigenous communities.\nThe TK and BC Labels are intended to be displayed prominently on public-facing Indigenous community, researcher and institutional websites, metadata and digital collection's pages.\n\nThis folder contains the following files:\n"
+    file_names = []
+    for f in files:
+        file_names.append(f[0])
+    readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guide for details on how to adapt and display the Labels for your community.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
+    files.append(('README.txt', readme_content))
 
     # Generate zip file 
     full_zip_in_memory = generate_zip(files)
 
     response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename="{}"'.format('Labels.zip')
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format(community.community_name + '-Labels.zip')
 
     return response
