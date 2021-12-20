@@ -59,6 +59,11 @@ def register(request):
                 user.is_active = False
                 user.save()
 
+                # If SignupInvite instances exist, delete them
+                if SignUpInvitation.objects.filter(email=user.email).exists():
+                    for invite in SignUpInvitation.objects.filter(email=user.email):
+                        invite.delete()
+
                 send_activation_email(request, user)
                 return redirect('verify')
             else:
