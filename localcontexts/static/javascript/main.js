@@ -217,22 +217,73 @@ function populateTemplate(id) {
 
 }
 
+// Customize Label: clone translation form to add multiple translations
+if (window.location.href.includes('/labels/customize')) {
+    let addTranslationBtn = document.getElementById('add-translation-btn')
+    if (addTranslationBtn) {
+        addTranslationBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+            cloneTranslationForm()
+        })        
+    }
+
+    let formCount = 0
+
+    function cloneTranslationForm() {
+        // Total forms hidden input needs to be incremented
+        let hiddenInputs = document.getElementsByName('form-TOTAL_FORMS')
+        let totalFormInput = hiddenInputs[0]
+
+        // Need to increment that number by 1 each time parent div is duplicated
+        // Get parent div, clone it and change its attributes
+        let parentDiv = document.getElementById('translation-form-0')
+        let clone = parentDiv.cloneNode(true)
+        clone.id = 'translation-form-'+ formCount++ // needs to increment by 1 for unique id
+        // Title input has name='form-0-title' and id='id_form-0-title'
+        // Language input has name='form-0-language' and id='id_form-0-language'
+        // Translation textarea has name='form-0-translation' and id='id_form-0-translation'
+
+        let titleInput = clone.getElementsByTagName('input')[0]
+        let languageInput = clone.getElementsByTagName('input')[1]
+        let translationInput = clone.getElementsByTagName('textarea')[0]
+
+        titleInput.value = ''
+        languageInput.value = ''
+        translationInput.value = ''
+        titleInput.id = `id_form-${formCount}-title`
+        titleInput.name = `form-${formCount}-title`
+        languageInput.id = `id_form-${formCount}-language`
+        languageInput.name = `form-${formCount}-language`
+        translationInput.id = `id_form-${formCount}-translation`
+        translationInput.name = `form-${formCount}-translation`
+        totalFormInput.value = parseInt(totalFormInput.value) + 1
+
+        // Append clone to sibling
+        // el.parentElement.parentElement.append(clone)
+        parentDiv.append(clone)
+
+    }
+}
+
 // Approve Label: show note div
 if (window.location.href.includes('community/labels/')) {
-    let noBtn = document.getElementById('displayLabelNote')
-    noBtn.addEventListener('click', (e) => {
-        e.preventDefault()
-        let div = document.getElementById('labelNoteDiv')
-        div.classList.remove('hide')
-        div.classList.add('show')
-    })
+    const noBtn = document.getElementById('displayLabelNote')
+    const closeNoteDivBtn = document.getElementById('closeNoteDiv')
 
-    let closeNoteDivBtn = document.getElementById('closeNoteDiv')
-    closeNoteDivBtn.addEventListener('click', (e) => {
-        e.preventDefault()
-        let div = document.getElementById('labelNoteDiv')
-        div.classList.replace('show', 'hide')
-    })    
+    if (noBtn && closeNoteDivBtn) {
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+            let div = document.getElementById('labelNoteDiv')
+            div.classList.remove('hide')
+            div.classList.add('show')
+        })
+
+        closeNoteDivBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+            let div = document.getElementById('labelNoteDiv')
+            div.classList.replace('show', 'hide')
+        }) 
+    }
 }
 
 // Show more content: Project Overview Page
