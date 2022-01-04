@@ -375,7 +375,7 @@
                     </div>
                 </div>
 
-                <!-- <div><button class="primary-btn green-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Translation</button></div> -->
+                <div><button id="add-translation-btn" class="primary-btn green-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Translation</button></div>
 
 
                 {{ formset.management_form }}
@@ -383,7 +383,7 @@
                     {% for hidden in tran_form.hidden_fields %}
                         {{ hidden }}
                     {% endfor %}
-                        <div class="flex-this column margin-top-16">
+                        <div id="translation-form-0" class="flex-this column margin-top-16">
                             <div class="flex-this w-80">
                                 <div class="w-30 margin-right-16"><label>Local name</label><br>{{ tran_form.title }}</div>
                                 <div class="w-30"><label>What language is this written in?</label><br>{{ tran_form.language }}</div>
