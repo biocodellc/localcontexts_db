@@ -1,6 +1,9 @@
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
+from .models import LabelNote
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
@@ -165,7 +168,14 @@ def send_email_labels_applied(project, community):
 
 # Label has been approved or not
 def send_email_label_approved(label):
-    template = render_to_string('snippets/emails/label-approved.html', { 'label': label })
+    label_notes = ''
+    if isinstance(label, BCLabel):
+        label_notes = LabelNote.objects.filter(bclabel=label)
+    if isinstance(label, TKLabel):
+        label_notes = LabelNote.objects.filter(tklabel=label)
+
+    print(label_notes)
+    template = render_to_string('snippets/emails/label-approved.html', { 'label': label, 'label_notes': label_notes })
 
     if label.is_approved:
         send_simple_email(label.created_by.email, 'Your Label has been approved', template)

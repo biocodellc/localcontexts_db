@@ -27,6 +27,21 @@
             </div>
         </div>
 
+        <div id="labelNoteDiv" class="content-card-v2 content-card-space white-bg hide">
+            <div class="margin-top-8">
+                <div class="flex-this space-between margin-bottom-8">
+                    <div>
+                        <h4 class="no-top-margin">Please add a note to request changes or give reason for not approving this Label.</h4>
+                    </div>
+                    <div>
+                        <button id="closeNoteDiv" class="primary-btn white-btn">Close X</button>
+                    </div>
+                </div>
+                <div>{{ form.note }}</div>
+                <div><button class="primary-btn action-btn" name="create_label_note">Submit</button></div>
+            </div>            
+        </div>
+
         <div class="content-card-v2 content-card-space white-bg"> 
 
             <div class="flex-this margin-bottom-8 margin-top-8 about-this-label">
@@ -63,21 +78,6 @@
                 </div>                
             </div>
 
-        </div>
-
-        <div id="labelNoteDiv" class="content-card-v2 content-card-space white-bg hide">
-            <div class="margin-top-8">
-                <div class="flex-this space-between margin-bottom-8">
-                    <div>
-                        <h4 class="no-top-margin">Please add a note to request changes or give reason for not approving this Label.</h4>
-                    </div>
-                    <div>
-                        <button id="closeNoteDiv" class="primary-btn white-btn">Close X</button>
-                    </div>
-                </div>
-                <div>{{ form.note }}</div>
-                <div><button class="primary-btn action-btn" name="create_label_note">Submit</button></div>
-            </div>            
         </div>
         
     </form>

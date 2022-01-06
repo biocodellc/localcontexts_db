@@ -337,17 +337,18 @@ def approve_label(request, pk, label_id):
                     data.sender = request.user
                     if bclabel:
                         data.bclabel = bclabel
+                        data.save()
                         bclabel.is_approved = False
                         bclabel.approved_by = request.user
                         bclabel.save()
                         send_email_label_approved(bclabel)
                     if tklabel:
                         data.tklabel = tklabel
+                        data.save()
                         tklabel.is_approved = False
                         tklabel.approved_by = request.user
                         tklabel.save()
                         send_email_label_approved(tklabel)
-                    data.save()
                     return redirect('select-label', community.id)
 
             # If approved, save Label

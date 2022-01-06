@@ -4,12 +4,21 @@
         <h3>{{ label.approved_by.get_full_name }} has approved your Label {{ label.name }} </h3>
     {% else %}
         <h3>{{ label.approved_by.get_full_name }} has not approved your Label {{ label.name }} </h3>
+        {% if label_notes %}
+            <p>
+                Notes included about why the Label was not approved:<br>
+
+                {% for note in label_notes %}
+                    From {{ note.sender.get_full_name }} : <br>
+                    "{{ note.note }}" <br>
+                {% endfor %}
+            </p>
+        {% endif %}
     {% endif %}
 
     <p>
         <strong>Next steps?</strong><br>
-        You can go to your Community account dashboard to view your Label.
-
+        You can go to your Community account dashboard to view {% if not label.is_approved %} or edit {% endif %} your Label.<br>
         {% include 'snippets/emails/_footer-snippet.html' %}
     </p>
 
