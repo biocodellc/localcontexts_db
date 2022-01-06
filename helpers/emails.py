@@ -168,13 +168,14 @@ def send_email_labels_applied(project, community):
 
 # Label has been approved or not
 def send_email_label_approved(label):
-    label_note = ''
+    label_notes = ''
     if isinstance(label, BCLabel):
-        label_note = LabelNote.objects.filter(bclabel=label)
+        label_notes = LabelNote.objects.filter(bclabel=label)
     if isinstance(label, TKLabel):
-        label_note = LabelNote.objects.filter(tklabel=label)
+        label_notes = LabelNote.objects.filter(tklabel=label)
 
-    template = render_to_string('snippets/emails/label-approved.html', { 'label': label, 'label_note': label_note })
+    print(label_notes)
+    template = render_to_string('snippets/emails/label-approved.html', { 'label': label, 'label_notes': label_notes })
 
     if label.is_approved:
         send_simple_email(label.created_by.email, 'Your Label has been approved', template)

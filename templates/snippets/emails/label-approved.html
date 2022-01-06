@@ -4,11 +4,17 @@
         <h3>{{ label.approved_by.get_full_name }} has approved your Label {{ label.name }} </h3>
     {% else %}
         <h3>{{ label.approved_by.get_full_name }} has not approved your Label {{ label.name }} </h3>
-        {% if label_note %}
+        {% if label_notes %}
+
             <p>
-                {{ label_note.sender.get_full_name }} has included a note about why the Label was not approved:<br>
-                {{ label_note.note }}
+                Notes included about why the Label was not approved:<br>
+
+                {% for note in label_notes %}
+                    From {{ note.sender.get_full_name }} : <br>
+                    "{{ note.note }}" <br>
+                {% endfor %}
             </p>
+
         {% endif %}
     {% endif %}
 
