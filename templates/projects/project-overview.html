@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block title %} | Projects {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
 
-<div id="full-div-card-{{ project.unique_id }}" class="content-card-v2 content-card-space white-bg">
-    <div id="project-unique-{{ project.unique_id }}" class="flex-this space-between" style="scroll-margin-top: 8em;">
+<div id="full-div-card-{{ project.unique_id }}" class="content-card-v2 content-card-space white-bg show filterProjects">
+    <div id="project-unique-{{ project.unique_id }}" class="flex-this space-between">
 
         <div class="w-60 flex-this column">
             <!-- title -->
@@ -95,7 +95,10 @@
 
             <div class="flex-this row margin-top-8 w-50 flex-end">
                 {% if project.tk_labels.all or project.bc_labels.all %}
-                    {% if project.tk_labels.all %}
+
+                <input id="label-{{ project.unique_id }}" class="projectLabelsFilter" type="hidden" value="label_true">
+                
+                {% if project.tk_labels.all %}
                         {% for tklabel in project.tk_labels.all %}
                             {% include 'tklabels/mini-labels.html' %}
                         {% endfor %}
@@ -107,18 +110,19 @@
                         {% endfor %}
                     {% endif %}
                 {% else %}
+                    <input id="notice-{{ project.unique_id }}" class="projectNoticesFilter" type="hidden" value="notice_true">
                     <div class="flex-this flex-end w-60">
                         {% if project.project_notice.all %}
-                                {% for notice in project.project_notice.all %}
-                                    {% if notice.notice_type == 'biocultural' %}
-                                        <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                    {% elif notice.notice_type == 'traditional_knowledge' %}
-                                        <div class="margin-right-8"><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                                    {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                                        <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                        <div class="margin-right-8"><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                                    {% endif %}
-                                {% endfor %}
+                            {% for notice in project.project_notice.all %}
+                                {% if notice.notice_type == 'biocultural' %}
+                                    <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                {% elif notice.notice_type == 'traditional_knowledge' %}
+                                    <div class="margin-right-8"><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                                    <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                    <div class="margin-right-8"><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
 
                         {% if project.project_institutional_notice.all %}
