@@ -883,6 +883,77 @@ if (window.location.href.includes('registry')) {
     })
 }
 
+// PROJECTS FILTERING
+if (window.location.href.includes('projects')) {
+    const filterbyNotices = document.getElementById('filterProjectsWithNotices')
+    const filterbyLabels = document.getElementById('filterProjectsWithLabels')
+    const filterbyAll = document.getElementById('filterAll')
+
+    if (filterbyNotices && filterbyLabels && filterbyAll) {
+        filterbyNotices.addEventListener('click', () => hideProjectsWithoutNotices())
+        filterbyLabels.addEventListener('click', () => hideProjectsWithoutLabels())
+        filterbyAll.addEventListener('click', () => showAllProjects())
+    }
+
+    // Hidden inputs to track which projects have Labels or Notices
+    let hiddenInputNotices = document.querySelectorAll('.projectNoticesFilter')
+    let hiddenInputLabels = document.querySelectorAll('.projectLabelsFilter')
+
+    // Initialize array to store the project ids
+    let projectsWithLabelsIDs = []
+    let projectsWithNoticesIDs = []
+
+    // shows Projects with Notices
+    let hideProjectsWithoutNotices = () => {
+        filterbyNotices.classList.add('bold')
+        if (filterbyLabels.classList.contains('bold')) { filterbyLabels.classList.remove('bold')}
+        if (filterbyAll.classList.contains('bold')) { filterbyAll.classList.remove('bold')}
+
+        // Add ID to array from hidden inputs
+        hiddenInputLabels.forEach(label => { projectsWithLabelsIDs.push(label.id.substring(6))})
+
+        projectsWithLabelsIDs.forEach(id => {
+            let targetProjectDiv = document.getElementById(`full-div-card-${id}`)
+            targetProjectDiv.classList.replace('show', 'hide')
+        })
+
+        projectsWithNoticesIDs.forEach(id => { 
+            let targetProjectDiv = document.getElementById(`full-div-card-${id}`)
+            targetProjectDiv.classList.replace('hide', 'show')
+        })
+    }
+
+    // shows projects with Labels
+    let hideProjectsWithoutLabels = () => {
+        filterbyLabels.classList.add('bold')
+        if (filterbyNotices.classList.contains('bold')) { filterbyNotices.classList.remove('bold')}
+        if (filterbyAll.classList.contains('bold')) { filterbyAll.classList.remove('bold')}
+
+        // Add ID to array from hidden inputs
+        hiddenInputNotices.forEach(notice => { projectsWithNoticesIDs.push(notice.id.substring(7))})
+        
+        projectsWithNoticesIDs.forEach(id => { 
+            let targetProjectDiv = document.getElementById(`full-div-card-${id}`)
+            targetProjectDiv.classList.replace('show', 'hide')
+        })
+
+        projectsWithLabelsIDs.forEach(id => { 
+            let targetProjectDiv = document.getElementById(`full-div-card-${id}`)
+            targetProjectDiv.classList.replace('hide', 'show')
+        })
+    }
+
+    // Shows all projects
+    let showAllProjects = () => {
+        filterbyAll.classList.add('bold')
+        if (filterbyNotices.classList.contains('bold')) { filterbyNotices.classList.remove('bold')}
+        if (filterbyLabels.classList.contains('bold')) { filterbyLabels.classList.remove('bold')}
+
+        let allProjectDivs = document.querySelectorAll('.filterProjects')
+        allProjectDivs.forEach(div => { div.classList.replace('hide', 'show') })
+    }
+}
+
 //  ONBOARDING MODAL: Shows up in dashboard if there isn't a localstorage item saved and onboarding_on is set to true
 if (window.location.href.includes('dashboard')) {
     const hiddenInput = document.getElementById('openOnboarding')
