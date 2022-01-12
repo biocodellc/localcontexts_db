@@ -7,7 +7,7 @@
         <!-- Top Nav -->
         <div class="flex-this w-100 space-between">
             <div class="loc">
-                <a href="{% url 'dashboard' %}" class="darkteal-text">
+                <a href="{% url 'dashboard' %}" class="darkteal-text underline-hover">
                     {% if request.user.first_name %} {{ request.user.get_full_name }}
                     {% else %}{{ request.user }}{% endif %}
                 </a> 

@@ -7,7 +7,7 @@
         <!-- Top Nav -->
         <div class="flex-this w-100 space-between">
             <div class="loc">
-                <a href="{% url 'dashboard' %}" class="darkteal-text"> {{ request.user.get_full_name }}</a> 
+                <a href="{% url 'dashboard' %}" class="darkteal-text underline-hover"> {{ request.user.get_full_name }}</a> 
                 >> {{ researcher.user.get_full_name }}
             </div>
 
@@ -94,19 +94,19 @@
                     <!-- ORCID display based on how it sits in the db -->
                     {% if researcher.orcid %}
                         {% if 'https://sandbox.orcid.org/' in researcher.orcid %}
-                            <div itemscope itemtype="https://schema.org/Person"><a class="darkteal-text" itemprop="sameAs" content="{{ researcher.orcid }}" href="{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
+                            <div itemscope itemtype="https://schema.org/Person"><a class="darkteal-text underline-hover" itemprop="sameAs" content="{{ researcher.orcid }}" href="{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
                                 <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">{{ researcher.orcid }}</a>
                             </div>
                         {% elif 'https://orcid.org/' in researcher.orcid %}
-                            <div itemscope itemtype="https://schema.org/Person"><a class="darkteal-text" itemprop="sameAs" content="{{ researcher.orcid }}" href="{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
+                            <div itemscope itemtype="https://schema.org/Person"><a class="darkteal-text underline-hover" itemprop="sameAs" content="{{ researcher.orcid }}" href="{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
                                 <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">{{ researcher.orcid }}</a>
                             </div>
                         {% elif 'X' in researcher.orcid %}
-                            <div itemscope itemtype="https://schema.org/Person"><a class="darkteal-text" itemprop="sameAs" content="https://sandbox.orcid.org/{{ researcher.orcid }}" href="https://sandbox.orcid.org/{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
+                            <div itemscope itemtype="https://schema.org/Person"><a class="darkteal-text underline-hover" itemprop="sameAs" content="https://sandbox.orcid.org/{{ researcher.orcid }}" href="https://sandbox.orcid.org/{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
                                 <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">https://sandbox.orcid.org/{{ researcher.orcid }}</a>
                             </div>
                         {% else %}
-                            <div itemscope itemtype="https://schema.org/Person"><a class="darkteal-text" itemprop="sameAs" content="https://orcid.org/{{ researcher.orcid }}" href="https://orcid.org/{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
+                            <div itemscope itemtype="https://schema.org/Person"><a class="darkteal-text underline-hover" itemprop="sameAs" content="https://orcid.org/{{ researcher.orcid }}" href="https://orcid.org/{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
                                 <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">https://orcid.org/{{ researcher.orcid }}</a>
                             </div>
                         {% endif %}

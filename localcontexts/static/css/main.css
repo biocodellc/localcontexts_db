@@ -119,6 +119,11 @@ input:focus {
     font-size: 12px;
 }
 
+/* Underline text on hover */
+.underline-hover:hover {
+    text-decoration: underline;
+}
+
 /* TEXT COLORS */
 
 .orange-h1 {

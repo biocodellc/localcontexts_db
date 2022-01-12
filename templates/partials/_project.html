@@ -1,10 +1,13 @@
 {% load static %}
 
 <div class="content-card-v2 content-card-space white-bg">
+    <div class="flex-this">
+        <div><a class="primary-btn green-btn margin-top-2" onClick="window.history.back();return false;"><i class="fa fa-arrow-left"></i> Back to Projects</a></div>
+    </div>
     <div class="flex-this space-between w-100">
         <div class="flex-this column">
             <div class="margin-top-1">
-                <p class="p-24 bold no-top-margin">Project View</p>
+                <p class="p-24 bold">Project View</p>
                 <p>Listed below is the information that is associated with this Project.<br>
                     If you would like to edit this Project again, you can do so until a community has applied a Label to this Project. </p>
             </div>
@@ -12,9 +15,6 @@
         <!-- <div class="flex-this w-30">
             <div class="margin-left-1"><a class="primary-btn action-btn margin-top-2 ">Share Project <i class="fa fa-share-alt" aria-hidden="true"></i></a></div>
         </div> -->
-        <div class="flex-this">
-            <div class="margin-left-1"><a class="primary-btn action-btn margin-top-2" onClick="window.history.back();return false;">Back</a></div>
-        </div>
     </div>
 </div>
 
@@ -88,36 +88,38 @@
             <div>
                 <p class="p-24 bold no-bottom-margin">Project Identifiers</p>
 
-                <div class="flex-this space-between">
-                    <div><p><span class="bold">Local Contexts Unique Project ID</span> <br><span id="uniqueIDToCopy">{{ project.unique_id }}</span><br></p></div>
-                    <div class="margin-top-1">
-                        {% if project.unique_id %}
-                            <a onclick="copyToClipboard()" class="primary-btn action-btn margin-top-2  copied-display">Copy ID <i class="fa fa-copy"></i></a>
-                        {% endif %}
-                    </div>
+                <div class="flex-this margin-top-16">
+                    <div><a onclick="copyToClipboard()" class="primary-btn green-btn margin-top-2 copied-display"><i class="fa fa-copy"></i></a></div>
+                    <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Local Contexts Unique Project ID</span> <br><span id="uniqueIDToCopy">{{ project.unique_id }}</span><br></p></div>
                 </div>
 
-                <div class="flex-this space-between">
-                    <div><p><span class="bold">Project DOI</span> <br>{{ project.publication_doi }} <br></p></div>
-                    <div class="margin-top-1">
+                <div class="flex-this margin-top-1">
+                    <div>
                         {% if project.publication_doi %}
                             {% if 'https://' not in project.publication_doi %}
-                                <a href="https://www.doi.org/{{ project.publication_doi }}" class="primary-btn action-btn margin-top-2 ">Project DOI <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                <a href="https://www.dx.doi.org/{{ project.publication_doi }}" class="primary-btn green-btn margin-top-2"><i class="fa fa-external-link" aria-hidden="true"></i></a>
                             {% endif %}
                         {% endif %}
                     </div>
+                    <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Project DOI</span> <br>
+                        {% if project.publication_doi %}
+                            <a class="darkteal-text underline-hover" href="https://www.dx.doi.org/{{ project.publication_doi }}">{{ project.publication_doi }}</a>
+                        {% else %}
+                            None listed <br>
+                        {% endif %}
+                    </p></div>
                 </div>
 
-                <div class="flex-this space-between">
-                    <div><p><span class="bold">Project Data GUID</span><br> {{ project.project_data_guid }}<br></p></div>
-                    <div class="margin-top-1">
+                <div class="flex-this margin-top-1">
+                    <div>
                         {% if project.project_data_guid %}
-                            <a href="#" class="primary-btn action-btn margin-top-2 ">Copy GUID <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                            <a href="#" class="primary-btn green-btn margin-top-2 "><i class="fa fa-copy"></i></a>
                         {% endif %}
                     </div>
+                    <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Project Data GUID</span><br> {{ project.project_data_guid }}<br></p></div>
                 </div>
 
-                <div><p><span class="bold">Recommended Citation</span><br> {{ project.recommended_citation }}<br></p></div>
+                <div><p><span class="bold">Recommended Citation</span><br> {% if project.recommended_citation %}{{ project.recommended_citation }} {% else %} None added{% endif %}<br></p></div>
 
             </div>
         </div>
@@ -199,7 +201,7 @@
                         </div>
                         <div class="pad-left-2">
                             <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
-                            <p> {{ bclabel.name }} </p>
+                            <p class="bold"> {{ bclabel.name }} </p>
                             <p>{{ bclabel.default_text}}</p>
 
                             {% include 'partials/_label-translation.html' %}
@@ -219,7 +221,7 @@
                         </div>
                         <div class="pad-left-2">
                             <p class="darkteal-text">Label shared by {{ tklabel.community.community_name }} </p>
-                            <p> {{ tklabel.name }} </p>
+                            <p class="bold"> {{ tklabel.name }} </p>
                             <p>{{ tklabel.default_text}}</p>
 
                             {% include 'partials/_label-translation.html' %}

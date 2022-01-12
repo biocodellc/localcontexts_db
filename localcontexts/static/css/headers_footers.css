@@ -120,6 +120,11 @@
     margin-right: 0;
     font-size: 30px;
     margin: 5px;
+    transition: width 1s, height 1s, transform 1s;
+}
+
+.socials:hover {
+    transform: scale(1.5);
 }
 
 @media screen and (max-width: 817px) {
