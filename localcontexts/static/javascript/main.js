@@ -768,8 +768,8 @@ if (window.location.href.includes('connect-community') || window.location.href.i
 }   
 
 // Copy text to clipboard
-function copyToClipboard() {
-    let span = document.getElementById('uniqueIDToCopy')
+function copyToClipboard(elemID) {
+    let span = document.getElementById(elemID)
     var textArea = document.createElement("textarea");
     textArea.value = span.textContent;
     document.body.appendChild(textArea);

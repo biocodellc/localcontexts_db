@@ -89,7 +89,7 @@
                 <p class="p-24 bold no-bottom-margin">Project Identifiers</p>
 
                 <div class="flex-this margin-top-16">
-                    <div><a onclick="copyToClipboard()" class="primary-btn green-btn margin-top-2 copied-display"><i class="fa fa-copy"></i></a></div>
+                    <div><a onclick="copyToClipboard('uniqueIDToCopy')" class="primary-btn green-btn margin-top-2 copied-display"><i class="fa fa-copy"></i></a></div>
                     <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Local Contexts Unique Project ID</span> <br><span id="uniqueIDToCopy">{{ project.unique_id }}</span><br></p></div>
                 </div>
 
@@ -113,10 +113,10 @@
                 <div class="flex-this margin-top-1">
                     <div>
                         {% if project.project_data_guid %}
-                            <a href="#" class="primary-btn green-btn margin-top-2 "><i class="fa fa-copy"></i></a>
+                            <a onclick="copyToClipboard('guidToCopy')" class="primary-btn green-btn margin-top-2 "><i class="fa fa-copy"></i></a>
                         {% endif %}
                     </div>
-                    <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Project Data GUID</span><br> {{ project.project_data_guid }}<br></p></div>
+                    <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Project Data GUID</span><br> <span id="guidToCopy">{{ project.project_data_guid }}</span><br></p></div>
                 </div>
 
                 <div><p><span class="bold">Recommended Citation</span><br> {% if project.recommended_citation %}{{ project.recommended_citation }} {% else %} None added{% endif %}<br></p></div>
