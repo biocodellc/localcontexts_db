@@ -97,13 +97,13 @@
                     <div>
                         {% if project.publication_doi %}
                             {% if 'https://' not in project.publication_doi %}
-                                <a href="https://www.dx.doi.org/{{ project.publication_doi }}" class="primary-btn green-btn margin-top-2 "><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                <a href="https://www.dx.doi.org/{{ project.publication_doi }}" class="primary-btn green-btn margin-top-2"><i class="fa fa-external-link" aria-hidden="true"></i></a>
                             {% endif %}
                         {% endif %}
                     </div>
                     <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Project DOI</span> <br>
                         {% if project.publication_doi %}
-                            <a class="darkteal-text" href="https://www.dx.doi.org/{{ project.publication_doi }}">{{ project.publication_doi }}</a>
+                            <a class="darkteal-text underline-hover" href="https://www.dx.doi.org/{{ project.publication_doi }}">{{ project.publication_doi }}</a>
                         {% else %}
                             None listed <br>
                         {% endif %}

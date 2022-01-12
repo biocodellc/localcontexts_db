@@ -868,16 +868,25 @@ if (window.location.href.includes('registry')) {
     let communities = document.querySelectorAll('.communities-filter')
 
     filterbyCommunities.addEventListener('click', () => {
+        filterbyCommunities.classList.add('bold')
+        filterbyInstitutions.classList.remove('bold')
+        filterbyAll.classList.remove('bold')
         institutions.forEach(institution => { institution.classList.replace('show', 'hide') })
         communities.forEach(community => { if (community.classList.contains('hide')) { community.classList.replace('hide', 'show') } })
     })
 
     filterbyInstitutions.addEventListener('click', () => { 
+        filterbyCommunities.classList.remove('bold')
+        filterbyInstitutions.classList.add('bold')
+        filterbyAll.classList.remove('bold')
         communities.forEach(community => { community.classList.replace('show', 'hide') })
         institutions.forEach(institution => { if (institution.classList.contains('hide')) { institution.classList.replace('hide', 'show') } })
     })
     
     filterbyAll.addEventListener('click', () => {
+        filterbyAll.classList.add('bold')
+        filterbyCommunities.classList.remove('bold')
+        filterbyInstitutions.classList.remove('bold')
         communities.forEach(community => { if (community.classList.contains('hide')) { community.classList.replace('hide', 'show') } })
         institutions.forEach(institution => { if (institution.classList.contains('hide')) { institution.classList.replace('hide', 'show') } })
     })
