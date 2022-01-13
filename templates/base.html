@@ -39,6 +39,26 @@
         <script src="{% static 'javascript/ror.js' %}" type="text/javascript" defer></script>
         <!-- ORCiD Widget -->
         <script src="{% static 'javascript/orcid-widget.js' %}" type="text/javascript" defer></script>
+
+        <!-- Zammad support form-->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script id="zammad_form_script" src="https://local-contexts.zammad.com/assets/form/form.js"></script>
+
+        <script>
+            $(function() {
+              $('#feedback-form').ZammadForm({
+                messageTitle: 'Feedback & Error Report Form',
+                messageSubmit: 'Submit',
+                messageThankYou: 'Thank you for your inquiry (#%s)! We\'ll contact you as soon as possible.',
+                // switch to true for testing debug
+                debug: false,
+                showTitle: true,
+                modal: true,
+                attachmentSupport: true
+              });
+            });
+        </script>
+
     </body>
 
 </html>
