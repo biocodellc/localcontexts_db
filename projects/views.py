@@ -8,7 +8,15 @@ import requests
 
 def view_project(request, unique_id):
     project = Project.objects.get(unique_id=unique_id)
-    return render(request, 'projects/view-project.html', {'project': project})
+
+    if project.project_privacy == 'Private':
+        if request.user.is_authenticated:
+            return render(request, 'projects/view-project.html', {'project': project})
+        else:
+            return redirect('login')
+    else:
+        return render(request, 'projects/view-project.html', {'project': project})
+
 
 # TODO: Images need to be SVGs
 def download_project_zip(request, unique_id):

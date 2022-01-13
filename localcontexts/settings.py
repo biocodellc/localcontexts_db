@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'storages',
 
     'rest_framework',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -79,6 +80,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'maintenance_mode.middleware.MaintenanceModeMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 CONTEXT_PROCESSORS = [
@@ -218,3 +220,9 @@ REST_FRAMEWORK = {
 # Note: this will UPDATE the db on every request.
 SESSION_COOKIE_AGE = 3600
 SESSION_SAVE_EVERY_REQUEST = True
+
+# debug_toolbar
+if DEBUG:
+    INTERNAL_IPS = [
+        '127.0.0.1',
+    ]

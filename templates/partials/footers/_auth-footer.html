@@ -3,12 +3,12 @@
 
 <footer class="footer-gradient white-text flex-this column">
     
-    <div class="flex-this space-between w-100">
+    <section class="flex-this space-between w-100">
 
         <div class="flex-this column">
             <div>
                 <a class="white-text underline-hover" href="https://localcontexts.org/contact/"> Contact Us</a> | 
-                {% include 'partials/_support-ticket-form.html' %} |
+                <a id="feedback-form" class="white-text pointer underline-hover">Report an Issue</a> |
                 <a class="white-text underline-hover" href="{% url 'api-overview' %}">API</a> |
                 <a class="white-text underline-hover" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/LC%20Privacy%20Policy.pdf" target="_blank">Privacy Policy <i class="fa fa-external-link" aria-hidden="true"></i></a> | 
                 <a class="white-text underline-hover" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/Indigenous%20Data%20Sovereignty%20Agreement.pdf" target="_blank">Data Sovereignty Agreement <i class="fa fa-external-link" aria-hidden="true"></i></a>
@@ -32,9 +32,9 @@
             <a href="https://www.facebook.com/LocalContextsOrg/" class="white-text socials"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
         </div>  
         
-    </div>
+    </section>
 
-    <div class="w-100 margin-top-16">
+    <section class="w-100 margin-top-16">
         <div class="flex-this row space-between wrap">
             <div><img src="{% static 'images/footer/Local-Contexts-Logo-White.png' %}" alt="Local Contexts logo"></div>
             <div><img src="{% static 'images/footer/NEH-Preferred-Seal-Transparent820.png' %}" alt="National Endowment for the Humanities logo"></div>
@@ -44,6 +44,6 @@
             <div><img src="{% static 'images/footer/Enrich_without_text.png' %} " alt="ENRICH logo"></div>
             <div><img src="{% static 'images/footer/mellon.png' %} " alt="Mellon logo"></div>
         </div>
-    </div>
+    </section>
 
 </footer>

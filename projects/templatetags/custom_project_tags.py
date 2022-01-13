@@ -1,8 +1,6 @@
 from django import template
 from institutions.models import Institution
 from researchers.models import Researcher
-from communities.models import Community
-from helpers.models import ProjectStatus, Notice
 from projects.models import Project
 
 register = template.Library()
