@@ -33,12 +33,12 @@
 
         {% block content %} {% endblock %}
         {% include 'partials/banners/_cookie-banner.html' %}
-        <script src='https://www.google.com/recaptcha/api.js'></script>
-        <script src="{% static 'javascript/main.js' %}" type="text/javascript"></script>
-        <script src="{% static 'javascript/xhr.js' %}" type="text/javascript"></script>
-        <script src="{% static 'javascript/ror.js' %}" type="text/javascript"></script>
+        <script src='https://www.google.com/recaptcha/api.js' type="text/javascript" defer></script>
+        <script src="{% static 'javascript/main.js' %}" type="text/javascript" defer></script>
+        <script src="{% static 'javascript/xhr.js' %}" type="text/javascript" defer></script>
+        <script src="{% static 'javascript/ror.js' %}" type="text/javascript" defer></script>
         <!-- ORCiD Widget -->
-        <script src="{% static 'javascript/orcid-widget.js' %}" type="text/javascript"></script>
+        <script src="{% static 'javascript/orcid-widget.js' %}" type="text/javascript" defer></script>
     </body>
 
 </html>
