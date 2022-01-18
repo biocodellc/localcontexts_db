@@ -4,21 +4,26 @@
 <section class="flex-this gradient-section">
     <div class="base-card flex-this">
 
-        <div id="progress-container" class="orange-bg white-text flex-this">
-            <img class="login-logo" src="{% static 'images/logos/lc-logo-signin.png' %}" alt="Local Contexts logo">
+        <div id="registration-progress-container" class="orange-bg white-text flex-this column justify-center">
+            <div class="login-logo-container">
+                <img class="login-logo" src="{% static 'images/logos/lc-logo-signin.png' %}" alt="Local Contexts logo">
+            </div>
+            <div id="progress-bottom-container"><div><h2>Grounding Indigenous Rights</h2></div></div>
         </div>
     
-        <div id="complete-form-container" class="flex-this column">
-            <div class="flex-this row flex-end w-90">
-                    <p class="grey-text">Not signed up yet?<a href="{% url 'register' %}" class="darkteal-text"> Register</a></p>
-            </div>
-
-            <!-- Alerts -->
-            {% include 'partials/_alerts.html' %}
+        <div id="registration-form-container" class="flex-this column">
     
             <div class="form-container flex-this column w-90">
-                <h2 class="darkteal-text margin-bottom-2">Welcome back!</h2>
-    
+                <div class="flex-this space-between">
+                    <div>
+                        <h2 class="margin-bottom-2">Welcome back!</h2>
+                        <p class="no-top-margin">Please sign in to use the Local Contexts Hub</p>                    
+                    </div>
+                    <div>
+                        <p class="grey-text">Not signed up yet?<a href="{% url 'register' %}" class="darkteal-text underline-hover"> Register</a></p>
+                    </div>                    
+                </div>
+
                 <form action="{% url 'login' %}" method="POST" class="flex-this column w-100">
                     {% csrf_token %}
                     <div class="pad-top-1-5">
@@ -31,15 +36,15 @@
                     </div>
                     <div class="flex-this space-between pad-top-1-5"> 
                         <div>
-                            <a href="{% url 'reset_password'%}" class="darkteal-text">Forgot Password?</a>
+                            <a href="{% url 'reset_password'%}" class="darkteal-text underline-hover">Forgot password?</a>
                         </div>  
-                        <div>
-                            <button class="primary-btn action-btn margin-top-2  default-btn-width">Sign in</button>
-                        </div>
+                        <div><button class="primary-btn action-btn margin-top-2 default-btn-width">Sign in</button></div>
                     </div>
-
                 </form>
-                
+
+                <!-- Alerts -->
+                {% include 'partials/_alerts.html' %}
+
             </div>
     
         </div>

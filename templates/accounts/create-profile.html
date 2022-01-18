@@ -1,23 +1,23 @@
 {% extends 'reg-base.html' %} {% block title %} | Create Profile {% endblock %} {% load static %} {% block card %}
 {% if user.is_authenticated %}
 
-<div class="form-container flex-this column w-90">
-    <div class="form-heading flex-this column w-100">
-        <h2 class="darkteal-text margin-bottom-2">Create your personal profile</h2>
-        <p>Local Contexts collects basic information so that we can learn more about you and help connect you with other organizations within the Local Context Hub.</p>    
-    </div>
+<div class="flex-this column w-90">
+    <div><h2 class="no-top-margin">Create your personal profile</h2></div>
+    <div><p class="no-top-margin">The information you provide here will be shared with other accounts you decide to join to help them identify who you are.</p></div>
+</div>
 
+<div class="form-container flex-this column w-90">
     <form action="{% url 'create-profile' %}" method="POST" enctype="multipart/form-data" class="flex-this column w-100">
         {% csrf_token %}
         <div class="flex-this column w-100">
 
             <div class="flex-this w-100 space-between">
                 <div class="w-50 margin-right-1"> 
-                    <label for="first_name">First Name </label>
+                    <label for="first_name">First name </label>
                         {{ user_form.first_name }}
                 </div>
                 <div class="w-50 margin-left-1">
-                    <label for="last_name">Last Name</label>
+                    <label for="last_name">Last name</label>
                         {{ user_form.last_name }}
                 </div>
             </div>
@@ -35,11 +35,11 @@
 
             <div class="flex-this w-100 space-between margin-top-1">
                 <div class="w-50 margin-right-1"> 
-                    <label for="city_town">Town or City </label>
+                    <label for="city_town">Town or city </label>
                         {{ profile_form.city_town }}
                 </div>
                 <div class="w-50 margin-left-1">
-                    <label for="state_province_region">State, Province, or Region</label>
+                    <label for="state_province_region">State, province, or region</label>
                         {{ profile_form.state_province_region }}
                 </div>
             </div>
@@ -51,8 +51,8 @@
 
         </div>
 
-        <div class="text-align-right">
-            <button class="primary-btn action-btn margin-top-2" style="float: right;">Continue <i class="fa fa-long-arrow-right"></i></button>
+        <div class="flex-this flex-end">
+            <button class="primary-btn action-btn margin-top-2">Continue <i class="fa fa-long-arrow-right"></i></button>
         </div>   
 
     </form>
