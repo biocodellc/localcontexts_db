@@ -524,19 +524,32 @@ input:focus {
 }
 
 .msg-red, .msg-green, .msg-blue {
-    margin: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .msg-red {
-    color: #ff0000;
+    padding: 7px 5px;
+    color: #B01212;
+    background-color: #FBF3F3;
+    border-radius: 7px;
+    border: 1px solid #B01212;
 }
 
 .msg-green {
+    padding: 7px 5px;
     color: #3c763d;
+    background-color: #dde7de;
+    border-radius: 7px;
+    border: 1px solid #3c763d;
 }
 
 .msg-blue {
+    padding: 7px 5px;
     color: #31708f;
+    background-color: #d9ebf5;
+    border-radius: 7px;
+    border: 1px solid #31708f;
 }
 
 #close-btn {

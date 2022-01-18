@@ -1,9 +1,9 @@
 {% extends 'reg-base.html' %} {% block title %} | Create Institution {% endblock %}{% load static %} {% block card %}
 
 <div class="flex-this column w-90">
-    <div class="margin-bottom-1 flex-this space-between">
-        <h2 class="darkteal-text">Institution Account</h2>  
-        <div class="margin-top-16">or <a class="darkteal-text" href="{% url 'connect-institution' %}">Request to join an institution account</a>  </div>
+    <div class="flex-this space-between">
+        <div><h2 class="no-top-margin">Institution Account</h2></div>
+        <div>Or <a class="darkteal-text underline-hover" href="{% url 'connect-institution' %}">request to join an existing institution</a>  </div>
     </div>
 
     <p class="no-bottom-margin no-top-margin">
@@ -38,7 +38,7 @@
                 </div>
             </div>
 
-            <small>These institutions come from <a class="darkteal-text" href="https://ror.org/" target="_blank">ROR</a>. If your institution is not listed here, <a href="{% url 'create-institution-noror' %}"><span class="darkteal-text">please fill out this form</span>.</a></small>
+            <small>These institutions come from <a class="darkteal-text underline-hover" href="https://ror.org/" target="_blank">ROR</a>. If your institution is not listed here, <a href="{% url 'create-institution-noror' %}"><span class="darkteal-text underline-hover">please fill out this form</span>.</a></small>
 
         </div>
 
