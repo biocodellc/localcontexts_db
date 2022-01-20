@@ -218,7 +218,7 @@ function populateTemplate(id) {
 }
 
 // Customize Label: clone translation form to add multiple translations
-if (window.location.href.includes('/labels/customize')) {
+if (window.location.href.includes('/labels/customize') || window.location.href.includes('/labels/edit')) {
     let addTranslationBtn = document.getElementById('add-translation-btn')
     if (addTranslationBtn) {
         addTranslationBtn.addEventListener('click', (e) => {
@@ -237,6 +237,8 @@ if (window.location.href.includes('/labels/customize')) {
         // Need to increment that number by 1 each time parent div is duplicated
         // Get parent div, clone it and change its attributes
         let parentDiv = document.getElementById('translation-form-0')
+
+        if (parentDiv.classList.contains('hide')) { parentDiv.classList.replace('hide', 'show')}
         let clone = parentDiv.cloneNode(true)
         clone.id = 'translation-form-'+ formCount++ // needs to increment by 1 for unique id
         // Title input has name='form-0-title' and id='id_form-0-title'
@@ -261,6 +263,8 @@ if (window.location.href.includes('/labels/customize')) {
         // Append clone to sibling
         // el.parentElement.parentElement.append(clone)
         parentDiv.append(clone)
+
+        console.log(formCount)
 
     }
 }
