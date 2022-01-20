@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -383,31 +384,53 @@ def edit_label(request, pk, label_id):
     form = ''
     formset = ''
 
-    if BCLabel.objects.filter(unique_id=label_id).exists():
-        bclabel = BCLabel.objects.get(unique_id=label_id)
-        form = EditBCLabelForm(request.POST or None, instance=bclabel)
-        formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
+    member_role = check_member_role_community(request.user, community)
+    if member_role == False or member_role == 'viewer':
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        add_translation_formset = AddLabelTranslationFormSet(request.POST or None)
 
-    if TKLabel.objects.filter(unique_id=label_id).exists():
-        tklabel = TKLabel.objects.get(unique_id=label_id)
-        form = EditTKLabelForm(request.POST or None, instance=tklabel)
-        formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
-    
-    if request.method == 'POST':
-        if form.is_valid() and formset.is_valid():
-            form.save()
-            formset.save()
+        if BCLabel.objects.filter(unique_id=label_id).exists():
+            bclabel = BCLabel.objects.get(unique_id=label_id)
+            form = EditBCLabelForm(request.POST or None, instance=bclabel)
+            formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
 
-            return redirect('select-label', community.id)
-    
-    context = {
-        'community': community,
-        'form': form,
-        'formset': formset,
-        'bclabel': bclabel,
-        'tklabel': tklabel,
-    }
-    return render(request, 'communities/edit-label.html', context)
+        if TKLabel.objects.filter(unique_id=label_id).exists():
+            tklabel = TKLabel.objects.get(unique_id=label_id)
+            form = EditTKLabelForm(request.POST or None, instance=tklabel)
+            formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
+        
+        if request.method == 'GET':
+            add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+        elif request.method == 'POST':
+            add_translation_formset = AddLabelTranslationFormSet(request.POST)
+
+            if form.is_valid() and formset.is_valid() and add_translation_formset.is_valid():
+                form.save()
+                formset.save()
+
+                # Save all new label translation instances
+                instances = add_translation_formset.save(commit=False)
+                for instance in instances:
+                    if BCLabel.objects.filter(unique_id=label_id).exists():
+                        instance.bclabel = bclabel
+                    elif TKLabel.objects.filter(unique_id=label_id).exists():
+                        instance.tklabel = tklabel
+
+                    instance.save()
+
+                return redirect('select-label', community.id)
+        
+        context = {
+            'community': community,
+            'member_role': member_role,
+            'form': form,
+            'formset': formset,
+            'add_translation_formset': add_translation_formset,
+            'bclabel': bclabel,
+            'tklabel': tklabel,
+        }
+        return render(request, 'communities/edit-label.html', context)
 
 # Projects Main
 @login_required(login_url='login')
