@@ -24,14 +24,12 @@
                 </div>
             </div>
 
-            {{ add_translation_formset.management_form }}
             {{ formset.management_form }}
-
-            <div class="flex-this flex-end w-80"><button id="add-translation-btn" class="primary-btn green-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Translation</button></div>
 
             {% if bclabel.bclabel_translation.all or tklabel.tklabel_translation.all %}
                 <div><p class="bold">Translated Label text</p></div>
 
+                <!-- Translations that currently exist -->
                 {% if formset %}
                     <div class="w-80">
                         {% for translation_form in formset %}
@@ -51,44 +49,10 @@
                         {% endfor %}                
                     </div>
                 {% endif %}
-
-                {% for tran_form in add_translation_formset %}
-                    {% for hidden in tran_form.hidden_fields %}{{ hidden }}{% endfor %}
-                        <div id="translation-form-0" class="flex-this column margin-top-16">
-                            <div class="flex-this w-80">
-                                <div class="w-30 margin-right-16"><label>Local name</label><br>{{ tran_form.title }}</div>
-                                <div class="w-30"><label>What language is this written in?</label><br>{{ tran_form.language }}</div>
-                            </div>
-                            <div class="w-80"><label>Translated text</label><br>{{ tran_form.translation }}</div>
-                        </div>
-                {% endfor %}
-
-                {% if add_translation_formset.errors %}
-                    {% for error in add_translation_formset.errors %}
-                        <div><small style="color:red;"> {{ error }}</small></div>
-                    {% endfor %}
-                {% endif %}                    
-
-            {% else %}
-                {% for tran_form in add_translation_formset %}
-                    {% for hidden in tran_form.hidden_fields %}{{ hidden }}{% endfor %}
-                        <div id="translation-form-0" class="flex-this column margin-top-16">
-                            <div class="flex-this w-80">
-                                <div class="w-30 margin-right-16"><label>Local name</label><br>{{ tran_form.title }}</div>
-                                <div class="w-30"><label>What language is this written in?</label><br>{{ tran_form.language }}</div>
-                            </div>
-                            <div class="w-80"><label>Translated text</label><br>{{ tran_form.translation }}</div>
-                        </div>
-                {% endfor %}
-
-                {% if add_translation_formset.errors %}
-                    {% for error in add_translation_formset.errors %}
-                        <div><small style="color:red;"> {{ error }}</small></div>
-                    {% endfor %}
-                {% endif %}                    
-
             {% endif %}
 
+            <!-- Add new translations -->
+            {% include 'partials/_add-translation.html' %}
 
             <div class="text-align-right margin-bottom-8">
                 <button class="primary-btn action-btn margin-top-1">Save as draft</button> 

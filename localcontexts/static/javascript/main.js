@@ -219,53 +219,30 @@ function populateTemplate(id) {
 
 // Customize Label: clone translation form to add multiple translations
 if (window.location.href.includes('/labels/customize') || window.location.href.includes('/labels/edit')) {
-    let addTranslationBtn = document.getElementById('add-translation-btn')
-    if (addTranslationBtn) {
-        addTranslationBtn.addEventListener('click', (e) => {
-            e.preventDefault()
-            cloneTranslationForm()
-        })        
-    }
+    const addTranslationBtn = document.getElementById('add-translation-btn')
+    if (addTranslationBtn) { addTranslationBtn.addEventListener('click', cloneForm, false)}
 
-    let formCount = 0
+    // h/t: https://www.brennantymrak.com/articles/django-dynamic-formsets-javascript
 
-    function cloneTranslationForm() {
-        // Total forms hidden input needs to be incremented
-        let hiddenInputs = document.getElementsByName('form-TOTAL_FORMS')
-        let totalFormInput = hiddenInputs[0]
+    function cloneForm(e) {
+        e.stopImmediatePropagation()
+        e.preventDefault()
+        
+        let translationForm = document.querySelectorAll('.add-translation-form')
+        let container = document.querySelector('#translation-form-container')
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+        let lastDiv = document.getElementById('lastDiv')
 
-        // Need to increment that number by 1 each time parent div is duplicated
-        // Get parent div, clone it and change its attributes
-        let parentDiv = document.getElementById('translation-form-0')
+        let formNum = translationForm.length-1
 
-        if (parentDiv.classList.contains('hide')) { parentDiv.classList.replace('hide', 'show')}
-        let clone = parentDiv.cloneNode(true)
-        clone.id = 'translation-form-'+ formCount++ // needs to increment by 1 for unique id
-        // Title input has name='form-0-title' and id='id_form-0-title'
-        // Language input has name='form-0-language' and id='id_form-0-language'
-        // Translation textarea has name='form-0-translation' and id='id_form-0-translation'
+        let newForm = translationForm[0].cloneNode(true)
+        let formRegex = RegExp(`form-(\\d){1}-`,'g')
 
-        let titleInput = clone.getElementsByTagName('input')[0]
-        let languageInput = clone.getElementsByTagName('input')[1]
-        let translationInput = clone.getElementsByTagName('textarea')[0]
+        formNum++
 
-        titleInput.value = ''
-        languageInput.value = ''
-        translationInput.value = ''
-        titleInput.id = `id_form-${formCount}-title`
-        titleInput.name = `form-${formCount}-title`
-        languageInput.id = `id_form-${formCount}-language`
-        languageInput.name = `form-${formCount}-language`
-        translationInput.id = `id_form-${formCount}-translation`
-        translationInput.name = `form-${formCount}-translation`
-        totalFormInput.value = parseInt(totalFormInput.value) + 1
-
-        // Append clone to sibling
-        // el.parentElement.parentElement.append(clone)
-        parentDiv.append(clone)
-
-        console.log(formCount)
-
+        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+        container.insertBefore(newForm, lastDiv)
+        totalForms.setAttribute('value', `${formNum+1}`)
     }
 }
 

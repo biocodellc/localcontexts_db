@@ -239,13 +239,13 @@ def customize_label(request, pk, label_type):
             form = CustomizeTKLabelForm(request.POST or None)
 
             if request.method == "GET":
-                formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+                add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
 
             elif request.method == "POST":
-                formset = AddLabelTranslationFormSet(request.POST)
+                add_translation_formset = AddLabelTranslationFormSet(request.POST)
                 label_name = request.POST.get('input-label-name')
 
-                if form.is_valid() and formset.is_valid():
+                if form.is_valid() and add_translation_formset.is_valid():
                     label_form = form.save(commit=False)
                     label_form.name = label_name
                     label_form.label_type = tk_type
@@ -256,7 +256,7 @@ def customize_label(request, pk, label_type):
                     label_form.save()
 
                     # Save all label translation instances
-                    instances = formset.save(commit=False)
+                    instances = add_translation_formset.save(commit=False)
                     for instance in instances:
                         instance.tklabel = label_form
                         instance.save()
@@ -275,13 +275,13 @@ def customize_label(request, pk, label_type):
             form = CustomizeBCLabelForm(request.POST or None)
 
             if request.method == "GET":
-                formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+                add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
 
             elif request.method == "POST":
-                formset = AddLabelTranslationFormSet(request.POST)
+                add_translation_formset = AddLabelTranslationFormSet(request.POST)
                 label_name = request.POST.get('input-label-name')
 
-                if form.is_valid() and formset.is_valid():
+                if form.is_valid() and add_translation_formset.is_valid():
                     label_form = form.save(commit=False)
                     label_form.name = label_name
                     label_form.label_type = bc_type
@@ -292,7 +292,7 @@ def customize_label(request, pk, label_type):
                     label_form.save()
 
                     # Save all label translation instances
-                    instances = formset.save(commit=False)
+                    instances = add_translation_formset.save(commit=False)
                     for instance in instances:
                         instance.bclabel = label_form
                         instance.save()
@@ -308,7 +308,7 @@ def customize_label(request, pk, label_type):
             'community': community,
             'label_type': label_type,
             'form': form,
-            'formset': formset,
+            'add_translation_formset': add_translation_formset,
         }
         return render(request, 'communities/customize-label.html', context)
 
