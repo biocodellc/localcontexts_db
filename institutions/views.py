@@ -75,11 +75,23 @@ def create_institution(request):
                 if dev_prod_or_local(request.get_host()) == 'DEV':
                     data.is_approved = True
                     data.save()
+                    
+                    # Add to user affiliations
+                    affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user)
+                    affiliation.institutions.add(data)
+                    affiliation.save()
+
                     # Create a Connections instance
                     Connections.objects.create(institution=data)
                     return redirect('dashboard')
                 else:
                     data.save()
+
+                    # Add to user affiliations
+                    affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user)
+                    affiliation.institutions.add(data)
+                    affiliation.save()
+
                     # Create a Connections instance
                     Connections.objects.create(institution=data)
                     return redirect('confirm-institution', data.id)

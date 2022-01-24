@@ -4,7 +4,7 @@ from .models import Researcher
 
 def is_user_researcher(user):
     if Researcher.objects.filter(user=user).exists():
-        return Researcher.objects.get(user=user)
+        return Researcher.objects.select_related('user').get(user=user)
     else:
         return False
 

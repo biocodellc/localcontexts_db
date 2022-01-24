@@ -82,11 +82,23 @@ def create_community(request):
             if dev_prod_or_local(request.get_host()) == 'DEV':
                 data.is_approved = True
                 data.save()
+                
+                # Add to user affiliations
+                affiliation = UserAffiliation.objects.prefetch_related('communities').get(user=request.user)
+                affiliation.communities.add(data)
+                affiliation.save()
+
                 # Create a Connections instance
                 Connections.objects.create(community=data)
                 return redirect('dashboard')
             else:
                 data.save()
+
+                # Add to user affiliations
+                affiliation = UserAffiliation.objects.prefetch_related('communities').get(user=request.user)
+                affiliation.communities.add(data)
+                affiliation.save()
+
                 # Create a Connections instance
                 Connections.objects.create(community=data)
                 return redirect('confirm-community', data.id)
@@ -435,13 +447,13 @@ def edit_label(request, pk, label_id):
 # Projects Main
 @login_required(login_url='login')
 def projects(request, pk):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        community_notified = EntitiesNotified.objects.filter(communities=community)
+        community_notified = EntitiesNotified.objects.filter(communities=community).select_related('project').prefetch_related('institutions', 'researchers')
         form = ProjectCommentForm(request.POST or None)
 
         # Form: Notify project contributor if project was seen
@@ -451,7 +463,7 @@ def projects(request, pk):
             if project_uuid != None and project_uuid != 'placeholder':
                 project_status = request.POST.get('project-status')
 
-                project = Project.objects.get(unique_id=project_uuid)
+                project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
                 reference_id = project.unique_id
                 statuses = ProjectStatus.objects.filter(project=project, community=community)
                 truncated_project_title = str(project.title)[0:30]

@@ -15,10 +15,11 @@ register = template.Library()
 def get_label_count(community):
     # find all labels of this community that have been applied to projects
     count = 0
-    projects = Project.objects.all()
+    projects = Project.objects.all().prefetch_related('tk_labels', 'bc_labels')
+
     for project in projects:
-        bclabels = project.bc_labels.all()
-        tklabels = project.tk_labels.all()
+        bclabels = project.bc_labels.select_related('community')
+        tklabels = project.tk_labels.select_related('community')
         for bclabel in bclabels:
             if bclabel.community == community:
                 count += 1
