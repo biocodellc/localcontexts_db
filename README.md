@@ -1,9 +1,14 @@
-# localcontexts_db
+# Local Contexts Hub Main Repository
 Prod Link:
 - [Local Contexts Hub](https://localcontextshub.org/)
+
 Branches:
 - [Master](https://anth-ja77-local-contexts-8985.uc.r.appspot.com/)
 - [Develop](https://anth-ja77-lc-dev-42d5.uc.r.appspot.com/)
+
+Data sources:
+- [Data used by Local Contexts Hub](https://github.com/biocodellc/localcontexts_json)
+- [ROR Parser](https://github.com/biocodellc/ror-parser)
 
 ## Getting Started
 What you need to run this app:

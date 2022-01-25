@@ -1,32 +1,24 @@
-from communities.models import InviteMember, Community
+from communities.models import InviteMember
 from accounts.models import UserAffiliation
 
 def is_community_in_user_community(user, community):
-    u = UserAffiliation.objects.get(user=user)
-    community_list = u.communities.all()
-    if community in community_list:
+    u = UserAffiliation.objects.prefetch_related('communities').get(user=user)
+    if community in u.communities.all():
         return True
     else:
         return False
 
 def check_member_role_community(user, community):
-    u = UserAffiliation.objects.get(user=user)
-    community_list = u.communities.all()
+    u = UserAffiliation.objects.prefetch_related('communities').get(user=user)
 
-    if community in community_list:
-        c = Community.objects.get(id=community.id)
-
-        admins = c.get_admins()
-        editors = c.get_editors()
-        viewers = c.get_viewers()
-
-        if user in admins or user == c.community_creator:
+    if community in u.communities.all():
+        if user in community.admins.all() or user == community.community_creator:
             return 'admin'
 
-        elif user in editors:
+        elif user in community.editors.all():
             return 'editor'
 
-        elif user in viewers:
+        elif user in community.viewers.all():
             return 'viewer'
     else:
         return False

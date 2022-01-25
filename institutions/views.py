@@ -75,11 +75,23 @@ def create_institution(request):
                 if dev_prod_or_local(request.get_host()) == 'DEV':
                     data.is_approved = True
                     data.save()
+                    
+                    # Add to user affiliations
+                    affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user)
+                    affiliation.institutions.add(data)
+                    affiliation.save()
+
                     # Create a Connections instance
                     Connections.objects.create(institution=data)
                     return redirect('dashboard')
                 else:
                     data.save()
+
+                    # Add to user affiliations
+                    affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user)
+                    affiliation.institutions.add(data)
+                    affiliation.save()
+
                     # Create a Connections instance
                     Connections.objects.create(institution=data)
                     return redirect('confirm-institution', data.id)
@@ -226,14 +238,14 @@ def remove_member(request, pk, member_id):
 # Projects
 @login_required(login_url='login')
 def institution_projects(request, pk):
-    institution = Institution.objects.get(id=pk)
+    institution = Institution.objects.select_related('institution_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
 
     member_role = check_member_role_institution(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         form = ProjectCommentForm(request.POST or None)
-        institution_notified = EntitiesNotified.objects.filter(institutions=institution)
+        institution_notified = EntitiesNotified.objects.prefetch_related('communities', 'researchers').filter(institutions=institution)
         
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')

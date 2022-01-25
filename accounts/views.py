@@ -150,30 +150,18 @@ def registration_reason(request):
 def dashboard(request):
     n = UserNotification.objects.filter(to_user=request.user)
     researcher = is_user_researcher(request.user)
-    current_user = UserAffiliation.objects.get(user=request.user)
+    user_affiliation = UserAffiliation.objects.prefetch_related('communities', 'institutions').get(user=request.user)
 
-    # Checks to see if any communities have been created by the current user 
-    user_created_communitites = Community.objects.filter(community_creator=request.user)
-    # and adds them to the UserAffiliation instance
-    for community in user_created_communitites:
-        current_user.communities.add(community.id) 
-        current_user.save()
-    
-    # Checks to see if any institutions have been created by the current user 
-    user_created_institutions = Institution.objects.filter(institution_creator=request.user)
-    for institution in user_created_institutions:
-        current_user.institutions.add(institution.id)
-        current_user.save()
-
-    user_communities = current_user.communities.all()
-    user_institutions = current_user.institutions.all()
+    user_communities = user_affiliation.communities.all()
+    user_institutions = user_affiliation.institutions.all()
+    profile = Profile.objects.select_related('user').get(user=request.user)
 
     if request.method == 'POST':
-        request.user.profile.onboarding_on = False
-        request.user.profile.save()
+        profile.onboarding_on = False
+        profile.save()
 
     context = { 
-        'current_user': current_user,
+        'profile': profile,
         'user_communities': user_communities,
         'user_institutions': user_institutions,
         'researcher': researcher,
@@ -289,8 +277,8 @@ def invite_user(request):
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 
 def organization_registry(request):
-    communities = Community.objects.filter(is_approved=True).order_by('community_name')
-    institutions = Institution.objects.filter(is_approved=True).order_by('institution_name')
+    communities = Community.objects.prefetch_related('admins', 'editors', 'viewers').filter(is_approved=True).order_by('community_name')
+    institutions = Institution.objects.prefetch_related('admins', 'editors', 'viewers').filter(is_approved=True).order_by('institution_name')
 
     if request.user.is_authenticated:
         user_institutions = UserAffiliation.objects.get(user=request.user).institutions.all()
@@ -301,7 +289,7 @@ def organization_registry(request):
             comm_input_id = request.POST.get('commid')
 
             if inst_input_id:
-                target_institution = Institution.objects.get(id=inst_input_id)
+                target_institution = Institution.objects.select_related('institution_creator').get(id=inst_input_id)
                 main_admin = target_institution.institution_creator
 
                 join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
@@ -311,7 +299,7 @@ def organization_registry(request):
                 send_join_request_email_admin(request.user, target_institution)
 
             if comm_input_id:
-                target_community = Community.objects.get(id=comm_input_id)
+                target_community = Community.objects.select_related('community_creator').get(id=comm_input_id)
                 main_admin = target_community.community_creator
 
                 req = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
@@ -366,17 +354,17 @@ def hub_counter(request):
     researcher_projects = 0
 
     # Community projects
-    for community in Community.objects.all():
+    for community in Community.objects.prefetch_related('projects').all():
         comm_count = community.projects.count()
         community_projects += comm_count
     
     # Institution projects
-    for institution in Institution.objects.all():
+    for institution in Institution.objects.prefetch_related('projects').all():
         inst_count = institution.projects.count()
         institution_projects += inst_count
 
     # Researcher projects
-    for researcher in Researcher.objects.all():
+    for researcher in Researcher.objects.prefetch_related('projects').all():
         res_count = researcher.projects.count()
         researcher_projects += res_count
 

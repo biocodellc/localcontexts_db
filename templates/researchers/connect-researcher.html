@@ -2,8 +2,8 @@
     
 <div class="flex-this column w-90">
     <div class="margin-bottom-1 flex-this space-between">
-        <h2 class="darkteal-text">Researcher Account</h2>  
-        <div class="margin-top-16">or <a class="darkteal-text" href="{% url 'select-account' %}">Back to choose an account</a>  </div>
+        <h2>Researcher Account</h2>  
+        <div class="margin-top-16">Or <a class="darkteal-text underline-hover" href="{% url 'select-account' %}">choose another account</a></div>
     </div>
     <div>
         <p class="no-top-margin no-bottom-margin">A researcher is a person who carries out academic or scientific research independently or in an institution, such as archive, library, museum, historical society, gallery, data repository, or university.</p>
@@ -13,7 +13,7 @@
         {% csrf_token %}
 
         <div class="flex-this space-between">
-            <div class="w-50"><p>We encourage you to have an ORCiD ID. <br>You can <a href="https://orcid.org/" target="_blank">read more about ORCiD here</a>.</p></div>
+            <div class="w-50"><p>We encourage you to have an ORCiD ID. <br>You can <a class="darkteal-text underline-hover" href="https://orcid.org/" target="_blank">read more about ORCiD here</a>.</p></div>
 
             <!-- Show ORCiD widget based on hostname -->
             {% if 'localcontextshub' in request.get_host %}
@@ -28,9 +28,9 @@
         </div>
 
         {% if 'anth-ja77-lc-dev-42d5' in request.get_host %}
-            <small class="bold">Please note that since this is a test site, the ORCiD used will be the <a class="darkteal-text" href="https://sandbox.orcid.org/">sandbox version</a>.</small><br>
+            <small class="bold">Please note that since this is a test site, the ORCiD used will be the <a class="darkteal-text underline-hover" href="https://sandbox.orcid.org/">sandbox version</a>.</small><br>
         {% elif 'localhost' in request.get_host %}
-            <small class="bold">Localhost uses the <a class="darkteal-text" href="https://sandbox.orcid.org/">sandbox version</a> of ORCiD.</small><br>
+            <small class="bold">Localhost uses the <a class="darkteal-text underline-hover" href="https://sandbox.orcid.org/">sandbox version</a> of ORCiD.</small><br>
         {% endif %}
 
         <div>

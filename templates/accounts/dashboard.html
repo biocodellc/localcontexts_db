@@ -3,7 +3,7 @@
 
     {% include 'partials/infocards/_user-info.html' %}
 
-    {% if user.profile.onboarding_on %}
+    {% if profile.onboarding_on %}
         <input id="openOnboarding" value="true" type="hidden">
     {% else %}
         <input id="openOnboarding" value="false" type="hidden">
@@ -41,10 +41,10 @@
                             <div><h3 class="dashcard-h3 darkteal-text">{{ researcher.user.get_full_name }}</h3></div>
                             <div>
                                 <p class="dashcard-subheader">Researcher | Location: 
-                                    {% if researcher.user.profile.city_town %} {{ researcher.user.profile.city_town }}, {% endif %} 
-                                    {% if researcher.user.profile.state_province_region %} {{ researcher.user.profile.state_province_region }}, {% endif %} 
-                                    {% if researcher.user.profile.country.name %} {{ researcher.user.profile.country.name }}{% endif %}
-                                    {% if not researcher.user.profile.city_town and not researcher.user.profile.state_province_region and not researcher.user.profile.country %}
+                                    {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
+                                    {% if profile.state_province_region %} {{ profile.state_province_region }}, {% endif %} 
+                                    {% if profile.country.name %} {{ profile.country.name }}{% endif %}
+                                    {% if not profile.city_town and not profile.state_province_region and not profile.country %}
                                         None specified
                                     {% endif %}
                                 </p>

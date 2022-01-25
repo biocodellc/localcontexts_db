@@ -8,7 +8,7 @@
 
 /* The entire card */
 .base-card {
-    justify-content: center;
+    /* justify-content: center; */
     border-radius: 5px 5px;
     max-width: 1200px;
     min-width: 1200px;
@@ -18,29 +18,25 @@
     background-color: #fff;
 }
 
-/* Progress List and Registration form containers */
-#progress-container, #complete-form-container {
-    align-items: center;
-}
-
 /* Progress Container || THE ORANGE PART */
-#progress-container {
+#registration-progress-container {
     max-width: 35%;
     min-width: 35%;
     border-radius: 5px 0px 0px 5px;
     font-weight: 600;
     font-size: 14px;
+    align-items: center;
 } 
 
 /* Form Container || THE WHITE PART */
-#complete-form-container {
+#registration-form-container {
     padding: 40px;
-    justify-content: center;
     max-width: 65%;
     min-width: 65%;
     border-radius: 0px 5px 5px 0px;
     font-weight: 300;
     font-size: 14px;
+    align-items: center;
 }
 
 /* Progress Container */
@@ -122,14 +118,6 @@
     justify-content: center;
 }
 
-.form-heading {
-    padding-bottom: 1.5%;
-}
-
-.form-heading p {
-    margin-top: 0;
-}
-
 /* THE FORM ITSELF */
 .form-container input {
     width: 100%;
@@ -192,19 +180,14 @@
     z-index: 1;
 }
 
+.login-logo-container {
+    /* border: 1px solid black; */
+    margin-bottom: 70px;
+}
+
 .login-logo {
-    margin: auto;
-    padding: 5%;
-    max-width: 80%;
-}
-
-/* Choose account page */
-.registration-card-space {
-    padding: 70px;
-}
-
-.registration-card-space span {
-    color: grey;
+    height: 297px;
+    width: 219px;
 }
 
 .text-align-right {
@@ -227,7 +210,6 @@ input[type=checkbox] {
   height: 383px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   padding: 15px;  
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);

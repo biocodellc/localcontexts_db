@@ -39,11 +39,7 @@ class Community(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
 
     def get_member_count(self):
-        admins = self.admins.count()
-        editors = self.editors.count()
-        viewers = self.viewers.count()
-        total_members = admins + editors + viewers + 1
-        return total_members
+        return self.admins.count() + self.editors.count() + self.viewers.count() + 1
         
     def get_admins(self):
         return self.admins.all()

@@ -25,30 +25,34 @@
             </div>
 
             {{ formset.management_form }}
-            {% if formset %}
-                <div>
-                    <p class="bold">Translated Label text</p>
-                </div>
-                <div class="w-80">
-                    {% for translation_form in formset %}
-                        {% for hidden in translation_form.hidden_fields %}
-                            {{ hidden }}
-                        {% endfor %}
-                        <div class="flex-this space-between">
-                            <div class="w-50">
-                                <label>Customized title</label>
-                                {{ translation_form.title }}
+
+            {% if bclabel.bclabel_translation.all or tklabel.tklabel_translation.all %}
+                <div><p class="bold">Translated Label text</p></div>
+
+                <!-- Translations that currently exist -->
+                {% if formset %}
+                    <div class="w-80">
+                        {% for translation_form in formset %}
+                            {% for hidden in translation_form.hidden_fields %} {{ hidden }} {% endfor %}
+
+                            <div class="flex-this space-between">
+                                <div class="w-50">
+                                    <label>Customized title</label>
+                                    {{ translation_form.title }}
+                                </div>
+                                <div>
+                                    <label>Language</label>
+                                    {{ translation_form.language }}
+                                </div>
                             </div>
-                            <div>
-                                <label>Language</label>
-                                {{ translation_form.language }}
-                            </div>
-                        </div>
-                        {{ translation_form.translation }}    
-                    {% endfor %}                
-                </div>
+                            {{ translation_form.translation }}    
+                        {% endfor %}                
+                    </div>
+                {% endif %}
             {% endif %}
 
+            <!-- Add new translations -->
+            {% include 'partials/_add-translation.html' %}
 
             <div class="text-align-right margin-bottom-8">
                 <button class="primary-btn action-btn margin-top-1">Save as draft</button> 

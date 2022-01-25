@@ -15,11 +15,14 @@
             {% if user_can_view %}
                 {% include 'partials/_project.html' %}
             {% else %}
-            <!-- TODO: what should this say/add template -->
                 <div class="content-card-v2 content-card-space white-bg">
                     <h3>This project can only be viewed by contributors.</h3>
                 </div>
             {% endif %}
+        {% else %}
+            <div class="content-card-v2 content-card-space white-bg">
+                <h3>This project can only be viewed by logged in contributors.</h3>
+            </div>
         {% endif %}
 
     {% elif project.project_privacy == 'Private' %}

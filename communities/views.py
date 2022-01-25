@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -81,11 +82,23 @@ def create_community(request):
             if dev_prod_or_local(request.get_host()) == 'DEV':
                 data.is_approved = True
                 data.save()
+
+                # Add to user affiliations
+                affiliation = UserAffiliation.objects.prefetch_related('communities').get(user=request.user)
+                affiliation.communities.add(data)
+                affiliation.save()
+
                 # Create a Connections instance
                 Connections.objects.create(community=data)
                 return redirect('dashboard')
             else:
                 data.save()
+
+                # Add to user affiliations
+                affiliation = UserAffiliation.objects.prefetch_related('communities').get(user=request.user)
+                affiliation.communities.add(data)
+                affiliation.save()
+
                 # Create a Connections instance
                 Connections.objects.create(community=data)
                 return redirect('confirm-community', data.id)
@@ -138,7 +151,7 @@ def update_community(request, pk):
 # Members
 @login_required(login_url='login')
 def community_members(request, pk):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.prefetch_related('admins', 'editors', 'viewers').get(id=pk)
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
@@ -238,13 +251,13 @@ def customize_label(request, pk, label_type):
             form = CustomizeTKLabelForm(request.POST or None)
 
             if request.method == "GET":
-                formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+                add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
 
             elif request.method == "POST":
-                formset = AddLabelTranslationFormSet(request.POST)
+                add_translation_formset = AddLabelTranslationFormSet(request.POST)
                 label_name = request.POST.get('input-label-name')
 
-                if form.is_valid() and formset.is_valid():
+                if form.is_valid() and add_translation_formset.is_valid():
                     label_form = form.save(commit=False)
                     label_form.name = label_name
                     label_form.label_type = tk_type
@@ -255,7 +268,7 @@ def customize_label(request, pk, label_type):
                     label_form.save()
 
                     # Save all label translation instances
-                    instances = formset.save(commit=False)
+                    instances = add_translation_formset.save(commit=False)
                     for instance in instances:
                         instance.tklabel = label_form
                         instance.save()
@@ -274,13 +287,13 @@ def customize_label(request, pk, label_type):
             form = CustomizeBCLabelForm(request.POST or None)
 
             if request.method == "GET":
-                formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+                add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
 
             elif request.method == "POST":
-                formset = AddLabelTranslationFormSet(request.POST)
+                add_translation_formset = AddLabelTranslationFormSet(request.POST)
                 label_name = request.POST.get('input-label-name')
 
-                if form.is_valid() and formset.is_valid():
+                if form.is_valid() and add_translation_formset.is_valid():
                     label_form = form.save(commit=False)
                     label_form.name = label_name
                     label_form.label_type = bc_type
@@ -291,7 +304,7 @@ def customize_label(request, pk, label_type):
                     label_form.save()
 
                     # Save all label translation instances
-                    instances = formset.save(commit=False)
+                    instances = add_translation_formset.save(commit=False)
                     for instance in instances:
                         instance.bclabel = label_form
                         instance.save()
@@ -307,7 +320,7 @@ def customize_label(request, pk, label_type):
             'community': community,
             'label_type': label_type,
             'form': form,
-            'formset': formset,
+            'add_translation_formset': add_translation_formset,
         }
         return render(request, 'communities/customize-label.html', context)
 
@@ -383,110 +396,115 @@ def edit_label(request, pk, label_id):
     form = ''
     formset = ''
 
-    if BCLabel.objects.filter(unique_id=label_id).exists():
-        bclabel = BCLabel.objects.get(unique_id=label_id)
-        form = EditBCLabelForm(request.POST or None, instance=bclabel)
-        formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
+    member_role = check_member_role_community(request.user, community)
+    if member_role == False or member_role == 'viewer':
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        add_translation_formset = AddLabelTranslationFormSet(request.POST or None)
 
-    if TKLabel.objects.filter(unique_id=label_id).exists():
-        tklabel = TKLabel.objects.get(unique_id=label_id)
-        form = EditTKLabelForm(request.POST or None, instance=tklabel)
-        formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
-    
-    if request.method == 'POST':
-        if form.is_valid() and formset.is_valid():
-            form.save()
-            formset.save()
+        if BCLabel.objects.filter(unique_id=label_id).exists():
+            bclabel = BCLabel.objects.get(unique_id=label_id)
+            form = EditBCLabelForm(request.POST or None, instance=bclabel)
+            formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
 
-            return redirect('select-label', community.id)
-    
-    context = {
-        'community': community,
-        'form': form,
-        'formset': formset,
-        'bclabel': bclabel,
-        'tklabel': tklabel,
-    }
-    return render(request, 'communities/edit-label.html', context)
+        if TKLabel.objects.filter(unique_id=label_id).exists():
+            tklabel = TKLabel.objects.get(unique_id=label_id)
+            form = EditTKLabelForm(request.POST or None, instance=tklabel)
+            formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
+        
+        if request.method == 'GET':
+            add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+        elif request.method == 'POST':
+            add_translation_formset = AddLabelTranslationFormSet(request.POST)
+
+            if form.is_valid() and formset.is_valid() and add_translation_formset.is_valid():
+                form.save()
+                formset.save()
+
+                # Save all new label translation instances
+                instances = add_translation_formset.save(commit=False)
+                for instance in instances:
+                    if BCLabel.objects.filter(unique_id=label_id).exists():
+                        instance.bclabel = bclabel
+                    elif TKLabel.objects.filter(unique_id=label_id).exists():
+                        instance.tklabel = tklabel
+
+                    instance.save()
+
+                return redirect('select-label', community.id)
+        
+        context = {
+            'community': community,
+            'member_role': member_role,
+            'form': form,
+            'formset': formset,
+            'add_translation_formset': add_translation_formset,
+            'bclabel': bclabel,
+            'tklabel': tklabel,
+        }
+        return render(request, 'communities/edit-label.html', context)
 
 # Projects Main
 @login_required(login_url='login')
 def projects(request, pk):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        community_notified = EntitiesNotified.objects.filter(communities=community)
+        community_notified = EntitiesNotified.objects.select_related('project').prefetch_related('institutions', 'researchers').filter(communities=community)
         form = ProjectCommentForm(request.POST or None)
 
         # Form: Notify project contributor if project was seen
-        if request.method == "POST" and "notify-btn" in request.POST:
+        if request.method == "POST":
             project_uuid = request.POST.get('project-uuid')
+            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
 
-            if project_uuid != None and project_uuid != 'placeholder':
-                project_status = request.POST.get('project-status')
+            if "notify-btn" in request.POST:
 
-                project = Project.objects.get(unique_id=project_uuid)
-                reference_id = project.unique_id
-                statuses = ProjectStatus.objects.filter(project=project, community=community)
-                truncated_project_title = str(project.title)[0:30]
+                if project_uuid != None and project_uuid != 'placeholder':
+                    project_status = request.POST.get('project-status')
 
-                for status in statuses:
-                    if project_status == 'seen':
-                        status.seen = True
-                        status.save()
+                    reference_id = project.unique_id
+                    statuses = ProjectStatus.objects.filter(project=project, community=community)
+                    truncated_project_title = str(project.title)[0:30]
 
-                        # Send Notification
-                        title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
-                        if project.project_notice.all():
-                            for notice in project.project_notice.all():
-                                ActionNotification.objects.create(sender=request.user, title=title, institution=notice.placed_by_institution, notification_type='Projects', reference_id=reference_id)
-                        if project.project_notice.all():
-                            for notice in project.project_notice.all():
-                                ActionNotification.objects.create(sender=request.user, title=title, researcher=notice.placed_by_researcher, notification_type='Projects', reference_id=reference_id)
+                    title = ''
+                    for status in statuses:
+                        if project_status == 'seen':
+                            status.seen = True
+                            status.save()
 
+                            title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
 
-                    if project_status == 'pending':
-                        status.seen = True
-                        status.status = 'pending'
-                        status.save()
+                        if project_status == 'pending':
+                            status.seen = True
+                            status.status = 'pending'
+                            status.save()
 
-                        # Send Notification
-                        title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
-                        if project.project_notice.all():
-                            for notice in project.project_notice.all():
-                                ActionNotification.objects.create(sender=request.user, title=title, institution=notice.placed_by_institution, notification_type='Projects', reference_id=reference_id)
-                        if project.project_notice.all():
-                            for notice in project.project_notice.all():
-                                ActionNotification.objects.create(sender=request.user, title=title, researcher=notice.placed_by_researcher, notification_type='Projects', reference_id=reference_id)
+                            title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
 
-                    if project_status == 'not_pending':
-                        status.seen = True
-                        status.status = 'not_pending'
-                        status.save()
-                       
-                        # Send Notification
-                        title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
-                        if project.project_notice.all():
-                            for notice in project.project_notice.all():
-                                ActionNotification.objects.create(sender=request.user, title=title, institution=notice.placed_by_institution, notification_type='Projects', reference_id=reference_id)
-                        if project.project_notice.all():
-                            for notice in project.project_notice.all():
-                                ActionNotification.objects.create(sender=request.user, title=title, researcher=notice.placed_by_researcher, notification_type='Projects', reference_id=reference_id)
+                        if project_status == 'not_pending':
+                            status.seen = True
+                            status.status = 'not_pending'
+                            status.save()
                         
-                return redirect('community-projects', community.id)
+                            title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
 
-        # Form: Add comment to notice
-        elif request.method == "POST" and "add-comment-btn" in request.POST:
-            project_id = request.POST.get('project-uuid')
+                        # Send Notification
+                        # TODO: institution notices only??
+                        if project.project_notice.exists():
+                            for notice in project.project_notice.all():
+                                ActionNotification.objects.create(sender=request.user, title=title, institution=notice.placed_by_institution, notification_type='Projects', reference_id=reference_id)
+                        if project.project_notice.exists():
+                            for notice in project.project_notice.all():
+                                ActionNotification.objects.create(sender=request.user, title=title, researcher=notice.placed_by_researcher, notification_type='Projects', reference_id=reference_id)
+                            
+                    return redirect('community-projects', community.id)
 
-            # Which project ?
-            project_exists = Project.objects.filter(unique_id=project_id).exists()
-
-            if project_exists:
-                project = Project.objects.get(unique_id=project_id)
+            # Form: Add comment to notice
+            elif "add-comment-btn" in request.POST:
                 status = ProjectStatus.objects.get(project=project, community=community)
                 truncated_project_title = str(project.title)[0:30]
 
@@ -504,11 +522,11 @@ def projects(request, pk):
 
                         # Send Notification
                         title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
-                        if project.project_notice.all():
-                            for notice in project.project_notice.all():
+                        if project.project_notice.exists():
+                            for notice in project.project_notice.select_related('placed_by_institution', 'placed_by_researcher').all():
                                 ActionNotification.objects.create(sender=request.user, title=title, institution=notice.placed_by_institution, notification_type='Projects', reference_id=notice.project.unique_id)
-                        if project.project_notice.all():
-                            for notice in project.project_notice.all():
+                        if project.project_notice.exists():
+                            for notice in project.project_notice.select_related('placed_by_institution', 'placed_by_researcher').all():
                                 ActionNotification.objects.create(sender=request.user, title=title, researcher=notice.placed_by_researcher, notification_type='Projects', reference_id=notice.project.unique_id)
 
 
