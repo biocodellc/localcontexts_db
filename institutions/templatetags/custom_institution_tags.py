@@ -16,8 +16,7 @@ def institution_notifications(institution):
 
 @register.simple_tag
 def unread_notifications(institution):
-    unread_notifications_exist = ActionNotification.objects.filter(institution=institution, viewed=False).exists()
-    return unread_notifications_exist
+    return ActionNotification.objects.filter(institution=institution, viewed=False).exists()
 
 @register.simple_tag
 def anchor(url_name, section_id, institution_id):
@@ -25,25 +24,23 @@ def anchor(url_name, section_id, institution_id):
 
 @register.simple_tag
 def get_notices_count(institution):
-    notice_count = Notice.objects.filter(placed_by_institution=institution).count()
-    return notice_count
+    return Notice.objects.filter(placed_by_institution=institution).count()
 
 @register.simple_tag
 def get_labels_count(institution):
     count = 0
-    for project in institution.projects.all():
+    for project in institution.projects.prefetch_related('bc_labels', 'tk_labels').all():
         if project.has_labels():
             count += 1
     return count
 
 @register.simple_tag
 def institution_contributing_projects(institution):
-    contributors = ProjectContributors.objects.filter(institutions=institution)
-    return contributors
+    return ProjectContributors.objects.filter(institutions=institution)
 
 @register.simple_tag
 def connections_count(institution):
-    connections = Connections.objects.get(institution=institution)
+    connections = Connections.objects.prefetch_related('communities').get(institution=institution)
     return connections.communities.count()
 
 @register.simple_tag
