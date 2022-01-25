@@ -1,36 +1,26 @@
 from accounts.models import UserAffiliation
-from .models import Institution
 from communities.models import InviteMember
 
+def is_institution_in_user_institutions(user, institution):
+    u = UserAffiliation.objects.prefetch_related('institutions').get(user=user)
+    if institution in u.institutions.all():
+        return True
+    else:
+        return False
+        
 def check_member_role_institution(user, institution):
-    u = UserAffiliation.objects.get(user=user)
+    u = UserAffiliation.objects.prefetch_related('institutions').get(user=user)
     institution_list = u.institutions.all()
 
     if institution in institution_list:
-        c = Institution.objects.get(id=institution.id)
-
-        admins = c.get_admins()
-        editors = c.get_editors()
-        viewers = c.get_viewers()
-
-        if user in admins or user == c.institution_creator:
+        if user in institution.admins.all() or user == institution.institution_creator:
             return 'admin'
 
-        elif user in editors:
+        elif user in institution.editors.all():
             return 'editor'
 
-        elif user in viewers:
+        elif user in institution.viewers.all():
             return 'viewer'
-        else:
-            print('something went wrong, user does not have a role.')
-    else:
-        return False
-
-def is_institution_in_user_institutions(user, institution):
-    u = UserAffiliation.objects.get(user=user)
-    institutions_list = u.institutions.all()
-    if institution in institutions_list:
-        return True
     else:
         return False
 

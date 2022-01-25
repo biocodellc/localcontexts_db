@@ -15,10 +15,11 @@ register = template.Library()
 def get_label_count(community):
     # find all labels of this community that have been applied to projects
     count = 0
-    projects = Project.objects.all()
+    projects = Project.objects.prefetch_related('tk_labels', 'bc_labels').all()
+
     for project in projects:
-        bclabels = project.bc_labels.all()
-        tklabels = project.tk_labels.all()
+        bclabels = project.bc_labels.select_related('community').all()
+        tklabels = project.tk_labels.select_related('community').all()
         for bclabel in bclabels:
             if bclabel.community == community:
                 count += 1
@@ -30,7 +31,7 @@ def get_label_count(community):
 @register.simple_tag
 def community_notified_count(community):
     count = 0
-    for en in EntitiesNotified.objects.all():
+    for en in EntitiesNotified.objects.prefetch_related('communities').all():
         if community in en.communities.all():
             count += 1
     return count
@@ -41,18 +42,15 @@ def anchor(url_name, section_id, community_id):
 
 @register.simple_tag
 def community_notifications(community):
-    notifications = ActionNotification.objects.filter(community=community)
-    return notifications
+    return ActionNotification.objects.filter(community=community)
 
 @register.simple_tag
 def unread_notifications(community):
-    notifications_exist = ActionNotification.objects.filter(community=community, viewed=False).exists()
-    return notifications_exist
+    return ActionNotification.objects.filter(community=community, viewed=False).exists()
 
 @register.simple_tag
 def community_contributing_projects(community):
-    contributors = ProjectContributors.objects.filter(communities=community)
-    return contributors
+    return ProjectContributors.objects.filter(communities=community)
 
 @register.simple_tag
 def get_bclabel_img_url(img_type, *args, **kwargs):
