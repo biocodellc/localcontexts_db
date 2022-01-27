@@ -2,8 +2,6 @@
 
 <div class="flex-this column">
 
-    {% include 'partials/_alerts.html' %}
-
     <div class="flex-this column w-100">
         <div class="flex-this space-between">
             <div><h2 class="margin-bottom-2">Community Account</h2></div>
@@ -30,20 +28,24 @@
          <div><button id="openJoinRequestModalBtn" class="primary-btn action-btn margin-top-2 ">Next <i class="fa fa-long-arrow-right"></i></button></div>
      </div>
 
+     {% include 'partials/_alerts.html' %}
+
 </div>
 
 <div id="joinRequestModal" class="modal hide">
 
     <div class="modal-defaults join-modal flex-this column w-100">
-        
-        <div class="flex-this flex-end close-modal-btn">
-            <div class="margin-right-8 primary-btn white-btn">Close X</div>
+
+        <div class="flex-this space-between">
+            <div class="modal-content-padding"><h2 style="color: #333333;">Request to join</h2></div>
+            <div class="close-modal-btn">
+                <div class="margin-right-8 primary-btn white-btn">Close X</div>
+            </div>            
         </div>
 
         <div class="modal-content-padding w-100">
             <div>
-                <h2 style="color: #333333;">Request to join</h2>  
-                <p>Every account has various responsibilities within the community.<br>
+                <p class="no-top-margin">Every account has various responsibilities within the community.<br>
                     <strong>Administrator:</strong> responsible for adding, editing and removing members<br>
                     <strong>Editor:</strong> responsible for customizing Labels and Projects<br>
                     <strong>Viewer:</strong> can view activity happening on the hub
@@ -55,21 +57,21 @@
                 <input id="hidden-target-input" type="hidden" value="" name="organization_name">
 
                 <div class="flex-this column w-100">
-                    
                         <div class="pad-top-1-5 margin-right-1">
                             <label class="pad-top-1-5">Requested Responsibility</label><br>
                             {{ form.role }}
+                            {% if form.role.errors %}
+                                <div class="msg-red w-50"><small>{{ form.role.errors.as_text }}</small></div> 
+                            {% endif %}
                         </div>
                         
                         <div class="pad-top-1-5">
                             <label class="pad-top-1-5">Send a message with this request</label><br>
                             {{ form.message }}
+                            {% if form.message.errors %}
+                                <div class="msg-red w-50"><small>{{ form.message.errors.as_text }}</small></div> 
+                            {% endif %}
                         </div>
-
-                        {% if form.errors %}
-                            <small class="red-text">{{ form.errors }}</small>
-                        {% endif %}
-        
                 </div>
                 <div class="text-align-right">
                     <button class="primary-btn action-btn margin-top-2">Send request to join</button>
