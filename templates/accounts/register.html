@@ -12,35 +12,47 @@
 
     <div class="pad-top-1-5">
         <label for="username">Username</label><br>
-        {{form.username}}
+        {{ form.username }}
+        {% if form.username.errors %}
+            <div class="msg-red"><small>{{ form.username.errors.as_text }}</small></div> 
+        {% endif %}
     </div>
 
     <div class="pad-top-1-5">
         <label for="email">Email address</label><br>
-        {{form.email}}
+        {{ form.email }}
     </div>
-    
+    {% if form.email.errors %}
+        <div class="msg-red"><small>{{ form.email.errors.as_text }}</small></div> 
+    {% endif %}
 
     <div class="flex-this w-100 pad-top-1-5">
 
         <div class="pad-right w-50" style="position: relative;">
             <label for="password">Password</label><br>
             <div class="flex-this pass-field">
-                {{form.password1}}
+                {{ form.password1 }}
             </div>
             <div id="help-text-pw" style="position: absolute;">
-                <small>{{form.password1.help_text}}</small>
+                <small>{{ form.password1.help_text }}</small>
             </div>
         </div>
 
         <div class="pad-left w-50">
             <label for="confirm-password">Confirm password</label><br>
             <div class="flex-this pass-field">
-                {{form.password2}}
+                {{ form.password2 }} <br>
             </div>
         </div>
 
     </div>
+
+    {% if form.password1.errors %}
+        <div class="msg-red"><small>{{ form.password1.errors.as_text }}</small></div> 
+    {% endif %}
+    {% if form.password2.errors %}
+        <div class="msg-red"><small>{{ form.password2.errors.as_text }}</small></div> 
+    {% endif %}
 
     <div class="flex-this row margin-top-16">
         <div class="flex-this space-between">
@@ -55,8 +67,6 @@
         <div><div class="g-recaptcha" data-sitekey="6Lde2coaAAAAAB4T8Ln0hGur0H7-x4roy47qByAU"></div></div>
     </div>
     <br>
-
-    {% if form.errors %}<small class="red-text"> {{ form.errors }}</small>{% endif %}
 
     <div class="flex-this flex-end">
         <button class="primary-btn action-btn margin-top-2">Continue <i class="fa fa-long-arrow-right"></i></button>

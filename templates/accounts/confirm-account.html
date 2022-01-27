@@ -24,7 +24,10 @@
                         {% if institution %} Institution {% endif %} 
                         Contact Name
                     </label>
-                    {{ form.contact_name }}
+                    {{ form.contact_name }}<br>
+                    {% if form.contact_name.errors %}
+                        <div class="msg-red"><small>{{ form.contact_name.errors.as_text }}</small></div> 
+                    {% endif %}
                 </div>
         
                 <div class="margin-top-1">
@@ -34,6 +37,9 @@
                         Contact Email
                     </label>
                     {{ form.contact_email }} <br>
+                    {% if form.contact_email.errors %}
+                        <div class="msg-red"><small>{{ form.contact_email.errors.as_text }}</small></div> 
+                    {% endif %}
                 </div>
             </div>
     
@@ -41,13 +47,12 @@
                 <div>
                     <label for="support_document">Support Document</label>
                     {{ form.support_document }}
+                    {% if form.support_document.errors %}
+                        <div class="msg-red"><small>{{ form.support_document.errors.as_text }}</small></div> 
+                    {% endif %}
                 </div>
             </div>
         </div>
-
-        {% if form.errors %}
-            <small class="red-text">{{form.errors}}</small>
-        {% endif %}
         
         <div class="flex-this">
             <div class="margin-top-16">
