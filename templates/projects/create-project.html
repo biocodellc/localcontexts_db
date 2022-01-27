@@ -220,11 +220,17 @@
             <p>A Local Contexts project relates to the item or group of items to which a Notice/Label will be attached. This could be a specific item/sample/publication or a group of items comprising a exhibition/expedition/collection.</p>
             <div class="w-40">
                 {{ form.project_type.label }} <br>
-                {{ form.project_type }}
+                {{ form.project_type }}<br>
+                {% if form.project_type.errors %}
+                    <div class="msg-red w-50"><small>{{ form.project_type.errors.as_text }}</small></div>
+                {% endif %}
             </div>
             <div id="otherTypeField" class="w-40 margin-top-16 hide">
                 <label>Other:</label> <br>
-                {{ form.other_type }}
+                {{ form.other_type }}<br>
+                {% if form.other_type.errors %}
+                    <div class="msg-red w-50"><small>{{ form.other_type.errors.as_text }}</small></div>
+                {% endif %}
             </div>
         </div>
         </div>
@@ -240,6 +246,9 @@
                 </div>
                 <br>
                 {{ form.title }} <br>
+                {% if form.title.errors %}
+                    <div class="msg-red w-50"><small>{{ form.title.errors.as_text }}</small></div>
+                {% endif %}
             </div>
 
             <div class="padding-bottom-1 w-50">
@@ -249,6 +258,9 @@
                 </div>
                 <br>
                 {{ form.description }} <br>
+                {% if form.description.errors %}
+                    <div class="msg-red w-50"><small>{{ form.description.errors.as_text }}</small></div>
+                {% endif %}
             </div>
 
             <div class="padding-bottom-1 w-50">
@@ -258,6 +270,9 @@
                 </div>
                 <br>
                 {{ form.url }} <br>
+                {% if form.url.errors %}
+                    <div class="msg-red w-50"><small>{{ form.url.errors.as_text }}</small></div>
+                {% endif %}
             </div>
         </div>
 
@@ -273,12 +288,18 @@
                 </div>
                 <br>
                 {{ form.project_contact }} <br>
+                {% if form.project_contact.errors %}
+                    <div class="msg-red w-50"><small>{{ form.project_contact.errors.as_text }}</small></div>
+                {% endif %}
             </div>
 
 
             <div class="padding-bottom-1 w-50">
                 <label>Project Contact Email*</label><br>
                 {{ form.project_contact_email }} <br>
+                {% if form.project_contact_email.errors %}
+                    <div class="msg-red w-50"><small>{{ form.project_contact_email.errors.as_text }}</small></div>
+                {% endif %}
             </div>
 
             {% include 'partials/_add-contributors.html'%}
@@ -296,6 +317,9 @@
                 </div>
                 <br>
                 {{ form.project_data_guid }} <br>
+                {% if form.project_data_guid.errors %}
+                    <div class="msg-red w-50"><small>{{ form.project_data_guid.errors.as_text }}</small></div> 
+                {% endif %}
             </div>
 
             <div class="padding-bottom-1 w-50">
@@ -305,6 +329,9 @@
                 </div>
                 <br>
                 {{ form.publication_doi }} <br>
+                {% if form.publication_doi.errors %}
+                    <div class="msg-red w-50"><small>{{ form.publication_doi.errors.as_text }}</small></div>
+                {% endif %}
             </div>
 
             <div class="padding-bottom-1 w-50">
@@ -314,6 +341,9 @@
                 </div>
                 <br>
                 {{ form.recommended_citation }} <br>
+                {% if form.recommended_citation.errors %}
+                    <div class="msg-red w-50"><small>{{ form.recommended_citation.errors.as_text }}</small></div>
+                {% endif %}
             </div>
         </div>
 
@@ -321,14 +351,15 @@
         <div class="content-card-v2 content-card-space white-bg">
             <h3>Visibility</h3>
 
-            <div class="margin-bottom-1 margin-top-1">
-                {{ form.project_privacy.label }} <br> {{ form.project_privacy }}
+            <div class="margin-bottom-1 margin-top-1 w-50">
+                {{ form.project_privacy.label }}*<br> 
+                {{ form.project_privacy }}
+                {% if form.project_privacy.errors %}
+                    <div class="msg-red w-50"><small>{{ form.project_privacy.errors.as_text }}</small></div> 
+                {% endif %}
             </div>
 
-            {% if form.errors %}
-                <small class="red-text"> {{ form.errors }}</small>
-            {% endif %}
-            <button class="primary-btn action-btn margin-top-2 ">Save Project</button>
+            <button id="submitProjectBtn" class="primary-btn action-btn margin-top-2">Save Project</button>
         </div>
     </form>
 

@@ -3,23 +3,15 @@
     {% for message in messages %}
         <div id="alert-message">
             <div class="{{ message.tags }} flex-this">
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                        <div class="msg-red">
-                            <small>{{ message }}</small>
-                        </div>
-                    {% endif %}
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
-                        <div class="msg-blue">
-                            <small>{{ message }}</small>
-                            <span id="close-btn" class="close" aria-label="close">&times;</span>
-                        </div>
-                    {% endif %}
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                        <div class="msg-green">
-                            <small>{{ message }}</small>
-                            <span id="close-btn" class="close" aria-label="close">&times;</span>
-                        </div>
-                    {% endif %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    <div class="msg-red"><small>{{ message }}</small></div>
+                {% endif %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                    <div class="msg-blue"><small>{{ message }}</small><span id="close-btn" class="close" aria-label="close">&times;</span></div>
+                {% endif %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                    <div class="msg-green"><small>{{ message }}</small><span id="close-btn" class="close" aria-label="close">&times;</span></div>
+                {% endif %}
             </div>
         </div>
     {% endfor %}

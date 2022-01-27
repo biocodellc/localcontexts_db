@@ -107,7 +107,7 @@ def create_community(request):
 # Confirm Community
 @login_required(login_url='login')
 def confirm_community(request, community_id):
-    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=community_id)
 
     form = ConfirmCommunityForm(request.POST or None, request.FILES, instance=community)
     if request.method == "POST":
