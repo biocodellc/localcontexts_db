@@ -107,7 +107,7 @@ def create_community(request):
 # Confirm Community
 @login_required(login_url='login')
 def confirm_community(request, community_id):
-    community = Community.objects.get(id=community_id)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
 
     form = ConfirmCommunityForm(request.POST or None, request.FILES, instance=community)
     if request.method == "POST":
@@ -123,7 +123,7 @@ def confirm_community(request, community_id):
 # Update Community / Settings
 @login_required(login_url='login')
 def update_community(request, pk):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
 
     member_role = check_member_role_community(request.user, community)
     if member_role == False or member_role == 'editor' or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -151,7 +151,7 @@ def update_community(request, pk):
 # Members
 @login_required(login_url='login')
 def community_members(request, pk):
-    community = Community.objects.prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
@@ -189,7 +189,7 @@ def community_members(request, pk):
 
 @login_required(login_url='login')
 def remove_member(request, pk, member_id):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     member = User.objects.get(id=member_id)
     # what role does member have
     # remove from role
@@ -208,7 +208,7 @@ def remove_member(request, pk, member_id):
 # Select Labels to Customize
 @login_required(login_url='login')
 def select_label(request, pk):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     bclabels = BCLabel.objects.filter(community=community)
     tklabels = TKLabel.objects.filter(community=community)
 
@@ -237,7 +237,7 @@ def select_label(request, pk):
 
 @login_required(login_url='login')
 def customize_label(request, pk, label_type):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
 
     member_role = check_member_role_community(request.user, community)
     if member_role == False or member_role == 'viewer':
@@ -326,7 +326,7 @@ def customize_label(request, pk, label_type):
 
 @login_required(login_url='login')
 def approve_label(request, pk, label_id):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     bclabel_exists = BCLabel.objects.filter(unique_id=label_id).exists()
     tklabel_exists = TKLabel.objects.filter(unique_id=label_id).exists()
 
@@ -337,9 +337,9 @@ def approve_label(request, pk, label_id):
         bclabel = ''
         tklabel = ''
         if bclabel_exists:
-            bclabel = BCLabel.objects.get(unique_id=label_id)
+            bclabel = BCLabel.objects.select_related('approved_by').get(unique_id=label_id)
         if tklabel_exists:
-            tklabel = TKLabel.objects.get(unique_id=label_id)
+            tklabel = TKLabel.objects.select_related('approved_by').get(unique_id=label_id)
         
         form = LabelNoteForm(request.POST or None)
         if request.method == 'POST':
@@ -390,7 +390,7 @@ def approve_label(request, pk, label_id):
 # Edit Label
 @login_required(login_url='login')
 def edit_label(request, pk, label_id):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     bclabel = ''
     tklabel = ''
     form = ''
@@ -447,7 +447,7 @@ def edit_label(request, pk, label_id):
 # Projects Main
 @login_required(login_url='login')
 def projects(request, pk):
-    community = Community.objects.prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -605,8 +605,8 @@ def create_project(request, pk):
 
 @login_required(login_url='login')
 def edit_project(request, community_id, project_uuid):
-    community = Community.objects.get(id=community_id)
-    project = Project.objects.get(unique_id=project_uuid)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=community_id)
+    project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
     
     member_role = check_member_role_community(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -614,7 +614,7 @@ def edit_project(request, community_id, project_uuid):
     else:
         form = EditProjectForm(request.POST or None, instance=project)
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
-        contributors = ProjectContributors.objects.get(project=project)
+        contributors = ProjectContributors.objects.prefetch_related('institutions', 'researchers', 'communities').get(project=project)
 
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
@@ -646,8 +646,8 @@ def edit_project(request, community_id, project_uuid):
 
 @login_required(login_url='login')
 def apply_labels(request, pk, project_uuid):
-    community = Community.objects.get(id=pk)
-    project = Project.objects.get(unique_id=project_uuid)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
+    project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
 
@@ -737,7 +737,7 @@ def connections(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        connections = Connections.objects.get(community=community)
+        connections = Connections.objects.prefetch_related('communities', 'institutions', 'researchers').get(community=community)
         bclabels = BCLabel.objects.filter(community=community)
         tklabels = TKLabel.objects.filter(community=community)
 
@@ -753,13 +753,13 @@ def connections(request, pk):
         return render(request, 'communities/connections.html', context)
 
 def restricted_view(request, pk):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     return render(request, 'communities/restricted.html', {'community': community, })
 
 # show community Labels in a PDF
 def labels_pdf(request, pk):
     # Get approved labels customized by community
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
     # combine two querysets
@@ -789,7 +789,7 @@ def labels_pdf(request, pk):
     return response
 
 def download_labels(request, pk):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
 

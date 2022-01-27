@@ -9,12 +9,10 @@ def is_user_researcher(user):
         return False
 
 def get_projects_count(researcher):
-    contrib_count = ProjectContributors.objects.filter(researcher=researcher).count()
-    return contrib_count
+    return ProjectContributors.objects.filter(researcher=researcher).count()
 
 def get_notices_count(researcher):
-    notice_count = Notice.objects.filter(placed_by_researcher=researcher).count()
-    return notice_count
+    return Notice.objects.filter(placed_by_researcher=researcher).count()
 
 def checkif_user_researcher(current_researcher, user):
     if Researcher.objects.filter(user=user).exists():
