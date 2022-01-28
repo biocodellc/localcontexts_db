@@ -8,8 +8,7 @@ register = template.Library()
 
 @register.simple_tag
 def researcher_notifications(researcher):
-    notifications = ActionNotification.objects.filter(researcher=researcher)
-    return notifications
+    return ActionNotification.objects.filter(researcher=researcher)
 
 @register.simple_tag
 def anchor(url_name, section_id, researcher_id):
@@ -17,8 +16,7 @@ def anchor(url_name, section_id, researcher_id):
 
 @register.simple_tag
 def get_notices_count(researcher):
-    notice_count = Notice.objects.filter(placed_by_researcher=researcher).count()
-    return notice_count
+    return Notice.objects.filter(placed_by_researcher=researcher).count()
 
 @register.simple_tag
 def get_labels_count(researcher):
@@ -30,8 +28,7 @@ def get_labels_count(researcher):
 
 @register.simple_tag
 def unread_notifications(researcher):
-    unread_notifications_exist = ActionNotification.objects.filter(researcher=researcher, viewed=False).exists()
-    return unread_notifications_exist
+    return ActionNotification.objects.filter(researcher=researcher, viewed=False).exists()
 
 @register.simple_tag
 def researcher_contributing_projects(researcher):

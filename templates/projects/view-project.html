@@ -15,14 +15,10 @@
             {% if user_can_view %}
                 {% include 'partials/_project.html' %}
             {% else %}
-                <div class="content-card-v2 content-card-space white-bg">
-                    <h3>This project can only be viewed by contributors.</h3>
-                </div>
+                {% include 'partials/_project-discoverable.html' %}
             {% endif %}
         {% else %}
-            <div class="content-card-v2 content-card-space white-bg">
-                <h3>This project can only be viewed by logged in contributors.</h3>
-            </div>
+            {% include 'partials/_project-discoverable.html' %}
         {% endif %}
 
     {% elif project.project_privacy == 'Private' %}

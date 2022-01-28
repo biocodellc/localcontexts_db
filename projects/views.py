@@ -7,7 +7,7 @@ from django.http import HttpResponse
 import requests
 
 def view_project(request, unique_id):
-    project = Project.objects.get(unique_id=unique_id)
+    project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
 
     if project.project_privacy == 'Private':
         if request.user.is_authenticated:
@@ -20,7 +20,7 @@ def view_project(request, unique_id):
 
 # TODO: Images need to be SVGs
 def download_project_zip(request, unique_id):
-    project = Project.objects.get(unique_id=unique_id)
+    project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
     project_bclabels = project.bc_labels.all()
     project_tklabels = project.tk_labels.all()
 

@@ -478,6 +478,27 @@ if (projectTypeSelect) {
     })
 }
 
+// CREATE PROJECT: Disable submit temporarily
+var submitProjectBtn = document.getElementById('submitProjectBtn')
+if (submitProjectBtn) {
+    submitProjectBtn.addEventListener('click', function(e) {
+        let createProjectForm = document.getElementById('createProjectForm')
+        createProjectForm.submit()
+
+        let oldValue = 'Save Project'
+        submitProjectBtn.setAttribute('disabled', true)
+        submitProjectBtn.classList.add('disabled-btn')
+        submitProjectBtn.innerText = 'Saving Project...'
+
+        setTimeout(function(){
+            submitProjectBtn.innerText = oldValue;
+            submitProjectBtn.classList.remove('disabled-btn')
+            submitProjectBtn.removeAttribute('disabled');
+        }, 3000)
+
+    })
+}
+
 // Institutions: projects: notify communities - select desired communities
 function selectCommunities() {
     let select = document.getElementById('communities-select')
