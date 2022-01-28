@@ -65,20 +65,17 @@
                 <span class="tooltiptext">An institution description allows you to share key public information about your institution or organization with other users on the Hub.</span>
             </div>
             {{ form.description }}
+            {% if form.description.errors %}
+                <div class="msg-red w-50"><small>{{ form.description.errors.as_text }}</small></div> 
+            {% endif %}
         </div>
 
-        <div class="flex-this space-between margin-top-8">
-            <div>
-                {% if form.errors %}
-                    <small class="red-text">{{ form.errors }}</small>
-                {% endif %}
-                {% include 'partials/_alerts.html' %}
-            </div>
-    
-            <div class="text-align-right">
-                <button class="primary-btn action-btn margin-top-2 ">Continue <i class="fa fa-long-arrow-right"></i></button>
-            </div>
+        {% include 'partials/_alerts.html' %}
+
+        <div class="flex-this flex-end">
+            <button class="primary-btn action-btn margin-top-2">Continue <i class="fa fa-long-arrow-right"></i></button>
         </div>
+
     </form>
 
 </div>
