@@ -6,7 +6,7 @@ urlpatterns = [
     path('create-community/', views.create_community, name="create-community"),
     path('confirm-community/<str:community_id>/', views.confirm_community, name="confirm-community"),
 
-    path('community/dashboard/update/<str:pk>/', views.update_community, name="update-community"),
+    path('community/update/<str:pk>/', views.update_community, name="update-community"),
 
     path('community/members/<str:pk>/', views.community_members, name="members"),
     path('community/members/remove/<str:pk>/<str:member_id>', views.remove_member, name="remove-member"),

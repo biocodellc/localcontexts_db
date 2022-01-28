@@ -6,7 +6,7 @@ urlpatterns = [
     path('create-institution/', views.create_institution, name="create-institution"),
     path('confirm-institution/<str:institution_id>/', views.confirm_institution, name="confirm-institution"),
 
-    path('institution/dashboard/update/<str:pk>/', views.update_institution, name="update-institution"),
+    path('institution/update/<str:pk>/', views.update_institution, name="update-institution"),
 
     path('institution/notices/<str:pk>/', views.institution_notices, name="institution-notices"),
 
