@@ -26,7 +26,7 @@
                     </label>
                     {{ form.contact_name }}<br>
                     {% if form.contact_name.errors %}
-                        <div class="msg-red"><small>{{ form.contact_name.errors.as_text }}</small></div> 
+                        <div class="msg-red w-50"><small>{{ form.contact_name.errors.as_text }}</small></div> 
                     {% endif %}
                 </div>
         
@@ -38,7 +38,7 @@
                     </label>
                     {{ form.contact_email }} <br>
                     {% if form.contact_email.errors %}
-                        <div class="msg-red"><small>{{ form.contact_email.errors.as_text }}</small></div> 
+                        <div class="msg-red w-50"><small>{{ form.contact_email.errors.as_text }}</small></div> 
                     {% endif %}
                 </div>
             </div>
@@ -48,7 +48,7 @@
                     <label for="support_document">Support Document</label>
                     {{ form.support_document }}
                     {% if form.support_document.errors %}
-                        <div class="msg-red"><small>{{ form.support_document.errors.as_text }}</small></div> 
+                        <div class="msg-red w-50"><small>{{ form.support_document.errors.as_text }}</small></div> 
                     {% endif %}
                 </div>
             </div>
