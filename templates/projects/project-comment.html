@@ -45,7 +45,7 @@
                             <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
                         </div>
                         {% if form.errors %}
-                            <small class="red-text"> {{ form.errors }}</small>
+                            <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
                         {% endif %}
                     </form>
                 {% endif %}  
@@ -88,7 +88,7 @@
                         <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
                     </div>
                     {% if form.errors %}
-                        <small class="red-text"> {{ form.errors }}</small>
+                        <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
                     {% endif %}
                 </form>
             {% endif %}  

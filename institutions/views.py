@@ -59,43 +59,60 @@ def connect_institution(request):
 @login_required(login_url='login')
 def create_institution(request):
     form = CreateInstitutionForm(request.POST or None)
+    noror_form = CreateInstitutionNoRorForm(request.POST or None)
+
     if request.method == 'POST':
-        if form.is_valid():
-            name = request.POST.get('institution_name')
-            data = form.save(commit=False)
+        affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user)
 
-            if Institution.objects.filter(institution_name=name).exists():
-                messages.add_message(request, messages.ERROR, 'An institution by this name already exists.')
-                return redirect('create-institution')
-            else:
-                data.institution_name = name
-                data.institution_creator = request.user
+        if 'create-institution-btn' in request.POST:
+            if form.is_valid():
+                name = request.POST.get('institution_name')
+                data = form.save(commit=False)
 
-                # If in test site, approve immediately, skip confirmation step
-                if dev_prod_or_local(request.get_host()) == 'DEV':
-                    data.is_approved = True
-                    data.save()
-                    
-                    # Add to user affiliations
-                    affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user)
-                    affiliation.institutions.add(data)
-                    affiliation.save()
-
-                    # Create a Connections instance
-                    Connections.objects.create(institution=data)
-                    return redirect('dashboard')
+                if Institution.objects.filter(institution_name=name).exists():
+                    messages.add_message(request, messages.ERROR, 'An institution by this name already exists.')
+                    return redirect('create-institution')
                 else:
-                    data.save()
+                    data.institution_name = name
+                    data.institution_creator = request.user
 
-                    # Add to user affiliations
-                    affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user)
-                    affiliation.institutions.add(data)
-                    affiliation.save()
+                    # If in test site, approve immediately, skip confirmation step
+                    if dev_prod_or_local(request.get_host()) == 'DEV':
+                        data.is_approved = True
+                        data.save()
+                        
+                        # Add to user affiliations
+                        affiliation.institutions.add(data)
+                        affiliation.save()
 
-                    # Create a Connections instance
-                    Connections.objects.create(institution=data)
-                    return redirect('confirm-institution', data.id)
-    return render(request, 'institutions/create-institution.html', {'form': form})
+                        # Create a Connections instance
+                        Connections.objects.create(institution=data)
+                        return redirect('dashboard')
+                    else:
+                        data.save()
+
+                        # Add to user affiliations
+                        affiliation.institutions.add(data)
+                        affiliation.save()
+
+                        # Create a Connections instance
+                        Connections.objects.create(institution=data)
+                        return redirect('confirm-institution', data.id)
+        elif 'create-institution-noror-btn' in request.POST:
+            if noror_form.is_valid():
+                data = noror_form.save(commit=False)
+                data.institution_creator = request.user
+                data.is_ror = False
+                data.save()
+
+                # Add to user affiliations
+                affiliation.institutions.add(data)
+                affiliation.save()
+
+                #  Create a Connections instance
+                Connections.objects.create(institution=data)
+                return redirect('confirm-institution', data.id)
+    return render(request, 'institutions/create-institution.html', {'form': form, 'noror_form': noror_form,})
 
 @login_required(login_url='login')
 def confirm_institution(request, institution_id):
@@ -122,23 +139,6 @@ def confirm_institution(request, institution_id):
                 send_hub_admins_application_email(institution, data, subject)
                 return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
-
-
-@login_required(login_url='login')
-def create_institution_noror(request):
-    form = CreateInstitutionNoRorForm(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            data = form.save(commit=False)
-            data.institution_creator = request.user
-            data.is_ror = False
-            data.save()
-
-            #  Create a Connections instance
-            Connections.objects.create(institution=data)
-        
-            return redirect('confirm-institution', data.id)
-    return render(request, 'institutions/create-institution-noror.html', {'form': form,})
 
 # Update institution
 @login_required(login_url='login')
