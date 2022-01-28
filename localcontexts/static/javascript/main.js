@@ -844,6 +844,19 @@ function openMemberModal() {
     }
 }
 
+// Create institution: non-ROR modal
+if (window.location.href.includes('create-institution')) {
+    const closeNORORModalBtn = document.getElementById('closeNORORmodal')
+    let modal = document.getElementById('noRORModal')
+    const openNORORModalBtn = document.getElementById('openNORORModalBtn')
+
+    openNORORModalBtn.addEventListener('click', function() { modal.classList.replace('hide', 'show')})
+    closeNORORModalBtn.addEventListener('click', function(e)  {
+        e.preventDefault()
+        modal.classList.replace('show', 'hide')
+    } )
+}
+
 // Deactivate user popup in user settings
 var deactivateAccountBtn = document.getElementById('submitDeactivation')
 if (deactivateAccountBtn) {
