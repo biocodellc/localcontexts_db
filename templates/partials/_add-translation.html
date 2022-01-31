@@ -23,6 +23,6 @@
 
 {% if add_translation_formset.errors %}
 {% for error in add_translation_formset.errors %}
-    <div><small style="color:red;"> {{ error }}</small></div>
+    <div class="msg-red w-50"><small>{{ error.as_text }}</small></div> 
 {% endfor %}
 {% endif %}  

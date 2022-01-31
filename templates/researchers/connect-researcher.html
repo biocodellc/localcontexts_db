@@ -39,6 +39,9 @@
                 <span class="tooltiptext">If you are associated with an institution, please list your primary institution.</span>
             </div>
             {{ form.primary_institution }}
+            {% if form.primary_institution.errors %}
+                <div class="msg-red w-80"><small>{{ form.primary_institution.errors.as_text }}</small></div> 
+            {% endif %}
         </div>
 
         <div class="margin-top-8">
@@ -47,13 +50,13 @@
                 <span class="tooltiptext">This is a place for you to share your research interests and expertise.</span>
             </div>
             {{ form.description }}
+            {% if form.description.errors %}
+                <div class="msg-red w-80"><small>{{ form.description.errors.as_text }}</small></div> 
+            {% endif %}
         </div>
 
         <div class="flex-this space-between margin-top-8">
             <div>
-                {% if form.errors %}
-                    <small class="red-text">{{ form.errors }}</small>
-                {% endif %}
                 {% include 'partials/_alerts.html' %}
             </div>
     

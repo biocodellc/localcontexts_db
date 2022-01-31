@@ -14,7 +14,7 @@
         <label for="username">Username</label><br>
         {{ form.username }}
         {% if form.username.errors %}
-            <div class="msg-red"><small>{{ form.username.errors.as_text }}</small></div> 
+            <div class="msg-red w-50"><small>{{ form.username.errors.as_text }}</small></div> 
         {% endif %}
     </div>
 
@@ -23,7 +23,7 @@
         {{ form.email }}
     </div>
     {% if form.email.errors %}
-        <div class="msg-red"><small>{{ form.email.errors.as_text }}</small></div> 
+        <div class="msg-red w-50"><small>{{ form.email.errors.as_text }}</small></div> 
     {% endif %}
 
     <div class="flex-this w-100 pad-top-1-5">
@@ -48,10 +48,10 @@
     </div>
 
     {% if form.password1.errors %}
-        <div class="msg-red"><small>{{ form.password1.errors.as_text }}</small></div> 
+        <div class="msg-red w-50"><small>{{ form.password1.errors.as_text }}</small></div> 
     {% endif %}
     {% if form.password2.errors %}
-        <div class="msg-red"><small>{{ form.password2.errors.as_text }}</small></div> 
+        <div class="msg-red w-50"><small>{{ form.password2.errors.as_text }}</small></div> 
     {% endif %}
 
     <div class="flex-this row margin-top-16">

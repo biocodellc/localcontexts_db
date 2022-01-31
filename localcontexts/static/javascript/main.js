@@ -844,6 +844,19 @@ function openMemberModal() {
     }
 }
 
+// Create institution: non-ROR modal
+if (window.location.href.includes('create-institution')) {
+    const closeNORORModalBtn = document.getElementById('closeNORORmodal')
+    let modal = document.getElementById('noRORModal')
+    const openNORORModalBtn = document.getElementById('openNORORModalBtn')
+
+    openNORORModalBtn.addEventListener('click', function() { modal.classList.replace('hide', 'show')})
+    closeNORORModalBtn.addEventListener('click', function(e)  {
+        e.preventDefault()
+        modal.classList.replace('show', 'hide')
+    } )
+}
+
 // Deactivate user popup in user settings
 var deactivateAccountBtn = document.getElementById('submitDeactivation')
 if (deactivateAccountBtn) {
@@ -865,31 +878,49 @@ if (window.location.href.includes('registry')) {
     // Filter Registry
     const filterbyCommunities = document.getElementById('filterCommunities')
     const filterbyInstitutions = document.getElementById('filterInstitutions')
+    const filterbyResearchers = document.getElementById('filterResearchers')
     const filterbyAll = document.getElementById('filterAll')
     let institutions = document.querySelectorAll('.institutions-filter')
     let communities = document.querySelectorAll('.communities-filter')
+    let researchers = document.querySelectorAll('.researchers-filter')
 
     filterbyCommunities.addEventListener('click', () => {
         filterbyCommunities.classList.add('bold')
         filterbyInstitutions.classList.remove('bold')
+        filterbyResearchers.classList.remove('bold')
         filterbyAll.classList.remove('bold')
         institutions.forEach(institution => { institution.classList.replace('show', 'hide') })
+        researchers.forEach(researcher => { researcher.classList.replace('show', 'hide') })
         communities.forEach(community => { if (community.classList.contains('hide')) { community.classList.replace('hide', 'show') } })
     })
 
     filterbyInstitutions.addEventListener('click', () => { 
         filterbyCommunities.classList.remove('bold')
+        filterbyResearchers.classList.remove('bold')
         filterbyInstitutions.classList.add('bold')
         filterbyAll.classList.remove('bold')
         communities.forEach(community => { community.classList.replace('show', 'hide') })
+        researchers.forEach(researcher => { researcher.classList.replace('show', 'hide') })
         institutions.forEach(institution => { if (institution.classList.contains('hide')) { institution.classList.replace('hide', 'show') } })
+    })
+
+    filterbyResearchers.addEventListener('click', () => { 
+        filterbyCommunities.classList.remove('bold')
+        filterbyInstitutions.classList.remove('bold')
+        filterbyResearchers.classList.add('bold')
+        filterbyAll.classList.remove('bold')
+        communities.forEach(community => { community.classList.replace('show', 'hide') })
+        institutions.forEach(institution => { institution.classList.replace('show', 'hide') })
+        researchers.forEach(researcher => { if (researcher.classList.contains('hide')) { researcher.classList.replace('hide', 'show') } })
     })
     
     filterbyAll.addEventListener('click', () => {
         filterbyAll.classList.add('bold')
         filterbyCommunities.classList.remove('bold')
         filterbyInstitutions.classList.remove('bold')
+        filterbyResearchers.classList.remove('bold')
         communities.forEach(community => { if (community.classList.contains('hide')) { community.classList.replace('hide', 'show') } })
+        researchers.forEach(researcher => { if (researcher.classList.contains('hide')) { researcher.classList.replace('hide', 'show') } })
         institutions.forEach(institution => { if (institution.classList.contains('hide')) { institution.classList.replace('hide', 'show') } })
     })
 }

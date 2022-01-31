@@ -152,8 +152,8 @@ def dashboard(request):
     researcher = is_user_researcher(request.user)
     user_affiliation = UserAffiliation.objects.prefetch_related('communities', 'institutions').get(user=request.user)
 
-    user_communities = user_affiliation.communities.all()
-    user_institutions = user_affiliation.institutions.all()
+    user_communities = user_affiliation.communities.prefetch_related('admins', 'editors', 'viewers').all()
+    user_institutions = user_affiliation.institutions.prefetch_related('admins', 'editors', 'viewers').all()
     profile = Profile.objects.select_related('user').get(user=request.user)
 
     if request.method == 'POST':
@@ -277,12 +277,14 @@ def invite_user(request):
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 
 def organization_registry(request):
-    communities = Community.objects.prefetch_related('admins', 'editors', 'viewers').filter(is_approved=True).order_by('community_name')
-    institutions = Institution.objects.prefetch_related('admins', 'editors', 'viewers').filter(is_approved=True).order_by('institution_name')
+    communities = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').filter(is_approved=True).order_by('community_name')
+    institutions = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').filter(is_approved=True).order_by('institution_name')
+    researchers = Researcher.objects.select_related('user').all()
 
     if request.user.is_authenticated:
-        user_institutions = UserAffiliation.objects.get(user=request.user).institutions.all()
-        user_communities = UserAffiliation.objects.get(user=request.user).communities.all()
+        user_affiliations = UserAffiliation.objects.prefetch_related('institutions', 'communities').get(user=request.user)
+        user_institutions = user_affiliations.institutions.all()
+        user_communities = user_affiliations.communities.all()
 
         if request.method == 'POST':
             inst_input_id = request.POST.get('instid')
@@ -315,6 +317,7 @@ def organization_registry(request):
         context = {
             'communities': communities,
             'institutions': institutions,
+            'researchers': researchers,
             'user_institutions': user_institutions,
             'user_communities': user_communities,
         }
