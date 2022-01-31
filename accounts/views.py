@@ -277,8 +277,9 @@ def invite_user(request):
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 
 def organization_registry(request):
-    communities = Community.objects.prefetch_related('admins', 'editors', 'viewers').filter(is_approved=True).order_by('community_name')
-    institutions = Institution.objects.prefetch_related('admins', 'editors', 'viewers').filter(is_approved=True).order_by('institution_name')
+    communities = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').filter(is_approved=True).order_by('community_name')
+    institutions = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').filter(is_approved=True).order_by('institution_name')
+    researchers = Researcher.objects.select_related('user').all()
 
     if request.user.is_authenticated:
         user_institutions = UserAffiliation.objects.get(user=request.user).institutions.all()
@@ -315,6 +316,7 @@ def organization_registry(request):
         context = {
             'communities': communities,
             'institutions': institutions,
+            'researchers': researchers,
             'user_institutions': user_institutions,
             'user_communities': user_communities,
         }
