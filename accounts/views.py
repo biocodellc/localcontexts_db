@@ -152,8 +152,8 @@ def dashboard(request):
     researcher = is_user_researcher(request.user)
     user_affiliation = UserAffiliation.objects.prefetch_related('communities', 'institutions').get(user=request.user)
 
-    user_communities = user_affiliation.communities.all()
-    user_institutions = user_affiliation.institutions.all()
+    user_communities = user_affiliation.communities.prefetch_related('admins', 'editors', 'viewers').all()
+    user_institutions = user_affiliation.institutions.prefetch_related('admins', 'editors', 'viewers').all()
     profile = Profile.objects.select_related('user').get(user=request.user)
 
     if request.method == 'POST':
