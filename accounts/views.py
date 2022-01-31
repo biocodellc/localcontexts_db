@@ -282,8 +282,9 @@ def organization_registry(request):
     researchers = Researcher.objects.select_related('user').all()
 
     if request.user.is_authenticated:
-        user_institutions = UserAffiliation.objects.get(user=request.user).institutions.all()
-        user_communities = UserAffiliation.objects.get(user=request.user).communities.all()
+        user_affiliations = UserAffiliation.objects.prefetch_related('institutions', 'communities').get(user=request.user)
+        user_institutions = user_affiliations.institutions.all()
+        user_communities = user_affiliations.communities.all()
 
         if request.method == 'POST':
             inst_input_id = request.POST.get('instid')
