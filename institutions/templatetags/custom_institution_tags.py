@@ -40,7 +40,7 @@ def institution_contributing_projects(institution):
 
 @register.simple_tag
 def connections_count(institution):
-    connections = Connections.objects.prefetch_related('communities').get(institution=institution)
+    connections = Connections.objects.get(institution=institution)
     return connections.communities.count()
 
 @register.simple_tag
