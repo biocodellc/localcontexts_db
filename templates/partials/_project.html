@@ -1,21 +1,30 @@
 {% load static %}
 
 <div class="content-card-v2 content-card-space white-bg">
-    <div class="flex-this">
-        <div><a class="primary-btn green-btn margin-top-2" onClick="window.history.back();return false;"><i class="fa fa-arrow-left"></i> Back to Projects</a></div>
+
+    <div class="flex-this w-100">
+
+        <div class="flex-this w-50">
+            <div><a class="primary-btn green-btn margin-top-2" onClick="window.history.back();return false;"><i class="fa fa-arrow-left"></i> Back to Projects</a></div>
+        </div>
+
+        <div class="flex-this flex-end w-50">
+            <div class="margin-left-8"><a class="primary-btn white-btn margin-top-2" href="{% url 'download-project-zip' project.unique_id %}">Download <i class="fa fa-download" aria-hidden="true"></i></a></div>
+        </div>
+
     </div>
+
+
     <div class="flex-this space-between w-100">
         <div class="flex-this column">
             <div class="margin-top-1">
                 <p class="p-24 bold">Project View</p>
                 <p>Listed below is the information that is associated with this Project.<br>
-                    If you would like to edit this Project again, you can do so until a community has applied a Label to this Project. </p>
+                    If you would like to edit this Project, you can do so until a community has applied a Label to this Project. </p>
             </div>
         </div>
-        <!-- <div class="flex-this w-30">
-            <div class="margin-left-1"><a class="primary-btn action-btn margin-top-2 ">Share Project <i class="fa fa-share-alt" aria-hidden="true"></i></a></div>
-        </div> -->
     </div>
+
 </div>
 
 <div class="content-card-v2 content-card-space white-bg">
@@ -27,12 +36,12 @@
 
             <div>
                 <p class="p-24 bold no-top-margin">Project Information</p>
-                <span class="bold">Project description</span><br>
+                <span class="bold">Project Description</span><br>
                 <p>{{ project.description }}</p>
             </div>
 
             <div>
-                <p class="bold">Project contact details</p>
+                <p class="bold">Project Contact</p>
                 <p>
                     Name | {{ project.project_contact }} <br>
                     Email | {{ project.project_contact_email }}
@@ -40,7 +49,7 @@
             </div>
 
             <div>
-                <p class="bold">Project contributors</p>
+                <p class="bold">Project Contributors</p>
                 <p>
                     <ul>
                         {% if project.project_contributors.communities %}
@@ -90,7 +99,7 @@
 
                 <div class="flex-this margin-top-16">
                     <div><a onclick="copyToClipboard('uniqueIDToCopy')" class="primary-btn green-btn margin-top-2 copied-display"><i class="fa fa-copy"></i></a></div>
-                    <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Local Contexts Unique Project ID</span> <br><span id="uniqueIDToCopy">{{ project.unique_id }}</span><br></p></div>
+                    <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Local Contexts Project ID</span> <br><span id="uniqueIDToCopy">{{ project.unique_id }}</span><br></p></div>
                 </div>
 
                 <div class="flex-this margin-top-1">
