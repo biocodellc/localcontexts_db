@@ -399,7 +399,7 @@ def edit_project(request, institution_id, project_uuid):
 @login_required(login_url='login')
 def notify_others(request, pk, proj_id):
     institution = Institution.objects.get(id=pk)
-    project = Project.objects.get(id=proj_id)
+    project = Project.objects.prefetch_related('project_status').get(id=proj_id)
     notice_exists = Notice.objects.filter(project=project).exists()
     institution_notice_exists = InstitutionNotice.objects.filter(project=project).exists()
 
