@@ -943,6 +943,7 @@ input:focus {
     position: absolute;
     bottom: 50%;
     width: 100%;
+    font-weight: bold;
 }
 
 /* Notification V2 (Institutions) */

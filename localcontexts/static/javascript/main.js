@@ -606,7 +606,7 @@ function selectContributors() {
                 let selectedResearcherDiv = document.getElementById(`selected-researcher-${option.dataset.resid}`)
                 let div = document.getElementById(`res-id-input-${option.dataset.resid}`)
         
-                selectedResearcherDiv.style.height = "auto"
+                selectedResearcherDiv.classList.replace('hide', 'show')
                 div.innerHTML = `<input type="hidden" value="${option.dataset.resid}" name="selected_researchers">`
             } else {
                 contribInput.value = ''
@@ -614,7 +614,7 @@ function selectContributors() {
                 let selectedInstitutionDiv = document.getElementById(`selected-institution-${option.dataset.instid}`)
                 let div = document.getElementById(`inst-id-input-${option.dataset.instid}`)
 
-                selectedInstitutionDiv.style.height = "auto"
+                selectedInstitutionDiv.classList.replace('hide', 'show')
                 div.innerHTML = `<input type="hidden" value="${option.dataset.instid}" name="selected_institutions">`
             }
         }
