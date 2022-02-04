@@ -414,10 +414,6 @@ input:focus {
     width: 100%;
 }
 
-.width-492 {
-    width: 492px;
-}
-
 /* ACTION Buttons / Register,Sign in, etc. */
 .primary-btn {
     display: block;
@@ -907,8 +903,8 @@ input:focus {
     height: 62px;
 }
 
-/* Institution: Notify */
-.selected-community {
+/* PROJECT: Notify */
+.selected-entity {
     margin-top: 5px;
     margin-bottom: 5px;
     padding: 19px;

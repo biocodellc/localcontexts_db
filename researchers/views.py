@@ -277,14 +277,16 @@ def edit_project(request, researcher_id, project_uuid):
 # Notify Communities of Project
 @login_required(login_url='login')
 def notify_others(request, pk, proj_id):
-    researcher = Researcher.objects.get(id=pk)
+    researcher = Researcher.objects.select_related('user').get(id=pk)
+
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('researcher-restricted', researcher.id)
     else:
-        project = Project.objects.get(id=proj_id)
-        notify_entities = EntitiesNotified.objects.prefetch_related('communities').get(project=project)
-        communities = Community.objects.filter(is_approved=True)
+        project = Project.objects.prefetch_related('bc_labels', 'tk_labels', 'project_status').get(id=proj_id)
+        entities_notified = EntitiesNotified.objects.prefetch_related('communities').get(project=project)
+        communities = Community.objects.prefetch_related('projects').filter(is_approved=True)
+        institutions = Institution.objects.filter(is_approved=True)
 
         if request.method == "POST":
             # Set private project to discoverable
@@ -293,35 +295,41 @@ def notify_others(request, pk, proj_id):
                 project.save()
 
             communities_selected = request.POST.getlist('selected_communities')
+            institutions_selected = request.POST.getlist('selected_institutions')
             message = request.POST.get('notice_message')
+
+            # Reference ID and title for notification
+            reference_id = str(project.unique_id)
+            title =  str(researcher.user.get_full_name()) + ' has notified you of a Project.'
 
             for community_id in communities_selected:
                 community = Community.objects.get(id=community_id)
 
                 # Add each selected community to notify entities instance
-                notify_entities.communities.add(community)
-                notify_entities.save()
+                entities_notified.communities.add(community)
 
-                # Create project status
+                # Create project status, first comment and  notification
                 ProjectStatus.objects.create(project=project, community=community, seen=False)
-
-                # Create first comment for project
                 ProjectComment.objects.create(project=project, community=community, sender=request.user, message=message)
-
-                # Create notification
-                reference_id = str(project.unique_id)
-                title =  "A Notice has been placed by " + str(researcher.user.get_full_name()) + '.'
                 ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
 
+                # TODO: ADJUST THIS
                 # Create email
-                send_email_notice_placed(project, community, researcher)
-
+                # send_email_notice_placed(project, community, researcher)
+            
+            for institution_id in institutions_selected:
+                institution = Institution.objects.get(id=institution_id)
+                entities_notified.institutions.add(institution)
+                ActionNotification.objects.create(institution=institution, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
+            
+            entities_notified.save()
             return redirect('researcher-projects', researcher.id)
 
         context = {
             'researcher': researcher,
             'project': project,
             'communities': communities,
+            'institutions': institutions,
             'user_can_view': user_can_view,
         }
         return render(request, 'researchers/notify.html', context)

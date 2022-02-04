@@ -494,12 +494,12 @@ if (submitProjectBtn) {
             submitProjectBtn.innerText = oldValue;
             submitProjectBtn.classList.remove('disabled-btn')
             submitProjectBtn.removeAttribute('disabled');
-        }, 3000)
+        }, 4000)
 
     })
 }
 
-// Institutions: projects: notify communities - select desired communities
+// PROJECTS: NOTIFY communities - select desired communities
 function selectCommunities() {
     let select = document.getElementById('communities-select')
     let allOptionsArray = Array.from(select.options)
@@ -514,6 +514,25 @@ function selectCommunities() {
             // console.log(option)
             selectedCommunityDiv.style.height = "auto";
             div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_communities">`
+        }
+    })
+}
+
+// PROJECTS: NOTIFY institutions - select desired institutions
+function selectInstitutions() {
+    let select = document.getElementById('institutions-select')
+    let allOptionsArray = Array.from(select.options)
+    // Remove first element of options array
+    let allOptionsMinusFirst = allOptionsArray.slice(1)
+
+    allOptionsMinusFirst.forEach(option => {
+        let selectedInstitutionDiv = document.getElementById(`selected-institution-${option.id}`)
+        let div = document.getElementById(`inst-id-input-${option.id}`)
+
+        if (option.selected) {
+            // console.log(option)
+            selectedInstitutionDiv.style.height = "auto";
+            div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_institutions">`
         }
     })
 }

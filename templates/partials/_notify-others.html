@@ -62,8 +62,15 @@
 
         <h3 class="no-top-margin">Send Requests</h3>
         <p>
-            By notifying relevant communities, they are able to see what this Project is and decide whether or not they would like to add their Labels to this Project. After your organization has entered the communities you would like to to send these requests to, you can monitor and communicate with them in the requests section.<br><br>
-            Please choose who you would like to notify of this Project.</p>
+            {% if institution or researcher %}
+                By notifying relevant communities, they are able to see what this Project is and decide whether or not they would like to add their Labels to this Project. After your organization has entered the communities you would like to to send these requests to, you can monitor and communicate with them in the requests section.<br><br>
+            {% endif %}
+            {% if community %}
+                Content needed
+            {% endif %}
+            Please choose who you would like to notify of this Project.
+        </p>
+
 
         <form method="POST" action="">
             {% csrf_token %}
@@ -71,7 +78,7 @@
             {% if communities %}
                 <label>Search the Local Contexts Hub registry</label><br>
 
-                <select id="communities-select" class="width-492" onchange="selectCommunities()">
+                <select id="communities-select" class="w-60" onchange="selectCommunities()">
                     <option>Select a Community</option>
 
                     {% for community in communities %}
@@ -87,17 +94,38 @@
                         {% endif %}
                     {% endfor %}
                 </select>
+
+                <select id="institutions-select" class="w-60" onchange="selectInstitutions()">
+                    <option>Select an Institution</option>
+
+                    {% for institution in institutions %}
+                        <option id="{{ institution.id }}">{{ institution.institution_name }}</option>
+                    {% endfor %}
+                </select>
+
+
                 
                 <p>Selected</p>
                 {% for community in communities %}
                     <div id="selected-community-{{ community.id }}" style="height: 0px; overflow: hidden;">
-                        <div class="selected-community flex-this row space-between">
+                        <div class="selected-entity flex-this row space-between">
                             <div><p class="center-name">{{community.community_name}}</p></div>
                             <div><p id="close-{{ community.id }}" class="close-x darkteal-text pointer" onclick="cancelCommunitySelection(this)">&times;</p></div>
                         </div>
                     </div>
                     <div id="comm-id-input-{{ community.id }}" style="display: none;"></div>
                 {% endfor %}
+
+                {% for institution in institutions %}
+                    <div id="selected-institution-{{ institution.id }}" style="height: 0px; overflow: hidden;">
+                        <div class="selected-entity flex-this row space-between">
+                            <div><p class="center-name">{{ institution.institution_name }}</p></div>
+                            <div><p id="close-{{ institution.id }}" class="close-x darkteal-text pointer" onclick="cancelInstitutionSelection(this)">&times;</p></div>
+                        </div>
+                    </div>
+                    <div id="inst-id-input-{{ institution.id }}" style="display: none;"></div>
+                {% endfor %}
+
             {% endif %}
         
             <div class="margin-top-1">

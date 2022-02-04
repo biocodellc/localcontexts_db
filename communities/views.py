@@ -5,7 +5,7 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections
+from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections, ProjectComment
 from notifications.models import ActionNotification
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
@@ -643,6 +643,69 @@ def edit_project(request, community_id, project_uuid):
             'contributors': contributors,
         }
         return render(request, 'communities/edit-project.html', context)
+
+@login_required(login_url='login')
+def notify_others(request, pk, proj_id):
+    community = Community.objects.select_related('community_creator').get(id=pk)
+
+    member_role = check_member_role_community(request.user, community)
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+        return render(request, 'institutions/restricted.html', {'community': community})
+    else:
+        project = Project.objects.prefetch_related('bc_labels', 'tk_labels', 'project_status').get(id=proj_id)
+        entities_notified = EntitiesNotified.objects.get(project=project)
+        communities = Community.objects.filter(is_approved=True).exclude(id=community.id) # all approved communities excluding self
+        institutions = Institution.objects.filter(is_approved=True)
+
+        if request.method == "POST":
+            # Set private project to discoverable
+            if project.project_privacy == 'Private':
+                project.project_privacy = 'Discoverable'
+                project.save()
+
+            communities_selected = request.POST.getlist('selected_communities')
+            institutions_selected = request.POST.getlist('selected_institutions')
+            message = request.POST.get('notice_message')
+            
+            # Reference ID and title for notifications
+            reference_id = str(project.unique_id)
+            title =  str(community.community_name) + ' has notified you of a Project'
+
+            for community_id in communities_selected:
+                community_selected = Community.objects.get(id=community_id)
+                
+                # add community to notice instance
+                entities_notified.communities.add(community_selected)
+                # entities_notified.save()
+
+                # Create project status, first comment and  notification
+                ProjectStatus.objects.create(project=project, community=community_selected, seen=False) # Creates a project status for each community
+                ProjectComment.objects.create(project=project, community=community_selected, sender=request.user, message=message)
+                ActionNotification.objects.create(community=community_selected, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
+
+                # TODO: ADJUST THIS
+                # Create email 
+                # send_email_notice_placed(project, community, institution)
+
+            for institution_id in institutions_selected:
+                institution = Institution.objects.get(id=institution_id)
+                # add community to notice instance
+                entities_notified.institutions.add(institution)
+
+                # Create notification
+                ActionNotification.objects.create(institution=institution, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
+
+            entities_notified.save()
+            return redirect('community-projects', community.id)
+
+        context = {
+            'community': community,
+            'project': project,
+            'communities': communities,
+            'institutions': institutions,
+            'member_role': member_role,
+        }
+        return render(request, 'communities/notify.html', context)
 
 @login_required(login_url='login')
 def apply_labels(request, pk, project_uuid):

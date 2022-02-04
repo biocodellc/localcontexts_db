@@ -162,7 +162,7 @@
                                 {% else %}
                                     <div class="margin-right-1">
                                         <a href="{% url 'institution-notify-others' institution.id project.id %}" class="primary-btn action-btn">
-                                            Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
+                                            Notify Others <i class="fa fa-users" aria-hidden="true"></i>
                                         </a>
                                     </div>
                                 {% endif %}
@@ -174,9 +174,38 @@
                         {% if project in researcher.projects.all %}
                             <div class="margin-right-1">
                                 <a href="{% url 'researcher-notify-others' researcher.id project.id %}" class="primary-btn action-btn">
-                                    Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
+                                    Notify Others <i class="fa fa-users" aria-hidden="true"></i>
                                 </a>
                             </div>
+                        {% endif %}
+                    {% endif %}
+                </div>            
+            </div>
+        {% endif %}
+
+        {% if community %}
+            <div class="flex-this space-between border-top-solid-teal">
+
+                <div class="w-70 margin-top-16">
+                    <h3 class="no-bottom-margin no-top-margin">Notify Others</h3>
+                    <p>
+                        Content Needed
+                    </p>
+                </div>
+
+                <div class="flex-this flex-end w-40 margin-top-16">
+                    {% if community.is_approved == False %}
+                        <small class="margin-right-1 w-50 no-top-margin">In order to notify communities of your Project, your community must be confirmed first.</small>
+                    {% else %}
+                        {% if project in community.projects.all %}
+                            {% if member_role == 'viewer' %}
+                            {% else %}
+                                <div class="margin-right-1">
+                                    <a href="{% url 'community-notify-others' community.id project.id %}" class="primary-btn action-btn">
+                                        Notify Others <i class="fa fa-users" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 </div>            
