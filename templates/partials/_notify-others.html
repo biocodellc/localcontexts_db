@@ -66,7 +66,7 @@
                 By notifying relevant communities, they are able to see what this Project is and decide whether or not they would like to add their Labels to this Project. After your organization has entered the communities you would like to to send these requests to, you can monitor and communicate with them in the requests section.<br><br>
             {% endif %}
             {% if community %}
-                Content needed
+                Content needed<br>
             {% endif %}
             Please choose who you would like to notify of this Project.
         </p>
@@ -78,33 +78,49 @@
             {% if communities %}
                 <label>Search the Local Contexts Hub registry</label><br>
 
-                <select id="communities-select" class="w-60" onchange="selectCommunities()">
-                    <option>Select a Community</option>
+                <div class="flex-this space-between w-90">
+                    <div class="w-30">
+                        <select id="communities-select" class="w-100" onchange="selectCommunities()">
+                            <option>Select a Community</option>
 
-                    {% for community in communities %}
-                        {% if project.project_status.all %}
-                            {% for status in project.project_status.all %}
-                                {% if status.community == community %}
+                            {% for community in communities %}
+                                {% if project.project_status.all %}
+                                    {% for status in project.project_status.all %}
+                                        {% if status.community == community %}
+                                        {% else %}
+                                            <option id="{{ community.id }}">{{ community.community_name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
                                 {% else %}
                                     <option id="{{ community.id }}">{{ community.community_name }}</option>
                                 {% endif %}
                             {% endfor %}
-                        {% else %}
-                            <option id="{{ community.id }}">{{ community.community_name }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
+                        </select>                    
+                    </div>
 
-                <select id="institutions-select" class="w-60" onchange="selectInstitutions()">
-                    <option>Select an Institution</option>
+                    <div class="w-30">
+                        <select id="institutions-select" class="w-100" onchange="selectInstitutions()">
+                            <option>Select an Institution</option>
 
-                    {% for institution in institutions %}
-                        <option id="{{ institution.id }}">{{ institution.institution_name }}</option>
-                    {% endfor %}
-                </select>
+                            {% for institution in institutions %}
+                                <option id="{{ institution.id }}">{{ institution.institution_name }}</option>
+                            {% endfor %}
+                        </select>                    
+                    </div>
+
+                    <div class="w-30">
+                        <select id="researchers-select" class="w-100" onchange="selectResearchers()">
+                            <option>Select a Researcher</option>
+
+                            {% for researcher in researchers %}
+                                <option id="{{ researcher.id }}">{{ researcher.user.get_full_name }}</option>
+                            {% endfor %}
+                        </select>                    
+                    </div>
+                </div>
 
 
-                
+
                 <p>Selected</p>
                 {% for community in communities %}
                     <div id="selected-community-{{ community.id }}" style="height: 0px; overflow: hidden;">
@@ -124,6 +140,16 @@
                         </div>
                     </div>
                     <div id="inst-id-input-{{ institution.id }}" style="display: none;"></div>
+                {% endfor %}
+
+                {% for researcher in researchers %}
+                    <div id="selected-researcher-{{ researcher.id }}" style="height: 0px; overflow: hidden;">
+                        <div class="selected-entity flex-this row space-between">
+                            <div><p class="center-name">{{ researcher.user.get_full_name }}</p></div>
+                            <div><p id="close-{{ researcher.id }}" class="close-x darkteal-text pointer" onclick="cancelResearcherSelection(this)">&times;</p></div>
+                        </div>
+                    </div>
+                    <div id="res-id-input-{{ researcher.id }}" style="display: none;"></div>
                 {% endfor %}
 
             {% endif %}

@@ -537,6 +537,24 @@ function selectInstitutions() {
     })
 }
 
+function selectResearchers() {
+    let select = document.getElementById('researchers-select')
+    let allOptionsArray = Array.from(select.options)
+    // Remove first element of options array
+    let allOptionsMinusFirst = allOptionsArray.slice(1)
+
+    allOptionsMinusFirst.forEach(option => {
+        let selectedResearcherDiv = document.getElementById(`selected-researcher-${option.id}`)
+        let div = document.getElementById(`res-id-input-${option.id}`)
+
+        if (option.selected) {
+            // console.log(option)
+            selectedResearcherDiv.style.height = "auto";
+            div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_researchers">`
+        }
+    })
+}
+
 // INSTITUTION: create project : add contributors
 function selectContributors() {
     let contribInput = document.getElementById('contributor-input')
@@ -590,7 +608,7 @@ function cancelResearcherSelection(elem) {
     let id = elem.id
     let matches = id.match(/(\d+)/)
     let targetNum = matches[0]
-    console.log(targetNum)
+    // console.log(targetNum)
 
     let divToClose = document.getElementById(`selected-researcher-${targetNum}`)
     let inputDivToRemove = document.getElementById(`res-id-input-${targetNum}`)

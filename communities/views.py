@@ -656,6 +656,7 @@ def notify_others(request, pk, proj_id):
         entities_notified = EntitiesNotified.objects.get(project=project)
         communities = Community.objects.filter(is_approved=True).exclude(id=community.id) # all approved communities excluding self
         institutions = Institution.objects.filter(is_approved=True)
+        researchers = Researcher.objects.select_related('user').all()
 
         if request.method == "POST":
             # Set private project to discoverable
@@ -665,6 +666,8 @@ def notify_others(request, pk, proj_id):
 
             communities_selected = request.POST.getlist('selected_communities')
             institutions_selected = request.POST.getlist('selected_institutions')
+            researchers_selected = request.POST.getlist('selected_researchers')
+
             message = request.POST.get('notice_message')
             
             # Reference ID and title for notifications
@@ -695,6 +698,11 @@ def notify_others(request, pk, proj_id):
                 # Create notification
                 ActionNotification.objects.create(institution=institution, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
 
+            for researcher_id in researchers_selected:
+                researcher_selected = Researcher.objects.get(id=researcher_id)
+                entities_notified.researchers.add(researcher_selected)
+                ActionNotification.objects.create(researcher=researcher_selected, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
+
             entities_notified.save()
             return redirect('community-projects', community.id)
 
@@ -703,6 +711,7 @@ def notify_others(request, pk, proj_id):
             'project': project,
             'communities': communities,
             'institutions': institutions,
+            'researchers': researchers,
             'member_role': member_role,
         }
         return render(request, 'communities/notify.html', context)
