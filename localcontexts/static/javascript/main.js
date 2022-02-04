@@ -511,8 +511,7 @@ function selectCommunities() {
         let div = document.getElementById(`comm-id-input-${option.id}`)
 
         if (option.selected) {
-            // console.log(option)
-            selectedCommunityDiv.style.height = "auto";
+            selectedCommunityDiv.classList.replace('hide', 'show')
             div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_communities">`
         }
     })
@@ -530,13 +529,13 @@ function selectInstitutions() {
         let div = document.getElementById(`inst-id-input-${option.id}`)
 
         if (option.selected) {
-            // console.log(option)
-            selectedInstitutionDiv.style.height = "auto";
+            selectedInstitutionDiv.classList.replace('hide', 'show')
             div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_institutions">`
         }
     })
 }
 
+// PROJECTS: NOTIFY researchers - select desired researchers
 function selectResearchers() {
     let select = document.getElementById('researchers-select')
     let allOptionsArray = Array.from(select.options)
@@ -548,11 +547,47 @@ function selectResearchers() {
         let div = document.getElementById(`res-id-input-${option.id}`)
 
         if (option.selected) {
-            // console.log(option)
-            selectedResearcherDiv.style.height = "auto";
+            selectedResearcherDiv.classList.replace('hide', 'show')
             div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_researchers">`
         }
     })
+}
+
+// Projects: notify others - close selected
+function cancelCommunitySelection(elem) {
+    let id = elem.id
+    let matches = id.match(/(\d+)/)
+    let targetNum = matches[0]
+
+    let divToClose = document.getElementById(`selected-community-${targetNum}`)
+    let inputDivToRemove = document.getElementById(`comm-id-input-${targetNum}`)
+
+    divToClose.classList.replace('show', 'hide')
+    inputDivToRemove.innerHTML = ``
+}
+
+function cancelInstitutionSelection(elem) {
+    let id = elem.id
+    let matches = id.match(/(\d+)/)
+    let targetNum = matches[0]
+
+    let divToClose = document.getElementById(`selected-institution-${targetNum}`)
+    let inputDivToRemove = document.getElementById(`inst-id-input-${targetNum}`)
+
+    divToClose.classList.replace('show', 'hide')
+    inputDivToRemove.innerHTML = ``
+}
+
+function cancelResearcherSelection(elem) {
+    let id = elem.id
+    let matches = id.match(/(\d+)/)
+    let targetNum = matches[0]
+
+    let divToClose = document.getElementById(`selected-researcher-${targetNum}`)
+    let inputDivToRemove = document.getElementById(`res-id-input-${targetNum}`)
+
+    divToClose.classList.replace('show', 'hide')
+    inputDivToRemove.innerHTML = ``
 }
 
 // INSTITUTION: create project : add contributors
@@ -584,38 +619,11 @@ function selectContributors() {
             }
         }
     })
-
 }
 
 var addContributorBtn = document.getElementById('add-contributor-btn')
-if(addContributorBtn) {
-    addContributorBtn.addEventListener('click', selectContributors)
-}
+if(addContributorBtn) { addContributorBtn.addEventListener('click', selectContributors) }
 
-function cancelInstitutionSelection(elem) {
-    let id = elem.id
-    let matches = id.match(/(\d+)/)
-    let targetNum = matches[0]
-
-    let divToClose = document.getElementById(`selected-institution-${targetNum}`)
-    let inputDivToRemove = document.getElementById(`inst-id-input-${targetNum}`)
-
-    divToClose.style.height = '0'
-    inputDivToRemove.innerHTML = ``
-}
-
-function cancelResearcherSelection(elem) {
-    let id = elem.id
-    let matches = id.match(/(\d+)/)
-    let targetNum = matches[0]
-    // console.log(targetNum)
-
-    let divToClose = document.getElementById(`selected-researcher-${targetNum}`)
-    let inputDivToRemove = document.getElementById(`res-id-input-${targetNum}`)
-
-    divToClose.style.height = '0'
-    inputDivToRemove.innerHTML = ``
-}
 
 // Add project people on institution create-project
 // h/t: https://medium.com/all-about-django/adding-forms-dynamically-to-a-django-formset-375f1090c2b0
@@ -679,19 +687,6 @@ function cloneForm(el) {
         el.parentElement.parentElement.append(clone)
     }
 
-}
-
-// Institutions: projects: notify communities - close selected communities
-function cancelCommunitySelection(elem) {
-    let id = elem.id
-    let matches = id.match(/(\d+)/)
-    let targetNum = matches[0]
-
-    let divToClose = document.getElementById(`selected-community-${targetNum}`)
-    let inputDivToRemove = document.getElementById(`comm-id-input-${targetNum}`)
-
-    divToClose.style.height = '0'
-    inputDivToRemove.innerHTML = ``
 }
 
 // Communities: Projects: Notify status

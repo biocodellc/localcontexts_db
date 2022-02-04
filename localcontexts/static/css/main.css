@@ -904,24 +904,45 @@ input:focus {
 }
 
 /* PROJECT: Notify */
-.selected-entity {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    padding: 19px;
-    border: 2px dashed #007385;
-    border-radius: 5px;
-    height: 67px;
-    width: 492px;
+.grey-chip {
+    margin-right: 5px;
+    border: 1px solid #4b5563;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    padding: 8px 16px;
+    height: 40px;
+    border-radius: 24px;
+    font-size: 14px;
 }
 
-.center-name, .close-x {
+.center-name {
     margin: 0;
     align-items: center;
 }
 
 .close-x {
-    color: #007385;
-    font-size: 1.2em;
+    margin-top: 2px;
+    margin-left: 5px;
+    line-height: 0;
+    position: relative;
+    border: 2px solid #4b5563;
+    background-color: #f3f4f6;
+    border-radius: 50%;
+    width: 16.67px;
+    height: 16.67px;
+    text-align: center;
+}
+
+.close-x::after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+  }
+
+.close-x div {
+    position: absolute;
+    bottom: 50%;
+    width: 100%;
 }
 
 /* Notification V2 (Institutions) */
