@@ -675,11 +675,9 @@ def notify_others(request, pk, proj_id):
             title =  str(community.community_name) + ' has notified you of a Project'
 
             for community_id in communities_selected:
-                community_selected = Community.objects.get(id=community_id)
-                
                 # add community to notice instance
+                community_selected = Community.objects.get(id=community_id)
                 entities_notified.communities.add(community_selected)
-                # entities_notified.save()
 
                 # Create project status, first comment and  notification
                 ProjectStatus.objects.create(project=project, community=community_selected, seen=False) # Creates a project status for each community
@@ -691,14 +689,15 @@ def notify_others(request, pk, proj_id):
                 # send_email_notice_placed(project, community, institution)
 
             for institution_id in institutions_selected:
+                # add institution to notice instance
                 institution = Institution.objects.get(id=institution_id)
-                # add community to notice instance
                 entities_notified.institutions.add(institution)
 
                 # Create notification
                 ActionNotification.objects.create(institution=institution, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
 
             for researcher_id in researchers_selected:
+                # add researcher to notice instance
                 researcher_selected = Researcher.objects.get(id=researcher_id)
                 entities_notified.researchers.add(researcher_selected)
                 ActionNotification.objects.create(researcher=researcher_selected, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)

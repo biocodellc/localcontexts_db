@@ -427,9 +427,8 @@ def notify_others(request, pk, proj_id):
             title =  str(institution.institution_name) + ' has notified you of a Project.'
 
             for community_id in communities_selected:
-                community = Community.objects.get(id=community_id)
-                
                 # Add communities that were notified to entities_notified instance
+                community = Community.objects.get(id=community_id)
                 entities_notified.communities.add(community)
 
                 # Create project status, first comment and  notification
@@ -444,13 +443,13 @@ def notify_others(request, pk, proj_id):
             for institution_id in institutions_selected:
                 institution_selected = Institution.objects.get(id=institution_id)
                 entities_notified.institutions.add(institution_selected)
+                ActionNotification.objects.create(institution=institution_selected, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
 
             for researcher_id in researchers_selected:
                 researcher_selected = Researcher.objects.get(id=researcher_id)
                 entities_notified.researchers.add(researcher_selected)
                 ActionNotification.objects.create(researcher=researcher_selected, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
 
-            
             entities_notified.save()
             return redirect('institution-projects', institution.id)
 
