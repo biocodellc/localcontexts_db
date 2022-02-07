@@ -801,6 +801,7 @@ def apply_labels(request, pk, project_uuid):
     }
     return render(request, 'communities/apply-labels.html', context)
 
+@login_required(login_url='login')
 def connections(request, pk):
     community = Community.objects.get(id=pk)
 

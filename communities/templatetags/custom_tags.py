@@ -1,8 +1,6 @@
 from django import template
 from django.urls import reverse
 from django.templatetags.static import static
-from communities.models import Community
-from institutions.models import Institution
 from notifications.models import ActionNotification
 from projects.models import Project, ProjectContributors
 from helpers.models import EntitiesNotified, Connections
@@ -13,18 +11,17 @@ register = template.Library()
 
 @register.simple_tag
 def get_label_count(community):
-    # find all labels of this community that have been applied to projects
     count = 0
     projects = Project.objects.prefetch_related('tk_labels', 'bc_labels').all()
 
+    # find all labels of this community that have been applied to projects
     for project in projects:
-        bclabels = project.bc_labels.select_related('community').all()
-        tklabels = project.tk_labels.select_related('community').all()
-        for bclabel in bclabels:
-            if bclabel.community == community:
+        if project.bc_labels.exists() or project.tk_labels.exists():
+            bclabels = project.bc_labels.filter(community=community)
+            tklabels = project.tk_labels.filter(community=community)
+            for bclabel in bclabels:
                 count += 1
-        for tklabel in tklabels:
-            if tklabel.community == community:
+            for tklabel in tklabels:
                 count += 1
     return count
 
