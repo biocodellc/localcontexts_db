@@ -46,10 +46,6 @@ def unread_notifications(community):
     return ActionNotification.objects.filter(community=community, viewed=False).exists()
 
 @register.simple_tag
-def community_contributing_projects(community):
-    return ProjectContributors.objects.filter(communities=community)
-
-@register.simple_tag
 def get_bclabel_img_url(img_type, *args, **kwargs):
     # Returns image url, usage: <img src="{% get_bclabel_img_url img_type %}">
     if img_type == 'bcr':

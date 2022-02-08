@@ -453,7 +453,24 @@ def projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        # community projects + 
+        # projects community has been notified of + 
+        # projects where community is contributor
+        projects_list = []
+        community_projects = community.projects.prefetch_related('bc_labels', 'tk_labels').all()
+        for p in community_projects:
+            projects_list.append(p)
+
         community_notified = EntitiesNotified.objects.select_related('project').prefetch_related('institutions', 'researchers').filter(communities=community)
+        for n in community_notified:
+            projects_list.append(n.project)
+        
+        contribs = ProjectContributors.objects.select_related('project').filter(communities=community)
+        for c in contribs:
+            projects_list.append(c.project)
+
+        projects = list(set(projects_list))
+        
         form = ProjectCommentForm(request.POST or None)
 
         # Form: Notify project contributor if project was seen
@@ -533,9 +550,9 @@ def projects(request, pk):
                     return redirect('community-projects', community.id)
 
         context = {
-            'community_notified': community_notified,
-            'community': community,
             'member_role': member_role,
+            'projects': projects,
+            'community': community,
             'form': form,
         }
         return render(request, 'communities/projects.html', context)
