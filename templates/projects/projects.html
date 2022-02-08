@@ -1,110 +1,51 @@
 {% extends 'base.html' %} {% block title %} | Projects {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
 
-<!-- Create Project button card -->
-<div class="content-card content-card-space white-bg">
+    <!-- Create Project button card -->
+    <div class="content-card content-card-space white-bg">
 
-    <div class="flex-this space-between">
-        <div class="w-60"><h2 class="no-top-margin">Local Contexts Projects</h2></div>
+        <div class="flex-this space-between">
+            <div class="w-60"><h2 class="no-top-margin">Local Contexts Projects</h2></div>
 
-        {% if community or institution %}
-            {% if member_role == 'viewer' %}
+            {% if community or institution %}
+                {% if member_role == 'viewer' %}
+                {% else %}
+                    <div class="flex-this align-center">
+                        <a class="primary-btn action-btn margin-top-2 "
+                            {% if community %} href="{% url 'create-project' community.id %}" {% endif %}
+                            {% if institution %} href="{% url 'inst-create-project' institution.id %}" {% endif %}
+                        >
+                            Create a Project <i class="fa fa-long-arrow-right"></i>
+                        </a>
+                    </div>
+                {% endif %}
             {% else %}
                 <div class="flex-this align-center">
-                    <a class="primary-btn action-btn margin-top-2 "
-                        {% if community %} href="{% url 'create-project' community.id %}" {% endif %}
-                        {% if institution %} href="{% url 'inst-create-project' institution.id %}" {% endif %}
-                    >
+                    <a class="primary-btn action-btn margin-top-2 " href="{% url 'researcher-create-project' researcher.id %}">
                         Create a Project <i class="fa fa-long-arrow-right"></i>
                     </a>
                 </div>
             {% endif %}
-        {% else %}
-            <div class="flex-this align-center">
-                <a class="primary-btn action-btn margin-top-2 " href="{% url 'researcher-create-project' researcher.id %}">
-                    Create a Project <i class="fa fa-long-arrow-right"></i>
-                </a>
-            </div>
-        {% endif %}
-    </div>
-    <div class="w-70">
-        <p class="no-top-margin">
-            A Local Contexts Project outlines data/information to which a Notice and/or Labels will be applied. A Local Contexts Project has space for Project details, Project contacts, Project metadata, Project disclosures, and is the first step to applying Notices, notifying communities, and exporting Notices for use in other places.
-        </p>
-    </div>
-    <div>
-        <p>
-            Filter: 
-            <a id="filterProjectsWithNotices" class="darkteal-text pointer underline-hover">Notices</a> |       
-            <a id="filterProjectsWithLabels" class="darkteal-text pointer underline-hover">Labels</a> |       
-            <a id="filterAll" class="darkteal-text pointer underline-hover bold">All</a> 
-        </p>            
+        </div>
+        <div class="w-70">
+            <p class="no-top-margin">
+                A Local Contexts Project outlines data/information to which a Notice and/or Labels will be applied. A Local Contexts Project has space for Project details, Project contacts, Project metadata, Project disclosures, and is the first step to applying Notices, notifying communities, and exporting Notices for use in other places.
+            </p>
+        </div>
+        <div>
+            <p>
+                Filter: 
+                <a id="filterProjectsWithNotices" class="darkteal-text pointer underline-hover">Notices</a> |       
+                <a id="filterProjectsWithLabels" class="darkteal-text pointer underline-hover">Labels</a> |       
+                <a id="filterAll" class="darkteal-text pointer underline-hover bold">All</a> 
+            </p>            
+        </div>
+
     </div>
 
-</div>
-
-<!-- Project  Overview Cards -->
-
-{% if institution %}
-
-<!-- Projects where institution is the creator -->
-    {% if institution.projects %}
-        {% for project in institution.projects.all %}
-            {% include 'projects/project-overview.html' %}
-        {% endfor %}
-    {% endif %}
-
-    <!-- Projects an institution has been notified of (institution in entities notified) or institution is contributor -->
-    {% if institution_notified %}
-        {% for notified in institution_notified %}
-            {% define notified.project as project %}
-            {% include 'projects/project-overview.html' %}
-        {% endfor %}
-    {% elif institution_projects_contrib %}
-        {% for contrib in institution_projects_contrib %}
-            {% if contrib.project in institution.projects.all %}
-            {% else %}
-                {% define contrib.project as project %}
-                {% include 'projects/project-overview.html' %}
-            {% endif %}
-        {% endfor %}    
-    {% endif %}
-
-{% endif %}
-
-    {% if researcher %}
-
-    <!-- Projects where researcher is the creator -->
-        {% if researcher.projects %}
-            {% for project in researcher.projects.all %}
-                {% include 'projects/project-overview.html' %}
-            {% endfor %}
-        {% endif %}
-
-            <!-- Projects a researcher has been notified of (researcher in entities notified) or researcher is a contributor-->
-        {% if researcher_notified %}
-            {% for notified in researcher_notified %}
-                {% define notified.project as project %}
-                {% include 'projects/project-overview.html' %}
-            {% endfor %}
-        {% elif researcher_projects_contrib %}
-            {% for contrib in researcher_projects_contrib %}
-                {% if contrib.project in researcher.projects.all %}
-                {% else %}
-                    {% define contrib.project as project %}
-                    {% include 'projects/project-overview.html' %}
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-
-    {% endif %}
-
-    {% if community %}
-
-        {% for project in projects %}
-            {% include 'projects/project-overview.html' %}
-        {% endfor %}
-
-    {% endif %}
+    <!-- Project  Overview Cards -->
+    {% for project in projects %}
+        {% include 'projects/project-overview.html' %}
+    {% endfor %}
 
 
 {% endblock %}

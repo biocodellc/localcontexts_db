@@ -244,9 +244,28 @@ def institution_projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
-        form = ProjectCommentForm(request.POST or None)
-        institution_notified = EntitiesNotified.objects.prefetch_related('communities', 'researchers').filter(institutions=institution)
+        # institution projects + 
+        # projects institution has been notified of + 
+        # projects where institution is contributor
+        projects_list = []
+        institution_projects = institution.projects.prefetch_related('bc_labels', 'tk_labels').all()
+        for p in institution_projects:
+            projects_list.append(p)
+
+        institution_notified = EntitiesNotified.objects.select_related('project').prefetch_related('communities', 'researchers').filter(institutions=institution)
+        for n in institution_notified:
+            projects_list.append(n.project)
         
+        contribs = ProjectContributors.objects.select_related('project').filter(institutions=institution)
+        for c in contribs:
+            projects_list.append(c.project)
+
+        projects = list(set(projects_list))
+
+        # institution_notified = EntitiesNotified.objects.prefetch_related('communities', 'researchers').filter(institutions=institution)
+        
+        form = ProjectCommentForm(request.POST or None)
+  
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
 
@@ -266,7 +285,8 @@ def institution_projects(request, pk):
                 return redirect('institution-projects', institution.id)
 
         context = {
-            'institution_notified': institution_notified,
+            # 'institution_notified': institution_notified,
+            'projects': projects,
             'institution': institution,
             'form': form,
             'member_role': member_role,

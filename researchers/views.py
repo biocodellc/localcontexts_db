@@ -95,14 +95,31 @@ def researcher_notices(request, pk):
 
 @login_required(login_url='login')
 def researcher_projects(request, pk):
-    researcher = Researcher.objects.prefetch_related('projects').get(id=pk)
+    researcher = Researcher.objects.prefetch_related('projects', 'user').get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('researcher-restricted', researcher.id)
     else:
-        form = ProjectCommentForm(request.POST or None)
-        researcher_notified = EntitiesNotified.objects.prefetch_related('communities', 'institutions').filter(researchers=researcher)
+        # researcher projects + 
+        # projects researcher has been notified of + 
+        # projects where researcher is contributor
+        projects_list = []
+        researcher_projects = researcher.projects.prefetch_related('bc_labels', 'tk_labels').all()
+        for p in researcher_projects:
+            projects_list.append(p)
 
+        researcher_notified = EntitiesNotified.objects.select_related('project').prefetch_related('communities', 'institutions').filter(researchers=researcher)
+        for n in researcher_notified:
+            projects_list.append(n.project)
+        
+        contribs = ProjectContributors.objects.select_related('project').filter(researchers=researcher)
+        for c in contribs:
+            projects_list.append(c.project)
+
+        projects = list(set(projects_list))
+        
+        form = ProjectCommentForm(request.POST or None)
+        
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
 
@@ -123,7 +140,8 @@ def researcher_projects(request, pk):
                 return redirect('researcher-projects', researcher.id)
 
         context = {
-            'researcher_notified': researcher_notified,
+            # 'researcher_notified': researcher_notified,
+            'projects': projects,
             'researcher': researcher,
             'form': form,
             'user_can_view': user_can_view,

@@ -458,8 +458,8 @@ def projects(request, pk):
         # projects where community is contributor
         projects_list = []
         community_projects = community.projects.prefetch_related('bc_labels', 'tk_labels').all()
-        for p in community_projects:
-            projects_list.append(p)
+        for proj in community_projects:
+            projects_list.append(proj)
 
         community_notified = EntitiesNotified.objects.select_related('project').prefetch_related('institutions', 'researchers').filter(communities=community)
         for n in community_notified:
