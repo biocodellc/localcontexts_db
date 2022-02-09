@@ -27,7 +27,7 @@ def get_label_count(community):
 
 @register.simple_tag
 def connections_count(community):
-    connections = Connections.objects.get(community=community)
+    connections = Connections.objects.prefetch_related('researchers', 'institutions').get(community=community)
     return connections.researchers.count() + connections.institutions.count()
 
 @register.simple_tag
