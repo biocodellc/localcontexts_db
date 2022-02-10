@@ -248,7 +248,7 @@ def institution_projects(request, pk):
         # projects institution has been notified of + 
         # projects where institution is contributor
         projects_list = []
-        institution_projects = institution.projects.prefetch_related('bc_labels', 'tk_labels').all()
+        institution_projects = institution.projects.all()
         for p in institution_projects:
             projects_list.append(p)
 
@@ -261,8 +261,6 @@ def institution_projects(request, pk):
             projects_list.append(c.project)
 
         projects = list(set(projects_list))
-
-        # institution_notified = EntitiesNotified.objects.prefetch_related('communities', 'researchers').filter(institutions=institution)
         
         form = ProjectCommentForm(request.POST or None)
   
@@ -285,7 +283,6 @@ def institution_projects(request, pk):
                 return redirect('institution-projects', institution.id)
 
         context = {
-            # 'institution_notified': institution_notified,
             'projects': projects,
             'institution': institution,
             'form': form,

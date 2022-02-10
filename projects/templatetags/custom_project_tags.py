@@ -19,9 +19,7 @@ def project_comments_all(project):
 
 @register.simple_tag
 def project_status(project):
-    # pass instance of project
-    return ProjectStatus.objects.select_related('community', 'sender').filter(project=project)
-
+    return ProjectStatus.objects.select_related('community').filter(project=project)
 
 @register.simple_tag
 def get_all_researchers():

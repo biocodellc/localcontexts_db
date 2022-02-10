@@ -27,8 +27,6 @@ from .forms import *
 from .models import *
 from .utils import *
 
-from itertools import chain
-
 # pdfs
 from django.http import HttpResponse
 from django.template.loader import get_template
@@ -208,9 +206,9 @@ def remove_member(request, pk, member_id):
 # Select Labels to Customize
 @login_required(login_url='login')
 def select_label(request, pk):
-    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
-    bclabels = BCLabel.objects.filter(community=community)
-    tklabels = TKLabel.objects.filter(community=community)
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    bclabels = BCLabel.objects.select_related('created_by', 'approved_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community)
+    tklabels = TKLabel.objects.select_related('created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community)
 
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -820,24 +818,18 @@ def apply_labels(request, pk, project_uuid):
 
 @login_required(login_url='login')
 def connections(request, pk):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').get(id=pk)
 
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        connections = Connections.objects.prefetch_related('communities', 'institutions', 'researchers').get(community=community)
-        bclabels = BCLabel.objects.filter(community=community)
-        tklabels = TKLabel.objects.filter(community=community)
-
-        # combine two querysets
-        labels = list(chain(bclabels,tklabels))
+        connections = Connections.objects.get(community=community)
 
         context = {
             'member_role': member_role,
             'community': community,
             'connections': connections,
-            'labels': labels,
         }
         return render(request, 'communities/connections.html', context)
 
