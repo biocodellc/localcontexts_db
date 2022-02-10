@@ -734,8 +734,8 @@ def notify_others(request, pk, proj_id):
 def apply_labels(request, pk, project_uuid):
     community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
-    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+    bclabels = BCLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community, is_approved=True)
+    tklabels = TKLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community, is_approved=True)
 
     notices = project.project_notice.all()
     institution_notices = project.project_institutional_notice.all()

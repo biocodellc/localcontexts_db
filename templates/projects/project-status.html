@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %} {% load custom_project_tags %}
 
 <div class="border-top-solid-teal">
     <h2>Project Request</h2>
@@ -33,40 +33,43 @@
                 <div><span>Project Decision </span></div>
                 <div class="flex-this">
                     <div class="margin-right-1"><select id="select-{{ project.unique_id }}" onchange="setProjectUUID(this)">
+                        {% project_status project as statuses %}
 
-                        {% for status in project.project_status.all %}
-                            {% if status.community == community %}
+                        {% if statuses %}
+                            {% for status in statuses %}
+                                {% if status.community == community %}
 
-                                {% if not status.seen and status.status == None %}
-                                    <option disabled selected="selected"> ----------------- </option>
-                                    <option value="seen"> Acknowledge Notice </option>
-                                    <option value="pending"> Labels Pending </option>
-                                    <option value="not_pending"> No Labels Pending </option>
-                                {% endif %} 
+                                    {% if not status.seen and status.status == None %}
+                                        <option disabled selected="selected"> ----------------- </option>
+                                        <option value="seen"> Acknowledge Notice </option>
+                                        <option value="pending"> Labels Pending </option>
+                                        <option value="not_pending"> No Labels Pending </option>
+                                    {% endif %} 
 
-                                {% if status.seen and status.status == None %}
-                                    <option disabled> ----------------- </option>
-                                    <option value="seen" selected="selected"> Acknowledge Notice </option>
-                                    <option value="pending"> Labels Pending </option>
-                                    <option value="not_pending"> No Labels Pending </option>
-                                {% endif %} 
+                                    {% if status.seen and status.status == None %}
+                                        <option disabled> ----------------- </option>
+                                        <option value="seen" selected="selected"> Acknowledge Notice </option>
+                                        <option value="pending"> Labels Pending </option>
+                                        <option value="not_pending"> No Labels Pending </option>
+                                    {% endif %} 
 
-                                {% if status.seen and status.status == 'pending' %}
-                                    <option disabled> ----------------- </option>
-                                    <option value="seen"> Acknowledge Notice </option>
-                                    <option value="pending" selected="selected"> Labels Pending </option>
-                                    <option value="not_pending"> No Labels Pending </option>
+                                    {% if status.seen and status.status == 'pending' %}
+                                        <option disabled> ----------------- </option>
+                                        <option value="seen"> Acknowledge Notice </option>
+                                        <option value="pending" selected="selected"> Labels Pending </option>
+                                        <option value="not_pending"> No Labels Pending </option>
+                                    {% endif %}
+
+                                    {% if status.seen and status.status == 'not_pending' %}
+                                        <option disabled> ----------------- </option>
+                                        <option value="seen"> Acknowledge Notice </option>
+                                        <option value="pending"> Labels Pending </option>
+                                        <option value="not_pending" selected="selected"> No Labels Pending </option>
+                                    {% endif %}
+
                                 {% endif %}
-
-                                {% if status.seen and status.status == 'not_pending' %}
-                                    <option disabled> ----------------- </option>
-                                    <option value="seen"> Acknowledge Notice </option>
-                                    <option value="pending"> Labels Pending </option>
-                                    <option value="not_pending" selected="selected"> No Labels Pending </option>
-                                {% endif %}
-
-                            {% endif %}
-                        {% endfor %}
+                            {% endfor %}
+                        {% endif %}
                 </select></div>
                 <div class="margin-left-1"><button class="primary-btn action-btn" name="notify-btn">Notify</button></div>
             </div>
