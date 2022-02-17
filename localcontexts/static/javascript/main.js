@@ -517,43 +517,7 @@ function selectCommunities() {
     })
 }
 
-// PROJECTS: NOTIFY institutions - select desired institutions
-function selectInstitutions() {
-    let select = document.getElementById('institutions-select')
-    let allOptionsArray = Array.from(select.options)
-    // Remove first element of options array
-    let allOptionsMinusFirst = allOptionsArray.slice(1)
-
-    allOptionsMinusFirst.forEach(option => {
-        let selectedInstitutionDiv = document.getElementById(`selected-institution-${option.id}`)
-        let div = document.getElementById(`inst-id-input-${option.id}`)
-
-        if (option.selected) {
-            selectedInstitutionDiv.classList.replace('hide', 'show')
-            div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_institutions">`
-        }
-    })
-}
-
-// PROJECTS: NOTIFY researchers - select desired researchers
-function selectResearchers() {
-    let select = document.getElementById('researchers-select')
-    let allOptionsArray = Array.from(select.options)
-    // Remove first element of options array
-    let allOptionsMinusFirst = allOptionsArray.slice(1)
-
-    allOptionsMinusFirst.forEach(option => {
-        let selectedResearcherDiv = document.getElementById(`selected-researcher-${option.id}`)
-        let div = document.getElementById(`res-id-input-${option.id}`)
-
-        if (option.selected) {
-            selectedResearcherDiv.classList.replace('hide', 'show')
-            div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_researchers">`
-        }
-    })
-}
-
-// Projects: notify others - close selected
+// Projects: notify communities - close selected
 function cancelCommunitySelection(elem) {
     let id = elem.id
     let matches = id.match(/(\d+)/)
@@ -561,30 +525,6 @@ function cancelCommunitySelection(elem) {
 
     let divToClose = document.getElementById(`selected-community-${targetNum}`)
     let inputDivToRemove = document.getElementById(`comm-id-input-${targetNum}`)
-
-    divToClose.classList.replace('show', 'hide')
-    inputDivToRemove.innerHTML = ``
-}
-
-function cancelInstitutionSelection(elem) {
-    let id = elem.id
-    let matches = id.match(/(\d+)/)
-    let targetNum = matches[0]
-
-    let divToClose = document.getElementById(`selected-institution-${targetNum}`)
-    let inputDivToRemove = document.getElementById(`inst-id-input-${targetNum}`)
-
-    divToClose.classList.replace('show', 'hide')
-    inputDivToRemove.innerHTML = ``
-}
-
-function cancelResearcherSelection(elem) {
-    let id = elem.id
-    let matches = id.match(/(\d+)/)
-    let targetNum = matches[0]
-
-    let divToClose = document.getElementById(`selected-researcher-${targetNum}`)
-    let inputDivToRemove = document.getElementById(`res-id-input-${targetNum}`)
 
     divToClose.classList.replace('show', 'hide')
     inputDivToRemove.innerHTML = ``
