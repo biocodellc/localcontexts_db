@@ -5,7 +5,7 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections
+from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections, ProjectComment
 from notifications.models import ActionNotification
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
@@ -26,8 +26,6 @@ from helpers.emails import *
 from .forms import *
 from .models import *
 from .utils import *
-
-from itertools import chain
 
 # pdfs
 from django.http import HttpResponse
@@ -208,9 +206,9 @@ def remove_member(request, pk, member_id):
 # Select Labels to Customize
 @login_required(login_url='login')
 def select_label(request, pk):
-    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
-    bclabels = BCLabel.objects.filter(community=community)
-    tklabels = TKLabel.objects.filter(community=community)
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    bclabels = BCLabel.objects.select_related('created_by', 'approved_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community)
+    tklabels = TKLabel.objects.select_related('created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community)
 
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -453,7 +451,24 @@ def projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        # community projects + 
+        # projects community has been notified of + 
+        # projects where community is contributor
+        projects_list = []
+        community_projects = community.projects.prefetch_related('bc_labels', 'tk_labels').all()
+        for proj in community_projects:
+            projects_list.append(proj)
+
         community_notified = EntitiesNotified.objects.select_related('project').prefetch_related('institutions', 'researchers').filter(communities=community)
+        for n in community_notified:
+            projects_list.append(n.project)
+        
+        contribs = ProjectContributors.objects.select_related('project').filter(communities=community)
+        for c in contribs:
+            projects_list.append(c.project)
+
+        projects = list(set(projects_list))
+        
         form = ProjectCommentForm(request.POST or None)
 
         # Form: Notify project contributor if project was seen
@@ -533,9 +548,9 @@ def projects(request, pk):
                     return redirect('community-projects', community.id)
 
         context = {
-            'community_notified': community_notified,
-            'community': community,
             'member_role': member_role,
+            'projects': projects,
+            'community': community,
             'form': form,
         }
         return render(request, 'communities/projects.html', context)
@@ -648,8 +663,8 @@ def edit_project(request, community_id, project_uuid):
 def apply_labels(request, pk, project_uuid):
     community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
-    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+    bclabels = BCLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community, is_approved=True)
+    tklabels = TKLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community, is_approved=True)
 
     notices = project.project_notice.all()
     institution_notices = project.project_institutional_notice.all()
@@ -730,25 +745,20 @@ def apply_labels(request, pk, project_uuid):
     }
     return render(request, 'communities/apply-labels.html', context)
 
+@login_required(login_url='login')
 def connections(request, pk):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').get(id=pk)
 
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        connections = Connections.objects.prefetch_related('communities', 'institutions', 'researchers').get(community=community)
-        bclabels = BCLabel.objects.filter(community=community)
-        tklabels = TKLabel.objects.filter(community=community)
-
-        # combine two querysets
-        labels = list(chain(bclabels,tklabels))
+        connections = Connections.objects.get(community=community)
 
         context = {
             'member_role': member_role,
             'community': community,
             'connections': connections,
-            'labels': labels,
         }
         return render(request, 'communities/connections.html', context)
 

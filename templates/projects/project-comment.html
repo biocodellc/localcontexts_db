@@ -1,11 +1,13 @@
-{% load static %}
+{% load static %} {% load custom_project_tags %}
 <div class="border-top-solid-teal">
 
     <!-- RESEARCHER AND INSTITUTION -->
     {% if researcher or institution %}
-        {% if project.project_status.all %}
-        <h3 class="no-bottom-margin">Project Messages</h3>
-            {% for status in project.project_status.all %}
+        {% project_status project as statuses %}
+
+        {% if statuses %}
+            <h3 class="no-bottom-margin">Project Messages</h3>
+            {% for status in statuses %}
                 <div class="flex-this space-between w-100 margin-top-16">
                     <div><p><span class="bold">{{ status.community }}</span></p></div>
                     <div>
@@ -20,8 +22,9 @@
                 </div>
 
                 <!-- TODO: FIX THIS, ORGANIZE MESSAGES BY COMMUNITY -->
-                {% if project.project_comment.all %}
-                    {% for comment in project.project_comment.all %}
+                {% project_comments_all project as all_project_comments %}
+                {% if all_project_comments %}
+                    {% for comment in all_project_comments %}
                         {% if comment.community.community_name in status.community.community_name %}
                             <div class="flex-this w-80 project-comment">
                                 <div class="project-comment-teal"></div>
@@ -56,7 +59,9 @@
 
     <!-- COMMUNITY  -->
     {% if community %}
-        {% if project.project_comment.all %}
+        {% project_comments project community as project_comments %}
+
+        {% if project_comments %}
             <h3 class="no-bottom-margin">Project Messages</h3>
             <div>
                 <p><span class="bold">
@@ -65,17 +70,15 @@
                 </span></p>
             </div>
 
-            {% for comment in project.project_comment.all %}
-                {% if community == comment.community %}
-                    <div class="flex-this w-80 project-comment">
-                        <div class="project-comment-teal"></div>
-                        <div class="project-comment-text">
-                            <span class="bold">{{ comment.sender.get_full_name }}</span>
-                            <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-                            <p>{{ comment.message }}</p>
-                        </div>
+            {% for comment in project_comments %}
+                <div class="flex-this w-80 project-comment">
+                    <div class="project-comment-teal"></div>
+                    <div class="project-comment-text">
+                        <span class="bold">{{ comment.sender.get_full_name }}</span>
+                        <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                        <p>{{ comment.message }}</p>
                     </div>
-                {% endif %}
+                </div>
             {% endfor %}
 
             {% if member_role == 'viewer' %} {% else %}
