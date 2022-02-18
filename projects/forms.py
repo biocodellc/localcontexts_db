@@ -12,7 +12,7 @@ class CreateProjectForm(forms.ModelForm):
     TYPES = (
         ('Item', 'Item'),
         ('Collection', 'Collection'),
-        ('Sample', 'Sample'),
+        ('Samples', 'Samples'),
         ('Expedition', 'Expedition'),
         ('Publication', 'Publication'),
         ('Exhibition', 'Exhibition'),
@@ -69,7 +69,7 @@ class EditProjectForm(forms.ModelForm):
     TYPES = (
         ('Item', 'Item'),
         ('Collection', 'Collection'),
-        ('Sample', 'Sample'),
+        ('Samples', 'Samples'),
         ('Expedition', 'Expedition'),
         ('Publication', 'Publication'),
         ('Exhibition', 'Exhibition'),

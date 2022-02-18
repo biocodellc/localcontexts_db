@@ -9,7 +9,7 @@ class Project(models.Model):
     TYPES = (
         ('Item', 'Item'),
         ('Collection', 'Collection'),
-        ('Sample', 'Sample'),
+        ('Samples', 'Samples'),
         ('Expedition', 'Expedition'),
         ('Publication', 'Publication'),
         ('Exhibition', 'Exhibition'),
