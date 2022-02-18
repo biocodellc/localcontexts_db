@@ -1,9 +1,6 @@
 import uuid
 from django.db import models
 from communities.models import Community
-from researchers.models import Researcher
-from institutions.models import Institution
-from projects.models import Project
 from django.contrib.auth.models import User
 
 class TKLabel(models.Model):
@@ -40,6 +37,7 @@ class TKLabel(models.Model):
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="tklabel_approver")
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
+    audiofile = models.FileField(upload_to='communities/bclabels/audio', blank=True)
 
     def __str__(self):
         return str(self.community) + ' ' + str(self.label_type) + ' ' + str(self.name)

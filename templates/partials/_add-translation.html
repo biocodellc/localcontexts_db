@@ -12,17 +12,16 @@
                 <div class="w-30 margin-right-16"><label>Local name</label><br>{{ tran_form.title }}</div>
                 <div class="w-30"><label>What language is this written in?</label><br>{{ tran_form.language }}</div>
             </div>
-            <div class="w-80"><label>Translated text</label><br>{{ tran_form.translation }}</div>
+            <div class="w-80 margin-top-8"><label>Translated text</label><br>{{ tran_form.translation }}</div>
         </div>
 
         <div id="lastDiv" class="flex-this flex-end w-80"><button id="add-translation-btn" class="primary-btn green-btn"><i class="fa fa-plus" aria-hidden="true"></i> Add Translation</button></div>
-
     </div>   
 
 {% endfor %}
 
 {% if add_translation_formset.errors %}
-{% for error in add_translation_formset.errors %}
-    <div class="msg-red w-50"><small>{{ error.as_text }}</small></div> 
-{% endfor %}
+    {% for error in add_translation_formset.errors %}
+        <div class="msg-red w-50"><small>{{ error.as_text }}</small></div> 
+    {% endfor %}
 {% endif %}  

@@ -1,27 +1,27 @@
 {% if bclabel %}
     {% if bclabel.bclabel_translation.all %}
-    {% for translation in bclabel.bclabel_translation.all %}
-        <div>
-            <div class="flex-this space-between">
-                <div><p class="bold">{{ translation.title }}</p></div>
-                <div><p>{{ translation.language }}</p></div>
+        {% for translation in bclabel.bclabel_translation.all %}
+            <div>
+                <div class="flex-this space-between">
+                    <div><p class="bold">{{ translation.title }}</p></div>
+                    <div><p>{{ translation.language }}</p></div>
+                </div>
+                <div><p class="no-top-margin no-bottom-margin">{{ translation.translation }} </p></div>
             </div>
-            <div><p class="no-top-margin no-bottom-margin">{{ translation.translation }} </p></div>
-        </div>
-    {% endfor %}
+        {% endfor %}
     {% endif %}
 {% endif %}
 
 {% if tklabel %}
     {% if tklabel.tklabel_translation.all %}
-    {% for translation in tklabel.tklabel_translation.all %}
-        <div>
-            <div class="flex-this space-between">
-                <div><p class="bold">{{ translation.title }}</p></div>
-                <div><p>{{ translation.language }}</p></div>
+        {% for translation in tklabel.tklabel_translation.all %}
+            <div>
+                <div class="flex-this space-between">
+                    <div><p class="bold">{{ translation.title }}</p></div>
+                    <div><p>{{ translation.language }}</p></div>
+                </div>
+                <div><p class="no-top-margin no-bottom-margin">{{ translation.translation }} </p></div>
             </div>
-            <div><p class="no-top-margin no-bottom-margin">{{ translation.translation }} </p></div>
-        </div>
-    {% endfor %}
+        {% endfor %}
     {% endif %}
 {% endif %}
