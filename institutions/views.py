@@ -24,7 +24,7 @@ from helpers.emails import *
 
 @login_required(login_url='login')
 def connect_institution(request):
-    institutions = Institution.objects.filter(is_approved=True)
+    institutions = Institution.approved.all()
     form = JoinRequestForm(request.POST or None)
 
     if request.method == 'POST':
@@ -423,7 +423,7 @@ def notify_others(request, pk, proj_id):
     else:
         project = Project.objects.prefetch_related('bc_labels', 'tk_labels', 'project_status').get(id=proj_id)
         entities_notified = EntitiesNotified.objects.get(project=project)
-        communities = Community.objects.filter(is_approved=True)
+        communities = Community.approved.all()
         
         if request.method == "POST":
             # Set private project to discoverable

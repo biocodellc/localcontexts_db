@@ -27,7 +27,7 @@ def get_all_researchers():
 
 @register.simple_tag
 def get_all_institutions():
-    return Institution.objects.filter(is_approved=True)
+    return Institution.approved.all()
 
 @register.simple_tag
 def define(val=None):
