@@ -35,7 +35,7 @@ from xhtml2pdf import pisa
 # Connect
 @login_required(login_url='login')
 def connect_community(request):
-    communities = Community.objects.filter(is_approved=True)
+    communities = Community.approved.all()
     form = JoinRequestForm(request.POST or None)
 
     if request.method == 'POST':

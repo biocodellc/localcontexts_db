@@ -1,10 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
-from researchers.models import Researcher
 from django_countries.fields import CountryField
 from django.core.validators import MaxLengthValidator
 import uuid
 import os
+
+class ApprovedManager(models.Manager):
+    def get_queryset(self):
+        return super(ApprovedManager, self).get_queryset().filter(is_approved=True)
+
 def get_file_path(self, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (str(uuid.uuid4()), ext)
@@ -36,6 +40,10 @@ class Institution(models.Model):
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="institution_approver")
     is_ror = models.BooleanField(default=True, null=False)
     created = models.DateTimeField(auto_now_add=True, null=True)
+
+    # Managers
+    objects = models.Manager()
+    approved = ApprovedManager()
 
     def get_member_count(self):
         admins = self.admins.count()
