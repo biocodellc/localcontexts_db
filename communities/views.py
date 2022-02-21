@@ -16,8 +16,8 @@ from bclabels.forms import *
 from tklabels.forms import *
 from projects.forms import *
 
-from bclabels.utils import check_bclabel_type, assign_bclabel_img
-from tklabels.utils import check_tklabel_type, assign_tklabel_img
+from bclabels.utils import check_bclabel_type, assign_bclabel_img, assign_bclabel_svg
+from tklabels.utils import check_tklabel_type, assign_tklabel_img, assign_tklabel_svg
 from projects.utils import add_to_contributors
 from helpers.utils import *
 
@@ -245,6 +245,7 @@ def customize_label(request, pk, label_type):
         if label_type.startswith('tk'):
             tk_type = check_tklabel_type(label_type)
             img_url = assign_tklabel_img(label_type)
+            svg_url = assign_tklabel_svg(label_type)
 
             form = CustomizeTKLabelForm(request.POST or None)
 
@@ -261,6 +262,7 @@ def customize_label(request, pk, label_type):
                     label_form.label_type = tk_type
                     label_form.community = community
                     label_form.img_url = img_url
+                    label_form.svg_url = svg_url
                     label_form.created_by = request.user
                     label_form.is_approved = False
                     label_form.save()
@@ -281,6 +283,7 @@ def customize_label(request, pk, label_type):
         if label_type.startswith('bc'):
             bc_type = check_bclabel_type(label_type)
             img_url = assign_bclabel_img(label_type)
+            svg_url = assign_bclabel_svg(label_type)
 
             form = CustomizeBCLabelForm(request.POST or None)
 
@@ -297,6 +300,7 @@ def customize_label(request, pk, label_type):
                     label_form.label_type = bc_type
                     label_form.community = community
                     label_form.img_url = img_url
+                    label_form.svg_url = svg_url
                     label_form.created_by = request.user
                     label_form.is_approved = False
                     label_form.save()
