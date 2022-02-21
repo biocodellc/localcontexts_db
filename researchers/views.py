@@ -303,7 +303,7 @@ def notify_others(request, pk, proj_id):
     else:
         project = Project.objects.prefetch_related('bc_labels', 'tk_labels', 'project_status').get(id=proj_id)
         entities_notified = EntitiesNotified.objects.prefetch_related('communities').get(project=project)
-        communities = Community.objects.prefetch_related('projects').filter(is_approved=True)
+        communities = Community.approved.prefetch_related('projects').all()
 
         if request.method == "POST":
             # Set private project to discoverable

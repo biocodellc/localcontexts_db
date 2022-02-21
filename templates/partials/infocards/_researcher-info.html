@@ -82,7 +82,7 @@
 
             <div class="flex-this column dashcard-text-container">
                     <div>
-                        <h3 class="dashcard-h3 darkteal-text">{% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}</h3>
+                        <h3 class="dashcard-h3 darkteal-text">{{ researcher.user.get_full_name }}</h3>
                     </div>
                     <div>
                         <p class="dashcard-subheader">Researcher | {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% endif %}<br>

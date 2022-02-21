@@ -2,10 +2,13 @@ from django.db import models
 from django.core.validators import MaxLengthValidator
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
-from django.conf import settings
 from institutions.models import Institution
 import uuid
 import os
+
+class ApprovedManager(models.Manager):
+    def get_queryset(self):
+        return super(ApprovedManager, self).get_queryset().filter(is_approved=True)
 
 def get_file_path(self, filename):
     ext = filename.split('.')[-1]
@@ -37,6 +40,9 @@ class Community(models.Model):
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="community_approver")
     projects = models.ManyToManyField('projects.Project', blank=True, related_name="community_projects", db_index=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
+    # Managers
+    objects = models.Manager()
+    approved = ApprovedManager()
 
     def get_member_count(self):
         return self.admins.count() + self.editors.count() + self.viewers.count() + 1
