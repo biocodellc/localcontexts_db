@@ -837,7 +837,9 @@ def download_labels(request, pk):
     # Add Label images, text and translations
     for bclabel in bclabels:
         get_image = requests.get(bclabel.img_url)
+        get_svg = requests.get(bclabel.svg_url)
         files.append((bclabel.name + '.png', get_image.content))
+        files.append((bclabel.name + '.svg', get_svg.content))
 
         # Default Label text
         text_content = bclabel.name + '\n' + bclabel.default_text
@@ -853,7 +855,9 @@ def download_labels(request, pk):
     # Add Label images, text and translations
     for tklabel in tklabels:
         get_image = requests.get(tklabel.img_url)
+        get_svg = requests.get(tklabel.svg_url)
         files.append((tklabel.name + '.png', get_image.content))
+        files.append((tklabel.name + '.svg', get_svg.content))
         
         # Default Label text
         text_content = tklabel.name + '\n' + tklabel.default_text
