@@ -247,7 +247,7 @@ def customize_label(request, pk, label_type):
             img_url = assign_tklabel_img(label_type)
             svg_url = assign_tklabel_svg(label_type)
 
-            form = CustomizeTKLabelForm(request.POST or None)
+            form = CustomizeTKLabelForm(request.POST or None, request.FILES)
 
             if request.method == "GET":
                 add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
@@ -285,7 +285,7 @@ def customize_label(request, pk, label_type):
             img_url = assign_bclabel_img(label_type)
             svg_url = assign_bclabel_svg(label_type)
 
-            form = CustomizeBCLabelForm(request.POST or None)
+            form = CustomizeBCLabelForm(request.POST or None, request.FILES)
 
             if request.method == "GET":
                 add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
@@ -402,22 +402,35 @@ def edit_label(request, pk, label_id):
     if member_role == False or member_role == 'viewer':
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+
         add_translation_formset = AddLabelTranslationFormSet(request.POST or None)
-
-        if BCLabel.objects.filter(unique_id=label_id).exists():
-            bclabel = BCLabel.objects.get(unique_id=label_id)
-            form = EditBCLabelForm(request.POST or None, instance=bclabel)
-            formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
-
-        if TKLabel.objects.filter(unique_id=label_id).exists():
-            tklabel = TKLabel.objects.get(unique_id=label_id)
-            form = EditTKLabelForm(request.POST or None, instance=tklabel)
-            formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
         
         if request.method == 'GET':
             add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+
+            if BCLabel.objects.filter(unique_id=label_id).exists():
+                bclabel = BCLabel.objects.get(unique_id=label_id)
+                form = EditBCLabelForm(instance=bclabel)
+                formset = UpdateBCLabelTranslationFormSet(instance=bclabel)
+
+            if TKLabel.objects.filter(unique_id=label_id).exists():
+                tklabel = TKLabel.objects.get(unique_id=label_id)
+                form = EditTKLabelForm(instance=tklabel)
+                formset = UpdateTKLabelTranslationFormSet(instance=tklabel)
+
         elif request.method == 'POST':
             add_translation_formset = AddLabelTranslationFormSet(request.POST)
+
+            if BCLabel.objects.filter(unique_id=label_id).exists():
+                bclabel = BCLabel.objects.get(unique_id=label_id)
+                form = EditBCLabelForm(request.POST, request.FILES, instance=bclabel)
+                formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
+
+            if TKLabel.objects.filter(unique_id=label_id).exists():
+                tklabel = TKLabel.objects.get(unique_id=label_id)
+                form = EditTKLabelForm(request.POST, request.FILES, instance=tklabel)
+                formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
+
 
             if form.is_valid() and formset.is_valid() and add_translation_formset.is_valid():
                 form.save()
@@ -434,7 +447,7 @@ def edit_label(request, pk, label_id):
                     instance.save()
 
                 return redirect('select-label', community.id)
-        
+
         context = {
             'community': community,
             'member_role': member_role,
