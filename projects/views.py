@@ -18,7 +18,6 @@ def view_project(request, unique_id):
         return render(request, 'projects/view-project.html', {'project': project})
 
 
-# TODO: Images need to be SVGs
 def download_project_zip(request, unique_id):
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
     project_bclabels = project.bc_labels.all()
@@ -118,7 +117,9 @@ def download_project_zip(request, unique_id):
     # Add Label images, text and translations
     for bclabel in project_bclabels:
         get_image = requests.get(bclabel.img_url)
+        get_svg = requests.get(bclabel.svg_url)
         files.append((bclabel.name + '.png', get_image.content))
+        files.append((bclabel.name + '.svg', get_svg.content))
 
         # Default Label text
         text_content = bclabel.name + '\n' + bclabel.default_text
@@ -134,7 +135,9 @@ def download_project_zip(request, unique_id):
     # Add Label images, text and translations
     for tklabel in project_tklabels:
         get_image = requests.get(tklabel.img_url)
+        get_svg = requests.get(tklabel.svg_url)
         files.append((tklabel.name + '.png', get_image.content))
+        files.append((tklabel.name + '.svg', get_svg.content))
         
         # Default Label text
         text_content = tklabel.name + '\n' + tklabel.default_text
