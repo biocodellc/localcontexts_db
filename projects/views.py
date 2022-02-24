@@ -19,6 +19,7 @@ def view_project(request, unique_id):
 
 
 def download_project_zip(request, unique_id):
+    baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/'
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
     project_bclabels = project.bc_labels.all()
     project_tklabels = project.tk_labels.all()
@@ -53,26 +54,34 @@ def download_project_zip(request, unique_id):
         notice = Notice.objects.get(project=project)
         if not notice.archived:
             # Add Usage Guide
-            usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
+            usage_guide_url = baseURL + 'guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
             response = requests.get(usage_guide_url) 
             files.append(('TK_BC_Notice_Usage_Guide.pdf', response.content))
 
             # Create PNG and TXT files based on which Notices are attached to the Project
             if notice.notice_type == 'biocultural':
                 get_img = requests.get(notice.bc_img_url)
+                get_svg = requests.get(baseURL + 'labels/notices/bc-notice.svg')
                 files.append(('Biocultural_Notice' + '.png', get_img.content))
+                files.append(('Biocultural_Notice' + '.svg', get_svg.content))
                 files.append(('Biocultural_Notice' + '.txt', notice.bc_default_text))
 
             if notice.notice_type == 'traditional_knowledge':
                 get_img = requests.get(notice.tk_img_url)
+                get_svg = requests.get(baseURL + 'labels/notices/tk-notice.svg')
                 files.append(('Traditional_Knowledge_Notice' + '.png', get_img.content))
+                files.append(('Traditional_Knowledge_Notice' + '.svg', get_svg.content))
                 files.append(('Traditional_Knowledge_Notice' + '.txt', notice.tk_default_text))
 
             if notice.notice_type == 'biocultural_and_traditional_knowledge':
                 get_bc_img = requests.get(notice.bc_img_url)
                 get_tk_img = requests.get(notice.tk_img_url)
+                get_tk_svg = requests.get(baseURL + 'labels/notices/tk-notice.svg')
+                get_bc_svg = requests.get(baseURL + 'labels/notices/bc-notice.svg')
                 files.append(('Biocultural_Notice' + '.png', get_bc_img.content))
+                files.append(('Biocultural_Notice' + '.svg', get_bc_svg.content))
                 files.append(('Traditional_Knowledge_Notice' + '.png', get_tk_img.content))
+                files.append(('Traditional_Knowledge_Notice' + '.svg', get_tk_svg.content))
                 files.append(('Biocultural_Notice' + '.txt', notice.bc_default_text))
                 files.append(('Traditional_Knowledge_Notice' + '.txt', notice.tk_default_text))
 
@@ -82,32 +91,41 @@ def download_project_zip(request, unique_id):
         inst_notice = InstitutionNotice.objects.get(project=project)
         if not inst_notice.archived:
             # Add Usage Guide
-            usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf'
+            usage_guide_url = baseURL + 'guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf'
             response = requests.get(usage_guide_url) 
             files.append(('Institution_Notice_Usage_Guide.pdf', response.content))
 
             # Create PNG and TXT files based on which Notices are attached to the Project
             if inst_notice.notice_type == 'open_to_collaborate':
                 get_img = requests.get(inst_notice.open_to_collaborate_img_url)
+                get_svg = requests.get(baseURL + 'labels/notices/ci-open-to-collaborate.svg')
                 files.append(('Open_To_Collaborate' + '.png', get_img.content))
+                files.append(('Open_To_Collaborate' + '.svg', get_svg.content))
                 files.append(('Open_To_Collaborate' + '.txt', inst_notice.open_to_collaborate_default_text))
 
             if inst_notice.notice_type == 'attribution_incomplete':
                 get_img = requests.get(inst_notice.attribution_incomplete_img_url)
+                get_svg = requests.get(baseURL + 'labels/notices/ci-attribution-incomplete.svg')
                 files.append(('Attribution_Incomplete' + '.png', get_img.content))
+                files.append(('Attribution_Incomplete' + '.svg', get_svg.content))
                 files.append(('Attribution_Incomplete' + '.txt', inst_notice.attribution_incomplete_default_text))
 
             if inst_notice.notice_type == 'open_to_collaborate_and_attribution_incomplete':
                 get_open_img = requests.get(inst_notice.open_to_collaborate_img_url)
                 get_attr_img = requests.get(inst_notice.attribution_incomplete_img_url)
+                get_open_svg = requests.get(baseURL + 'labels/notices/ci-open-to-collaborate.svg')
+                get_attr_svg = requests.get(baseURL + 'labels/notices/ci-attribution-incomplete.svg')
+
                 files.append(('Open_To_Collaborate' + '.png', get_open_img.content))
+                files.append(('Open_To_Collaborate' + '.svg', get_open_svg.content))
                 files.append(('Attribution_Incomplete' + '.png', get_attr_img.content))
+                files.append(('Attribution_Incomplete' + '.svg', get_attr_svg.content))
                 files.append(('Open_To_Collaborate' + '.txt', inst_notice.open_to_collaborate_default_text))
                 files.append(('Attribution_Incomplete' + '.txt', inst_notice.attribution_incomplete_default_text))
 
     if project_bclabels or project_tklabels:
         # Labels Usage guide PDF
-        usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf'
+        usage_guide_url = baseURL + 'guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf'
         response = requests.get(usage_guide_url) 
         files.append(('BC_TK_Label_Usage_Guide.pdf', response.content))
 
