@@ -31,39 +31,44 @@ def generate_zip(files):
     return mem_zip.getvalue()
 
 def set_notice_defaults(notice):
+    baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/'
     if isinstance(notice, Notice):
         bc_text = 'The BC (Biocultural) Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information (DSI) generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC Labels are in development and their implementation is being negotiated.'
         tk_text = 'The TK (Traditional Knowledge) Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated.'
-        bc_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/bc-notice.png'
-        tk_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/tk-notice.png'
         
         if notice.notice_type == 'biocultural':
-            notice.bc_img_url = bc_url
+            notice.bc_img_url = baseURL + 'bc-notice.png'
+            notice.bc_svg_url = baseURL + 'bc-notice.svg'
             notice.bc_default_text = bc_text
         if notice.notice_type == 'traditional_knowledge':
-            notice.tk_img_url = tk_url
+            notice.tk_img_url = baseURL + 'tk-notice.png'
+            notice.tk_svg_url = baseURL + 'tk-notice.svg'
             notice.tk_default_text = tk_text
+
         if notice.notice_type == 'biocultural_and_traditional_knowledge':
-            notice.bc_img_url = bc_url
+            notice.bc_img_url = baseURL + 'bc-notice.png'
+            notice.bc_svg_url = baseURL + 'bc-notice.svg'
             notice.bc_default_text = bc_text
-            notice.tk_img_url = tk_url
+            notice.tk_img_url = baseURL + 'tk-notice.png'
+            notice.tk_svg_url = baseURL + 'tk-notice.svg'
             notice.tk_default_text = tk_text
     elif isinstance(notice, InstitutionNotice):
         attribution_incomplete_text = 'Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution.'
         open_to_collaborate_text = 'Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.'
-        attribution_incomplete_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/ci-attribution-incomplete.png'
-        open_to_collaborate_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/ci-open-to-collaborate.png'
         
         if notice.notice_type == 'open_to_collaborate':
-            notice.open_to_collaborate_img_url = open_to_collaborate_url
+            notice.open_to_collaborate_img_url = baseURL + 'ci-open-to-collaborate.png'
+            notice.open_to_collaborate_svg_url = baseURL + 'ci-open-to-collaborate.svg'
             notice.open_to_collaborate_default_text = open_to_collaborate_text
         if notice.notice_type == 'attribution_incomplete':
-            notice.attribution_incomplete_img_url = attribution_incomplete_url
+            notice.attribution_incomplete_img_url = baseURL + 'ci-attribution-incomplete.png'
+            notice.attribution_incomplete_svg_url = baseURL + 'ci-attribution-incomplete.svg'
             notice.attribution_incomplete_default_text = attribution_incomplete_text
         if notice.notice_type == 'open_to_collaborate_and_attribution_incomplete':
-            notice.open_to_collaborate_img_url = open_to_collaborate_url
+            notice.open_to_collaborate_img_url = baseURL + 'ci-open-to-collaborate.png'
             notice.open_to_collaborate_default_text = open_to_collaborate_text
-            notice.attribution_incomplete_img_url = attribution_incomplete_url
+            notice.attribution_incomplete_img_url = baseURL + 'ci-attribution-incomplete.png'
+            notice.attribution_incomplete_svg_url = baseURL + 'ci-attribution-incomplete.svg'
             notice.attribution_incomplete_default_text = attribution_incomplete_text
 
     notice.save()  
