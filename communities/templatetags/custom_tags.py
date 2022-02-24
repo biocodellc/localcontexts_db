@@ -1,40 +1,68 @@
 from django import template
 from django.urls import reverse
 from django.templatetags.static import static
-from communities.models import Community
-from institutions.models import Institution
 from notifications.models import ActionNotification
-from projects.models import Project, ProjectContributors
+from projects.models import Project
 from helpers.models import EntitiesNotified, Connections
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 
 register = template.Library()
 
+# COUNTERS
+
+# How many total Labels have been applied to projects
 @register.simple_tag
 def get_label_count(community):
-    # find all labels of this community that have been applied to projects
     count = 0
     projects = Project.objects.prefetch_related('tk_labels', 'bc_labels').all()
 
+    # find all labels of this community that have been applied to projects
     for project in projects:
-        bclabels = project.bc_labels.select_related('community').all()
-        tklabels = project.tk_labels.select_related('community').all()
-        for bclabel in bclabels:
-            if bclabel.community == community:
-                count += 1
-        for tklabel in tklabels:
-            if tklabel.community == community:
-                count += 1
+        if project.bc_labels.exists() or project.tk_labels.exists():
+            count = count + project.bc_labels.filter(community=community).count()
+            count = count + project.tk_labels.filter(community=community).count()
     return count
 
+# How many Projects has this community been notified of
 @register.simple_tag
 def community_notified_count(community):
-    count = 0
-    for en in EntitiesNotified.objects.prefetch_related('communities').all():
-        if community in en.communities.all():
-            count += 1
-    return count
+    return EntitiesNotified.objects.prefetch_related('communities').filter(communities=community).count()
+
+# How many connections gave been created (how many unique institutions or researchers have had a Label applied to a project)
+@register.simple_tag
+def connections_count(community):
+    connections = Connections.objects.prefetch_related('researchers', 'institutions').get(community=community)
+    return connections.researchers.count() + connections.institutions.count()
+
+# Community Connections page
+@register.simple_tag
+def connections_organization_projects(community, organization):
+    # can pass instance of institution or researcher 
+
+    # get all labels from target community
+    bclabels = BCLabel.objects.prefetch_related('project_bclabels').filter(community=community)
+    tklabels = TKLabel.objects.prefetch_related('project_tklabels').filter(community=community)
+
+    # set up a storage of projects to check for these labels
+    all_projects = []
+    # if project has particular label from these lists, append project
+    for bclabel in bclabels:
+        for project in bclabel.project_bclabels.all():
+            all_projects.append(project)
+    for tklabel in tklabels:
+        for project in tklabel.project_tklabels.all():
+            all_projects.append(project)
+    
+    # if project is found in target institution projects, append to target list
+    target_projects = []
+    for project in all_projects:
+        if project in organization.projects.all():
+            target_projects.append(project)
+
+    # Removes duplicates from the list
+    projects = set(target_projects)
+    return projects
 
 @register.simple_tag
 def anchor(url_name, section_id, community_id):
@@ -47,10 +75,6 @@ def community_notifications(community):
 @register.simple_tag
 def unread_notifications(community):
     return ActionNotification.objects.filter(community=community, viewed=False).exists()
-
-@register.simple_tag
-def community_contributing_projects(community):
-    return ProjectContributors.objects.filter(communities=community)
 
 @register.simple_tag
 def get_bclabel_img_url(img_type, *args, **kwargs):
@@ -125,36 +149,3 @@ def get_tklabel_img_url(img_type, *args, **kwargs):
     elif img_type =='tkcr':
         image_path = 'images/tk-labels/tk-creative.png'
     return static(image_path)
-
-@register.simple_tag
-def connections_count(community):
-    connections = Connections.objects.get(community=community)
-    return connections.researchers.count() + connections.institutions.count()
-
-@register.simple_tag
-def connections_organization_projects(community, organization):
-    # can pass instance of institution or researcher 
-
-    # get all labels from target community
-    bclabels = BCLabel.objects.filter(community=community)
-    tklabels = TKLabel.objects.filter(community=community)
-
-    # set up a storage of projects to check for these labels
-    all_projects = []
-    # if project has particular label from these lists, append project
-    for bclabel in bclabels:
-        for project in bclabel.project_bclabels.all():
-            all_projects.append(project)
-    for tklabel in tklabels:
-        for project in tklabel.project_tklabels.all():
-            all_projects.append(project)
-    
-    # if project is found in target institution projects, append to target list
-    target_projects = []
-    for project in all_projects:
-        if project in organization.projects.all():
-            target_projects.append(project)
-
-    # Removes duplicates from the list
-    projects = set(target_projects)
-    return projects

@@ -66,7 +66,7 @@ on the site letting users know site is under construction. Superuser will still 
 Every push to `master` will automatically trigger a new version build. Migrations should be done before pushing to `master`!!
 In order to make migrations or migrate the production database:
 1. `source env-localprod.sh`
-2. `cloud_sql_proxy --instances=anth-ja77-local-contexts-8985:us-west2:biocodedb=tcp:5431`
+2. CLOUD PROXY CONNECTION STRING
 3. `python manage.py makemigrations`
 4. `python manage.py migrate`
 5. Merge `develop` into `master`

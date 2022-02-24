@@ -6,13 +6,30 @@
         <div class="w-60 flex-this column">
             <!-- title -->
             <div><h2 class="no-bottom-margin no-top-margin">{{ project.title }}</h2></div>
-            <div><p>{{ project.date_added|date:'M d, Y' }} | 
-                {{ project.project_type }} | 
-                {{ project.project_privacy }}<br>
-                Created: {{ project.project_creator.get_full_name }} 
-                {% if project.community_projects.all %} {% for community in project.community_projects.all %} at {{ community }} | Community {% endfor %} {% endif %}
-                {% if project.institution_projects.all %} {% for institution in project.institution_projects.all %} at {{ institution }} | Institution {% endfor %} {% endif %}
-                {% if project.researcher_projects.all %} {% for researcher in project.researcher_projects.all %} | Researcher {% endfor %} {% endif %}
+            <div>
+                <p>
+                    {{ project.date_added|date:'M d, Y' }} | 
+                    {{ project.project_type }} | 
+                    {{ project.project_privacy }}<br>
+                    Created: {{ project.project_creator.get_full_name }} 
+
+                    {% if project.community_projects %} 
+                        {% with qs=project.community_projects.all %}
+                            {% for community in qs %} at {{ community }} | Community {% endfor %} 
+                        {% endwith %}
+                    {% endif %}
+
+                    {% if project.institution_projects %} 
+                        {% with qs=project.institution_projects.all %}
+                            {% for institution in qs %} at {{ institution }} | Institution {% endfor %} 
+                        {% endwith %}
+                    {% endif %}
+
+                    {% if project.researcher_projects %} 
+                        {% with qs=project.researcher_projects.all %}
+                            {% for researcher in qs %} | Researcher {% endfor %} 
+                        {% endwith %}
+                    {% endif %}
                 </p>
             </div>
             
@@ -49,7 +66,7 @@
                     <a href="{% url 'view-project' project.unique_id %}" class="primary-btn white-btn">View <i class="fa fa-long-arrow-right"></i></a>
                 </div>
 
-                {% if project.bc_labels.all or project.tk_labels.all %}{% else %}
+                {% if not project.has_labels %}
                     {% if request.user == project.project_creator %}
                         <div class="margin-right-1">
                             <a
@@ -80,52 +97,70 @@
             </div>
 
             <div class="flex-this row margin-top-8 w-50 flex-end">
-                {% if project.tk_labels.all or project.bc_labels.all %}
 
-                <input id="label-{{ project.unique_id }}" class="projectLabelsFilter" type="hidden" value="label_true">
-                
-                {% if project.tk_labels.all %}
-                        {% for tklabel in project.tk_labels.all %}
-                            {% include 'tklabels/mini-labels.html' %}
-                        {% endfor %}
-                    {% endif %}
+                {% with tklabels=project.tk_labels.all bclabels=project.bc_labels.all %}
+                    {% if tklabels or bclabels %}
+                        <input id="label-{{ project.unique_id }}" class="projectLabelsFilter" type="hidden" value="label_true">
+                    
+                        {% if tklabels %}
+                            {% for tklabel in tklabels %}
+                                {% include 'tklabels/mini-labels.html' %}
+                            {% endfor %}
+                        {% endif %}
 
-                    {% if project.bc_labels.all %}
-                        {% for bclabel in project.bc_labels.all %}
-                            {% include 'bclabels/mini-labels.html' %}
-                        {% endfor %}
+                        {% if bclabels %}
+                            {% for bclabel in bclabels %}
+                                {% include 'bclabels/mini-labels.html' %}
+                            {% endfor %}
+                        {% endif %}
                     {% endif %}
-                {% else %}
-                    <input id="notice-{{ project.unique_id }}" class="projectNoticesFilter" type="hidden" value="notice_true">
-                    <div class="flex-this flex-end w-60">
-                        {% if project.project_notice.all %}
-                            {% for notice in project.project_notice.all %}
-                                {% if notice.notice_type == 'biocultural' %}
-                                    <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                {% elif notice.notice_type == 'traditional_knowledge' %}
-                                    <div class="margin-right-8"><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                                {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                                    <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                    <div class="margin-right-8"><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                {% endwith %}
+
+
+                {% with notices=project.project_notice.all inst_notices=project.project_institutional_notice.all %}
+
+                    {% if notices or inst_notices %}
+                        <input id="notice-{{ project.unique_id }}" class="projectNoticesFilter" type="hidden" value="notice_true">
+
+                        {% if notices %}
+                            {% for notice in notices %}
+                                {% if not notice.archived %}
+                                    <div class="flex-this flex-end">
+                                        {% if notice.notice_type == 'biocultural' %}
+                                            <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                        {% elif notice.notice_type == 'traditional_knowledge' %}
+                                            <div class="margin-right-8"><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                        {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                                            <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                            <div class="margin-right-8"><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                        {% endif %}
+                                    </div>
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
 
-                        {% if project.project_institutional_notice.all %}
-                            {% for notice in project.project_institutional_notice.all %}
-                                {% if notice.notice_type == 'attribution_incomplete' %}
-                                    <div><img src="{% static 'images/notices/ci-notice-attribution-incomplete.png' %}" height="72px" width="72px"></div>
-                                {% elif notice.notice_type == 'open_to_collaborate' %}
-                                    <div><img src="{% static 'images/notices/ci-notice-open-to-collaborate.png' %}" height="72px" width="72px"></div>
-                                {% elif notice.notice_type == 'open_to_collaborate_and_attribution_incomplete' %}
-                                    <div class="margin-right-8"><img src="{% static 'images/notices/ci-notice-attribution-incomplete.png' %}" height="72px" width="72px"></div>
-                                    <div><img src="{% static 'images/notices/ci-notice-open-to-collaborate.png' %}" height="72px" width="72px"></div>
+                        {% if inst_notices %}
+                            {% for notice in inst_notices %}
+                                {% if not notice.archived %}
+                                    <div class="flex-this flex-end">
+                                        {% if notice.notice_type == 'attribution_incomplete' %}
+                                            <div><img src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
+                                        {% elif notice.notice_type == 'open_to_collaborate' %}
+                                            <div><img src="{% static 'images/notices/ci-open-to-collaborate.png' %}" height="72px" width="72px"></div>
+                                        {% elif notice.notice_type == 'open_to_collaborate_and_attribution_incomplete' %}
+                                            <div class="margin-right-8"><img src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
+                                            <div><img src="{% static 'images/notices/ci-open-to-collaborate.png' %}" height="72px" width="72px"></div>
+                                        {% endif %}
+                                    </div>
                                 {% endif %}
                             {% endfor %}
-                        {% endif %}
-                        
-                    </div>
-                {% endif %}
+                        {% endif %} 
+
+                    {% endif %}
+
+                {% endwith %}
+
+
 
             </div>
         </div>

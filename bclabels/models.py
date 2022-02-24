@@ -23,10 +23,12 @@ class BCLabel(models.Model):
     name = models.CharField(verbose_name='label name', max_length=90, null=True)
     default_text = models.TextField(null=True, blank=True)
     img_url = models.URLField(blank=True, null=True)
+    svg_url = models.URLField(blank=True, null=True)
     is_approved = models.BooleanField(default=False, null=True)
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="bclabel_approver")
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
+    audiofile = models.FileField(upload_to='communities/bclabels/audio', blank=True)
 
     def __str__(self):
         return str(self.community) + ' ' + str(self.label_type) + ' ' + str(self.name)

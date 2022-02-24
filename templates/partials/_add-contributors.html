@@ -36,10 +36,10 @@
 {% if contributors %}
 
     {% for researcher in contributors.researchers.all %}
-        <div id="selected-researcher-{{ researcher.id }}" style="height: auto; overflow: hidden;">
-            <div class="selected-community flex-this row space-between">
+        <div id="selected-researcher-{{ researcher.id }}" class="hide">
+            <div class="grey-chip flex-this row space-between">
                 <div><p class="center-name">{{ researcher.user.get_full_name }}</p></div>
-                <div><p id="close-res-{{ researcher.id }}" class="close-x darkteal-text pointer" onclick="cancelResearcherSelection(this)">&times;</p></div>
+                <div id="close-res-{{ researcher.id }}" class="close-x pointer" onclick="cancelResearcherSelection(this)"><div>&times;</div></div>
             </div>
         </div>
         <div id="res-id-input-{{ researcher.id }}" style="display: none;">
@@ -48,10 +48,10 @@
     {% endfor %}
 
     {% for institution in contributors.institutions.all %}
-        <div id="selected-institution-{{ institution.id }}" style="height: auto; overflow: hidden;">
-            <div class="selected-community flex-this row space-between">
+        <div id="selected-institution-{{ institution.id }}" class="hide">
+            <div class="grey-chip flex-this row space-between">
                 <div><p class="center-name">{{ institution.institution_name }}</p></div>
-                <div><p id="close-inst-{{ institution.id }}" class="close-x darkteal-text pointer" onclick="cancelInstitutionSelection(this)">&times;</p></div>
+                <div id="close-inst-{{ institution.id }}" class="close-x pointer" onclick="cancelInstitutionSelection(this)"><div>&times;</div></div>
             </div>
         </div>
         <div id="inst-id-input-{{ institution.id }}" style="display: none;">
@@ -61,22 +61,24 @@
 {% endif %}
 
 <!-- If create project -->
-{% for researcher in all_researchers %}
-    <div id="selected-researcher-{{ researcher.id }}" style="height: 0px; overflow: hidden;">
-        <div class="selected-community flex-this row space-between">
-            <div><p class="center-name">{{ researcher.user.get_full_name }}</p></div>
-            <div><p id="close-res-{{ researcher.id }}" class="close-x darkteal-text pointer" onclick="cancelResearcherSelection(this)">&times;</p></div>
+<div class="flex-this">
+    {% for researcher in all_researchers %}
+        <div id="selected-researcher-{{ researcher.id }}" class="hide">
+            <div class="grey-chip flex-this row space-between">
+                <div><p class="center-name">{{ researcher.user.get_full_name }}</p></div>
+                <div id="close-res-{{ researcher.id }}" class="close-x pointer" onclick="cancelResearcherSelection(this)"><div>&times;</div></div>
+            </div>
         </div>
-    </div>
-    <div id="res-id-input-{{ researcher.id }}" style="display: none;"></div>
-{% endfor %}
+        <div id="res-id-input-{{ researcher.id }}" style="display: none;"></div>
+    {% endfor %}
 
-{% for institution in all_institutions %}
-    <div id="selected-institution-{{ institution.id }}" style="height: 0px; overflow: hidden;">
-        <div class="selected-community flex-this row space-between">
-            <div><p class="center-name">{{ institution.institution_name }}</p></div>
-            <div><p id="close-inst-{{ institution.id }}" class="close-x darkteal-text pointer" onclick="cancelInstitutionSelection(this)">&times;</p></div>
+    {% for institution in all_institutions %}
+        <div id="selected-institution-{{ institution.id }}" class="hide">
+            <div class="grey-chip flex-this row space-between">
+                <div><p class="center-name">{{ institution.institution_name }}</p></div>
+                <div id="close-inst-{{ institution.id }}" class="close-x pointer" onclick="cancelInstitutionSelection(this)"><div>&times;</div></div>
+            </div>
         </div>
-    </div>
-    <div id="inst-id-input-{{ institution.id }}" style="display: none;"></div>
-{% endfor %}
+        <div id="inst-id-input-{{ institution.id }}" style="display: none;"></div>
+    {% endfor %}
+</div>

@@ -356,34 +356,43 @@
     </div>
     </div>
 
-    <div class="content-card-v2 content-card-space white-bg">
+<div class="content-card-v2 content-card-space white-bg">
 
     <div class="flex-this column border-bottom-solid-teal">
 
-        <form method="POST" action="">
-                {% csrf_token %}
-                <div><h3 class="no-bottom-margin">Step 2. Customize Label</h3></div>
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+                <h3 class="no-bottom-margin">Step 2. Customize Label</h3>
+                <p class="w-80">You can edit the Label template text, and add a local name that reflects your community alongside the Label name.</p>
+            </div>
+            <div>
+                <input id="input-label-name" type="hidden" value="" name="input-label-name">
+
+                <div class="w-80">
+                    <label for="default_text">Label text</label>
+                    {{ form.default_text }}
+                </div>
                 <div>
-                    <p class="w-80">
-                        You can edit the Label template text, and add a local name that reflects your community alongside the Label name.                    </p>
-                    <div class="w-30 margin-bottom-16">
-                        <input id="input-label-name" type="hidden" value="" name="input-label-name">
-                    </div>
-                    <div class="w-80">
-                        <label for="default_text">Label text</label>
-                        {{ form.default_text }}
-                    </div>
+                    <label>Upload audio file</label><br>
+                    {{ form.audiofile }}
                 </div>
 
-                <!-- Add translation -->
-                {% include 'partials/_add-translation.html' %}
+                {% if form.errors %}
+                    <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
+                {% endif %}
+            </div>
 
-                <div class="text-align-right margin-bottom-16">
-                    <button class="primary-btn action-btn margin-top-2 ">Save as draft</button> 
-                    <!-- <button class="white-bg darkteal-text">Cancel</button> -->
-                </div>
-            </form>
-        </div>
+            <!-- Add translation -->
+            {% include 'partials/_add-translation.html' %}
+
+            <div class="text-align-right margin-bottom-16">
+                <button class="primary-btn action-btn margin-top-2 ">Save as draft</button> 
+                <!-- <button class="white-bg darkteal-text">Cancel</button> -->
+            </div>
+        </form>
+        
+    </div>
 </div>
 
 {% endblock %}

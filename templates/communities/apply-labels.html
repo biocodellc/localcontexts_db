@@ -16,9 +16,9 @@
                 {{ project.project_type }} | 
                 {{ project.project_privacy }}<br>
                 Created: {{ project.project_creator.get_full_name }} 
-                {% if project.community_projects.all %} {% for community in project.community_projects.all %} at {{ community }} | Community {% endfor %} {% endif %}
-                {% if project.institution_projects.all %} {% for institution in project.institution_projects.all %} at {{ institution }} | Institution {% endfor %} {% endif %}
-                {% if project.researcher_projects.all %} {% for researcher in project.researcher_projects.all %} | Researcher {% endfor %} {% endif %}
+                {% if project.community_projects %} {% for community in project.community_projects.all %} at {{ community }} | Community {% endfor %} {% endif %}
+                {% if project.institution_projects %} {% for institution in project.institution_projects.all %} at {{ institution }} | Institution {% endfor %} {% endif %}
+                {% if project.researcher_projects %} {% for researcher in project.researcher_projects.all %} | Researcher {% endfor %} {% endif %}
                 </p>
             </div>
             

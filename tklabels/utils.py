@@ -13,14 +13,24 @@ def check_tklabel_type(label):
                     elif label == 'placeholder':
                         return False
 
-def assign_tklabel_img(label_type):
-    baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/tklabels/'
+storageBaseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/tklabels/'
 
+def assign_tklabel_img(label_type):
     for key, values in data.items():
         if key == 'tkLabels':
             if(isinstance(values, list)):
                 for value in values:
                     if label_type == value['labelCode']:
-                        return baseURL + value['imgFileName']
+                        return storageBaseURL + value['imgFileName']
+                    elif label_type == 'placeholder':
+                        return None
+
+def assign_tklabel_svg(label_type):
+    for key, values in data.items():
+        if key == 'tkLabels':
+            if(isinstance(values, list)):
+                for value in values:
+                    if label_type == value['labelCode']:
+                        return storageBaseURL + value['svgFileName']
                     elif label_type == 'placeholder':
                         return None

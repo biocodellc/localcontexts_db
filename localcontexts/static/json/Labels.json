@@ -9,7 +9,8 @@
             "labelDefaultText": "This Label is being used to affirm an inherent interest Indigenous people have in the scientific collections and data about communities, peoples, and the biodiversity found within traditional lands, waters and territories. [Community name or authorizing party] retains the right to be named and associated with it into the future. This association reflects a significant relationship and responsibility to [the species or biological entity] and associated scientific collections and data. [Optional attribution statement]",
             "labelCategory": "provenance",
             "audioFileName": "BC-Provenance-Label-1.mp3",
-            "imgFileName": "bc-provenance.png"
+            "imgFileName": "bc-provenance.png",
+            "svgFileName": "bc-provenance.svg"
         },
         {
             "id": 2,
@@ -20,7 +21,8 @@
             "labelDefaultText": "This Label is being used to affirm that responsibility and ownership over this information, collection, data, and digital sequence information (DSI) is spread across several distinct communities. Use will be dependent upon discussion and negotiation with these multiple communities.",
             "labelCategory": "provenance",
             "audioFileName": "BC-Multiple-Communities-Label.mp3",
-            "imgFileName": "bc-multiple-community.png"
+            "imgFileName": "bc-multiple-community.png",
+            "svgFileName": "bc-multiple-community.svg"
         },
         {
             "id": 3,
@@ -31,7 +33,8 @@
             "labelDefaultText": "This Label is being used to make clear [community name or authorizing body] is open to future engagement, collaboration, and partnership around research and outreach opportunities.",
             "labelCategory": "permission",
             "audioFileName": "BC-Open-to-Collaboration-Label.mp3",
-            "imgFileName": "bc-open-to-collaboration.png"
+            "imgFileName": "bc-open-to-collaboration.png",
+            "svgFileName": "bc-open-to-collaboration.svg"
         },
         {
             "id": 4,
@@ -42,7 +45,8 @@
             "labelDefaultText": "This Label is being used to indicate that [community name or authorizing party] is open to commercialization opportunities that might derive from any information, collections, data, and digital sequence information (DSI) to which this Label is connected. As a primary party in any partnership and collaboration opportunity that emerges from the use of these resources, we retain an express interest in any future negotiations.",
             "labelCategory": "permission",
             "audioFileName": "BC-Open-to-Commercialization-Label.mp3",
-            "imgFileName": "bc-open-to-commercialization.png"
+            "imgFileName": "bc-open-to-commercialization.png",
+            "svgFileName": "bc-open-to-commercialization.svg"
         },
         {
             "id": 5,
@@ -53,7 +57,8 @@
             "labelDefaultText": "This Label is being used by [community name or authorizing body] to allow this information, collection, data, and digital sequence information (DSI) to be used for unspecified research purposes. This Label does not provide permission for commercialization activities. [Optional return of research results statement]",
             "labelCategory": "permission",
             "audioFileName": "BC-Research-Use-Label.mp3",
-            "imgFileName": "bc-research-use.png"
+            "imgFileName": "bc-research-use.png",
+            "svgFileName": "bc-research-use.svg"
         },
         {
             "id": 6,
@@ -64,7 +69,8 @@
             "labelDefaultText": "This Label is being used to verify that [community name or authorizing party] have consent conditions in place for the use of this information, collections, data, and digital sequence information. [These can be found at ….].",
             "labelCategory": "protocol",
             "audioFileName": "BC-Consent-Verified-Label-1.mp3",
-            "imgFileName": "bc-consent-verified.png"
+            "imgFileName": "bc-consent-verified.png",
+            "svgFileName": "bc-consent-verified.svg"
         },
         {
             "id": 7,
@@ -75,7 +81,8 @@
             "labelDefaultText": "This Label is being used because there are concerns about the accuracy of the consent and/or representations made for this data. This material was not created through informed consent or community protocols for research and engagement.",
             "labelCategory": "protocol",
             "audioFileName": "BC-Consent-Non-Verified.mp3",
-            "imgFileName": "bc-consent-non-verified.png"
+            "imgFileName": "bc-consent-non-verified.png",
+            "svgFileName": "bc-consent-non-verified.svg"
         },
         {
             "id": 8,
@@ -86,7 +93,8 @@
             "labelDefaultText": "This Label is being used to indicate that this material is traditionally and usually not publicly available. The Label lets future users know that this data has specific conditions for use and sharing because of clan membership and/or relationships. This Label asks viewers of this data to respect the cultural values and expectations about circulation and use defined by designated clans, members, and their internal relations.",
             "labelCategory": "provenance",
             "audioFileName": "BC-Clan.mp3",
-            "imgFileName": "bc-clan.png"
+            "imgFileName": "bc-clan.png",
+            "svgFileName": "bc-clan.svg"
         },
         {
             "id": 9,
@@ -97,7 +105,8 @@
             "labelDefaultText": "The Label is letting any users know that this data can be used for educational outreach activities. This Label asks you to respect the designated circulation conditions for these biocultural materials and/or data and additionally, where possible, to develop a means for fair and equitable reciprocal exchange for the use of this data with the relevant BC holders.",
             "labelCategory": "permission",
             "audioFileName": "BC-Outreach.mp3",
-            "imgFileName": "bc-outreach.png"
+            "imgFileName": "bc-outreach.png",
+            "svgFileName": "bc-outreach.svg"
         },
         {
             "id": 10,
@@ -108,7 +117,8 @@
             "labelDefaultText": "This Label is being used to indicate that these biocultural materials and/or data have been designated as being available for non-commercial use. You are allowed to use this material for non-commercial purposes including for research, study, or public presentation and/or online in blogs or non-commercial websites. This Label asks you to think and act with respect and responsibility towards this data and the original custodians.",
             "labelCategory": "permission",
             "audioFileName": "BC-Non-Commercial.mp3",
-            "imgFileName": "bc-non-commercial.png"
+            "imgFileName": "bc-non-commercial.png",
+            "svgFileName": "bc-non-commercial.svg"
         }
 
     ],
@@ -122,7 +132,8 @@
             "labelDefaultText": "This Label is being used to correct historical mistakes or exclusions pertaining to this material. This is especially in relation to the names of the people involved in performing or making this work and/or correctly naming the community from which it originally derives. As a user you are being asked to also apply the correct attribution in any future use of this work.",
             "labelCategory": "provenance",
             "audioFileName": "TK-Attribution-Label.mp3",
-            "imgFileName": "tk-attribution.png"
+            "imgFileName": "tk-attribution.png",
+            "svgFileName": "tk-attribution.svg"
         },
         {
             "id": 2,
@@ -133,7 +144,8 @@
             "labelDefaultText": "This Label is being used to indicate that this material is traditionally and usually not publicly available. The Label lets future users know that this material has specific conditions for use and sharing because of clan membership and/or relationships. This material is not, and never was, free, public, or available for everyone. This Label asks viewers of these materials to respect the cultural values and expectations about circulation and use defined by designated clans, members, and their internal relations.",
             "labelCategory": "provenance",
             "audioFileName": "TK-Clan-Label.mp3",
-            "imgFileName": "tk-clan.png"
+            "imgFileName": "tk-clan.png",
+            "svgFileName": "tk-clan.svg"
         },
         {
             "id": 3,
@@ -144,7 +156,8 @@
             "labelDefaultText": "This Label is being used to indicate that this material is traditionally and usually not publicly available. The Label is correcting a misunderstanding about the circulation options for this material and letting any users know that this material has specific conditions for sharing between family members. Who these family members are, and how sharing occurs will be defined in each locale. This material is not, and never was, free, public, or available for everyone at anytime. This Label asks you to think about how you are going to use this material and to respect different cultural values and expectations about circulation and use.",
             "labelCategory": "provenance",
             "audioFileName": "TK-Family-Label.mp3",
-            "imgFileName": "tk-family.png"
+            "imgFileName": "tk-family.png",
+            "svgFileName": "tk-family.svg"
         },
         {
             "id": 4,
@@ -155,7 +168,8 @@
             "labelDefaultText": "Responsibility and ownership over this material is spread across several distinct communities. Use will be dependent upon discussion and negotiation with the multiple communities named herein [insert names]. Decisions about use will need to be decided collectively. As an external user of this material you are asked to recognize and respect cultural protocols in relation to the use of this material and clear your intended use with the relevant communities.",
             "labelCategory": "provenance",
             "audioFileName": "TK-Multiple-Communities-Label.mp3",
-            "imgFileName": "tk-multiple-communities.png"
+            "imgFileName": "tk-multiple-communities.png",
+            "svgFileName": "tk-multiple-communities.svg"
         },
         {
             "id": 5,
@@ -166,7 +180,8 @@
             "labelDefaultText": "This Label is being used to encourage the sharing of stories and voices about this material. The Label indicates that existing knowledge or descriptions are incomplete or partial. Any community member is invited and welcome to contribute to our community knowledge about this event, photograph, recording or heritage item. Sharing our voices helps us reclaim our histories and knowledge. This sharing is an internal process.",
             "labelCategory": "provenance",
             "audioFileName": "TK-Community-Voice-Label.mp3",
-            "imgFileName": "tk-community-voice.png"
+            "imgFileName": "tk-community-voice.png",
+            "svgFileName": "tk-community-voice.svg"
         },
         {
             "id": 6,
@@ -177,7 +192,8 @@
             "labelDefaultText": "This Label is being used to acknowledge the relationship between the creative practices of [name] and [community name] and the associated cultural responsibilities.",
             "labelCategory": "provenance",
             "audioFileName": "TK-Creative.mp3",
-            "imgFileName": "tk-creative.png"
+            "imgFileName": "tk-creative.png",
+            "svgFileName": "tk-creative.svg"
         },
         {
             "id": 7,
@@ -188,7 +204,8 @@
             "labelDefaultText": "This Label affirms that the representation and presentation of this material is in keeping with community expectations and cultural protocols. It lets you know that for the individual, family or community represented in this material, use is considered fair, reasonable and respectful.",
             "labelCategory": "protocol",
             "audioFileName": "TK-Verified-Label.mp3",
-            "imgFileName": "tk-verified.png"
+            "imgFileName": "tk-verified.png",
+            "svgFileName": "tk-verified.svg"
         },
         {
             "id": 8,
@@ -199,7 +216,8 @@
             "labelDefaultText": "This Label is being used because there are concerns about accuracy and/or representations made in this material. This material was not created through informed consent or community protocols for research and engagement. Therefore, questions about its accuracy and who/how it represents this community are being raised.",
             "labelCategory": "protocol",
             "audioFileName": "TK-Non-Verified-Label.mp3",
-            "imgFileName": "tk-non-verified.png"
+            "imgFileName": "tk-non-verified.png",
+            "svgFileName": "tk-non-verified.svg"
         },
         {
             "id": 9,
@@ -210,7 +228,8 @@
             "labelDefaultText": "This Label is being used to indicate that this material traditionally and usually is heard and/or utilized at a particular time of year and in response to specific seasonal changes and conditions. For instance, many important ceremonies are held at very specific times of the year. This Label is being used to indicate sophisticated relationships between land and knowledge creation. It is also being used to highlight the relationships between recorded material and the specific contexts where it derives, especially the interconnected and embodied teachings that it conveys.",
             "labelCategory": "protocol",
             "audioFileName": "TK-Seasonal-Label.mp3",
-            "imgFileName": "tk-seasonal.png"
+            "imgFileName": "tk-seasonal.png",
+            "svgFileName": "tk-seasonal.svg"
         },
         {
             "id": 10,
@@ -221,7 +240,8 @@
             "labelDefaultText": "This material has specific gender restrictions on access. It is usually only to be accessed and used by women in the community. If you are not from the community and you have accessed this material, you are requested not to download, copy, remix or otherwise circulate this material to others without permission. This Label asks you to think about whether you should be using this material and to respect different cultural values and expectations about circulation and use.",
             "labelCategory": "protocol",
             "audioFileName": "TK-Women-General-Label.mp3",
-            "imgFileName": "tk-women-general.png"
+            "imgFileName": "tk-women-general.png",
+            "svgFileName": "tk-women-general.svg"
         },
         {
             "id": 11,
@@ -232,7 +252,8 @@
             "labelDefaultText": "This material has specific gender restrictions on access. It is usually only to be accessed and used by men in the community. If you are not from the community and you have accessed this material, you are requested to not download, copy, remix or otherwise circulate this material to others without permission. This Label asks you to think about whether you should be using this material and to respect different cultural values and expectations about circulation and use.",
             "labelCategory": "protocol",
             "audioFileName": "TK-Men-General-Label.mp3",
-            "imgFileName": "tk-men-general.png"
+            "imgFileName": "tk-men-general.png",
+            "svgFileName": "tk-men-general.svg"
         },
         {
             "id": 12,
@@ -243,7 +264,8 @@
             "labelDefaultText": "This material has specific gender restrictions on access. It is regarded as important secret and/or ceremonial material that has community-based laws in relation to who can access it. Given its nature it is only to be accessed and used by authorized [and/or initiated] men in the community. If you are an external third party user and you have accessed this material, you are requested to not download, copy, remix or otherwise circulate this material to others. This material is not freely available within the community and it therefore should not be considered freely available outside of the community. This Label asks you to think about whether you should be using this material and to respect different cultural values and expectations about circulation and use.",
             "labelCategory": "protocol",
             "audioFileName": "TK-Men-Restricted-Label.mp3",
-            "imgFileName": "tk-men-restricted.png"
+            "imgFileName": "tk-men-restricted.png",
+            "svgFileName": "tk-men-restricted.svg"
         },
         {
             "id": 13,
@@ -254,7 +276,8 @@
             "labelDefaultText": "This material has specific gender restrictions on access. It is regarded as important secret and/or ceremonial material that has community-based laws in relation to who can access it. Given its nature it is only to be accessed and used by authorized [and/or initiated] women in the community. If you are an external third party user and you have accessed this material, you are requested to not download, copy, remix or otherwise circulate this material to others. This material is not freely available within the community and it therefore should not be considered freely available outside of the community. This Label asks you to think about whether you should be using this material and to respect different cultural values and expectations about circulation and use.",
             "labelCategory": "protocol",
             "audioFileName": "TK-Women-Restricted-Label.mp3",
-            "imgFileName": "tk-women-restricted.png"
+            "imgFileName": "tk-women-restricted.png",
+            "svgFileName": "tk-women-restricted.svg"
         },
         {
             "id": 14,
@@ -265,7 +288,8 @@
             "labelDefaultText": "This Label is being used to indicate that this material has cultural and/or historical sensitivities. The Label asks for care to be taken when this material is accessed, used, and circulated, especially when materials are first returned or reunited with communities of origin. In some instances, this Label will indicate that there are specific permissions for use of this material required directly from the community itself.",
             "labelCategory": "protocol",
             "audioFileName": "TK-Culturally-Sensitive-Label-1.mp3",
-            "imgFileName": "tk-culturally-sensitive.png"
+            "imgFileName": "tk-culturally-sensitive.png",
+            "svgFileName": "tk-culturally-sensitive.svg"
         },
         {
             "id": 15,
@@ -276,7 +300,8 @@
             "labelDefaultText": "This Label is being used to indicate that this material is traditionally and usually not publicly available because it contains important secret or sacred components. The Label is correcting a misunderstanding about the significance of this material and therefore its circulation conditions. It is letting users know that because of its secret/sacred status it is not, and was never free, public, or available for everyone at anytime. This Label asks you to think about whether you should be using this material and to respect different cultural values and expectations about circulation and use.",
             "labelCategory": "protocol",
             "audioFileName": "TK-SecretSacred-Label.mp3",
-            "imgFileName": "tk-secret-sacred.png"
+            "imgFileName": "tk-secret-sacred.png",
+            "svgFileName": "tk-secret-sacred.svg"
         },
         {
             "id": 16,
@@ -287,7 +312,8 @@
             "labelDefaultText": "This Label is being used to indicate that [community name or authorized party] is open to commercialization opportunities that might derive from any cultural material with traditional knowledge to which this Label is connected to. As a primary party for any partnership and collaboration opportunities that emerge from the use of this cultural material and traditional knowledge, we retain an expressed interest in any future negotiations.",
             "labelCategory": "permission",
             "audioFileName": "TK-Open-to-Commercialization-Label.mp3",
-            "imgFileName": "tk-commercial.png"
+            "imgFileName": "tk-commercial.png",
+            "svgFileName": "tk-commercial.svg"
         },
         {
             "id": 17,
@@ -298,7 +324,8 @@
             "labelDefaultText": "This material has been designated as being available for non-commercial use. You are allowed to use this material for non-commercial purposes including for research, study, or public presentation and/or online in blogs or non-commercial websites. This Label asks you to think and act with fairness and responsibility towards this material and the original custodians.",
             "labelCategory": "permission",
             "audioFileName": "TK-Non-Commercial-Label.mp3",
-            "imgFileName": "tk-non-commercial.png"
+            "imgFileName": "tk-non-commercial.png",
+            "svgFileName": "tk-non-commercial.svg"
         },
         {
             "id": 18,
@@ -309,7 +336,8 @@
             "labelDefaultText": "This Label is being used to indicate that this material is traditionally and usually not publicly available. The Label is correcting a misunderstanding about the circulation options for this material and letting any users know that this material has specific conditions for circulation within the community. It is not, and never was, free, public, or available for everyone at anytime. This Label asks you to think about how you are going to use this material and to respect different cultural values and expectations about circulation and use.",
             "labelCategory": "permission",
             "audioFileName": "TK-Community-Use-Only.mp3",
-            "imgFileName": "tk-community-use-only.png"
+            "imgFileName": "tk-community-use-only.png",
+            "svgFileName": "tk-community-use-only.svg"
         },
         {
             "id": 19,
@@ -320,7 +348,8 @@
             "labelDefaultText": "This Label is being used to indicate that this material is traditionally and usually not publicly available. The Label is correcting a misunderstanding about the circulation options for this material and letting any users know that this material can be used for educational outreach activities. This Label asks you to respect the designated circulation conditions for this material and additionally, where possible, to develop a means for fair and equitable reciprocal exchange for the use of this material with the relevant TK holders. This exchange might include access to educational or other resources that are difficult to access under normal circumstances.",
             "labelCategory": "permission",
             "audioFileName": "TK-Outreach-Label.mp3",
-            "imgFileName": "tk-outreach.png"
+            "imgFileName": "tk-outreach.png",
+            "svgFileName": "tk-outreach.svg"
         },
         {
             "id": 20,
@@ -331,7 +360,8 @@
             "labelDefaultText": "This Label is being used to make clear [community name or authorizing body] is open to future engagement, collaboration, and partnership around research opportunities.",
             "labelCategory": "permission",
             "audioFileName": "TK-Open-to-Collab.mp3",
-            "imgFileName": "tk-open-to-collaboration.png"
+            "imgFileName": "tk-open-to-collaboration.png",
+            "svgFileName": "tk-open-to-collaboration.png"
         }
     ]
 }

@@ -5,7 +5,7 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections
+from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections, ProjectComment
 from notifications.models import ActionNotification
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
@@ -16,8 +16,8 @@ from bclabels.forms import *
 from tklabels.forms import *
 from projects.forms import *
 
-from bclabels.utils import check_bclabel_type, assign_bclabel_img
-from tklabels.utils import check_tklabel_type, assign_tklabel_img
+from bclabels.utils import check_bclabel_type, assign_bclabel_img, assign_bclabel_svg
+from tklabels.utils import check_tklabel_type, assign_tklabel_img, assign_tklabel_svg
 from projects.utils import add_to_contributors
 from helpers.utils import *
 
@@ -27,8 +27,6 @@ from .forms import *
 from .models import *
 from .utils import *
 
-from itertools import chain
-
 # pdfs
 from django.http import HttpResponse
 from django.template.loader import get_template
@@ -37,7 +35,7 @@ from xhtml2pdf import pisa
 # Connect
 @login_required(login_url='login')
 def connect_community(request):
-    communities = Community.objects.filter(is_approved=True)
+    communities = Community.approved.all()
     form = JoinRequestForm(request.POST or None)
 
     if request.method == 'POST':
@@ -208,9 +206,9 @@ def remove_member(request, pk, member_id):
 # Select Labels to Customize
 @login_required(login_url='login')
 def select_label(request, pk):
-    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
-    bclabels = BCLabel.objects.filter(community=community)
-    tklabels = TKLabel.objects.filter(community=community)
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    bclabels = BCLabel.objects.select_related('created_by', 'approved_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community)
+    tklabels = TKLabel.objects.select_related('created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community)
 
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -247,8 +245,9 @@ def customize_label(request, pk, label_type):
         if label_type.startswith('tk'):
             tk_type = check_tklabel_type(label_type)
             img_url = assign_tklabel_img(label_type)
+            svg_url = assign_tklabel_svg(label_type)
 
-            form = CustomizeTKLabelForm(request.POST or None)
+            form = CustomizeTKLabelForm(request.POST or None, request.FILES)
 
             if request.method == "GET":
                 add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
@@ -263,6 +262,7 @@ def customize_label(request, pk, label_type):
                     label_form.label_type = tk_type
                     label_form.community = community
                     label_form.img_url = img_url
+                    label_form.svg_url = svg_url
                     label_form.created_by = request.user
                     label_form.is_approved = False
                     label_form.save()
@@ -283,8 +283,9 @@ def customize_label(request, pk, label_type):
         if label_type.startswith('bc'):
             bc_type = check_bclabel_type(label_type)
             img_url = assign_bclabel_img(label_type)
+            svg_url = assign_bclabel_svg(label_type)
 
-            form = CustomizeBCLabelForm(request.POST or None)
+            form = CustomizeBCLabelForm(request.POST or None, request.FILES)
 
             if request.method == "GET":
                 add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
@@ -299,6 +300,7 @@ def customize_label(request, pk, label_type):
                     label_form.label_type = bc_type
                     label_form.community = community
                     label_form.img_url = img_url
+                    label_form.svg_url = svg_url
                     label_form.created_by = request.user
                     label_form.is_approved = False
                     label_form.save()
@@ -400,22 +402,35 @@ def edit_label(request, pk, label_id):
     if member_role == False or member_role == 'viewer':
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+
         add_translation_formset = AddLabelTranslationFormSet(request.POST or None)
-
-        if BCLabel.objects.filter(unique_id=label_id).exists():
-            bclabel = BCLabel.objects.get(unique_id=label_id)
-            form = EditBCLabelForm(request.POST or None, instance=bclabel)
-            formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
-
-        if TKLabel.objects.filter(unique_id=label_id).exists():
-            tklabel = TKLabel.objects.get(unique_id=label_id)
-            form = EditTKLabelForm(request.POST or None, instance=tklabel)
-            formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
         
         if request.method == 'GET':
             add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+
+            if BCLabel.objects.filter(unique_id=label_id).exists():
+                bclabel = BCLabel.objects.get(unique_id=label_id)
+                form = EditBCLabelForm(instance=bclabel)
+                formset = UpdateBCLabelTranslationFormSet(instance=bclabel)
+
+            if TKLabel.objects.filter(unique_id=label_id).exists():
+                tklabel = TKLabel.objects.get(unique_id=label_id)
+                form = EditTKLabelForm(instance=tklabel)
+                formset = UpdateTKLabelTranslationFormSet(instance=tklabel)
+
         elif request.method == 'POST':
             add_translation_formset = AddLabelTranslationFormSet(request.POST)
+
+            if BCLabel.objects.filter(unique_id=label_id).exists():
+                bclabel = BCLabel.objects.get(unique_id=label_id)
+                form = EditBCLabelForm(request.POST, request.FILES, instance=bclabel)
+                formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
+
+            if TKLabel.objects.filter(unique_id=label_id).exists():
+                tklabel = TKLabel.objects.get(unique_id=label_id)
+                form = EditTKLabelForm(request.POST, request.FILES, instance=tklabel)
+                formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
+
 
             if form.is_valid() and formset.is_valid() and add_translation_formset.is_valid():
                 form.save()
@@ -432,7 +447,7 @@ def edit_label(request, pk, label_id):
                     instance.save()
 
                 return redirect('select-label', community.id)
-        
+
         context = {
             'community': community,
             'member_role': member_role,
@@ -453,7 +468,24 @@ def projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        # community projects + 
+        # projects community has been notified of + 
+        # projects where community is contributor
+        projects_list = []
+        community_projects = community.projects.prefetch_related('bc_labels', 'tk_labels').all()
+        for proj in community_projects:
+            projects_list.append(proj)
+
         community_notified = EntitiesNotified.objects.select_related('project').prefetch_related('institutions', 'researchers').filter(communities=community)
+        for n in community_notified:
+            projects_list.append(n.project)
+        
+        contribs = ProjectContributors.objects.select_related('project').filter(communities=community)
+        for c in contribs:
+            projects_list.append(c.project)
+
+        projects = list(set(projects_list))
+        
         form = ProjectCommentForm(request.POST or None)
 
         # Form: Notify project contributor if project was seen
@@ -533,9 +565,9 @@ def projects(request, pk):
                     return redirect('community-projects', community.id)
 
         context = {
-            'community_notified': community_notified,
-            'community': community,
             'member_role': member_role,
+            'projects': projects,
+            'community': community,
             'form': form,
         }
         return render(request, 'communities/projects.html', context)
@@ -648,8 +680,8 @@ def edit_project(request, community_id, project_uuid):
 def apply_labels(request, pk, project_uuid):
     community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
-    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+    bclabels = BCLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community, is_approved=True)
+    tklabels = TKLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community, is_approved=True)
 
     notices = project.project_notice.all()
     institution_notices = project.project_institutional_notice.all()
@@ -730,25 +762,20 @@ def apply_labels(request, pk, project_uuid):
     }
     return render(request, 'communities/apply-labels.html', context)
 
+@login_required(login_url='login')
 def connections(request, pk):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').get(id=pk)
 
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
-        connections = Connections.objects.prefetch_related('communities', 'institutions', 'researchers').get(community=community)
-        bclabels = BCLabel.objects.filter(community=community)
-        tklabels = TKLabel.objects.filter(community=community)
-
-        # combine two querysets
-        labels = list(chain(bclabels,tklabels))
+        connections = Connections.objects.get(community=community)
 
         context = {
             'member_role': member_role,
             'community': community,
             'connections': connections,
-            'labels': labels,
         }
         return render(request, 'communities/connections.html', context)
 
@@ -810,7 +837,9 @@ def download_labels(request, pk):
     # Add Label images, text and translations
     for bclabel in bclabels:
         get_image = requests.get(bclabel.img_url)
+        get_svg = requests.get(bclabel.svg_url)
         files.append((bclabel.name + '.png', get_image.content))
+        files.append((bclabel.name + '.svg', get_svg.content))
 
         # Default Label text
         text_content = bclabel.name + '\n' + bclabel.default_text
@@ -826,7 +855,9 @@ def download_labels(request, pk):
     # Add Label images, text and translations
     for tklabel in tklabels:
         get_image = requests.get(tklabel.img_url)
+        get_svg = requests.get(tklabel.svg_url)
         files.append((tklabel.name + '.png', get_image.content))
+        files.append((tklabel.name + '.svg', get_svg.content))
         
         # Default Label text
         text_content = tklabel.name + '\n' + tklabel.default_text

@@ -494,12 +494,12 @@ if (submitProjectBtn) {
             submitProjectBtn.innerText = oldValue;
             submitProjectBtn.classList.remove('disabled-btn')
             submitProjectBtn.removeAttribute('disabled');
-        }, 3000)
+        }, 4000)
 
     })
 }
 
-// Institutions: projects: notify communities - select desired communities
+// PROJECTS: NOTIFY communities - select desired communities
 function selectCommunities() {
     let select = document.getElementById('communities-select')
     let allOptionsArray = Array.from(select.options)
@@ -511,11 +511,23 @@ function selectCommunities() {
         let div = document.getElementById(`comm-id-input-${option.id}`)
 
         if (option.selected) {
-            // console.log(option)
-            selectedCommunityDiv.style.height = "auto";
+            selectedCommunityDiv.classList.replace('hide', 'show')
             div.innerHTML = `<input type="hidden" value="${option.id}" name="selected_communities">`
         }
     })
+}
+
+// Projects: notify communities - close selected
+function cancelCommunitySelection(elem) {
+    let id = elem.id
+    let matches = id.match(/(\d+)/)
+    let targetNum = matches[0]
+
+    let divToClose = document.getElementById(`selected-community-${targetNum}`)
+    let inputDivToRemove = document.getElementById(`comm-id-input-${targetNum}`)
+
+    divToClose.classList.replace('show', 'hide')
+    inputDivToRemove.innerHTML = ``
 }
 
 // INSTITUTION: create project : add contributors
@@ -534,7 +546,7 @@ function selectContributors() {
                 let selectedResearcherDiv = document.getElementById(`selected-researcher-${option.dataset.resid}`)
                 let div = document.getElementById(`res-id-input-${option.dataset.resid}`)
         
-                selectedResearcherDiv.style.height = "auto"
+                selectedResearcherDiv.classList.replace('hide', 'show')
                 div.innerHTML = `<input type="hidden" value="${option.dataset.resid}" name="selected_researchers">`
             } else {
                 contribInput.value = ''
@@ -542,43 +554,16 @@ function selectContributors() {
                 let selectedInstitutionDiv = document.getElementById(`selected-institution-${option.dataset.instid}`)
                 let div = document.getElementById(`inst-id-input-${option.dataset.instid}`)
 
-                selectedInstitutionDiv.style.height = "auto"
+                selectedInstitutionDiv.classList.replace('hide', 'show')
                 div.innerHTML = `<input type="hidden" value="${option.dataset.instid}" name="selected_institutions">`
             }
         }
     })
-
 }
 
 var addContributorBtn = document.getElementById('add-contributor-btn')
-if(addContributorBtn) {
-    addContributorBtn.addEventListener('click', selectContributors)
-}
+if(addContributorBtn) { addContributorBtn.addEventListener('click', selectContributors) }
 
-function cancelInstitutionSelection(elem) {
-    let id = elem.id
-    let matches = id.match(/(\d+)/)
-    let targetNum = matches[0]
-
-    let divToClose = document.getElementById(`selected-institution-${targetNum}`)
-    let inputDivToRemove = document.getElementById(`inst-id-input-${targetNum}`)
-
-    divToClose.style.height = '0'
-    inputDivToRemove.innerHTML = ``
-}
-
-function cancelResearcherSelection(elem) {
-    let id = elem.id
-    let matches = id.match(/(\d+)/)
-    let targetNum = matches[0]
-    console.log(targetNum)
-
-    let divToClose = document.getElementById(`selected-researcher-${targetNum}`)
-    let inputDivToRemove = document.getElementById(`res-id-input-${targetNum}`)
-
-    divToClose.style.height = '0'
-    inputDivToRemove.innerHTML = ``
-}
 
 // Add project people on institution create-project
 // h/t: https://medium.com/all-about-django/adding-forms-dynamically-to-a-django-formset-375f1090c2b0
@@ -642,19 +627,6 @@ function cloneForm(el) {
         el.parentElement.parentElement.append(clone)
     }
 
-}
-
-// Institutions: projects: notify communities - close selected communities
-function cancelCommunitySelection(elem) {
-    let id = elem.id
-    let matches = id.match(/(\d+)/)
-    let targetNum = matches[0]
-
-    let divToClose = document.getElementById(`selected-community-${targetNum}`)
-    let inputDivToRemove = document.getElementById(`comm-id-input-${targetNum}`)
-
-    divToClose.style.height = '0'
-    inputDivToRemove.innerHTML = ``
 }
 
 // Communities: Projects: Notify status
