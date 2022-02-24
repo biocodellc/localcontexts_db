@@ -63,14 +63,14 @@ class NoticeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Notice
-        fields = ('notice_type', 'bc_img_url', 'bc_default_text', 'tk_img_url', 'tk_default_text', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
+        fields = ('notice_type', 'bc_img_url', 'bc_svg_url', 'bc_default_text', 'tk_img_url', 'tk_svg_url', 'tk_default_text', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
 
 class InstitutionNoticeSerializer(serializers.ModelSerializer):
     institution = InstitutionSerializer()
 
     class Meta:
         model = InstitutionNotice
-        fields = ('notice_type', 'institution', 'open_to_collaborate_img_url', 'open_to_collaborate_default_text', 'attribution_incomplete_img_url', 'attribution_incomplete_default_text', 'created', 'updated',)
+        fields = ('notice_type', 'institution', 'open_to_collaborate_img_url', 'open_to_collaborate_svg_url', 'open_to_collaborate_default_text', 'attribution_incomplete_img_url', 'attribution_incomplete_svg_url', 'attribution_incomplete_default_text', 'created', 'updated',)
 
 class ProjectOverviewSerializer(serializers.ModelSerializer):
     class Meta:
