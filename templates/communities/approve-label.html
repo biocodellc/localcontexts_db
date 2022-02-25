@@ -54,7 +54,15 @@
                     {% endif %}
                 </div>   
                 <div class="w-90 margin-right-16">
-                    <div><p class="bold">{% if bclabel.name %}{{ bclabel.name }}{% endif %}{% if tklabel.name %}{{ tklabel.name }}{% endif %}</p></div>
+                    <div>
+                        <p class="bold">
+                            {% if bclabel.name %}{{ bclabel.name }}{% endif %}
+                            {% if tklabel.name %}{{ tklabel.name }}{% endif %}
+                        </p>
+                        {% if bclabel.audiofile %} <div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
+                        {% if tklabel.audiofile %} <div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
+
+                    </div>
                     <div>{% if bclabel %}{{ bclabel.default_text }}{% endif %}{% if tklabel %}{{ tklabel.default_text }}{% endif %}</div>
                     
                     {% if bclabel %}
