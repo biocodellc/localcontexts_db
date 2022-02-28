@@ -788,7 +788,7 @@ if (window.location.href.includes('registry')) {
 
     document.addEventListener('click', function(e) {
 
-        if (e.target.tagName == 'BUTTON') {
+        if (e.target.tagName == 'A') {
             e.preventDefault()
             // show modal
             registryModal.classList.replace('hide', 'show')

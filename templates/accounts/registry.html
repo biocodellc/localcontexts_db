@@ -46,25 +46,25 @@
                         </div>
                         <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
                     </div>
+
                     <div class="dashcard-btn-container">
                         {% if user.is_authenticated %}
                             <div>
                                 {% join_request_comm community.id request.user as request_exists %}
                                 {% if request_exists or community in user_communities %}
-                                    <div><p class="primary-btn disabled-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></p></div>
+                                    <div><a class="primary-btn disabled-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></a></div>
                                 {% else %}
                                     <form id="communityRegistryForm{{ community.id }}" method="POST" action="">
                                         {% csrf_token %}
                                         <input type="hidden" value="{{ community.id }}" name="commid">
-                                        <div class="margin-top-8 margin-bottom-8"><button id="community-{{ community.id }}" class="primary-btn action-btn">Send request to join</button></div>
+                                        <div class="margin-top-8 margin-bottom-8"><a id="community-{{ community.id }}" class="darkteal-text underline-hover pointer">Request to join</a></div>
                                     </form>                                    
                                 {% endif %}                            
                             </div>
-                            
-                            <!-- TODO: set up this btn -->
-                            <!-- <div><a class="darkteal-text underline-hover" href="#">Contact Us</a></div> -->
 
-                            {% else %}
+                            <div class="margin-left-16"><a class="primary-btn action-btn" href="#">Contact Us</a></div>
+
+                        {% else %}
                         {% endif %}
                     </div>
 
@@ -103,18 +103,17 @@
                             <div>
                                 {% join_request_inst institution.id request.user as request_exists %}
                                 {% if request_exists or institution in user_institutions %}
-                                    <div><p class="primary-btn disabled-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></p></div>
+                                    <div><a class="primary-btn disabled-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></a></div>
                                 {% else %}
                                     <form id="institutionRegistryForm{{ institution.id }}" method="POST" action="">
                                         {% csrf_token %}
                                         <input type="hidden" value="{{ institution.id }}" name="instid">
-                                        <div><button id="institution-{{ institution.id }}" class="primary-btn action-btn">Send request to join</button></div>
+                                        <div class="margin-top-8 margin-bottom-8"><a id="institution-{{ institution.id }}" class="darkteal-text underline-hover pointer">Request to join</a></div>
                                     </form>
                                 {% endif %}                                
                             </div>
 
-                            <!-- TODO: set up this btn -->
-                            <!-- <div><a class="darkteal-text underline-hover" href="#">Contact Us</a></div> -->
+                            <div class="margin-left-16"><a class="primary-btn action-btn" href="#">Contact Us</a></div>
 
                         {% else %}
                         {% endif %}
