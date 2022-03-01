@@ -780,6 +780,7 @@ if (window.location.href.includes('connect-researcher')) {
 }
 
 if (window.location.href.includes('registry')) {
+    // Send request to join institution or community
     const registryModal = document.getElementById('registryModal')
     const submitJoinRequestFormBtn = document.getElementById('submitRegistryForm')
 
@@ -789,7 +790,6 @@ if (window.location.href.includes('registry')) {
     document.addEventListener('click', function(e) {
 
         if (e.target.tagName == 'A') {
-            e.preventDefault()
             // show modal
             registryModal.classList.replace('hide', 'show')
 
@@ -802,7 +802,36 @@ if (window.location.href.includes('registry')) {
                 submitJoinRequestFormBtn.addEventListener('click', function(e) { document.getElementById(`institutionRegistryForm${targetId}`).submit() })    
             }
         }
-    })       
+    })   
+    
+    const contactModal = document.getElementById('contactModal')
+    const submitContactFormBtn = document.getElementById('submitContactForm')
+
+    // const closeRegistryModalBtn = document.getElementById('closeRegistryModal')
+    // closeRegistryModalBtn.addEventListener('click', function(e) { contactModal.classList.replace('show', 'hide') })
+
+    document.addEventListener('click', function(e) {
+
+        if (e.target.tagName == 'A') {
+            // show modal
+            contactModal.classList.replace('hide', 'show')
+
+            // get Id and btn type, based on which organization it is, submit
+            if (e.target.id.includes('communityContact')) {
+                let targetId = e.target.id.split('-').pop()
+                submitContactFormBtn.addEventListener('click', function(e) { 
+                    e.preventDefault()
+                    document.getElementById(`communityContactForm${targetId}`).submit() 
+                })    
+            } else if (e.target.id.includes('institutionContact')) {
+                let targetId = e.target.id.split('-').pop()
+                submitContactFormBtn.addEventListener('click', function(e) { 
+                    e.preventDefault()
+                    document.getElementById(`institutionContactForm${targetId}`).submit() 
+                })    
+            }
+        }
+    })  
 }
 
 // Add member modal

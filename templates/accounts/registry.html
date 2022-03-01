@@ -62,7 +62,12 @@
                                 {% endif %}                            
                             </div>
 
-                            <div class="margin-left-16"><a class="primary-btn action-btn" href="#">Contact Us</a></div>
+                            <form id="communityContactForm{{ community.id }}" method="POST" action="">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ community.id }}" name="instid_contact">
+                                <div class="margin-left-16"><a class="primary-btn action-btn">Contact Us</a></div>
+                            </form>
+
 
                         {% else %}
                         {% endif %}
@@ -113,7 +118,11 @@
                                 {% endif %}                                
                             </div>
 
-                            <div class="margin-left-16"><a class="primary-btn action-btn" href="#">Contact Us</a></div>
+                            <form id="institutionContactForm{{ institution.id }}" method="POST" action="">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{ institution.id }}" name="instid_contact">
+                                <div class="margin-left-16"><a id="institutionContact-{{ institution.id }}" class="primary-btn action-btn">Contact Us</a></div>
+                            </form>
 
                         {% else %}
                         {% endif %}
@@ -164,6 +173,31 @@
                     <div id="closeRegistryModal" class="primary-btn white-btn margin-right-1 w-50 center-text">Cancel</div>    
                     <div id="submitRegistryForm" class="margin-left-1 primary-btn action-btn w-50 center-text">Yes</div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="contactModal" class="modal hide">
+        <div class="modal-defaults contact-modal flex-this column w-100">
+            <div class="modal-content-padding w-100">
+                <div>
+                    <h2 style="color: #333333;">Contact form</h2>  
+                    <p>This message will be sent to the administrator of [account name].</p>  
+                </div>
+                <div>
+                    <label>Name</label><br>
+                    <input type="text" class="w-100">
+                </div>
+                <div>
+                    <label>Email Address</label><br>
+                    <input type="text" class="w-100">
+                </div>
+                <div>
+                    <label>Message</label><br>
+                    <textarea class="w-100"></textarea>
+                </div>                    
+
+                <button id="submitContactForm" class="primary-btn action-btn">Send message</button>
             </div>
         </div>
     </div>
