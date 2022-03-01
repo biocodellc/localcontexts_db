@@ -790,48 +790,55 @@ if (window.location.href.includes('registry')) {
     document.addEventListener('click', function(e) {
 
         if (e.target.tagName == 'A') {
-            // show modal
-            registryModal.classList.replace('hide', 'show')
-
             // get Id and btn type, based on which organization it is, submit
-            if (e.target.id.includes('community')) {
+            if (e.target.id.includes('communityRequest')) {
+                // show modal
+                registryModal.classList.replace('hide', 'show')
+
                 let targetId = e.target.id.split('-').pop()
                 submitJoinRequestFormBtn.addEventListener('click', function(e) { document.getElementById(`communityRegistryForm${targetId}`).submit() })    
-            } else if (e.target.id.includes('institution')) {
+            } else if (e.target.id.includes('institutionRequest')) {
+                // show modal
+                registryModal.classList.replace('hide', 'show')
+
                 let targetId = e.target.id.split('-').pop()
-                submitJoinRequestFormBtn.addEventListener('click', function(e) { document.getElementById(`institutionRegistryForm${targetId}`).submit() })    
+                submitJoinRequestFormBtn.addEventListener('click', function(e) { document.getElementById(`institutionRegistryForm${targetId}`).submit() })  
+
+            } else if (e.target.id.includes('communityContact')) {
+                let targetId = e.target.id.split('-').pop()
+                let modal = document.getElementById(`contactModalComm${targetId}`)
+                modal.classList.replace('hide', 'show')
+
+            } else if (e.target.id.includes('institutionContact')) {
+                let targetId = e.target.id.split('-').pop()
+                let modal = document.getElementById(`contactModalInst${targetId}`)
+                modal.classList.replace('hide', 'show')
             }
         }
     })   
     
-    const contactModal = document.getElementById('contactModal')
-    const submitContactFormBtn = document.getElementById('submitContactForm')
 
     // const closeRegistryModalBtn = document.getElementById('closeRegistryModal')
     // closeRegistryModalBtn.addEventListener('click', function(e) { contactModal.classList.replace('show', 'hide') })
 
-    document.addEventListener('click', function(e) {
+    // document.addEventListener('click', function(e) {
 
-        if (e.target.tagName == 'A') {
-            // show modal
-            contactModal.classList.replace('hide', 'show')
+    //     if (e.target.tagName == 'A') {
+    //         // show modal
+    //         // contactModal.classList.replace('hide', 'show')
 
-            // get Id and btn type, based on which organization it is, submit
-            if (e.target.id.includes('communityContact')) {
-                let targetId = e.target.id.split('-').pop()
-                submitContactFormBtn.addEventListener('click', function(e) { 
-                    e.preventDefault()
-                    document.getElementById(`communityContactForm${targetId}`).submit() 
-                })    
-            } else if (e.target.id.includes('institutionContact')) {
-                let targetId = e.target.id.split('-').pop()
-                submitContactFormBtn.addEventListener('click', function(e) { 
-                    e.preventDefault()
-                    document.getElementById(`institutionContactForm${targetId}`).submit() 
-                })    
-            }
-        }
-    })  
+    //         // get Id and btn type, based on which organization it is, submit
+    //         if (e.target.id.includes('communityContact')) {
+    //             let targetId = e.target.id.split('-').pop()
+  
+    //         } else if (e.target.id.includes('institutionContact')) {
+    //             let targetId = e.target.id.split('-').pop()
+    //             let modal = document.getElementById(`contactModalInst${targetId}`)
+    //             modal.classList.replace('hide', 'show')
+  
+    //         }
+    //     }
+    // })  
 }
 
 // Add member modal

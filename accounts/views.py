@@ -286,7 +286,33 @@ def organization_registry(request):
         user_institutions = user_affiliations.institutions.all()
         user_communities = user_affiliations.communities.all()
 
+        form = ContactOrganizationForm(request.POST or None)
+
         if request.method == 'POST':
+
+            # contact community or institution
+            if form.is_valid():
+                print('###########################')
+                print(form.cleaned_data)
+                print('###########################')
+
+                # which institution or community
+                inst_contact_id = request.POST.get('instid_contact')
+                comm_contact_id = request.POST.get('commid_contact')
+
+                if inst_contact_id:
+                    inst = Institution.objects.select_related('institution_creator').get(id=inst_contact_id)
+                    print('###########################')
+                    print(inst.institution_creator.email)
+                    print('###########################')
+                
+                if comm_contact_id:
+                    comm = Community.objects.select_related('community_creator').get(id=comm_contact_id)
+                    print(comm.community_creator.email)
+
+
+
+            # Request To Join community or institution
             inst_input_id = request.POST.get('instid')
             comm_input_id = request.POST.get('commid')
 
@@ -320,6 +346,7 @@ def organization_registry(request):
             'researchers': researchers,
             'user_institutions': user_institutions,
             'user_communities': user_communities,
+            'form': form,
         }
         return render(request, 'accounts/registry.html', context)
 

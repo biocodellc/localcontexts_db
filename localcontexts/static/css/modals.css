@@ -70,5 +70,5 @@
 
 .contact-modal {
     width: 714px;
-    height: 500px;
+    min-height: 430px;
 }
