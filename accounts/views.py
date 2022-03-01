@@ -292,9 +292,10 @@ def organization_registry(request):
 
             # contact community or institution
             if form.is_valid():
-                print('###########################')
-                print(form.cleaned_data)
-                print('###########################')
+                to_email = ''
+                from_name = form.cleaned_data['name']
+                from_email = form.cleaned_data['email']
+                message = form.cleaned_data['message']
 
                 # which institution or community
                 inst_contact_id = request.POST.get('instid_contact')
@@ -302,14 +303,14 @@ def organization_registry(request):
 
                 if inst_contact_id:
                     inst = Institution.objects.select_related('institution_creator').get(id=inst_contact_id)
-                    print('###########################')
-                    print(inst.institution_creator.email)
-                    print('###########################')
+                    to_email = inst.institution_creator.email
                 
                 if comm_contact_id:
                     comm = Community.objects.select_related('community_creator').get(id=comm_contact_id)
-                    print(comm.community_creator.email)
-
+                    to_email = comm.community_creator.email
+                
+                send_bcc_email(to_email, from_name, from_email, message)
+                return redirect('organization-registry')
 
 
             # Request To Join community or institution
@@ -335,8 +336,7 @@ def organization_registry(request):
 
                 # Send email to community creator
                 send_join_request_email_admin(request.user, target_community)
-
-            
+ 
             return redirect('organization-registry')
 
 

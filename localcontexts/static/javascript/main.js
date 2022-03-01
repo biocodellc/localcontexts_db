@@ -779,6 +779,7 @@ if (window.location.href.includes('connect-researcher')) {
     })  
 }
 
+// Registry
 if (window.location.href.includes('registry')) {
     // Send request to join institution or community
     const registryModal = document.getElementById('registryModal')
@@ -803,7 +804,8 @@ if (window.location.href.includes('registry')) {
 
                 let targetId = e.target.id.split('-').pop()
                 submitJoinRequestFormBtn.addEventListener('click', function(e) { document.getElementById(`institutionRegistryForm${targetId}`).submit() })  
-
+                
+                // open contact form modal
             } else if (e.target.id.includes('communityContact')) {
                 let targetId = e.target.id.split('-').pop()
                 let modal = document.getElementById(`contactModalComm${targetId}`)
@@ -816,29 +818,6 @@ if (window.location.href.includes('registry')) {
             }
         }
     })   
-    
-
-    // const closeRegistryModalBtn = document.getElementById('closeRegistryModal')
-    // closeRegistryModalBtn.addEventListener('click', function(e) { contactModal.classList.replace('show', 'hide') })
-
-    // document.addEventListener('click', function(e) {
-
-    //     if (e.target.tagName == 'A') {
-    //         // show modal
-    //         // contactModal.classList.replace('hide', 'show')
-
-    //         // get Id and btn type, based on which organization it is, submit
-    //         if (e.target.id.includes('communityContact')) {
-    //             let targetId = e.target.id.split('-').pop()
-  
-    //         } else if (e.target.id.includes('institutionContact')) {
-    //             let targetId = e.target.id.split('-').pop()
-    //             let modal = document.getElementById(`contactModalInst${targetId}`)
-    //             modal.classList.replace('hide', 'show')
-  
-    //         }
-    //     }
-    // })  
 }
 
 // Add member modal
