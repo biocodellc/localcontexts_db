@@ -4,6 +4,7 @@ from researchers.models import Researcher
 from .models import LabelNote
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
+from projects.models import Project
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
@@ -231,3 +232,18 @@ def send_contact_email(to_email, from_name, from_email, message):
 			"subject": subject,
             "html": template}
     )
+
+def send_contributor_email(org, proj_id):
+    to_email = ''
+    subject = ''
+    project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
+    template = render_to_string('snippets/emails/contributor.html', { 'org': org, 'project': project, })
+
+    if isinstance(org, Institution):
+        to_email = org.institution_creator.email
+        subject = "Your institution has been added as a contributor on a Project"
+    if isinstance(org, Researcher):
+        to_email = org.user.email
+        subject = "You have been added as a contributor on a Project"
+
+    send_simple_email(to_email, subject, template)

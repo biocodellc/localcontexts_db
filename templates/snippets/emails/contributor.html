@@ -1,0 +1,11 @@
+{% autoescape off %}
+    <h3>{{ project.project_creator.get_full_name }} has added you to their Local Contexts Hub Project "{{ project.title }}".</h3>
+
+    <p>
+        <strong>Next steps?</strong><br>
+        You can see this Project in your account's Projects dashboard.<br>
+
+        {% include 'snippets/emails/_footer-snippet.html' %}
+    </p>
+
+{% endautoescape %}
