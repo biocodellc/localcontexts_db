@@ -309,9 +309,7 @@ def organization_registry(request):
                         comm = Community.objects.select_related('community_creator').get(id=comm_contact_id)
                         to_email = comm.community_creator.email
                     
-                    send_bcc_email(to_email, from_name, from_email, message)
-                    return redirect('organization-registry')
-
+                    send_contact_email(to_email, from_name, from_email, message)
             else:
                 # Request To Join community or institution
                 inst_input_id = request.POST.get('instid')
@@ -320,9 +318,7 @@ def organization_registry(request):
                 if inst_input_id:
                     target_institution = Institution.objects.select_related('institution_creator').get(id=inst_input_id)
                     main_admin = target_institution.institution_creator
-
-                    join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
-                    join_request.save()
+                    JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
 
                     # Send email to institution creator
                     send_join_request_email_admin(request.user, target_institution)
@@ -330,14 +326,12 @@ def organization_registry(request):
                 elif comm_input_id:
                     target_community = Community.objects.select_related('community_creator').get(id=comm_input_id)
                     main_admin = target_community.community_creator
-
-                    req = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
-                    req.save()
+                    JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
 
                     # Send email to community creator
                     send_join_request_email_admin(request.user, target_community)
             
-                return redirect('organization-registry')
+            return redirect('organization-registry')
         else:
             context = {
                 'communities': communities,
