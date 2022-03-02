@@ -47,8 +47,8 @@
                         <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
                     </div>
 
-                    <div class="dashcard-btn-container">
-                        {% if user.is_authenticated %}
+                    {% if user.is_authenticated %}
+                        <div class="dashcard-btn-container">
                             <div>
                                 {% join_request_comm community.id request.user as request_exists %}
                                 {% if request_exists or community in user_communities %}
@@ -57,16 +57,35 @@
                                     <form id="communityRegistryForm{{ community.id }}" method="POST" action="">
                                         {% csrf_token %}
                                         <input type="hidden" value="{{ community.id }}" name="commid">
-                                        <div class="margin-top-8 margin-bottom-8"><a id="community-{{ community.id }}" class="darkteal-text underline-hover pointer">Request to join</a></div>
+                                        <div class="margin-top-8 margin-bottom-8"><a id="communityRequest-{{ community.id }}" class="darkteal-text underline-hover pointer">Request to join</a></div>
                                     </form>                                    
                                 {% endif %}                            
                             </div>
+                            <div class="margin-left-16"><a id="communityContact-{{ community.id }}" class="primary-btn action-btn">Contact Us</a></div>
+                        </div>
 
-                            <div class="margin-left-16"><a class="primary-btn action-btn" href="#">Contact Us</a></div>
+                        <div id="contactModalComm{{ community.id }}" class="modal hide">
+                            <div class="modal-defaults contact-modal flex-this column w-100">
+                                <div class="modal-content-padding w-100">
+                                    <div>
+                                        <h2 class="primary-black-text">Contact form</h2>  
+                                        <p>This message will be sent to the administrator of {{ community.community_name }}.</p>  
+                                    </div>
 
-                        {% else %}
-                        {% endif %}
-                    </div>
+                                    <form method="POST" action="">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{ community.id }}" name="commid_contact">
+
+                                        {{ form.as_p }}
+                        
+                                        <button class="primary-btn action-btn" name="contact_btn">Send message <i class="fa fa-envelope" aria-hidden="true"></i></button>
+                                    </form>    
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                    {% endif %}
+
 
                 </div>
             </div>
@@ -98,8 +117,8 @@
                         <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p></div>
                     </div>
 
-                    <div class="dashcard-btn-container">
-                        {% if user.is_authenticated %}
+                    {% if user.is_authenticated %}
+                        <div class="dashcard-btn-container">
                             <div>
                                 {% join_request_inst institution.id request.user as request_exists %}
                                 {% if request_exists or institution in user_institutions %}
@@ -108,17 +127,36 @@
                                     <form id="institutionRegistryForm{{ institution.id }}" method="POST" action="">
                                         {% csrf_token %}
                                         <input type="hidden" value="{{ institution.id }}" name="instid">
-                                        <div class="margin-top-8 margin-bottom-8"><a id="institution-{{ institution.id }}" class="darkteal-text underline-hover pointer">Request to join</a></div>
+                                        <div class="margin-top-8 margin-bottom-8"><a id="institutionRequest-{{ institution.id }}" class="darkteal-text underline-hover pointer">Request to join</a></div>
                                     </form>
                                 {% endif %}                                
                             </div>
+                            
+                            <div class="margin-left-16"><a id="institutionContact-{{ institution.id }}" class="primary-btn action-btn">Contact Us</a></div>
+                        </div>
 
-                            <div class="margin-left-16"><a class="primary-btn action-btn" href="#">Contact Us</a></div>
+                        <div id="contactModalInst{{ institution.id }}" class="modal hide">
+                            <div class="modal-defaults contact-modal flex-this column w-100">
+                                <div class="modal-content-padding w-100">
+                                    <div>
+                                        <h2 class="primary-black-text">Contact form</h2>  
+                                        <p>This message will be sent to the administrator of {{ institution.institution_name }}.</p>  
+                                    </div>
 
-                        {% else %}
-                        {% endif %}
-                    </div>
+                                    <form method="POST" action="">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{ institution.id }}" name="instid_contact">
 
+                                        {{ form.as_p }}
+                        
+                                        <button class="primary-btn action-btn" name="contact_btn">Send message</button>
+                                    </form>    
+                                </div>
+                            </div>
+                        </div>
+
+                    {% else %}
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
@@ -157,12 +195,12 @@
         <div class="modal-defaults registry-modal flex-this column w-100">
             <div class="modal-content-padding w-100">
                 <div>
-                    <h2 style="color: #333333;">Just checking...</h2>  
+                    <h2 class="primary-black-text">Just checking...</h2>  
                     <p>Are you sure you want to send a request to join this account?</p>  
                 </div>
                 <div class="flex-this w-100 text-align-center">
                     <div id="closeRegistryModal" class="primary-btn white-btn margin-right-1 w-50 center-text">Cancel</div>    
-                    <div id="submitRegistryForm" class="margin-left-1 primary-btn action-btn w-50 center-text">Yes</div>
+                    <button id="submitRegistryForm" class="margin-left-1 primary-btn action-btn w-50 center-text">Yes</button>
                 </div>
             </div>
         </div>

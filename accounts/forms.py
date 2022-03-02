@@ -73,3 +73,9 @@ class SignUpInvitationForm(forms.ModelForm):
             'message': forms.Textarea(attrs={'rows': 4, 'cols': 65}),
             'email': forms.TextInput(attrs={'size': 65}),
         }
+
+class ContactOrganizationForm(forms.Form):
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-100'}))
+    email = forms.EmailField(label=_('Email Address'), required=True, widget=forms.EmailInput(attrs={'class': 'w-100', 'placeholder': 'email@domain.com'}))
+    message= forms.CharField(widget=forms.Textarea(attrs={"rows":4, "cols":65, 'class': 'w-100'}))
+    

@@ -286,43 +286,63 @@ def organization_registry(request):
         user_institutions = user_affiliations.institutions.all()
         user_communities = user_affiliations.communities.all()
 
+        form = ContactOrganizationForm(request.POST or None)
+
         if request.method == 'POST':
-            inst_input_id = request.POST.get('instid')
-            comm_input_id = request.POST.get('commid')
+            if 'contact_btn' in request.POST:
+                # contact community or institution
+                if form.is_valid():
+                    to_email = ''
+                    from_name = form.cleaned_data['name']
+                    from_email = form.cleaned_data['email']
+                    message = form.cleaned_data['message']
 
-            if inst_input_id:
-                target_institution = Institution.objects.select_related('institution_creator').get(id=inst_input_id)
-                main_admin = target_institution.institution_creator
+                    # which institution or community
+                    inst_contact_id = request.POST.get('instid_contact')
+                    comm_contact_id = request.POST.get('commid_contact')
 
-                join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
-                join_request.save()
+                    if inst_contact_id:
+                        inst = Institution.objects.select_related('institution_creator').get(id=inst_contact_id)
+                        to_email = inst.institution_creator.email
+                    
+                    if comm_contact_id:
+                        comm = Community.objects.select_related('community_creator').get(id=comm_contact_id)
+                        to_email = comm.community_creator.email
+                    
+                    send_contact_email(to_email, from_name, from_email, message)
+            else:
+                # Request To Join community or institution
+                inst_input_id = request.POST.get('instid')
+                comm_input_id = request.POST.get('commid')
 
-                # Send email to institution creator
-                send_join_request_email_admin(request.user, target_institution)
+                if inst_input_id:
+                    target_institution = Institution.objects.select_related('institution_creator').get(id=inst_input_id)
+                    main_admin = target_institution.institution_creator
+                    JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
 
-            if comm_input_id:
-                target_community = Community.objects.select_related('community_creator').get(id=comm_input_id)
-                main_admin = target_community.community_creator
+                    # Send email to institution creator
+                    send_join_request_email_admin(request.user, target_institution)
 
-                req = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
-                req.save()
+                elif comm_input_id:
+                    target_community = Community.objects.select_related('community_creator').get(id=comm_input_id)
+                    main_admin = target_community.community_creator
+                    JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
 
-                # Send email to community creator
-                send_join_request_email_admin(request.user, target_community)
-
+                    # Send email to community creator
+                    send_join_request_email_admin(request.user, target_community)
             
             return redirect('organization-registry')
-
-
-        context = {
-            'communities': communities,
-            'institutions': institutions,
-            'researchers': researchers,
-            'user_institutions': user_institutions,
-            'user_communities': user_communities,
-        }
-        return render(request, 'accounts/registry.html', context)
-
+        else:
+            context = {
+                'communities': communities,
+                'institutions': institutions,
+                'researchers': researchers,
+                'user_institutions': user_institutions,
+                'user_communities': user_communities,
+                'form': form,
+            }
+            return render(request, 'accounts/registry.html', context)
+    
     context = {
         'communities': communities,
         'institutions': institutions,

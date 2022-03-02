@@ -213,4 +213,21 @@ def send_email_to_support(researcher):
         name = researcher.user.username
     
     title = name + ' has created a Researcher Account'
-    send_simple_email('support@localcontexts.org', title, template)    
+    send_simple_email('support@localcontexts.org', title, template)  
+
+
+# REGISTRY Contact organization email
+def send_contact_email(to_email, from_name, from_email, message):
+    subject = f"{from_name} has sent you a message from the Local Contexts Hub"
+    from_string = f"{from_name} <{from_email}>"
+    template = render_to_string('snippets/emails/registry-contact.html', { 'from_name': from_name, 'message': message, })
+
+    return requests.post(
+		settings.MAILGUN_BASE_URL,
+		auth=("api", settings.MAILGUN_API_KEY),
+		data={"from": from_string,
+			"to": [to_email],
+			# "bcc": [to_email],
+			"subject": subject,
+            "html": template}
+    )

@@ -67,3 +67,8 @@
     width: 445px;
     height: 216px;
 }
+
+.contact-modal {
+    width: 714px;
+    min-height: 440px;
+}
