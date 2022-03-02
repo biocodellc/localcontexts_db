@@ -891,20 +891,28 @@ if (window.location.href.includes('registry')) {
                 registryModal.classList.replace('hide', 'show')
                 let targetId = e.target.id.split('-').pop()
                 submitJoinRequestFormBtn.addEventListener('click', function(e) { document.getElementById(`institutionRegistryForm${targetId}`).submit() })  
-                
+
                 // open contact form modal
             } else if (e.target.id.includes('communityContact')) {
                 let targetId = e.target.id.split('-').pop()
                 let modal = document.getElementById(`contactModalComm${targetId}`)
                 modal.classList.replace('hide', 'show')
+                closeModal(modal)
 
             } else if (e.target.id.includes('institutionContact')) {
                 let targetId = e.target.id.split('-').pop()
                 let modal = document.getElementById(`contactModalInst${targetId}`)
                 modal.classList.replace('hide', 'show')
+                closeModal(modal)
             }
         }
     })  
+
+    function closeModal(modal) {  
+        let closeBtns = Array.from(document.getElementsByClassName('close-modal-btn'))
+        closeBtns.forEach(btn => { btn.addEventListener('click', hideModal)})
+        function hideModal () { modal.classList.replace('show', 'hide') }
+    }
 }
 
 // PROJECTS FILTERING
