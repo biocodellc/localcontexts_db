@@ -4,7 +4,7 @@
 
     <p>
         {% if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable' %}
-            You can view the Project <a href="{% url 'view-project' project.unique_id %}">here</a>.<br>
+            You can view the Project <a href="http://{{domain}}{% url 'view-project' project.unique_id %}">here</a>.<br>
         {% endif %}
 
         {% if project_person %}
