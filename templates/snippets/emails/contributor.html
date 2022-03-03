@@ -9,7 +9,7 @@
 
         {% if project_person %}
             {% if not registered %}
-                If you wish to interact with this Project, please register with the Local Contexts Hub <a href="{% url 'register' %}">here</a>.
+                If you wish to interact with this Project, please register with the Local Contexts Hub <a href="http://{{domain}}{% url 'register' %}">here</a>.
             {% endif %}
         {% else %}
             <strong>Next steps?</strong><br>

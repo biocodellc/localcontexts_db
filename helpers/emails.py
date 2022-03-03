@@ -117,16 +117,17 @@ def send_invite_user_email(request, data):
 
 # Anywhere JoinRequest instance is created, 
 # will email community or institution creator that someone wants to join the organization
-def send_join_request_email_admin(user, organization):
-    template = render_to_string('snippets/emails/join-request.html', { 'user': user, 'organization': organization, })
+def send_join_request_email_admin(request, organization):
+    current_site=get_current_site(request)
+    template = render_to_string('snippets/emails/join-request.html', { 'user': request.user, 'domain': current_site.domain, 'organization': organization, })
     title = ''
     send_to_email = ''
     # Check if organization instance is community model
     if isinstance(organization, Community):
-        title = str(user.get_full_name()) + ' has requested to join ' + str(organization.community_name) 
+        title = str(request.user.get_full_name()) + ' has requested to join ' + str(organization.community_name) 
         send_to_email = organization.community_creator.email
     if isinstance(organization, Institution):
-        title = str(user.get_full_name()) + ' has requested to join ' + str(organization.institution_name) 
+        title = str(request.user.get_full_name()) + ' has requested to join ' + str(organization.institution_name) 
         send_to_email = organization.institution_creator.email
     
     send_simple_email(send_to_email, title, template)
@@ -136,8 +137,13 @@ def send_join_request_email_admin(user, organization):
     EMAILS FOR INSTITUTION APP
 """
 
-def send_institution_invite_email(data, institution):
-    template = render_to_string('snippets/emails/member-invite.html', { 'data': data, 'institution': institution })
+def send_institution_invite_email(request, data, institution):
+    current_site=get_current_site(request)
+    template = render_to_string('snippets/emails/member-invite.html', { 
+        'domain':current_site.domain,
+        'data': data, 
+        'institution': institution 
+    })
     title = 'You have been invited to join ' + str(institution.institution_name)
     send_simple_email(data.receiver.email, title, template)
 
@@ -159,8 +165,13 @@ def send_email_notice_placed(project, community, sender):
 """
 
 # Inviting a user to join community
-def send_community_invite_email(data, community):
-    template = render_to_string('snippets/emails/member-invite.html', { 'data': data, 'community': community })
+def send_community_invite_email(request, data, community):
+    current_site=get_current_site(request)
+    template = render_to_string('snippets/emails/member-invite.html', { 
+        'domain':current_site.domain,
+        'data': data, 
+        'community': community 
+    })
     send_simple_email(data.receiver.email, 'You have been invited to join a community', template)
 
 # When Labels have been applied to a Project
@@ -194,8 +205,14 @@ def send_email_label_approved(label):
     # send_simple_email(project.project_creator.email, title, template)
 
 # You are now a member of institution/community email
-def send_membership_email(organization, receiver, role):
-    template = render_to_string('snippets/emails/membership-info.html', { 'organization': organization, 'role': role, })
+def send_membership_email(request, organization, receiver, role):
+    current_site=get_current_site(request)
+
+    template = render_to_string('snippets/emails/membership-info.html', { 
+        'domain':current_site.domain,
+        'organization': organization, 
+        'role': role, 
+    })
     title = ''
     if isinstance(organization, Community):
         title = 'You are now a member of ' + str(organization.community_name)
@@ -234,11 +251,12 @@ def send_contact_email(to_email, from_name, from_email, message):
             "html": template}
     )
 
-def send_contributor_email(org, proj_id):
+def send_contributor_email(request, org, proj_id):
+    current_site=get_current_site(request)
     to_email = ''
     subject = ''
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
-    template = render_to_string('snippets/emails/contributor.html', { 'project': project })
+    template = render_to_string('snippets/emails/contributor.html', { 'domain': current_site.domain, 'project': project })
 
     if isinstance(org, Institution):
         to_email = org.institution_creator.email
@@ -249,7 +267,8 @@ def send_contributor_email(org, proj_id):
 
     send_simple_email(to_email, subject, template)
 
-def send_project_person_email(to_email, proj_id):
+def send_project_person_email(request, to_email, proj_id):
+    current_site=get_current_site(request)
     registered = ''
 
     if User.objects.filter(email=to_email).exists():
@@ -261,6 +280,7 @@ def send_project_person_email(to_email, proj_id):
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
     subject = 'You have been added as a contributor on a Local Contexts Hub Project'
     template = render_to_string('snippets/emails/contributor.html', { 
+        'domain':current_site.domain,
         'project': project, 
         'project_person': project_person, 
         'registered': registered,

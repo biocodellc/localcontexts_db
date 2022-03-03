@@ -12,7 +12,7 @@
     {{ data.message }}<br><br>
 
     <strong>Next steps?</strong><br>
-    Login <a href="https://localcontextshub.org/login/" target="_blank">here</a> to Local Contexts Hub and go to My Profile, then Notifications to see and respond to your invitation.
+    Login <a href="http://{{domain}}{% url 'login' %}" target="_blank">here</a> to Local Contexts Hub and go to My Profile, then Notifications to see and respond to your invitation.
 
     {% include 'snippets/emails/_footer-snippet.html' %}
 </p>
