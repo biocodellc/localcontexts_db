@@ -1,3 +1,4 @@
+from atexit import register
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
@@ -237,7 +238,7 @@ def send_contributor_email(org, proj_id):
     to_email = ''
     subject = ''
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
-    template = render_to_string('snippets/emails/contributor.html', { 'org': org, 'project': project, })
+    template = render_to_string('snippets/emails/contributor.html', { 'project': project })
 
     if isinstance(org, Institution):
         to_email = org.institution_creator.email
@@ -246,4 +247,22 @@ def send_contributor_email(org, proj_id):
         to_email = org.user.email
         subject = "You have been added as a contributor on a Project"
 
+    send_simple_email(to_email, subject, template)
+
+def send_project_person_email(to_email, proj_id):
+    registered = ''
+
+    if User.objects.filter(email=to_email).exists():
+        registered = True
+    else:
+        registered = False
+
+    project_person = True
+    project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
+    subject = 'You have been added as a contributor on a Local Contexts Hub Project'
+    template = render_to_string('snippets/emails/contributor.html', { 
+        'project': project, 
+        'project_person': project_person, 
+        'registered': registered,
+    })
     send_simple_email(to_email, subject, template)

@@ -617,6 +617,8 @@ def create_project(request, pk):
                 for instance in instances:
                     instance.project = data
                     instance.save()
+                    # Send email to added person
+                    send_project_person_email(instance.email, data.unique_id)
 
                 # Send notification
                 truncated_project_title = str(data.title)[0:30]

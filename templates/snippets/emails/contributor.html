@@ -1,9 +1,20 @@
 {% autoescape off %}
+
     <h3>{{ project.project_creator.get_full_name }} has added you as a contributor to the Local Contexts Hub Project "{{ project.title }}".</h3>
 
     <p>
-        <strong>Next steps?</strong><br>
-        You can see this Project in your account's dashboard under 'Projects'.<br>
+        {% if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable' %}
+            You can view the Project <a href="{% url 'view-project' project.unique_id %}">here</a>.<br>
+        {% endif %}
+
+        {% if project_person %}
+            {% if not registered %}
+                If you wish to interact with this Project, please register with the Local Contexts Hub <a href="{% url 'register' %}">here</a>.
+            {% endif %}
+        {% else %}
+            <strong>Next steps?</strong><br>
+            You can see and interact with this Project in your account's dashboard under the 'Projects' tab.<br>
+        {% endif %}    
 
         {% include 'snippets/emails/_footer-snippet.html' %}
     </p>
