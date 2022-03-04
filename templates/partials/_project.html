@@ -103,6 +103,13 @@
                     <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Local Contexts Project ID</span> <br><span id="uniqueIDToCopy">{{ project.unique_id }}</span><br></p></div>
                 </div>
 
+                <div class="flex-this margin-top-16">
+                    {% if project.providers_id %}
+                        <div><a onclick="copyToClipboard('providersIDToCopy')" class="primary-btn green-btn margin-top-2 copied-display"><i class="fa fa-copy"></i></a></div>
+                        <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Providers ID</span> <br><span id="providersIDToCopy">{{ project.providers_id }}</span><br></p></div>
+                    {% endif %}
+                </div>
+
                 <div class="flex-this margin-top-1">
                     <div>
                         {% if project.publication_doi %}
@@ -115,7 +122,7 @@
                         {% if project.publication_doi %}
                             <a class="darkteal-text underline-hover" href="https://www.dx.doi.org/{{ project.publication_doi }}">{{ project.publication_doi }}</a>
                         {% else %}
-                            None listed <br>
+                            None <br>
                         {% endif %}
                     </p></div>
                 </div>
@@ -129,7 +136,7 @@
                     <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Project Data GUID</span><br> <span id="guidToCopy">{{ project.project_data_guid }}</span><br></p></div>
                 </div>
 
-                <div><p><span class="bold">Recommended Citation</span><br> {% if project.recommended_citation %}{{ project.recommended_citation }} {% else %} None added{% endif %}<br></p></div>
+                <div><p><span class="bold">Recommended Citation</span><br> {% if project.recommended_citation %}{{ project.recommended_citation }} {% else %} None {% endif %}<br></p></div>
 
             </div>
         </div>

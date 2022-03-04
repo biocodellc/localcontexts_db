@@ -1,3 +1,4 @@
+from email.policy import default
 from django import forms
 from django.forms import modelformset_factory, inlineformset_factory
 from .models import Project, ProjectContributors, ProjectPerson
@@ -18,12 +19,12 @@ class CreateProjectForm(forms.ModelForm):
         ('Exhibition', 'Exhibition'),
         ('Other', 'Other'),
     )
-    project_privacy = forms.ChoiceField(label=_('What is the privacy level of this project?'), choices=PRIVACY, widget=forms.RadioSelect())
+    project_privacy = forms.ChoiceField(label=_('What is the privacy level of this project?'), choices=PRIVACY, initial='Public', widget=forms.RadioSelect())
     project_type = forms.ChoiceField(label=_('Which of the following reflects your Local Contexts project? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
 
     class Meta:
         model = Project
-        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation']
+        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'providers_id', 'publication_doi', 'project_data_guid', 'recommended_citation']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-100'}),
             'other_type': forms.TextInput(attrs={'class': 'w-100'}),
@@ -32,6 +33,7 @@ class CreateProjectForm(forms.ModelForm):
             'project_contact_email': forms.TextInput(attrs={'class': 'w-100'}),
             'publication_doi': forms.TextInput(attrs={'class': 'w-100'}),
             'project_data_guid': forms.TextInput(attrs={'class': 'w-100'}),
+            'providers_id': forms.TextInput(attrs={'class': 'w-100'}),
             'recommended_citation': forms.Textarea(attrs={'rows': 4, 'class': 'w-100'}),
             'url': forms.TextInput(attrs={'class': 'w-100'}),
         }
@@ -80,7 +82,7 @@ class EditProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'recommended_citation']
+        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'providers_id', 'recommended_citation']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-100'}),
             'other_type': forms.TextInput(attrs={'class': 'w-100'}),
@@ -89,6 +91,7 @@ class EditProjectForm(forms.ModelForm):
             'project_contact_email': forms.TextInput(attrs={'class': 'w-100'}),
             'publication_doi': forms.TextInput(attrs={'class': 'w-100'}),
             'project_data_guid': forms.TextInput(attrs={'class': 'w-100'}),
+            'providers_id': forms.TextInput(attrs={'class': 'w-100'}),
             'recommended_citation': forms.Textarea(attrs={'rows': 4, 'class': 'w-100'}),
             'url': forms.TextInput(attrs={'class': 'w-100'}),
         }

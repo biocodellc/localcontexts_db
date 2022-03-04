@@ -45,6 +45,23 @@ def project_detail(request, unique_id):
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+# TODO: Make this a filter instead?
+@api_view(['GET'])
+def project_detail_providers(request, providers_id):
+    try:
+        project = Project.objects.get(providers_id=providers_id)
+        if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable':
+            if project.has_notice():
+                serializer = ProjectSerializer(project, many=False)
+            else:
+                serializer = ProjectNoNoticeSerializer(project, many=False)
+            
+            return Response(serializer.data)
+        else:
+            raise PermissionDenied({"message":"You don't have permission to view this project", "unique_id": unique_id})
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
 @api_view(['GET'])
 def projects_by_user(request, username):
     try:
