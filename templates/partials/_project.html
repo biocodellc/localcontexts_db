@@ -4,7 +4,9 @@
 
     <div class="flex-this w-100">
         <div class="flex-this w-50">
-            <div><a class="primary-btn green-btn margin-top-2" onClick="window.history.back();return false;"><i class="fa fa-arrow-left"></i> Back to Projects</a></div>
+            {% if request.user.is_authenticated %}
+                <div><a class="primary-btn green-btn margin-top-2" onClick="window.history.back();return false;"><i class="fa fa-arrow-left"></i> Back to Projects</a></div>
+            {% endif %}
         </div>
 
         <div class="flex-this flex-end w-50">

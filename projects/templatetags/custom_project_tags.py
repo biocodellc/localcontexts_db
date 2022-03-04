@@ -42,8 +42,11 @@ def which_communities_notified(project):
 def discoverable_project_view(user, project_uuid):
     project = Project.objects.select_related('project_creator').get(unique_id=project_uuid)
     project_contributors = ProjectContributors.objects.prefetch_related('institutions', 'communities', 'researchers').get(project=project)
+
+    if user.is_anonymous:
+        return False
     
-    if user == project.project_creator:
+    elif user == project.project_creator:
         return True
     
     elif project.community_projects.all(): # is user a part of the community created project
@@ -54,7 +57,7 @@ def discoverable_project_view(user, project_uuid):
         for institution in project.institution_projects.all():
             return institution.is_user_in_institution(user)
 
-    elif user.profile.is_researcher:  #is user a researcher and is this researcher a contributor
+    elif Researcher.objects.filter(user=user):  #is user a researcher and is this researcher a contributor
         for researcher in project_contributors.researchers.all():
             return user == researcher.user
 
