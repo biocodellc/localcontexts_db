@@ -311,9 +311,21 @@
             <p>This is an optional step to apply identifiers associated with this dataset. Please choose from the suggested options below and add accordingly.</p>
 
             <div class="padding-bottom-1 w-50">
+                <label>Provider's Project ID</label>
+                <div class="tooltip"><strong>?</strong>
+                    <span class="tooltiptext">An external Project ID that is already being used in a different system from the Local Contexts Hub.</span>
+                </div>
+                <br>
+                {{ form.providers_project_id }} <br>
+                {% if form.providers_project_id.errors %}
+                    <div class="msg-red w-50"><small>{{ form.providers_project_id.errors.as_text }}</small></div> 
+                {% endif %}
+            </div>
+
+            <div class="padding-bottom-1 w-50">
                 <label>Project Data GUID</label>
                 <div class="tooltip"><strong>?</strong>
-                    <span class="tooltiptext">A globally unique identifier for the data in this project. Recommended to use a resolvable URL containing a DOI or ARK identifier. Coming soon is the ability to generate a DOI here. GEOME does not automatically assign identifiers for all datasets since many datasets have been given GUIDs elsewhere</span>
+                    <span class="tooltiptext">A globally unique identifier for the data in this project. Recommended to use a resolvable URL containing a DOI or ARK identifier.</span>
                 </div>
                 <br>
                 {{ form.project_data_guid }} <br>
