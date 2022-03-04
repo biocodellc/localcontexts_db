@@ -487,12 +487,12 @@ if (submitProjectBtn) {
 
         let oldValue = 'Save Project'
         submitProjectBtn.setAttribute('disabled', true)
-        submitProjectBtn.classList.add('disabled-btn')
+        submitProjectBtn.classList.replace('action-btn', 'disabled-btn')
         submitProjectBtn.innerText = 'Saving Project...'
 
         setTimeout(function(){
             submitProjectBtn.innerText = oldValue;
-            submitProjectBtn.classList.remove('disabled-btn')
+            submitProjectBtn.classList.replace('disabled-btn', 'action-btn')
             submitProjectBtn.removeAttribute('disabled');
         }, 4000)
 

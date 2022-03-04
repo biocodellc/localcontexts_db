@@ -2,15 +2,15 @@
 
         <div class="content-card-v2 content-card-space white-bg">
             <div>
-                {% if community %}
-                    <small><a class="darkteal-text" href="{% url 'community-projects' community.id %}">Projects</a> <span class="grey-text"> >> Create New Project</span></small>
-                {% endif %}
-                {% if institution %}
-                    <small><a class="darkteal-text" href="{% url 'institution-projects' institution.id %}">Projects</a> <span class="grey-text"> >> Create New Project</span></small>
-                {% endif %}
-                {% if researcher %}
-                    <small><a class="darkteal-text" href="{% url 'researcher-projects' researcher.id %}">Projects</a> <span class="grey-text"> >> Create New Project</span></small>
-                {% endif %}
+                <small>
+                    <a class="darkteal-text" 
+                        {% if community %} href="{% url 'community-projects' community.id %}" {% endif %}
+                        {% if institution %} href="{% url 'institution-projects' institution.id %}" {% endif %}
+                        {% if researcher %} href="{% url 'researcher-projects' researcher.id %}" {% endif %}
+                    >Projects
+                    </a> 
+                    <span class="grey-text"> >> Create New Project</span>
+                </small>
             </div>
             <h2 class="no-bottom-margin">Create a Local Contexts Project</h2>
             <p>A Local Context Project describes the research that Notice(s) or Label(s) can be applied to.</p>
