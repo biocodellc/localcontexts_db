@@ -135,9 +135,6 @@ def accept_user_join_request(sender, instance, created, **kwargs):
 
             UserNotification.objects.create(to_user=sender_, from_user=receiver_, title=title, message=message, notification_type="Accept", community=community, reference_id=ref)
             
-            # Send email letting user know they are a member
-            # send_membership_email(community, sender_, role)
-
             # Message to user accepting the join request letting them know user is now a community member.
             title2 = f"{sender_name} is now a member of {community}"
             message2 = f"{sender_name} is now a member of {community}. They will now have access to {community}'s Projects and Labels"
@@ -152,9 +149,6 @@ def accept_user_join_request(sender, instance, created, **kwargs):
             title = f"You are now a member of {institution}"
             message = f"Your request to join {institution} has been accepted and you are now a member"
             UserNotification.objects.create(to_user=sender_, from_user=receiver_, title=title, message=message, notification_type="Accept", institution=institution, reference_id=ref)
-
-            # Send email letting user know they are a member
-            # send_membership_email(institution, sender_, role)
 
             # Message to user accepting the join request letting them know user is now a institution member.
             title2 = f"{sender_name} is now a member of {institution}"

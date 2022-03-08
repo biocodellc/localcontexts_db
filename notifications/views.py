@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from communities.models import *
 from accounts.models import UserAffiliation
+from helpers.emails import send_membership_email
 from .utils import send_community_approval_notification
 from django.views.decorators.csrf import csrf_exempt
 
@@ -57,6 +58,9 @@ def show_notification(request, pk):
                     c.viewers.add(n.from_user)
                 c.save()
 
+                # Send email letting user know they are a member
+                send_membership_email(request, c, n.user_from, n.role)
+
                 return render(request, 'notifications/read.html', {'notification': n})
 
             elif n.notification_type == 'Create':
@@ -90,6 +94,9 @@ def show_notification(request, pk):
                 elif n.role == 'editor':
                     c.editors.add(n.to_user)
                 c.save()
+
+                # Send email letting user know they are a member
+                send_membership_email(request, c, n.user_from, n.role)
 
                 return render(request, 'notifications/read.html', {'notification': n})
 
