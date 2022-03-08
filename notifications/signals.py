@@ -58,7 +58,7 @@ def accept_community_invite(sender, instance, **kwargs):
             UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Accept", community=community, reference_id=ref)
             
             # Send email letting user know they are a member
-            send_membership_email(community, receiver_, role)
+            # send_membership_email(community, receiver_, role)
 
             # Lets sender know their invitation was accepted
             title2 = str(check_full_name(receiver_)) + " has accepted your invitation to join " + str(community) + "!"
@@ -78,7 +78,7 @@ def accept_community_invite(sender, instance, **kwargs):
             UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Accept", institution=institution, reference_id=ref)
 
             # Send email letting user know they are a member
-            send_membership_email(institution, receiver_, role)
+            # send_membership_email(institution, receiver_, role)
 
             # Lets sender know their invitation was accepted
             title2 = str(check_full_name(receiver_)) + " has accepted your invitation to join " + str(institution) + "."
@@ -134,7 +134,7 @@ def accept_user_join_request(sender, instance, created, **kwargs):
             UserNotification.objects.create(to_user=sender_, from_user=receiver_, title=title, message=message, notification_type="Accept", community=community, reference_id=ref)
             
             # Send email letting user know they are a member
-            send_membership_email(community, sender_, role)
+            # send_membership_email(community, sender_, role)
 
             # Message to user accepting the join request letting them know user is now a community member.
             title2 = str(check_full_name(sender_)) + " is now a member of " + str(community)
@@ -153,7 +153,7 @@ def accept_user_join_request(sender, instance, created, **kwargs):
             UserNotification.objects.create(to_user=sender_, from_user=receiver_, title=title, message=message, notification_type="Accept", institution=institution, reference_id=ref)
 
             # Send email letting user know they are a member
-            send_membership_email(institution, sender_, role)
+            # send_membership_email(institution, sender_, role)
 
             # Message to user accepting the join request letting them know user is now a institution member.
             title2 = str(check_full_name(sender_)) + " is now a member of " + str(institution)
