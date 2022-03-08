@@ -59,20 +59,37 @@
                         {% endfor %}
                     {% endif %}
                 {% else %}
-                    {% if project.project_notice.all %}
-                        <div class="flex-this flex-end w-60">
+                    <div class="flex-this flex-end w-60">
+                        {% if project.project_notice.all %}
                             {% for notice in project.project_notice.all %}
-                                {% if notice.notice_type == 'biocultural' %}
-                                    <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                {% elif notice.notice_type == 'traditional_knowledge' %}
-                                    <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                                {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                                    <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                    <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                {% if not notice.archived %}
+                                    {% if notice.notice_type == 'biocultural' %}
+                                        <div><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                    {% elif notice.notice_type == 'traditional_knowledge' %}
+                                        <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                    {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                                        <div class="margin-right-8"><img src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                        <div><img src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
-                        </div>
-                    {% endif %}
+                        {% endif %}
+                        
+                        {% if project.project_institutional_notice.all %}
+                            {% for notice in project.project_institutional_notice.all %}
+                                {% if not notice.archived %}
+                                    {% if notice.notice_type == 'attribution_incomplete' %}
+                                        <div class="margin-left-8"><img src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
+                                    {% elif notice.notice_type == 'open_to_collaborate' %}
+                                        <div class="margin-left-8"><img src="{% static 'images/notices/ci-open-to-collaborate.png' %}" height="72px" width="72px"></div>
+                                    {% elif notice.notice_type == 'open_to_collaborate_and_attribution_incomplete' %}
+                                        <div class="margin-right-8"><img src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
+                                        <div><img src="{% static 'images/notices/ci-open-to-collaborate.png' %}" height="72px" width="72px"></div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 {% endif %}
 
             </div>
