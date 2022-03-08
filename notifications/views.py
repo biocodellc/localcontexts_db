@@ -12,6 +12,8 @@ def show_notification(request, pk):
     n = UserNotification.objects.get(id=pk)
     sent_to = n.to_user
     sent_from = n.from_user
+    sent_to_affiliation = UserAffiliation.objects.get(user=sent_to)
+    sent_from_affiliation = UserAffiliation.objects.get(user=sent_from)
 
     if request.method == 'POST':
         if n.community:
@@ -24,9 +26,8 @@ def show_notification(request, pk):
                 invite.save()
 
                 # Add community to UserAffiliation
-                affiliation = UserAffiliation.objects.get(user=sent_to)
-                affiliation.communities.add(community)
-                affiliation.save()
+                sent_to_affiliation.communities.add(community)
+                sent_to_affiliation.save()
 
                 # Add user as target role to community.
                 if n.role == 'viewer':
@@ -48,9 +49,8 @@ def show_notification(request, pk):
                 join_request.save()
 
                 # Add community to UserAffiliation
-                affiliation = UserAffiliation.objects.get(user=sent_from)
-                affiliation.communities.add(community)
-                affiliation.save()
+                sent_from_affiliation.communities.add(community)
+                sent_from_affiliation.save()
 
                 radio_value = request.POST.get('role')
 
@@ -85,9 +85,8 @@ def show_notification(request, pk):
                 invite.save()
 
                 # Add institution to UserAffiliation
-                affiliation = UserAffiliation.objects.get(user=sent_to)
-                affiliation.institutions.add(institution)
-                affiliation.save()
+                sent_to_affiliation.institutions.add(institution)
+                sent_to_affiliation.save()
 
                 # Add user as target role to institution.
                 if n.role == 'viewer':
@@ -109,12 +108,11 @@ def show_notification(request, pk):
                 join_request.save()
 
                 # Add institution to UserAffiliation
-                affiliation = UserAffiliation.objects.get(user=sent_from)
-                affiliation.institutions.add(institution)
-                affiliation.save()
+                sent_from_affiliation.institutions.add(institution)
+                sent_from_affiliation.save()
 
+                # get radio btn value from template
                 radio_value = request.POST.get('role')
-
                 if radio_value == 'admin':
                     institution.admins.add(sent_from)
                 elif radio_value == 'editor':
