@@ -112,9 +112,8 @@ def verify(request):
 @unauthenticated_user
 def login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = auth.authenticate(request, username=username, password=password)
 
         # If user is found, log in the user.
