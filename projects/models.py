@@ -37,6 +37,7 @@ class Project(models.Model):
     publication_doi = models.CharField(max_length=200, blank=True, null=True)
     project_data_guid = models.CharField(max_length=200, blank=True, null=True)
     providers_id = models.CharField(max_length=200, blank=True, null=True)
+    project_boundary_geojson = models.JSONField(blank=True, null=True)
     recommended_citation = models.TextField(null=True, blank=True)
     geome_project_id = models.IntegerField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)

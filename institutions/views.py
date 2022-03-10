@@ -205,9 +205,9 @@ def institution_members(request, pk):
                         messages.add_message(request, messages.INFO, 'Invitation Sent!')
                         return redirect('institution-members', institution.id)
                 else: 
-                    messages.add_message(request, messages.INFO, 'This user has already been invited to this institution.')
+                    messages.add_message(request, messages.INFO, 'The user you are trying to add has already been invited to this institution.')
             else:
-                messages.add_message(request, messages.ERROR, 'This user is already a member of this institution.')
+                messages.add_message(request, messages.ERROR, 'The user you are trying to add is already a member of this institution.')
 
         context = { 
             'institution': institution,
