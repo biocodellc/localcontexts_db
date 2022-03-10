@@ -178,35 +178,23 @@ def onboarding_on(request):
 def create_profile(request):
     if request.method == 'POST':
         user_form = UserCreateProfileForm(request.POST, instance=request.user)
-        profile_form = ProfileCreationForm(
-            request.POST,  
-            instance=request.user.profile
-        )
+        profile_form = ProfileCreationForm(request.POST, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-
             return redirect('select-account')
     else:
         user_form = UserCreateProfileForm(instance=request.user)
         profile_form = ProfileCreationForm(instance=request.user.profile)
 
-    context = {
-        'user_form': user_form,
-        'profile_form': profile_form,
-    }
-
+    context = { 'user_form': user_form, 'profile_form': profile_form,}
     return render(request, 'accounts/create-profile.html', context)
 
 @login_required(login_url='login')
 def update_profile(request):
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(
-            request.POST, 
-            request.FILES, 
-            instance=request.user.profile
-        )
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -219,10 +207,7 @@ def update_profile(request):
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
 
-    context = {
-        'user_form': user_form,
-        'profile_form': profile_form,
-    }
+    context = { 'user_form': user_form, 'profile_form': profile_form }
     return render(request, 'accounts/update-profile.html', context)
 
 @login_required(login_url='login')
@@ -329,7 +314,8 @@ def organization_registry(request):
 
                     # Send email to community creator
                     send_join_request_email_admin(request, target_community)
-            
+
+            messages.add_message(request, messages.SUCCESS, 'Your message was sent!')
             return redirect('organization-registry')
         else:
             context = {
