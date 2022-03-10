@@ -14,6 +14,10 @@
             Viewers can view the activity happening in the account but cannot change or edit anything.
         </p>
     </div>
+
+        <!-- Alerts -->
+    {% include 'partials/_alerts.html' %}
+
 </div>
 
 {% if community %}
@@ -268,10 +272,6 @@
                                     {{ form.message }}
                                 </div>
                             </div>    
-
-                            <!-- Alerts -->
-                            {% include 'partials/_alerts.html' %}
-
                         
                             <div class="flex-this w-100 margin-bottom-16">
                                 <div class="w-50 margin-top-2">
