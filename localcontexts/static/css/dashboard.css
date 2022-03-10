@@ -88,9 +88,10 @@
 /* Registry btns on dashcard */
 .dashcard-btn-container {
     display: flex;
-    width: 20%;
-    align-items: center;
-    justify-content: center;
+    width: 30%; 
+    justify-content: flex-end;  
+    font-size: 14px;
+    font-weight: bold;
 }
 
 /* SETTINGS */

@@ -3,9 +3,10 @@
 <div class="content-card-v2 content-card-space white-bg">
 
     <div class="flex-this w-100">
-
         <div class="flex-this w-50">
-            <div><a class="primary-btn green-btn margin-top-2" onClick="window.history.back();return false;"><i class="fa fa-arrow-left"></i> Back to Projects</a></div>
+            {% if request.user.is_authenticated %}
+                <div><a class="primary-btn green-btn margin-top-2" onClick="window.history.back();return false;"><i class="fa fa-arrow-left"></i> Back to Projects</a></div>
+            {% endif %}
         </div>
 
         <div class="flex-this flex-end w-50">
@@ -102,6 +103,13 @@
                     <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Local Contexts Project ID</span> <br><span id="uniqueIDToCopy">{{ project.unique_id }}</span><br></p></div>
                 </div>
 
+                <div class="flex-this margin-top-16">
+                    {% if project.providers_id %}
+                        <div><a onclick="copyToClipboard('providersIDToCopy')" class="primary-btn green-btn margin-top-2 copied-display"><i class="fa fa-copy"></i></a></div>
+                        <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Providers ID</span> <br><span id="providersIDToCopy">{{ project.providers_id }}</span><br></p></div>
+                    {% endif %}
+                </div>
+
                 <div class="flex-this margin-top-1">
                     <div>
                         {% if project.publication_doi %}
@@ -114,7 +122,7 @@
                         {% if project.publication_doi %}
                             <a class="darkteal-text underline-hover" href="https://www.dx.doi.org/{{ project.publication_doi }}">{{ project.publication_doi }}</a>
                         {% else %}
-                            None listed <br>
+                            None <br>
                         {% endif %}
                     </p></div>
                 </div>
@@ -128,7 +136,7 @@
                     <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Project Data GUID</span><br> <span id="guidToCopy">{{ project.project_data_guid }}</span><br></p></div>
                 </div>
 
-                <div><p><span class="bold">Recommended Citation</span><br> {% if project.recommended_citation %}{{ project.recommended_citation }} {% else %} None added{% endif %}<br></p></div>
+                <div><p><span class="bold">Recommended Citation</span><br> {% if project.recommended_citation %}{{ project.recommended_citation }} {% else %} None {% endif %}<br></p></div>
 
             </div>
         </div>
@@ -211,6 +219,7 @@
                         <div class="pad-left-2">
                             <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
                             <p class="bold"> {{ bclabel.name }} </p>
+                            {% if bclabel.audiofile %} <div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
                             <p>{{ bclabel.default_text}}</p>
 
                             {% include 'partials/_label-translation.html' %}
@@ -231,6 +240,8 @@
                         <div class="pad-left-2">
                             <p class="darkteal-text">Label shared by {{ tklabel.community.community_name }} </p>
                             <p class="bold"> {{ tklabel.name }} </p>
+                            {% if tklabel.audiofile %} <div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
+
                             <p>{{ tklabel.default_text}}</p>
 
                             {% include 'partials/_label-translation.html' %}

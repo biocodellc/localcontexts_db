@@ -47,7 +47,7 @@ def connect_institution(request):
                 data.save()
 
                 # Send institution creator email
-                send_join_request_email_admin(request.user, institution)
+                send_join_request_email_admin(request, institution)
                 return redirect('dashboard')
         else:
             messages.add_message(request, messages.ERROR, 'Institution not in registry')
@@ -201,7 +201,7 @@ def institution_members(request, pk):
                         data.institution = institution
                         data.save()
                         # Send email to target user
-                        send_institution_invite_email(data, institution)
+                        send_institution_invite_email(request, data, institution)
                         messages.add_message(request, messages.INFO, 'Invitation Sent!')
                         return redirect('institution-members', institution.id)
                 else: 
@@ -328,13 +328,16 @@ def create_project(request, pk):
                 contributors = ProjectContributors.objects.get(project=data)
                 contributors.institutions.add(institution)
                 # Add selected contributors to the ProjectContributors object
-                add_to_contributors(contributors, institutions_selected, researchers_selected)
+                add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
 
                 # Project person formset
                 instances = formset.save(commit=False)
                 for instance in instances:
                     instance.project = data
                     instance.save()
+                    
+                    # Send email to added person
+                    send_project_person_email(request, instance.email, data.unique_id)
 
                 # Format and send notification about the created project
                 truncated_project_title = str(data.title)[0:30]
@@ -391,7 +394,7 @@ def edit_project(request, institution_id, project_uuid):
                 researchers_selected = request.POST.getlist('selected_researchers')
 
                 # Add selected contributors to the ProjectContributors object
-                add_to_contributors(contributors, institutions_selected, researchers_selected)
+                add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
 
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')

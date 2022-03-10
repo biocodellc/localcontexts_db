@@ -58,7 +58,7 @@ def connect_community(request):
                 data.save()
 
                 # Send community creator email
-                send_join_request_email_admin(request.user, community)
+                send_join_request_email_admin(request, community)
                 return redirect('dashboard')
         else:
             messages.add_message(request, messages.ERROR, 'Community not in registry')
@@ -170,7 +170,7 @@ def community_members(request, pk):
                         data.community = community
                         data.save()
                         # Send email to target user
-                        send_community_invite_email(data, community)
+                        send_community_invite_email(request, data, community)
                         messages.add_message(request, messages.INFO, 'Invitation Sent!')
                         return redirect('members', community.id)
                 else: 
@@ -610,13 +610,15 @@ def create_project(request, pk):
                 institutions_selected = request.POST.getlist('selected_institutions')
                 researchers_selected = request.POST.getlist('selected_researchers')
 
-                add_to_contributors(contributors, institutions_selected, researchers_selected)
+                add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
                 
                 # Project person formset
                 instances = formset.save(commit=False)
                 for instance in instances:
                     instance.project = data
                     instance.save()
+                    # Send email to added person
+                    send_project_person_email(request, instance.email, data.unique_id)
 
                 # Send notification
                 truncated_project_title = str(data.title)[0:30]
@@ -663,7 +665,7 @@ def edit_project(request, community_id, project_uuid):
                 researchers_selected = request.POST.getlist('selected_researchers')
 
                 # Add selected contributors to the ProjectContributors object
-                add_to_contributors(contributors, institutions_selected, researchers_selected)
+                add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
                 return redirect('community-projects', community.id)
 
         context = {

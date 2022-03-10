@@ -8,7 +8,8 @@ urlpatterns = [
     path('v1/', views.apiOverview, name="api-overview"),
 
     path('v1/projects/', views.projects, name="api-projects"),
-    path('v1/projects/<str:unique_id>/', views.project_detail, name="api-project-detail"),
+    path('v1/projects/<uuid:unique_id>/', views.project_detail, name="api-project-detail"),
+    path('v1/projects/external/<str:providers_id>/', views.project_detail_providers, name="api-project-detail-providers"),
 
     path('v1/projects/users/<str:username>/', views.projects_by_user, name="api-projects-user"),
     path('v1/projects/institutions/<str:institution_id>/', views.projects_by_institution, name="api-projects-institution"),
