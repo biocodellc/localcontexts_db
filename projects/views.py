@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Project
+from .models import Project, ProjectContributors, ProjectPerson
 from helpers.models import Notice, InstitutionNotice
 from helpers.utils import render_to_pdf, generate_zip
 from django.http import HttpResponse
@@ -23,12 +23,14 @@ def download_project_zip(request, unique_id):
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
     project_bclabels = project.bc_labels.all()
     project_tklabels = project.tk_labels.all()
+    contributors = ProjectContributors.objects.prefetch_related('communities', 'institutions', 'researchers').get(project=project)
+    project_people = ProjectPerson.objects.filter(project=project)
 
     notice_exists = Notice.objects.filter(project=project).exists()
     institution_notice_exists = InstitutionNotice.objects.filter(project=project).exists()
 
     template_path = 'snippets/pdfs/project-pdf.html'
-    context = {'project': project}
+    context = { 'project': project, 'contributors': contributors, 'project_people': project_people }
 
     files = []
 
@@ -178,7 +180,9 @@ def download_project_zip(request, unique_id):
     # Generate zip file 
     full_zip_in_memory = generate_zip(files)
 
+    zipfile_name = f"LC-Project-{project.title}.zip"
+
     response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename="{}"'.format('LC-Project.zip')
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format(zipfile_name)
 
     return response

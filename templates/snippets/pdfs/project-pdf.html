@@ -42,13 +42,48 @@
     <body>
         <h1>{{ project.title }}</h1>
         <p>
-            <strong>Created:</strong> {{ project.project_creator.get_full_name }}
+            <strong>Created By:</strong> {{ project.project_creator.get_full_name }}
             {% if project.community_projects.all %} {% for community in project.community_projects.all %} at {{ community }} | Community {% endfor %} {% endif %}
             {% if project.institution_projects.all %} {% for institution in project.institution_projects.all %} at {{ institution }} | Institution {% endfor %} {% endif %}
             {% if project.researcher_projects.all %} {% for researcher in project.researcher_projects.all %} | Researcher {% endfor %} {% endif %}
             <br>
             <strong>Date Added:</strong> {{ project.date_added }}<br>
-            <strong>Local Contexts Unique Project ID:</strong> {{ project.unique_id }}<br>
+            <strong>Date Last Modified:</strong> {{ project.date_modified }}<br>
+            <strong>Project Privacy:</strong> {{ project.project_privacy }}<br>
+            <strong>Local Contexts Project ID:</strong> {{ project.unique_id }}<br>
+            
+            {% if project.project_privacy == 'Public' %}
+                {% if project.publication_doi %}<strong>Project DOI:</strong> {{ project.publication_doi }}<br>{% endif %}
+                {% if project.project_data_guid %}<strong>Project Data GUID:</strong> {{ project.project_data_guid }}<br>{% endif %}
+                {% if project.providers_id %}<strong>Project Provider's ID:</strong> {{ project.providers_id }}<br>{% endif %}
+
+                <strong>Project Contact:</strong> {{ project.project_contact }} {{ project.project_contact_email }}<br>
+                <strong>Project Type:</strong> {% if project.project_type == 'Other' %} {{ project.other_type }} <br> {% else %} {{ project.project_type }}<br> {% endif %}
+                
+                {% if contributors %}
+                    <strong>Project Contributors:</strong> <br>
+                    {% for community in contributors.communities.all %}
+                        {{ community.community_name }} | Community <br>
+                    {% endfor %}
+                    {% for institution in contributors.institutions.all %}
+                        {{ institution.institution_name }} | Institution <br>
+                    {% endfor %}
+                    {% for researcher in contributors.researchers.all %}
+                        {{ researcher.user.get_full_name }} | Researcher <br>
+                    {% endfor %}
+                {% endif %}
+
+                {% if project_people %}
+                    <strong>Other Contributors:</strong><br>
+                    {% for person in project_people %}
+                        {{ person.name }} <br>
+                    {% endfor %}
+                {% endif %}
+
+                {% if project.recommended_citation %}<strong>Recommended Citation:</strong> {{ project.recommended_citation }}<br>{% endif %}
+                {% if project.description %}<br><strong>Project Description:</strong> {{ project.description|linebreaks }}<br>{% endif %}
+
+            {% endif %}
         </p>
 
         <table>
