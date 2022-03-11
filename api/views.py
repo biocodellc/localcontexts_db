@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework import generics
+from rest_framework import generics, filters
 from rest_framework.exceptions import PermissionDenied
 from rest_framework import status
 
@@ -28,6 +28,13 @@ class ProjectList(generics.ListAPIView):
     queryset = Project.objects.exclude(project_privacy='Private')
     serializer_class = ProjectOverviewSerializer
 
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^providers_id', '=unique_id']
+
+    # '^' starts-with search
+    # '=' exact matches
+    # '$' regex search
+
 class ProjectDetail(generics.RetrieveAPIView):
     lookup_field = 'unique_id'
     queryset = Project.objects.exclude(project_privacy='Private')
@@ -38,22 +45,6 @@ class ProjectDetail(generics.RetrieveAPIView):
             return ProjectSerializer
         else:
             return ProjectNoNoticeSerializer
-
-@api_view(['GET'])
-def project_detail(request, unique_id):
-    try:
-        project = Project.objects.get(unique_id=unique_id)
-        if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable':
-            if project.has_notice():
-                serializer = ProjectSerializer(project, many=False)
-            else:
-                serializer = ProjectNoNoticeSerializer(project, many=False)
-            
-            return Response(serializer.data)
-        else:
-            raise PermissionDenied({"message":"You don't have permission to view this project", "unique_id": unique_id})
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
 
 # TODO: Make this a filter instead?
 @api_view(['GET'])
