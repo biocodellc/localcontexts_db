@@ -7,6 +7,7 @@ from rest_framework import status
 
 from .serializers import *
 from projects.models import Project
+from helpers.models import Notice, InstitutionNotice
 
 @api_view(['GET'])
 def apiOverview(request, format=None):
@@ -26,6 +27,17 @@ def apiOverview(request, format=None):
 class ProjectList(generics.ListAPIView):
     queryset = Project.objects.exclude(project_privacy='Private')
     serializer_class = ProjectOverviewSerializer
+
+class ProjectDetail(generics.RetrieveAPIView):
+    lookup_field = 'unique_id'
+    queryset = Project.objects.exclude(project_privacy='Private')
+
+    def get_serializer_class(self):
+        project = self.get_object()
+        if Notice.objects.filter(project=project, archived=False).exists() or InstitutionNotice.objects.filter(project=project, archived=False).exists():
+            return ProjectSerializer
+        else:
+            return ProjectNoNoticeSerializer
 
 @api_view(['GET'])
 def project_detail(request, unique_id):

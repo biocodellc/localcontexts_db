@@ -75,7 +75,7 @@ class InstitutionNoticeSerializer(serializers.ModelSerializer):
 class ProjectOverviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ('unique_id', 'title',)
+        fields = ('unique_id', 'title', 'date_added', 'date_modified',)
 
 # Notices only   
 class ProjectSerializer(serializers.ModelSerializer):

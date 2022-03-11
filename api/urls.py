@@ -7,7 +7,7 @@ urlpatterns = [
     path('v1/', apiOverview, name="api-overview"),
 
     path('v1/projects/', ProjectList.as_view(), name="api-projects"),
-    path('v1/projects/<uuid:unique_id>/', project_detail, name="api-project-detail"),
+    path('v1/projects/<unique_id>/', ProjectDetail.as_view(), name="api-project-detail"),
     path('v1/projects/external/<str:providers_id>/', project_detail_providers, name="api-project-detail-providers"),
 
     path('v1/projects/users/<str:username>/', projects_by_user, name="api-projects-user"),
