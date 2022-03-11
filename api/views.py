@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework import permissions
+from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
 from rest_framework import status
 
@@ -23,11 +23,9 @@ def apiOverview(request, format=None):
     }
     return Response(api_urls)
 
-@api_view(['GET'])
-def projects(request):
-    projects = Project.objects.exclude(project_privacy='Private')
-    serializer = ProjectOverviewSerializer(projects, many=True)
-    return Response(serializer.data)
+class ProjectList(generics.ListAPIView):
+    queryset = Project.objects.exclude(project_privacy='Private')
+    serializer_class = ProjectOverviewSerializer
 
 @api_view(['GET'])
 def project_detail(request, unique_id):
