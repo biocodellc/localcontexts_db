@@ -29,7 +29,7 @@ class ProjectList(generics.ListAPIView):
     serializer_class = ProjectOverviewSerializer
 
     filter_backends = [filters.SearchFilter]
-    search_fields = ['^providers_id', '=unique_id']
+    search_fields = ['^providers_id', '=unique_id', '$title']
 
     # '^' starts-with search
     # '=' exact matches
