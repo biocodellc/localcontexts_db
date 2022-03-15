@@ -75,7 +75,7 @@ class InstitutionNoticeSerializer(serializers.ModelSerializer):
 class ProjectOverviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ('unique_id', 'title',)
+        fields = ('unique_id', 'providers_id', 'title', 'project_privacy', 'date_added', 'date_modified',)
 
 # Notices only   
 class ProjectSerializer(serializers.ModelSerializer):
@@ -84,7 +84,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'providers_id', 'title', 'date_added', 'date_modified', 'notice', 'institution_notice')
+        fields = ('unique_id', 'providers_id', 'title', 'project_privacy', 'date_added', 'date_modified', 'notice', 'institution_notice', 'project_boundary_geojson')
 
 # Labels only
 class ProjectNoNoticeSerializer(serializers.ModelSerializer):
@@ -93,4 +93,4 @@ class ProjectNoNoticeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'providers_id', 'title', 'date_added', 'date_modified', 'bc_labels', 'tk_labels')
+        fields = ('unique_id', 'providers_id', 'title', 'project_privacy', 'date_added', 'date_modified', 'bc_labels', 'tk_labels', 'project_boundary_geojson')
