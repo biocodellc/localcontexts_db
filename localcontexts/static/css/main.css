@@ -537,6 +537,7 @@ input:focus {
 }
 
 .msg-green {
+    display: flex;
     padding: 7px 5px;
     color: #3c763d;
     background-color: #dde7de;
@@ -544,7 +545,14 @@ input:focus {
     border: 1px solid #3c763d;
 }
 
+.msg-green small, .msg-green span, 
+.msg-blue small, .msg-blue span,
+.msg-red small { 
+    display: block;
+}
+
 .msg-blue {
+    display: flex;
     padding: 7px 5px;
     color: #31708f;
     background-color: #d9ebf5;

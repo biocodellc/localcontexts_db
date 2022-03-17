@@ -1,12 +1,13 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework import permissions
+from rest_framework import generics, filters
 from rest_framework.exceptions import PermissionDenied
 from rest_framework import status
 
 from .serializers import *
 from projects.models import Project
+from helpers.models import Notice, InstitutionNotice
 
 @api_view(['GET'])
 def apiOverview(request, format=None):
@@ -23,27 +24,27 @@ def apiOverview(request, format=None):
     }
     return Response(api_urls)
 
-@api_view(['GET'])
-def projects(request):
-    projects = Project.objects.exclude(project_privacy='Private')
-    serializer = ProjectOverviewSerializer(projects, many=True)
-    return Response(serializer.data)
+class ProjectList(generics.ListAPIView):
+    queryset = Project.objects.exclude(project_privacy='Private')
+    serializer_class = ProjectOverviewSerializer
 
-@api_view(['GET'])
-def project_detail(request, unique_id):
-    try:
-        project = Project.objects.get(unique_id=unique_id)
-        if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable':
-            if project.has_notice():
-                serializer = ProjectSerializer(project, many=False)
-            else:
-                serializer = ProjectNoNoticeSerializer(project, many=False)
-            
-            return Response(serializer.data)
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^providers_id', '=unique_id', '$title']
+
+    # '^' starts-with search
+    # '=' exact matches
+    # '$' regex search
+
+class ProjectDetail(generics.RetrieveAPIView):
+    lookup_field = 'unique_id'
+    queryset = Project.objects.exclude(project_privacy='Private')
+
+    def get_serializer_class(self):
+        project = self.get_object()
+        if Notice.objects.filter(project=project, archived=False).exists() or InstitutionNotice.objects.filter(project=project, archived=False).exists():
+            return ProjectSerializer
         else:
-            raise PermissionDenied({"message":"You don't have permission to view this project", "unique_id": unique_id})
-    except:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+            return ProjectNoNoticeSerializer
 
 # TODO: Make this a filter instead?
 @api_view(['GET'])

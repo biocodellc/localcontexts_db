@@ -3,6 +3,7 @@
 <section class="grey-bg flex-this column align-center">
 
     <div class="content-card-v2 white-bg">
+
         <div class="border-bottom-solid-teal">
             <h2 class="no-bottom-margin">The Local Contexts Registry</h2><br>
             <p class="no-top-margin w-80">
@@ -20,8 +21,10 @@
             </p>            
         </div>
 
-    </div>
+        {% include 'partials/_alerts.html' %}
 
+    </div>
+    
     {% if communities %}
         {% for community in communities %}
             <div class="dashcard communities-filter show">
