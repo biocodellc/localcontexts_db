@@ -13,6 +13,48 @@ if (passwordField) {
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
+if (window.location.href.includes('labels/customize/')) {
+// Get languages from the IANA directory
+    let languagesArray = []
+
+    const populateLanguages = (array) => {
+        let languageSelect = document.getElementById('languagesSelect')
+
+        array.forEach(item => {
+            let option = new Option(item,item)
+            languageSelect.add(option, undefined)
+        })
+    }
+
+    const fetchLanguages = () => {
+        const endpoint = 'https://raw.githubusercontent.com/OnroerendErfgoed/language-tags/develop/language_tags/data/json/registry.json'
+
+        fetch(endpoint)
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                } else if (response.status === 404) {
+                    return Promise.reject('404 Not Found')
+                }
+            })
+            .then(data => {
+                data.forEach((language) => {
+                    let allLanguages = language.Description
+                    allLanguages.forEach((item) => { languagesArray.push(item)})
+                })
+                let sortedArray = languagesArray.sort()
+                const uniqueSortedArray = [...new Set(sortedArray)]
+                populateLanguages(uniqueSortedArray)
+            })
+            .catch((err) => {console.error('Error: ', err)})
+
+    }
+
+    fetchLanguages()
+}
+
+
+
 // Show customized label text in community: labels
 function customText(imgDiv) {
     let labelID = imgDiv.id
