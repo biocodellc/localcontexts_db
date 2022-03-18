@@ -39,17 +39,17 @@ if (window.location.href.includes('labels/customize/')) {
             })
             .then(data => {
                 data.forEach((language) => {
-                    let allLanguages = language.Description
-                    allLanguages.forEach((item) => { languagesArray.push(item)})
+                    if(language.Type == 'language') {
+                        let allLanguages = language.Description
+                        allLanguages.forEach((item) => { languagesArray.push(item)})
+                    }
                 })
                 let sortedArray = languagesArray.sort()
                 const uniqueSortedArray = [...new Set(sortedArray)]
                 populateLanguages(uniqueSortedArray)
             })
             .catch((err) => {console.error('Error: ', err)})
-
     }
-
     fetchLanguages()
 }
 
