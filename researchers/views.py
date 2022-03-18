@@ -130,7 +130,7 @@ def researcher_projects(request, pk):
                 data = form.save(commit=False)
 
                 if project_uuid:
-                    project = Project.objects.get(id=project_uuid)
+                    project = Project.objects.get(unique_id=project_uuid)
                     data.project = project
 
                 data.sender = request.user
