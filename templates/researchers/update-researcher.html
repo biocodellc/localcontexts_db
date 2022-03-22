@@ -72,34 +72,43 @@
                             <label class="bold">ORCiD</label>
 
                             {% if researcher.orcid %}
-                                <div itemscope itemtype="https://schema.org/Person">
-                                    <a 
-                                        class="darkteal-text underline-hover" 
-                                        itemprop="sameAs" 
-                                        target="orcid.widget" 
-                                        rel="me noopener noreferrer" 
-                                        style="vertical-align:top;"
-                                        {% if 'https://sandbox.orcid.org/' in researcher.orcid or 'https://orcid.org/' in researcher.orcid %}
-                                            content="{{ researcher.orcid }}" 
-                                            href="{{ researcher.orcid }}" 
-                                        {% elif 'X' in researcher.orcid %}
-                                            content="https://sandbox.orcid.org/{{ researcher.orcid }}" 
-                                            href="https://sandbox.orcid.org/{{ researcher.orcid }}"
-                                        {% else %}
-                                            content="https://orcid.org/{{ researcher.orcid }}" 
-                                            href="https://orcid.org/{{ researcher.orcid }}" 
-                                        {% endif %}
-                                    >
-                                        <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">
-                                        {% if 'https://sandbox.orcid.org/' in researcher.orcid or 'https://orcid.org/' in researcher.orcid %}
-                                            {{ researcher.orcid }}
-                                        {% elif 'X' in researcher.orcid %}
-                                            https://sandbox.orcid.org/{{ researcher.orcid }} 
-                                        {% else %}
-                                            https://orcid.org/{{ researcher.orcid }}
-                                        {% endif %}
-                                    </a>
+                                <div class="flex-this space-between">
+                                    <div>
+                                        <div itemscope itemtype="https://schema.org/Person">
+                                            <a 
+                                                class="darkteal-text underline-hover" 
+                                                itemprop="sameAs" 
+                                                target="orcid.widget" 
+                                                rel="me noopener noreferrer" 
+                                                style="vertical-align:top;"
+                                                {% if 'https://sandbox.orcid.org/' in researcher.orcid or 'https://orcid.org/' in researcher.orcid %}
+                                                    content="{{ researcher.orcid }}" 
+                                                    href="{{ researcher.orcid }}" 
+                                                {% elif 'X' in researcher.orcid %}
+                                                    content="https://sandbox.orcid.org/{{ researcher.orcid }}" 
+                                                    href="https://sandbox.orcid.org/{{ researcher.orcid }}"
+                                                {% else %}
+                                                    content="https://orcid.org/{{ researcher.orcid }}" 
+                                                    href="https://orcid.org/{{ researcher.orcid }}" 
+                                                {% endif %}
+                                            >
+                                                <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">
+                                                {% if 'https://sandbox.orcid.org/' in researcher.orcid or 'https://orcid.org/' in researcher.orcid %}
+                                                    {{ researcher.orcid }}
+                                                {% elif 'X' in researcher.orcid %}
+                                                    https://sandbox.orcid.org/{{ researcher.orcid }} 
+                                                {% else %}
+                                                    https://orcid.org/{{ researcher.orcid }}
+                                                {% endif %}
+                                            </a>
+                                        </div>                                
+                                    </div>
+
+                                    <div>
+                                        <a class="primary-btn white-btn" href="{% url 'disconnect-orcid' %}">Disconnect ORCiD</a>
+                                    </div> 
                                 </div>
+
                             {% else %}
                                 <div class="flex-this space-between">
                                     <div class="w-50"><p>We encourage you to have an ORCiD ID. <br>You can <a class="darkteal-text underline-hover" href="https://orcid.org/" target="_blank">read more about ORCiD here</a>.</p></div>
