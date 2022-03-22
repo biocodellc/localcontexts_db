@@ -808,33 +808,6 @@ function copyToClipboard(elemID) {
     textArea.remove();
 }
 
-// Connect-researcher: ORCiD popup
-if (window.location.href.includes('connect-researcher')) {
-    const createResearcherBtn = document.getElementById('submitResearcher')
-
-    createResearcherBtn.addEventListener('click', function(event) {
-        event.preventDefault()
-        let hiddenORCIDInput = document.getElementById('orcidId')
-    
-        //If it isn't "undefined" and it isn't "null", then it exists.
-        if(typeof(hiddenORCIDInput) != 'undefined' && hiddenORCIDInput != null){
-            document.getElementById('createResearcher').submit()
-        } else {
-            // Show modal
-            let modal = document.getElementById('ORCIDmodal')
-            modal.classList.replace('hide', 'show')
-
-            // Close modal
-            let closeBtn = document.getElementById('closeORCIDmodal')
-            closeBtn.addEventListener('click', function(event) { modal.classList.replace('show', 'hide') })
-
-            // Continue without orcid
-            let continueBtn = document.getElementById('continueNoOrcidBtn')
-            continueBtn.addEventListener('click', function(event) { document.getElementById('createResearcher').submit() })
-        }
-    })  
-}
-
 // Add member modal
 function openMemberModal() {
     const memberModal = document.getElementById('memberModal')
