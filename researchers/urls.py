@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
     path('connect-researcher/', views.connect_researcher, name="connect-researcher"),
+    path('connect-orcid/', views.connect_orcid, name="connect-orcid"),
+    
     path('update/<str:pk>', views.update_researcher, name="researcher-update"),
 
     path('notices/<str:pk>', views.researcher_notices, name="researcher-notices"),
