@@ -59,6 +59,14 @@ def connect_orcid(request):
     return redirect('researcher-update', researcher.id)
 
 @login_required(login_url='login')
+def disconnect_orcid(request):
+    researcher = Researcher.objects.get(user=request.user)
+    researcher.orcid = ''
+    researcher.orcid_auth_token = ''
+    researcher.save()
+    return redirect('researcher-update', researcher.id)
+
+@login_required(login_url='login')
 def update_researcher(request, pk):
     researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
