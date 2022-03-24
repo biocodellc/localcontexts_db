@@ -54,6 +54,19 @@ def connect_researcher(request):
         return redirect('researcher-projects', researcher.id)
 
 @login_required(login_url='login')
+def connect_orcid(request):
+    researcher = Researcher.objects.get(user=request.user)
+    return redirect('researcher-update', researcher.id)
+
+@login_required(login_url='login')
+def disconnect_orcid(request):
+    researcher = Researcher.objects.get(user=request.user)
+    researcher.orcid = ''
+    researcher.orcid_auth_token = ''
+    researcher.save()
+    return redirect('researcher-update', researcher.id)
+
+@login_required(login_url='login')
 def update_researcher(request, pk):
     researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
@@ -66,6 +79,13 @@ def update_researcher(request, pk):
             if update_form.is_valid():
                 data = update_form.save(commit=False)
                 data.save()
+
+                if not researcher.orcid:
+                    orcid_id = request.POST.get('orcidId')
+                    orcid_token = request.POST.get('orcidIdToken')
+                    researcher.orcid_auth_token = orcid_token
+                    researcher.orcid = orcid_id
+                    researcher.save()
 
                 messages.add_message(request, messages.SUCCESS, 'Updated!')
                 return redirect('researcher-update', researcher.id)
@@ -130,7 +150,7 @@ def researcher_projects(request, pk):
                 data = form.save(commit=False)
 
                 if project_uuid:
-                    project = Project.objects.get(id=project_uuid)
+                    project = Project.objects.get(unique_id=project_uuid)
                     data.project = project
 
                 data.sender = request.user

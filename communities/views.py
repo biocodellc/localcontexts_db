@@ -1,11 +1,10 @@
-import re
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections, ProjectComment
+from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections
 from notifications.models import ActionNotification
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
@@ -112,9 +111,7 @@ def confirm_community(request, community_id):
         if form.is_valid():
             data = form.save(commit=False)
             data.save()
-
-            subject = 'New Community Application: ' + str(data.community_name)
-            send_hub_admins_application_email(community, data, subject)
+            send_hub_admins_application_email(request, community, data)
             return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'community': community,})
 

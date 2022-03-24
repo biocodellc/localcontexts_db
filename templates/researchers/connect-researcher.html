@@ -16,15 +16,27 @@
             <div class="w-50"><p>We encourage you to have an ORCiD ID. <br>You can <a class="darkteal-text underline-hover" href="https://orcid.org/" target="_blank">read more about ORCiD here</a>.</p></div>
 
             <!-- Show ORCiD widget based on hostname -->
-            {% if 'localcontextshub' in request.get_host %}
-                <div id="orcidWidget" data-clientid='APP-IBW6UOF5FGJG0ODB' data-env="production" data-redirecturi="https://localcontextshub.org/researchers/connect-researcher/"></div>
-            {% elif 'localhost' in request.get_host %}
-                <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="http://localhost:8000/researchers/connect-researcher/"></div>
-            {% elif 'anth-ja77-local-contexts-8985' in request.get_host %}
-                <div id="orcidWidget" data-clientid='APP-IBW6UOF5FGJG0ODB' data-env="production" data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"></div>
-            {% elif 'anth-ja77-lc-dev-42d5' in request.get_host %}
-                <div id="orcidWidget" data-clientid='APP-6SAN29B74JQ6FEUQ' data-env="sandbox" data-redirecturi="https://anth-ja77-lc-dev-42d5.uc.r.appspot.com/researchers/connect-researcher/"></div>
-            {% endif %}
+            <div 
+                id="orcidWidget" 
+                {% if 'localcontextshub' in request.get_host %}
+                    data-clientid='APP-IBW6UOF5FGJG0ODB' 
+                    data-env="production" 
+                    data-redirecturi="https://localcontextshub.org/researchers/connect-researcher/"
+                {% elif 'localhost' in request.get_host %}
+                    data-clientid='APP-6SAN29B74JQ6FEUQ' 
+                    data-env="sandbox" 
+                    data-redirecturi="http://localhost:8000/researchers/connect-researcher/"
+                {% elif 'anth-ja77-local-contexts-8985' in request.get_host %}
+                    data-clientid='APP-IBW6UOF5FGJG0ODB' 
+                    data-env="production" 
+                    data-redirecturi="https://anth-ja77-local-contexts-8985.uc.r.appspot.com/researchers/connect-researcher/"
+                {% elif 'anth-ja77-lc-dev-42d5' in request.get_host %}
+                    data-clientid='APP-6SAN29B74JQ6FEUQ' 
+                    data-env="sandbox" 
+                    data-redirecturi="https://anth-ja77-lc-dev-42d5.uc.r.appspot.com/researchers/connect-researcher/"
+                {% endif %}
+            >
+            </div>
         </div>
 
         {% if 'anth-ja77-lc-dev-42d5' in request.get_host %}
@@ -62,30 +74,6 @@
     
             <div class="text-align-right">
                 <button id="submitResearcher" class="primary-btn action-btn margin-top-2">Get Started <i class="fa fa-long-arrow-right"></i></button>
-            </div>
-        </div>
-
-        <div id="ORCIDmodal" class="modal hide">
-
-            <div class="modal-defaults orcid-modal flex-this column w-100">
-                <div class="flex-this flex-end">
-                    <div id="closeORCIDmodal" class="margin-right-8 primary-btn action-btn">Close X</div>
-                </div>
-                <div class="modal-content-padding w-100">
-        
-                    <div>
-                        <h2 class="no-top-margin primary-black-text">Just checking...</h2>  
-                        <p>
-                            Are you sure you don’t want to add an ORCiD to your account? <br><br>
-
-                            By linking this we can connect Projects you create in here with your ID outside of Local Contexts Hub.
-                        </p>  
-                    </div>
-                    <div class="flex-this w-100 text-align-center">
-                        <div id="continueNoOrcidBtn" class="primary-btn white-btn">Continue</div>    
-                    </div>
-        
-                </div>
             </div>
         </div>
 

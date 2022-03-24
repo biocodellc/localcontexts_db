@@ -13,6 +13,60 @@ if (passwordField) {
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
+function setWithExpiry(key, value, ttl) {
+	const now = new Date()
+
+	// `item` is an object which contains the original value
+	// as well as the time when it's supposed to expire
+	const item = {
+		value: value,
+		expiry: now.getTime() + ttl,
+	}
+	localStorage.setItem(key, JSON.stringify(item))
+}
+
+function getWithExpiry(key) {
+	const itemStr = localStorage.getItem(key)
+	// if the item doesn't exist, return null
+	if (!itemStr) { return null }
+	const item = JSON.parse(itemStr)
+	const now = new Date()
+	// compare the expiry time of the item with the current time
+	if (now.getTime() > item.expiry) {
+		// If the item is expired, delete the item from storage
+		// and return null
+		localStorage.removeItem(key)
+		return null
+	}
+	return item.value
+}
+
+// Get languages from the IANA directory
+// function fetchLanguages() {
+//     const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/iana.json'
+    
+//     fetch(endpoint)
+//         .then(response => {
+//             if (response.ok) {
+//                 return response.json()
+//             } else if (response.status === 404) {
+//                 return Promise.reject('404 Not Found')
+//             }
+//         })
+//         .then(data => { populateLanguageDropdown(data.languages) })
+//         .catch((err) => {console.error('Error: ', err)})
+// }
+
+// function populateLanguageDropdown(array) {
+//     // Populate Translation Language dropdown from localstorage
+//     const languageSelect = document.getElementById('languagesSelect')
+//     // const languageArray = JSON.parse(localStorage.getItem('languageTags')).value
+//     array.forEach(item => {
+//         let option = new Option(item,item)
+//         languageSelect.add(option, undefined)
+//     })        
+// }
+
 // Show customized label text in community: labels
 function customText(imgDiv) {
     let labelID = imgDiv.id
@@ -244,6 +298,8 @@ if (window.location.href.includes('/labels/customize') || window.location.href.i
         container.insertBefore(newForm, lastDiv)
         totalForms.setAttribute('value', `${formNum+1}`)
     }
+
+    fetchLanguages()
 }
 
 // Approve Label: show note div
@@ -750,33 +806,6 @@ function copyToClipboard(elemID) {
     textArea.select();
     document.execCommand("Copy");
     textArea.remove();
-}
-
-// Connect-researcher: ORCiD popup
-if (window.location.href.includes('connect-researcher')) {
-    const createResearcherBtn = document.getElementById('submitResearcher')
-
-    createResearcherBtn.addEventListener('click', function(event) {
-        event.preventDefault()
-        let hiddenORCIDInput = document.getElementById('orcidId')
-    
-        //If it isn't "undefined" and it isn't "null", then it exists.
-        if(typeof(hiddenORCIDInput) != 'undefined' && hiddenORCIDInput != null){
-            document.getElementById('createResearcher').submit()
-        } else {
-            // Show modal
-            let modal = document.getElementById('ORCIDmodal')
-            modal.classList.replace('hide', 'show')
-
-            // Close modal
-            let closeBtn = document.getElementById('closeORCIDmodal')
-            closeBtn.addEventListener('click', function(event) { modal.classList.replace('show', 'hide') })
-
-            // Continue without orcid
-            let continueBtn = document.getElementById('continueNoOrcidBtn')
-            continueBtn.addEventListener('click', function(event) { document.getElementById('createResearcher').submit() })
-        }
-    })  
 }
 
 // Add member modal

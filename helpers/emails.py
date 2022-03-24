@@ -1,4 +1,3 @@
-from atexit import register
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
@@ -6,6 +5,7 @@ from .models import LabelNote
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from projects.models import Project
+from .utils import dev_prod_or_local
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
@@ -45,22 +45,26 @@ def send_email_with_attachment(file, to_email, subject, template):
               "subject": subject,
               "html": template})
 
-# Send all Institution and community applications to the hub_admins group or the site admin
-def send_hub_admins_application_email(organization, data, subject):
+# Send all Institution and community applications to support or the site admin
+def send_hub_admins_application_email(request, organization, data):
     template = ''
-    is_community = isinstance(organization, Community)
-    if is_community:
+    subject = ''
+
+    if isinstance(organization, Community):
+        subject = f'New Community Application: {data.community_name}'
         template = render_to_string('snippets/emails/community-application.html', { 'data' : data })
     else: 
+        if data.is_ror:
+            subject = f'New Institution Application: {data.institution_name}'
+        else:
+            subject = f'New Institution Application (non-ROR): {data.institution_name}'
+
         template = render_to_string('snippets/emails/institution-application.html', { 'data' : data })
 
-    # if admin group exists:
-    if User.objects.filter(groups__name='hub_admins').exists():
-        emails = [settings.SITE_ADMIN_EMAIL, 'support@localcontexts.org']
 
-        admin_group = User.objects.filter(groups__name='hub_admins')
-        for admin in admin_group:
-            emails.append(admin.email)
+    # if admin group exists:
+    if dev_prod_or_local(request.get_host()) == 'PROD':
+        emails = [settings.SITE_ADMIN_EMAIL, 'support@localcontexts.org']
         
         # If file, send as attachment
         if data.support_document:

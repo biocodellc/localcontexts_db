@@ -31,7 +31,7 @@ class BCLabel(models.Model):
     audiofile = models.FileField(upload_to='communities/bclabels/audio', blank=True)
 
     def __str__(self):
-        return str(self.community) + ' ' + str(self.label_type) + ' ' + str(self.name)
+        return f"{self.community} {self.label_type} {self.name}"
     
     class Meta:
         verbose_name = 'BC Label'

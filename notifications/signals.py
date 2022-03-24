@@ -1,11 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import User
 from communities.models import *
 from .models import *
 from .utils import *
-from django.conf import settings
-from helpers.emails import send_membership_email
 
 # When the instance of invite member form is saved, send target user a notification
 @receiver(post_save, sender=InviteMember)
@@ -77,9 +74,6 @@ def accept_community_invite(sender, instance, **kwargs):
             message = f"You now have access to {institution}'s Projects and Notices."
             
             UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Accept", institution=institution, reference_id=ref)
-
-            # Send email letting user know they are a member
-            # send_membership_email(institution, receiver_, role)
 
             # Lets sender know their invitation was accepted
             title2 = f"{receiver_name} has accepted your invitation to join {institution}."
@@ -156,17 +150,3 @@ def accept_user_join_request(sender, instance, created, **kwargs):
 
             UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title2, message=message2, notification_type="Accept", institution=institution, reference_id=ref)
             instance.delete() # Deletes the request when it has been accepted
-
-# Sends Site admin notifiation with request to create community
-@receiver(post_save, sender=Community)
-def community_application(sender, instance, created, **kwargs):
-    creator = instance.community_creator
-    admin = User.objects.get(email=settings.SITE_ADMIN_EMAIL)
-
-    name = check_full_name(creator)
-
-    title = f"{name} wants to create a community: {instance.community_name}"
-    message = f"{name} wants to create a community: {instance.community_name}"
-
-    if created:
-        UserNotification.objects.create(to_user=admin, from_user=creator, title=title, message=message, notification_type="Create", community=instance)
