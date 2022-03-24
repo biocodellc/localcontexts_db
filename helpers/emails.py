@@ -45,7 +45,7 @@ def send_email_with_attachment(file, to_email, subject, template):
               "subject": subject,
               "html": template})
 
-# Send all Institution and community applications to the hub_admins group or the site admin
+# Send all Institution and community applications to support or the site admin
 def send_hub_admins_application_email(request, organization, data):
     template = ''
     subject = ''
