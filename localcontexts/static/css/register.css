@@ -29,7 +29,7 @@
 } 
 
 /* Form Container || THE WHITE PART */
-#registration-form-container {
+.registration-form-container {
     padding: 40px;
     max-width: 65%;
     min-width: 65%;
@@ -37,6 +37,10 @@
     font-weight: 300;
     font-size: 14px;
     align-items: center;
+}
+
+#id_email {
+    width: 100%;
 }
 
 /* Progress Container */

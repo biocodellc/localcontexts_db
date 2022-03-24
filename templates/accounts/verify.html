@@ -1,50 +1,32 @@
-{% extends 'base.html' %} {% load static %} {% block title %} | Verify Email {% endblock %}
-{% block content %} {% include 'partials/headers/_reg-header.html' %}
+{% extends 'reg-base.html' %} {% load static %} {% block title %} | Verify Email {% endblock %}
 
-<section class="flex-this gradient-section">
-    <div class="base-card flex-this">
-
-        <div id="registration-progress-container" class="orange-bg white-text flex-this column justify-center">
-            <div class="login-logo-container">
-                <img class="login-logo" src="{% static 'images/logos/lc-logo-signin.png' %}" alt="Local Contexts logo">
-            </div>
-            <div id="progress-bottom-container"><div><h2>Grounding Indigenous Rights</h2></div></div>
+{% block card %}
+    <div class="form-container">
+        <div>
+            <h2 class="no-top-margin">Verify your email</h2>              
         </div>
-
-        <div id="registration-form-container" class="flex-this column">
-            <div class="form-container">
-                <div>
-                    <h2 class="no-top-margin">Verify your email</h2>              
-                </div>
-                <p class="no-top-margin">A verification link has been sent to the email you provided. <br>
-            
-                If you have verified your email, you're all set! You can close this window. <br><br>
-                
-                Didn't get an email? <br>Check your spam inbox or enter the email you used at registration to send it again.</p>
-                    
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <div class="w-100 flex-this">
-            
-                        <div class="w-60">
-                            {{ form.email }}
-                        </div>
-            
-                        <div class="w-40">
-                            <button id="resend-email-btn" class="primary-btn action-btn">Resend email</button>    
-                        </div>
-                
-                    </div>
-                </form>
-            </div>
-
+        <p class="no-top-margin">A verification link has been sent to the email you provided. <br>
+    
+        If you have verified your email, you're all set! You can close this window. <br><br>
         
-            <!-- Alerts -->
-            {% include 'partials/_alerts.html' %}
-        </div>
+        Didn't get an email? <br>Check your spam inbox or enter the email you used at registration to send it again.</p>
+            
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="w-100 flex-this">
+    
+                <div class="w-60">
+                    {{ form.email }}
+                </div>
+    
+                <div class="w-40">
+                    <button id="resend-email-btn" class="primary-btn action-btn">Resend email</button>    
+                </div>
+        
+            </div>
+        </form>
     </div>
-</section>
 
-{% include 'partials/footers/_reg-footer.html' %}
-
+    <!-- Alerts -->
+    {% include 'partials/_alerts.html' %}
 {% endblock %}
