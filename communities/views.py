@@ -111,9 +111,7 @@ def confirm_community(request, community_id):
         if form.is_valid():
             data = form.save(commit=False)
             data.save()
-
-            subject = 'New Community Application: ' + str(data.community_name)
-            send_hub_admins_application_email(community, data, subject)
+            send_hub_admins_application_email(request, community, data)
             return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'community': community,})
 

@@ -129,14 +129,7 @@ def confirm_institution(request, institution_id):
                 return redirect('dashboard')
             else:
                 data.save()
-
-                subject = ''
-                if data.is_ror:
-                    subject = 'New Institution Application: ' + str(data.institution_name)
-                else:
-                    subject = 'New Institution Application (non-ROR): ' + str(data.institution_name)
-
-                send_hub_admins_application_email(institution, data, subject)
+                send_hub_admins_application_email(request, institution, data)
                 return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
 
