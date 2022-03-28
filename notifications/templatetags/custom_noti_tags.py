@@ -1,6 +1,4 @@
 from django import template
-from django.urls import reverse
-from notifications.models import ActionNotification
 from communities.models import JoinRequest
 
 register = template.Library()

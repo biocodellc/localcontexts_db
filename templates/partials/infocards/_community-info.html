@@ -34,18 +34,18 @@
                                 <div class="border-bottom-solid-teal">
                                     <!-- TODO: add custom anchor tag with referenceid -->
                                     {% if n.notification_type == 'Labels' %}
-                                        <a href="{% url 'select-label' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsReadCommunity(this); return true;">
+                                        <a href="{% url 'select-label' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
                                     {% endif %}
                                     {% if n.notification_type == 'Projects' %}
                                         {% if n.reference_id %}
-                                            <a href="{% anchor 'community-projects' n.reference_id community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsReadCommunity(this); return true;">
+                                            <a href="{% anchor 'community-projects' n.reference_id community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
                                         {% else %}
-                                            <a href="{% url 'community-projects' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsReadCommunity(this); return true;">
+                                            <a href="{% url 'community-projects' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
                                         {% endif %}
                                     {% endif %}
 
                                     {% if n.notification_type == 'Connections' %}
-                                        <a href="#" id="{{ community.id }}_{{ n.id }}" onclick="markAsReadCommunity(this); return true;">
+                                        <a href="#" id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
                                     {% endif %}
                                     
                                         <div class="flex-this space-between margin-top-1">

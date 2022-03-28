@@ -4,35 +4,33 @@
 
     <section class="grey-bg">
 
-            <div class="white-bg content-card content-card-space">
-                <h3 class="darkteal-text">{{ notification.message }}</h3>
+        <div class="white-bg content-card content-card-space">
+            <h3 class="darkteal-text">{{ notification.message }}</h3>
 
-            {% if notification.notification_type == 'invitation' %}
-                <p>Invitation accepted! </p>
+        {% if notification.notification_type == 'invitation' %}
+            <p>Invitation accepted! </p>
+        {% endif %}
 
+        {% if notification.notification_type == 'request' %}
+            {% display_joinrequest_message notification.reference_id as request_message %}
+            {% if request_message %}
+                <p>Request message:<br> {{ request_message }}</p>
             {% endif %}
+            <p>User has been added to community!</p>
 
-            {% if notification.notification_type == 'request' %}
-                {% display_joinrequest_message notification.reference_id as request_message %}
-                {% if request_message %}
-                    <p>Request message:<br> {{ request_message }}</p>
-                {% endif %}
-                <p>User has been added to community!</p>
+        {% endif %}
 
-            {% endif %}
+        {% if notification.notification_type == 'create' %}
+            <p>Community approved!</p>
+        {% endif %}
 
-            {% if notification.notification_type == 'create' %}
-                <p>Community approved!</p>
+        <div class="flex-this space-between">
+            <p><a class="darkteal-text underline-hover" href="{% url 'dashboard' %}">Back to My Profile</a></p>    
+            <p><a class="darkteal-text underline-hover" href="{% url 'read' notification.id %}">Mark as Read</a></p>
+            <p><a class="darkteal-text underline-hover" href="{% url 'delete' notification.id %}">Delete</a></p>
+        </div>
 
-            {% endif %}
-
-            <div class="flex-this space-between">
-                <p><a class="darkteal-text" href="{% url 'dashboard' %}">Back to My Profile</a></p>    
-                <p><a class="darkteal-text" href="{% url 'read' notification.id %}">Mark as Read</a></p>
-                <p><a class="darkteal-text" href="{% url 'delete' notification.id %}">Delete</a></p>
-            </div>
-
-            </div>
+        </div>
 
     </section>
 
