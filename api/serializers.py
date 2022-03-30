@@ -33,7 +33,7 @@ class ResearcherSerializer(serializers.ModelSerializer):
 class LabelTranslationSerializer(serializers.ModelSerializer):
     class Meta:
         model = LabelTranslation
-        fields = ('title', 'language', 'translation')
+        fields = ('title', 'language_tag', 'language', 'translation')
     
 class BCLabelSerializer(serializers.ModelSerializer):
     community = SerializerMethodField()

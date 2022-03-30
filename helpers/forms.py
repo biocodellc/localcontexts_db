@@ -8,7 +8,7 @@ AddLabelTranslationFormSet = modelformset_factory(
     extra=1,
     widgets = {
             'title': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Customized label name'}),
-            'language': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Language'}),
+            'language': forms.TextInput(attrs={'id': 'languageListInput', 'class': 'w-100', 'placeholder': 'Language', 'autocomplete': 'off'}),
             'translation': forms.Textarea(attrs={'class': 'w-100 margin-top-1 margin-bottom-2', 'style': 'height: 150px; padding: 10px;'}),
     }
 )
