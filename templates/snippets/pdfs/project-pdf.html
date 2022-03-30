@@ -93,7 +93,7 @@
                         {% if notice.notice_type == 'biocultural' %}
                             <tr>
                                 <td class="image-td">
-                                    <img src="{{ notice.bc_img_url }}" width="200px">
+                                    <img loading="lazy" src="{{ notice.bc_img_url }}" width="200px">
                                 </td>
                                 <td class="text-td">
                                     <h1 class="no-bottom-margin">Biocultural Notice</h1>
@@ -104,7 +104,7 @@
                         {% if notice.notice_type == 'traditional_knowledge' %}
                             <tr>
                                 <td class="image-td">
-                                    <img src="{{ notice.tk_img_url }}" width="200px">
+                                    <img loading="lazy" src="{{ notice.tk_img_url }}" width="200px">
                                 </td>
                                 <td class="text-td">
                                     <h1 class="no-bottom-margin">Traditional Knowledge Notice</h1>
@@ -115,7 +115,7 @@
                         {% if notice.notice_type == 'biocultural_and_traditional_knowledge' %}
                             <tr>
                                 <td class="image-td">
-                                    <img src="{{ notice.bc_img_url }}" width="200px">
+                                    <img loading="lazy" src="{{ notice.bc_img_url }}" width="200px">
                                 </td>
                                 <td class="text-td">
                                     <h1 class="no-bottom-margin">Biocultural Notice</h1>
@@ -124,7 +124,7 @@
                             </tr>
                             <tr>
                                 <td class="image-td">
-                                    <img src="{{ notice.tk_img_url }}" width="200px">
+                                    <img loading="lazy" src="{{ notice.tk_img_url }}" width="200px">
                                 </td>
                                 <td class="text-td">
                                     <h1 class="no-bottom-margin">Traditional Knowledge Notice</h1>
@@ -142,7 +142,7 @@
                         {% if notice.notice_type == 'open_to_collaborate' %}
                             <tr>
                                 <td class="image-td">
-                                    <img src="{{ notice.open_to_collaborate_img_url }}" width="200px">
+                                    <img loading="lazy" src="{{ notice.open_to_collaborate_img_url }}" width="200px">
                                 </td>
                                 <td class="text-td">
                                     <h1 class="no-bottom-margin">Open to Collaborate Notice</h1>
@@ -153,7 +153,7 @@
                         {% if notice.notice_type == 'attribution_incomplete' %}
                             <tr>
                                 <td class="image-td">
-                                    <img src="{{ notice.attribution_incomplete_img_url }}" width="200px">
+                                    <img loading="lazy" src="{{ notice.attribution_incomplete_img_url }}" width="200px">
                                 </td>
                                 <td class="text-td">
                                     <h1 class="no-bottom-margin">Attribution Incomplete Notice</h1>
@@ -164,7 +164,7 @@
                         {% if notice.notice_type == 'open_to_collaborate_and_attribution_incomplete' %}
                             <tr>
                                 <td class="image-td">
-                                    <img src="{{ notice.open_to_collaborate_img_url }}" width="200px">
+                                    <img loading="lazy" src="{{ notice.open_to_collaborate_img_url }}" width="200px">
                                 </td>
                                 <td class="text-td">
                                     <h1 class="no-bottom-margin">Open to Collaborate Notice</h1>
@@ -173,7 +173,7 @@
                             </tr>
                             <tr>
                                 <td class="image-td">
-                                    <img src="{{ notice.attribution_incomplete_img_url }}" width="200px">
+                                    <img loading="lazy" src="{{ notice.attribution_incomplete_img_url }}" width="200px">
                                 </td>
                                 <td class="text-td">
                                     <h1 class="no-bottom-margin">Attribution Incomplete Notice</h1>
@@ -189,7 +189,7 @@
                 {% for bclabel in project.bc_labels.all %}
                     <tr>
                         <td class="image-td">
-                            <img src="{{ bclabel.img_url }}" width="200px">
+                            <img loading="lazy" src="{{ bclabel.img_url }}" width="200px">
                         </td>
                         <td class="text-td">
                             <h1 class="no-bottom-margin">{{ bclabel.name }} ({{ bclabel.community.community_name }})</h1>
@@ -210,7 +210,7 @@
                 {% for tklabel in project.tk_labels.all %}
                     <tr>
                         <td class="image-td">
-                            <img src="{{ tklabel.img_url }}" width="200px">
+                            <img loading="lazy" src="{{ tklabel.img_url }}" width="200px">
                         </td>
                         <td class="text-td">
                             <h1 class="no-bottom-margin">{{ tklabel.name }} ({{ tklabel.community.community_name }})</h1>

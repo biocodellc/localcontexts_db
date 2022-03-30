@@ -78,7 +78,7 @@ def unread_notifications(community):
 
 @register.simple_tag
 def get_bclabel_img_url(img_type, *args, **kwargs):
-    # Returns image url, usage: <img src="{% get_bclabel_img_url img_type %}">
+    # Returns image url, usage: <img loading="lazy" src="{% get_bclabel_img_url img_type %}">
     if img_type == 'bcr':
         image_path = 'images/bc-labels/bc-research-use.png'
     elif img_type =='bccv':
@@ -105,7 +105,7 @@ def get_bclabel_img_url(img_type, *args, **kwargs):
 
 @register.simple_tag
 def get_tklabel_img_url(img_type, *args, **kwargs):
-    # Returns image url, usage: <img src="{% get_tklabel_img_url img_type %}">
+    # Returns image url, usage: <img loading="lazy" src="{% get_tklabel_img_url img_type %}">
     if img_type == 'tka':
         image_path = 'images/tk-labels/tk-attribution.png'
     elif img_type =='tkcl':

@@ -39,13 +39,13 @@
         </style>
     </head>
     <body>
-        <img src="/static/images/logos/email_header.png" width="400px">
+        <img loading="lazy" src="/static/images/logos/email_header.png" width="400px">
         <h2>{{ community.community_name }}'s Customized Labels</h2>
         <table>
             {% for bclabel in bclabels %}
                 <tr>
                     <td class="image-td">
-                        <img src="{{ bclabel.img_url }}" width="200px">
+                        <img loading="lazy" src="{{ bclabel.img_url }}" width="200px">
                     </td>
                     <td class="text-td">
                         <h1 class="no-bottom-margin">{{ bclabel.name }}</h1>
@@ -63,7 +63,7 @@
             {% for tklabel in tklabels %}
                 <tr>
                     <td class="image-td">
-                        <img src="{{ tklabel.img_url }}" width="200px">
+                        <img loading="lazy" src="{{ tklabel.img_url }}" width="200px">
                     </td>
                     <td class="text-td">
                         <h1 class="no-bottom-margin">{{ tklabel.name }}</h1>

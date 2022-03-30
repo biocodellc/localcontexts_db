@@ -92,7 +92,7 @@
                                                     href="https://orcid.org/{{ researcher.orcid }}" 
                                                 {% endif %}
                                             >
-                                                <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">
+                                                <img loading="lazy" src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">
                                                 {% if 'https://sandbox.orcid.org/' in researcher.orcid or 'https://orcid.org/' in researcher.orcid %}
                                                     {{ researcher.orcid }}
                                                 {% elif 'X' in researcher.orcid %}

@@ -85,7 +85,7 @@
         <div class="flex-this">
 
                 <div class="dashcard-img-container">
-                    <img 
+                    <img loading="lazy" 
                         class="profile-img" 
                         src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
                         alt="{{ community.community_name }} image"

@@ -7,7 +7,7 @@
             
             {% if '/login' in request.path or 'reset' in request.path %}
                 <div class="login-logo-container">
-                    <img class="login-logo" src="{% static 'images/logos/lc-logo-signin.png' %}" alt="Local Contexts logo">
+                    <img loading="lazy" class="login-logo" src="{% static 'images/logos/lc-logo-signin.png' %}" alt="Local Contexts logo">
                 </div>
             {% else %}
 
