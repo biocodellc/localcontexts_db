@@ -10,7 +10,7 @@ class InstitutionNoticeAdmin(admin.ModelAdmin):
     search_fields = ('project',)
 
 class LabelTranslationAdmin(admin.ModelAdmin):
-    list_display = ('language', 'language_tag', 'title', 'translation', )
+    list_display = ('title', 'language', 'language_tag', 'translation', )
 
 class ProjectCommentAdmin(admin.ModelAdmin):
     list_display = ('project', 'sender', 'community', 'message', 'created')
