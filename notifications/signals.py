@@ -23,7 +23,7 @@ def send_community_invite(sender, instance, created, **kwargs):
                 message = msg
             else:
                 message= f"You've been invited to join {community} with the role of {role}"
-            UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="Invitation", community=community, reference_id=ref, role=role)
+            UserNotification.objects.create(from_user=sender_, to_user=receiver_, title=title, message=message, notification_type="Invitation", community=community, reference_id=ref, role=role)
 
         if instance.institution:
             institution = instance.institution
@@ -33,7 +33,7 @@ def send_community_invite(sender, instance, created, **kwargs):
                 message = msg
             else:
                 message= f"You've been invited to join {institution} with the role of {role}."
-            UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="Invitation", institution=institution, reference_id=ref, role=role)
+            UserNotification.objects.create(from_user=sender_, to_user=receiver_, title=title, message=message, notification_type="Invitation", institution=institution, reference_id=ref, role=role)
 
 
 # When an invitation to a community or institution is accepted, send target a notification
