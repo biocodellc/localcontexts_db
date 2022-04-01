@@ -1,6 +1,5 @@
 import json
 import requests
-from urllib.request import urlopen
 import zipfile
 from django.template.loader import get_template
 from io import BytesIO
