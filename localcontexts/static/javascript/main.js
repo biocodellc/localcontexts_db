@@ -43,7 +43,8 @@ function getWithExpiry(key) {
 
 // Get languages from the IANA directory
 function fetchLanguages() {
-    const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/iana.json'
+    // const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/iana.json'
+    const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
     
     fetch(endpoint)
         .then(response => {
@@ -58,20 +59,9 @@ function fetchLanguages() {
 }
 
 function languageList(data) {
-    // language codes should go into hidden input
-    // document.getElementById('languageCodeHiddenInput')
-
-    let langArray = []
-    data.forEach(item => {
-        let subArray = item.language
-        if (subArray.length > 1) {
-            subArray.forEach(lang => { langArray.push(lang) })
-        } else { langArray.push(subArray[0]) }
-    })
-    const uniqueLangs = [...new Set(langArray)]
-
+    let langArray = Object.keys(data)
     // feed only array of languages into this function
-    autocomplete(document.getElementById('languageListInput'), uniqueLangs)
+    autocomplete(document.getElementById('languageListInput'), langArray)
 }
 
 // Searchbar with autocomplete

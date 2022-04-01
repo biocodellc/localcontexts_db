@@ -1,4 +1,5 @@
 import json
+import requests
 from urllib.request import urlopen
 import zipfile
 from django.template.loader import get_template
@@ -11,18 +12,12 @@ from researchers.models import Researcher
 from .models import Connections, Notice, InstitutionNotice
 
 def set_language_code(instance):
-    url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/iana.json'
-    response = urlopen(url)
-    data = json.loads(response.read())
-    # print(data)
-    for x in data:
-        if [instance.language] in x.values():
-            print('Yes', x)
-            print('Yes', x['tag'])
-            # test case 'ru', 'Russian' PASSED
-            # test case 'ril', 'Riang Lang' (2 in list) FAILED
-            instance.language_tag = x['tag']
-            instance.save()
+    url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
+    data = requests.get(url).json()
+
+    if instance.language in data.keys():
+        instance.language_tag = data[instance.language]
+        instance.save()
 
 
 # h/t: https://stackoverflow.com/questions/59695870/generate-multiple-pdfs-and-zip-them-for-download-all-in-a-single-view
