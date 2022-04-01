@@ -269,6 +269,7 @@ def customize_label(request, pk, label_type):
                     for instance in instances:
                         instance.tklabel = label_form
                         instance.save()
+                        set_language_code(instance)
                     
                     # Create notification
                     title = "A TK Label was customized by " + request.user.get_full_name() + " and is waiting approval by another member of the community."
@@ -307,6 +308,7 @@ def customize_label(request, pk, label_type):
                     for instance in instances:
                         instance.bclabel = label_form
                         instance.save()
+                        set_language_code(instance)
 
                     # Send notification
                     title = "A BC Label was customized by " + request.user.get_full_name() + " and is waiting approval by another member of the community."
@@ -442,6 +444,7 @@ def edit_label(request, pk, label_id):
                         instance.tklabel = tklabel
 
                     instance.save()
+                    set_language_code(instance)
 
                 return redirect('select-label', community.id)
 
