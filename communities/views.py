@@ -263,6 +263,8 @@ def customize_label(request, pk, label_type):
                     label_form.created_by = request.user
                     label_form.is_approved = False
                     label_form.save()
+                    set_language_code(label_form)
+
 
                     # Save all label translation instances
                     instances = add_translation_formset.save(commit=False)
@@ -302,6 +304,8 @@ def customize_label(request, pk, label_type):
                     label_form.created_by = request.user
                     label_form.is_approved = False
                     label_form.save()
+                    set_language_code(label_form)
+
 
                     # Save all label translation instances
                     instances = add_translation_formset.save(commit=False)
