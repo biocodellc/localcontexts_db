@@ -1,26 +1,47 @@
 {% load static %} {% load custom_acct_tags %}
 {% unread_notifications_exist request.user as unread_exist %}
 
-<section class="white-bg dash-driver flex-this space-between">
-        <div class="w-70">
-            <h2 class="orange-text">Welcome, {{ user.first_name }} </h2>
+<section class="dash-driver flex-this space-between">
+    <div class="w-70">
+        <h2 class="no-top-margin no-bottom-margin">{{ user.get_full_name }} </h2>
+        <h3 class="no-top-margin">{{ profile.affiliation }}</h3>
+        <h4 class="no-top-margin">{{ profile.city_town }} {{ profile.state_province_region }} {{ profile.country.name }}</h4>
+
+        <div class="flex-this">
+            <div class="dash-icons-big">
+                <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+            </div>
+            <div>
+                <small class="orange-text">Languages</small>
+                <p class="no-top-margin">{{ profile.languages_spoken }}</p>
+            </div>
         </div>
-        
-        <div class="flex-this dash-btn-container space-between">
-            {% if 'update-profile' in request.path or 'manage' in request.path or 'change-password' in request.path or 'deactivate' in request.path %}
-                <div><a href="{% url 'dashboard' %}" class="primary-btn white-btn">Back to Profile</a></div>
-                <div><a href="{% url 'update-profile' %}" class="primary-btn white-btn">Settings <i class="fa fa-user" aria-hidden="true"></i></a></div>
-            {% else %}
-                <div><a onclick="showUserNotifications(this)" class="primary-btn action-btn">
-                    Notifications 
-                    <i 
-                    class="fa {% if unread_exist %} fa-bell orange-text {% else %} fa-bell-o {% endif %}" 
-                    aria-hidden="true"
-                    ></i>
-                </a></div>
-                <div><a href="{% url 'update-profile' %}" class="white-text primary-btn action-btn">Settings <i class="fa fa-user" aria-hidden="true"></i></a></div>
-            {% endif %}
+
+        <div class="flex-this">
+            <div class="dash-icons-big">
+                <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+            </div>
+            <div>
+                <small class="orange-text">Affiliations</small>
+                <p class="no-top-margin">{{ profile.affiliation }}</p>
+            </div>
         </div>
+
+    </div>
+    
+    <div class="flex-this dash-btn-container flex-end">
+        {% if 'update-profile' in request.path or 'manage' in request.path or 'change-password' in request.path or 'deactivate' in request.path %}
+            <div class="margin-right-8"><a href="{% url 'dashboard' %}" class="primary-btn white-btn">Back to Profile</a></div>
+        {% else %}
+            <div class="noti-bell"><a onclick="showUserNotifications(this)" class="pointer"> 
+                <i 
+                class="fa {% if unread_exist %} fa-bell orange-text {% else %} fa-bell grey-bell {% endif %}" 
+                aria-hidden="true"
+                ></i>
+            </a></div>
+            <div><a href="{% url 'update-profile' %}" class="primary-btn green-btn">Edit profile <i class="fa fa-pencil" aria-hidden="true"></i></a></div>
+        {% endif %}
+    </div>
 
 </section>
 
