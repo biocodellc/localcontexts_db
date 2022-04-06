@@ -66,6 +66,11 @@ def connect_community(request):
     context = { 'communities': communities, 'form': form,}
     return render(request, 'communities/connect-community.html', context)
 
+@login_required(login_url='login')
+def preparation_step(request):
+    community = True
+    return render(request, 'accounts/preparation.html', { 'community' : community })
+
 # Create Community
 @login_required(login_url='login')
 def create_community(request):

@@ -142,7 +142,7 @@ def landing(request):
     return redirect('login')
 
 @login_required(login_url='login')
-def registration_reason(request):
+def select_account(request):
     return render(request, 'accounts/select-account.html')
 
 @login_required(login_url='login')
