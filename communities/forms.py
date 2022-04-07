@@ -1,6 +1,7 @@
 from django import forms
 from .models import Community, InviteMember, JoinRequest
 from django.utils.translation import ugettext_lazy as _
+from accounts.utils import get_users_name
 
 class CreateCommunityForm(forms.ModelForm):
     class Meta:
@@ -52,7 +53,7 @@ class InviteMemberForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(InviteMemberForm, self).__init__(*args, **kwargs)
-        self.fields['receiver'].label_from_instance = lambda obj: "%s" % obj.get_full_name()
+        self.fields['receiver'].label_from_instance = lambda obj: "%s" % get_users_name(obj)
 
 class JoinRequestForm(forms.ModelForm):
     class Meta:

@@ -19,6 +19,7 @@ from bclabels.utils import check_bclabel_type, assign_bclabel_img, assign_bclabe
 from tklabels.utils import check_tklabel_type, assign_tklabel_img, assign_tklabel_svg
 from projects.utils import add_to_contributors
 from helpers.utils import *
+from accounts.utils import get_users_name
 
 from helpers.emails import *
 
@@ -279,7 +280,8 @@ def customize_label(request, pk, label_type):
                         set_language_code(instance)
                     
                     # Create notification
-                    title = "A TK Label was customized by " + request.user.get_full_name() + " and is waiting approval by another member of the community."
+                    name = get_users_name(request.user)
+                    title = f"A TK Label was customized by {name} and is waiting approval by another member of the community."
                     ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
                     return redirect('select-label', community.id)
@@ -320,7 +322,8 @@ def customize_label(request, pk, label_type):
                         set_language_code(instance)
 
                     # Send notification
-                    title = "A BC Label was customized by " + request.user.get_full_name() + " and is waiting approval by another member of the community."
+                    name = get_users_name(request.user)
+                    title = f"A BC Label was customized by {name} and is waiting approval by another member of the community."
                     ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
                     return redirect('select-label', community.id)
@@ -631,7 +634,8 @@ def create_project(request, pk):
 
                 # Send notification
                 truncated_project_title = str(data.title)[0:30]
-                title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + truncated_project_title + ' ...'
+                name = get_users_name(data.project_creator)
+                title = f'A new project was created by {name}: {truncated_project_title} ...'
                 ActionNotification.objects.create(title=title, sender=request.user, community=community, notification_type='Projects', reference_id=data.unique_id)
                 return redirect('community-projects', community.id)
         
