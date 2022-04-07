@@ -6,6 +6,7 @@ from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from projects.models import Project
 from .utils import dev_prod_or_local
+from accounts.utils import get_users_name
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
@@ -126,12 +127,14 @@ def send_join_request_email_admin(request, organization):
     template = render_to_string('snippets/emails/join-request.html', { 'user': request.user, 'domain': current_site.domain, 'organization': organization, })
     title = ''
     send_to_email = ''
+    name = get_users_name(request.user)
+
     # Check if organization instance is community model
     if isinstance(organization, Community):
-        title = str(request.user.get_full_name()) + ' has requested to join ' + str(organization.community_name) 
+        title = f'{name} has requested to join {organization.community_name}'
         send_to_email = organization.community_creator.email
     if isinstance(organization, Institution):
-        title = str(request.user.get_full_name()) + ' has requested to join ' + str(organization.institution_name) 
+        title = f'{name} has requested to join {organization.institution_name}'
         send_to_email = organization.institution_creator.email
     
     send_simple_email(send_to_email, title, template)
@@ -148,7 +151,7 @@ def send_institution_invite_email(request, data, institution):
         'data': data, 
         'institution': institution 
     })
-    title = 'You have been invited to join ' + str(institution.institution_name)
+    title = f'You have been invited to join {institution.institution_name}'
     send_simple_email(data.receiver.email, title, template)
 
 # A notice has been applied by researcher or institution
@@ -157,9 +160,10 @@ def send_email_notice_placed(project, community, sender):
     template = render_to_string('snippets/emails/notice-placed.html', { 'project': project, 'sender': sender, })
     title = ''
     if isinstance(sender, Institution):
-        title = sender.institution_name + ' has placed a Notice'
+        title = f'{sender.institution_name} has placed a Notice'
     if isinstance(sender, Researcher):
-        title = sender.user.get_full_name() + ' has placed a Notice'
+        name = get_users_name(sender.user)
+        title = f'{name} has placed a Notice'
     
     send_simple_email(community.community_creator.email, title, template)
     
@@ -191,7 +195,6 @@ def send_email_label_approved(label):
     if isinstance(label, TKLabel):
         label_notes = LabelNote.objects.filter(tklabel=label)
 
-    print(label_notes)
     template = render_to_string('snippets/emails/label-approved.html', { 'label': label, 'label_notes': label_notes })
 
     if label.is_approved:
@@ -219,23 +222,17 @@ def send_membership_email(request, organization, receiver, role):
     })
     title = ''
     if isinstance(organization, Community):
-        title = 'You are now a member of ' + str(organization.community_name)
+        title = f'You are now a member of {organization.community_name}'
     if isinstance(organization, Institution):
-        title = 'You are now a member of ' + str(organization.institution_name)
+        title = f'You are now a member of {organization.institution_name}'
 
     send_simple_email(receiver.email, title, template)
 
 # Send email to support when a Researcher connects to the Hub in PRODUCTION
 def send_email_to_support(researcher):
     template = render_to_string('snippets/emails/researcher-account-connection.html', { 'researcher': researcher })
-
-    name = ''
-    if researcher.user.get_full_name():
-        name = researcher.user.get_full_name()
-    else:
-        name = researcher.user.username
-    
-    title = name + ' has created a Researcher Account'
+    name = get_users_name(researcher.user)
+    title = f'{name} has created a Researcher Account'
     send_simple_email('support@localcontexts.org', title, template)  
 
 

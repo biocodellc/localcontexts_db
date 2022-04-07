@@ -8,12 +8,12 @@
         <p>You can join or create accounts here.</p>
     </div>
 
-    <div><a class="darkteal-text" href="{% url 'organization-registry' %}"> View the Local Contexts Registry</a></div>
-    <div><a class="darkteal-text" href="{% url 'create-community' %}"> Create a Community Account</a></div>
-    <div><a class="darkteal-text" href="{% url 'create-institution' %}"> Create an Institution Account</a></div>
+    <div><a class="darkteal-text underline-hover" href="{% url 'organization-registry' %}"> View the Local Contexts Registry</a></div>
+    <div><a class="darkteal-text underline-hover" href="{% url 'prep-community' %}"> Create a Community Account</a></div>
+    <div><a class="darkteal-text underline-hover" href="{% url 'prep-institution' %}"> Create an Institution Account</a></div>
     {% if request.user.profile.is_researcher %}
     {% else %}
-        <div><a class="darkteal-text" href="{% url 'connect-researcher' %}"> Create your Researcher Account</a></div>
+        <div><a class="darkteal-text underline-hover" href="{% url 'connect-researcher' %}"> Create your Researcher Account</a></div>
     {% endif %}
 
 </div>

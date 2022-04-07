@@ -52,11 +52,12 @@ class ProfileCreationForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['position', 'affiliation', 'preferred_language', 'city_town', 'state_province_region', 'country']
+        fields = ['position', 'affiliation', 'preferred_language', 'languages_spoken', 'city_town', 'state_province_region', 'country']
         widgets = {
             'position': forms.TextInput(attrs={'class': 'w-100'}),
             'affiliation': forms.TextInput(attrs={'class': 'w-100'}),
             'preferred_language': forms.TextInput(attrs={'class': 'w-100'}),
+            'languages_spoken': forms.TextInput(attrs={'class': 'w-100'}),
             'city_town': forms.TextInput(attrs={'class': 'w-100'}),
             'state_province_region': forms.TextInput(attrs={'class': 'w-100'}),
         }

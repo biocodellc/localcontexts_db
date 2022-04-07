@@ -55,14 +55,24 @@
                 {% endif %}
             </div>
 
-
-            <div class="w-100 margin-top-8">
-                <label for="preferred_language">Preferred Language </label><br>
+        <div class="w-100 flex-this">
+            <div class="w-50 margin-top-8">
+                <label for="preferred_language">Preferred Language</label><br>
                 {{ profile_form.preferred_language }}
                 {% if profile_form.preferred_language.errors %}
                     <div class="msg-red w-50"><small>{{ profile_form.preferred_language.errors.as_text }}</small></div> 
                 {% endif %}
             </div>
+
+            <div class="w-50 margin-top-8 margin-left-16">
+                <label>Languages Spoken</label><br>
+                {{ profile_form.languages_spoken }}
+                {% if profile_form.languages_spoken.errors %}
+                    <div class="msg-red w-50"><small>{{ profile_form.languages_spoken.errors.as_text }}</small></div> 
+                {% endif %}
+            </div>    
+        </div>
+
 
             <div class="w-100 margin-top-8">
                 <div class="flex-this">

@@ -24,7 +24,7 @@ urlpatterns = [
     path('change-password/', views.change_password, name='change-password'),
     path('deactivate/', views.deactivate_user, name='deactivate-user'),
 
-    path('select-account/', views.registration_reason, name='select-account'),
+    path('select-account/', views.select_account, name='select-account'),
     
     path('registry/', views.organization_registry, name='organization-registry'),
     path('counter/', views.hub_counter, name='hub-counter'),

@@ -2,7 +2,7 @@
 {% institution_notifications institution as notifications %}
 {% unread_notifications institution as unread_exist %}
 
-    <div class="dashcard auto-margin">
+    <div class="dashcard">
         
         <!-- Top Nav -->
         <div class="flex-this w-100 space-between">
@@ -36,13 +36,13 @@
                                     {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
                                     <!-- TODO: Figure out what this URL should link to -->
                                         {% if n.reference_id %}
-                                            <a href="{% anchor 'institution-projects' n.reference_id institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
+                                            <a href="{% anchor 'institution-projects' n.reference_id institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
                                         {% else %}
-                                            <a href="{% url 'institution-projects' institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
+                                            <a href="{% url 'institution-projects' institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
                                         {% endif %}
                                     {% endif %}
                                     {% if n.notification_type == 'Connections' %}
-                                        <a href="#" id="{{ institution.id }}_{{ n.id }}" onclick="markAsReadInstitution(this); return true;">
+                                        <a href="#" id="{{ institution.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
                                     {% endif %}
                                         <div class="flex-this space-between margin-top-1">
                                             <div>
@@ -80,7 +80,7 @@
         <div class="flex-this">
 
                 <div class="dashcard-img-container">
-                    <img 
+                    <img loading="lazy" 
                         class="profile-img" 
                         src="{% if institution.image %} {{ institution.image.url }} {% else %} {% static 'images/placeholders/institution-place.jpg' %}{% endif %}" 
                         alt="{{ institution.institution_name }} image"

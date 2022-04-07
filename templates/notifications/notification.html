@@ -7,10 +7,6 @@
         <div class="content-card content-card-space white-bg">
             <h3 class="darkteal-text">{{ notification.message }}</h3>
 
-            {% if notification.notification_type == 'Welcome' %}
-                
-            {% endif %}
-
             {% if notification.notification_type == 'Invitation' %}
                 <form method="POST" action="">
                     {% csrf_token %}
@@ -20,11 +16,10 @@
             {% endif %}
 
             {% if notification.notification_type == 'Request' %}
-
-            {% display_joinrequest_message notification.reference_id as request_message %}
-            {% if request_message %}
-                <p>Request message:<br> {{ request_message }}</p>
-            {% endif %}
+                {% display_joinrequest_message notification.reference_id as request_message %}
+                {% if request_message %}
+                    <p>Request message:<br> {{ request_message }}</p>
+                {% endif %}
                 <form method="POST" action="">
                     {% csrf_token %}
                     <input type="hidden">
@@ -33,33 +28,16 @@
                     <input type="radio" name="role" value="editor"><label for="editor">Editor</label>
                     <input type="radio" name="role" value="viewer"><label for="viewer">Viewer</label>
                     <br>
-                     {% if notification.community %}
-                        <button class="primary-btn action-btn margin-top-2 ">Add User To Community</button>
-                    {% else %}
-                        <button class="primary-btn action-btn margin-top-2 ">Add User To Institution</button>
-                    {% endif %}
-                </form>
-            {% endif %}
-
-            {% if notification.notification_type == 'Approval' %}
-
-            {% endif %}
-
-            {% if notification.notification_type == 'Accept' %}
-            {% endif %}
-
-            {% if notification.notification_type == 'Create' %}
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <input type="hidden">
-                    <button class="primary-btn action-btn margin-top-2 ">Approve Community</button>
+                    <button class="primary-btn action-btn margin-top-2">
+                        Add User to {% if notification.community %} Community {% else %} Institution {% endif %}
+                    </button>
                 </form>
             {% endif %}
 
             <div class="flex-this space-between">
-                <p><a class="darkteal-text" href="{% url 'dashboard' %}">Back to My Profile</a></p>    
-                <p><a class="darkteal-text" href="{% url 'read' notification.id %}">Mark as Read</a></p>
-                <p><a class="darkteal-text" href="{% url 'delete' notification.id %}">Delete</a></p>
+                <p><a class="darkteal-text underline-hover" href="{% url 'dashboard' %}">Back to My Profile</a></p>    
+                <p><a class="darkteal-text underline-hover" href="{% url 'read' notification.id %}">Mark as Read</a></p>
+                <p><a class="darkteal-text underline-hover" href="{% url 'delete' notification.id %}">Delete</a></p>
             </div>
 
         </div>

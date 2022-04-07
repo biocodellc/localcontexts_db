@@ -4,7 +4,6 @@ from .models import *
 from communities.models import *
 from accounts.models import UserAffiliation
 from helpers.emails import send_membership_email
-from .utils import send_community_approval_notification
 from django.views.decorators.csrf import csrf_exempt
 
 @login_required(login_url='login')
@@ -65,14 +64,6 @@ def show_notification(request, pk):
                 # Send email letting user know they are a member
                 send_membership_email(request, community, sent_from, n.role)
 
-                return render(request, 'notifications/read.html', {'notification': n})
-
-            elif n.notification_type == 'Create':
-                new_community = Community.objects.get(id=community_id)
-                new_community.is_approved = True
-                new_community.save()
-                # Sends email
-                send_community_approval_notification(new_community.community_creator, new_community)
                 return render(request, 'notifications/read.html', {'notification': n})
 
         if n.institution:
@@ -143,53 +134,9 @@ def delete_notification(request, pk):
     return redirect('dashboard')
 
 @login_required(login_url='login')
-def show_notification_community(request, cid, pk):
-    n = ActionNotification.objects.get(id=pk)
-    community = Community.objects.get(id=cid)
-    context = {
-        'n': n,
-        'community':community,
-    }
-    return render(request, 'notifications/community-notification.html', context)
-
-@login_required(login_url='login')
 @csrf_exempt
-def read_notification_community(request, cid, pk):
+def read_org_notification(request, pk):
     n = ActionNotification.objects.get(id=pk)
-    community = Community.objects.get(id=cid)
     n.viewed = True
     n.save()
-    
-    context = {
-        'n': n,
-        'community':community,
-    }
-    return render(request, 'notifications/comm-read.html', context)
-
-@login_required(login_url='login')
-@csrf_exempt
-def read_institution_notification(request, iid, pk):
-    n = ActionNotification.objects.get(id=pk)
-    institution = Institution.objects.get(id=iid)
-    n.viewed = True
-    n.save()
-    
-    context = {
-        'n': n,
-        'institution':institution,
-    }
-    return render(request, 'notifications/inst-read.html', context)
-
-@login_required(login_url='login')
-@csrf_exempt
-def read_researcher_notification(request, rid, pk):
-    n = ActionNotification.objects.get(id=pk)
-    researcher = Researcher.objects.get(id=rid)
-    n.viewed = True
-    n.save()
-    
-    context = {
-        'n': n,
-        'researcher':researcher,
-    }
-    return render(request, 'notifications/researcher-read.html', context)
+    return render(request, 'notifications/action-read.html')

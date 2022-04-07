@@ -7,7 +7,7 @@
             
             {% if '/login' in request.path or 'reset' in request.path %}
                 <div class="login-logo-container">
-                    <img class="login-logo" src="{% static 'images/logos/lc-logo-signin.png' %}" alt="Local Contexts logo">
+                    <img loading="lazy" class="login-logo" src="{% static 'images/logos/lc-logo-signin.png' %}" alt="Local Contexts logo">
                 </div>
             {% else %}
 
@@ -46,7 +46,7 @@
                             Select an account
                         </li>
                         <li>
-                            {% if 'connect-community' in request.path or 'create-community' in request.path or 'confirm-community' in request.path or 'connect-institution' in request.path or 'create-institution' in request.path or 'confirm-institution' in request.path or 'create-institution/no-ror/' in request.path or 'connect-researcher' in request.path %}
+                            {% if 'connect-community' in request.path or 'create-community' in request.path or 'confirm-community' in request.path or 'connect-institution' in request.path or 'create-institution' in request.path or 'confirm-institution' in request.path or 'create-institution/no-ror/' in request.path or 'connect-researcher' in request.path or 'preparation-step' in request.path %}
                                 {% include 'snippets/bullet-big.html'%}
                             {% else %}
                                 {% include 'snippets/bullet.html'%}
@@ -68,8 +68,8 @@
         <div class="registration-form-container flex-this column">
             {% block card %} {% endblock %}    
         </div>
-    </div>
 
+    </div>
 </section>
 {% include 'partials/footers/_reg-footer.html' %}
 {% endblock %}

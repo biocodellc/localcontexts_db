@@ -2,7 +2,7 @@
 {% researcher_notifications researcher as notifications %}
 {% unread_notifications researcher as unread_exist %}
 
-    <div class="dashcard auto-margin">
+    <div class="dashcard">
         
         <!-- Top Nav -->
         <div class="flex-this w-100 space-between">
@@ -33,13 +33,13 @@
                                     <div class="border-bottom-solid-teal">
                                         {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
                                             {% if n.reference_id %}
-                                                <a href="{% anchor 'researcher-projects' n.reference_id researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
+                                                <a href="{% anchor 'researcher-projects' n.reference_id researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
                                             {% else %}
-                                                <a href="{% url 'researcher-projects' researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
+                                                <a href="{% url 'researcher-projects' researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
                                             {% endif %}
                                         {% endif %}
                                         {% if n.notification_type == 'Connections' %}
-                                            <a href="#" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsReadResearcher(this); return true;">
+                                            <a href="#" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
                                         {% endif %}
                                             <div class="flex-this space-between margin-top-1">
                                                 <div>
@@ -74,7 +74,7 @@
             <!-- Image, headers, description -->
         <div class="flex-this">
             <div class="researcher-img-container">
-                <img 
+                <img loading="lazy" 
                     src=" {% if researcher.image %} {{ researcher.image.url }} {% else %} {% static 'images/placeholders/researcher-place.jpg' %} {% endif %}" 
                     alt="{{ researcher.researcher_name }} image"
                 >
@@ -111,7 +111,7 @@
                                     href="https://orcid.org/{{ researcher.orcid }}" 
                                 {% endif %}
                             >
-                                <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">
+                                <img loading="lazy" src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">
                                 {% if 'https://sandbox.orcid.org/' in researcher.orcid or 'https://orcid.org/' in researcher.orcid %}
                                     {{ researcher.orcid }}
                                 {% elif 'X' in researcher.orcid %}
@@ -123,7 +123,7 @@
                         </div>
                     {% else %}
                         <div>
-                            <img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"> <small>No ORCiD specified</small>
+                            <img loading="lazy" src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"> <small>No ORCiD specified</small>
                         </div>
                     {% endif %}
 

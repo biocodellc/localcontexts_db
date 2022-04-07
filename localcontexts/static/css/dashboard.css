@@ -1,34 +1,41 @@
-/* Welcome card */
+/* user info card */
 .dash-driver {
-    width: 1280px;
-    height: 114px;
-    margin: auto;
     padding: 20px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    align-items: center;
-    margin-bottom: 10px;
 }
 
-.dash-driver h2 {
-    font-size: 34px;
-    line-height: 40px;
-    font-weight: 700;
+.dash-driver, .dashcard {
+    margin: auto;
+    border-radius: 5px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+    margin-bottom: 10px;
+    width: 1280px;
+    background-color: #fff;
+}
+
+.dash-driver h2, .dash-driver h4 {
+    color: #1f2937;
+}
+
+.dash-driver h3 {
+    color: #4b5563;
 }
 
 .dash-btn-container {
     width: 22%;
 }
 
+.noti-bell, .dash-icons-big {
+    padding: 10px;
+}
+
+.grey-bell {
+    color: #7a828e;
+}
+
 /* DASH CARDS */
 .dashcard {
     margin-top: 5px;
-    margin-bottom: 10px;
     padding: 16px;
-    width: 1280px;
-    background-color: #fff;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
 }
 
 .dashcard-img-container, .dashcard-text-container, .researcher-img-container {
@@ -106,12 +113,6 @@
     width: 271px;
     padding: 10px;
     margin-bottom: 5px;
-}
-
-.side-nav-item i {
-    margin-right: 5px;
-    padding: 5px;
-    font-size: 36px;
 }
 
 /* USER NOTIFICATIONS */

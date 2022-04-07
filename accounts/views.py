@@ -142,7 +142,7 @@ def landing(request):
     return redirect('login')
 
 @login_required(login_url='login')
-def registration_reason(request):
+def select_account(request):
     return render(request, 'accounts/select-account.html')
 
 @login_required(login_url='login')
@@ -192,6 +192,8 @@ def create_profile(request):
 
 @login_required(login_url='login')
 def update_profile(request):
+    profile = Profile.objects.select_related('user').get(user=request.user)
+
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
@@ -207,11 +209,13 @@ def update_profile(request):
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
 
-    context = { 'user_form': user_form, 'profile_form': profile_form }
+    context = { 'profile': profile, 'user_form': user_form, 'profile_form': profile_form }
     return render(request, 'accounts/update-profile.html', context)
 
 @login_required(login_url='login')
 def change_password(request):
+    profile = Profile.objects.select_related('user').get(user=request.user)
+
     form = PasswordChangeForm(request.user, request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
@@ -222,11 +226,12 @@ def change_password(request):
         else:
             messages.add_message(request, messages.ERROR, 'Something went wrong')
             return redirect('change-password')
-    return render(request, 'accounts/change-password.html', {'form':form,})
+    return render(request, 'accounts/change-password.html', {'profile': profile, 'form':form })
     
 
 @login_required(login_url='login')
 def deactivate_user(request):
+    profile = Profile.objects.select_related('user').get(user=request.user)
     if request.method == "POST":
         user = request.user
         user.is_active = False
@@ -234,11 +239,12 @@ def deactivate_user(request):
         auth.logout(request)
         messages.add_message(request, messages.INFO, 'Your account has been deactivated.')
         return redirect('login')
-    return render(request, 'accounts/deactivate.html')
+    return render(request, 'accounts/deactivate.html', { 'profile': profile })
 
 @login_required(login_url='login')
 def manage_organizations(request):
-    return render(request, 'accounts/manage-orgs.html')
+    profile = Profile.objects.select_related('user').get(user=request.user)
+    return render(request, 'accounts/manage-orgs.html', { 'profile': profile })
 
 @login_required(login_url='login')
 def invite_user(request):

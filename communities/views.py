@@ -19,6 +19,7 @@ from bclabels.utils import check_bclabel_type, assign_bclabel_img, assign_bclabe
 from tklabels.utils import check_tklabel_type, assign_tklabel_img, assign_tklabel_svg
 from projects.utils import add_to_contributors
 from helpers.utils import *
+from accounts.utils import get_users_name
 
 from helpers.emails import *
 
@@ -65,6 +66,11 @@ def connect_community(request):
 
     context = { 'communities': communities, 'form': form,}
     return render(request, 'communities/connect-community.html', context)
+
+@login_required(login_url='login')
+def preparation_step(request):
+    community = True
+    return render(request, 'accounts/preparation.html', { 'community' : community })
 
 # Create Community
 @login_required(login_url='login')
@@ -263,15 +269,19 @@ def customize_label(request, pk, label_type):
                     label_form.created_by = request.user
                     label_form.is_approved = False
                     label_form.save()
+                    set_language_code(label_form)
+
 
                     # Save all label translation instances
                     instances = add_translation_formset.save(commit=False)
                     for instance in instances:
                         instance.tklabel = label_form
                         instance.save()
+                        set_language_code(instance)
                     
                     # Create notification
-                    title = "A TK Label was customized by " + request.user.get_full_name() + " and is waiting approval by another member of the community."
+                    name = get_users_name(request.user)
+                    title = f"A TK Label was customized by {name} and is waiting approval by another member of the community."
                     ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
                     return redirect('select-label', community.id)
@@ -301,15 +311,19 @@ def customize_label(request, pk, label_type):
                     label_form.created_by = request.user
                     label_form.is_approved = False
                     label_form.save()
+                    set_language_code(label_form)
+
 
                     # Save all label translation instances
                     instances = add_translation_formset.save(commit=False)
                     for instance in instances:
                         instance.bclabel = label_form
                         instance.save()
+                        set_language_code(instance)
 
                     # Send notification
-                    title = "A BC Label was customized by " + request.user.get_full_name() + " and is waiting approval by another member of the community."
+                    name = get_users_name(request.user)
+                    title = f"A BC Label was customized by {name} and is waiting approval by another member of the community."
                     ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
 
                     return redirect('select-label', community.id)
@@ -442,6 +456,7 @@ def edit_label(request, pk, label_id):
                         instance.tklabel = tklabel
 
                     instance.save()
+                    set_language_code(instance)
 
                 return redirect('select-label', community.id)
 
@@ -619,7 +634,8 @@ def create_project(request, pk):
 
                 # Send notification
                 truncated_project_title = str(data.title)[0:30]
-                title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + truncated_project_title + ' ...'
+                name = get_users_name(data.project_creator)
+                title = f'A new project was created by {name}: {truncated_project_title} ...'
                 ActionNotification.objects.create(title=title, sender=request.user, community=community, notification_type='Projects', reference_id=data.unique_id)
                 return redirect('community-projects', community.id)
         

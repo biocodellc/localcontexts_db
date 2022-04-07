@@ -31,7 +31,7 @@
                 <div class="flex-this">
 
                     <div class="dashcard-img-container">
-                        <img 
+                        <img loading="lazy" 
                             class="profile-img" 
                             src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
                             alt="{{ community.community_name }} image"
@@ -106,7 +106,7 @@
                 <div class="flex-this">
 
                     <div class="dashcard-img-container">
-                        <img 
+                        <img loading="lazy" 
                             class="profile-img" 
                             src="{% if institution.image %} {{ institution.image.url }} {% else %} {% static 'images/placeholders/institution-place.jpg' %}{% endif %}" 
                             alt="{{ institution.institution_name }} image"
@@ -180,7 +180,7 @@
             <div class="dashcard researchers-filter show">
                 <div class="flex-this">
                     <div class="researcher-img-container">
-                        <img 
+                        <img loading="lazy" 
                             src=" {% if researcher.image %} {{ researcher.image.url }} {% else %} {% static 'images/placeholders/researcher-place.jpg' %} {% endif %}" 
                             alt="{{ researcher.researcher_name }} image"
                         >

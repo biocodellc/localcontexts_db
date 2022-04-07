@@ -1,4 +1,5 @@
 import json
+import requests
 import zipfile
 from django.template.loader import get_template
 from io import BytesIO
@@ -8,6 +9,15 @@ from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
 from .models import Connections, Notice, InstitutionNotice
+
+def set_language_code(instance):
+    url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
+    data = requests.get(url).json()
+
+    if instance.language in data.keys():
+        instance.language_tag = data[instance.language]
+        instance.save()
+
 
 # h/t: https://stackoverflow.com/questions/59695870/generate-multiple-pdfs-and-zip-them-for-download-all-in-a-single-view
 def render_to_pdf(template_src, context_dict={}):

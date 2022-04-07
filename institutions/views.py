@@ -57,6 +57,11 @@ def connect_institution(request):
     return render(request, 'institutions/connect-institution.html', context)
 
 @login_required(login_url='login')
+def preparation_step(request):
+    institution = True
+    return render(request, 'accounts/preparation.html', { 'institution': institution })
+
+@login_required(login_url='login')
 def create_institution(request):
     form = CreateInstitutionForm(request.POST or None)
     noror_form = CreateInstitutionNoRorForm(request.POST or None)
@@ -334,7 +339,8 @@ def create_project(request, pk):
 
                 # Format and send notification about the created project
                 truncated_project_title = str(data.title)[0:30]
-                title = 'A new project was created by ' + str(data.project_creator.get_full_name()) + ': ' + truncated_project_title
+                name = get_users_name(data.project_creator)
+                title = f'A new project was created by {name}: {truncated_project_title} ...'
                 ActionNotification.objects.create(title=title, notification_type='Projects', sender=data.project_creator, reference_id=data.unique_id, institution=institution)
                 return redirect('institution-projects', institution.id)
 

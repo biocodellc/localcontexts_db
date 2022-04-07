@@ -9,11 +9,11 @@
 
             <div class="account-card margin-right-1">
                 <p><strong>Community Account </strong></p>
-                <div><img class="tiny-label" src="{% static 'images/tk-labels/tk-attribution.png' %}"></div>
+                <div><img loading="lazy" class="tiny-label" src="{% static 'images/tk-labels/tk-attribution.png' %}"></div>
                 <p><strong>Who?</strong> A community entity or representative</p>
                 <p><strong>What?</strong> Customize Labels, create Projects and apply Labels</p>
                 <a href="{% url 'connect-community' %}"><div class="primary-btn white-btn-select"><span>Join</span></div></a>
-                <a href="{% url 'create-community' %}"><div class="primary-btn white-btn-select"><span>Create</span></div></a>
+                <a href="{% url 'prep-community' %}"><div class="primary-btn white-btn-select"><span>Create</span></div></a>
             </div>
             <div class="account-card margin-left-1 margin-right-1">
                 <div class="flex-this">
@@ -23,19 +23,19 @@
                     </div>
                 </div>
                 <div class="flex-this">
-                    <div class="margin-right-1"><img class="tiny-notice" src="{% static 'images/notices/tk-notice.png' %}"></div>
-                    <div class="margin-left-16"><img class="tiny-notice" src="{% static 'images/notices/ci-open-to-collaborate.png' %}"></div>
+                    <div class="margin-right-1"><img loading="lazy" class="tiny-notice" src="{% static 'images/notices/tk-notice.png' %}"></div>
+                    <div class="margin-left-16"><img loading="lazy" class="tiny-notice" src="{% static 'images/notices/ci-open-to-collaborate.png' %}"></div>
                 </div>
                 <p><strong>Who?</strong> Cultural or research institutions as well as other data repsitories</p>
                 <p><strong>What?</strong> Create Projects and apply Notices</p>
                 <a href="{% url 'connect-institution' %}"><div class="primary-btn white-btn-select"><span>Join</span></div></a>
-                <a href="{% url 'create-institution' %}"><div class="primary-btn white-btn-select"><span>Create</span></div></a>
+                <a href="{% url 'prep-institution' %}"><div class="primary-btn white-btn-select"><span>Create</span></div></a>
             </div>
             <div class="account-card margin-left-1">
                 <p><strong>Researcher Account</strong></p>
                 <div class="flex-this">
-                    <div class="margin-right-1"><img class="tiny-notice" src="{% static 'images/notices/tk-notice.png' %}"></div>
-                    <div class="margin-left-16"><img class="tiny-notice" src="{% static 'images/notices/bc-notice.png' %}"></div>
+                    <div class="margin-right-1"><img loading="lazy" class="tiny-notice" src="{% static 'images/notices/tk-notice.png' %}"></div>
+                    <div class="margin-left-16"><img loading="lazy" class="tiny-notice" src="{% static 'images/notices/bc-notice.png' %}"></div>
                 </div>
                 <p><strong>Who?</strong> An individual researcher who is either affiliated with an institution or independent </p>
                 <p><strong>What?</strong> Create Projects and apply Notices</p>

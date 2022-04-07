@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from communities.models import *
 from .models import *
-from .utils import *
+from accounts.utils import get_users_name
 
 # When the instance of invite member form is saved, send target user a notification
 @receiver(post_save, sender=InviteMember)
@@ -13,7 +13,7 @@ def send_community_invite(sender, instance, created, **kwargs):
         role = instance.role
         ref = instance.id
         msg = instance.message
-        name = check_full_name(sender_)
+        name = get_users_name(sender_)
 
         if instance.community:
             community = instance.community
@@ -23,7 +23,7 @@ def send_community_invite(sender, instance, created, **kwargs):
                 message = msg
             else:
                 message= f"You've been invited to join {community} with the role of {role}"
-            UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="Invitation", community=community, reference_id=ref, role=role)
+            UserNotification.objects.create(from_user=sender_, to_user=receiver_, title=title, message=message, notification_type="Invitation", community=community, reference_id=ref, role=role)
 
         if instance.institution:
             institution = instance.institution
@@ -33,7 +33,7 @@ def send_community_invite(sender, instance, created, **kwargs):
                 message = msg
             else:
                 message= f"You've been invited to join {institution} with the role of {role}."
-            UserNotification.objects.create(to_user=receiver_, title=title, message=message, notification_type="Invitation", institution=institution, reference_id=ref, role=role)
+            UserNotification.objects.create(from_user=sender_, to_user=receiver_, title=title, message=message, notification_type="Invitation", institution=institution, reference_id=ref, role=role)
 
 
 # When an invitation to a community or institution is accepted, send target a notification
@@ -44,7 +44,7 @@ def accept_community_invite(sender, instance, **kwargs):
         receiver_ = instance.receiver
         role = instance.role
         ref = instance.id
-        receiver_name = check_full_name(receiver_)
+        receiver_name = get_users_name(receiver_)
 
         if instance.community:
             community = instance.community
@@ -92,7 +92,7 @@ def send_user_join_request(sender, instance, created, **kwargs):
         sender_ = instance.user_from
         ref = instance.id
 
-        name = check_full_name(sender_)
+        name = get_users_name(sender_)
 
         if instance.community:
             community = instance.community
@@ -118,7 +118,7 @@ def accept_user_join_request(sender, instance, created, **kwargs):
         sender_ = instance.user_from
         ref = instance.id
         role = instance.role
-        sender_name = check_full_name(sender_)
+        sender_name = get_users_name(sender_)
 
         if instance.community:
             community = instance.community

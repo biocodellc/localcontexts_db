@@ -166,7 +166,7 @@
 	}
 
 	function showAuthButton($){
-		$('<a id="orcidAuthButton" href=' + buildReturnUrl() + '><img src="https://orcid.org/sites/default/files/images/orcid_24x24.png" />Connect your ORCID iD</a>').appendTo(elementId);
+		$('<a id="orcidAuthButton" href=' + buildReturnUrl() + '><img loading="lazy" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" />Connect your ORCID iD</a>').appendTo(elementId);
 	}
 
 	function showError($){
@@ -178,7 +178,7 @@
 	}
 
 	function showSuccess($, id_token, signedInIdToken){
-		$('<p id="orcidAuthSuccess"><b>Thanks, ' +signedInIdToken.given_name+ " " +signedInIdToken.family_name+ '!</b><br><img src="https://orcid.org/sites/default/files/images/orcid_24x24.png"/><a target="_orcidRecord" href="' + issuer + '/my-orcid">' +  issuer + '/' + signedInIdToken.sub + '</a></p>').appendTo(elementId);
+		$('<p id="orcidAuthSuccess"><b>Thanks, ' +signedInIdToken.given_name+ " " +signedInIdToken.family_name+ '!</b><br><img loading="lazy" src="https://orcid.org/sites/default/files/images/orcid_24x24.png"/><a target="_orcidRecord" href="' + issuer + '/my-orcid">' +  issuer + '/' + signedInIdToken.sub + '</a></p>').appendTo(elementId);
 		//Add hidden inputs with ORCID info
 		$('<input>').attr({
 		    type: 'hidden',

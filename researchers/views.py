@@ -4,6 +4,7 @@ from django.contrib import messages
 
 from projects.utils import add_to_contributors
 from helpers.utils import set_notice_defaults, dev_prod_or_local
+from accounts.utils import get_users_name
 
 from communities.models import Community
 from notifications.models import ActionNotification
@@ -339,7 +340,8 @@ def notify_others(request, pk, proj_id):
 
             # Reference ID and title for notification
             reference_id = str(project.unique_id)
-            title =  str(researcher.user.get_full_name()) + ' has notified you of a Project.'
+            name = get_users_name(researcher.user)
+            title =  f'{name} has notified you of a Project.'
 
             for community_id in communities_selected:
                 # Add each selected community to notify entities instance
