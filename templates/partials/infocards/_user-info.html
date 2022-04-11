@@ -8,7 +8,15 @@
             {% if affiliation %}
                 <h3 class="no-top-margin">{{ profile.affiliation }}</h3>
             {% endif %}
-            <h4 class="no-top-margin">{{ profile.city_town }}, {{ profile.state_province_region }} {{ profile.country.name }}</h4>
+
+            {% if not profile.city_town and not profile.state_province_region and not profile.country.name %}
+            {% else %}
+                <h4 class="no-top-margin">
+                    {% if profile.city_town %} {{ profile.city_town }}, {% endif %}
+                    {% if profile.state_province_region %}{{ profile.state_province_region }} {% endif %}
+                    {% if profile.country %} {{ profile.country.name }} {% endif%}
+                </h4>
+            {% endif %}
 
             {% if profile.languages_spoken %}
                 <div class="flex-this">
