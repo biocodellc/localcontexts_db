@@ -231,7 +231,10 @@ def remove_member(request, pk, member_id):
     # remove institution from userAffiloiation instance
     affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=member)
     affiliation.institutions.remove(institution)
-    return redirect('institution-members', institution.id)
+    if '/manage/' in request.META.get('HTTP_REFERER'):
+        return redirect('manage-orgs')
+    else:
+        return redirect('institution-members', institution.id)
 
 # Projects
 @login_required(login_url='login')

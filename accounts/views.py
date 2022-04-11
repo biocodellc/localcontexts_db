@@ -244,7 +244,15 @@ def deactivate_user(request):
 @login_required(login_url='login')
 def manage_organizations(request):
     profile = Profile.objects.select_related('user').get(user=request.user)
-    return render(request, 'accounts/manage-orgs.html', { 'profile': profile })
+    affiliations = UserAffiliation.objects.prefetch_related('communities', 'institutions').get(user=request.user)
+    print(request.META.get('HTTP_REFERER'))
+    return render(request, 'accounts/manage-orgs.html', { 'profile': profile, 'affiliations': affiliations })
+
+# @login_required(login_url='login')
+# def remove_organizations(request, org_id):
+#     profile = Profile.objects.select_related('user').get(user=request.user)
+#     affiliations = UserAffiliation.objects.prefetch_related('communities', 'institutions').get(user=request.user)
+#     return redirect('manage-orgs')
 
 @login_required(login_url='login')
 def invite_user(request):

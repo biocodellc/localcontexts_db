@@ -204,7 +204,10 @@ def remove_member(request, pk, member_id):
     # remove community from userAffiloiation instance
     affiliation = UserAffiliation.objects.get(user=member)
     affiliation.communities.remove(community)
-    return redirect('members', community.id)
+    if '/manage/' in request.META.get('HTTP_REFERER'):
+        return redirect('manage-orgs')
+    else:
+        return redirect('members', community.id)
 
 # Select Labels to Customize
 @login_required(login_url='login')
