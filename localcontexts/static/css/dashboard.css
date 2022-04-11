@@ -208,3 +208,16 @@
     margin-top: 20px;
     margin-right: -25px;
 }
+
+.suggestion-box {
+    margin-right: 9px;
+    padding: 16px;
+    border: 1px solid #EFF0F1;
+    border-radius: 4px;
+    width: 360px;
+    height: 91px;
+}
+
+.set-height {
+    height: 200px;
+}

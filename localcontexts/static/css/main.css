@@ -365,6 +365,10 @@ input:focus {
     flex-wrap: wrap;
 }
 
+.block {
+    display: block;
+}
+
 /* WIDTHS */
 .w-5 {
     width: 5%;
