@@ -4,28 +4,34 @@
 <section class="dash-driver flex-this space-between">
     <div class="w-70">
         <h2 class="no-top-margin no-bottom-margin">{% display_name request.user %} </h2>
-        <h3 class="no-top-margin">{{ profile.affiliation }}</h3>
-        <h4 class="no-top-margin">{{ profile.city_town }} {{ profile.state_province_region }} {{ profile.country.name }}</h4>
+        {% if affiliation %}
+            <h3 class="no-top-margin">{{ profile.affiliation }}</h3>
+        {% endif %}
+        <h4 class="no-top-margin">{{ profile.city_town }}, {{ profile.state_province_region }} {{ profile.country.name }}</h4>
 
-        <div class="flex-this">
-            <div class="dash-icons-big">
-                <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+        {% if profile.languages_spoken %}
+            <div class="flex-this">
+                <div class="dash-icons-big">
+                    <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+                </div>
+                <div>
+                    <small class="orange-text">Languages</small>
+                    <p class="no-top-margin">{{ profile.languages_spoken }}</p>
+                </div>
             </div>
-            <div>
-                <small class="orange-text">Languages</small>
-                <p class="no-top-margin">{{ profile.languages_spoken }}</p>
-            </div>
-        </div>
+        {% endif %}
 
-        <div class="flex-this">
-            <div class="dash-icons-big">
-                <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+        {% if profile.affiliation %}
+            <div class="flex-this">
+                <div class="dash-icons-big">
+                    <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+                </div>
+                <div>
+                    <small class="orange-text">Affiliations</small>
+                    <p class="no-top-margin">{{ profile.affiliation }}</p>
+                </div>
             </div>
-            <div>
-                <small class="orange-text">Affiliations</small>
-                <p class="no-top-margin">{{ profile.affiliation }}</p>
-            </div>
-        </div>
+        {% endif %}
 
     </div>
     
