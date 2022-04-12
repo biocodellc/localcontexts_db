@@ -4,7 +4,7 @@ from django.contrib import messages
 
 from .utils import *
 from projects.utils import add_to_contributors
-from helpers.utils import set_notice_defaults, dev_prod_or_local, create_notices
+from helpers.utils import dev_prod_or_local, create_notices, change_member_role
 
 from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson
@@ -185,27 +185,35 @@ def institution_members(request, pk):
     else:
         form = InviteMemberForm(request.POST or None)
         if request.method == 'POST':
-            receiver = request.POST.get('receiver')
-            user_in_institution = is_institution_in_user_institutions(receiver, institution)
-
-            if user_in_institution == False: # If user is not an institution member
-                check_invitation = does_institution_invite_exist(receiver, institution)
-
-                if check_invitation == False: # If invitation does not exist, save form
-                    if form.is_valid():
-                        data = form.save(commit=False)
-                        data.sender = request.user
-                        data.status = 'sent'
-                        data.institution = institution
-                        data.save()
-                        # Send email to target user
-                        send_institution_invite_email(request, data, institution)
-                        messages.add_message(request, messages.INFO, 'Invitation Sent!')
-                        return redirect('institution-members', institution.id)
-                else: 
-                    messages.add_message(request, messages.INFO, 'The user you are trying to add has already been invited to this institution.')
+            if 'change_member_role_btn' in request.POST:
+                current_role = request.POST.get('current_role')
+                new_role = request.POST.get('new_role')
+                user_id = request.POST.get('user_id')
+                member = User.objects.get(id=user_id)
+                change_member_role(institution, member, current_role, new_role)
+                return redirect('institution-members', institution.id)
             else:
-                messages.add_message(request, messages.ERROR, 'The user you are trying to add is already a member of this institution.')
+                receiver = request.POST.get('receiver')
+                user_in_institution = is_institution_in_user_institutions(receiver, institution)
+
+                if user_in_institution == False: # If user is not an institution member
+                    check_invitation = does_institution_invite_exist(receiver, institution)
+
+                    if check_invitation == False: # If invitation does not exist, save form
+                        if form.is_valid():
+                            data = form.save(commit=False)
+                            data.sender = request.user
+                            data.status = 'sent'
+                            data.institution = institution
+                            data.save()
+                            # Send email to target user
+                            send_institution_invite_email(request, data, institution)
+                            messages.add_message(request, messages.INFO, 'Invitation Sent!')
+                            return redirect('institution-members', institution.id)
+                    else: 
+                        messages.add_message(request, messages.INFO, 'The user you are trying to add has already been invited to this institution.')
+                else:
+                    messages.add_message(request, messages.ERROR, 'The user you are trying to add is already a member of this institution.')
 
         context = { 
             'institution': institution,
@@ -231,7 +239,10 @@ def remove_member(request, pk, member_id):
     # remove institution from userAffiloiation instance
     affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=member)
     affiliation.institutions.remove(institution)
-    return redirect('institution-members', institution.id)
+    if '/manage/' in request.META.get('HTTP_REFERER'):
+        return redirect('manage-orgs')
+    else:
+        return redirect('institution-members', institution.id)
 
 # Projects
 @login_required(login_url='login')

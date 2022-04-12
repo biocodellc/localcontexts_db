@@ -43,7 +43,6 @@ function getWithExpiry(key) {
 
 // Get languages from the IANA directory
 function fetchLanguages() {
-    // const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/iana.json'
     const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
     
     fetch(endpoint)
@@ -917,6 +916,38 @@ function openMemberModal() {
         memberModal.classList.replace('show', 'hide')
     }
 }
+
+// Change user role
+if (window.location.href.includes('members')) {
+    // openChangeRoleModalBtn_id and changeRoleModal_id will be the same id
+
+    const btns = document.querySelectorAll('.changeRoleBtn')
+    btns.forEach(btn => {
+        let buttonId = btn.id
+        let arr = buttonId.split('_')
+        let primary_id = arr[0]
+        let user_id = arr[1]
+
+        const openChangeRoleBtn = document.getElementById(`${primary_id}_${user_id}`)
+        openChangeRoleBtn.addEventListener('click', function(e) {
+            console.log(e.target)
+            e.preventDefault()
+            openChangeRoleModal(user_id)
+        })
+    })
+
+    function openChangeRoleModal(id) {
+        console.log(id)
+        const modal = document.getElementById(`changeRoleModal_${id}`)
+        modal.classList.replace('hide', 'show')
+
+        const closeModalBtn = document.getElementById('closeRoleChangeModal')
+        closeModalBtn.addEventListener('click', function(e) {
+            e.preventDefault()
+            modal.classList.replace('show', 'hide')
+        })    
+    }
+} 
 
 // Create institution: non-ROR modal
 if (window.location.href.includes('create-institution')) {

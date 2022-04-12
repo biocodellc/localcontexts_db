@@ -1,0 +1,54 @@
+{% load static %}
+
+<!-- CHANGE MEMBER ROLE MODAL -->
+
+<div 
+    id="changeRoleModal_{% if admin %}{{ admin.id }}{% endif %}{% if editor %}{{ editor.id }}{% endif %}{% if viewer %}{{ viewer.id }}{% endif %}" 
+    class="modal hide"
+>
+    <div class="modal-defaults change-role-modal flex-this column w-100">
+        <div class="modal-content-padding w-100">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div>
+                    <h2 class="primary-black-text">Change role</h2>  
+
+                    <div>
+                        <label>Current role</label><br>
+                        <input  
+                            class="w-100" 
+                            type="text" 
+                            placeholder="{% if admin %}Administrator{% endif %}{% if editor %}Editor{% endif %}{% if viewer %}Viewer{% endif %}"
+                            disabled
+                        ><br>
+                        <input 
+                            type="hidden" 
+                            value="{% if admin %}admin{% endif %}{% if editor %}editor{% endif %}{% if viewer %}viewer{% endif %}" 
+                            name="current_role"
+                        >
+                        <input 
+                            type="hidden" 
+                            value="{% if admin %} {{ admin.id }} {% endif %}{% if editor %} {{ editor.id }} {% endif %}{% if viewer %} {{ viewer.id }} {% endif %}" 
+                            name="user_id"
+                        >
+                    </div>
+
+                    <div class="margin-top-8">
+                        <label>New role</label><br>
+                        <select name="new_role" class="w-100">
+                            <option>-------------</option>
+                            <option>Administrator</option>
+                            <option>Editor</option>
+                            <option>Viewer</option>
+                        </select>                        
+                    </div>
+                </div>
+
+                <div class="flex-this flex-end w-100 text-align-center margin-top-16">
+                    <button id="continueRoleChangeBtn" class="primary-btn white-btn margin-right-1" name="change_member_role_btn">Update member role</button>    
+                    <div id="closeRoleChangeModal" class="margin-left-1 primary-btn action-btn">Cancel</div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

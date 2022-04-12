@@ -5,16 +5,30 @@
 <div class="flex-this column w-80 border-left margin-right-1">
     <div>
         <h3>Accounts</h3>
-        <p>You can join or create accounts here.</p>
+        <p>Manage the accounts you are a member of below.</p>
     </div>
 
-    <div><a class="darkteal-text underline-hover" href="{% url 'organization-registry' %}"> View the Local Contexts Registry</a></div>
-    <div><a class="darkteal-text underline-hover" href="{% url 'prep-community' %}"> Create a Community Account</a></div>
-    <div><a class="darkteal-text underline-hover" href="{% url 'prep-institution' %}"> Create an Institution Account</a></div>
-    {% if request.user.profile.is_researcher %}
-    {% else %}
-        <div><a class="darkteal-text underline-hover" href="{% url 'connect-researcher' %}"> Create your Researcher Account</a></div>
-    {% endif %}
+    {% for community in affiliations.communities.all %}
+        <div class="flex-this space-between border-top-bottom-grey w-100 align-center">
+            <div>
+                <h3>{{ community.community_name }}</h3>
+            </div>
+            <a class="leave-acct-btn block darkteal-text bold" href="{% url 'remove-member' community.id request.user.id %}"><small class="block">Leave account</small></a>
+        </div>
+    {% endfor %}
+
+    {% for institution in affiliations.institutions.all %}
+        <div class="flex-this space-between border-top-bottom-grey w-100 align-center">
+            <div>
+                <h3>{{ institution.institution_name }}</h3>
+            </div>
+            <a class="leave-acct-btn block darkteal-text bold" href="{% url 'remove-institution-member' institution.id request.user.id %}"><small class="block">Leave account</small></a>
+        </div>
+    {% endfor %}
+
+    <div class="w-20 margin-top-16">
+        <a class="primary-btn white-btn" href="{% url 'select-account' %}">Create a new account</a>
+    </div>
 
 </div>
 
