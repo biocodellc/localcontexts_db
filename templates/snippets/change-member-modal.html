@@ -2,7 +2,10 @@
 
 <!-- CHANGE MEMBER ROLE MODAL -->
 
-<div id="changeRoleModal" class="modal hide">
+<div 
+    id="changeRoleModal_{% if admin %}{{ admin.id }}{% endif %}{% if editor %}{{ editor.id }}{% endif %}{% if viewer %}{{ viewer.id }}{% endif %}" 
+    class="modal hide"
+>
     <div class="modal-defaults change-role-modal flex-this column w-100">
         <div class="modal-content-padding w-100">
             <form method="POST" action="">
@@ -18,8 +21,16 @@
                             placeholder="{% if admin %}Administrator{% endif %}{% if editor %}Editor{% endif %}{% if viewer %}Viewer{% endif %}"
                             disabled
                         ><br>
-                        <input type="hidden" value="{% if admin %}admin{% endif %}{% if editor %}editor{% endif %}{% if viewer %}viewer{% endif %}" name="current_role">
-                        <input type="hidden" value="{% if admin %} {{ admin.id }} {% endif %}{% if editor %} {{ editor.id }} {% endif %}{% if viewer %} {{ viewer.id }} {% endif %}" name="user_id">
+                        <input 
+                            type="hidden" 
+                            value="{% if admin %}admin{% endif %}{% if editor %}editor{% endif %}{% if viewer %}viewer{% endif %}" 
+                            name="current_role"
+                        >
+                        <input 
+                            type="hidden" 
+                            value="{% if admin %} {{ admin.id }} {% endif %}{% if editor %} {{ editor.id }} {% endif %}{% if viewer %} {{ viewer.id }} {% endif %}" 
+                            name="user_id"
+                        >
                     </div>
 
                     <div class="margin-top-8">
@@ -32,13 +43,6 @@
                         </select>                        
                     </div>
                 </div>
-
-                <input 
-                    id="hiddenInputChangeRole"
-                    type="hidden" 
-                    value="{% if admin %}admin_{{ admin.id }}{% endif %}{% if editor %}editor_{{ editor.id }}{% endif %}{% if viewer %}viewer_{{ viewer.id }}{% endif %}"
-                    name="{% if community %} community_{{ community.id }} {% endif %} {% if institution %} institution_{{ institution.id }} {% endif %}"
-                >
 
                 <div class="flex-this flex-end w-100 text-align-center margin-top-16">
                     <button id="continueRoleChangeBtn" class="primary-btn white-btn margin-right-1" name="change_member_role_btn">Update member role</button>    

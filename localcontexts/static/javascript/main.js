@@ -919,35 +919,34 @@ function openMemberModal() {
 
 // Change user role
 if (window.location.href.includes('members')) {
-    // needs to know:
-    // community or institution
-    // role
-    // which user
+    // openChangeRoleModalBtn_id and changeRoleModal_id will be the same id
 
-    const hiddenInputChangeRole = document.getElementById('hiddenInputChangeRole')
-    const hiddenValue = hiddenInputChangeRole.value
-    const hiddenName = hiddenInputChangeRole.name
-    let newValue = hiddenValue.split('_')
-    console.log(newValue[0], newValue[1])
-    let newName = hiddenName.split('_')
-    console.log(newName[0], newName[1])
+    const btns = document.querySelectorAll('.changeRoleBtn')
+    btns.forEach(btn => {
+        let buttonId = btn.id
+        let arr = buttonId.split('_')
+        let primary_id = arr[0]
+        let user_id = arr[1]
 
-    const openChangeRoleBtn = document.getElementById('openChangeRoleModalBtn')
-    openChangeRoleBtn.addEventListener('click', function(e) {
-        e.preventDefault()
-        openChangeRoleModal()
+        const openChangeRoleBtn = document.getElementById(`${primary_id}_${user_id}`)
+        openChangeRoleBtn.addEventListener('click', function(e) {
+            console.log(e.target)
+            e.preventDefault()
+            openChangeRoleModal(user_id)
+        })
     })
 
-    function openChangeRoleModal() {
-        let modal = document.getElementById('changeRoleModal')
+    function openChangeRoleModal(id) {
+        console.log(id)
+        const modal = document.getElementById(`changeRoleModal_${id}`)
         modal.classList.replace('hide', 'show')
-    }
 
-    let closeModalBtn = document.getElementById('closeRoleChangeModal')
-    closeModalBtn.addEventListener('click', function(e) {
-        e.preventDefault()
-        document.getElementById('changeRoleModal').classList.replace('show', 'hide')
-    })
+        const closeModalBtn = document.getElementById('closeRoleChangeModal')
+        closeModalBtn.addEventListener('click', function(e) {
+            e.preventDefault()
+            modal.classList.replace('show', 'hide')
+        })    
+    }
 } 
 
 // Create institution: non-ROR modal
