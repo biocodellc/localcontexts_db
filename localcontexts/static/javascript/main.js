@@ -889,42 +889,47 @@ function openMemberModal() {
     }
 }
 
-// Change user role
-if (window.location.href.includes('members')) {
-    // use
-    // openBtnClasses: '.example'
-    // modalPartialId: 'modalName'
-    // closeBtnPartialId: 'closeModalBtn'
+// use
+// openBtnClasses: '.example'
+// modalPartialId: 'modalName'
+// closeBtnPartialId: 'closeModalBtn'
+function modalToggle(openBtnClasses, modalPartialId, closeBtnPartialId) {
+    const roleBtns = document.querySelectorAll(openBtnClasses)
+    roleBtns.forEach(btn => {
+        let buttonId = btn.id
+        let arr = buttonId.split('_')
+        let primary_id = arr[0]
+        let user_id = arr[1]
 
+        const openChangeRoleBtn = document.getElementById(`${primary_id}_${user_id}`)
+        openChangeRoleBtn.addEventListener('click', function(e) {
+            e.preventDefault()
+            openTargetModal(user_id)
+        })
+    })
+
+    function openTargetModal(id) {
+        const modal = document.getElementById(`${modalPartialId}_${id}`)
+        modal.classList.replace('hide', 'show')
+
+        const closeModalBtn = document.getElementById(`${closeBtnPartialId}_${id}`)
+        closeModalBtn.addEventListener('click', function(e) {
+            e.preventDefault()
+            modal.classList.replace('show', 'hide')
+        })    
+    }
+}
+
+// Change member role / remove member
+if (window.location.href.includes('members')) {
     modalToggle('.changeRoleBtn', 'changeRoleModal', 'closeRoleChangeModal')
     modalToggle('.removeMemberBtn', 'removeMemberModal', 'closeRemoveMemberModal')
+} 
 
-    function modalToggle(openBtnClasses, modalPartialId, closeBtnPartialId) {
-        const roleBtns = document.querySelectorAll(openBtnClasses)
-        roleBtns.forEach(btn => {
-            let buttonId = btn.id
-            let arr = buttonId.split('_')
-            let primary_id = arr[0]
-            let user_id = arr[1]
-    
-            const openChangeRoleBtn = document.getElementById(`${primary_id}_${user_id}`)
-            openChangeRoleBtn.addEventListener('click', function(e) {
-                e.preventDefault()
-                openTargetModal(user_id)
-            })
-        })
-
-        function openTargetModal(id) {
-            const modal = document.getElementById(`${modalPartialId}_${id}`)
-            modal.classList.replace('hide', 'show')
-    
-            const closeModalBtn = document.getElementById(`${closeBtnPartialId}_${id}`)
-            closeModalBtn.addEventListener('click', function(e) {
-                e.preventDefault()
-                modal.classList.replace('show', 'hide')
-            })    
-        }
-    }
+// Leave account
+if (window.location.href.includes('manage')) {
+    modalToggle('.leaveCommunityBtn', 'leaveCommAccountModal', 'closeLeaveCommModal')
+    modalToggle('.leaveInstitutionBtn', 'leaveInstAccountModal', 'closeLeaveInstModal')
 } 
 
 // Create institution: non-ROR modal

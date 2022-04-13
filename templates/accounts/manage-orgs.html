@@ -13,17 +13,17 @@
             <div>
                 <h3>{{ community.community_name }}</h3>
             </div>
-            <a class="leave-acct-btn block darkteal-text bold" href="{% url 'remove-member' community.id request.user.id %}"><small class="block">Leave account</small></a>
+            <a id="openCommLeaveAcctBtn_{{community.id}}" class="leave-acct-btn block darkteal-text bold pointer leaveCommunityBtn"><small class="block">Leave account</small></a>
         </div>
+        {% include 'snippets/modals/leave-account-modal.html' %}
     {% endfor %}
 
     {% for institution in affiliations.institutions.all %}
         <div class="flex-this space-between border-top-bottom-grey w-100 align-center">
-            <div>
-                <h3>{{ institution.institution_name }}</h3>
-            </div>
-            <a class="leave-acct-btn block darkteal-text bold" href="{% url 'remove-institution-member' institution.id request.user.id %}"><small class="block">Leave account</small></a>
+            <div> <h3>{{ institution.institution_name }}</h3></div>
+            <a id="openInstLeaveAcctBtn_{{institution.id}}" class="leave-acct-btn block darkteal-text bold pointer leaveInstitutionBtn"><small class="block">Leave account</small></a>
         </div>
+        {% include 'snippets/modals/leave-account-modal.html' %}
     {% endfor %}
 
     <div class="w-20 margin-top-16">
