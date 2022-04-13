@@ -209,9 +209,15 @@ def remove_member(request, pk, member_id):
     if member in community.viewers.all():
         community.viewers.remove(member)
 
-    # remove community from userAffiloiation instance
+    # remove community from userAffiliation instance
     affiliation = UserAffiliation.objects.get(user=member)
     affiliation.communities.remove(community)
+
+    # Delete join request for this community if exists
+    if JoinRequest.objects.filter(user_from=member, community=community).exists():
+        join_request = JoinRequest.objects.get(user_from=member, community=community)
+        join_request.delete()
+    
     if '/manage/' in request.META.get('HTTP_REFERER'):
         return redirect('manage-orgs')
     else:

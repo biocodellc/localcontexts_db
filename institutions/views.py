@@ -236,9 +236,15 @@ def remove_member(request, pk, member_id):
     if member in institution.viewers.all():
         institution.viewers.remove(member)
 
-    # remove institution from userAffiloiation instance
+    # remove institution from userAffiliation instance
     affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=member)
     affiliation.institutions.remove(institution)
+
+    # Delete join request for this institution if exists
+    if JoinRequest.objects.filter(user_from=member, institution=institution).exists():
+        join_request = JoinRequest.objects.get(user_from=member, institution=institution)
+        join_request.delete()
+
     if '/manage/' in request.META.get('HTTP_REFERER'):
         return redirect('manage-orgs')
     else:
