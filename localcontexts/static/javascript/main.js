@@ -893,8 +893,8 @@ function openMemberModal() {
 if (window.location.href.includes('members')) {
     // openChangeRoleModalBtn_id and changeRoleModal_id will be the same id
 
-    const btns = document.querySelectorAll('.changeRoleBtn')
-    btns.forEach(btn => {
+    const roleBtns = document.querySelectorAll('.changeRoleBtn')
+    roleBtns.forEach(btn => {
         let buttonId = btn.id
         let arr = buttonId.split('_')
         let primary_id = arr[0]
@@ -916,6 +916,29 @@ if (window.location.href.includes('members')) {
             e.preventDefault()
             modal.classList.replace('show', 'hide')
         })    
+    }
+
+    const removeMemberBtns = document.querySelectorAll('.removeMemberBtn')
+    removeMemberBtns.forEach(btn => {
+        let btnId = btn.id
+        let arr = btnId.split('_')
+        let primary_id = arr[0]
+        let user_id = arr[1]
+
+        const openRemoveMemberModalBtn = document.getElementById(`${primary_id}_${user_id}`)
+        openRemoveMemberModalBtn.addEventListener('click', function(e) {
+            openRemoveMemberModal(user_id)
+        })
+    })
+
+    function openRemoveMemberModal(id) {
+        const modal = document.getElementById(`removeMemberModal_${id}`)
+        modal.classList.replace('hide', 'show')
+
+        const closeModalBtn = document.getElementById(`closeRemoveMemberModal_${id}`)
+        closeModalBtn.addEventListener('click', function(e) {
+            modal.classList.replace('show', 'hide')
+        }) 
     }
 } 
 

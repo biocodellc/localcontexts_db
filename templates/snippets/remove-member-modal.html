@@ -1,0 +1,43 @@
+<div 
+    id="removeMemberModal_{% if admin %}{{ admin.id }}{% endif %}{% if editor %}{{ editor.id }}{% endif %}{% if viewer %}{{ viewer.id }}{% endif %}" 
+    class="modal hide"
+>
+
+    <div class="modal-defaults deactivate-modal flex-this column w-100">
+        <div class="modal-content-padding w-100">
+
+            <div>
+                <h2 class="primary-black-text">Are you sure?</h2>  
+                <p>Are you sure you want remove this member? </p>  
+            </div>
+            <div class="flex-this w-100 text-align-center">
+                <a 
+                    {% if community %}
+                        {% if admin %}
+                            href="{% url 'remove-member' community.id admin.id %}" 
+                        {% endif %}
+                    {% endif %}
+
+                    {% if institution %}
+                        {% if admin %}
+                            href="{% url 'institution-remove-member' institution.id admin.id %}" 
+                        {% endif %}
+                        {% if editor %}
+                            href="{% url 'institution-remove-member' institution.id editor.id %}" 
+                        {% endif %}
+                        {% if viewer %}
+                            href="{% url 'institution-remove-member' institution.id viewer.id %}" 
+                        {% endif %}
+                    {% endif %} 
+                    class="primary-btn white-btn margin-right-1"
+                >
+                Yes, remove member</a>    
+                <div 
+                    id="closeRemoveMemberModal_{% if admin %}{{ admin.id }}{% endif %}{% if editor %}{{ editor.id }}{% endif %}{% if viewer %}{{ viewer.id }}{% endif %}" 
+                    class="margin-left-1 primary-btn action-btn"
+                >Cancel</div>
+            </div>
+
+        </div>
+    </div>
+</div>
