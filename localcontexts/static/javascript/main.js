@@ -13,34 +13,6 @@ if (passwordField) {
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
-function setWithExpiry(key, value, ttl) {
-	const now = new Date()
-
-	// `item` is an object which contains the original value
-	// as well as the time when it's supposed to expire
-	const item = {
-		value: value,
-		expiry: now.getTime() + ttl,
-	}
-	localStorage.setItem(key, JSON.stringify(item))
-}
-
-function getWithExpiry(key) {
-	const itemStr = localStorage.getItem(key)
-	// if the item doesn't exist, return null
-	if (!itemStr) { return null }
-	const item = JSON.parse(itemStr)
-	const now = new Date()
-	// compare the expiry time of the item with the current time
-	if (now.getTime() > item.expiry) {
-		// If the item is expired, delete the item from storage
-		// and return null
-		localStorage.removeItem(key)
-		return null
-	}
-	return item.value
-}
-
 // Get languages from the IANA directory
 function fetchLanguages() {
     const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
@@ -930,18 +902,16 @@ if (window.location.href.includes('members')) {
 
         const openChangeRoleBtn = document.getElementById(`${primary_id}_${user_id}`)
         openChangeRoleBtn.addEventListener('click', function(e) {
-            console.log(e.target)
             e.preventDefault()
             openChangeRoleModal(user_id)
         })
     })
 
     function openChangeRoleModal(id) {
-        console.log(id)
         const modal = document.getElementById(`changeRoleModal_${id}`)
         modal.classList.replace('hide', 'show')
 
-        const closeModalBtn = document.getElementById('closeRoleChangeModal')
+        const closeModalBtn = document.getElementById(`closeRoleChangeModal_${id}`)
         closeModalBtn.addEventListener('click', function(e) {
             e.preventDefault()
             modal.classList.replace('show', 'hide')

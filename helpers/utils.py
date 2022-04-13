@@ -12,19 +12,22 @@ from .models import Connections, Notice, InstitutionNotice
 
 def change_member_role(org, member, current_role, new_role):
     print(current_role, new_role)
-    if current_role == 'admin':
-        org.admins.remove(member)
-    elif current_role == 'editor':
-        org.editors.remove(member)
+    if new_role is None:
+        pass
     else:
-        org.viewers.remove(member)
-    
-    if new_role == 'Administrator':
-        org.admins.add(member)
-    elif new_role == 'Editor':
-        org.editors.add(member)
-    else:
-        org.viewers.add(member)
+        if current_role == 'admin':
+            org.admins.remove(member)
+        elif current_role == 'editor':
+            org.editors.remove(member)
+        elif current_role == 'viewer':
+            org.viewers.remove(member)
+        
+        if new_role == 'Administrator':
+            org.admins.add(member)
+        elif new_role == 'Editor':
+            org.editors.add(member)
+        elif new_role == 'Viewer':
+            org.viewers.add(member)
 
 def set_language_code(instance):
     url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'

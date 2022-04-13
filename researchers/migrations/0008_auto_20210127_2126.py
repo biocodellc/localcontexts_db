@@ -18,11 +18,7 @@ class Migration(migrations.Migration):
             name='contact_email',
             field=models.EmailField(blank=True, max_length=254, null=True),
         ),
-        migrations.AddField(
-            model_name='researcher',
-            name='contact_phone',
-            field=models.CharField(blank=True, max_length=15, null=True),
-        ),
+
         migrations.AddField(
             model_name='researcher',
             name='website',
