@@ -9,7 +9,12 @@
             <form method="POST" action="">
                 {% csrf_token %}
                 <div>
-                    <h2 class="primary-black-text">Change role</h2>  
+                    <h2 class="primary-black-text">
+                        Change role for 
+                        {% if admin %} {% if admin.get_full_name %} {{ admin.get_full_name }} ({{ admin.username }}) {% else %} {{ admin.username }} {% endif %} {% endif %}
+                        {% if editor %} {% if editor.get_full_name %} {{ editor.get_full_name }} ({{ editor.username }}) {% else %} {{ editor.username }} {% endif %} {% endif %}
+                        {% if viewer %} {% if viewer.get_full_name %} {{ viewer.get_full_name }} ({{ viewer.username }}) {% else %} {{ viewer.username }} {% endif %} {% endif %}
+                    </h2>  
 
                     <div>
                         <label>Current role</label><br>

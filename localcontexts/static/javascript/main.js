@@ -891,54 +891,39 @@ function openMemberModal() {
 
 // Change user role
 if (window.location.href.includes('members')) {
-    // openChangeRoleModalBtn_id and changeRoleModal_id will be the same id
+    // use
+    // openBtnClasses: '.example'
+    // modalPartialId: 'modalName'
+    // closeBtnPartialId: 'closeModalBtn'
 
-    const roleBtns = document.querySelectorAll('.changeRoleBtn')
-    roleBtns.forEach(btn => {
-        let buttonId = btn.id
-        let arr = buttonId.split('_')
-        let primary_id = arr[0]
-        let user_id = arr[1]
+    modalToggle('.changeRoleBtn', 'changeRoleModal', 'closeRoleChangeModal')
+    modalToggle('.removeMemberBtn', 'removeMemberModal', 'closeRemoveMemberModal')
 
-        const openChangeRoleBtn = document.getElementById(`${primary_id}_${user_id}`)
-        openChangeRoleBtn.addEventListener('click', function(e) {
-            e.preventDefault()
-            openChangeRoleModal(user_id)
+    function modalToggle(openBtnClasses, modalPartialId, closeBtnPartialId) {
+        const roleBtns = document.querySelectorAll(openBtnClasses)
+        roleBtns.forEach(btn => {
+            let buttonId = btn.id
+            let arr = buttonId.split('_')
+            let primary_id = arr[0]
+            let user_id = arr[1]
+    
+            const openChangeRoleBtn = document.getElementById(`${primary_id}_${user_id}`)
+            openChangeRoleBtn.addEventListener('click', function(e) {
+                e.preventDefault()
+                openTargetModal(user_id)
+            })
         })
-    })
 
-    function openChangeRoleModal(id) {
-        const modal = document.getElementById(`changeRoleModal_${id}`)
-        modal.classList.replace('hide', 'show')
-
-        const closeModalBtn = document.getElementById(`closeRoleChangeModal_${id}`)
-        closeModalBtn.addEventListener('click', function(e) {
-            e.preventDefault()
-            modal.classList.replace('show', 'hide')
-        })    
-    }
-
-    const removeMemberBtns = document.querySelectorAll('.removeMemberBtn')
-    removeMemberBtns.forEach(btn => {
-        let btnId = btn.id
-        let arr = btnId.split('_')
-        let primary_id = arr[0]
-        let user_id = arr[1]
-
-        const openRemoveMemberModalBtn = document.getElementById(`${primary_id}_${user_id}`)
-        openRemoveMemberModalBtn.addEventListener('click', function(e) {
-            openRemoveMemberModal(user_id)
-        })
-    })
-
-    function openRemoveMemberModal(id) {
-        const modal = document.getElementById(`removeMemberModal_${id}`)
-        modal.classList.replace('hide', 'show')
-
-        const closeModalBtn = document.getElementById(`closeRemoveMemberModal_${id}`)
-        closeModalBtn.addEventListener('click', function(e) {
-            modal.classList.replace('show', 'hide')
-        }) 
+        function openTargetModal(id) {
+            const modal = document.getElementById(`${modalPartialId}_${id}`)
+            modal.classList.replace('hide', 'show')
+    
+            const closeModalBtn = document.getElementById(`${closeBtnPartialId}_${id}`)
+            closeModalBtn.addEventListener('click', function(e) {
+                e.preventDefault()
+                modal.classList.replace('show', 'hide')
+            })    
+        }
     }
 } 
 
