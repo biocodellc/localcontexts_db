@@ -56,7 +56,7 @@
                 {% if member_role == 'admin' or request.user == community.community_creator %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
-                            <a class="block underline-hover" href="{% url 'remove-member' community.id admin.id %}"><small class="darkteal-text bold">Remove member</small></a>
+                            <a class="block" href="{% url 'remove-member' community.id admin.id %}"><small class="darkteal-text bold underline-hover">Remove member</small></a>
                         </div>
                         <div>
                             <button id="openChangeRoleModalBtn_{{ admin.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
@@ -85,7 +85,7 @@
                 {% if member_role == 'admin' or request.user == community.community_creator %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
-                            <a class="block underline-hover" href="{% url 'remove-member' community.id editor.id %}"><small class="darkteal-text bold">Remove member</small></a>
+                            <a class="block" href="{% url 'remove-member' community.id editor.id %}"><small class="darkteal-text bold underline-hover">Remove member</small></a>
                         </div>
                         <div>
                             <button id="openChangeRoleModalBtn_{{ editor.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
@@ -114,7 +114,7 @@
                 {% if member_role == 'admin' or request.user == community.community_creator %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
-                            <a class="block underline-hover" href="{% url 'remove-member' community.id viewer.id %}"><small class="darkteal-text bold">Remove member</small></a>
+                            <a class="block" href="{% url 'remove-member' community.id viewer.id %}"><small class="darkteal-text bold underline-hover">Remove member</small></a>
                         </div>
                         <div>
                             <button id="openChangeRoleModalBtn_{{ viewer.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
@@ -172,7 +172,7 @@
                 {% if member_role == 'admin' or request.user == institution.institution_creator %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
-                            <a class="block underline-hover" href="{% url 'remove-institution-member' institution.id admin.id %}"><small class="darkteal-text bold">Remove member</small></a>
+                            <a class="block" href="{% url 'remove-institution-member' institution.id admin.id %}"><small class="darkteal-text bold underline-hover">Remove member</small></a>
                         </div>
                         <div>
                             <button id="openChangeRoleModalBtn_{{ admin.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
@@ -200,7 +200,7 @@
                 {% if member_role == 'admin' or request.user == institution.institution_creator %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
-                            <a class="block underline-hover" href="{% url 'remove-institution-member' institution.id editor.id %}"><small class="darkteal-text bold">Remove member</small></a>
+                            <a class="block" href="{% url 'remove-institution-member' institution.id editor.id %}"><small class="darkteal-text bold underline-hover">Remove member</small></a>
                         </div>
                         <div>
                             <button id="openChangeRoleModalBtn_{{ editor.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
@@ -233,7 +233,7 @@
                 {% if member_role == 'admin' or request.user == institution.institution_creator %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
-                            <a class="block underline-hover" href="{% url 'remove-institution-member' institution.id viewer.id %}"><small class="darkteal-text bold">Remove member</small></a>
+                            <a class="block" href="{% url 'remove-institution-member' institution.id viewer.id %}"><small class="darkteal-text bold underline-hover">Remove member</small></a>
                         </div>
                         <div>
                             <button id="openChangeRoleModalBtn_{{ viewer.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
