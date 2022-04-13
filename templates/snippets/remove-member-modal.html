@@ -8,7 +8,16 @@
 
             <div>
                 <h2 class="primary-black-text">Are you sure?</h2>  
-                <p>Are you sure you want remove this member? </p>  
+                <p>
+                    Are you sure you want remove member 
+                        {% if admin %} {% if admin.get_full_name %} {{ admin.get_full_name }} ({{ admin.username }}) {% else %} {{ admin.username }} {% endif %} {% endif %}
+                        {% if editor %} {% if editor.get_full_name %} {{ editor.get_full_name }} ({{ editor.username }}) {% else %} {{ editor.username }} {% endif %} {% endif %}
+                        {% if viewer %} {% if viewer.get_full_name %} {{ viewer.get_full_name }} ({{ viewer.username }}) {% else %} {{ viewer.username }} {% endif %} {% endif %}
+                    from
+                    {% if community %} {{ community.community_name }} {% endif %}
+                    {% if institution %} {{ institution.institution_name }} {% endif %}
+                    ? 
+                </p>  
             </div>
             <div class="flex-this w-100 text-align-center">
                 <a 
