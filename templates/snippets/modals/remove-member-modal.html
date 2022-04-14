@@ -14,8 +14,8 @@
                         {% if editor %} {% if editor.get_full_name %} {{ editor.get_full_name }} ({{ editor.username }}) {% else %} {{ editor.username }} {% endif %} {% endif %}
                         {% if viewer %} {% if viewer.get_full_name %} {{ viewer.get_full_name }} ({{ viewer.username }}) {% else %} {{ viewer.username }} {% endif %} {% endif %}
                     from
-                    {% if community %} {{ community.community_name }} {% endif %}
-                    {% if institution %} {{ institution.institution_name }} {% endif %}
+                    {% if community %} {{ community.community_name }}{% endif %}
+                    {% if institution %} {{ institution.institution_name }}{% endif %}
                     ? 
                 </p>  
             </div>
@@ -24,6 +24,12 @@
                     {% if community %}
                         {% if admin %}
                             href="{% url 'remove-member' community.id admin.id %}" 
+                        {% endif %}
+                        {% if editor %}
+                            href="{% url 'remove-member' community.id editor.id %}" 
+                        {% endif %}
+                        {% if viewer %}
+                            href="{% url 'remove-member' community.id viewer.id %}" 
                         {% endif %}
                     {% endif %}
 
