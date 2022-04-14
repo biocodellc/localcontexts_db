@@ -29,13 +29,13 @@
 
                     {% if institution %}
                         {% if admin %}
-                            href="{% url 'institution-remove-member' institution.id admin.id %}" 
+                            href="{% url 'remove-institution-member' institution.id admin.id %}" 
                         {% endif %}
                         {% if editor %}
-                            href="{% url 'institution-remove-member' institution.id editor.id %}" 
+                            href="{% url 'remove-institution-member' institution.id editor.id %}" 
                         {% endif %}
                         {% if viewer %}
-                            href="{% url 'institution-remove-member' institution.id viewer.id %}" 
+                            href="{% url 'remove-institution-member' institution.id viewer.id %}" 
                         {% endif %}
                     {% endif %} 
                     class="primary-btn white-btn margin-right-1"
