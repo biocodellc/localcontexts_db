@@ -8,3 +8,9 @@ def display_joinrequest_message(reference_id):
     if JoinRequest.objects.filter(id=reference_id).exists():
         request = JoinRequest.objects.get(id=reference_id)
         return request.message
+
+@register.simple_tag
+def display_joinrequest_desired_role(reference_id):
+    if JoinRequest.objects.filter(id=reference_id).exists():
+        request = JoinRequest.objects.get(id=reference_id)
+        return request.role

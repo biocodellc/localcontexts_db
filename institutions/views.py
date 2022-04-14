@@ -41,15 +41,17 @@ def connect_institution(request):
                 messages.add_message(request, messages.ERROR, "Either you have already sent this request or are currently a member of this institution.")
                 return redirect('connect-institution')
             else:
-                data = form.save(commit=False)
-                data.user_from = request.user
-                data.institution = institution
-                data.user_to = institution.institution_creator
-                data.save()
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.user_from = request.user
+                    data.institution = institution
+                    data.user_to = institution.institution_creator
+                    data.save()
 
-                # Send institution creator email
-                send_join_request_email_admin(request, institution)
-                return redirect('dashboard')
+                    # Send institution creator email
+                    send_join_request_email_admin(request, data, institution)
+                    messages.add_message(request, messages.SUCCESS, "Request to join institution sent!")
+                    return redirect('connect-institution')
         else:
             messages.add_message(request, messages.ERROR, 'Institution not in registry')
             return redirect('connect-institution')

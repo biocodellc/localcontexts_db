@@ -122,9 +122,16 @@ def send_invite_user_email(request, data):
 
 # Anywhere JoinRequest instance is created, 
 # will email community or institution creator that someone wants to join the organization
-def send_join_request_email_admin(request, organization):
+def send_join_request_email_admin(request, join_request, organization):
     current_site=get_current_site(request)
-    template = render_to_string('snippets/emails/join-request.html', { 'user': request.user, 'domain': current_site.domain, 'organization': organization, })
+    template = render_to_string('snippets/emails/join-request.html', 
+                                { 
+                                    'user': request.user, 
+                                    'domain': current_site.domain, 
+                                    'organization': organization, 
+                                    'message': join_request.message,
+                                    'role': join_request.role,
+                                })
     title = ''
     send_to_email = ''
     name = get_users_name(request.user)

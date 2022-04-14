@@ -309,18 +309,20 @@ def organization_registry(request):
                 if inst_input_id:
                     target_institution = Institution.objects.select_related('institution_creator').get(id=inst_input_id)
                     main_admin = target_institution.institution_creator
-                    JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
+                    join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
+                    join_request.save()
 
                     # Send email to institution creator
-                    send_join_request_email_admin(request, target_institution)
+                    send_join_request_email_admin(request, join_request, target_institution)
 
                 elif comm_input_id:
                     target_community = Community.objects.select_related('community_creator').get(id=comm_input_id)
                     main_admin = target_community.community_creator
-                    JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
+                    join_request = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
+                    join_request.save()
 
                     # Send email to community creator
-                    send_join_request_email_admin(request, target_community)
+                    send_join_request_email_admin(request, join_request, target_community)
 
             messages.add_message(request, messages.SUCCESS, 'Your message was sent!')
             return redirect('organization-registry')

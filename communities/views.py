@@ -52,16 +52,17 @@ def connect_community(request):
                 messages.add_message(request, messages.ERROR, "Either you have already sent this request or are currently a member of this community.")
                 return redirect('connect-community')
             else:
-                data = form.save(commit=False)
-                data.user_from = request.user
-                data.community = community
-                data.user_to = community.community_creator
-                data.save()
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.user_from = request.user
+                    data.community = community
+                    data.user_to = community.community_creator
+                    data.save()
 
-                # Send community creator email
-                send_join_request_email_admin(request, community)
-                messages.add_message(request, messages.SUCCESS, "Request to join community sent!")
-                return redirect('connect-community')
+                    # Send community creator email
+                    send_join_request_email_admin(request, data, community)
+                    messages.add_message(request, messages.SUCCESS, "Request to join community sent!")
+                    return redirect('connect-community')
         else:
             messages.add_message(request, messages.ERROR, 'Community not in registry')
             return redirect('connect-community')

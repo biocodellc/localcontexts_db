@@ -3,6 +3,8 @@
 
     {% include 'partials/infocards/_user-info.html' %}
 
+    <div class="flex-this justify-center">{% include 'partials/_alerts.html' %}</div>
+
     {% if profile.onboarding_on %}
         <input id="openOnboarding" value="true" type="hidden">
     {% else %}
