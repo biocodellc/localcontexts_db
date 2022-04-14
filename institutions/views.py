@@ -24,6 +24,7 @@ from helpers.emails import *
 
 @login_required(login_url='login')
 def connect_institution(request):
+    institution = True
     institutions = Institution.approved.all()
     form = JoinRequestForm(request.POST or None)
 
@@ -53,7 +54,7 @@ def connect_institution(request):
             messages.add_message(request, messages.ERROR, 'Institution not in registry')
             return redirect('connect-institution')
 
-    context = { 'institutions': institutions, 'form': form,}
+    context = { 'institution': institution, 'institutions': institutions, 'form': form,}
     return render(request, 'institutions/connect-institution.html', context)
 
 @login_required(login_url='login')

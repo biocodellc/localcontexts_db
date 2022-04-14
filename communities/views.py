@@ -35,6 +35,7 @@ from xhtml2pdf import pisa
 # Connect
 @login_required(login_url='login')
 def connect_community(request):
+    community = True
     communities = Community.approved.all()
     form = JoinRequestForm(request.POST or None)
 
@@ -59,12 +60,13 @@ def connect_community(request):
 
                 # Send community creator email
                 send_join_request_email_admin(request, community)
-                return redirect('dashboard')
+                messages.add_message(request, messages.SUCCESS, "Request to join community sent!")
+                return redirect('connect-community')
         else:
             messages.add_message(request, messages.ERROR, 'Community not in registry')
             return redirect('connect-community')
 
-    context = { 'communities': communities, 'form': form,}
+    context = { 'community': community, 'communities': communities, 'form': form,}
     return render(request, 'communities/connect-community.html', context)
 
 @login_required(login_url='login')
