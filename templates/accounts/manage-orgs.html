@@ -9,9 +9,16 @@
          <small>Please note that at this time removing yourself from an account you created and deleting accounts is not yet possible.</small></p>
     </div>
 
+    {% if researcher %}
+        <div class="flex-this space-between border-top-bottom-grey w-100 align-center">
+            <div><h3>{{ users_name }} | Researcher</h3></div>
+            <small class="block">You're the creator of this account</small>
+        </div>
+    {% endif %}
+
     {% for community in affiliations.communities.all %}
         <div class="flex-this space-between border-top-bottom-grey w-100 align-center">
-            <div><h3>{{ community.community_name }}</h3></div>
+            <div><h3>{{ community.community_name }} | Community</h3></div>
             {% if not request.user == community.community_creator %}
                 <a id="openCommLeaveAcctBtn_{{community.id}}" class="leave-acct-btn block darkteal-text bold pointer leaveCommunityBtn"><small class="block">Leave account</small></a>
             {% else %}
@@ -23,7 +30,7 @@
 
     {% for institution in affiliations.institutions.all %}
         <div class="flex-this space-between border-top-bottom-grey w-100 align-center">
-            <div><h3>{{ institution.institution_name }}</h3></div>
+            <div><h3>{{ institution.institution_name }} | Institution</h3></div>
             {% if not request.user == institution.institution_creator %}
                 <a id="openInstLeaveAcctBtn_{{institution.id}}" class="leave-acct-btn block darkteal-text bold pointer leaveInstitutionBtn"><small class="block">Leave account</small></a>
             {% else %}

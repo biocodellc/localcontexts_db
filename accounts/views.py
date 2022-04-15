@@ -245,7 +245,11 @@ def deactivate_user(request):
 def manage_organizations(request):
     profile = Profile.objects.select_related('user').get(user=request.user)
     affiliations = UserAffiliation.objects.prefetch_related('communities', 'institutions').get(user=request.user)
-    return render(request, 'accounts/manage-orgs.html', { 'profile': profile, 'affiliations': affiliations })
+    researcher = ''
+    users_name = get_users_name(request.user)
+    if Researcher.objects.filter(user=request.user).exists():
+        researcher = Researcher.objects.get(user=request.user)
+    return render(request, 'accounts/manage-orgs.html', { 'profile': profile, 'affiliations': affiliations, 'researcher': researcher, 'users_name': users_name })
 
 @login_required(login_url='login')
 def invite_user(request):
