@@ -35,6 +35,7 @@ from xhtml2pdf import pisa
 # Connect
 @login_required(login_url='login')
 def connect_community(request):
+    community = True
     communities = Community.approved.all()
     form = JoinRequestForm(request.POST or None)
 
@@ -51,20 +52,22 @@ def connect_community(request):
                 messages.add_message(request, messages.ERROR, "Either you have already sent this request or are currently a member of this community.")
                 return redirect('connect-community')
             else:
-                data = form.save(commit=False)
-                data.user_from = request.user
-                data.community = community
-                data.user_to = community.community_creator
-                data.save()
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.user_from = request.user
+                    data.community = community
+                    data.user_to = community.community_creator
+                    data.save()
 
-                # Send community creator email
-                send_join_request_email_admin(request, community)
-                return redirect('dashboard')
+                    # Send community creator email
+                    send_join_request_email_admin(request, data, community)
+                    messages.add_message(request, messages.SUCCESS, "Request to join community sent!")
+                    return redirect('connect-community')
         else:
             messages.add_message(request, messages.ERROR, 'Community not in registry')
             return redirect('connect-community')
 
-    context = { 'communities': communities, 'form': form,}
+    context = { 'community': community, 'communities': communities, 'form': form,}
     return render(request, 'communities/connect-community.html', context)
 
 @login_required(login_url='login')
@@ -159,27 +162,35 @@ def community_members(request, pk):
     else:
         form = InviteMemberForm(request.POST or None)
         if request.method == "POST":
-            receiver = request.POST.get('receiver')
-            user_check = is_community_in_user_community(receiver, community)
-            
-            if user_check == False: # If user is not community member
-                check_invitation = does_community_invite_exist(receiver, community) # Check to see if invitation already exists
-
-                if check_invitation == False: # If invitation does not exist, save form.
-                    if form.is_valid():
-                        data = form.save(commit=False)
-                        data.sender = request.user
-                        data.status = 'sent'
-                        data.community = community
-                        data.save()
-                        # Send email to target user
-                        send_community_invite_email(request, data, community)
-                        messages.add_message(request, messages.INFO, 'Invitation Sent!')
-                        return redirect('members', community.id)
-                else: 
-                    messages.add_message(request, messages.INFO, 'The user you are trying to add has already been invited to this community.')
+            if 'change_member_role_btn' in request.POST:
+                current_role = request.POST.get('current_role')
+                new_role = request.POST.get('new_role')
+                user_id = request.POST.get('user_id')
+                member = User.objects.get(id=user_id)
+                change_member_role(community, member, current_role, new_role)
+                return redirect('members', community.id)
             else:
-                messages.add_message(request, messages.ERROR, 'The user you are trying to add is already a member of this community.')
+                receiver = request.POST.get('receiver')
+                user_check = is_community_in_user_community(receiver, community)
+                
+                if user_check == False: # If user is not community member
+                    check_invitation = does_community_invite_exist(receiver, community) # Check to see if invitation already exists
+
+                    if check_invitation == False: # If invitation does not exist, save form.
+                        if form.is_valid():
+                            data = form.save(commit=False)
+                            data.sender = request.user
+                            data.status = 'sent'
+                            data.community = community
+                            data.save()
+                            # Send email to target user
+                            send_community_invite_email(request, data, community)
+                            messages.add_message(request, messages.INFO, 'Invitation Sent!')
+                            return redirect('members', community.id)
+                    else: 
+                        messages.add_message(request, messages.INFO, 'The user you are trying to add has already been invited to this community.')
+                else:
+                    messages.add_message(request, messages.ERROR, 'The user you are trying to add is already a member of this community.')
 
         context = {
             'community': community,
@@ -201,10 +212,19 @@ def remove_member(request, pk, member_id):
     if member in community.viewers.all():
         community.viewers.remove(member)
 
-    # remove community from userAffiloiation instance
+    # remove community from userAffiliation instance
     affiliation = UserAffiliation.objects.get(user=member)
     affiliation.communities.remove(community)
-    return redirect('members', community.id)
+
+    # Delete join request for this community if exists
+    if JoinRequest.objects.filter(user_from=member, community=community).exists():
+        join_request = JoinRequest.objects.get(user_from=member, community=community)
+        join_request.delete()
+    
+    if '/manage/' in request.META.get('HTTP_REFERER'):
+        return redirect('manage-orgs')
+    else:
+        return redirect('members', community.id)
 
 # Select Labels to Customize
 @login_required(login_url='login')

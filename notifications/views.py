@@ -5,6 +5,7 @@ from communities.models import *
 from accounts.models import UserAffiliation
 from helpers.emails import send_membership_email
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
 
 @login_required(login_url='login')
 def show_notification(request, pk):
@@ -61,10 +62,13 @@ def show_notification(request, pk):
                     community.viewers.add(sent_from)
                 community.save()
 
-                # Send email letting user know they are a member
-                send_membership_email(request, community, sent_from, n.role)
+                n.delete() # delete request notification 
 
-                return render(request, 'notifications/read.html', {'notification': n})
+                # Send email letting user know they are a member
+                send_membership_email(request, community, sent_from, radio_value)
+
+                messages.add_message(request, messages.SUCCESS, f'{sent_from} has been added to {community}!')
+                return redirect('dashboard')
 
         if n.institution:
             institution_id = n.institution.id
@@ -112,10 +116,12 @@ def show_notification(request, pk):
                     institution.viewers.add(sent_from)
                 institution.save()
 
-                # Send email letting user know they are a member
-                send_membership_email(request, institution, sent_from, n.role)
+                n.delete() # delete request notification 
 
-                return render(request, 'notifications/read.html', {'notification': n})
+                # Send email letting user know they are a member
+                send_membership_email(request, institution, sent_from, radio_value)
+                messages.add_message(request, messages.SUCCESS, f'{sent_from} has been added to {institution}!')
+                return redirect('dashboard')
                 
     return render(request, 'notifications/notification.html', { 'notification': n })
 

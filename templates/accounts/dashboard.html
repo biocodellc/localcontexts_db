@@ -3,28 +3,20 @@
 
     {% include 'partials/infocards/_user-info.html' %}
 
+    <div class="flex-this justify-center">{% include 'partials/_alerts.html' %}</div>
+
     {% if profile.onboarding_on %}
         <input id="openOnboarding" value="true" type="hidden">
     {% else %}
         <input id="openOnboarding" value="false" type="hidden">
     {% endif %}
 
-    {% include 'snippets/onboarding.html' %}
+    {% include 'snippets/modals/onboarding.html' %}
 
     <section class="flex-this column">
 
         {% if not researcher and not user_communities and not user_institutions %}
-            <div class="dashcard">
-                <p>
-                    <strong>Welcome to Local Contexts Hub!</strong><br><br>
-                    This is your profile dashboard. It looks like you haven't connected to any accounts yet.<br><br>
-                    <strong>What's next?</strong><br>
-                    If you'd like to finish setting up your profile, click <a class="darkteal-text underline-hover" href="{% url 'create-profile' %}">here</a>.<br>
-                    If you'd like to join existing communities and institutions, check out the <a class="darkteal-text underline-hover" href="{% url 'organization-registry' %}">Local Contexts Registry</a>.<br>
-                    You can also connect your researcher account by clicking <a class="darkteal-text underline-hover" href="{% url 'connect-researcher' %}">here</a>.<br>
-                    <small>All of the above plus account creation can also be done through your user settings in Edit Profile.</small>
-                </p>
-            </div>
+            <div class="set-height"></div>
         {% endif %}
 
         {% if researcher %}

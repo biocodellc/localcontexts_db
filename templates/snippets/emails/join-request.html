@@ -9,6 +9,14 @@
 </h3>
 
 <p>
+    {% if role %} <strong>Desired role:</strong> {{role}} <br>{% endif %}
+    {% if message %}
+        <strong>Message included with the request:</strong><br>
+        "{{ message }}"
+    {% endif %}
+</p>
+
+<p>
 
     <strong>Next steps?</strong><br>
     Login <a href="http://{{domain}}{% url 'login' %}" target="_blank">here</a> to Local Contexts Hub and go to My Profile, then Notifications to see and respond to this join request.

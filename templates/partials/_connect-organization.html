@@ -1,0 +1,132 @@
+<div class="flex-this column">
+
+    <div class="flex-this column w-100">
+        <div class="flex-this space-between">
+            <div>
+                <h2 class="margin-bottom-2">
+                    {% if community %}Community {% endif %}
+                    {% if institution %}Institution {% endif %}
+                    Account
+                </h2>
+            </div>
+            <div class="margin-top-16">Or <a class="darkteal-text underline-hover" href="{% url 'select-account' %}">choose another account</a></div>
+        </div>
+        <p class="w-90">
+            Please first check if your
+            {% if community %} community {% endif %}
+            {% if institution %} institution {% endif %}
+            is already registered. If your 
+            {% if community %} community {% endif %}
+            {% if institution %} institution {% endif %}
+            is not in our register, you can create a new 
+            {% if community %} community {% endif %}
+            {% if institution %} institution {% endif %}
+            account.
+        </p>    
+    </div>
+
+     <div>
+         <label for="community-search">
+             Search our 
+             {% if community %} community {% endif %}
+             {% if institution %} institution {% endif %}
+             register
+            </label><br>
+
+        {% if community %}
+            {% if communities %}
+                <input id="selectedOrganizationInputList" list="communities" name="communities" class="w-100"  placeholder="Select a community from the hub">
+                <datalist id="communities">
+                    {% for community in communities %}
+                        <option value="{{ community.community_name }}">
+                        <input type="hidden" value="{{ community.community_name }}" class="nameToCheck" name="check_comm_name_hidden_input">
+                    {% endfor %}
+                </datalist>
+            {% endif %}
+         {% endif %}
+
+         {% if institution %}
+            {% if institutions %}
+                <input id="selectedOrganizationInputList" list="institutions" name="institutions" class="w-100" placeholder="Select an institution from the hub">
+                <datalist id="institutions">
+                    {% for institution in institutions %}
+                        <option value="{{ institution.institution_name }}">
+                        <input type="hidden" value="{{ institution.institution_name }}" class="nameToCheck" name="check_inst_name_hidden_input">
+                    {% endfor %}
+                </datalist>
+            {% endif %}
+        {% endif %}
+     </div>
+
+     <div class="flex-this space-between margin-top-1">
+         <div>
+             <a 
+                class="darkteal-text underline-hover" 
+                {% if community %}
+                href="{% url 'create-community' %}"
+                {% endif %}
+                {% if institution %}
+                href="{% url 'create-institution' %}"
+                {% endif %}
+            >
+            
+                Or create {% if community %}a community{% endif %}{% if institution %}an institution{% endif %} account
+            </a></div>
+         <div><button id="openJoinRequestModalBtn" class="primary-btn action-btn margin-top-2 ">Next <i class="fa fa-arrow-right"></i></button></div>
+     </div>
+
+     {% include 'partials/_alerts.html' %}
+
+</div>
+
+<div id="joinRequestModal" class="modal hide">
+
+    <div class="modal-defaults join-modal flex-this column w-100">
+
+        <div class="flex-this space-between">
+            <div class="modal-content-padding"><h2 class="primary-black-text">Request to join</h2></div>
+            <div class="close-modal-btn">
+                <div class="margin-right-8 primary-btn white-btn">Close X</div>
+            </div>            
+        </div>
+
+        <div class="modal-content-padding w-100">
+            <div>
+                <p class="no-top-margin">Every account has various responsibilities within the community.<br>
+                    <strong>Administrator:</strong> responsible for adding, editing and removing members<br>
+                    <strong>Editor:</strong> responsible for customizing Labels and Projects<br>
+                    <strong>Viewer:</strong> can view activity happening on the hub
+                </p>  
+            </div>
+
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input id="hidden-target-input" type="hidden" value="" name="organization_name">
+
+                <div class="flex-this column w-100">
+                    <div class="margin-top-8">
+                        <label>Requested Responsibility</label><br>
+                        {{ form.role }}
+                        {% if form.role.errors %}
+                            <div class="msg-red w-50"><small>{{ form.role.errors.as_text }}</small></div> 
+                        {% endif %}
+                    </div>
+                    
+                    <div class="margin-top-8">
+                        <label>Send a message with this request</label><br>
+                        {{ form.message }}
+                        {% if form.message.errors %}
+                            <div class="msg-red w-50"><small>{{ form.message.errors.as_text }}</small></div> 
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="flex-this flex-end">
+                    <button class="primary-btn action-btn margin-top-2">Send request to join</button>
+                </div>
+                
+            </form>
+
+        </div>
+    </div>
+</div>

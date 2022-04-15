@@ -13,37 +13,8 @@ if (passwordField) {
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
-function setWithExpiry(key, value, ttl) {
-	const now = new Date()
-
-	// `item` is an object which contains the original value
-	// as well as the time when it's supposed to expire
-	const item = {
-		value: value,
-		expiry: now.getTime() + ttl,
-	}
-	localStorage.setItem(key, JSON.stringify(item))
-}
-
-function getWithExpiry(key) {
-	const itemStr = localStorage.getItem(key)
-	// if the item doesn't exist, return null
-	if (!itemStr) { return null }
-	const item = JSON.parse(itemStr)
-	const now = new Date()
-	// compare the expiry time of the item with the current time
-	if (now.getTime() > item.expiry) {
-		// If the item is expired, delete the item from storage
-		// and return null
-		localStorage.removeItem(key)
-		return null
-	}
-	return item.value
-}
-
 // Get languages from the IANA directory
 function fetchLanguages() {
-    // const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/iana.json'
     const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
     
     fetch(endpoint)
@@ -917,6 +888,49 @@ function openMemberModal() {
         memberModal.classList.replace('show', 'hide')
     }
 }
+
+// use
+// openBtnClasses: '.example'
+// modalPartialId: 'modalName'
+// closeBtnPartialId: 'closeModalBtn'
+function modalToggle(openBtnClasses, modalPartialId, closeBtnPartialId) {
+    const roleBtns = document.querySelectorAll(openBtnClasses)
+    roleBtns.forEach(btn => {
+        let buttonId = btn.id
+        let arr = buttonId.split('_')
+        let primary_id = arr[0]
+        let user_id = arr[1]
+
+        const openChangeRoleBtn = document.getElementById(`${primary_id}_${user_id}`)
+        openChangeRoleBtn.addEventListener('click', function(e) {
+            e.preventDefault()
+            openTargetModal(user_id)
+        })
+    })
+
+    function openTargetModal(id) {
+        const modal = document.getElementById(`${modalPartialId}_${id}`)
+        modal.classList.replace('hide', 'show')
+
+        const closeModalBtn = document.getElementById(`${closeBtnPartialId}_${id}`)
+        closeModalBtn.addEventListener('click', function(e) {
+            e.preventDefault()
+            modal.classList.replace('show', 'hide')
+        })    
+    }
+}
+
+// Change member role / remove member
+if (window.location.href.includes('members')) {
+    modalToggle('.changeRoleBtn', 'changeRoleModal', 'closeRoleChangeModal')
+    modalToggle('.removeMemberBtn', 'removeMemberModal', 'closeRemoveMemberModal')
+} 
+
+// Leave account
+if (window.location.href.includes('manage')) {
+    modalToggle('.leaveCommunityBtn', 'leaveCommAccountModal', 'closeLeaveCommModal')
+    modalToggle('.leaveInstitutionBtn', 'leaveInstAccountModal', 'closeLeaveInstModal')
+} 
 
 // Create institution: non-ROR modal
 if (window.location.href.includes('create-institution')) {

@@ -5,16 +5,44 @@
 <div class="flex-this column w-80 border-left margin-right-1">
     <div>
         <h3>Accounts</h3>
-        <p>You can join or create accounts here.</p>
+        <p>Manage the accounts you are a member of below.<br>
+         <small>Please note that at this time removing yourself from an account you created and deleting accounts is not yet possible.</small></p>
     </div>
 
-    <div><a class="darkteal-text underline-hover" href="{% url 'organization-registry' %}"> View the Local Contexts Registry</a></div>
-    <div><a class="darkteal-text underline-hover" href="{% url 'prep-community' %}"> Create a Community Account</a></div>
-    <div><a class="darkteal-text underline-hover" href="{% url 'prep-institution' %}"> Create an Institution Account</a></div>
-    {% if request.user.profile.is_researcher %}
-    {% else %}
-        <div><a class="darkteal-text underline-hover" href="{% url 'connect-researcher' %}"> Create your Researcher Account</a></div>
+    {% if researcher %}
+        <div class="flex-this space-between border-top-bottom-grey w-100 align-center">
+            <div><h3>{{ users_name }} | Researcher</h3></div>
+            <small class="block">You're the creator of this account</small>
+        </div>
     {% endif %}
+
+    {% for community in affiliations.communities.all %}
+        <div class="flex-this space-between border-top-bottom-grey w-100 align-center">
+            <div><h3>{{ community.community_name }} | Community</h3></div>
+            {% if not request.user == community.community_creator %}
+                <a id="openCommLeaveAcctBtn_{{community.id}}" class="leave-acct-btn block darkteal-text bold pointer leaveCommunityBtn"><small class="block">Leave account</small></a>
+            {% else %}
+                <small class="block">You're the creator of this account</small>
+            {% endif %}
+        </div>
+        {% include 'snippets/modals/leave-account-modal.html' %}
+    {% endfor %}
+
+    {% for institution in affiliations.institutions.all %}
+        <div class="flex-this space-between border-top-bottom-grey w-100 align-center">
+            <div><h3>{{ institution.institution_name }} | Institution</h3></div>
+            {% if not request.user == institution.institution_creator %}
+                <a id="openInstLeaveAcctBtn_{{institution.id}}" class="leave-acct-btn block darkteal-text bold pointer leaveInstitutionBtn"><small class="block">Leave account</small></a>
+            {% else %}
+                <small class="block">You're the creator of this account</small>
+            {% endif %}
+        </div>
+        {% include 'snippets/modals/leave-account-modal.html' %}
+    {% endfor %}
+
+    <div class="w-20 margin-top-16">
+        <a class="primary-btn white-btn" href="{% url 'select-account' %}">Create a new account</a>
+    </div>
 
 </div>
 

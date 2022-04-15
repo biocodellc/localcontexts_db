@@ -4,7 +4,6 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 import django_countries.fields
-import phone_field.models
 
 
 class Migration(migrations.Migration):
@@ -21,7 +20,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('profile_pic', models.ImageField(blank=True, default='default.png', null=True, upload_to='photos/')),
-                ('phone', phone_field.models.PhoneField(blank=True, help_text='Contact phone number', max_length=31)),
                 ('nationality', models.CharField(blank=True, max_length=60, null=True, verbose_name='nationality')),
                 ('country', django_countries.fields.CountryField(blank=True, max_length=2, null=True)),
                 ('city_or_town', models.CharField(blank=True, max_length=80, null=True, verbose_name='city or town')),

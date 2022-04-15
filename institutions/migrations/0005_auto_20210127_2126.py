@@ -17,11 +17,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='institution',
-            name='contact_phone',
-            field=models.CharField(blank=True, max_length=15, null=True),
-        ),
-        migrations.AddField(
-            model_name='institution',
             name='website',
             field=models.URLField(blank=True, max_length=150, null=True),
         ),

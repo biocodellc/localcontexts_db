@@ -31,6 +31,8 @@
                 <p class="no-bottom-margin">
                     <span class="bold">Responsibility</span> | Administrator <br><br>
                     <span class="bold">Job title</span> | {{ community.community_creator.profile.position }} <br><br>
+                    <span class="bold">Affiliation</span> | {{ community.community_creator.profile.affiliation }} <br><br>
+
                 </p>
             </div>    
         </div>
@@ -47,16 +49,21 @@
                     <p class="no-bottom-margin">
                         <span class="bold">Responsibility</span> | Administrator <br><br>
                         <span class="bold">Job title</span> | {{ admin.profile.position }} <br><br>
+                        <span class="bold">Affiliation</span> | {{ admin.profile.affiliation }} <br><br>
                     </p>
                 </div>            
 
                 {% if member_role == 'admin' or request.user == community.community_creator %}
-                    <div class="dropdown">
-                        <a onclick="toggleMeatballMenu(this)" id="meatball-{{ admin.id }}" class="meatball"><i class="fa fa-ellipsis-h" style="font-size: 24px;"></i></a>
-                        <div id="meatball-content-{{ admin.id }}" class="meatball-dropdown-content hide"> 
-                            <a href="{% url 'remove-member' community.id admin.id %}"><span class="darkteal-text">Remove member</span></a>
+                    <div class="flex-this">
+                        <div class="margin-right-16 margin-top-8">
+                            <a id="removeMemberBtn_{{admin.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
                         </div>
-                    </div> 
+                        <div>
+                            <button id="openChangeRoleModalBtn_{{ admin.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
+                        </div>
+                    </div>
+                    {% include 'snippets/modals/remove-member-modal.html' %}
+                    {% include 'snippets/modals/change-member-modal.html' %}
                 {% endif %}
             </div>
         </div>
@@ -73,15 +80,20 @@
                     <p class="no-bottom-margin">
                         <span class="bold">Responsibility</span> | Editor <br><br>
                         <span class="bold">Job title</span> | {{ editor.profile.position }} <br><br>
+                        <span class="bold">Affiliation</span> | {{ editor.profile.affiliation }} <br><br>
                     </p>
                 </div>
                 {% if member_role == 'admin' or request.user == community.community_creator %}
-                    <div class="dropdown">
-                        <a onclick="toggleMeatballMenu(this)" id="meatball-{{ editor.id }}" class="meatball"><i class="fa fa-ellipsis-h" style="font-size: 24px;"></i></a>
-                        <div id="meatball-content-{{ editor.id }}" class="meatball-dropdown-content hide"> 
-                            <a href="{% url 'remove-member' community.id editor.id %}"><span class="darkteal-text">Remove member</span></a>
+                    <div class="flex-this">
+                        <div class="margin-right-16 margin-top-8">
+                            <a id="removeMemberBtn_{{editor.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
                         </div>
-                    </div> 
+                        <div>
+                            <button id="openChangeRoleModalBtn_{{ editor.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
+                        </div>
+                    </div>
+                    {% include 'snippets/modals/remove-member-modal.html' %}
+                    {% include 'snippets/modals/change-member-modal.html' %}
                 {% endif %}
             </div>
         </div>
@@ -98,16 +110,20 @@
                     <p class="no-bottom-margin">
                         <span class="bold">Responsibility</span> | Viewer <br><br>
                         <span class="bold">Job title</span> | {{ viewer.profile.position }} <br><br>
+                        <span class="bold">Affiliation</span> | {{ viewer.profile.affiliation }} <br><br>
                     </p>
                 </div>
                 {% if member_role == 'admin' or request.user == community.community_creator %}
-                    <div class="dropdown">
-                        <a onclick="toggleMeatballMenu(this)" id="meatball-{{ viewer.id }}" class="meatball"><i class="fa fa-ellipsis-h" style="font-size: 24px;"></i></a>
-                        <div id="meatball-content-{{ viewer.id }}" class="meatball-dropdown-content hide"> 
-                            <!-- <span class="darkteal-text">Change role</span> -->
-                            <a href="{% url 'remove-member' community.id viewer.id %}"><span class="darkteal-text">Remove member</span></a>
+                    <div class="flex-this">
+                        <div class="margin-right-16 margin-top-8">
+                            <a id="removeMemberBtn_{{viewer.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
                         </div>
-                    </div>   
+                        <div>
+                            <button id="openChangeRoleModalBtn_{{ viewer.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
+                        </div>
+                    </div>
+                    {% include 'snippets/modals/remove-member-modal.html' %}
+                    {% include 'snippets/modals/change-member-modal.html' %}
                 {% endif %}          
             </div>
         </div>
@@ -157,12 +173,16 @@
                     </p>
                 </div>
                 {% if member_role == 'admin' or request.user == institution.institution_creator %}
-                    <div class="dropdown">
-                        <a onclick="toggleMeatballMenu(this)" id="meatball-{{ admin.id }}" class="meatball"><i class="fa fa-ellipsis-h" style="font-size: 24px;"></i></a>
-                        <div id="meatball-content-{{ admin.id }}" class="meatball-dropdown-content hide"> 
-                            <a href="{% url 'remove-institution-member' institution.id admin.id %}"><span class="darkteal-text">Remove member</span></a>
+                    <div class="flex-this">
+                        <div class="margin-right-16 margin-top-8">
+                            <a id="removeMemberBtn_{{admin.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
                         </div>
-                    </div>  
+                        <div>
+                            <button id="openChangeRoleModalBtn_{{ admin.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
+                        </div>
+                    </div>
+                    {% include 'snippets/modals/remove-member-modal.html' %}
+                    {% include 'snippets/modals/change-member-modal.html' %}
                 {% endif %}
             </div>
         </div>
@@ -182,12 +202,16 @@
                     </p>
                 </div>
                 {% if member_role == 'admin' or request.user == institution.institution_creator %}
-                    <div class="dropdown">
-                        <a onclick="toggleMeatballMenu(this)" id="meatball-{{ editor.id }}" class="meatball"><i class="fa fa-ellipsis-h" style="font-size: 24px;"></i></a>
-                        <div id="meatball-content-{{ editor.id }}" class="meatball-dropdown-content hide"> 
-                            <a href="{% url 'remove-institution-member' institution.id editor.id %}"><span class="darkteal-text">Remove member</span></a>
+                    <div class="flex-this">
+                        <div class="margin-right-16 margin-top-8">
+                            <a id="removeMemberBtn_{{editor.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
                         </div>
-                    </div> 
+                        <div>
+                            <button id="openChangeRoleModalBtn_{{ editor.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
+                        </div>
+                    </div>
+                    {% include 'snippets/modals/remove-member-modal.html' %}
+                    {% include 'snippets/modals/change-member-modal.html' %}
                 {% endif %}
             </div>
  
@@ -212,12 +236,16 @@
                     </p>
                 </div>
                 {% if member_role == 'admin' or request.user == institution.institution_creator %}
-                    <div class="dropdown">
-                        <a onclick="toggleMeatballMenu(this)" id="meatball-{{ viewer.id }}" class="meatball"><i class="fa fa-ellipsis-h" style="font-size: 24px;"></i></a>
-                        <div id="meatball-content-{{ viewer.id }}" class="meatball-dropdown-content hide"> 
-                            <a href="{% url 'remove-institution-member' institution.id viewer.id %}"><span class="darkteal-text">Remove member</span></a>
+                    <div class="flex-this">
+                        <div class="margin-right-16 margin-top-8">
+                            <a id="removeMemberBtn_{{viewer.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
                         </div>
-                    </div>  
+                        <div>
+                            <button id="openChangeRoleModalBtn_{{ viewer.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
+                        </div>
+                    </div>
+                    {% include 'snippets/modals/remove-member-modal.html' %}
+                    {% include 'snippets/modals/change-member-modal.html' %}
                 {% endif %}
             </div>
         </div>

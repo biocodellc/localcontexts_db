@@ -103,7 +103,7 @@
 
 /* SETTINGS */
 .selected {
-    background-color: #468076;
+    background-color:#108670;
     border-radius: 5px;
     color: #fff;
 }
@@ -113,6 +113,12 @@
     width: 271px;
     padding: 10px;
     margin-bottom: 5px;
+}
+
+.leave-acct-btn {
+    padding: 8px 16px;
+    border: 1px solid #E6F1F3;
+    border-radius: 4px;
 }
 
 /* USER NOTIFICATIONS */
@@ -207,4 +213,17 @@
     height: 120px;
     margin-top: 20px;
     margin-right: -25px;
+}
+
+.suggestion-box {
+    margin-right: 9px;
+    padding: 16px;
+    border: 1px solid #EFF0F1;
+    border-radius: 4px;
+    width: 360px;
+    height: 91px;
+}
+
+.set-height {
+    height: 200px;
 }

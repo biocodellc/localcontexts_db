@@ -14,8 +14,4 @@ class Migration(migrations.Migration):
             model_name='profile',
             name='nationality',
         ),
-        migrations.RemoveField(
-            model_name='profile',
-            name='phone',
-        ),
     ]

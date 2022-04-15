@@ -1,0 +1,47 @@
+<div 
+    {% if community %}
+        id="leaveCommAccountModal_{{ community.id }}" 
+    {% endif %}
+    {% if institution %}
+        id="leaveInstAccountModal_{{ institution.id }}" 
+    {% endif %}
+    class="modal hide"
+>
+
+    <div class="modal-defaults deactivate-modal flex-this column w-100">
+        <div class="modal-content-padding w-100">
+
+            <div>
+                <h2 class="primary-black-text">Are you sure?</h2>  
+                <p>
+                    Are you sure you want to leave 
+                    {% if community %} {{ community.community_name }} {% endif %}
+                    {% if institution %} {{ institution.institution_name }} {% endif %}
+                    ? You will no longer be able to access this account.
+                </p>
+            </div>
+            <div class="flex-this w-100 text-align-center">
+                <a 
+                    id="leaveAccountBtn" 
+                    {% if community %} 
+                        href="{% url 'remove-member' community.id request.user.id %}" 
+                    {% endif %}
+                    {% if institution %} 
+                        href="{% url 'remove-institution-member' institution.id request.user.id %}" 
+                    {% endif %}
+                    class="primary-btn white-btn margin-right-1"
+                >Yes, leave account</a>    
+                <div 
+                    {% if community %}
+                        id="closeLeaveCommModal_{{ community.id }}" 
+                    {% endif %}
+                    {% if institution %}
+                        id="closeLeaveInstModal_{{ institution.id }}" 
+                    {% endif %}
+                    class="margin-left-1 primary-btn action-btn"
+                >Cancel</div>
+            </div>
+
+        </div>
+    </div>
+</div>
