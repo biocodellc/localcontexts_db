@@ -5,23 +5,30 @@
 <div class="flex-this column w-80 border-left margin-right-1">
     <div>
         <h3>Accounts</h3>
-        <p>Manage the accounts you are a member of below.</p>
+        <p>Manage the accounts you are a member of below.<br>
+         <small>Please note that at this time removing yourself from an account you created and deleting accounts is not yet possible.</small></p>
     </div>
 
     {% for community in affiliations.communities.all %}
         <div class="flex-this space-between border-top-bottom-grey w-100 align-center">
-            <div>
-                <h3>{{ community.community_name }}</h3>
-            </div>
-            <a id="openCommLeaveAcctBtn_{{community.id}}" class="leave-acct-btn block darkteal-text bold pointer leaveCommunityBtn"><small class="block">Leave account</small></a>
+            <div><h3>{{ community.community_name }}</h3></div>
+            {% if not request.user == community.community_creator %}
+                <a id="openCommLeaveAcctBtn_{{community.id}}" class="leave-acct-btn block darkteal-text bold pointer leaveCommunityBtn"><small class="block">Leave account</small></a>
+            {% else %}
+                <small class="block">You're the creator of this account</small>
+            {% endif %}
         </div>
         {% include 'snippets/modals/leave-account-modal.html' %}
     {% endfor %}
 
     {% for institution in affiliations.institutions.all %}
         <div class="flex-this space-between border-top-bottom-grey w-100 align-center">
-            <div> <h3>{{ institution.institution_name }}</h3></div>
-            <a id="openInstLeaveAcctBtn_{{institution.id}}" class="leave-acct-btn block darkteal-text bold pointer leaveInstitutionBtn"><small class="block">Leave account</small></a>
+            <div><h3>{{ institution.institution_name }}</h3></div>
+            {% if not request.user == institution.institution_creator %}
+                <a id="openInstLeaveAcctBtn_{{institution.id}}" class="leave-acct-btn block darkteal-text bold pointer leaveInstitutionBtn"><small class="block">Leave account</small></a>
+            {% else %}
+                <small class="block">You're the creator of this account</small>
+            {% endif %}
         </div>
         {% include 'snippets/modals/leave-account-modal.html' %}
     {% endfor %}
