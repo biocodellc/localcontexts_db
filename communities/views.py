@@ -505,7 +505,8 @@ def view_label(request, pk, label_uuid):
         tklabel = ''
 
         # TODO: get all translations of target label
-        
+        # TODO: get all projects where this label is used
+
         if BCLabel.objects.filter(unique_id=label_uuid).exists():
             bclabel = BCLabel.objects.get(unique_id=label_uuid)
         if TKLabel.objects.filter(unique_id=label_uuid).exists():

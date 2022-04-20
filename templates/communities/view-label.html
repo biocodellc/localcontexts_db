@@ -39,19 +39,26 @@
     <div class="margin-left-16">
         <h3>Explore your other customized Labels</h3>
 
-        <div class="flex-this space-between w-90">
+        <div class="flex-this space-between w-100">
             {% if bclabels %}
                 {% for bclabel in bclabels %}
-                    {% include 'bclabels/mini-labels.html' %}
+                    <div class="w-40 center-text">
+                        {% include 'bclabels/mini-labels.html' %}
+                        <small class="bold">{{ bclabel.name }}</small>
+                    </div>
                 {% endfor %}
             {% endif %}  
 
             {% if tklabels %}
                 {% for tklabel in tklabels %}
-                    {% include 'tklabels/mini-labels.html' %}
+                    <div class="w-40 center-text">
+                        {% include 'tklabels/mini-labels.html' %}
+                        <small class="bold">{{ tklabel.name }}</small>
+                    </div>
                 {% endfor %}
             {% endif %}          
         </div>
+
     </div>
 
 </section>
