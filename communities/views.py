@@ -491,6 +491,38 @@ def edit_label(request, pk, label_id):
         }
         return render(request, 'communities/edit-label.html', context)
 
+@login_required(login_url='login')
+def view_label(request, pk, label_uuid):
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    bclabels = BCLabel.objects.filter(community=community)
+    tklabels = TKLabel.objects.filter(community=community)
+
+    member_role = check_member_role_community(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        bclabel = ''
+        tklabel = ''
+
+        # TODO: get all translations of target label
+        
+        if BCLabel.objects.filter(unique_id=label_uuid).exists():
+            bclabel = BCLabel.objects.get(unique_id=label_uuid)
+        if TKLabel.objects.filter(unique_id=label_uuid).exists():
+            tklabel = TKLabel.objects.get(unique_id=label_uuid)
+
+        context = {
+            'community': community,
+            'member_role': member_role,
+            'bclabels': bclabels,
+            'tklabels': tklabels,
+            'bclabel': bclabel,
+            'tklabel': tklabel,
+        }
+
+        return render(request, 'communities/view-label.html', context)
+
+
 # Projects Main
 @login_required(login_url='login')
 def projects(request, pk):

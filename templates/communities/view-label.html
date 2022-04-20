@@ -1,0 +1,59 @@
+{% extends 'sub-base.html' %} {% block title %} | View Label {% endblock %}{% load static %} {% load custom_tags %} {% block community_content %}
+
+<section class="content-card-v2 content-card-space white-bg">
+
+    <div class="flex-this space-between border-bottom-solid-teal">
+        {% if bclabel %}
+            <div class="w-20 center-text">
+                {% include 'bclabels/which-label.html' %}
+            </div>
+            <div class="w-90">
+                <div class="w-80">
+                    <h2 class="no-top-margin">{{ bclabel.name }}</h2>
+                    <p>
+                        <span class="bold">Created by</span> - {{ bclabel.community }} <br><br>
+                        <span class="bold">Why Use This Label?</span> <br><br>
+                        <span class="bold">Label text</span> <br>
+                        {{ bclabel.default_text }}
+                    </p>
+                    
+                    <p>
+                        <span class="bold">TRANSLATION LANGUAGE</span><br>
+                        TRANSLATION TEXT
+                    </p>
+
+                    <p>
+                        <h3>Related Projects</h3>
+                        <ul>
+                            <li>
+                                <a class="darkteal-text underline-hover" href="#">Project Title</a>
+                            </li>
+                        </ul>
+                    </p>
+                </div>
+
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="margin-left-16">
+        <h3>Explore your other customized Labels</h3>
+
+        <div class="flex-this space-between w-90">
+            {% if bclabels %}
+                {% for bclabel in bclabels %}
+                    {% include 'bclabels/mini-labels.html' %}
+                {% endfor %}
+            {% endif %}  
+
+            {% if tklabels %}
+                {% for tklabel in tklabels %}
+                    {% include 'tklabels/mini-labels.html' %}
+                {% endfor %}
+            {% endif %}          
+        </div>
+    </div>
+
+</section>
+
+{% endblock %}
