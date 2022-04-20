@@ -503,14 +503,16 @@ def view_label(request, pk, label_uuid):
     else:
         bclabel = ''
         tklabel = ''
+        translations = ''
 
-        # TODO: get all translations of target label
         # TODO: get all projects where this label is used
 
         if BCLabel.objects.filter(unique_id=label_uuid).exists():
             bclabel = BCLabel.objects.get(unique_id=label_uuid)
+            translations = LabelTranslation.objects.filter(bclabel=bclabel)
         if TKLabel.objects.filter(unique_id=label_uuid).exists():
             tklabel = TKLabel.objects.get(unique_id=label_uuid)
+            translations = LabelTranslation.objects.filter(tklabel=tklabel)
 
         context = {
             'community': community,
@@ -519,6 +521,7 @@ def view_label(request, pk, label_uuid):
             'tklabels': tklabels,
             'bclabel': bclabel,
             'tklabel': tklabel,
+            'translations': translations,
         }
 
         return render(request, 'communities/view-label.html', context)

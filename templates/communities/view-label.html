@@ -17,10 +17,14 @@
                         {{ bclabel.default_text }}
                     </p>
                     
-                    <p>
-                        <span class="bold">TRANSLATION LANGUAGE</span><br>
-                        TRANSLATION TEXT
-                    </p>
+                    {% if translations %}
+                        <p>
+                            {% for translation in translations %}
+                                <span class="bold">{{ translation.language }}</span><br>
+                                {{translation.translation}}<br><br>
+                            {% endfor %}
+                        </p>
+                    {% endif %}
 
                     <p>
                         <h3>Related Projects</h3>
