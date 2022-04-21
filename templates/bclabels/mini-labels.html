@@ -1,42 +1,51 @@
 <!-- Project Overview: Labels -->
 {% load static %}
 
-{% if bclabel.label_type == 'commercialization'%}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label"></div>
-{% endif %}
+<div>
+    <img 
+        loading="lazy" 
 
-{% if bclabel.label_type == 'provenance' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label"></div>
-{% endif %}
-
-{% if bclabel.label_type == 'collaboration' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC CB) Label"></div>
-{% endif %}
-
-{% if bclabel.label_type == 'consent_verified' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label"></div>
-{% endif %}
-
-{% if bclabel.label_type == 'multiple_community' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label"></div>
-{% endif %}
-
-{% if bclabel.label_type == 'research' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label"></div>
-{% endif %}
-
-{% if bclabel.label_type == 'non_commercial' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/bc-labels/bc-non-commercial.png' %}" alt="BC Non-Commercial (BC NC) Label"></div>
-{% endif %}
-
-{% if bclabel.label_type == 'consent_non_verified' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" alt="BC Consent Non-Verified (BC CNV) Label"></div>
-{% endif %}
-
-{% if bclabel.label_type == 'clan' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/bc-labels/bc-clan.png' %}" alt="BC Clan (BC CL) Label"></div>
-{% endif %}
-
-{% if bclabel.label_type == 'outreach' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/bc-labels/bc-outreach.png' %}" alt="BC Outreach (BC O) Label"></div>
-{% endif %}
+        class="img-sizedown-small {% if not bclabel.is_approved %}opacity-4{% endif %}"
+        
+        {% if bclabel.label_type == 'commercialization'%}
+            src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" 
+            alt="BC Open to Commercialization (BC OC) Label"
+        {% endif %}
+        {% if bclabel.label_type == 'provenance' %}
+            src="{% static 'images/bc-labels/bc-provenance.png' %}"
+            alt="BC Provenance (BC P) Label"
+        {% endif %}
+        {% if bclabel.label_type == 'collaboration' %}
+            src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" 
+            alt="BC Open to Collaboration (BC CB) Label"
+        {% endif %}
+        {% if bclabel.label_type == 'consent_verified' %}
+            src="{% static 'images/bc-labels/bc-consent-verified.png' %}" 
+            alt="BC Consent Verified (BC CV) Label"
+        {% endif %}
+        {% if bclabel.label_type == 'multiple_community' %}
+            src="{% static 'images/bc-labels/bc-multiple-community.png' %}" 
+            alt="BC Multiple Communities (BC MC) Label"
+        {% endif %}
+        {% if bclabel.label_type == 'research' %}
+            src="{% static 'images/bc-labels/bc-research-use.png' %}" 
+            alt="BC Research Use (BC R) Label"
+        {% endif %}
+        {% if bclabel.label_type == 'non_commercial' %}
+            src="{% static 'images/bc-labels/bc-non-commercial.png' %}" 
+            alt="BC Non-Commercial (BC NC) Label"
+        {% endif %}
+        {% if bclabel.label_type == 'consent_non_verified' %}
+            src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" 
+            alt="BC Consent Non-Verified (BC CNV) Label"
+        {% endif %}
+        {% if bclabel.label_type == 'clan' %}
+            src="{% static 'images/bc-labels/bc-clan.png' %}" 
+            alt="BC Clan (BC CL) Label"
+        {% endif %}
+        {% if bclabel.label_type == 'outreach' %}
+            src="{% static 'images/bc-labels/bc-outreach.png' %}" 
+            alt="BC Outreach (BC O) Label"
+        {% endif %}
+    >
+</div>

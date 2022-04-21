@@ -149,7 +149,7 @@ function customText(imgDiv) {
     let pDivs = Array.from(document.querySelectorAll('.toggle-txt-color'))
     pDivs.forEach(node => {
         let nodeID = node.id
-        if (nodeID.includes(labelID)) { node.classList.replace('grey-text', 'darkteal-text') } else { node.classList.replace('darkteal-text', 'grey-text') }
+        if (nodeID.includes(labelID)) { node.classList.add('label-name-active') } else { node.classList.remove('label-name-active') }
     })
 }
 
