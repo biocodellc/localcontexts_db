@@ -504,15 +504,23 @@ def view_label(request, pk, label_uuid):
         bclabel = ''
         tklabel = ''
         translations = ''
+        projects = ''
 
-        # TODO: get all projects where this label is used
+        # TODO: 
+        # 2. Link from /select-labels to this page
+        # 3. Link other customized labels on this page
+        # 4. make sure no one but this community's members can see this page
+
+        # TEST: http://localhost:8000/communities/labels/view/19/41fa3970-3dff-409b-b491-2b1f7a09e119/
 
         if BCLabel.objects.filter(unique_id=label_uuid).exists():
             bclabel = BCLabel.objects.get(unique_id=label_uuid)
             translations = LabelTranslation.objects.filter(bclabel=bclabel)
+            projects = bclabel.project_bclabels.all()
         if TKLabel.objects.filter(unique_id=label_uuid).exists():
             tklabel = TKLabel.objects.get(unique_id=label_uuid)
             translations = LabelTranslation.objects.filter(tklabel=tklabel)
+            projects = tklabel.project_tklabels.all()
 
         context = {
             'community': community,
@@ -522,6 +530,7 @@ def view_label(request, pk, label_uuid):
             'bclabel': bclabel,
             'tklabel': tklabel,
             'translations': translations,
+            'projects': projects,
         }
 
         return render(request, 'communities/view-label.html', context)

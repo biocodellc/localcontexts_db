@@ -25,14 +25,18 @@
                             {% endfor %}
                         </p>
                     {% endif %}
-
+                    
                     <p>
                         <h3>Related Projects</h3>
-                        <ul>
-                            <li>
-                                <a class="darkteal-text underline-hover" href="#">Project Title</a>
-                            </li>
-                        </ul>
+                        {% if projects %}
+                            <ul>
+                                {% for project in projects %}
+                                    <li><a class="darkteal-text underline-hover" href="{% url 'view-project' project.unique_id  %}">{{ project.title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            This label has not yet been applied to any Local Contexts Projects
+                        {% endif %}
                     </p>
                 </div>
 
