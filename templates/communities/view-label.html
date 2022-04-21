@@ -3,45 +3,67 @@
 <section class="content-card-v2 content-card-space white-bg">
 
     <div class="flex-this space-between border-bottom-solid-teal">
-        {% if bclabel %}
-            <div class="w-20 center-text">
+        <div class="w-20 center-text">
+            {% if bclabel %}
                 {% include 'bclabels/which-label.html' %}
-            </div>
-            <div class="w-90">
-                <div class="w-80">
-                    <h2 class="no-top-margin">{{ bclabel.name }}</h2>
-                    <p>
-                        <span class="bold">Created by</span> - {{ bclabel.community }} <br><br>
-                        <span class="bold">Why Use This Label?</span> <br><br>
-                        <span class="bold">Label text</span> <br>
-                        {{ bclabel.default_text }}
-                    </p>
-                    
-                    {% if translations %}
-                        <p>
-                            {% for translation in translations %}
-                                <span class="bold">{{ translation.language }}</span><br>
-                                {{translation.translation}}<br><br>
-                            {% endfor %}
-                        </p>
+            {% endif %}
+            {% if tklabel %}
+                {% include 'tklabels/which-label.html' %}
+            {% endif %}
+        </div>
+        <div class="w-90">
+            <div class="w-80">
+                <h2 class="no-top-margin">
+                    {% if bclabel %}
+                        {{ bclabel.name }}
                     {% endif %}
-                    
+                    {% if tklabel %}
+                        {{ tklabel.name }}
+                    {% endif %}
+                </h2>
+                <p>
+                    <span class="bold">Created by</span> - 
+                    {% if bclabel %}
+                        {{ bclabel.community }} 
+                    {% endif %}
+                    {% if tklabel %}
+                        {{ tklabel.community }} 
+                    {% endif %}
+                    <br><br>
+                    <span class="bold">Why Use This Label?</span> <br><br>
+                    <span class="bold">Label text</span> <br>
+                    {% if bclabel %}
+                        {{ bclabel.default_text }}
+                    {% endif %}
+                    {% if tklabel %}
+                        {{ tklabel.default_text }}
+                    {% endif %}
+                </p>
+                
+                {% if translations %}
                     <p>
-                        <h3>Related Projects</h3>
-                        {% if projects %}
-                            <ul>
-                                {% for project in projects %}
-                                    <li><a class="darkteal-text underline-hover" href="{% url 'view-project' project.unique_id  %}">{{ project.title }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        {% else %}
-                            This label has not yet been applied to any Local Contexts Projects
-                        {% endif %}
+                        {% for translation in translations %}
+                            <span class="bold">{{ translation.language }}</span><br>
+                            {{translation.translation}}<br><br>
+                        {% endfor %}
                     </p>
-                </div>
-
+                {% endif %}
+                
+                <p>
+                    <h3>Related Projects</h3>
+                    {% if projects %}
+                        <ul>
+                            {% for project in projects %}
+                                <li><a class="darkteal-text underline-hover" href="{% url 'view-project' project.unique_id  %}">{{ project.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        This label has not yet been applied to any Local Contexts Projects
+                    {% endif %}
+                </p>
             </div>
-        {% endif %}
+
+        </div>
     </div>
 
     <div class="margin-left-16">
@@ -51,8 +73,10 @@
             {% if bclabels %}
                 {% for bclabel in bclabels %}
                     <div class="w-40 center-text">
-                        {% include 'bclabels/mini-labels.html' %}
-                        <small class="bold">{{ bclabel.name }}</small>
+                        <a class="primary-black-text" href="{% url 'view-label' community.id bclabel.unique_id %}">
+                            {% include 'bclabels/mini-labels.html' %}
+                            <small class="bold">{{ bclabel.name }}</small>
+                        </a>
                     </div>
                 {% endfor %}
             {% endif %}  
@@ -60,8 +84,10 @@
             {% if tklabels %}
                 {% for tklabel in tklabels %}
                     <div class="w-40 center-text">
-                        {% include 'tklabels/mini-labels.html' %}
-                        <small class="bold">{{ tklabel.name }}</small>
+                        <a class="primary-black-text" href="{% url 'view-label' community.id tklabel.unique_id %}">
+                            {% include 'tklabels/mini-labels.html' %}
+                            <small class="bold">{{ tklabel.name }}</small>
+                        </a>
                     </div>
                 {% endfor %}
             {% endif %}          
