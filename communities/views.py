@@ -491,6 +491,52 @@ def edit_label(request, pk, label_id):
         }
         return render(request, 'communities/edit-label.html', context)
 
+@login_required(login_url='login')
+def view_label(request, pk, label_uuid):
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    bclabels = BCLabel.objects.filter(community=community)
+    tklabels = TKLabel.objects.filter(community=community)
+
+    member_role = check_member_role_community(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        bclabel = ''
+        tklabel = ''
+        translations = ''
+        projects = ''
+        creator_name = ''
+        approver_name = ''
+
+        if BCLabel.objects.filter(unique_id=label_uuid).exists():
+            bclabel = BCLabel.objects.get(unique_id=label_uuid)
+            translations = LabelTranslation.objects.filter(bclabel=bclabel)
+            projects = bclabel.project_bclabels.all()
+            creator_name = get_users_name(bclabel.created_by)
+            approver_name = get_users_name(bclabel.approved_by)
+        if TKLabel.objects.filter(unique_id=label_uuid).exists():
+            tklabel = TKLabel.objects.get(unique_id=label_uuid)
+            translations = LabelTranslation.objects.filter(tklabel=tklabel)
+            projects = tklabel.project_tklabels.all()
+            creator_name = get_users_name(tklabel.created_by)
+            approver_name = get_users_name(tklabel.approved_by)
+
+        context = {
+            'community': community,
+            'member_role': member_role,
+            'bclabels': bclabels,
+            'tklabels': tklabels,
+            'bclabel': bclabel,
+            'tklabel': tklabel,
+            'translations': translations,
+            'projects': projects,
+            'creator_name': creator_name,
+            'approver_name': approver_name,
+        }
+
+        return render(request, 'communities/view-label.html', context)
+
+
 # Projects Main
 @login_required(login_url='login')
 def projects(request, pk):

@@ -1,82 +1,90 @@
 <!-- Projects: Mini Labels -->
 {% load static %}
 
-{% if tklabel.label_type == 'attribution' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-attribution.png' %}" alt="TK Attribution (TK A) Label"></div>
-{% endif %}
+<div>
+    <img
+        loading="lazy"
+        class="img-sizedown-small {% if not tklabel.is_approved %}opacity-4{% endif %}"
 
-{% if tklabel.label_type == 'clan' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-clan.png' %}" alt="TK Clan (TK CL) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'family' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-family.png' %}" alt="TK Family (TK F) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'outreach' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-outreach.png' %}" alt="TK Outreach (TK O) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'tk_multiple_community' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-multiple-community.png' %}" alt="TK Multiple Community (TK MC) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'non_verified' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-non-verified.png' %}" alt="TK Non-Verifed (TK NV) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'verified' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-verified.png' %}" alt="TK Verified (TK V) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'non_commercial' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-non-commercial.png' %}" alt="TK Non-Commercial (TK NC) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'commercial' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-commercial.png' %}" alt="TK Open to Commercialization (TK OC) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'culturally_sensitive' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-culturally-sensitive.png' %}" alt="TK Culturally Sensitive (TK CS) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'community_voice' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-community-voice.png' %}" alt="TK Community Voice (TK CV) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'community_use_only' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-community-use-only.png' %}" alt="TK Community Use Only (TK CO) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'seasonal' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-seasonal.png' %}" alt="TK Seasonal (TK S) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'women_general' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-women-general.png' %}" alt="TK Women General (TK WG) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'men_general' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-men-general.png' %}" alt="TK Men General (TK MG) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'men_restricted' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-men-restricted.png' %}" alt="TK Men Restricted (TK MR) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'women_restricted' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-women-restricted.png' %}" alt="TK Women Restricted (TK WR) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'secret_sacred' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-secret-sacred.png' %}" alt="TK Secret Sacred (TK SS) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'open_to_collaboration' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-open-to-collaboration.png' %}" alt="TK Open to Collaboration (TK CB) Label"></div>
-{% endif %}
-
-{% if tklabel.label_type == 'creative' %}
-    <div class="margin-left-8"><img loading="lazy" class="img-sizedown-small" src="{% static 'images/tk-labels/tk-creative.png' %}" alt="TK Creative (TK CR) Label"></div>
-{% endif %}
+        {% if tklabel.label_type == 'attribution' %} 
+            src="{% static 'images/tk-labels/tk-attribution.png' %}" 
+            alt="TK Attribution (TK A) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'clan' %} 
+            src="{% static 'images/tk-labels/tk-clan.png' %}" 
+            alt="TK Clan (TK CL) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'family' %} 
+            src="{% static 'images/tk-labels/tk-family.png' %}" 
+            alt="TK Family (TK F) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'outreach' %} 
+            src="{% static 'images/tk-labels/tk-outreach.png' %}" 
+            alt="TK Outreach (TK O) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'tk_multiple_community' %} 
+            src="{% static 'images/tk-labels/tk-multiple-community.png' %}" 
+            alt="TK Multiple Community (TK MC) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'non_verified' %} 
+            src="{% static 'images/tk-labels/tk-non-verified.png' %}" 
+            alt="TK Non-Verifed (TK NV) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'verified' %} 
+            src="{% static 'images/tk-labels/tk-verified.png' %}" 
+            alt="TK Verified (TK V) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'non_commercial' %} 
+            src="{% static 'images/tk-labels/tk-non-commercial.png' %}" 
+            alt="TK Non-Commercial (TK NC) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'commercial' %} 
+            src="{% static 'images/tk-labels/tk-commercial.png' %}" 
+            alt="TK Open to Commercialization (TK OC) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'culturally_sensitive' %} 
+            src="{% static 'images/tk-labels/tk-culturally-sensitive.png' %}" 
+            alt="TK Culturally Sensitive (TK CS) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'community_voice' %} 
+            src="{% static 'images/tk-labels/tk-community-voice.png' %}" 
+            alt="TK Community Voice (TK CV) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'community_use_only' %} 
+            src="{% static 'images/tk-labels/tk-community-use-only.png' %}" 
+            alt="TK Community Use Only (TK CO) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'seasonal' %} 
+            src="{% static 'images/tk-labels/tk-seasonal.png' %}" 
+            alt="TK Seasonal (TK S) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'women_general' %} 
+            src="{% static 'images/tk-labels/tk-women-general.png' %}" 
+            alt="TK Women General (TK WG) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'men_general' %} 
+            src="{% static 'images/tk-labels/tk-men-general.png' %}" 
+            alt="TK Men General (TK MG) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'men_restricted' %} 
+            src="{% static 'images/tk-labels/tk-men-restricted.png' %}" 
+            alt="TK Men Restricted (TK MR) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'women_restricted' %} 
+            src="{% static 'images/tk-labels/tk-women-restricted.png' %}" 
+            alt="TK Women Restricted (TK WR) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'secret_sacred' %} 
+            src="{% static 'images/tk-labels/tk-secret-sacred.png' %}" 
+            alt="TK Secret Sacred (TK SS) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'open_to_collaboration' %} 
+            src="{% static 'images/tk-labels/tk-open-to-collaboration.png' %}" 
+            alt="TK Open to Collaboration (TK CB) Label"
+        {% endif %}
+        {% if tklabel.label_type == 'creative' %} 
+            src="{% static 'images/tk-labels/tk-creative.png' %}" 
+            alt="TK Creative (TK CR) Label"
+        {% endif %}
+    >
+</div>

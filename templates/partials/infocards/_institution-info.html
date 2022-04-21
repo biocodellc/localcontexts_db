@@ -6,12 +6,14 @@
         
         <!-- Top Nav -->
         <div class="flex-this w-100 space-between">
-            <div class="loc">
-                <a href="{% url 'dashboard' %}" class="darkteal-text underline-hover">
-                    {% if request.user.first_name %}{{ request.user.get_full_name }}
-                    {% else %}{{ request.user }}{% endif %}
-                </a> 
-                >> {{ institution.institution_name }}
+            <div class="loc grey-text bold">
+                <small>
+                    <a href="{% url 'dashboard' %}" class="bold darkteal-text underline-hover">
+                        {% if request.user.first_name %} {{ request.user.get_full_name }}
+                        {% else %}{{ request.user }}{% endif %}
+                    </a> 
+                    >> {{ institution.institution_name }}                    
+                </small>
             </div>
 
             <!-- Notifications -->
