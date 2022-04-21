@@ -505,15 +505,21 @@ def view_label(request, pk, label_uuid):
         tklabel = ''
         translations = ''
         projects = ''
-        
+        creator_name = ''
+        approver_name = ''
+
         if BCLabel.objects.filter(unique_id=label_uuid).exists():
             bclabel = BCLabel.objects.get(unique_id=label_uuid)
             translations = LabelTranslation.objects.filter(bclabel=bclabel)
             projects = bclabel.project_bclabels.all()
+            creator_name = get_users_name(bclabel.created_by)
+            approver_name = get_users_name(bclabel.approved_by)
         if TKLabel.objects.filter(unique_id=label_uuid).exists():
             tklabel = TKLabel.objects.get(unique_id=label_uuid)
             translations = LabelTranslation.objects.filter(tklabel=tklabel)
             projects = tklabel.project_tklabels.all()
+            creator_name = get_users_name(tklabel.created_by)
+            approver_name = get_users_name(tklabel.approved_by)
 
         context = {
             'community': community,
@@ -524,6 +530,8 @@ def view_label(request, pk, label_uuid):
             'tklabel': tklabel,
             'translations': translations,
             'projects': projects,
+            'creator_name': creator_name,
+            'approver_name': approver_name,
         }
 
         return render(request, 'communities/view-label.html', context)
