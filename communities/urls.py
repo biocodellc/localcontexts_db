@@ -13,6 +13,7 @@ urlpatterns = [
     path('members/remove/<str:pk>/<str:member_id>', views.remove_member, name="remove-member"),
     
     path('labels/select/<str:pk>/', views.select_label, name="select-label"),
+    path('labels/view/<str:pk>/<uuid:label_uuid>/', views.view_label, name="view-label"),
 
     path('labels/customize/<str:pk>/<str:label_type>', views.customize_label, name="customize-label"),
     path('labels/<str:pk>/<str:label_id>/', views.approve_label, name="approve-label"),
