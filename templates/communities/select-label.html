@@ -41,17 +41,20 @@
             {% for bclabel in bclabels %}
 
                 {% if not bclabel.is_approved %}
-                    <div class="w-20 margin-top-16 margin-bottom-16">
+                <div class="w-20">
+                    <small class="center-text block bold darkteal-text margin-bottom-8">
+                        {% if request.user == tklabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
+                    </small>
+                    <div class="margin-top-16 margin-bottom-16">
                         <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
-                            <p class="darkteal-text">
-                                {% if request.user == bclabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
-                            </p>
                             <div class="auto-margin">
                                 {% include 'bclabels/mini-labels.html' %}
                                 <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ bclabel.name }}</p>
                             </div>
                         </div>
-                    </div>
+                    </div>                    
+                </div>
+
                 {% endif %}
 
             {% endfor %}
@@ -61,19 +64,18 @@
         {% if tklabels %}
             {% for tklabel in tklabels %}
                 {% if not tklabel.is_approved %}
-                    <div class="w-20 margin-top-16 margin-bottom-16">
-                        <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
-                            <p class="darkteal-text">
-                                {% if request.user == tklabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
-                            </p>
-                            <div class="auto-margin">
+                    <div class="w-20">
+                        <small class="center-text block bold darkteal-text margin-bottom-8">
+                            {% if request.user == tklabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
+                        </small>
+                        <div class="margin-top-16 margin-bottom-16">
+                            <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
                                 {% include 'tklabels/mini-labels.html' %}
                                 <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ tklabel.name }}</p>
-                            </div>  
-                        </div>
+                            </div>
+                        </div>                    
                     </div>
                 {% endif %}
-
             {% endfor %}
         {% endif %}
 
@@ -81,11 +83,13 @@
         {% if bclabels %}
             {% for bclabel in bclabels %}
                 {% if bclabel.is_approved %}
-                    <div class="w-20 margin-top-16 margin-bottom-16">
-                        <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
-                            {% include 'bclabels/mini-labels.html' %}
-                            <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ bclabel.name }}</p>
-                        </div>
+                    <div class="w-20">
+                        <div class="margin-top-16 margin-bottom-16">
+                            <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
+                                {% include 'bclabels/mini-labels.html' %}
+                                <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ bclabel.name }}</p>
+                            </div>
+                        </div>                    
                     </div>
                 {% endif %}
             {% endfor %}

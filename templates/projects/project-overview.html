@@ -104,13 +104,17 @@
                     
                         {% if tklabels %}
                             {% for tklabel in tklabels %}
-                                {% include 'tklabels/mini-labels.html' %}
+                                <div class="margin-left-8">
+                                    {% include 'tklabels/mini-labels.html' %}
+                                </div>
                             {% endfor %}
                         {% endif %}
 
                         {% if bclabels %}
                             {% for bclabel in bclabels %}
-                                {% include 'bclabels/mini-labels.html' %}
+                                <div class="margin-left-8">
+                                    {% include 'bclabels/mini-labels.html' %}
+                                </div>
                             {% endfor %}
                         {% endif %}
                     {% endif %}
