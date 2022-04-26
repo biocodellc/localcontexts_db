@@ -494,8 +494,6 @@ def edit_label(request, pk, label_id):
 @login_required(login_url='login')
 def view_label(request, pk, label_uuid):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    bclabels = BCLabel.objects.filter(community=community)
-    tklabels = TKLabel.objects.filter(community=community)
 
     member_role = check_member_role_community(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
@@ -507,6 +505,8 @@ def view_label(request, pk, label_uuid):
         projects = ''
         creator_name = ''
         approver_name = ''
+        bclabels = ''
+        tklabels = ''
 
         if BCLabel.objects.filter(unique_id=label_uuid).exists():
             bclabel = BCLabel.objects.get(unique_id=label_uuid)
@@ -514,12 +514,16 @@ def view_label(request, pk, label_uuid):
             projects = bclabel.project_bclabels.all()
             creator_name = get_users_name(bclabel.created_by)
             approver_name = get_users_name(bclabel.approved_by)
+            bclabels = BCLabel.objects.filter(community=community).exclude(unique_id=label_uuid)
+            tklabels = TKLabel.objects.filter(community=community)
         if TKLabel.objects.filter(unique_id=label_uuid).exists():
             tklabel = TKLabel.objects.get(unique_id=label_uuid)
             translations = LabelTranslation.objects.filter(tklabel=tklabel)
             projects = tklabel.project_tklabels.all()
             creator_name = get_users_name(tklabel.created_by)
             approver_name = get_users_name(tklabel.approved_by)
+            tklabels = TKLabel.objects.filter(community=community).exclude(unique_id=label_uuid)
+            bclabels = BCLabel.objects.filter(community=community)
 
         context = {
             'community': community,

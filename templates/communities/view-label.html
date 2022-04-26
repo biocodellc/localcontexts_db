@@ -120,10 +120,10 @@
     <div class="margin-left-16">
         <h3>Explore your other customized Labels</h3>
 
-        <div class="flex-this space-between w-100">
+        <div class="flex-this w-100">
             {% if bclabels %}
                 {% for bclabel in bclabels %}
-                    <div class="w-40 center-text">
+                    <div class="w-20 center-text margin-right-16">
                         <a class="primary-black-text" href="{% url 'view-label' community.id bclabel.unique_id %}">
                             {% include 'bclabels/mini-labels.html' %}
                             <small class="bold">{{ bclabel.name }}</small>
@@ -134,7 +134,7 @@
 
             {% if tklabels %}
                 {% for tklabel in tklabels %}
-                    <div class="w-40 center-text">
+                    <div class="w-20 center-text margin-right-16">
                         <a class="primary-black-text" href="{% url 'view-label' community.id tklabel.unique_id %}">
                             {% include 'tklabels/mini-labels.html' %}
                             <small class="bold">{{ tklabel.name }}</small>
