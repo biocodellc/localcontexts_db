@@ -71,8 +71,12 @@
             >
             
                 Or create {% if community %}a community{% endif %}{% if institution %}an institution{% endif %} account
-            </a></div>
-         <div><button id="openJoinRequestModalBtn" class="primary-btn action-btn margin-top-2 ">Next <i class="fa fa-arrow-right"></i></button></div>
+            </a>
+        </div>
+        <div class="flex-this">
+            <div class="margin-right-16 flex-this align-center"><small class="block"><a href="{% url 'dashboard' %}" class="darkteal-text underline-hover bold">Skip this for now</a></small></div>
+            <div><button id="openJoinRequestModalBtn" class="primary-btn action-btn margin-top-2 ">Next <i class="fa fa-arrow-right"></i></button></div>
+        </div>
      </div>
 
      {% include 'partials/_alerts.html' %}

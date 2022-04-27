@@ -67,7 +67,7 @@
                             {% connections_organization_projects community institution as projects%}
                             {% for project in projects %}
                                 <li>
-                                    <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text">{{ project.title }}</a>
+                                    <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -122,7 +122,7 @@
                                 {% connections_organization_projects community researcher as projects%}
                                 {% for project in projects %}
                                     <li>
-                                        <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text">{{ project.title }}</a>
+                                        <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
                                     </li>
                                 {% endfor %}                                
                             </ul>
@@ -192,13 +192,13 @@
                             {% for project in projects %}
                                 {% if researcher %}
                                     <li>
-                                        <a href="{% anchor 'researcher-projects' project.unique_id researcher.id %}" class="darkteal-text">{{ project.title }}</a>
+                                        <a href="{% anchor 'researcher-projects' project.unique_id researcher.id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
                                     </li>
                                 {% endif %}
 
                                 {% if institution %}
                                     <li>
-                                        <a href="{% anchor 'institution-projects' project.unique_id institution.id %}" class="darkteal-text">{{ project.title }}</a>
+                                        <a href="{% anchor 'institution-projects' project.unique_id institution.id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
                                     </li>
                                 {% endif %}
                             {% endfor %}
