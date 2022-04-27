@@ -48,7 +48,8 @@
             {% if 'update-profile' in request.path or 'manage' in request.path or 'change-password' in request.path or 'deactivate' in request.path %}
                 <div class="margin-right-8"><a href="{% url 'dashboard' %}" class="primary-btn white-btn">Back to Profile</a></div>
             {% else %}
-                <div class="noti-bell"><a onclick="showUserNotifications(this)" class="pointer"> 
+                <div class="no-top-margin margin-right-8"><a class="primary-btn white-btn" onclick="showUserNotifications()" class="pointer"> 
+                    Notifications
                     <i 
                     class="fa {% if unread_exist %} fa-bell orange-text {% else %} fa-bell grey-bell {% endif %}" 
                     aria-hidden="true"

@@ -827,10 +827,9 @@ function toggleNotifications() {
     }
 }
 
-function showUserNotifications(btn) {
+function showUserNotifications() {
     let div = document.getElementById('userNotifications')
     div.classList.toggle('hide')
-    if (div.classList.contains('hide')) { btn.classList.replace('white-btn', 'action-btn') } else { btn.classList.replace( 'action-btn', 'white-btn') }
 }
 
 
