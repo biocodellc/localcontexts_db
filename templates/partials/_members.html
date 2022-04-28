@@ -1,7 +1,27 @@
 <div class="content-card-v2 content-card-space white-bg">
-    <div class="border-bottom-solid-teal">
-        <h2 class="no-top-margin">Members</h2>
-        <p>Manage responsibilities within this account and add new members below.</p>
+    <div class="border-bottom-solid-teal flex-this space-between">
+        <div>
+            <h2 class="no-top-margin">Members</h2>
+            <p>View all members and their associated responsibilities.</p>
+        </div>
+        <div class="flex-this">
+            <div>
+                <a 
+                    {% if community %}
+                        href="{% url 'member-requests' community.id %}"
+                    {% endif %} 
+                    {% if institution %}
+                        href="{% url 'institution-member-requests' institution.id %}"
+                    {% endif %}
+                    class="primary-btn white-btn">Member Requests
+                </a>                
+            </div>
+            {% if not member_role == 'viewer' %}
+                <div class="margin-left-8">
+                    <a class="primary-btn green-btn" onclick="openMemberModal()">Add a new member <i class="fa fa-user-plus" aria-hidden="true"></i></a>
+                </div>
+            {% endif %}
+        </div>
     </div>
     <div>
         <h3>What responsibilities are there in the Local Contexts Hub?</h3>
@@ -21,37 +41,62 @@
 </div>
 
 {% if community %}
-    <div class="content-card-v2 content-card-space white-bg">
+    <section class="dash-driver flex-this column">
         <div class="flex-this space-between">
-            <div>
-                <h2 class="darkteal-text no-top-margin">
-                    {% if community.community_creator.get_full_name %}{{ community.community_creator.get_full_name }}{% else %}{{ community.community_creator }}{% endif %}
-                </h2>
-
-                <p class="no-bottom-margin">
-                    <span class="bold">Responsibility</span> | Administrator <br><br>
-                    <span class="bold">Job title</span> | {{ community.community_creator.profile.position }} <br><br>
-                    <span class="bold">Affiliation</span> | {{ community.community_creator.profile.affiliation }} <br><br>
-
-                </p>
-            </div>    
+            <div class="margin-bottom-16">
+                <small class="bold">Role - Main Admininstrator</small>
+            </div>
         </div>
-    </div>
+
+        <div class="w-70">
+            <h2 class="no-top-margin no-bottom-margin">{{ community.community_creator.get_full_name }} </h2>
+            {% if community.community_creator.profile.position %}
+                <h3 class="no-top-margin">{{ community.community_creator.profile.position }}</h3>
+            {% endif %}
+
+            {% if not community.community_creator.profile.city_town and not community.community_creator.profile.state_province_region and not community.community_creator.profile.country.name %}
+            {% else %}
+                <h4 class="no-top-margin">
+                    {% if community.community_creator.profile.city_town %} {{ community.community_creator.profile.city_town }}, {% endif %}
+                    {% if community.community_creator.profile.state_province_region %}{{ community.community_creator.profile.state_province_region }}, {% endif %}
+                    {% if community.community_creator.profile.country %} {{ community.community_creator.profile.country.name }} {% endif%}
+                </h4>
+            {% endif %}
+
+            {% if community.community_creator.profile.languages_spoken %}
+                <div class="flex-this">
+                    <div class="dash-icons-big">
+                        <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <small class="orange-text">Languages</small>
+                        <p class="no-top-margin">{{ community.community_creator.profile.languages_spoken }}</p>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if community.community_creator.profile.affiliation %}
+                <div class="flex-this">
+                    <div class="dash-icons-big">
+                        <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <small class="orange-text">Affiliations</small>
+                        <p class="no-top-margin">{{ community.community_creator.profile.affiliation }}</p>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+
+    </section>
 
     {% for admin in community.get_admins %}
-        <div class="content-card-v2 content-card-space white-bg">
+        <section class="dash-driver flex-this column">
             <div class="flex-this space-between">
                 <div>
-                    <h2 class="darkteal-text no-top-margin">
-                        {% if admin.get_full_name %}{{ admin.get_full_name }}{% else %}{{ admin }}{% endif %}
-                    </h2>
-
-                    <p class="no-bottom-margin">
-                        <span class="bold">Responsibility</span> | Administrator <br><br>
-                        <span class="bold">Job title</span> | {{ admin.profile.position }} <br><br>
-                        <span class="bold">Affiliation</span> | {{ admin.profile.affiliation }} <br><br>
-                    </p>
-                </div>            
+                    <small class="bold">Role - Admininstrator</small>
+                </div>
 
                 {% if member_role == 'admin' or request.user == community.community_creator %}
                     <div class="flex-this">
@@ -65,54 +110,126 @@
                     {% include 'snippets/modals/remove-member-modal.html' %}
                     {% include 'snippets/modals/change-member-modal.html' %}
                 {% endif %}
+
             </div>
-        </div>
+
+            <div class="w-70">
+                <h2 class="no-top-margin no-bottom-margin">{{ admin.get_full_name }} </h2>
+                {% if admin.profile.position %}
+                    <h3 class="no-top-margin">{{ admin.profile.position }}</h3>
+                {% endif %}
+
+                {% if not admin.profile.city_town and not admin.profile.state_province_region and not admin.profile.country.name %}
+                {% else %}
+                    <h4 class="no-top-margin">
+                        {% if admin.profile.city_town %} {{ admin.profile.city_town }}, {% endif %}
+                        {% if admin.profile.state_province_region %}{{ admin.profile.state_province_region }}, {% endif %}
+                        {% if admin.profile.country %} {{ admin.profile.country.name }} {% endif%}
+                    </h4>
+                {% endif %}
+
+                {% if admin.profile.languages_spoken %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Languages</small>
+                            <p class="no-top-margin">{{ admin.profile.languages_spoken }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if admin.profile.affiliation %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Affiliations</small>
+                            <p class="no-top-margin">{{ admin.profile.affiliation }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </section>
     {% endfor %}
 
     {% for editor in community.get_editors %}
-        <div class="content-card-v2 content-card-space white-bg">
+        <section class="dash-driver flex-this column">
             <div class="flex-this space-between">
                 <div>
-                    <h2 class="darkteal-text no-top-margin">
-                        {% if editor.get_full_name %}{{ editor.get_full_name }}{% else %}{{ editor }}{% endif %}
-                    </h2>
-
-                    <p class="no-bottom-margin">
-                        <span class="bold">Responsibility</span> | Editor <br><br>
-                        <span class="bold">Job title</span> | {{ editor.profile.position }} <br><br>
-                        <span class="bold">Affiliation</span> | {{ editor.profile.affiliation }} <br><br>
-                    </p>
+                    <small class="bold">Role - Editor</small>
                 </div>
+
                 {% if member_role == 'admin' or request.user == community.community_creator %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
                             <a id="removeMemberBtn_{{editor.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
                         </div>
                         <div>
-                            <button id="openChangeRoleModalBtn_{{ editor.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
+                            <button id="openChangeRoleModalBtn_{{ editor.id }}" class="primary-btn white-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
                         </div>
                     </div>
                     {% include 'snippets/modals/remove-member-modal.html' %}
                     {% include 'snippets/modals/change-member-modal.html' %}
-                {% endif %}
+                {% endif %} 
+
             </div>
-        </div>
+
+            <div class="w-70">
+                <h2 class="no-top-margin no-bottom-margin">{{ editor.get_full_name }} </h2>
+                {% if editor.profile.position %}
+                    <h3 class="no-top-margin">{{ editor.profile.position }}</h3>
+                {% endif %}
+
+                {% if not editor.profile.city_town and not editor.profile.state_province_region and not editor.profile.country.name %}
+                {% else %}
+                    <h4 class="no-top-margin">
+                        {% if editor.profile.city_town %} {{ editor.profile.city_town }}, {% endif %}
+                        {% if editor.profile.state_province_region %}{{ editor.profile.state_province_region }}, {% endif %}
+                        {% if editor.profile.country %} {{ editor.profile.country.name }} {% endif%}
+                    </h4>
+                {% endif %}
+
+                {% if editor.profile.languages_spoken %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Languages</small>
+                            <p class="no-top-margin">{{ editor.profile.languages_spoken }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if editor.profile.affiliation %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Affiliations</small>
+                            <p class="no-top-margin">{{ editor.profile.affiliation }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </section>
     {% endfor %}
 
     {% for viewer in community.get_viewers %}
-        <div class="content-card-v2 content-card-space white-bg">
+        <section class="dash-driver flex-this column">
             <div class="flex-this space-between">
                 <div>
-                    <h2 class="darkteal-text no-top-margin">
-                        {% if viewer.get_full_name %}{{ viewer.get_full_name }}{% else %}{{ viewer }}{% endif %}
-                    </h2>
-
-                    <p class="no-bottom-margin">
-                        <span class="bold">Responsibility</span> | Viewer <br><br>
-                        <span class="bold">Job title</span> | {{ viewer.profile.position }} <br><br>
-                        <span class="bold">Affiliation</span> | {{ viewer.profile.affiliation }} <br><br>
-                    </p>
+                    <small class="bold">Role - Viewer</small>
                 </div>
+
                 {% if member_role == 'admin' or request.user == community.community_creator %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
@@ -124,54 +241,113 @@
                     </div>
                     {% include 'snippets/modals/remove-member-modal.html' %}
                     {% include 'snippets/modals/change-member-modal.html' %}
-                {% endif %}          
-            </div>
-        </div>
-    {% endfor %}
+                {% endif %}
 
-    {% if member_role == 'admin' or member_role == 'editor' %}
-        <div>
-            <a onclick="openMemberModal()">
-                <div class="flex-this add-member-card">
-                <div class="w-100 add-member">
-                    <h4 class="darkteal-text">+ Add a Member </h4>
-                </div>
-                </div>
-            </a>
-        </div>
-    {% endif %}
+            </div>
+
+            <div class="w-70">
+                <h2 class="no-top-margin no-bottom-margin">{{ viewer.get_full_name }} </h2>
+                {% if viewer.profile.position %}
+                    <h3 class="no-top-margin">{{ viewer.profile.position }}</h3>
+                {% endif %}
+
+                {% if not viewer.profile.city_town and not viewer.profile.state_province_region and not viewer.profile.country.name %}
+                {% else %}
+                    <h4 class="no-top-margin">
+                        {% if viewer.profile.city_town %} {{ viewer.profile.city_town }}, {% endif %}
+                        {% if viewer.profile.state_province_region %}{{ viewer.profile.state_province_region }}, {% endif %}
+                        {% if viewer.profile.country %} {{ viewer.profile.country.name }} {% endif%}
+                    </h4>
+                {% endif %}
+
+                {% if viewer.profile.languages_spoken %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Languages</small>
+                            <p class="no-top-margin">{{ viewer.profile.languages_spoken }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if viewer.profile.affiliation %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Affiliations</small>
+                            <p class="no-top-margin">{{ viewer.profile.affiliation }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </section>
+    {% endfor %}
 {% endif %}
 
 {% if institution %}
-    <div class="content-card-v2 content-card-space white-bg">
+    <section class="dash-driver flex-this column">
         <div class="flex-this space-between">
-            <div>
-                <h2 class="darkteal-text no-top-margin">
-                    {% if institution.institution_creator.get_full_name %}{{ institution.institution_creator.get_full_name }}{% else %}{{ institution.institution_creator }}{% endif %}
-                </h2>
-
-                <p class="no-bottom-margin">
-                    <span class="bold">Responsibility</span> | Administrator <br><br>
-                    <span class="bold">Job title</span> | {{ institution.institution_creator.profile.position }} <br><br>
-                </p>
-            </div>          
+            <div class="margin-bottom-16">
+                <small class="bold">Role - Main Admininstrator</small>
+            </div>
         </div>
 
-    </div>
+        <div class="w-70">
+            <h2 class="no-top-margin no-bottom-margin">{{ institution.institution_creator.get_full_name }} </h2>
+            {% if institution.institution_creator.profile.position %}
+                <h3 class="no-top-margin">{{ institution.institution_creator.profile.position }}</h3>
+            {% endif %}
+
+            {% if not institution.institution_creator.profile.city_town and not institution.institution_creator.profile.state_province_region and not institution.institution_creator.profile.country.name %}
+            {% else %}
+                <h4 class="no-top-margin">
+                    {% if institution.institution_creator.profile.city_town %} {{ institution.institution_creator.profile.city_town }}, {% endif %}
+                    {% if institution.institution_creator.profile.state_province_region %}{{ institution.institution_creator.profile.state_province_region }}, {% endif %}
+                    {% if institution.institution_creator.profile.country %} {{ institution.institution_creator.profile.country.name }} {% endif%}
+                </h4>
+            {% endif %}
+
+            {% if institution.institution_creator.profile.languages_spoken %}
+                <div class="flex-this">
+                    <div class="dash-icons-big">
+                        <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <small class="orange-text">Languages</small>
+                        <p class="no-top-margin">{{ institution.institution_creator.profile.languages_spoken }}</p>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if institution.institution_creator.profile.affiliation %}
+                <div class="flex-this">
+                    <div class="dash-icons-big">
+                        <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <small class="orange-text">Affiliations</small>
+                        <p class="no-top-margin">{{ institution.institution_creator.profile.affiliation }}</p>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+
+    </section>
 
     {% for admin in institution.get_admins %}
-        <div class="content-card-v2 content-card-space white-bg">
+        <section class="dash-driver flex-this column">
             <div class="flex-this space-between">
                 <div>
-                    <h2 class="darkteal-text no-top-margin">
-                        {% if admin.get_full_name %}{{ admin.get_full_name }}{% else %}{{ admin }}{% endif %}
-                    </h2>
-
-                    <p class="no-bottom-margin">
-                        <span class="bold">Responsibility</span> | Administrator <br><br>
-                        <span class="bold">Job title</span> | {{ admin.profile.position }} <br><br>
-                    </p>
+                    <small class="bold">Role - Admininstrator</small>
                 </div>
+
                 {% if member_role == 'admin' or request.user == institution.institution_creator %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
@@ -184,57 +360,126 @@
                     {% include 'snippets/modals/remove-member-modal.html' %}
                     {% include 'snippets/modals/change-member-modal.html' %}
                 {% endif %}
+
             </div>
-        </div>
+
+            <div class="w-70">
+                <h2 class="no-top-margin no-bottom-margin">{{ admin.get_full_name }} </h2>
+                {% if admin.profile.position %}
+                    <h3 class="no-top-margin">{{ admin.profile.position }}</h3>
+                {% endif %}
+
+                {% if not admin.profile.city_town and not admin.profile.state_province_region and not admin.profile.country.name %}
+                {% else %}
+                    <h4 class="no-top-margin">
+                        {% if admin.profile.city_town %} {{ admin.profile.city_town }}, {% endif %}
+                        {% if admin.profile.state_province_region %}{{ admin.profile.state_province_region }}, {% endif %}
+                        {% if admin.profile.country %} {{ admin.profile.country.name }} {% endif%}
+                    </h4>
+                {% endif %}
+
+                {% if admin.profile.languages_spoken %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Languages</small>
+                            <p class="no-top-margin">{{ admin.profile.languages_spoken }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if admin.profile.affiliation %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Affiliations</small>
+                            <p class="no-top-margin">{{ admin.profile.affiliation }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </section>
     {% endfor %}
 
     {% for editor in institution.get_editors %}
-        <div class="content-card-v2 content-card-space white-bg">
+        <section class="dash-driver flex-this column">
             <div class="flex-this space-between">
                 <div>
-                    <h2 class="darkteal-text no-top-margin">
-                        {% if editor.get_full_name %}{{ editor.get_full_name }}{% else %}{{ editor }}{% endif %}
-                    </h2>
-
-                    <p class="no-bottom-margin">
-                        <span class="bold">Responsibility</span> | Editor <br><br>
-                        <span class="bold">Job title</span> | {{ editor.profile.position }} <br><br>
-                    </p>
+                    <small class="bold">Role - Editor</small>
                 </div>
+
                 {% if member_role == 'admin' or request.user == institution.institution_creator %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
                             <a id="removeMemberBtn_{{editor.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
                         </div>
                         <div>
-                            <button id="openChangeRoleModalBtn_{{ editor.id }}" class="primary-btn green-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
+                            <button id="openChangeRoleModalBtn_{{ editor.id }}" class="primary-btn white-btn changeRoleBtn">Change role <i class="fa fa-edit"></i></button>
                         </div>
                     </div>
                     {% include 'snippets/modals/remove-member-modal.html' %}
                     {% include 'snippets/modals/change-member-modal.html' %}
-                {% endif %}
+                {% endif %} 
+
             </div>
- 
-        </div>
+
+            <div class="w-70">
+                <h2 class="no-top-margin no-bottom-margin">{{ editor.get_full_name }} </h2>
+                {% if editor.profile.position %}
+                    <h3 class="no-top-margin">{{ editor.profile.position }}</h3>
+                {% endif %}
+
+                {% if not editor.profile.city_town and not editor.profile.state_province_region and not editor.profile.country.name %}
+                {% else %}
+                    <h4 class="no-top-margin">
+                        {% if editor.profile.city_town %} {{ editor.profile.city_town }}, {% endif %}
+                        {% if editor.profile.state_province_region %}{{ editor.profile.state_province_region }}, {% endif %}
+                        {% if editor.profile.country %} {{ editor.profile.country.name }} {% endif%}
+                    </h4>
+                {% endif %}
+
+                {% if editor.profile.languages_spoken %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Languages</small>
+                            <p class="no-top-margin">{{ editor.profile.languages_spoken }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if editor.profile.affiliation %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Affiliations</small>
+                            <p class="no-top-margin">{{ editor.profile.affiliation }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </section>
     {% endfor %}
 
     {% for viewer in institution.get_viewers %}
-        <div class="content-card-v2 content-card-space white-bg">
+        <section class="dash-driver flex-this column">
             <div class="flex-this space-between">
                 <div>
-                    <h2 class="darkteal-text no-top-margin">
-                        {% if viewer.get_full_name %}
-                            {{ viewer.get_full_name }}
-                        {% else %}
-                            {{ viewer }}
-                        {% endif %}
-                    </h2>
-
-                    <p class="no-bottom-margin">
-                        <span class="bold">Responsibility</span> | Viewer <br><br>
-                        <span class="bold">Job title</span> | {{ viewer.profile.position }} <br><br>
-                    </p>
+                    <small class="bold">Role - Viewer</small>
                 </div>
+
                 {% if member_role == 'admin' or request.user == institution.institution_creator %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
@@ -247,73 +492,105 @@
                     {% include 'snippets/modals/remove-member-modal.html' %}
                     {% include 'snippets/modals/change-member-modal.html' %}
                 {% endif %}
-            </div>
-        </div>
-    {% endfor %}
 
-    {% if member_role == 'viewer' %}{% else %}
-        <div>
-            <a onclick="openMemberModal()">
-                <div class="flex-this add-member-card">
-                    <div class="w-100 add-member">
-                        <h4 class="darkteal-text">+ Add Members </h4>
+            </div>
+
+            <div class="w-70">
+                <h2 class="no-top-margin no-bottom-margin">{{ viewer.get_full_name }} </h2>
+                {% if viewer.profile.position %}
+                    <h3 class="no-top-margin">{{ viewer.profile.position }}</h3>
+                {% endif %}
+
+                {% if not viewer.profile.city_town and not viewer.profile.state_province_region and not viewer.profile.country.name %}
+                {% else %}
+                    <h4 class="no-top-margin">
+                        {% if viewer.profile.city_town %} {{ viewer.profile.city_town }}, {% endif %}
+                        {% if viewer.profile.state_province_region %}{{ viewer.profile.state_province_region }}, {% endif %}
+                        {% if viewer.profile.country %} {{ viewer.profile.country.name }} {% endif%}
+                    </h4>
+                {% endif %}
+
+                {% if viewer.profile.languages_spoken %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Languages</small>
+                            <p class="no-top-margin">{{ viewer.profile.languages_spoken }}</p>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </div>
-    {% endif %}
+                {% endif %}
+
+                {% if viewer.profile.affiliation %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Affiliations</small>
+                            <p class="no-top-margin">{{ viewer.profile.affiliation }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </section>
+    {% endfor %}
 {% endif %}
 
-    <!-- ADD MEMBER MODAL -->
 
-    <div id="memberModal" class="modal hide">
-        <div class="modal-defaults add-member-modal flex-this column w-100">
-      
-            <div class="flex-this flex-end close-modal-btn">
-                <div class="margin-right-8 primary-btn white-btn">Close X</div>
-            </div>
-            <div class="modal-content-padding w-100">
+<!-- ADD MEMBER MODAL -->
 
-                <h2 class="no-top-margin primary-black-text">Add a new member</h2>  
-                <p>
-                    To invite a new member, please select a user and their proposed responsibility below
-                </p>
+<div id="memberModal" class="modal hide">
+    <div class="modal-defaults add-member-modal flex-this column w-100">
+    
+        <div class="flex-this flex-end close-modal-btn">
+            <div class="margin-right-8 primary-btn white-btn">Close X</div>
+        </div>
+        <div class="modal-content-padding w-100">
 
-                <div class="w-100 flex-this column">
-                    <form id="addMemberForm" method="POST" action="">
-                        {% csrf_token %}
-            
-                            <div class="flex-this column"> 
-                                <div>
-                                    <div> 
-                                        <label>Name</label> <br>
-                                        {{ form.receiver }} 
-                                    </div>
-                                    <div>
-                                        <label>Proposed Responsibility</label><br>
-                                        {{ form.role }} 
-                                    </div>
-                                </div>
+            <h2 class="no-top-margin primary-black-text">Add a new member</h2>  
+            <p>
+                To invite a new member, please select a user and their proposed responsibility below
+            </p>
+
+            <div class="w-100 flex-this column">
+                <form id="addMemberForm" method="POST" action="">
+                    {% csrf_token %}
         
+                        <div class="flex-this column"> 
+                            <div>
+                                <div> 
+                                    <label>Name</label> <br>
+                                    {{ form.receiver }} 
+                                </div>
                                 <div>
-                                    <label>Optional Message</label><br>
-                                    {{ form.message }}
-                                </div>
-                            </div>    
-                        
-                            <div class="flex-this w-100 margin-bottom-16">
-                                <div class="w-50 margin-top-2">
-                                    <button class="primary-btn action-btn">Send Invitation </button>
-                                </div>
-        
-                                <div class="w-50 margin-top-2 right-text">
-                                    <small>Looking for someone who isn't on this list? <br><a class="darkteal-text" href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.</small>
+                                    <label>Proposed Responsibility</label><br>
+                                    {{ form.role }} 
                                 </div>
                             </div>
-        
-                    </form>
-                </div>
-            </div>
     
+                            <div>
+                                <label>Optional Message</label><br>
+                                {{ form.message }}
+                            </div>
+                        </div>    
+                    
+                        <div class="flex-this w-100 margin-bottom-16">
+                            <div class="w-50 margin-top-2">
+                                <button class="primary-btn action-btn">Send Invitation </button>
+                            </div>
+    
+                            <div class="w-50 margin-top-2 right-text">
+                                <small>Looking for someone who isn't on this list? <br><a class="darkteal-text" href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.</small>
+                            </div>
+                        </div>
+    
+                </form>
+            </div>
         </div>
+
     </div>
+</div>

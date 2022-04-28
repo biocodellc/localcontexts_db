@@ -523,20 +523,6 @@ input:focus {
     color: #fff;
 }
 
-/* COMMUNITY DASHBOARD: MEMBERS PAGE */
-.add-member-card {
-    border: 2px dashed rgba(0, 115, 133, 0.2);
-    margin: 1% auto 1% auto;
-    max-height: 75px;
-    min-height: 75px;
-    max-width: 1280px;
-    min-width: 1280px;
-    border-radius: 10px;
-    text-align: center;
-    cursor: pointer;
-
-}
-
 
 /* COMMUNITY DASHBOARD: SETTINGS */
 .set-nav {
