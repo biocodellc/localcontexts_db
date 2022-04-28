@@ -89,7 +89,7 @@
             </div>
 
             <div class="w-70">
-                <h2 class="no-top-margin no-bottom-margin">{{ join_request.user_from.get_full_name }} </h2>
+                <h2 class="no-top-margin no-bottom-margin">{% if join_request.user_from.get_full_name %}{{ join_request.user_from.get_full_name }} {% else %} {{ join_request.user_from.username }} {% endif %} </h2>
                 {% if join_request.user_from.profile.position %}
                     <h3 class="no-top-margin">{{ join_request.user_from.profile.position }}</h3>
                 {% endif %}
@@ -124,6 +124,25 @@
                             <small class="orange-text">Affiliations</small>
                             <p class="no-top-margin">{{ join_request.user_from.profile.affiliation }}</p>
                         </div>
+                    </div>
+                {% endif %}
+
+                {% if join_request.role %}
+                    <div>
+                        <span class="bold">Their proposed responsibility is:</span>
+                        <i>
+                            {% if join_request.role == 'admin' %} Administrator {% endif %}
+                            {% if join_request.role == 'editor' %} Editor {% endif %}
+                            {% if join_request.role == 'viewer' %} Viewer {% endif %}
+                        </i>                    
+                    </div>
+                {% endif %}
+
+                {% if join_request.message %}
+                    <div>
+                        <p>
+                            <span class="bold">Message:</span><i> {{ join_request.message }}</i>
+                        </p>                    
                     </div>
                 {% endif %}
 
