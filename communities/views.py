@@ -160,6 +160,7 @@ def community_members(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        join_requests_count = JoinRequest.objects.filter(community=community).count()
         form = InviteMemberForm(request.POST or None)
         if request.method == "POST":
             if 'change_member_role_btn' in request.POST:
@@ -196,6 +197,7 @@ def community_members(request, pk):
             'community': community,
             'member_role': member_role,
             'form': form,
+            'join_requests_count': join_requests_count,
         }
         return render(request, 'communities/members.html', context)
 

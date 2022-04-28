@@ -186,6 +186,7 @@ def institution_members(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
+        join_requests_count = JoinRequest.objects.filter(institution=institution).count()
         form = InviteMemberForm(request.POST or None)
         if request.method == 'POST':
             if 'change_member_role_btn' in request.POST:
@@ -222,6 +223,7 @@ def institution_members(request, pk):
             'institution': institution,
             'form': form,
             'member_role': member_role,
+            'join_requests_count': join_requests_count,
         }    
         return render(request, 'institutions/members.html', context)
 

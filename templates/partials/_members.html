@@ -13,7 +13,8 @@
                     {% if institution %}
                         href="{% url 'institution-member-requests' institution.id %}"
                     {% endif %}
-                    class="primary-btn white-btn">Member Requests
+                    class="primary-btn white-btn">
+                    Member Requests {% if join_requests_count %}({% if join_requests_count < 10 %}0{{ join_requests_count }}{% else %}{{ join_requests_count }}{% endif %}){% endif %}
                 </a>                
             </div>
             {% if not member_role == 'viewer' %}
