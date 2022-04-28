@@ -243,6 +243,13 @@ def remove_member(request, pk, member_id):
     else:
         return redirect('members', community.id)
 
+@login_required(login_url='login')
+def delete_join_request(request, pk, join_id):
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
+    join_request = JoinRequest.objects.get(id=join_id)
+    join_request.delete()
+    return redirect('member-requests', community.id)
+
 # Select Labels to Customize
 @login_required(login_url='login')
 def select_label(request, pk):

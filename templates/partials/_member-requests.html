@@ -26,7 +26,17 @@
 
                 
                 <div class="flex-this dash-btn-container flex-end">
-                    <div class="no-top-margin margin-right-8"><a class="primary-btn white-btn" a href="#" class="pointer">Delete Request</a></div>
+                    <div class="no-top-margin margin-right-8">
+                        <a 
+                            class="primary-btn white-btn" 
+                            {% if community %}
+                                href="{% url 'delete-join-request' community.id join_request.id %}" 
+                            {% endif %}
+                            {% if institution %}
+                                href="{% url 'institution-delete-join-request' institution.id join_request.id %}" 
+                            {% endif %}
+                        >Delete Request</a>
+                    </div>
                     <div><a href="#" class="primary-btn action-btn">Accept Request</a></div>
                 </div>   
 

@@ -241,6 +241,13 @@ def member_requests(request, pk):
             'join_requests': join_requests,
         }
         return render(request, 'institutions/member-requests.html', context)
+
+@login_required(login_url='login')
+def delete_join_request(request, pk, join_id):
+    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    join_request = JoinRequest.objects.get(id=join_id)
+    join_request.delete()
+    return redirect('institution-member-requests', institution.id)
     
 @login_required(login_url='login')
 def remove_member(request, pk, member_id):

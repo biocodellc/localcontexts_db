@@ -26,8 +26,7 @@ urlpatterns = [
     path('communities/', include('communities.urls')),
     path('institutions/', include('institutions.urls')),
     path('researchers/', include('researchers.urls')),
-    path('bclabels/', include('bclabels.urls')),
-    path('projects/', include('projects.urls')),
+    path('projects/', include('projects.urls')),    
     path('api/', include('api.urls')),
 
     path('notifications/', include('notifications.urls')),
