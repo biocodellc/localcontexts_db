@@ -37,8 +37,53 @@
                             {% endif %}
                         >Delete Request</a>
                     </div>
-                    <div><a href="#" class="primary-btn action-btn">Accept Request</a></div>
-                </div>   
+                    <div><a id="{{join_request.id}}" onclick="acceptJoinRequestModal(this)" class="primary-btn action-btn">Accept Request</a></div>
+                </div>  
+                
+                <div id="acceptJoinRequestModal_{{join_request.id}}" class="modal hide">
+                    <div class="modal-defaults add-member-modal flex-this column w-100">
+                    
+                        <div class="flex-this flex-end close-modal-btn">
+                            <div class="margin-right-8 primary-btn white-btn">Close X</div>
+                        </div>
+                        <div class="modal-content-padding w-100">
+                
+                            <h2 class="no-top-margin primary-black-text">Accept a join request</h2>  
+                            <p>
+                                To accept this new member, please select their responsibility below.
+                            </p>
+                
+                            <div class="w-100 flex-this column">
+                                <form method="POST" action="">
+                                    {% csrf_token %}
+                        
+                                    <div>
+                                        <label>Responsibility</label><br>
+                                        <select name="selected_role" class="w-100">
+                                            <option selected="true" disabled>-------------</option>
+                                            <option>Administrator</option>
+                                            <option>Editor</option>
+                                            <option>Viewer</option>
+                                        </select> 
+                                    </div>
+
+                                    <input 
+                                        type="hidden" 
+                                        value="{{join_request.id}}" 
+                                        name="join_request_id"
+                                    >
+                                
+                                    <div class="flex-this flex-end margin-top-16">
+                                        <button class="primary-btn action-btn">Accept Request</button>
+                                    </div>
+
+                                </form>
+                            </div>
+
+                        </div>
+                
+                    </div>
+                </div>
 
             </div>
 

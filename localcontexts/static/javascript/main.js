@@ -888,6 +888,12 @@ function openMemberModal() {
     }
 }
 
+function acceptJoinRequestModal(elem) {
+    console.log(elem.id)
+    let modal = document.getElementById(`acceptJoinRequestModal_${elem.id}`)
+    modal.classList.replace('hide', 'show')
+}
+
 // use
 // openBtnClasses: '.example'
 // modalPartialId: 'modalName'

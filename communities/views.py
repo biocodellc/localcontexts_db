@@ -209,12 +209,26 @@ def member_requests(request, pk):
         return render(request, 'communities/restricted.html', {'community': community})
     else:
         join_requests = JoinRequest.objects.filter(community=community)
+        if request.method == 'POST':
+            selected_role = request.POST.get('selected_role')
+            join_request_id = request.POST.get('join_request_id')
+
+            accepted_join_request(community, join_request_id, selected_role)
+            return redirect('member-requests', community.id)
+
         context = {
             'member_role': member_role,
             'community': community,
             'join_requests': join_requests,
         }
         return render(request, 'communities/member-requests.html', context)
+
+@login_required(login_url='login')
+def delete_join_request(request, pk, join_id):
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
+    join_request = JoinRequest.objects.get(id=join_id)
+    join_request.delete()
+    return redirect('member-requests', community.id)
 
 @login_required(login_url='login')
 def remove_member(request, pk, member_id):
@@ -242,13 +256,6 @@ def remove_member(request, pk, member_id):
         return redirect('manage-orgs')
     else:
         return redirect('members', community.id)
-
-@login_required(login_url='login')
-def delete_join_request(request, pk, join_id):
-    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
-    join_request = JoinRequest.objects.get(id=join_id)
-    join_request.delete()
-    return redirect('member-requests', community.id)
 
 # Select Labels to Customize
 @login_required(login_url='login')

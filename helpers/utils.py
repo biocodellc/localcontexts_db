@@ -3,9 +3,10 @@ import requests
 import zipfile
 from django.template.loader import get_template
 from io import BytesIO
+from accounts.models import UserAffiliation
 from xhtml2pdf import pisa
 
-from communities.models import Community
+from communities.models import Community, JoinRequest
 from institutions.models import Institution
 from researchers.models import Researcher
 from .models import Connections, Notice, InstitutionNotice
@@ -28,6 +29,31 @@ def change_member_role(org, member, current_role, new_role):
             org.editors.add(member)
         elif new_role == 'Viewer':
             org.viewers.add(member)
+
+def accepted_join_request(org, join_request_id, selected_role):
+    join_request = JoinRequest.objects.get(id=join_request_id)
+    print(org, join_request, selected_role)
+    if selected_role is None:
+        pass
+    else:
+        # Add organization to userAffiliation
+        affiliation = UserAffiliation.objects.get(user=join_request.user_from)
+        if isinstance(org, Community):
+            affiliation.communities.add(org)
+        if isinstance(org, Institution):
+            affiliation.institutions.add(org)
+
+        # Add member to role
+        if selected_role == 'Administrator':
+            org.admins.add(join_request.user_from)
+        elif selected_role == 'Editor':
+            org.editors.add(join_request.user_from)
+        elif selected_role == 'Viewer':
+            org.viewers.add(join_request.user_from)
+        
+        # Delete join request
+        join_request.delete()
+
 
 def set_language_code(instance):
     url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
