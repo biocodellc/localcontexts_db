@@ -214,6 +214,7 @@ def member_requests(request, pk):
             join_request_id = request.POST.get('join_request_id')
 
             accepted_join_request(community, join_request_id, selected_role)
+            messages.add_message(request, messages.SUCCESS, 'You have successfully added a new member!')
             return redirect('member-requests', community.id)
 
         context = {

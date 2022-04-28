@@ -889,9 +889,13 @@ function openMemberModal() {
 }
 
 function acceptJoinRequestModal(elem) {
-    console.log(elem.id)
     let modal = document.getElementById(`acceptJoinRequestModal_${elem.id}`)
     modal.classList.replace('hide', 'show')
+    
+    const closeBtn = document.getElementById(`closeModal${elem.id}`)
+    closeBtn.onclick = function() {
+        modal.classList.replace('show', 'hide')
+    }
 }
 
 // use

@@ -4,7 +4,7 @@ from django.contrib import messages
 
 from .utils import *
 from projects.utils import add_to_contributors
-from helpers.utils import dev_prod_or_local, create_notices, change_member_role
+from helpers.utils import *
 
 from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson
@@ -235,6 +235,14 @@ def member_requests(request, pk):
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
         join_requests = JoinRequest.objects.filter(institution=institution)
+        if request.method == 'POST':
+            selected_role = request.POST.get('selected_role')
+            join_request_id = request.POST.get('join_request_id')
+
+            accepted_join_request(institution, join_request_id, selected_role)
+            messages.add_message(request, messages.SUCCESS, 'You have successfully added a new member!')
+            return redirect('institution-member-requests', institution.id)
+
         context = {
             'member_role': member_role,
             'institution': institution,
