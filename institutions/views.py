@@ -225,6 +225,20 @@ def institution_members(request, pk):
         }    
         return render(request, 'institutions/members.html', context)
 
+@login_required(login_url='login')
+def member_requests(request, pk):
+    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    member_role = check_member_role_institution(request.user, institution)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'institutions/restricted.html', {'institution': institution})
+    else:
+        join_requests = JoinRequest.objects.filter(institution=institution)
+        context = {
+            'member_role': member_role,
+            'institution': institution,
+            'join_requests': join_requests,
+        }
+        return render(request, 'institutions/member-requests.html', context)
     
 @login_required(login_url='login')
 def remove_member(request, pk, member_id):

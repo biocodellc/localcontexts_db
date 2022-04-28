@@ -200,6 +200,21 @@ def community_members(request, pk):
         return render(request, 'communities/members.html', context)
 
 @login_required(login_url='login')
+def member_requests(request, pk):
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
+    member_role = check_member_role_community(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        join_requests = JoinRequest.objects.filter(community=community)
+        context = {
+            'member_role': member_role,
+            'community': community,
+            'join_requests': join_requests,
+        }
+        return render(request, 'communities/member-requests.html', context)
+
+@login_required(login_url='login')
 def remove_member(request, pk, member_id):
     community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     member = User.objects.get(id=member_id)

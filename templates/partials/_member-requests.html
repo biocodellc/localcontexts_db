@@ -1,0 +1,78 @@
+<div class="content-card-v2 content-card-space white-bg">
+    <div class="margin-bottom-16">
+        <small class="bold">
+            <a 
+                class="darkteal-text" 
+                {% if community %}
+                    href="{% url 'members' community.id %}"
+                {% endif %}
+                {% if institution %}
+                    href="{% url 'institution-members' institution.id %}"
+                {% endif %}
+            >Members</a> 
+            <span class="grey-text"> >> Member Requests</span>
+        </small>
+    </div>
+    <div><h2 class="no-top-margin">Member Requests</h2></div>
+</div>
+
+{% if join_requests %}
+    {% for join_request in join_requests %}
+        <section class="dash-driver flex-this column">
+            <div class="flex-this space-between">
+                <div>
+                    <small class="grey-text bold">Request Sent: {{ join_request.date_sent }}</small>
+                </div>
+
+                
+                <div class="flex-this dash-btn-container flex-end">
+                    <div class="no-top-margin margin-right-8"><a class="primary-btn white-btn" a href="#" class="pointer">Delete Request</a></div>
+                    <div><a href="#" class="primary-btn action-btn">Accept Request</a></div>
+                </div>   
+
+            </div>
+
+            <div class="w-70">
+                <h2 class="no-top-margin no-bottom-margin">{{ join_request.user_from.get_full_name }} </h2>
+                {% if join_request.user_from.profile.position %}
+                    <h3 class="no-top-margin">{{ join_request.user_from.profile.position }}</h3>
+                {% endif %}
+
+                {% if not join_request.user_from.profile.city_town and not join_request.user_from.profile.state_province_region and not join_request.user_from.profile.country.name %}
+                {% else %}
+                    <h4 class="no-top-margin">
+                        {% if join_request.user_from.profile.city_town %} {{ join_request.user_from.profile.city_town }}, {% endif %}
+                        {% if join_request.user_from.profile.state_province_region %}{{ join_request.user_from.profile.state_province_region }}, {% endif %}
+                        {% if join_request.user_from.profile.country %} {{ join_request.user_from.profile.country.name }} {% endif%}
+                    </h4>
+                {% endif %}
+
+                {% if join_request.user_from.profile.languages_spoken %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Languages</small>
+                            <p class="no-top-margin">{{ join_request.user_from.profile.languages_spoken }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if join_request.user_from.profile.affiliation %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Affiliations</small>
+                            <p class="no-top-margin">{{ join_request.user_from.profile.affiliation }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </section>
+    {% endfor %}
+{% endif %}
