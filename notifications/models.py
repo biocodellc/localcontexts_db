@@ -45,7 +45,8 @@ class ActionNotification(models.Model):
         ('Labels', 'labels'),
         ('Connections', 'connections'),
         ('Activity', 'activity'),
-        ('Projects', 'projects')
+        ('Projects', 'projects'),
+        ('Members', 'members'),
     )
 
     title = models.CharField(max_length=200)

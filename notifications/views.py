@@ -43,33 +43,6 @@ def show_notification(request, pk):
 
                 return render(request, 'notifications/read.html', {'notification': n})
 
-            elif n.notification_type == 'Request':
-                join_request = JoinRequest.objects.get(id=n.reference_id)
-                join_request.status = 'accepted'
-                join_request.save()
-
-                # Add community to UserAffiliation
-                sent_from_affiliation.communities.add(community)
-                sent_from_affiliation.save()
-
-                radio_value = request.POST.get('role')
-
-                if radio_value == 'admin':
-                    community.admins.add(sent_from)
-                elif radio_value == 'editor':
-                    community.editors.add(sent_from)
-                elif radio_value == 'viewer':
-                    community.viewers.add(sent_from)
-                community.save()
-
-                n.delete() # delete request notification 
-
-                # Send email letting user know they are a member
-                send_membership_email(request, community, sent_from, radio_value)
-
-                messages.add_message(request, messages.SUCCESS, f'{sent_from} has been added to {community}!')
-                return redirect('dashboard')
-
         if n.institution:
             institution_id = n.institution.id
             institution = Institution.objects.get(id=institution_id)
@@ -96,32 +69,6 @@ def show_notification(request, pk):
                 send_membership_email(request, institution, sent_to, n.role)
 
                 return render(request, 'notifications/read.html', {'notification': n})
-
-            elif n.notification_type == 'Request':
-                join_request = JoinRequest.objects.get(id=n.reference_id)
-                join_request.status = 'accepted'
-                join_request.save()
-
-                # Add institution to UserAffiliation
-                sent_from_affiliation.institutions.add(institution)
-                sent_from_affiliation.save()
-
-                # get radio btn value from template
-                radio_value = request.POST.get('role')
-                if radio_value == 'admin':
-                    institution.admins.add(sent_from)
-                elif radio_value == 'editor':
-                    institution.editors.add(sent_from)
-                elif radio_value == 'viewer':
-                    institution.viewers.add(sent_from)
-                institution.save()
-
-                n.delete() # delete request notification 
-
-                # Send email letting user know they are a member
-                send_membership_email(request, institution, sent_from, radio_value)
-                messages.add_message(request, messages.SUCCESS, f'{sent_from} has been added to {institution}!')
-                return redirect('dashboard')
                 
     return render(request, 'notifications/notification.html', { 'notification': n })
 
