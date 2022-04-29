@@ -6,11 +6,48 @@ from io import BytesIO
 from accounts.models import UserAffiliation
 from xhtml2pdf import pisa
 
-from communities.models import Community, JoinRequest
+from communities.models import Community, JoinRequest, InviteMember
 from institutions.models import Institution
 from researchers.models import Researcher
 from .models import Connections, Notice, InstitutionNotice
 from notifications.models import *
+
+def accept_member_invite(invite_id):
+    invite = InviteMember.objects.get(id=invite_id)
+    affiliation = UserAffiliation.objects.get(user=invite.receiver)
+
+    # Which organization, add yto user affiliation
+    org = ''
+    if invite.community:
+        org = invite.community
+        affiliation.communities.add(org)
+
+    if invite.institution:
+        org = invite.institution
+        affiliation.institutions.add(org)
+    
+    affiliation.save()
+    
+    # Add user to role
+    if invite.role == 'viewer':
+        org.viewers.add(invite.receiver)
+    elif invite.role == 'admin':
+        org.admins.add(invite.receiver)
+    elif invite.role == 'editor':
+        org.editors.add(invite.receiver)
+    
+    org.save()
+
+    # Send email letting user know they are a member
+    # send_membership_email(request, community, sent_to, n.role)
+
+    # Find relevant user notification to delete
+    if UserNotification.objects.filter(to_user=invite.receiver, from_user=invite.sender, reference_id=invite.id).exists():
+        notification = UserNotification.objects.get(to_user=invite.receiver, from_user=invite.sender, reference_id=invite.id)
+        notification.delete()
+
+    # Delete invitation
+    invite.delete()
 
 def change_member_role(org, member, current_role, new_role):
     if new_role is None:

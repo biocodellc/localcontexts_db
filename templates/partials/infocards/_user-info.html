@@ -45,7 +45,7 @@
         </div>
         
         <div class="flex-this dash-btn-container flex-end">
-            {% if 'update-profile' in request.path or 'manage' in request.path or 'change-password' in request.path or 'deactivate' in request.path %}
+            {% if 'update-profile' in request.path or 'manage' in request.path or 'change-password' in request.path or 'deactivate' in request.path or 'member-invites' in request.path %}
                 <div class="margin-right-8"><a href="{% url 'dashboard' %}" class="primary-btn white-btn">Back to Profile</a></div>
             {% else %}
                 <!-- Notifications -->
@@ -72,7 +72,9 @@
                                             onclick="markAsRead(this); return true;"
 
                                             {% if not n.viewed %}
-                                                href="{% url 'show' n.id %}"
+                                                {% if n.notification_type == 'Invitation' %}
+                                                    href="{% url 'member-invitations' %}"
+                                                {% endif %}
                                             {% else %}
                                                 href="{% url 'read' n.id %}"
                                             {% endif %}

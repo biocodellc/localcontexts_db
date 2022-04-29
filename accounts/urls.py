@@ -13,6 +13,7 @@ urlpatterns = [
     path('verify/', views.verify, name='verify'),
 
     path('invite/', views.invite_user, name='invite'),
+    path('member-invites/', views.member_invitations, name='member-invitations'),
 
     path('dashboard/', views.dashboard, name='dashboard'),
 

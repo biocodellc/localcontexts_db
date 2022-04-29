@@ -6,6 +6,7 @@ from django.contrib.auth.views import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 
 from django.contrib.auth.decorators import login_required
+from urllib3 import Retry
 
 from projects.models import Project
 from .decorators import unauthenticated_user
@@ -16,7 +17,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
 
 from django.contrib.auth.models import User
-from communities.models import Community, JoinRequest
+from communities.models import Community, InviteMember, JoinRequest
 from institutions.models import Institution
 from researchers.models import Researcher
 from bclabels.models import BCLabel
@@ -25,6 +26,7 @@ from helpers.models import Notice
 from notifications.models import UserNotification
 
 from researchers.utils import is_user_researcher
+from helpers.utils import accept_member_invite
 
 from helpers.emails import *
 from .models import *
@@ -250,6 +252,22 @@ def manage_organizations(request):
     if Researcher.objects.filter(user=request.user).exists():
         researcher = Researcher.objects.get(user=request.user)
     return render(request, 'accounts/manage-orgs.html', { 'profile': profile, 'affiliations': affiliations, 'researcher': researcher, 'users_name': users_name })
+
+@login_required(login_url='login')
+def member_invitations(request):
+    profile = Profile.objects.select_related('user').get(user=request.user)
+    member_invites = InviteMember.objects.filter(receiver=request.user)
+
+    if request.method == 'POST':
+        invite_id = request.POST.get('invite_id')
+        accept_member_invite(invite_id)
+        return redirect('member-invitations')
+
+    context = {
+        'profile': profile,
+        'member_invites': member_invites,
+    }
+    return render(request, 'accounts/member-invitations.html', context)
 
 @login_required(login_url='login')
 def invite_user(request):
