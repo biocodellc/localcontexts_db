@@ -12,7 +12,9 @@ from researchers.models import Researcher
 from .models import Connections, Notice, InstitutionNotice
 from notifications.models import *
 
-def accept_member_invite(invite_id):
+from helpers.emails import send_membership_email
+
+def accept_member_invite(request, invite_id):
     invite = InviteMember.objects.get(id=invite_id)
     affiliation = UserAffiliation.objects.get(user=invite.receiver)
 
@@ -39,7 +41,7 @@ def accept_member_invite(invite_id):
     org.save()
 
     # Send email letting user know they are a member
-    # send_membership_email(request, community, sent_to, n.role)
+    send_membership_email(request, org, invite.receiver, invite.role)
 
     # Find relevant user notification to delete
     if UserNotification.objects.filter(to_user=invite.receiver, from_user=invite.sender, reference_id=invite.id).exists():

@@ -260,7 +260,7 @@ def member_invitations(request):
 
     if request.method == 'POST':
         invite_id = request.POST.get('invite_id')
-        accept_member_invite(invite_id)
+        accept_member_invite(request, invite_id)
         return redirect('member-invitations')
 
     context = {
