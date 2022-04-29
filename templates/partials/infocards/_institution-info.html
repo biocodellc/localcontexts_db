@@ -35,20 +35,29 @@
                             {% for n in notifications %}
 
                                 <div class="border-bottom-solid-teal">
-                                    {% if n.notification_type == 'Members' %}
-                                        <a href="{% url 'institution-member-requests' institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
-                                    {% endif %}
-                                    {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
-                                    <!-- TODO: Figure out what this URL should link to -->
-                                        {% if n.reference_id %}
-                                            <a href="{% anchor 'institution-projects' n.reference_id institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
-                                        {% else %}
-                                            <a href="{% url 'institution-projects' institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
+                                    <a
+                                        id="{{ institution.id }}_{{ n.id }}" 
+                                        onclick="markAsRead(this); return true;"
+
+                                        {% if n.notification_type == 'Members' %}
+                                            {% if n.reference_id %}
+                                                href="{% url 'institution-member-requests' institution.id %}" 
+                                            {% else %}
+                                                href="{% url 'institution-members' institution.id %}"
+                                            {% endif %}
                                         {% endif %}
-                                    {% endif %}
-                                    {% if n.notification_type == 'Connections' %}
-                                        <a href="#" id="{{ institution.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
-                                    {% endif %}
+                                        {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
+                                            {% if n.reference_id %}
+                                                href="{% anchor 'institution-projects' n.reference_id institution.id %}" 
+                                            {% else %}
+                                                href="{% url 'institution-projects' institution.id %}" 
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if n.notification_type == 'Connections' %}
+                                            href="{% url 'institution-connections' institution.id %}" 
+                                        {% endif %}
+                                    >
+
                                         <div class="flex-this space-between margin-top-1">
                                             <div>
                                                 <span id="notification-label-tag-{{ n.id }}" 
@@ -65,6 +74,7 @@
                                         </div>
                                         <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
                                     </a>
+
                                 </div>
 
                             {% endfor %}

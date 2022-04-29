@@ -827,12 +827,6 @@ function toggleNotifications() {
     }
 }
 
-function showUserNotifications() {
-    let div = document.getElementById('userNotifications')
-    div.classList.toggle('hide')
-}
-
-
 if (window.location.href.includes('connect-community') || window.location.href.includes('connect-institution')) {
 
     let inputList = document.getElementById('selectedOrganizationInputList')

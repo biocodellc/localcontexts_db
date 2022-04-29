@@ -9,7 +9,7 @@ from helpers.utils import *
 from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson
 from communities.models import Community, JoinRequest
-from notifications.models import ActionNotification
+from notifications.models import ActionNotification, UserNotification
 from helpers.models import ProjectComment, ProjectStatus, Notice, InstitutionNotice, EntitiesNotified, Connections
 
 from django.contrib.auth.models import User

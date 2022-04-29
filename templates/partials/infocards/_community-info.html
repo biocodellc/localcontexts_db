@@ -34,24 +34,31 @@
                             {% for n in notifications %}
 
                                 <div class="border-bottom-solid-teal">
-                                    <!-- TODO: add custom anchor tag with referenceid -->
-                                    {% if n.notification_type == 'Labels' %}
-                                        <a href="{% url 'select-label' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
-                                    {% endif %}
-                                    {% if n.notification_type == 'Members' %}
-                                        <a href="{% url 'member-requests' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
-                                    {% endif %}
-                                    {% if n.notification_type == 'Projects' %}
-                                        {% if n.reference_id %}
-                                            <a href="{% anchor 'community-projects' n.reference_id community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
-                                        {% else %}
-                                            <a href="{% url 'community-projects' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
-                                        {% endif %}
-                                    {% endif %}
+                                    <a
+                                        id="{{ community.id }}_{{ n.id }}" 
+                                        onclick="markAsRead(this); return true;"
 
-                                    {% if n.notification_type == 'Connections' %}
-                                        <a id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
-                                    {% endif %}
+                                        {% if n.notification_type == 'Labels' %}
+                                            href="{% url 'select-label' community.id %}"
+                                        {% endif %}
+                                        {% if n.notification_type == 'Members' %}
+                                            {% if n.reference_id %}
+                                                href="{% url 'member-requests' community.id %}"
+                                            {% else %}
+                                                href="{% url 'members' community.id %}"
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if n.notification_type == 'Projects' %}
+                                            {% if n.reference_id %}
+                                                href="{% anchor 'community-projects' n.reference_id community.id %}"
+                                            {% else %}
+                                                href="{% url 'community-projects' community.id %}"
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if n.notification_type == 'Connections' %}
+                                            href="{% url 'community-connections' community.id %}"
+                                        {% endif %}
+                                    >
                                     
                                         <div class="flex-this space-between margin-top-1">
                                             <div>
@@ -70,6 +77,7 @@
         
                                         <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
                                     </a>
+
                                 </div>
 
                             {% endfor %}

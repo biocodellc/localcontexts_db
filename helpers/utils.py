@@ -10,12 +10,13 @@ from communities.models import Community, JoinRequest
 from institutions.models import Institution
 from researchers.models import Researcher
 from .models import Connections, Notice, InstitutionNotice
+from notifications.models import *
 
 def change_member_role(org, member, current_role, new_role):
-    print(current_role, new_role)
     if new_role is None:
         pass
     else:
+        # Remove user from previous role
         if current_role == 'admin':
             org.admins.remove(member)
         elif current_role == 'editor':
@@ -23,6 +24,7 @@ def change_member_role(org, member, current_role, new_role):
         elif current_role == 'viewer':
             org.viewers.remove(member)
         
+        # Add user to new role
         if new_role == 'Administrator':
             org.admins.add(member)
         elif new_role == 'Editor':
@@ -31,8 +33,8 @@ def change_member_role(org, member, current_role, new_role):
             org.viewers.add(member)
 
 def accepted_join_request(org, join_request_id, selected_role):
+    # Passes instance of Community or Institution, a join_request pk, and a selected role
     join_request = JoinRequest.objects.get(id=join_request_id)
-    print(org, join_request, selected_role)
     if selected_role is None:
         pass
     else:
@@ -51,6 +53,11 @@ def accepted_join_request(org, join_request_id, selected_role):
         elif selected_role == 'Viewer':
             org.viewers.add(join_request.user_from)
         
+        # Create UserNotification
+        sender = join_request.user_from
+        title = f"You are now a member of {org}!"
+        UserNotification.objects.create(to_user=sender, title=title, notification_type="Accept")
+
         # Delete join request
         join_request.delete()
 

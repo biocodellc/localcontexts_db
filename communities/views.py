@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
 from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections
-from notifications.models import ActionNotification
+from notifications.models import *
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from projects.models import ProjectContributors, Project, ProjectPerson

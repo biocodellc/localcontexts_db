@@ -11,7 +11,6 @@ class UserNotification(models.Model):
         ('Request', 'request'),
         ('Approval', 'approval'),
         ('Accept', 'accept'),
-        ('Create', 'create'),
     )
 
     ROLES = (

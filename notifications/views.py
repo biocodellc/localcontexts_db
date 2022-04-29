@@ -11,9 +11,9 @@ from django.contrib import messages
 def show_notification(request, pk):
     n = UserNotification.objects.get(id=pk)
     sent_to = n.to_user
-    sent_from = n.from_user
+    # sent_from = n.from_user
     sent_to_affiliation = UserAffiliation.objects.get(user=sent_to)
-    sent_from_affiliation = UserAffiliation.objects.get(user=sent_from)
+    # sent_from_affiliation = UserAffiliation.objects.get(user=sent_from)
 
     if request.method == 'POST':
         if n.community:
