@@ -19,7 +19,9 @@
 <p>
 
     <strong>Next steps?</strong><br>
-    Login <a href="http://{{domain}}{% url 'login' %}" target="_blank">here</a> to Local Contexts Hub and go to My Profile, then Notifications to see and respond to this join request.
+    Login <a href="http://{{domain}}{% url 'login' %}" target="_blank">here</a> to Local Contexts Hub and go to the  
+    {% if organization.community_name %}{{ organization.community_name }}{% elif organization.institution_name %}{{ organization.institution_name }}{% endif %}
+   account Notifications, to see and respond to this join request.
     
     {% include 'snippets/emails/_footer-snippet.html' %}
 
