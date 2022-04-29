@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% load custom_noti_tags %}
+{% extends 'base.html' %}
 {% block content %}
 
 {% include 'partials/headers/_auth-header.html' %}
@@ -12,36 +12,6 @@
                     {% csrf_token %}
                     <input type="hidden">
                     <button class="primary-btn action-btn margin-top-2 ">Accept Invitation</button>
-                </form>
-            {% endif %}
-
-            {% if notification.notification_type == 'Request' %}
-            
-                {% display_joinrequest_message notification.reference_id as request_message %}
-                {% if request_message %}
-                    <p>
-                        <span class="bold">Message included with this request:</span><br> 
-                        {{ request_message }}
-                    </p>
-                {% endif %}
-
-                {% display_joinrequest_desired_role notification.reference_id as desired_role %}
-                {% if desired_role %}
-                    <p> <span class="bold">Desired role:</span> {{ desired_role }}</p>
-                {% endif %}
-
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <input type="hidden">
-
-                    <p>Please select responsibility for the user:</p>
-                    <input type="radio" name="role" value="admin"><label for="admin">Admin</label>
-                    <input type="radio" name="role" value="editor"><label for="editor">Editor</label>
-                    <input type="radio" name="role" value="viewer"><label for="viewer">Viewer</label>
-                    <br>
-                    <button class="primary-btn action-btn margin-top-2">
-                        Add User to {% if notification.community %} Community {% else %} Institution {% endif %}
-                    </button>
                 </form>
             {% endif %}
 

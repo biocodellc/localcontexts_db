@@ -328,7 +328,7 @@ def organization_registry(request):
                     # Send email to community creator
                     send_join_request_email_admin(request, join_request, target_community)
 
-            messages.add_message(request, messages.SUCCESS, 'Your message was sent!')
+            messages.add_message(request, messages.SUCCESS, 'Sent!')
             return redirect('organization-registry')
         else:
             context = {

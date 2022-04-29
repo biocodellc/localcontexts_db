@@ -38,6 +38,9 @@
                                     {% if n.notification_type == 'Labels' %}
                                         <a href="{% url 'select-label' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
                                     {% endif %}
+                                    {% if n.notification_type == 'Members' %}
+                                        <a href="{% url 'member-requests' community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
+                                    {% endif %}
                                     {% if n.notification_type == 'Projects' %}
                                         {% if n.reference_id %}
                                             <a href="{% anchor 'community-projects' n.reference_id community.id %}" id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
@@ -47,7 +50,7 @@
                                     {% endif %}
 
                                     {% if n.notification_type == 'Connections' %}
-                                        <a href="#" id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
+                                        <a id="{{ community.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
                                     {% endif %}
                                     
                                         <div class="flex-this space-between margin-top-1">
@@ -59,6 +62,7 @@
                                                 {% if n.notification_type == 'Activity' %} Activity {% endif %}
                                                 {% if n.notification_type == 'Projects' %} Projects {% endif %}
                                                 {% if n.notification_type == 'Connections' %} Connections {% endif %}
+                                                {% if n.notification_type == 'Members' %} Members {% endif %}
                                                 </span>
                                             </div>
                                             <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>

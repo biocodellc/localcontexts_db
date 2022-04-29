@@ -35,6 +35,9 @@
                             {% for n in notifications %}
 
                                 <div class="border-bottom-solid-teal">
+                                    {% if n.notification_type == 'Members' %}
+                                        <a href="{% url 'institution-member-requests' institution.id %}" id="{{ institution.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
+                                    {% endif %}
                                     {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
                                     <!-- TODO: Figure out what this URL should link to -->
                                         {% if n.reference_id %}
@@ -56,6 +59,7 @@
                                                 {% if n.notification_type == 'Activity' %} Activity {% endif %}
                                                 {% if n.notification_type == 'Projects' %} Projects {% endif %}
                                                 {% if n.notification_type == 'Connections' %} Connections {% endif %}
+                                                {% if n.notification_type == 'Members' %} Members {% endif %}
                                             </span></div>
                                             <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
                                         </div>

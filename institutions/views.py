@@ -4,7 +4,7 @@ from django.contrib import messages
 
 from .utils import *
 from projects.utils import add_to_contributors
-from helpers.utils import dev_prod_or_local, create_notices, change_member_role
+from helpers.utils import *
 
 from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson
@@ -186,6 +186,7 @@ def institution_members(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'institutions/restricted.html', {'institution': institution})
     else:
+        join_requests_count = JoinRequest.objects.filter(institution=institution).count()
         form = InviteMemberForm(request.POST or None)
         if request.method == 'POST':
             if 'change_member_role_btn' in request.POST:
@@ -222,9 +223,39 @@ def institution_members(request, pk):
             'institution': institution,
             'form': form,
             'member_role': member_role,
+            'join_requests_count': join_requests_count,
         }    
         return render(request, 'institutions/members.html', context)
 
+@login_required(login_url='login')
+def member_requests(request, pk):
+    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    member_role = check_member_role_institution(request.user, institution)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'institutions/restricted.html', {'institution': institution})
+    else:
+        join_requests = JoinRequest.objects.filter(institution=institution)
+        if request.method == 'POST':
+            selected_role = request.POST.get('selected_role')
+            join_request_id = request.POST.get('join_request_id')
+
+            accepted_join_request(institution, join_request_id, selected_role)
+            messages.add_message(request, messages.SUCCESS, 'You have successfully added a new member!')
+            return redirect('institution-member-requests', institution.id)
+
+        context = {
+            'member_role': member_role,
+            'institution': institution,
+            'join_requests': join_requests,
+        }
+        return render(request, 'institutions/member-requests.html', context)
+
+@login_required(login_url='login')
+def delete_join_request(request, pk, join_id):
+    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    join_request = JoinRequest.objects.get(id=join_id)
+    join_request.delete()
+    return redirect('institution-member-requests', institution.id)
     
 @login_required(login_url='login')
 def remove_member(request, pk, member_id):
