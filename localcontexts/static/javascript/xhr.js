@@ -8,6 +8,15 @@ function markAsRead(elem) {
     xhrRequestPost(url, notificationID)
 }
 
+function markAsReadUser(elem) {
+    let spanId = elem.id
+    let splitString = spanId.split('_')
+    let notificationID = splitString[1]
+
+    let url = `/notifications/read/${notificationID}/`
+    xhrRequestPost(url, notificationID)
+}
+
 // Generic function for notifications
 var xhrRequestPost = (url, notificationID) => {
     const method = 'POST'

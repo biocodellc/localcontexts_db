@@ -69,11 +69,14 @@
                                         
                                         <a 
                                             id="{{ request.user.id }}_{{ n.id }}"
-                                            onclick="markAsRead(this); return true;"
+                                            onclick="markAsReadUser(this); return true;"
 
                                             {% if not n.viewed %}
                                                 {% if n.notification_type == 'Invitation' %}
                                                     href="{% url 'member-invitations' %}"
+                                                {% endif %}
+                                                {% if n.notification_type == 'Accept' %}
+                                                    href="{% url 'read' n.id %}"
                                                 {% endif %}
                                             {% else %}
                                                 href="{% url 'read' n.id %}"
