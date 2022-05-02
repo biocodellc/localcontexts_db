@@ -10,9 +10,13 @@ urlpatterns = [
     path('update/<str:pk>/', views.update_community, name="update-community"),
 
     path('members/<str:pk>/', views.community_members, name="members"),
+    path('members/requests/<str:pk>/', views.member_requests, name="member-requests"),
     path('members/remove/<str:pk>/<str:member_id>', views.remove_member, name="remove-member"),
+
+    path('members/join-request/delete/<str:pk>/<str:join_id>', views.delete_join_request, name="delete-join-request"),
     
     path('labels/select/<str:pk>/', views.select_label, name="select-label"),
+    path('labels/view/<str:pk>/<uuid:label_uuid>/', views.view_label, name="view-label"),
 
     path('labels/customize/<str:pk>/<str:label_type>', views.customize_label, name="customize-label"),
     path('labels/<str:pk>/<str:label_id>/', views.approve_label, name="approve-label"),

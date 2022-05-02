@@ -2,135 +2,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import *
 from communities.models import *
-from accounts.models import UserAffiliation
-from helpers.emails import send_membership_email
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib import messages
 
 @login_required(login_url='login')
-def show_notification(request, pk):
-    n = UserNotification.objects.get(id=pk)
-    sent_to = n.to_user
-    sent_from = n.from_user
-    sent_to_affiliation = UserAffiliation.objects.get(user=sent_to)
-    sent_from_affiliation = UserAffiliation.objects.get(user=sent_from)
-
-    if request.method == 'POST':
-        if n.community:
-            community_id = n.community.id
-            community = Community.objects.get(id=community_id)
-
-            if n.notification_type == 'Invitation':
-                invite = InviteMember.objects.get(id=n.reference_id) #Use reference id to find id of Invite Member instance
-                invite.status = 'accepted'
-                invite.save()
-
-                # Add community to UserAffiliation
-                sent_to_affiliation.communities.add(community)
-                sent_to_affiliation.save()
-
-                # Add user as target role to community.
-                if n.role == 'viewer':
-                    community.viewers.add(sent_to)
-                elif n.role == 'admin':
-                    community.admins.add(sent_to)
-                elif n.role == 'editor':
-                    community.editors.add(sent_to)
-                community.save()
-
-                # Send email letting user know they are a member
-                send_membership_email(request, community, sent_to, n.role)
-
-                return render(request, 'notifications/read.html', {'notification': n})
-
-            elif n.notification_type == 'Request':
-                join_request = JoinRequest.objects.get(id=n.reference_id)
-                join_request.status = 'accepted'
-                join_request.save()
-
-                # Add community to UserAffiliation
-                sent_from_affiliation.communities.add(community)
-                sent_from_affiliation.save()
-
-                radio_value = request.POST.get('role')
-
-                if radio_value == 'admin':
-                    community.admins.add(sent_from)
-                elif radio_value == 'editor':
-                    community.editors.add(sent_from)
-                elif radio_value == 'viewer':
-                    community.viewers.add(sent_from)
-                community.save()
-
-                n.delete() # delete request notification 
-
-                # Send email letting user know they are a member
-                send_membership_email(request, community, sent_from, radio_value)
-
-                messages.add_message(request, messages.SUCCESS, f'{sent_from} has been added to {community}!')
-                return redirect('dashboard')
-
-        if n.institution:
-            institution_id = n.institution.id
-            institution = Institution.objects.get(id=institution_id)
-
-            if n.notification_type == 'Invitation':
-                invite = InviteMember.objects.get(id=n.reference_id) #Use reference id to find id of Invite Member instance
-                invite.status = 'accepted'
-                invite.save()
-
-                # Add institution to UserAffiliation
-                sent_to_affiliation.institutions.add(institution)
-                sent_to_affiliation.save()
-
-                # Add user as target role to institution.
-                if n.role == 'viewer':
-                    institution.viewers.add(sent_to)
-                elif n.role == 'admin':
-                    institution.admins.add(sent_to)
-                elif n.role == 'editor':
-                    institution.editors.add(sent_to)
-                institution.save()
-
-                # Send email letting user know they are a member
-                send_membership_email(request, institution, sent_to, n.role)
-
-                return render(request, 'notifications/read.html', {'notification': n})
-
-            elif n.notification_type == 'Request':
-                join_request = JoinRequest.objects.get(id=n.reference_id)
-                join_request.status = 'accepted'
-                join_request.save()
-
-                # Add institution to UserAffiliation
-                sent_from_affiliation.institutions.add(institution)
-                sent_from_affiliation.save()
-
-                # get radio btn value from template
-                radio_value = request.POST.get('role')
-                if radio_value == 'admin':
-                    institution.admins.add(sent_from)
-                elif radio_value == 'editor':
-                    institution.editors.add(sent_from)
-                elif radio_value == 'viewer':
-                    institution.viewers.add(sent_from)
-                institution.save()
-
-                n.delete() # delete request notification 
-
-                # Send email letting user know they are a member
-                send_membership_email(request, institution, sent_from, radio_value)
-                messages.add_message(request, messages.SUCCESS, f'{sent_from} has been added to {institution}!')
-                return redirect('dashboard')
-                
-    return render(request, 'notifications/notification.html', { 'notification': n })
-
-@login_required(login_url='login')
+@csrf_exempt
 def read_notification(request, pk):
     n = UserNotification.objects.get(id=pk)
     n.viewed = True
     n.save()
-    return render(request, 'notifications/read.html', {'notification': n})
+    # return render(request, 'notifications/read.html', {'notification': n})
+    return redirect('dashboard')
 
 
 @login_required(login_url='login')

@@ -21,10 +21,10 @@
 }
 
 .dash-btn-container {
-    width: 22%;
+    width: 40%;
 }
 
-.noti-bell, .dash-icons-big {
+.dash-icons-big {
     padding: 10px;
 }
 
@@ -119,36 +119,6 @@
     padding: 8px 16px;
     border: 1px solid #E6F1F3;
     border-radius: 4px;
-}
-
-/* USER NOTIFICATIONS */
-
-.noti-card a {
-    color: black;
-}
-
-.noti-container {
-    width: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #A09D9D;
-}
-
-.noti-container span {
-    margin-left: 5px;
-}
-
-.noti-container p {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    width: 950px;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.tag-container {
-    width: 120px;
 }
 
 /* onboarding modal */

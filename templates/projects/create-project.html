@@ -2,7 +2,7 @@
 
         <div class="content-card-v2 content-card-space white-bg">
             <div>
-                <small>
+                <small class="bold">
                     <a class="darkteal-text" 
                         {% if community %} href="{% url 'community-projects' community.id %}" {% endif %}
                         {% if institution %} href="{% url 'institution-projects' institution.id %}" {% endif %}

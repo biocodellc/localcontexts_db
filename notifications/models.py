@@ -11,7 +11,6 @@ class UserNotification(models.Model):
         ('Request', 'request'),
         ('Approval', 'approval'),
         ('Accept', 'accept'),
-        ('Create', 'create'),
     )
 
     ROLES = (
@@ -21,16 +20,16 @@ class UserNotification(models.Model):
     )
 
     title = models.CharField(max_length=200, blank=True)
-    message = models.TextField()
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="to_user")
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="from_user")
-    notification_type = models.CharField(max_length=10, choices=TYPES, null=True)
+    message = models.TextField(blank=True)
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="to_user", blank=True)
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="from_user", blank=True)
+    notification_type = models.CharField(max_length=10, choices=TYPES, null=True, blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, blank=True)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True)
     role = models.CharField(max_length=8, choices=ROLES, null=True, blank=True)
     reference_id = models.CharField(max_length=20, null=True, blank=True)
-    viewed = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True, null=True)
+    viewed = models.BooleanField(default=False, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return f"{self.notification_type}-{self.title}"
@@ -45,18 +44,19 @@ class ActionNotification(models.Model):
         ('Labels', 'labels'),
         ('Connections', 'connections'),
         ('Activity', 'activity'),
-        ('Projects', 'projects')
+        ('Projects', 'projects'),
+        ('Members', 'members'),
     )
 
-    title = models.CharField(max_length=200)
-    notification_type = models.CharField(max_length=20, choices=TYPES, null=True)
+    title = models.CharField(max_length=200, blank=True)
+    notification_type = models.CharField(max_length=20, choices=TYPES, null=True, blank=True)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="notification_sender", blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, blank=True)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, null=True, blank=True)
     researcher = models.ForeignKey(Researcher, on_delete=models.CASCADE, null=True, blank=True)
     reference_id = models.CharField(max_length=50, null=True, blank=True)
-    viewed = models.BooleanField(default=False)
-    created = models.DateTimeField(auto_now_add=True, null=True)
+    viewed = models.BooleanField(default=False, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return f"{self.notification_type} - {self.title}"

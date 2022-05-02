@@ -1,85 +1,53 @@
 <!-- Community: Labels -->
 {% load static %}
 
-    <div>
+<div>
+    <img 
+        loading="lazy" 
+
+        {% if not bclabel.is_approved %}
+            class="opacity-4" 
+        {% endif %}
+        
         {% if bclabel.label_type == 'commercialization'%}
-            {% if bclabel.is_approved == False %}
-                <img loading="lazy" class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
-            {% else %}
-                <img loading="lazy" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
-            {% endif %}
+            src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" 
+            alt="BC Open to Commercialization (BC OC) Label"
         {% endif %}
-
         {% if bclabel.label_type == 'provenance' %}
-            {% if bclabel.is_approved == False %}
-                <img loading="lazy" class="opacity-4" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
-            {% else %}
-                <img loading="lazy" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
-            {% endif %}
+            src="{% static 'images/bc-labels/bc-provenance.png' %}"
+            alt="BC Provenance (BC P) Label"
         {% endif %}
-
         {% if bclabel.label_type == 'collaboration' %}
-            {% if bclabel.is_approved == False %}
-                <img loading="lazy" class="opacity-4" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC CB) Label">
-            {% else %}
-                <img loading="lazy" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC CB) Label">
-            {% endif %}
+            src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" 
+            alt="BC Open to Collaboration (BC CB) Label"
         {% endif %}
-
         {% if bclabel.label_type == 'consent_verified' %}
-            {% if bclabel.is_approved == False %}
-                <img loading="lazy" class="opacity-4" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
-            {% else %}
-                <img loading="lazy" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
-            {% endif %}
+            src="{% static 'images/bc-labels/bc-consent-verified.png' %}" 
+            alt="BC Consent Verified (BC CV) Label"
         {% endif %}
-
         {% if bclabel.label_type == 'multiple_community' %}
-            {% if bclabel.is_approved == False %}
-                <img loading="lazy" class="opacity-4" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
-            {% else %}
-                <img loading="lazy" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
-            {% endif %}
+            src="{% static 'images/bc-labels/bc-multiple-community.png' %}" 
+            alt="BC Multiple Communities (BC MC) Label"
         {% endif %}
-
         {% if bclabel.label_type == 'research' %}
-            {% if bclabel.is_approved == False %}
-                <img loading="lazy" class="opacity-4" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
-            {% else %}
-                <img loading="lazy" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
-            {% endif %}
+            src="{% static 'images/bc-labels/bc-research-use.png' %}" 
+            alt="BC Research Use (BC R) Label"
         {% endif %}
-
         {% if bclabel.label_type == 'non_commercial' %}
-            {% if bclabel.is_approved == False %}
-                <img loading="lazy" class="opacity-4" src="{% static 'images/bc-labels/bc-non-commercial.png' %}" alt="BC Non-Commercial (BC NC) Label">
-            {% else %}
-                <img loading="lazy" src="{% static 'images/bc-labels/bc-non-commercial.png' %}" alt="BC Non-Commercial (BC NC) Label">
-            {% endif %}
+            src="{% static 'images/bc-labels/bc-non-commercial.png' %}" 
+            alt="BC Non-Commercial (BC NC) Label"
         {% endif %}
-
         {% if bclabel.label_type == 'consent_non_verified' %}
-            {% if bclabel.is_approved == False %}
-                <img loading="lazy" class="opacity-4" src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" alt="BC Consent Non-Verified (BC CNV) Label">
-            {% else %}
-                <img loading="lazy" src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" alt="BC Consent Non-Verified (BC CNV) Label">
-            {% endif %}
+            src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" 
+            alt="BC Consent Non-Verified (BC CNV) Label"
         {% endif %}
-
         {% if bclabel.label_type == 'clan' %}
-            {% if bclabel.is_approved == False %}
-                <img loading="lazy" class="opacity-4" src="{% static 'images/bc-labels/bc-clan.png' %}" alt="BC Clan (BC CL) Label">
-            {% else %}
-                <img loading="lazy" src="{% static 'images/bc-labels/bc-clan.png' %}" alt="BC Clan (BC CL) Label">
-            {% endif %}
+            src="{% static 'images/bc-labels/bc-clan.png' %}" 
+            alt="BC Clan (BC CL) Label"
         {% endif %}
-
         {% if bclabel.label_type == 'outreach' %}
-            {% if bclabel.is_approved == False %}
-                <img loading="lazy" class="opacity-4" src="{% static 'images/bc-labels/bc-outreach.png' %}" alt="BC Outreach (BC O) Label">
-            {% else %}
-                <img loading="lazy" src="{% static 'images/bc-labels/bc-outreach.png' %}" alt="BC Outreach (BC O) Label">
-            {% endif %}
+            src="{% static 'images/bc-labels/bc-outreach.png' %}" 
+            alt="BC Outreach (BC O) Label"
         {% endif %}
-
-    </div>
+    >
+</div>

@@ -6,9 +6,14 @@
         
         <!-- Top Nav -->
         <div class="flex-this w-100 space-between">
-            <div class="loc">
-                <a href="{% url 'dashboard' %}" class="darkteal-text underline-hover"> {{ request.user.get_full_name }}</a> 
-                >> {{ researcher.user.get_full_name }}
+            <div class="loc grey-text bold">
+                <small>
+                    <a href="{% url 'dashboard' %}" class="bold darkteal-text underline-hover">
+                        {% if request.user.first_name %} {{ request.user.get_full_name }}
+                        {% else %}{{ request.user }}{% endif %}
+                    </a> 
+                    >> {{ researcher.user.get_full_name }}            
+                </small>
             </div>
 
             {% if user_can_view %}
@@ -23,24 +28,29 @@
                             ></i>
                         </a>
                         <div id="notification-v2" class="notification-dropdown-content">
-                        <div class="border-bottom-solid-teal center-text">
-                            <span class="orange-text">{{ researcher.user.get_full_name }} Notifications</span>
-                        </div>
+                            <div class="border-bottom-solid-teal center-text">
+                                <span class="orange-text">{{ researcher.user.get_full_name }} Notifications</span>
+                            </div>
 
                             {% if notifications %}
                                 {% for n in notifications %}
 
                                     <div class="border-bottom-solid-teal">
-                                        {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
-                                            {% if n.reference_id %}
-                                                <a href="{% anchor 'researcher-projects' n.reference_id researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
-                                            {% else %}
-                                                <a href="{% url 'researcher-projects' researcher.id %}" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
+                                        <a
+                                            id="{{ researcher.id }}_{{ n.id }}"
+                                            onclick="markAsRead(this); return true;"
+                                            {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
+                                                {% if n.reference_id %}
+                                                    href="{% anchor 'researcher-projects' n.reference_id researcher.id %}"
+                                                {% else %}
+                                                    href="{% url 'researcher-projects' researcher.id %}"
+                                                {% endif %}
                                             {% endif %}
-                                        {% endif %}
-                                        {% if n.notification_type == 'Connections' %}
-                                            <a href="#" id="{{ researcher.id }}_{{ n.id }}" onclick="markAsRead(this); return true;">
-                                        {% endif %}
+                                            {% if n.notification_type == 'Connections' %}
+                                                href="{% url 'researcher-connections' researcher.id %}"
+                                            {% endif %}
+                                        >
+
                                             <div class="flex-this space-between margin-top-1">
                                                 <div>
                                                     <span id="notification-label-tag-{{ n.id }}" 

@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
 from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections
-from notifications.models import ActionNotification
+from notifications.models import *
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from projects.models import ProjectContributors, Project, ProjectPerson
@@ -160,6 +160,7 @@ def community_members(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return render(request, 'communities/restricted.html', {'community': community})
     else:
+        join_requests_count = JoinRequest.objects.filter(community=community).count()
         form = InviteMemberForm(request.POST or None)
         if request.method == "POST":
             if 'change_member_role_btn' in request.POST:
@@ -196,8 +197,39 @@ def community_members(request, pk):
             'community': community,
             'member_role': member_role,
             'form': form,
+            'join_requests_count': join_requests_count,
         }
         return render(request, 'communities/members.html', context)
+
+@login_required(login_url='login')
+def member_requests(request, pk):
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
+    member_role = check_member_role_community(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        join_requests = JoinRequest.objects.filter(community=community)
+        if request.method == 'POST':
+            selected_role = request.POST.get('selected_role')
+            join_request_id = request.POST.get('join_request_id')
+
+            accepted_join_request(community, join_request_id, selected_role)
+            messages.add_message(request, messages.SUCCESS, 'You have successfully added a new member!')
+            return redirect('member-requests', community.id)
+
+        context = {
+            'member_role': member_role,
+            'community': community,
+            'join_requests': join_requests,
+        }
+        return render(request, 'communities/member-requests.html', context)
+
+@login_required(login_url='login')
+def delete_join_request(request, pk, join_id):
+    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
+    join_request = JoinRequest.objects.get(id=join_id)
+    join_request.delete()
+    return redirect('member-requests', community.id)
 
 @login_required(login_url='login')
 def remove_member(request, pk, member_id):
@@ -490,6 +522,56 @@ def edit_label(request, pk, label_id):
             'tklabel': tklabel,
         }
         return render(request, 'communities/edit-label.html', context)
+
+@login_required(login_url='login')
+def view_label(request, pk, label_uuid):
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+
+    member_role = check_member_role_community(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return render(request, 'communities/restricted.html', {'community': community})
+    else:
+        bclabel = ''
+        tklabel = ''
+        translations = ''
+        projects = ''
+        creator_name = ''
+        approver_name = ''
+        bclabels = ''
+        tklabels = ''
+
+        if BCLabel.objects.filter(unique_id=label_uuid).exists():
+            bclabel = BCLabel.objects.get(unique_id=label_uuid)
+            translations = LabelTranslation.objects.filter(bclabel=bclabel)
+            projects = bclabel.project_bclabels.all()
+            creator_name = get_users_name(bclabel.created_by)
+            approver_name = get_users_name(bclabel.approved_by)
+            bclabels = BCLabel.objects.filter(community=community).exclude(unique_id=label_uuid)
+            tklabels = TKLabel.objects.filter(community=community)
+        if TKLabel.objects.filter(unique_id=label_uuid).exists():
+            tklabel = TKLabel.objects.get(unique_id=label_uuid)
+            translations = LabelTranslation.objects.filter(tklabel=tklabel)
+            projects = tklabel.project_tklabels.all()
+            creator_name = get_users_name(tklabel.created_by)
+            approver_name = get_users_name(tklabel.approved_by)
+            tklabels = TKLabel.objects.filter(community=community).exclude(unique_id=label_uuid)
+            bclabels = BCLabel.objects.filter(community=community)
+
+        context = {
+            'community': community,
+            'member_role': member_role,
+            'bclabels': bclabels,
+            'tklabels': tklabels,
+            'bclabel': bclabel,
+            'tklabel': tklabel,
+            'translations': translations,
+            'projects': projects,
+            'creator_name': creator_name,
+            'approver_name': approver_name,
+        }
+
+        return render(request, 'communities/view-label.html', context)
+
 
 # Projects Main
 @login_required(login_url='login')

@@ -3,18 +3,59 @@ import requests
 import zipfile
 from django.template.loader import get_template
 from io import BytesIO
+from accounts.models import UserAffiliation
 from xhtml2pdf import pisa
 
-from communities.models import Community
+from communities.models import Community, JoinRequest, InviteMember
 from institutions.models import Institution
 from researchers.models import Researcher
 from .models import Connections, Notice, InstitutionNotice
+from notifications.models import *
+
+from helpers.emails import send_membership_email
+
+def accept_member_invite(request, invite_id):
+    invite = InviteMember.objects.get(id=invite_id)
+    affiliation = UserAffiliation.objects.get(user=invite.receiver)
+
+    # Which organization, add yto user affiliation
+    org = ''
+    if invite.community:
+        org = invite.community
+        affiliation.communities.add(org)
+
+    if invite.institution:
+        org = invite.institution
+        affiliation.institutions.add(org)
+    
+    affiliation.save()
+    
+    # Add user to role
+    if invite.role == 'viewer':
+        org.viewers.add(invite.receiver)
+    elif invite.role == 'admin':
+        org.admins.add(invite.receiver)
+    elif invite.role == 'editor':
+        org.editors.add(invite.receiver)
+    
+    org.save()
+
+    # Send email letting user know they are a member
+    send_membership_email(request, org, invite.receiver, invite.role)
+
+    # Find relevant user notification to delete
+    if UserNotification.objects.filter(to_user=invite.receiver, from_user=invite.sender, reference_id=invite.id).exists():
+        notification = UserNotification.objects.get(to_user=invite.receiver, from_user=invite.sender, reference_id=invite.id)
+        notification.delete()
+
+    # Delete invitation
+    invite.delete()
 
 def change_member_role(org, member, current_role, new_role):
-    print(current_role, new_role)
     if new_role is None:
         pass
     else:
+        # Remove user from previous role
         if current_role == 'admin':
             org.admins.remove(member)
         elif current_role == 'editor':
@@ -22,12 +63,43 @@ def change_member_role(org, member, current_role, new_role):
         elif current_role == 'viewer':
             org.viewers.remove(member)
         
+        # Add user to new role
         if new_role == 'Administrator':
             org.admins.add(member)
         elif new_role == 'Editor':
             org.editors.add(member)
         elif new_role == 'Viewer':
             org.viewers.add(member)
+
+def accepted_join_request(org, join_request_id, selected_role):
+    # Passes instance of Community or Institution, a join_request pk, and a selected role
+    join_request = JoinRequest.objects.get(id=join_request_id)
+    if selected_role is None:
+        pass
+    else:
+        # Add organization to userAffiliation
+        affiliation = UserAffiliation.objects.get(user=join_request.user_from)
+        if isinstance(org, Community):
+            affiliation.communities.add(org)
+        if isinstance(org, Institution):
+            affiliation.institutions.add(org)
+
+        # Add member to role
+        if selected_role == 'Administrator':
+            org.admins.add(join_request.user_from)
+        elif selected_role == 'Editor':
+            org.editors.add(join_request.user_from)
+        elif selected_role == 'Viewer':
+            org.viewers.add(join_request.user_from)
+        
+        # Create UserNotification
+        sender = join_request.user_from
+        title = f"You are now a member of {org}!"
+        UserNotification.objects.create(to_user=sender, title=title, notification_type="Accept")
+
+        # Delete join request
+        join_request.delete()
+
 
 def set_language_code(instance):
     url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'

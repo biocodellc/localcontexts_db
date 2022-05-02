@@ -5,15 +5,17 @@ from .models import LabelNote
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from projects.models import Project
-from .utils import dev_prod_or_local
+from django.contrib.auth.models import User
+
+from .utils import *
 from accounts.utils import get_users_name
+
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 import requests
-from django.contrib.auth.models import User
 
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 

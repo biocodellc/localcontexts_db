@@ -149,7 +149,7 @@ function customText(imgDiv) {
     let pDivs = Array.from(document.querySelectorAll('.toggle-txt-color'))
     pDivs.forEach(node => {
         let nodeID = node.id
-        if (nodeID.includes(labelID)) { node.classList.replace('grey-text', 'darkteal-text') } else { node.classList.replace('darkteal-text', 'grey-text') }
+        if (nodeID.includes(labelID)) { node.classList.add('label-name-active') } else { node.classList.remove('label-name-active') }
     })
 }
 
@@ -827,13 +827,6 @@ function toggleNotifications() {
     }
 }
 
-function showUserNotifications(btn) {
-    let div = document.getElementById('userNotifications')
-    div.classList.toggle('hide')
-    if (div.classList.contains('hide')) { btn.classList.replace('white-btn', 'action-btn') } else { btn.classList.replace( 'action-btn', 'white-btn') }
-}
-
-
 if (window.location.href.includes('connect-community') || window.location.href.includes('connect-institution')) {
 
     let inputList = document.getElementById('selectedOrganizationInputList')
@@ -886,6 +879,16 @@ function openMemberModal() {
     const closeBtn = document.querySelector('.close-modal-btn')
     closeBtn.onclick = function() {
         memberModal.classList.replace('show', 'hide')
+    }
+}
+
+function acceptJoinRequestModal(elem) {
+    let modal = document.getElementById(`acceptJoinRequestModal_${elem.id}`)
+    modal.classList.replace('hide', 'show')
+    
+    const closeBtn = document.getElementById(`closeModal${elem.id}`)
+    closeBtn.onclick = function() {
+        modal.classList.replace('show', 'hide')
     }
 }
 

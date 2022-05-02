@@ -1,0 +1,151 @@
+{% extends 'sub-base.html' %} {% block title %} | View Label {% endblock %}{% load static %} {% load custom_tags %} {% block community_content %}
+
+<section class="content-card-v2 content-card-space white-bg">
+    <div class="margin-bottom-16">
+        <small class="bold">
+            <a class="darkteal-text"href="{% url 'select-label' community.id %}">Labels</a> 
+            <span class="grey-text"> >> View Label</span>
+        </small>
+    </div>
+
+    <div class="flex-this space-between border-bottom-solid-teal">
+        <div class="w-20 center-text">
+            {% if bclabel %}
+                {% include 'bclabels/which-label.html' %}
+            {% endif %}
+            {% if tklabel %}
+                {% include 'tklabels/which-label.html' %}
+            {% endif %}
+        </div>
+        <div class="w-90">
+
+            <div class="flex-this space-between">
+                <div>
+                    <h2 class="no-top-margin">
+                        {% if bclabel %}
+                            {{ bclabel.name }}
+                        {% endif %}
+                        {% if tklabel %}
+                            {{ tklabel.name }}
+                        {% endif %}
+                    </h2>                    
+                </div>
+
+                <div>
+                    {% if not bclabel.is_approved %}
+                        {% if bclabel.created_by == request.user %}
+                            <div>
+                                <a class="primary-btn white-btn" href="{% url 'edit-label' community.id bclabel.unique_id %}">Edit Label</a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if not tklabel.is_approved %}
+                        {% if tklabel.created_by == request.user %}
+                            <div>
+                                <a class="primary-btn white-btn" href="{% url 'edit-label' community.id tklabel.unique_id %}">Edit Label</a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                </div>                    
+            </div>
+
+            <div class="w-80">
+                <p class="no-top-margin">
+                    <span class="bold">Created by</span> - 
+                    {% if bclabel %}
+                        {{ creator_name }} | {{ bclabel.community }} 
+                    {% endif %}
+                    {% if tklabel %}
+                        {{ creator_name }} | {{ tklabel.community }} 
+                    {% endif %}
+                    <br>
+
+                    <span class="bold">Approved by</span> - 
+                    {% if bclabel %}   
+                        {% if not bclabel.approved %}
+                            This Label has not been approved yet
+                        {% else %}
+                            {{ approver_name }}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if tklabel %}   
+                        {% if not tklabel.approved %}
+                            This Label has not been approved yet
+                        {% else %}
+                            {{ approver_name }}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if bclabel.audiofile %}<div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
+                    <br>
+
+                    <span class="bold">Label text</span> <br>
+                    {% if bclabel %}
+                        {{ bclabel.default_text }}
+                    {% endif %}
+                    {% if tklabel %}
+                        {{ tklabel.default_text }}
+                    {% endif %}
+                </p>
+                
+                {% if translations %}
+                    <p>
+                        {% for translation in translations %}
+                            <span class="bold">{{ translation.language }}</span><br>
+                            {{translation.translation}}<br><br>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+                
+                <p>
+                    <h3>Related Projects</h3>
+                    {% if projects %}
+                        <ul>
+                            {% for project in projects %}
+                                <li><a class="darkteal-text underline-hover" href="{% url 'view-project' project.unique_id  %}">{{ project.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        This label has not yet been applied to any Local Contexts Projects
+                    {% endif %}
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="margin-left-16">
+        <h3>Explore your other customized Labels</h3>
+
+        <div class="flex-this w-100">
+            {% if bclabels %}
+                {% for bclabel in bclabels %}
+                    <div class="w-20 center-text margin-right-16">
+                        <a class="primary-black-text" href="{% url 'view-label' community.id bclabel.unique_id %}">
+                            {% include 'bclabels/mini-labels.html' %}
+                            <small class="bold">{{ bclabel.name }}</small>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}  
+
+            {% if tklabels %}
+                {% for tklabel in tklabels %}
+                    <div class="w-20 center-text margin-right-16">
+                        <a class="primary-black-text" href="{% url 'view-label' community.id tklabel.unique_id %}">
+                            {% include 'tklabels/mini-labels.html' %}
+                            <small class="bold">{{ tklabel.name }}</small>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}          
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
