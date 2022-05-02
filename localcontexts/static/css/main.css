@@ -49,8 +49,8 @@ input[type=text], input[type=email], input[type=password], input[type=username],
     max-height: 40px;
     min-height: 40px;
     background-color: #fff;
-    border: 1px solid #333333;
-    border-radius: 5px;
+    border: 1px solid #1F2937;
+    border-radius: 4px;
     padding:8px;
 }
 
@@ -58,8 +58,8 @@ input[name=contributors] { width: 416px; }
 
 textarea {
     background-color: #fff;
-    border: 1px solid #333333;
-    border-radius: 5px;
+    border: 1px solid #1F2937;
+    border-radius: 4px;
 }
 
 input[type=checkbox] {
