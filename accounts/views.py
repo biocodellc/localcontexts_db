@@ -6,7 +6,6 @@ from django.contrib.auth.views import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 
 from django.contrib.auth.decorators import login_required
-from urllib3 import Retry
 
 from projects.models import Project
 from .decorators import unauthenticated_user

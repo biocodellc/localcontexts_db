@@ -83,34 +83,12 @@
                                     type="checkbox" 
                                     name="checkbox-notice"
                                     {% if institution_notice %} 
-                                        {% if institution_notice.notice_type == 'attribution_incomplete' or institution_notice.notice_type == 'open_to_collaborate_and_attribution_incomplete'%} 
+                                        {% if institution_notice.notice_type == 'attribution_incomplete'%} 
                                             checked 
                                         {% endif %}
                                     {% endif %}
                                 >
 
-                                <span class="margin-left-8">Select</span>
-                            </div>
-                        </div>
-
-                        <div class="flex-this column center-text margin-left-16">
-                            <div><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="73px"></div>
-                            <div><p id="title-open-to-collaborate-notice" class="grey-text">Open to <br>Collaborate Notice</p></div>
-                            <div class="notice-checkbox-container">
-
-                                <input 
-                                    id="open-to-collaborate-notice" 
-                                    onclick="showDescription()" 
-                                    value="open_to_collaborate" 
-                                    type="checkbox" 
-                                    name="checkbox-notice"
-                                    {% if institution_notice %} 
-                                        {% if institution_notice.notice_type == 'open_to_collaborate' or institution_notice.notice_type == 'open_to_collaborate_and_attribution_incomplete'%} 
-                                            checked 
-                                        {% endif %}
-                                    {% endif %}
-                                >
-                                
                                 <span class="margin-left-8">Select</span>
                             </div>
                         </div>
@@ -165,7 +143,7 @@
                 <div 
                     id="show-description-attr-notice" 
                     {% if institution_notice %} 
-                        {% if institution_notice.notice_type == 'attribution_incomplete' or institution_notice.notice_type == 'open_to_collaborate_and_attribution_incomplete' %}
+                        {% if institution_notice.notice_type == 'attribution_incomplete' %}
                             class="show"
                         {% else %}
                             class="hide"
@@ -181,31 +159,6 @@
                             <p>
                                 Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution. <br> 
                                 For more information about the Attribution Incomplete Notice click <a href="https://localcontexts.org/notice/attribution-incomplete/" target="_blank"><span class="darkteal-text">here</span></a>.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div 
-                    id="show-description-open-to-collaborate-notice" 
-                    {% if institution_notice %} 
-                        {% if institution_notice.notice_type == 'open_to_collaborate' or institution_notice.notice_type == 'open_to_collaborate_and_attribution_incomplete' %}
-                            class="show"
-                        {% else %}
-                            class="hide"
-                        {% endif %}
-                    {% else %}
-                        class="hide"
-                    {% endif %}
-                >
-                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                        <div class="w-15 pad-top-1"><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="119px" alt="black square with white letters BC in the middle"></div>
-                        <div class="w-80 pad-top-1">
-                            <h3 class="no-top-margin">Open to Collaborate Notice</h3>
-                            <p>
-                                Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections. <br>
-                                For more information about the Open to Collaborate Notice click <a href="https://localcontexts.org/notice/open-to-collaborate/" target="_blank"><span class="darkteal-text">here</span></a>.
-
                             </p>
                         </div>
                     </div>

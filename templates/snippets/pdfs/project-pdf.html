@@ -139,38 +139,7 @@
             {% if project.project_institutional_notice.all %}
                 {% for notice in project.project_institutional_notice.all %}
                     {% if not notice.archived %}
-                        {% if notice.notice_type == 'open_to_collaborate' %}
-                            <tr>
-                                <td class="image-td">
-                                    <img loading="lazy" src="{{ notice.open_to_collaborate_img_url }}" width="200px">
-                                </td>
-                                <td class="text-td">
-                                    <h1 class="no-bottom-margin">Open to Collaborate Notice</h1>
-                                    <p> {{ notice.open_to_collaborate_default_text|linebreaks }} </p> 
-                                </td>
-                            </tr>
-                        {% endif %}
                         {% if notice.notice_type == 'attribution_incomplete' %}
-                            <tr>
-                                <td class="image-td">
-                                    <img loading="lazy" src="{{ notice.attribution_incomplete_img_url }}" width="200px">
-                                </td>
-                                <td class="text-td">
-                                    <h1 class="no-bottom-margin">Attribution Incomplete Notice</h1>
-                                    <p> {{ notice.attribution_incomplete_default_text|linebreaks }} </p> 
-                                </td>
-                            </tr>
-                        {% endif %}
-                        {% if notice.notice_type == 'open_to_collaborate_and_attribution_incomplete' %}
-                            <tr>
-                                <td class="image-td">
-                                    <img loading="lazy" src="{{ notice.open_to_collaborate_img_url }}" width="200px">
-                                </td>
-                                <td class="text-td">
-                                    <h1 class="no-bottom-margin">Open to Collaborate Notice</h1>
-                                    <p> {{ notice.open_to_collaborate_default_text|linebreaks }} </p> 
-                                </td>
-                            </tr>
                             <tr>
                                 <td class="image-td">
                                     <img loading="lazy" src="{{ notice.attribution_incomplete_img_url }}" width="200px">
