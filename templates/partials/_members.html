@@ -17,7 +17,7 @@
                     Member Requests {% if join_requests_count %}({% if join_requests_count < 10 %}0{{ join_requests_count }}{% else %}{{ join_requests_count }}{% endif %}){% endif %}
                 </a>                
             </div>
-            {% if not member_role == 'viewer' %}
+            {% if member_role == 'admin' %}
                 <div class="margin-left-8">
                     <a class="primary-btn green-btn" onclick="openMemberModal()">Add a new member <i class="fa fa-user-plus" aria-hidden="true"></i></a>
                 </div>
@@ -99,7 +99,7 @@
                     <small class="bold">Role - Admininstrator</small>
                 </div>
 
-                {% if member_role == 'admin' or request.user == community.community_creator %}
+                {% if member_role == 'admin' %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
                             <a id="removeMemberBtn_{{admin.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
@@ -165,7 +165,7 @@
                     <small class="bold">Role - Editor</small>
                 </div>
 
-                {% if member_role == 'admin' or request.user == community.community_creator %}
+                {% if member_role == 'admin' %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
                             <a id="removeMemberBtn_{{editor.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
@@ -231,7 +231,7 @@
                     <small class="bold">Role - Viewer</small>
                 </div>
 
-                {% if member_role == 'admin' or request.user == community.community_creator %}
+                {% if member_role == 'admin' %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
                             <a id="removeMemberBtn_{{viewer.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
@@ -349,7 +349,7 @@
                     <small class="bold">Role - Admininstrator</small>
                 </div>
 
-                {% if member_role == 'admin' or request.user == institution.institution_creator %}
+                {% if member_role == 'admin' %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
                             <a id="removeMemberBtn_{{admin.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
@@ -415,7 +415,7 @@
                     <small class="bold">Role - Editor</small>
                 </div>
 
-                {% if member_role == 'admin' or request.user == institution.institution_creator %}
+                {% if member_role == 'admin' %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
                             <a id="removeMemberBtn_{{editor.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
@@ -481,7 +481,7 @@
                     <small class="bold">Role - Viewer</small>
                 </div>
 
-                {% if member_role == 'admin' or request.user == institution.institution_creator %}
+                {% if member_role == 'admin' %}
                     <div class="flex-this">
                         <div class="margin-right-16 margin-top-8">
                             <a id="removeMemberBtn_{{viewer.id}}" class="block removeMemberBtn"><small class="darkteal-text bold pointer underline-hover">Remove member</small></a>
