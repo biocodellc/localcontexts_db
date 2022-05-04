@@ -14,6 +14,41 @@ from notifications.models import *
 
 from helpers.emails import send_membership_email
 
+def is_organization_in_user_affiliation(user, organization):
+    affiliation = UserAffiliation.objects.prefetch_related('communities').get(user=user)
+    if isinstance(organization, Community):
+        if organization in affiliation.communities.all():
+            return True
+        else:
+            return False
+            
+    if isinstance(organization, Institution):
+        if organization in affiliation.institutions.all():
+            return True
+        else:
+            return False
+
+def check_member_role(user, organization):
+    role = ''
+    if isinstance(organization, Community):
+        if user == organization.community_creator:
+            return 'admin'
+
+    if isinstance(organization, Institution):
+        if user == organization.institution_creator:
+            return 'admin'
+    
+    if user in organization.admins.all():
+        role = 'admin'
+    elif user in organization.editors.all():
+        role = 'editor'
+    elif user in organization.viewers.all():
+        role = 'viewer'
+    else:
+        return False
+    
+    return role
+    
 def accept_member_invite(request, invite_id):
     invite = InviteMember.objects.get(id=invite_id)
     affiliation = UserAffiliation.objects.get(user=invite.receiver)
