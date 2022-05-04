@@ -98,31 +98,11 @@ def download_project_zip(request, unique_id):
             files.append(('Institution_Notice_Usage_Guide.pdf', response.content))
 
             # Create PNG and TXT files based on which Notices are attached to the Project
-            if inst_notice.notice_type == 'open_to_collaborate':
-                get_img = requests.get(inst_notice.open_to_collaborate_img_url)
-                get_svg = requests.get(baseURL + 'labels/notices/ci-open-to-collaborate.svg')
-                files.append(('Open_To_Collaborate' + '.png', get_img.content))
-                files.append(('Open_To_Collaborate' + '.svg', get_svg.content))
-                files.append(('Open_To_Collaborate' + '.txt', inst_notice.open_to_collaborate_default_text))
-
             if inst_notice.notice_type == 'attribution_incomplete':
                 get_img = requests.get(inst_notice.attribution_incomplete_img_url)
                 get_svg = requests.get(baseURL + 'labels/notices/ci-attribution-incomplete.svg')
                 files.append(('Attribution_Incomplete' + '.png', get_img.content))
                 files.append(('Attribution_Incomplete' + '.svg', get_svg.content))
-                files.append(('Attribution_Incomplete' + '.txt', inst_notice.attribution_incomplete_default_text))
-
-            if inst_notice.notice_type == 'open_to_collaborate_and_attribution_incomplete':
-                get_open_img = requests.get(inst_notice.open_to_collaborate_img_url)
-                get_attr_img = requests.get(inst_notice.attribution_incomplete_img_url)
-                get_open_svg = requests.get(baseURL + 'labels/notices/ci-open-to-collaborate.svg')
-                get_attr_svg = requests.get(baseURL + 'labels/notices/ci-attribution-incomplete.svg')
-
-                files.append(('Open_To_Collaborate' + '.png', get_open_img.content))
-                files.append(('Open_To_Collaborate' + '.svg', get_open_svg.content))
-                files.append(('Attribution_Incomplete' + '.png', get_attr_img.content))
-                files.append(('Attribution_Incomplete' + '.svg', get_attr_svg.content))
-                files.append(('Open_To_Collaborate' + '.txt', inst_notice.open_to_collaborate_default_text))
                 files.append(('Attribution_Incomplete' + '.txt', inst_notice.attribution_incomplete_default_text))
 
     if project_bclabels or project_tklabels:

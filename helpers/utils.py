@@ -155,19 +155,8 @@ def set_notice_defaults(notice):
             notice.tk_default_text = tk_text
     elif isinstance(notice, InstitutionNotice):
         attribution_incomplete_text = 'Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution.'
-        open_to_collaborate_text = 'Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.'
         
-        if notice.notice_type == 'open_to_collaborate':
-            notice.open_to_collaborate_img_url = baseURL + 'ci-open-to-collaborate.png'
-            notice.open_to_collaborate_svg_url = baseURL + 'ci-open-to-collaborate.svg'
-            notice.open_to_collaborate_default_text = open_to_collaborate_text
         if notice.notice_type == 'attribution_incomplete':
-            notice.attribution_incomplete_img_url = baseURL + 'ci-attribution-incomplete.png'
-            notice.attribution_incomplete_svg_url = baseURL + 'ci-attribution-incomplete.svg'
-            notice.attribution_incomplete_default_text = attribution_incomplete_text
-        if notice.notice_type == 'open_to_collaborate_and_attribution_incomplete':
-            notice.open_to_collaborate_img_url = baseURL + 'ci-open-to-collaborate.png'
-            notice.open_to_collaborate_default_text = open_to_collaborate_text
             notice.attribution_incomplete_img_url = baseURL + 'ci-attribution-incomplete.png'
             notice.attribution_incomplete_svg_url = baseURL + 'ci-attribution-incomplete.svg'
             notice.attribution_incomplete_default_text = attribution_incomplete_text
@@ -216,8 +205,6 @@ def loop_through_notices(list, institution, project):
             notice = Notice.objects.create(notice_type='biocultural', placed_by_institution=institution, project=project)
         elif selected == 'tknotice':
             notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_institution=institution, project=project)
-        elif selected == 'open_to_collaborate':
-            notice = InstitutionNotice.objects.create(notice_type='open_to_collaborate', institution=institution, project=project)
         elif selected == 'attribution_incomplete':
             notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', institution=institution, project=project)
         
@@ -227,7 +214,7 @@ def loop_through_notices(list, institution, project):
 # Create/Update Notices (institutions)
 def create_notices(selected_notices, institution, project, existing_notice, existing_inst_notice):
     # selected_notices would be a list: 
-    # attribution_incomplete # open_to_collaborate # bcnotice # tknotice
+    # attribution_incomplete # bcnotice # tknotice
     
     if existing_notice:
         existing_notice.delete()
@@ -243,11 +230,6 @@ def create_notices(selected_notices, institution, project, existing_notice, exis
         if 'bcnotice' in selected_notices and 'tknotice' in selected_notices:
             notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_institution=institution, project=project)
             set_notice_defaults(notice)
-
-        # If both institution notices
-        elif 'open_to_collaborate' in selected_notices and 'attribution_incomplete' in selected_notices:
-            institution_notice = InstitutionNotice.objects.create(notice_type='open_to_collaborate_and_attribution_incomplete', institution=institution, project=project)
-            set_notice_defaults(institution_notice)
         else:
             loop_through_notices(selected_notices, institution, project)
 
@@ -256,28 +238,6 @@ def create_notices(selected_notices, institution, project, existing_notice, exis
         if 'bcnotice' in selected_notices and 'tknotice' in selected_notices:
             notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_institution=institution, project=project)
             set_notice_defaults(notice)
-            if 'open_to_collaborate' in selected_notices:
-                institution_notice = InstitutionNotice.objects.create(notice_type='open_to_collaborate', institution=institution, project=project)
-                set_notice_defaults(institution_notice)
-            else:
-                institution_notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', institution=institution, project=project)
-                set_notice_defaults(institution_notice)
-
-        # Both institution notices and one of either tk or bc
-        elif 'open_to_collaborate' in selected_notices and 'attribution_incomplete' in selected_notices:
-            institution_notice = InstitutionNotice.objects.create(notice_type='open_to_collaborate_and_attribution_incomplete', institution=institution, project=project)
+            institution_notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', institution=institution, project=project)
             set_notice_defaults(institution_notice)
-            if 'bcnotice' in selected_notices:
-                notice = Notice.objects.create(notice_type='biocultural', placed_by_institution=institution, project=project)
-                set_notice_defaults(notice)
-            else:
-                notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_institution=institution, project=project)
-                set_notice_defaults(notice)
-
-    # If all four notices
-    elif len(selected_notices) == 4:
-        notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_institution=institution, project=project)
-        set_notice_defaults(notice)
-        institution_notice = InstitutionNotice.objects.create(notice_type='open_to_collaborate_and_attribution_incomplete', institution=institution, project=project)
-        set_notice_defaults(institution_notice)
 

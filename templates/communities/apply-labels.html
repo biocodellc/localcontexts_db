@@ -80,11 +80,6 @@
                                 {% if not notice.archived %}
                                     {% if notice.notice_type == 'attribution_incomplete' %}
                                         <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
-                                    {% elif notice.notice_type == 'open_to_collaborate' %}
-                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" height="72px" width="72px"></div>
-                                    {% elif notice.notice_type == 'open_to_collaborate_and_attribution_incomplete' %}
-                                        <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
-                                        <div><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" height="72px" width="72px"></div>
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}
