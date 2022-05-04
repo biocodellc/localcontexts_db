@@ -33,8 +33,29 @@
 </div>
 
 <div class="content-card content-card-space white-bg">
+    <div class="flex-this space-between">
+        <div><h2 class="no-top-margin">Open to Collaborate Notice</h2></div>
+        <div><a href="{% url 'download-open-to-collaborate-notice' %}" class="primary-btn white-btn">Download Notice</a>
+    </div>
+    </div>
+    <div class="flex-this border-bottom-solid-teal">
+        <div><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="119px" alt="black square with a rectangle and on hand on top and bottom in the middle in white"></div>
+        <div class="flex-this column margin-left-16">
+            <div class="w-90">
+                <p class="no-top-margin">
+                    <span class="darkteal-text bold">Why Use this Notice?</span><br>
+                    The Open to Collaborate Notice indicates that a researcher or an institution is committed to developing new modes of collaboration, engagement, and partnership over Indigenous collections and data that have colonial and/or problematic histories or unclear provenance. This notice indicates a commitment to change and to develop new processes for the care and stewardship of past and future heritage collections.                    
+                </p>        
+            </div>
+            <div class="w-90">
+                <p>
+                    <span class="darkteal-text bold">Notice Text</span><br>
+                    Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.                    </p>         
+            </div>
+        </div>
+    </div>
 
-    <h2 class="no-top-margin">Traditional Knowledge Notice</h2>
+    <h2>Traditional Knowledge Notice</h2>
     <div class="flex-this border-bottom-solid-teal">
         <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" alt="black square with the letters TK in the middle in white"></div>
         <div class="flex-this column margin-left-16">
@@ -88,24 +109,6 @@
                         <span class="darkteal-text bold">Notice Text</span><br>
                         Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution.
                     </p>         
-                </div>
-            </div>
-        </div>
-
-        <h2>Open to Collaborate Notice</h2>
-        <div class="flex-this">
-            <div><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="119px" alt="black square with a rectangle and on hand on top and bottom in the middle in white"></div>
-            <div class="flex-this column margin-left-16">
-                <div class="w-90">
-                    <p class="no-top-margin">
-                        <span class="darkteal-text bold">Why Use this Notice?</span><br>
-                        The Open to Collaborate Notice indicates that an institution is committed to developing new modes of collaboration, engagement, and partnership over Indigenous collections and data that have colonial and/or problematic histories or unclear provenance. This notice indicates an institutional commitment to change and to develop new processes for the care and stewardship of past and future heritage collections.                    
-                    </p>        
-                </div>
-                <div class="w-90">
-                    <p>
-                        <span class="darkteal-text bold">Notice Text</span><br>
-                        Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.                    </p>         
                 </div>
             </div>
         </div>
