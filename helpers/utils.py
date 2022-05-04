@@ -112,12 +112,18 @@ def accepted_join_request(org, join_request_id, selected_role):
     if selected_role is None:
         pass
     else:
-        # Add organization to userAffiliation
+        # Add organization to userAffiliation and delete relevant action notification
         affiliation = UserAffiliation.objects.get(user=join_request.user_from)
         if isinstance(org, Community):
             affiliation.communities.add(org)
+            if ActionNotification.objects.filter(sender=join_request.user_from, community=org, reference_id=join_request.id).exists():
+                notification = ActionNotification.objects.get(sender=join_request.user_from, community=org, reference_id=join_request.id)
+                notification.delete()
         if isinstance(org, Institution):
             affiliation.institutions.add(org)
+            if ActionNotification.objects.filter(sender=join_request.user_from, institution=org, reference_id=join_request.id).exists():
+                notification = ActionNotification.objects.get(sender=join_request.user_from, institution=org, reference_id=join_request.id)
+                notification.delete()
 
         # Add member to role
         if selected_role == 'Administrator':
