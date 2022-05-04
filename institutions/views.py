@@ -147,7 +147,8 @@ def update_institution(request, pk):
 
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'institutions/restricted.html', {'institution': institution})
+        return redirect('restricted')
+
     else:
         if request.method == "POST":
             update_form = UpdateInstitutionForm(request.POST, request.FILES, instance=institution)
@@ -173,7 +174,7 @@ def institution_notices(request, pk):
 
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'institutions/restricted.html', {'institution': institution})
+        return redirect('restricted')
     else:
         return render(request, 'institutions/notices.html', {'institution': institution, 'member_role': member_role,})
 
@@ -183,7 +184,7 @@ def institution_members(request, pk):
     institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'institutions/restricted.html', {'institution': institution})
+        return redirect('restricted')
     else:
         join_requests_count = JoinRequest.objects.filter(institution=institution).count()
         form = InviteMemberForm(request.POST or None)
@@ -231,7 +232,7 @@ def member_requests(request, pk):
     institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'institutions/restricted.html', {'institution': institution})
+        return redirect('restricted')
     else:
         join_requests = JoinRequest.objects.filter(institution=institution)
         if request.method == 'POST':
@@ -290,7 +291,7 @@ def institution_projects(request, pk):
 
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'institutions/restricted.html', {'institution': institution})
+        return redirect('restricted')
     else:
         # institution projects + 
         # projects institution has been notified of + 
@@ -345,7 +346,7 @@ def create_project(request, pk):
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
-        return render(request, 'institutions/restricted.html', {'institution': institution})
+        return redirect('restricted')
     else:
         if request.method == 'GET':
             form = CreateProjectForm(request.GET or None)
@@ -411,7 +412,7 @@ def edit_project(request, institution_id, project_uuid):
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
-        return render(request, 'institutions/restricted.html', {'institution': institution})
+        return redirect('restricted')
     else:
         form = EditProjectForm(request.POST or None, instance=project)
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
@@ -471,7 +472,7 @@ def notify_others(request, pk, proj_id):
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
-        return render(request, 'institutions/restricted.html', {'institution': institution})
+        return redirect('restricted')
     else:
         project = Project.objects.prefetch_related('bc_labels', 'tk_labels', 'project_status').get(id=proj_id)
         entities_notified = EntitiesNotified.objects.get(project=project)
@@ -520,7 +521,7 @@ def connections(request, pk):
 
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'institutions/restricted.html', {'institution': institution})
+        return redirect('restricted')
     else:
         connections = Connections.objects.get(institution=institution)
         context = {

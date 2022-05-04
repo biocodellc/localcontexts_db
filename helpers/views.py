@@ -1,8 +1,11 @@
-# from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect
 # from django.contrib.auth.decorators import login_required
 from .utils import generate_zip
 from django.http import HttpResponse
 import requests
+
+def restricted_view(request):
+    return render(request, 'restricted.html')
 
 def download_open_collaborate_notice(request):
     baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/'
