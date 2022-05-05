@@ -200,10 +200,11 @@ def institution_members(request, pk):
                 receiver = request.POST.get('receiver')
                 user_in_institution = is_organization_in_user_affiliation(receiver, institution)
 
-                if user_in_institution == False: # If user is not an institution member
-                    check_invitation = InviteMember.objects.filter(receiver=receiver, institution=institution).exists()
+                if not user_in_institution: # If user is not an institution member
+                    invitation_exists = InviteMember.objects.filter(receiver=receiver, institution=institution).exists() # Check to see if invitation already exists
+                    join_request_exists = JoinRequest.objects.filter(user_from=receiver, institution=institution).exists() # Check to see if join request already exists
 
-                    if check_invitation == False: # If invitation does not exist, save form
+                    if not invitation_exists and not join_request_exists: # If invitation and join request does not exist, save form
                         if form.is_valid():
                             data = form.save(commit=False)
                             data.sender = request.user

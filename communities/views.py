@@ -171,12 +171,13 @@ def community_members(request, pk):
                 return redirect('members', community.id)
             else:
                 receiver = request.POST.get('receiver')
-                user_check = is_organization_in_user_affiliation(receiver, community)
+                user_in_community = is_organization_in_user_affiliation(receiver, community)
                 
-                if user_check == False: # If user is not community member
-                    check_invitation = InviteMember.objects.filter(receiver=receiver, community=community).exists() # Check to see if invitation already exists
+                if not user_in_community: # If user is not community member
+                    invitation_exists = InviteMember.objects.filter(receiver=receiver, community=community).exists() # Check to see if invitation already exists
+                    join_request_exists = JoinRequest.objects.filter(user_from=receiver, community=community).exists() # Check to see if invitation already exists
 
-                    if check_invitation == False: # If invitation does not exist, save form.
+                    if not invitation_exists and not join_request_exists: # If invitation does not exist or join request does not exist, save form.
                         if form.is_valid():
                             data = form.save(commit=False)
                             data.sender = request.user
