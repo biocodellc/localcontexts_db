@@ -153,3 +153,92 @@
         </section>
     {% endfor %}
 {% endif %}
+
+{% if member_invites %}
+    {% for invite in member_invites %}
+        <section class="dash-driver flex-this column">
+            <div class="flex-this space-between">
+                <div>
+                    <small class="grey-text bold">Request Sent: {{ invite.created }}</small>
+                </div>
+                
+                {% if member_role == 'admin' %}
+                    <div class="flex-this dash-btn-container flex-end">
+                        <div class="no-top-margin margin-right-8">
+                            <a class="primary-btn white-btn" href="{% url 'delete-member-invite' invite.id %}">Cancel Invite</a>
+                        </div>
+                    </div>  
+                {% endif %}
+
+            </div>
+
+            <div class="w-70">
+                <h2 class="no-top-margin no-bottom-margin">{% if invite.receiver.get_full_name %}{{ invite.receiver.get_full_name }} {% else %} {{ invite.receiver.username }} {% endif %} </h2>
+                {% if invite.receiver.profile.position %}
+                    <h3 class="no-top-margin">{{ invite.receiver.profile.position }}</h3>
+                {% endif %}
+
+                {% if not invite.receiver.profile.city_town and not invite.receiver.profile.state_province_region and not invite.receiver.profile.country.name %}
+                {% else %}
+                    <h4 class="no-top-margin">
+                        {% if invite.receiver.profile.city_town %} {{ invite.receiver.profile.city_town }}, {% endif %}
+                        {% if invite.receiver.profile.state_province_region %}{{ invite.receiver.profile.state_province_region }}, {% endif %}
+                        {% if invite.receiver.profile.country %} {{ invite.receiver.profile.country.name }} {% endif%}
+                    </h4>
+                {% endif %}
+
+                {% if invite.receiver.profile.languages_spoken %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Languages</small>
+                            <p class="no-top-margin">{{ invite.receiver.profile.languages_spoken }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if invite.receiver.profile.affiliation %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Affiliations</small>
+                            <p class="no-top-margin">{{ invite.receiver.profile.affiliation }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if invite.sender %}
+                    <div>
+                        <span class="bold">Invited by:</span>
+                        <i>{% if invite.sender.get_full_name %}{{ invite.sender.get_full_name }} {% else %} {{ invite.sender.username }} {% endif %}</i>
+                    </div>
+                {% endif %}
+
+                {% if invite.role %}
+                    <div>
+                        <span class="bold">Their proposed responsibility is:</span>
+                        <i>
+                            {% if invite.role == 'admin' %} Administrator {% endif %}
+                            {% if invite.role == 'editor' %} Editor {% endif %}
+                            {% if invite.role == 'viewer' %} Viewer {% endif %}
+                        </i>                    
+                    </div>
+                {% endif %}
+
+                {% if invite.message %}
+                    <div>
+                        <p>
+                            <span class="bold">Message:</span><i> {{ invite.message }}</i>
+                        </p>                    
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </section>
+    {% endfor %}
+{% endif %}

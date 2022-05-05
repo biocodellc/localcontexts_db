@@ -3,6 +3,24 @@ from django.shortcuts import render, redirect
 from .utils import generate_zip
 from django.http import HttpResponse
 import requests
+from communities.models import InviteMember
+from notifications.models import UserNotification
+
+def delete_member_invite(request, pk):
+    invite = InviteMember.objects.get(id=pk)
+    
+    # Delete relevant UserNotification
+    if UserNotification.objects.filter(to_user=invite.receiver, from_user=invite.sender, notification_type='invitation', reference_id=pk).exists():
+        notification = UserNotification.objects.get(to_user=invite.receiver, notification_type='invitation', reference_id=pk)
+        notification.delete()
+
+    invite.delete()
+
+    if '/communities/' in request.META.get('HTTP_REFERER'):
+        return redirect('member-requests', invite.community.id)
+    else:
+        return redirect('institution-member-requests', invite.institution.id)
+
 
 def restricted_view(request):
     return render(request, 'restricted.html')

@@ -236,6 +236,8 @@ def member_requests(request, pk):
         return redirect('restricted')
     else:
         join_requests = JoinRequest.objects.filter(institution=institution)
+        member_invites = InviteMember.objects.filter(institution=institution)
+        
         if request.method == 'POST':
             selected_role = request.POST.get('selected_role')
             join_request_id = request.POST.get('join_request_id')
@@ -248,6 +250,7 @@ def member_requests(request, pk):
             'member_role': member_role,
             'institution': institution,
             'join_requests': join_requests,
+            'member_invites': member_invites,
         }
         return render(request, 'institutions/member-requests.html', context)
 
