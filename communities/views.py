@@ -898,11 +898,7 @@ def connections(request, pk):
             'connections': connections,
         }
         return render(request, 'communities/connections.html', context)
-
-def restricted_view(request, pk):
-    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
-    return render(request, 'communities/restricted.html', {'community': community, })
-
+        
 # show community Labels in a PDF
 def labels_pdf(request, pk):
     # Get approved labels customized by community

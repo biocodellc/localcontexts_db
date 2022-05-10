@@ -72,7 +72,7 @@ def update_researcher(request, pk):
     researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
-        return redirect('researcher-restricted', researcher.id)
+        return redirect('restricted')
     else:
         if request.method == 'POST':
             update_form = UpdateResearcherForm(request.POST, request.FILES, instance=researcher)
@@ -105,7 +105,7 @@ def researcher_notices(request, pk):
     researcher = Researcher.objects.prefetch_related('projects').get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
-        return redirect('researcher-restricted', researcher.id)
+        return redirect('restricted')
     else:
         context = {
             'researcher': researcher,
@@ -119,7 +119,7 @@ def researcher_projects(request, pk):
     researcher = Researcher.objects.prefetch_related('projects', 'user').get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
-        return redirect('researcher-restricted', researcher.id)
+        return redirect('restricted')
     else:
         # researcher projects + 
         # projects researcher has been notified of + 
@@ -175,7 +175,7 @@ def create_project(request, pk):
     researcher = Researcher.objects.prefetch_related('projects').get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
-        return redirect('researcher-restricted', researcher.id)
+        return redirect('restricted')
     else:
         if request.method == "GET":
             form = CreateProjectForm(request.POST or None)
@@ -244,7 +244,7 @@ def edit_project(request, researcher_id, project_uuid):
     researcher = Researcher.objects.get(id=researcher_id)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
-        return redirect('researcher-restricted', researcher.id)
+        return redirect('restricted')
     else:
         project = Project.objects.get(unique_id=project_uuid)
         notice_exists = Notice.objects.filter(project=project)
@@ -322,7 +322,7 @@ def notify_others(request, pk, proj_id):
 
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
-        return redirect('researcher-restricted', researcher.id)
+        return redirect('restricted')
     else:
         project = Project.objects.prefetch_related('bc_labels', 'tk_labels', 'project_status').get(id=proj_id)
         entities_notified = EntitiesNotified.objects.prefetch_related('communities').get(project=project)
@@ -371,7 +371,7 @@ def connections(request, pk):
     researcher = Researcher.objects.prefetch_related('projects').get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
-        return redirect('researcher-restricted', researcher.id)
+        return redirect('restricted')
     else:
         connections = Connections.objects.get(researcher=researcher)
         context = {
@@ -380,7 +380,3 @@ def connections(request, pk):
             'user_can_view': user_can_view,
         }
         return render(request, 'researchers/connections.html', context)
-
-def restricted_view(request, pk):
-    researcher = Researcher.objects.prefetch_related('projects').get(id=pk)
-    return render(request, 'researchers/restricted.html', {'researcher': researcher})
