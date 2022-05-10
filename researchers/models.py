@@ -14,6 +14,7 @@ class Researcher(models.Model):
     orcid = models.CharField(max_length=300, null=True, blank=True)
     image = models.ImageField(upload_to=researcher_img_path, blank=True, null=True)
     contact_email = models.EmailField(blank=True, null=True)
+    contact_email_public = models.BooleanField(default=False, null=True, blank=True)
     description = models.TextField(null=True, blank=True, validators=[MaxLengthValidator(200)])
     website = models.URLField(max_length=150, blank=True, null=True)
     primary_institution = models.CharField(max_length=250, null=True, blank=True)

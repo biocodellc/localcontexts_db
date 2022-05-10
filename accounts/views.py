@@ -312,6 +312,7 @@ def organization_registry(request):
                     # which institution or community
                     inst_contact_id = request.POST.get('instid_contact')
                     comm_contact_id = request.POST.get('commid_contact')
+                    res_contact_id = request.POST.get('resid_contact')
 
                     if inst_contact_id:
                         inst = Institution.objects.select_related('institution_creator').get(id=inst_contact_id)
@@ -320,6 +321,10 @@ def organization_registry(request):
                     if comm_contact_id:
                         comm = Community.objects.select_related('community_creator').get(id=comm_contact_id)
                         to_email = comm.community_creator.email
+                    
+                    if res_contact_id:
+                        researcher = Researcher.objects.select_related('user').get(id=res_contact_id)
+                        to_email = researcher.contact_email
                     
                     send_contact_email(to_email, from_name, from_email, message)
             else:

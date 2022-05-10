@@ -50,7 +50,7 @@
                         <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
                     </div>
 
-                    {% if user.is_authenticated %}
+                    {% if request.user.is_authenticated %}
                         <div class="dashcard-btn-container">
                             <div>
                                 {% join_request_comm community.id request.user as request_exists %}
@@ -125,7 +125,7 @@
                         <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p></div>
                     </div>
 
-                    {% if user.is_authenticated %}
+                    {% if request.user.is_authenticated %}
                         <div class="dashcard-btn-container">
                             <div>
                                 {% join_request_inst institution.id request.user as request_exists %}
@@ -189,15 +189,47 @@
                         <div><h3 class="dashcard-h3 darkteal-text">{% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}</h3></div>
                         <div>
                             <p class="dashcard-subheader">Researcher | Location: 
-                                {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
-                                {% if profile.state_province_region %} {{ profile.state_province_region }}, {% endif %} 
-                                {% if profile.country.name %} {{ profile.country.name }}{% endif %}
-                                {% if not profile.city_town and not profile.state_province_region and not profile.country %}
+                                {% if researcher.user.profile.city_town %} {{ researcher.user.profile.city_town }}, {% endif %} 
+                                {% if researcher.user.profile.state_province_region %} {{ researcher.user.profile.state_province_region }}, {% endif %} 
+                                {% if researcher.user.profile.country.name %} {{ researcher.user.profile.country.name }}{% endif %}
+                                {% if not researcher.user.profile.city_town and not researcher.user.profile.state_province_region and not researcher.user.profile.country %}
                                     None specified
                                 {% endif %}
                             </p>
                         </div>
                         <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p></div>
+                    </div>
+                    {% if request.user.is_authenticated %}
+                        {% if researcher.contact_email_public %}
+                            <div class="dashcard-btn-container">
+                                <div class="margin-left-16"><a id="researcherContact-{{ researcher.id }}" class="primary-btn action-btn">Contact Me</a></div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="contactModalResearcher{{ researcher.id }}" class="modal hide">
+                <div class="modal-defaults contact-modal flex-this column w-100">
+                    <div class="modal-content-padding w-100">
+                        <div class="flex-this space-between">
+                            <div>
+                                <h2 class="primary-black-text">Contact form</h2>  
+                                <p>This message will be sent to {% if researcher.user.get_full_name %}{{ researcher.user.get_full_name }}{% else %} {{ researcher.user.username }}{% endif %}.</p>  
+                            </div>
+                            <div>
+                                <div class="primary-btn white-btn close-modal-btn">Close X</div>
+                            </div>
+                        </div>
+
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{ researcher.id }}" name="resid_contact">
+
+                            {{ form.as_p }}
+            
+                            <button class="primary-btn action-btn" name="contact_btn">Send message</button>
+                        </form>    
                     </div>
                 </div>
             </div>

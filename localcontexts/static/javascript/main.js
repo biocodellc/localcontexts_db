@@ -1049,6 +1049,12 @@ if (window.location.href.includes('registry')) {
                 let modal = document.getElementById(`contactModalInst${targetId}`)
                 modal.classList.replace('hide', 'show')
                 closeModal(modal)
+                
+            } else if (e.target.id.includes('researcherContact')) {
+                let targetId = e.target.id.split('-').pop()
+                let modal = document.getElementById(`contactModalResearcher${targetId}`)
+                modal.classList.replace('hide', 'show')
+                closeModal(modal)
             }
         }
     })  

@@ -19,7 +19,7 @@ class CreateProjectForm(forms.ModelForm):
         ('Exhibition', 'Exhibition'),
         ('Other', 'Other'),
     )
-    project_privacy = forms.ChoiceField(label=_('What is the privacy level of this project?'), choices=PRIVACY, initial='Public', widget=forms.RadioSelect())
+    project_privacy = forms.ChoiceField(label=_('What is the privacy level of this project?'), choices=PRIVACY, initial='Public', widget=forms.RadioSelect(attrs={'class': 'ul-no-bullets'}))
     project_type = forms.ChoiceField(label=_('Which of the following reflects your Local Contexts project? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
 
     class Meta:
