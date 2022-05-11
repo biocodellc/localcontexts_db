@@ -56,7 +56,7 @@ if (window.location.href.includes('create-institution')) {
             }
             typesArray.push(item.types[0])
         })
-        let uniqueTypes = typesArray.filter(uniqueArray)
+        let uniqueTypes = typesArray.filter(uniqueArray).sort()
 
         uniqueTypes.forEach(type => {
             let option = document.createElement('option')

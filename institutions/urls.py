@@ -23,7 +23,4 @@ urlpatterns = [
     path('projects/notify/<str:pk>/<str:proj_id>/', views.notify_others, name="institution-notify-others"),
 
     path('connections/<str:pk>/', views.connections, name="institution-connections"),
-
-    path('restricted/<str:pk>/', views.restricted_view, name="institution-restricted"),
-
 ]

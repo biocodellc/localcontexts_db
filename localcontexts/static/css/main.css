@@ -34,7 +34,7 @@ body {
     min-height: 100%;
 }
 
-.ul-no-bullets, #id_project_privacy { list-style-type: none; }
+.ul-no-bullets { list-style-type: none; }
 
 a { text-decoration: none; }
 

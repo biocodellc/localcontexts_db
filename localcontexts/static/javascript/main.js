@@ -1030,12 +1030,18 @@ if (window.location.href.includes('registry')) {
                 // show modal
                 registryModal.classList.replace('hide', 'show')
                 let targetId = e.target.id.split('-').pop()
-                submitJoinRequestFormBtn.addEventListener('click', function(e) { document.getElementById(`communityRegistryForm${targetId}`).submit() })    
+                submitJoinRequestFormBtn.addEventListener('click', function(e) { 
+                    disbleSendRequestBtn(submitJoinRequestFormBtn)
+                    document.getElementById(`communityRegistryForm${targetId}`).submit() 
+                })    
             } else if (e.target.id.includes('institutionRequest')) {
                 // show modal
                 registryModal.classList.replace('hide', 'show')
                 let targetId = e.target.id.split('-').pop()
-                submitJoinRequestFormBtn.addEventListener('click', function(e) { document.getElementById(`institutionRegistryForm${targetId}`).submit() })  
+                submitJoinRequestFormBtn.addEventListener('click', function(e) { 
+                    disbleSendRequestBtn(submitJoinRequestFormBtn)
+                    document.getElementById(`institutionRegistryForm${targetId}`).submit() 
+                })  
 
                 // open contact form modal
             } else if (e.target.id.includes('communityContact')) {
@@ -1049,9 +1055,29 @@ if (window.location.href.includes('registry')) {
                 let modal = document.getElementById(`contactModalInst${targetId}`)
                 modal.classList.replace('hide', 'show')
                 closeModal(modal)
+                
+            } else if (e.target.id.includes('researcherContact')) {
+                let targetId = e.target.id.split('-').pop()
+                let modal = document.getElementById(`contactModalResearcher${targetId}`)
+                modal.classList.replace('hide', 'show')
+                closeModal(modal)
             }
         }
     })  
+
+    // Temporarily disable the submit button to prevent multiple form submission
+    function disbleSendRequestBtn(btn) {
+        let oldValue = 'Yes'
+        btn.setAttribute('disabled', true)
+        btn.classList.replace('action-btn', 'disabled-btn')
+        btn.innerText = 'Sending'
+    
+        setTimeout(function(){
+            btn.innerText = oldValue;
+            btn.classList.replace('disabled-btn', 'action-btn')
+            btn.removeAttribute('disabled');
+        }, 5000)
+    }
 
     function closeModal(modal) {  
         let closeBtns = Array.from(document.getElementsByClassName('close-modal-btn'))

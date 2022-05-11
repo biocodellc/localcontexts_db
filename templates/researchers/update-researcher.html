@@ -14,7 +14,7 @@
     
             <div class="flex-this column w-80 border-left">
     
-                    <div><h3>Researcher Information</h3></div>
+                    <div><h3>Contact Information</h3></div>
     
                     <div class="w-70">
                         <form method="POST" action="{% url 'researcher-update' researcher.id %}" enctype="multipart/form-data">
@@ -24,13 +24,23 @@
                                 <div class="w-50">
                                     <label for="contact_email"> Contact Email </label><br> 
                                     {{ update_form.contact_email }}
-                                </div>
-                                <small>Please note that this contact email will be visible to Local Contexts Hub users</small>                                      
+                                </div>                                   
 
                                 {% if update_form.contact_email.errors %}
                                     <div class="msg-red w-50"><small>{{ update_form.contact_email.errors.as_text }}</small></div> 
                                 {% endif %}
                             </div>
+
+                            <div class="margin-top-16">
+                                {{ update_form.contact_email_public.label }}
+                                {{ update_form.contact_email_public }}
+
+                                {% if update_form.contact_email_public.errors %}
+                                    <div class="msg-red w-50"><small>{{ update_form.contact_email_public.errors.as_text }}</small></div> 
+                                {% endif %}
+                            </div>  
+
+                            <div><h3>Additional Information</h3></div>
 
                             <div class="w-100 margin-top-8">
                                 <div class="flex-this">

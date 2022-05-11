@@ -25,7 +25,6 @@ from helpers.emails import *
 
 from .forms import *
 from .models import *
-from .utils import *
 
 # pdfs
 from django.http import HttpResponse
@@ -129,9 +128,9 @@ def confirm_community(request, community_id):
 def update_community(request, pk):
     community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
 
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'editor' or member_role == 'viewer': # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')
     
     else:
         update_form = UpdateCommunityForm(instance=community)
@@ -156,9 +155,9 @@ def update_community(request, pk):
 @login_required(login_url='login')
 def community_members(request, pk):
     community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')
     else:
         join_requests_count = JoinRequest.objects.filter(community=community).count()
         form = InviteMemberForm(request.POST or None)
@@ -172,12 +171,13 @@ def community_members(request, pk):
                 return redirect('members', community.id)
             else:
                 receiver = request.POST.get('receiver')
-                user_check = is_community_in_user_community(receiver, community)
+                user_in_community = is_organization_in_user_affiliation(receiver, community)
                 
-                if user_check == False: # If user is not community member
-                    check_invitation = does_community_invite_exist(receiver, community) # Check to see if invitation already exists
+                if not user_in_community: # If user is not community member
+                    invitation_exists = InviteMember.objects.filter(receiver=receiver, community=community).exists() # Check to see if invitation already exists
+                    join_request_exists = JoinRequest.objects.filter(user_from=receiver, community=community).exists() # Check to see if invitation already exists
 
-                    if check_invitation == False: # If invitation does not exist, save form.
+                    if not invitation_exists and not join_request_exists: # If invitation does not exist or join request does not exist, save form.
                         if form.is_valid():
                             data = form.save(commit=False)
                             data.sender = request.user
@@ -204,11 +204,13 @@ def community_members(request, pk):
 @login_required(login_url='login')
 def member_requests(request, pk):
     community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')
     else:
         join_requests = JoinRequest.objects.filter(community=community)
+        member_invites = InviteMember.objects.filter(community=community)
+
         if request.method == 'POST':
             selected_role = request.POST.get('selected_role')
             join_request_id = request.POST.get('join_request_id')
@@ -221,6 +223,7 @@ def member_requests(request, pk):
             'member_role': member_role,
             'community': community,
             'join_requests': join_requests,
+            'member_invites': member_invites,
         }
         return render(request, 'communities/member-requests.html', context)
 
@@ -265,9 +268,9 @@ def select_label(request, pk):
     bclabels = BCLabel.objects.select_related('created_by', 'approved_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community)
     tklabels = TKLabel.objects.select_related('created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community)
 
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')
     else:
         if request.method == "POST":
             bclabel_type = request.POST.get('bclabel-type')
@@ -292,9 +295,9 @@ def select_label(request, pk):
 def customize_label(request, pk, label_type):
     community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
 
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer':
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')    
     else:
         # TK Label
         if label_type.startswith('tk'):
@@ -395,9 +398,9 @@ def approve_label(request, pk, label_id):
     bclabel_exists = BCLabel.objects.filter(unique_id=label_id).exists()
     tklabel_exists = TKLabel.objects.filter(unique_id=label_id).exists()
 
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer':
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')    
     else:
         bclabel = ''
         tklabel = ''
@@ -461,9 +464,9 @@ def edit_label(request, pk, label_id):
     form = ''
     formset = ''
 
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer':
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')    
     else:
 
         add_translation_formset = AddLabelTranslationFormSet(request.POST or None)
@@ -527,9 +530,9 @@ def edit_label(request, pk, label_id):
 def view_label(request, pk, label_uuid):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
 
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')    
     else:
         bclabel = ''
         tklabel = ''
@@ -578,9 +581,9 @@ def view_label(request, pk, label_uuid):
 def projects(request, pk):
     community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')    
     else:
         # community projects + 
         # projects community has been notified of + 
@@ -694,9 +697,9 @@ def create_project(request, pk):
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
 
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')    
     else:
         if request.method == "GET":
             form = CreateProjectForm(request.GET or None)
@@ -757,9 +760,9 @@ def edit_project(request, community_id, project_uuid):
     community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=community_id)
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
     
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')    
     else:
         form = EditProjectForm(request.POST or None, instance=project)
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
@@ -808,9 +811,9 @@ def apply_labels(request, pk, project_uuid):
     truncated_project_title = str(project.title)[0:30]
     title = community.community_name + ' has applied Labels to project ' + truncated_project_title + ' ...'
 
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')    
     else:
         if request.method == "POST":
              # Set private project to discoverable
@@ -883,9 +886,9 @@ def apply_labels(request, pk, project_uuid):
 def connections(request, pk):
     community = Community.objects.select_related('community_creator').get(id=pk)
 
-    member_role = check_member_role_community(request.user, community)
+    member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
-        return render(request, 'communities/restricted.html', {'community': community})
+        return redirect('restricted')    
     else:
         connections = Connections.objects.get(community=community)
 
@@ -895,11 +898,7 @@ def connections(request, pk):
             'connections': connections,
         }
         return render(request, 'communities/connections.html', context)
-
-def restricted_view(request, pk):
-    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
-    return render(request, 'communities/restricted.html', {'community': community, })
-
+        
 # show community Labels in a PDF
 def labels_pdf(request, pk):
     # Get approved labels customized by community

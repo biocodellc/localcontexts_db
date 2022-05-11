@@ -29,8 +29,6 @@ urlpatterns = [
     path('projects/edit-project/<str:community_id>/<str:project_uuid>', views.edit_project, name="edit-project"),
 
     path('connections/<str:pk>/', views.connections, name="community-connections"),
-
-    path('restricted/<str:pk>/', views.restricted_view, name="restricted"),
     
     path('labels-pdf/<str:pk>/', views.labels_pdf, name="labels-pdf"),
     path('labels-download/<str:pk>/', views.download_labels, name="download-labels"),

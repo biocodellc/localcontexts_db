@@ -70,7 +70,7 @@ class InstitutionNoticeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InstitutionNotice
-        fields = ('notice_type', 'institution', 'open_to_collaborate_img_url', 'open_to_collaborate_svg_url', 'open_to_collaborate_default_text', 'attribution_incomplete_img_url', 'attribution_incomplete_svg_url', 'attribution_incomplete_default_text', 'created', 'updated',)
+        fields = ('notice_type', 'institution', 'attribution_incomplete_img_url', 'attribution_incomplete_svg_url', 'attribution_incomplete_default_text', 'created', 'updated',)
 
 class ProjectOverviewSerializer(serializers.ModelSerializer):
     class Meta:
