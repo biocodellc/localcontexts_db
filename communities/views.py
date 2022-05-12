@@ -957,11 +957,6 @@ def download_labels(request, pk):
         get_svg = requests.get(bclabel.svg_url)
         files.append((bclabel.name + '.png', get_image.content))
         files.append((bclabel.name + '.svg', get_svg.content))
-        # TODO: make this work
-        if bclabel.audiofile:
-            audiofile_base_url = ''
-            audiofile = requests.get(bclabel.audiofile.path)
-            files.append((bclabel.audiofile.name, audiofile))
 
         # Default Label text
         text_content = bclabel.name + '\n' + bclabel.default_text
