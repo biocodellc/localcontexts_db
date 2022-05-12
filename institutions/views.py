@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+from localcontexts.utils import dev_prod_or_local
 from projects.utils import add_to_contributors
 from helpers.utils import *
 
 from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson
 from communities.models import Community, JoinRequest
-from notifications.models import ActionNotification, UserNotification
+from notifications.models import ActionNotification
 from helpers.models import ProjectComment, ProjectStatus, Notice, InstitutionNotice, EntitiesNotified, Connections
 
 from django.contrib.auth.models import User

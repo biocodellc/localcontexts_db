@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+from localcontexts.utils import dev_prod_or_local
 from projects.utils import add_to_contributors
-from helpers.utils import set_notice_defaults, dev_prod_or_local
+from helpers.utils import *
 from accounts.utils import get_users_name
 
 from communities.models import Community
