@@ -7,7 +7,7 @@ from tklabels.models import TKLabel
 from projects.models import Project
 from django.contrib.auth.models import User
 
-from .utils import *
+from localcontexts.utils import dev_prod_or_local
 from accounts.utils import get_users_name
 
 from django.conf import settings
