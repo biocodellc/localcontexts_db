@@ -1076,7 +1076,7 @@ if (window.location.href.includes('registry')) {
             btn.innerText = oldValue;
             btn.classList.replace('disabled-btn', 'action-btn')
             btn.removeAttribute('disabled');
-        }, 5000)
+        }, 9000)
     }
 
     function closeModal(modal) {  
