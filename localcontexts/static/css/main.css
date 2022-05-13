@@ -822,6 +822,11 @@ input:focus {
     width: 100px;
 }
 
+.member-roles {
+    width: 150px;
+    text-align: right;
+}
+
   /* TOOLTIPS */
   /* Tooltip container */
 .tooltip {

@@ -26,14 +26,26 @@
     </div>
     <div>
         <h3>What responsibilities are there in the Local Contexts Hub?</h3>
-        <p>
-            <span class="bold">Administrator</span><br>
-            An administrator can accept new members on behalf of the community. They take care of administrative tasks to help build a sustainable workspace.<br><br>
-            <span class="bold">Editor</span><br>
-            Editors can customize Labels and create Projects, they can also approve other Labels developed by another editor within the account. <br><br>
-            <span class="bold">Viewer</span><br>
-            Viewers can view the activity happening in the account but cannot change or edit anything.
-        </p>
+
+        <div class="flex-this margin-bottom-8">
+            <div class="member-roles"><span class="bold">Administrator</span> | </div>
+            <div><span>An administrator can accept new members, change member responsibilities, and remove members. They also have the abilities of an editor.</span></div>
+        </div>
+        <div class="flex-this margin-bottom-8">
+            <div class="member-roles"><span class="bold">Editor</span> | </div>
+            <div><span>
+                {% if community %}
+                    Editors can customize Labels and create Projects, they can also approve other Labels developed by another editor or administrator within the account. 
+                {% endif %}
+                {% if institution %}
+                    Editors can create and contribute to Projects, place Notices, and notify communities. 
+                {% endif %}
+            </span></div>
+        </div>
+        <div class="flex-this margin-bottom-8">
+            <div class="member-roles"><span class="bold">Viewer</span> | </div>
+            <div><span>Viewers can see the activity happening in the account but cannot change or edit anything.</span></div>
+        </div>
     </div>
 
         <!-- Alerts -->
