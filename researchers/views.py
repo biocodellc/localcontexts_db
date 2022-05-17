@@ -367,7 +367,8 @@ def notify_others(request, pk, proj_id):
             'user_can_view': user_can_view,
         }
         return render(request, 'researchers/notify.html', context)
-
+        
+@login_required(login_url='login')
 def connections(request, pk):
     researcher = Researcher.objects.prefetch_related('projects').get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)

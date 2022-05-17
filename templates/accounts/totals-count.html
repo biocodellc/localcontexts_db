@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} | Home {% endblock %}{% load static %} {% block content %} {% include 'partials/headers/_auth-header.html' %}
+{% extends 'base.html' %} {% block title %} | Counter {% endblock %}{% load static %} {% block content %} {% include 'partials/headers/_auth-header.html' %}
 
 <section class="grey-bg">
     <div class="content-card-v2 content-card-space white-bg ">
@@ -25,14 +25,15 @@
                 <h2>Notices</h2>
                 <p>
                     TK - {{ tk_notice_count }} <br>
-                    BC - {{ bc_notice_count }} <br><br>
+                    BC - {{ bc_notice_count }} <br>
+                    Attribution Incomplete - {{ institution_notices_count }} <br><br>
                     <strong>TOTAL: {{ notices_total }} </strong>
                 </p>
             </div>
             <div class="stats-count-div">
                 <h2>Projects</h2>
                 <p>
-                    Communities- {{ community_projects }} <br>
+                    Communities - {{ community_projects }} <br>
                     Institutions - {{ institution_projects }} <br>
                     Researchers - {{ researcher_projects }}<br><br>
                     <strong>TOTAL: {{ projects_count }} </strong>
