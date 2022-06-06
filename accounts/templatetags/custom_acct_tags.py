@@ -1,9 +1,23 @@
 from django import template
-from communities.models import JoinRequest
+from communities.models import Community, JoinRequest
+from institutions.models import Institution
 from notifications.models import UserNotification
 from accounts.utils import get_users_name
+from researchers.models import Researcher
 
 register = template.Library()
+
+@register.simple_tag
+def community_count():
+    return Community.approved.count()
+
+@register.simple_tag
+def institution_count():
+    return Institution.approved.count()
+
+@register.simple_tag
+def researcher_count():
+    return Researcher.objects.count()
 
 @register.simple_tag
 def join_request_inst(institution, user):
