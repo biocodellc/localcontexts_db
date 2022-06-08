@@ -104,7 +104,7 @@ def update_researcher(request, pk):
 
 @login_required(login_url='login')
 def researcher_notices(request, pk):
-    researcher = Researcher.objects.prefetch_related('projects').get(id=pk)
+    researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')
@@ -118,7 +118,7 @@ def researcher_notices(request, pk):
 
 @login_required(login_url='login')
 def researcher_projects(request, pk):
-    researcher = Researcher.objects.prefetch_related('projects', 'user').get(id=pk)
+    researcher = Researcher.objects.prefetch_related('user').get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')
@@ -179,7 +179,7 @@ def researcher_projects(request, pk):
 # Create Project
 @login_required(login_url='login')
 def create_project(request, pk):
-    researcher = Researcher.objects.prefetch_related('projects').get(id=pk)
+    researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')
@@ -334,7 +334,7 @@ def notify_others(request, pk, proj_id):
     else:
         project = Project.objects.prefetch_related('bc_labels', 'tk_labels', 'project_status').get(id=proj_id)
         entities_notified = EntitiesNotified.objects.prefetch_related('communities').get(project=project)
-        communities = Community.approved.prefetch_related('projects').all()
+        communities = Community.approved.all()
 
         if request.method == "POST":
             # Set private project to discoverable
@@ -377,7 +377,7 @@ def notify_others(request, pk, proj_id):
         
 @login_required(login_url='login')
 def connections(request, pk):
-    researcher = Researcher.objects.prefetch_related('projects').get(id=pk)
+    researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')

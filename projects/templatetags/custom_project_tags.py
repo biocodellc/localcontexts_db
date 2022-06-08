@@ -9,7 +9,8 @@ register = template.Library()
 
 @register.simple_tag
 def which_account_created_project(project):
-    return ProjectCreator.objects.get(project=project)
+    p = ProjectCreator.objects.filter(project=project)
+    return p[0] #1st in instances
 
 @register.simple_tag
 def project_comments(project, entity):

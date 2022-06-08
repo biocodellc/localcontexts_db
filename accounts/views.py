@@ -480,17 +480,17 @@ def hub_counter(request):
 
         # Project Counts -- excludes accounts created by ADMIN
         # Community projects
-        for community in Community.objects.prefetch_related('projects').exclude(community_creator=admin):
+        for community in Community.objects.exclude(community_creator=admin):
             comm_count = community.projects.count()
             community_projects += comm_count
         
         # Institution projects
-        for institution in Institution.objects.prefetch_related('projects').exclude(institution_creator=admin):
+        for institution in Institution.objects.exclude(institution_creator=admin):
             inst_count = institution.projects.count()
             institution_projects += inst_count
 
         # Researcher projects
-        for researcher in Researcher.objects.prefetch_related('projects').exclude(user=admin):
+        for researcher in Researcher.objects.exclude(user=admin):
             res_count = researcher.projects.count()
             researcher_projects += res_count
 
@@ -523,17 +523,17 @@ def hub_counter(request):
 
         # Project Counts -- excludes accounts created by ADMIN
         # Community projects
-        for community in Community.objects.prefetch_related('projects').all():
+        for community in Community.objects.all():
             comm_count = community.projects.count()
             community_projects += comm_count
         
         # Institution projects
-        for institution in Institution.objects.prefetch_related('projects').all():
+        for institution in Institution.objects.all():
             inst_count = institution.projects.count()
             institution_projects += inst_count
 
         # Researcher projects
-        for researcher in Researcher.objects.prefetch_related('projects').all():
+        for researcher in Researcher.objects.all():
             res_count = researcher.projects.count()
             researcher_projects += res_count
 

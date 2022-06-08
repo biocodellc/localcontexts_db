@@ -526,7 +526,7 @@ def notify_others(request, pk, proj_id):
 
 @login_required(login_url='login')
 def connections(request, pk):
-    institution = Institution.objects.prefetch_related('projects').get(id=pk)
+    institution = Institution.objects.get(id=pk)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
