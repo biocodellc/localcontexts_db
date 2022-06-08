@@ -168,30 +168,59 @@
         {% endif %} 
 
         <!-- Project Overview -->
-        <div class="content-card-v2 content-card-space white-bg">
-            <h3>Project Overview</h3>
-            <p>A Local Contexts project relates to the item or group of items to which a Notice/Label will be attached. This could be a specific item/samples/publication or a group of items comprising a exhibition/expedition/collection.</p>
-            <div class="w-40">
-                {{ form.project_type.label }} <br>
-                {{ form.project_type }}<br>
-                {% if form.project_type.errors %}
-                    <div class="msg-red w-50"><small>{{ form.project_type.errors.as_text }}</small></div>
-                {% endif %}
-            </div>
-            <div id="otherTypeField" class="w-40 margin-top-16 hide">
-                <label>Other:</label> <br>
-                {{ form.other_type }}<br>
-                {% if form.other_type.errors %}
-                    <div class="msg-red w-50"><small>{{ form.other_type.errors.as_text }}</small></div>
-                {% endif %}
-            </div>
-        </div>
-        </div>
+
 
         <!-- Project Details -->
         <div class="content-card-v2 content-card-space white-bg">
             <h3>Project Details</h3>
             <p>What is the high level information for this project?</p>
+
+            {{ form.project_type.label }}
+            <div class="tooltip"><strong>?</strong>
+                <span class="tooltiptext">
+                    For example, a Local Contexts Project could include adding a Notice to: 
+                    <ul>
+                        <li>
+                            Item (a single record, photograph, sound recording, manuscript, archival document, digital heritage item, artwork), 
+                        </li>
+                        <li>
+                            Collection (papers, language materials, DNA sequences, voucher specimens, researcher collection), 
+                        </li>
+                        <li>
+                            Samples, 
+                        </li>
+                        <li>
+                            Expedition (collecting event, research trip), 
+                        </li>
+                        <li>
+                            Publication (digital publication, website, research publication, archival publication), 
+                        </li>
+                        <li>
+                            Exhibition (online or IRL), or
+                        </li>
+                        <li>
+                            Something else (a university syllabus, metadata).
+                        </li>
+                    </ul>
+                </span>
+            </div>
+            <div class="w-50 flex-this">
+                <div class="w-50 margin-bottom-16 margin-right-8">
+                    {{ form.project_type }}<br>
+                    {% if form.project_type.errors %}
+                        <div class="msg-red w-50"><small>{{ form.project_type.errors.as_text }}</small></div>
+                    {% endif %}
+                </div>
+
+                <div id="otherTypeField" class="w-50 margin-bottom-16 hide">
+                    {{ form.other_type }}<br>
+                    {% if form.other_type.errors %}
+                        <div class="msg-red w-50"><small>{{ form.other_type.errors.as_text }}</small></div>
+                    {% endif %}
+                </div>
+            </div>
+
+
             <div class="padding-bottom-1 w-50">
                 <label>Project Title*</label>
                 <div class="tooltip"><strong>?</strong>

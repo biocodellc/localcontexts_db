@@ -27,7 +27,7 @@ class CreateProjectForm(forms.ModelForm):
         fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'providers_id', 'publication_doi', 'project_data_guid', 'recommended_citation']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-100'}),
-            'other_type': forms.TextInput(attrs={'class': 'w-100'}),
+            'other_type': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Specify other Project type'}),
             'description': forms.Textarea(attrs={'rows': 4, 'class': 'w-100'}),
             'project_contact': forms.TextInput(attrs={'class': 'w-100'}),
             'project_contact_email': forms.TextInput(attrs={'class': 'w-100'}),
@@ -85,7 +85,7 @@ class EditProjectForm(forms.ModelForm):
         fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'providers_id', 'recommended_citation']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-100'}),
-            'other_type': forms.TextInput(attrs={'class': 'w-100'}),
+            'other_type': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Specify other Project type'}),
             'description': forms.Textarea(attrs={'rows': 4, 'class': 'w-100'}),
             'project_contact': forms.TextInput(attrs={'class': 'w-100'}),
             'project_contact_email': forms.TextInput(attrs={'class': 'w-100'}),

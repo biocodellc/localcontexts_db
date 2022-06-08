@@ -394,7 +394,7 @@ def registry_institutions(request):
 
 # REGISTRY : RESEARCHERS
 def registry_researchers(request):
-    r = Researcher.objects.select_related('user').order_by('user').all()
+    r = Researcher.objects.select_related('user').all().order_by('user__username')
     p = Paginator(r, 5)
     page_num = request.GET.get('page', 1)
     page = p.page(page_num)
