@@ -103,3 +103,16 @@ class ProjectPerson(models.Model):
     class Meta:
         verbose_name = 'Additional Contributor'
         verbose_name_plural = 'Additional Contributors'
+
+class ProjectCreator(models.Model):
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community_created_project', null=True, blank=True)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='institution_created_project', null=True, blank=True)
+    researcher = models.ForeignKey(Researcher, on_delete=models.CASCADE, related_name='researcher_created_project', null=True, blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_creator_project', null=True, blank=True)
+
+    def __str__(self):
+        return str(self.project)
+    
+    class Meta:
+        verbose_name = 'Project Creator'
+        verbose_name_plural = 'Project Creator'

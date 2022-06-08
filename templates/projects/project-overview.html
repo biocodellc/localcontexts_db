@@ -13,23 +13,10 @@
                     {{ project.project_privacy }}<br>
                     Created: {{ project.project_creator.get_full_name }} 
 
-                    {% if project.community_projects %} 
-                        {% with qs=project.community_projects.all %}
-                            {% for community in qs %} at {{ community }} | Community {% endfor %} 
-                        {% endwith %}
-                    {% endif %}
-
-                    {% if project.institution_projects %} 
-                        {% with qs=project.institution_projects.all %}
-                            {% for institution in qs %} at {{ institution }} | Institution {% endfor %} 
-                        {% endwith %}
-                    {% endif %}
-
-                    {% if project.researcher_projects %} 
-                        {% with qs=project.researcher_projects.all %}
-                            {% for researcher in qs %} | Researcher {% endfor %} 
-                        {% endwith %}
-                    {% endif %}
+                    {% which_account_created_project project as project_creator %}
+                    {% if project_creator.community %} {{ project_creator.community }} | Community {% endif %}
+                    {% if project_creator.institution %} {{ project_creator.institution }} | Institution {% endif %}
+                    {% if project_creator.researcher %} {{ project_creator.researcher }} | Researcher {% endif %}
                 </p>
             </div>
             
@@ -191,7 +178,7 @@
                         {% if institution.is_approved == False %}
                             <small class="margin-right-1 w-50 no-top-margin">In order to notify communities of your Project, your institution must be confirmed first.</small>
                         {% else %}
-                            {% if project in institution.projects.all %}
+                            {% if project_creator.institution %}
                                 {% if member_role == 'viewer' %}
                                 {% else %}
                                     <div class="margin-right-1">
@@ -205,7 +192,7 @@
                     {% endif %}
 
                     {% if researcher %}
-                        {% if project in researcher.projects.all %}
+                        {% if project_creator.researcher %}
                             <div class="margin-right-1">
                                 <a href="{% url 'researcher-notify-others' researcher.id project.id %}" class="primary-btn action-btn">
                                     Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
@@ -236,7 +223,7 @@
             {% endif %}
 
             {% if community %}
-                {% if project in community.projects.all %} {% else %}
+                {% if not project_creator.community %}
                     {% include 'projects/project-status.html'%}
                 {% endif %}
             {% endif %}

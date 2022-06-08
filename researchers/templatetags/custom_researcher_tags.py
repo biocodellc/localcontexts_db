@@ -2,7 +2,7 @@ from django import template
 from django.urls import reverse
 from notifications.models import ActionNotification
 from helpers.models import Notice, Connections
-from projects.models import ProjectContributors
+from projects.models import ProjectContributors, ProjectCreator
 
 register = template.Library()
 
@@ -21,8 +21,9 @@ def get_notices_count(researcher):
 @register.simple_tag
 def get_labels_count(researcher):
     count = 0
-    for project in researcher.projects.all():
-        if project.has_labels():
+    projects_created_researcher = ProjectCreator.objects.filter(researcher=researcher)
+    for instance in projects_created_researcher:
+        if instance.project.has_labels():
             count += 1
     return count
 

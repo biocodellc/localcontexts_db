@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, ProjectContributors, ProjectPerson
+from .models import Project, ProjectContributors, ProjectPerson, ProjectCreator
 
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('title', 'project_creator', 'project_contact', 'project_contact_email', 'project_privacy', 'date_added', 'unique_id')
@@ -11,6 +11,10 @@ class ProjectContributorsAdmin(admin.ModelAdmin):
 class ProjectPersonAdmin(admin.ModelAdmin):
     list_display = ('project', 'name', 'email')
 
+class ProjectCreatorAdmin(admin.ModelAdmin):
+    list_display = ('project', 'community', 'institution', 'researcher')
+
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectContributors, ProjectContributorsAdmin)
 admin.site.register(ProjectPerson, ProjectPersonAdmin)
+admin.site.register(ProjectCreator, ProjectCreatorAdmin)

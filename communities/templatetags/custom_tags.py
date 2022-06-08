@@ -1,10 +1,12 @@
 from django import template
 from django.urls import reverse
 from django.templatetags.static import static
+from institutions.models import Institution
 from notifications.models import ActionNotification
-from projects.models import Project
+from projects.models import Project, ProjectCreator
 from helpers.models import EntitiesNotified, Connections
 from bclabels.models import BCLabel
+from researchers.models import Researcher
 from tklabels.models import TKLabel
 
 register = template.Library()
@@ -57,8 +59,12 @@ def connections_organization_projects(community, organization):
     # if project is found in target institution projects, append to target list
     target_projects = []
     for project in all_projects:
-        if project in organization.projects.all():
-            target_projects.append(project)
+        if isinstance(organization, Institution):
+            if ProjectCreator.objects.filter(institution=organization, project=project).exists():
+                target_projects.append(project)
+        if isinstance(organization, Researcher):
+            if ProjectCreator.objects.filter(researcher=organization, project=project).exists():
+                target_projects.append(project)
 
     # Removes duplicates from the list
     projects = set(target_projects)

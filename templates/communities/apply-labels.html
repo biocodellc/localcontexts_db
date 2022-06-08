@@ -1,4 +1,4 @@
-{% extends 'sub-base.html' %} {% block title %} | Apply Labels {% endblock %}{% load static %} {% block community_content %}
+{% extends 'sub-base.html' %} {% block title %} | Apply Labels {% endblock %}{% load static %} {% load custom_project_tags %} {% block community_content %}
 
 <div class="content-card-v2 content-card-space white-bg">
     <div class="padding-bottom-2"><small><a href="{% url 'community-projects' community.id %}"><span class="darkteal-text">Projects</span></a> >> Apply Labels</small></div>
@@ -16,9 +16,11 @@
                 {{ project.project_type }} | 
                 {{ project.project_privacy }}<br>
                 Created: {{ project.project_creator.get_full_name }} 
-                {% if project.community_projects %} {% for community in project.community_projects.all %} at {{ community }} | Community {% endfor %} {% endif %}
-                {% if project.institution_projects %} {% for institution in project.institution_projects.all %} at {{ institution }} | Institution {% endfor %} {% endif %}
-                {% if project.researcher_projects %} {% for researcher in project.researcher_projects.all %} | Researcher {% endfor %} {% endif %}
+
+                {% which_account_created_project project as project_creator %}
+                {% if project_creator.community %} at {{ project_creator.community }} | Community {% endif %}
+                {% if project_creator.institution %} at {{ project_creator.institution }} | Institution {% endif %}
+                {% if project_creator.researcher %} {{ project_creator.researcher}} | Researcher {% endif %}
                 </p>
             </div>
             
