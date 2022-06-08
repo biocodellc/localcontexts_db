@@ -1,10 +1,12 @@
 from django import template
 from django.urls import reverse
 from communities.views import projects
+from institutions.models import Institution
 from notifications.models import ActionNotification
 from helpers.models import Notice, Connections
-from projects.models import ProjectContributors
+from projects.models import ProjectContributors, ProjectCreator
 from bclabels.models import BCLabel
+from researchers.models import Researcher
 from tklabels.models import TKLabel
 
 register = template.Library()
@@ -29,8 +31,9 @@ def get_notices_count(institution):
 @register.simple_tag
 def get_labels_count(institution):
     count = 0
-    for project in institution.projects.prefetch_related('bc_labels', 'tk_labels').all():
-        if project.has_labels():
+    projects_created_institution = ProjectCreator.objects.filter(institution=institution)
+    for instance in projects_created_institution:
+        if instance.project.has_labels():
             count += 1
     return count
 
@@ -45,20 +48,39 @@ def connections_count(institution):
 
 @register.simple_tag
 def connections_projects_with_labels(community, organization):
+    # pass instance of researcher or institution
+
     # get all labels from target community
     bclabels = BCLabel.objects.filter(community=community)
     tklabels = TKLabel.objects.filter(community=community)
 
     target_projects = []
+
     for bclabel in bclabels:
         for project in bclabel.project_bclabels.all():
-            if project in organization.projects.all():
-                target_projects.append(project)
+            if isinstance(organization, Institution):
+                if ProjectCreator.objects.filter(institution=organization, project=project).exists():
+                    org_created_project = ProjectCreator.objects.get(institution=organization, project=project)
+                    target_projects.append(org_created_project.project)
+
+            if isinstance(organization, Researcher):
+                if ProjectCreator.objects.filter(researcher=organization, project=project).exists():
+                    org_created_project = ProjectCreator.objects.get(researcher=organization, project=project)
+                    target_projects.append(org_created_project.project)
+
     for tklabel in tklabels:
         for project in tklabel.project_tklabels.all():
-            if project in organization.projects.all():
-                target_projects.append(project)
-    
+
+            if isinstance(organization, Institution):
+                if ProjectCreator.objects.filter(institution=organization, project=project).exists():
+                    org_created_project = ProjectCreator.objects.get(institution=organization, project=project)
+                    target_projects.append(org_created_project.project)
+
+            if isinstance(organization, Researcher):
+                if ProjectCreator.objects.filter(researcher=organization, project=project).exists():
+                    org_created_project = ProjectCreator.objects.get(researcher=organization, project=project)
+                    target_projects.append(org_created_project.project)
+
     projects = set(target_projects)
     return projects
 

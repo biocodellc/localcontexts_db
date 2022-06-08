@@ -7,7 +7,7 @@ from projects.utils import add_to_contributors
 from helpers.utils import *
 
 from .models import *
-from projects.models import Project, ProjectContributors, ProjectPerson
+from projects.models import Project, ProjectContributors, ProjectPerson, ProjectCreator
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
 from helpers.models import ProjectComment, ProjectStatus, Notice, InstitutionNotice, EntitiesNotified, Connections
@@ -292,19 +292,22 @@ def remove_member(request, pk, member_id):
 # Projects
 @login_required(login_url='login')
 def institution_projects(request, pk):
-    institution = Institution.objects.select_related('institution_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
+    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
-        # institution projects + 
-        # projects institution has been notified of + 
-        # projects where institution is contributor
+        # init list for:
+        # 1. institution projects + 
+        # 2. projects institution has been notified of 
+        # 3. projects where institution is contributor
         projects_list = []
-        institution_projects = institution.projects.all()
+
+        institution_projects = ProjectCreator.objects.filter(institution=institution) # projects created by institution
+
         for p in institution_projects:
-            projects_list.append(p)
+            projects_list.append(p.project)
 
         institution_notified = EntitiesNotified.objects.select_related('project').prefetch_related('communities', 'researchers').filter(institutions=institution)
         for n in institution_notified:
@@ -365,7 +368,8 @@ def create_project(request, pk):
                 data.project_creator = request.user
                 data.save()
                 # Add project to institution projects
-                institution.projects.add(data)
+                # institution.projects.add(data)
+                ProjectCreator.objects.create(institution=institution, project=data)
 
                 #Create EntitiesNotified instance for the project
                 EntitiesNotified.objects.create(project=data)

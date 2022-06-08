@@ -8,7 +8,7 @@ from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Co
 from notifications.models import *
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
-from projects.models import ProjectContributors, Project, ProjectPerson
+from projects.models import ProjectContributors, Project, ProjectPerson, ProjectCreator
 
 from helpers.forms import AddLabelTranslationFormSet, LabelNoteForm, ProjectCommentForm, UpdateBCLabelTranslationFormSet, UpdateTKLabelTranslationFormSet
 from bclabels.forms import *
@@ -580,8 +580,7 @@ def view_label(request, pk, label_uuid):
 # Projects Main
 @login_required(login_url='login')
 def projects(request, pk):
-    community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
-    
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
@@ -590,9 +589,16 @@ def projects(request, pk):
         # projects community has been notified of + 
         # projects where community is contributor
         projects_list = []
-        community_projects = community.projects.prefetch_related('bc_labels', 'tk_labels').all()
-        for proj in community_projects:
-            projects_list.append(proj)
+
+        # community_projects = community.projects.prefetch_related('bc_labels', 'tk_labels').all()
+        # for p in community_projects:
+        #     projects_list.append(p)
+
+        # TODO: IMPLEMENT THIS
+        community_projects = ProjectCreator.objects.filter(community=community)
+
+        for p in community_projects:
+            projects_list.append(p.project)
 
         community_notified = EntitiesNotified.objects.select_related('project').prefetch_related('institutions', 'researchers').filter(communities=community)
         for n in community_notified:
@@ -715,7 +721,8 @@ def create_project(request, pk):
                 data.save()
 
                 # Add project to community projects
-                community.projects.add(data)
+                # community.projects.add(data)
+                ProjectCreator.objects.create(community=community, project=data)
 
                 #Create EntitiesNotified instance for the project
                 EntitiesNotified.objects.create(project=data)
@@ -801,6 +808,7 @@ def edit_project(request, community_id, project_uuid):
 def apply_labels(request, pk, project_uuid):
     community = Community.objects.select_related('community_creator').prefetch_related('projects', 'admins', 'editors', 'viewers').get(id=pk)
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
+    project_creator = ProjectCreator.objects.get(project=project)
     bclabels = BCLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community, is_approved=True)
 
@@ -878,6 +886,7 @@ def apply_labels(request, pk, project_uuid):
         'member_role': member_role,
         'community': community,
         'project': project,
+        'project_creator': project_creator,
         'bclabels': bclabels,
         'tklabels': tklabels,
     }
