@@ -108,38 +108,39 @@ def change_member_role(org, member, current_role, new_role):
 
 def accepted_join_request(org, join_request_id, selected_role):
     # Passes instance of Community or Institution, a join_request pk, and a selected role
-    join_request = JoinRequest.objects.get(id=join_request_id)
-    if selected_role is None:
-        pass
-    else:
-        # Add organization to userAffiliation and delete relevant action notification
-        affiliation = UserAffiliation.objects.get(user=join_request.user_from)
-        if isinstance(org, Community):
-            affiliation.communities.add(org)
-            if ActionNotification.objects.filter(sender=join_request.user_from, community=org, reference_id=join_request.id).exists():
-                notification = ActionNotification.objects.get(sender=join_request.user_from, community=org, reference_id=join_request.id)
-                notification.delete()
-        if isinstance(org, Institution):
-            affiliation.institutions.add(org)
-            if ActionNotification.objects.filter(sender=join_request.user_from, institution=org, reference_id=join_request.id).exists():
-                notification = ActionNotification.objects.get(sender=join_request.user_from, institution=org, reference_id=join_request.id)
-                notification.delete()
+    if JoinRequest.objects.filter(id=join_request_id).exists():
+        join_request = JoinRequest.objects.get(id=join_request_id)
+        if selected_role is None:
+            pass
+        else:
+            # Add organization to userAffiliation and delete relevant action notification
+            affiliation = UserAffiliation.objects.get(user=join_request.user_from)
+            if isinstance(org, Community):
+                affiliation.communities.add(org)
+                if ActionNotification.objects.filter(sender=join_request.user_from, community=org, reference_id=join_request.id).exists():
+                    notification = ActionNotification.objects.get(sender=join_request.user_from, community=org, reference_id=join_request.id)
+                    notification.delete()
+            if isinstance(org, Institution):
+                affiliation.institutions.add(org)
+                if ActionNotification.objects.filter(sender=join_request.user_from, institution=org, reference_id=join_request.id).exists():
+                    notification = ActionNotification.objects.get(sender=join_request.user_from, institution=org, reference_id=join_request.id)
+                    notification.delete()
 
-        # Add member to role
-        if selected_role == 'Administrator':
-            org.admins.add(join_request.user_from)
-        elif selected_role == 'Editor':
-            org.editors.add(join_request.user_from)
-        elif selected_role == 'Viewer':
-            org.viewers.add(join_request.user_from)
-        
-        # Create UserNotification
-        sender = join_request.user_from
-        title = f"You are now a member of {org}!"
-        UserNotification.objects.create(to_user=sender, title=title, notification_type="Accept")
+            # Add member to role
+            if selected_role == 'Administrator':
+                org.admins.add(join_request.user_from)
+            elif selected_role == 'Editor':
+                org.editors.add(join_request.user_from)
+            elif selected_role == 'Viewer':
+                org.viewers.add(join_request.user_from)
+            
+            # Create UserNotification
+            sender = join_request.user_from
+            title = f"You are now a member of {org}!"
+            UserNotification.objects.create(to_user=sender, title=title, notification_type="Accept")
 
-        # Delete join request
-        join_request.delete()
+            # Delete join request
+            join_request.delete()
 
 
 def set_language_code(instance):
