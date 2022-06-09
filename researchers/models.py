@@ -18,7 +18,6 @@ class Researcher(models.Model):
     description = models.TextField(null=True, blank=True, validators=[MaxLengthValidator(200)])
     website = models.URLField(max_length=150, blank=True, null=True)
     primary_institution = models.CharField(max_length=250, null=True, blank=True)
-    projects = models.ManyToManyField('projects.Project', blank=True, related_name="researcher_projects")
     orcid_auth_token = models.TextField(null=True, blank=True)
     date_connected = models.DateTimeField(auto_now_add=True, null=True)
 

@@ -13,5 +13,5 @@ Request Labels
 Authenticate all users
 
 ## /labelcreation
-Meant for tribal interactions
+Meant for indigenous interactions
 PUT, UPDATE, DELETE labels

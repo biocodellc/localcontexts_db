@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages, auth
 from django.views.generic import View
 from django.contrib.auth.views import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 
 from django.contrib.auth.decorators import login_required
-
-from projects.models import Project
 from .decorators import unauthenticated_user
+
+from django.core.paginator import Paginator
 
 # For emails
 from django.conf import settings
@@ -289,86 +289,151 @@ def invite_user(request):
                 return redirect('invite')
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 
-def organization_registry(request):
-    communities = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
-    institutions = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
-    researchers = Researcher.objects.select_related('user').all()
+# REGISTRY : COMMUNITIES
+def registry_communities(request):
+    try:
+        # Paginate the query of all approved communities
+        c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
+        p = Paginator(c, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
 
-    if request.user.is_authenticated:
-        user_affiliations = UserAffiliation.objects.prefetch_related('institutions', 'communities').get(user=request.user)
-        user_institutions = user_affiliations.institutions.all()
-        user_communities = user_affiliations.communities.all()
+        if request.user.is_authenticated:
+            user_communities = UserAffiliation.objects.prefetch_related('communities').get(user=request.user).communities.all()
+            form = ContactOrganizationForm(request.POST or None)
+
+            if request.method == 'POST':
+                if 'contact_btn' in request.POST:
+                    # contact community
+                    if form.is_valid():
+                        to_email = ''
+                        from_name = form.cleaned_data['name']
+                        from_email = form.cleaned_data['email']
+                        message = form.cleaned_data['message']
+
+                        # which community
+                        comm_contact_id = request.POST.get('commid_contact')
+                        
+                        if comm_contact_id:
+                            comm = Community.objects.select_related('community_creator').get(id=comm_contact_id)
+                            to_email = comm.community_creator.email
+                        
+                        send_contact_email(to_email, from_name, from_email, message)
+                else:
+                    # Request To Join community
+                    comm_input_id = request.POST.get('commid')
+
+                    if comm_input_id:
+                        target_community = Community.objects.select_related('community_creator').get(id=comm_input_id)
+                        main_admin = target_community.community_creator
+                        join_request = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
+                        join_request.save()
+
+                        # Send email to community creator
+                        send_join_request_email_admin(request, join_request, target_community)
+
+                messages.add_message(request, messages.SUCCESS, 'Sent!')
+                return redirect('community-registry')
+
+            else:
+                context = { 'communities': True, 'items': page, 'form': form, 'user_communities': user_communities,}
+                return render(request, 'accounts/registry.html', context)
+
+        context = { 'communities': True, 'items': page }
+        return render(request, 'accounts/registry.html', context)
+    except:
+        raise Http404()
+
+# REGISTRY : INSTITUTIONS
+def registry_institutions(request):
+    try:
+        i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
+        p = Paginator(i, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+
+        if request.user.is_authenticated:
+            user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()
+            form = ContactOrganizationForm(request.POST or None)
+
+            if request.method == 'POST':
+                if 'contact_btn' in request.POST:
+                    # contact institution
+                    if form.is_valid():
+                        to_email = ''
+                        from_name = form.cleaned_data['name']
+                        from_email = form.cleaned_data['email']
+                        message = form.cleaned_data['message']
+
+                        # which institution
+                        inst_contact_id = request.POST.get('instid_contact')
+                        
+                        if inst_contact_id:
+                            inst = Institution.objects.select_related('institution_creator').get(id=inst_contact_id)
+                            to_email = inst.institution_creator.email
+                        
+                        send_contact_email(to_email, from_name, from_email, message)
+                else:
+                    # Request To Join institution
+                    inst_input_id = request.POST.get('instid')
+
+                    if inst_input_id:
+                        target_institution = Institution.objects.select_related('institution_creator').get(id=inst_input_id)
+                        main_admin = target_institution.institution_creator
+                        join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
+                        join_request.save()
+
+                        # Send email to institution creator
+                        send_join_request_email_admin(request, join_request, target_institution)
+
+                messages.add_message(request, messages.SUCCESS, 'Sent!')
+                return redirect('institution-registry')
+
+            else:
+                context = { 'institutions': True, 'items': page, 'form': form, 'user_institutions': user_institutions,}
+                return render(request, 'accounts/registry.html', context)
+
+        context = { 'institutions': True, 'items': page,}
+        return render(request, 'accounts/registry.html', context)
+    except:
+        raise Http404()
+
+# REGISTRY : RESEARCHERS
+def registry_researchers(request):
+    try:
+        r = Researcher.objects.select_related('user').all().order_by('user__username')
+        p = Paginator(r, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
 
         form = ContactOrganizationForm(request.POST or None)
 
         if request.method == 'POST':
             if 'contact_btn' in request.POST:
-                # contact community or institution
+                # contact researcher
                 if form.is_valid():
                     to_email = ''
                     from_name = form.cleaned_data['name']
                     from_email = form.cleaned_data['email']
                     message = form.cleaned_data['message']
 
-                    # which institution or community
-                    inst_contact_id = request.POST.get('instid_contact')
-                    comm_contact_id = request.POST.get('commid_contact')
                     res_contact_id = request.POST.get('resid_contact')
 
-                    if inst_contact_id:
-                        inst = Institution.objects.select_related('institution_creator').get(id=inst_contact_id)
-                        to_email = inst.institution_creator.email
-                    
-                    if comm_contact_id:
-                        comm = Community.objects.select_related('community_creator').get(id=comm_contact_id)
-                        to_email = comm.community_creator.email
-                    
                     if res_contact_id:
                         researcher = Researcher.objects.select_related('user').get(id=res_contact_id)
                         to_email = researcher.contact_email
-                    
+
                     send_contact_email(to_email, from_name, from_email, message)
-            else:
-                # Request To Join community or institution
-                inst_input_id = request.POST.get('instid')
-                comm_input_id = request.POST.get('commid')
-
-                if inst_input_id:
-                    target_institution = Institution.objects.select_related('institution_creator').get(id=inst_input_id)
-                    main_admin = target_institution.institution_creator
-                    join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
-                    join_request.save()
-
-                    # Send email to institution creator
-                    send_join_request_email_admin(request, join_request, target_institution)
-
-                elif comm_input_id:
-                    target_community = Community.objects.select_related('community_creator').get(id=comm_input_id)
-                    main_admin = target_community.community_creator
-                    join_request = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
-                    join_request.save()
-
-                    # Send email to community creator
-                    send_join_request_email_admin(request, join_request, target_community)
-
-            messages.add_message(request, messages.SUCCESS, 'Sent!')
-            return redirect('organization-registry')
+                    messages.add_message(request, messages.SUCCESS, 'Sent!')
+                    return redirect('researcher-registry')
         else:
-            context = {
-                'communities': communities,
-                'institutions': institutions,
-                'researchers': researchers,
-                'user_institutions': user_institutions,
-                'user_communities': user_communities,
-                'form': form,
-            }
+            context = { 'researchers': True, 'items': page, 'form': form,}
             return render(request, 'accounts/registry.html', context)
-    
-    context = {
-        'communities': communities,
-        'institutions': institutions,
-    }
-    return render(request, 'accounts/registry.html', context)
+
+        context = { 'researchers': True, 'items': page,}
+        return render(request, 'accounts/registry.html', context)
+    except:
+        raise Http404()
 
 # Hub stats page
 def hub_counter(request):
@@ -424,17 +489,17 @@ def hub_counter(request):
 
         # Project Counts -- excludes accounts created by ADMIN
         # Community projects
-        for community in Community.objects.prefetch_related('projects').exclude(community_creator=admin):
+        for community in Community.objects.exclude(community_creator=admin):
             comm_count = community.projects.count()
             community_projects += comm_count
         
         # Institution projects
-        for institution in Institution.objects.prefetch_related('projects').exclude(institution_creator=admin):
+        for institution in Institution.objects.exclude(institution_creator=admin):
             inst_count = institution.projects.count()
             institution_projects += inst_count
 
         # Researcher projects
-        for researcher in Researcher.objects.prefetch_related('projects').exclude(user=admin):
+        for researcher in Researcher.objects.exclude(user=admin):
             res_count = researcher.projects.count()
             researcher_projects += res_count
 
@@ -467,17 +532,17 @@ def hub_counter(request):
 
         # Project Counts -- excludes accounts created by ADMIN
         # Community projects
-        for community in Community.objects.prefetch_related('projects').all():
+        for community in Community.objects.all():
             comm_count = community.projects.count()
             community_projects += comm_count
         
         # Institution projects
-        for institution in Institution.objects.prefetch_related('projects').all():
+        for institution in Institution.objects.all():
             inst_count = institution.projects.count()
             institution_projects += inst_count
 
         # Researcher projects
-        for researcher in Researcher.objects.prefetch_related('projects').all():
+        for researcher in Researcher.objects.all():
             res_count = researcher.projects.count()
             researcher_projects += res_count
 

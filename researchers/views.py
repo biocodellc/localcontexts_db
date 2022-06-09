@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from communities.views import projects
 
 from localcontexts.utils import dev_prod_or_local
 from projects.utils import add_to_contributors
@@ -10,7 +11,7 @@ from accounts.utils import get_users_name
 from communities.models import Community
 from notifications.models import ActionNotification
 from helpers.models import ProjectStatus, ProjectComment, Notice, EntitiesNotified, Connections
-from projects.models import ProjectContributors, Project, ProjectPerson
+from projects.models import ProjectContributors, Project, ProjectPerson, ProjectCreator
 
 from projects.forms import *
 from helpers.forms import ProjectCommentForm
@@ -53,7 +54,7 @@ def connect_researcher(request):
 
         return render(request, 'researchers/connect-researcher.html', {'form': form})
     else:
-        return redirect('researcher-projects', researcher.id)
+        return redirect('researcher-notices', researcher.id)
 
 @login_required(login_url='login')
 def connect_orcid(request):
@@ -103,7 +104,7 @@ def update_researcher(request, pk):
 
 @login_required(login_url='login')
 def researcher_notices(request, pk):
-    researcher = Researcher.objects.prefetch_related('projects').get(id=pk)
+    researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')
@@ -117,7 +118,7 @@ def researcher_notices(request, pk):
 
 @login_required(login_url='login')
 def researcher_projects(request, pk):
-    researcher = Researcher.objects.prefetch_related('projects', 'user').get(id=pk)
+    researcher = Researcher.objects.prefetch_related('user').get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')
@@ -126,9 +127,15 @@ def researcher_projects(request, pk):
         # projects researcher has been notified of + 
         # projects where researcher is contributor
         projects_list = []
-        researcher_projects = researcher.projects.prefetch_related('bc_labels', 'tk_labels').all()
+
+        # researcher_projects = researcher.projects.prefetch_related('bc_labels', 'tk_labels').all()
+        # for p in researcher_projects:
+        #     projects_list.append(p)
+
+        researcher_projects = ProjectCreator.objects.filter(researcher=researcher)
+
         for p in researcher_projects:
-            projects_list.append(p)
+            projects_list.append(p.project)
 
         researcher_notified = EntitiesNotified.objects.select_related('project').prefetch_related('communities', 'institutions').filter(researchers=researcher)
         for n in researcher_notified:
@@ -162,7 +169,6 @@ def researcher_projects(request, pk):
                 return redirect('researcher-projects', researcher.id)
 
         context = {
-            # 'researcher_notified': researcher_notified,
             'projects': projects,
             'researcher': researcher,
             'form': form,
@@ -173,7 +179,7 @@ def researcher_projects(request, pk):
 # Create Project
 @login_required(login_url='login')
 def create_project(request, pk):
-    researcher = Researcher.objects.prefetch_related('projects').get(id=pk)
+    researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')
@@ -190,7 +196,8 @@ def create_project(request, pk):
                 data.project_creator = request.user
                 data.save()
                 # Add project to researcher projects
-                researcher.projects.add(data)
+                # researcher.projects.add(data)
+                ProjectCreator.objects.create(researcher=researcher, project=data)
 
                 #Create EntitiesNotified instance for the project
                 EntitiesNotified.objects.create(project=data)
@@ -327,7 +334,7 @@ def notify_others(request, pk, proj_id):
     else:
         project = Project.objects.prefetch_related('bc_labels', 'tk_labels', 'project_status').get(id=proj_id)
         entities_notified = EntitiesNotified.objects.prefetch_related('communities').get(project=project)
-        communities = Community.approved.prefetch_related('projects').all()
+        communities = Community.approved.all()
 
         if request.method == "POST":
             # Set private project to discoverable
@@ -370,7 +377,7 @@ def notify_others(request, pk, proj_id):
         
 @login_required(login_url='login')
 def connections(request, pk):
-    researcher = Researcher.objects.prefetch_related('projects').get(id=pk)
+    researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')

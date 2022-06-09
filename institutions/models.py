@@ -35,7 +35,6 @@ class Institution(models.Model):
     admins = models.ManyToManyField(User, blank=True, related_name="institution_admins")
     editors = models.ManyToManyField(User, blank=True, related_name="institution_editors")
     viewers = models.ManyToManyField(User, blank=True, related_name="institution_viewers")
-    projects = models.ManyToManyField('projects.Project', blank=True, related_name="institution_projects")
     is_approved = models.BooleanField(default=False, null=True)
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="institution_approver")
     is_ror = models.BooleanField(default=True, null=False)

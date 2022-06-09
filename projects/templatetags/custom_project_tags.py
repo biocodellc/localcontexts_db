@@ -2,10 +2,15 @@ from django import template
 from institutions.models import Institution
 from researchers.models import Researcher
 from communities.models import Community
-from projects.models import Project, ProjectContributors
+from projects.models import Project, ProjectContributors, ProjectCreator
 from helpers.models import ProjectStatus, ProjectComment
 
 register = template.Library()
+
+@register.simple_tag
+def which_account_created_project(project):
+    p = ProjectCreator.objects.filter(project=project)
+    return p[0] #1st in instances
 
 @register.simple_tag
 def project_comments(project, entity):
@@ -42,6 +47,20 @@ def which_communities_notified(project):
 def discoverable_project_view(user, project_uuid):
     project = Project.objects.select_related('project_creator').get(unique_id=project_uuid)
     project_contributors = ProjectContributors.objects.prefetch_related('institutions', 'communities', 'researchers').get(project=project)
+    project_creator_org = ProjectCreator.objects.get(project=project)
+
+    # Initialize boolean with false to check which account created the project
+    is_community_created = False
+    is_institution_created = False
+    is_researcher_created = False
+
+    # Check which account created the project
+    if project_creator_org.community:
+        is_community_created = True
+    if project_creator_org.institution:
+        is_institution_created = True
+    if project_creator_org.researcher:
+        is_researcher_created = True
 
     if user.is_anonymous:
         return False
@@ -49,13 +68,15 @@ def discoverable_project_view(user, project_uuid):
     elif user == project.project_creator:
         return True
     
-    elif project.community_projects.all(): # is user a part of the community created project
-        for community in project.community_projects.all():
-            return community.is_user_in_community(user)
+    elif is_community_created: # was project created by community
+        return project_creator_org.community.is_user_in_community(user) # is user a member of the community
     
-    elif project.institution_projects.all(): # is user a part of the institution created project
-        for institution in project.institution_projects.all():
-            return institution.is_user_in_institution(user)
+    elif is_institution_created: # was project created by institution
+        return project_creator_org.institution.is_user_in_institution(user) # is user a member of the institution
+    
+    elif is_researcher_created: # was project created by researcher
+        if Researcher.objects.filter(user=user).exists(): # does this user have a researcher account
+            return project_creator_org.researcher == Researcher.objects.get(user=user) # is it the same researcher account as project created by instance
 
     elif Researcher.objects.filter(user=user):  #is user a researcher and is this researcher a contributor
         for researcher in project_contributors.researchers.all():

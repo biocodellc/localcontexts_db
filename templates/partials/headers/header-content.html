@@ -8,7 +8,7 @@
             <div class="nav-links-div flex-this align-center w-50">
                 <a 
                     class="{% if request.get_full_path == '/registry/' %} active-link bold {% endif %} white-text upper" 
-                    href="{% url 'organization-registry' %}"> Local Contexts Registry
+                    href="{% url 'community-registry' %}"> Local Contexts Registry
                 </a>
                 
                 {% if user.is_authenticated %}

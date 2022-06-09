@@ -848,8 +848,9 @@ input:focus {
     width: 330px;
     background-color: #EF6C00;
     color: #fff;
-    text-align: center;
-    padding: 10px 7px;
+    /* text-align: center; */
+    text-align: left;
+    padding: 10px 8px;
     border-radius: 5px;
   
     /* Position the tooltip text */

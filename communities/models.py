@@ -38,7 +38,6 @@ class Community(models.Model):
     viewers = models.ManyToManyField(User, blank=True, related_name="viewers", db_index=True)
     is_approved = models.BooleanField(default=False, null=True)
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL, related_name="community_approver")
-    projects = models.ManyToManyField('projects.Project', blank=True, related_name="community_projects", db_index=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     # Managers
     objects = models.Manager()
@@ -111,13 +110,13 @@ class JoinRequest(models.Model):
         ('viewer', 'viewer'),
     )
 
-    user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_sender')
-    user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_receiver')
-    role = models.CharField(max_length=8, choices=ROLES, null=True)
+    user_from = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_sender', blank=True)
+    user_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='request_receiver', blank=True)
+    role = models.CharField(max_length=8, choices=ROLES, null=True, blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='join_request_community', null=True, blank=True)
     institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='join_request_institution', null=True, blank=True)
     message = models.TextField(blank=True)
-    status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent')
+    status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='sent', blank=True)
     date_sent = models.DateTimeField(auto_now=True)
 
     def __str__(self):
