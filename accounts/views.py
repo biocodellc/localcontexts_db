@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages, auth
 from django.views.generic import View
 from django.contrib.auth.views import PasswordChangeForm
@@ -291,55 +291,58 @@ def invite_user(request):
 
 # REGISTRY : COMMUNITIES
 def registry_communities(request):
-    # Paginate the query of all approved communities
-    c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
-    p = Paginator(c, 5)
-    page_num = request.GET.get('page', 1)
-    page = p.page(page_num)
+    try:
+        # Paginate the query of all approved communities
+        c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
+        p = Paginator(c, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
 
-    if request.user.is_authenticated:
-        user_communities = UserAffiliation.objects.prefetch_related('communities').get(user=request.user).communities.all()
-        form = ContactOrganizationForm(request.POST or None)
+        if request.user.is_authenticated:
+            user_communities = UserAffiliation.objects.prefetch_related('communities').get(user=request.user).communities.all()
+            form = ContactOrganizationForm(request.POST or None)
 
-        if request.method == 'POST':
-            if 'contact_btn' in request.POST:
-                # contact community
-                if form.is_valid():
-                    to_email = ''
-                    from_name = form.cleaned_data['name']
-                    from_email = form.cleaned_data['email']
-                    message = form.cleaned_data['message']
+            if request.method == 'POST':
+                if 'contact_btn' in request.POST:
+                    # contact community
+                    if form.is_valid():
+                        to_email = ''
+                        from_name = form.cleaned_data['name']
+                        from_email = form.cleaned_data['email']
+                        message = form.cleaned_data['message']
 
-                    # which community
-                    comm_contact_id = request.POST.get('commid_contact')
-                    
-                    if comm_contact_id:
-                        comm = Community.objects.select_related('community_creator').get(id=comm_contact_id)
-                        to_email = comm.community_creator.email
-                    
-                    send_contact_email(to_email, from_name, from_email, message)
+                        # which community
+                        comm_contact_id = request.POST.get('commid_contact')
+                        
+                        if comm_contact_id:
+                            comm = Community.objects.select_related('community_creator').get(id=comm_contact_id)
+                            to_email = comm.community_creator.email
+                        
+                        send_contact_email(to_email, from_name, from_email, message)
+                else:
+                    # Request To Join community
+                    comm_input_id = request.POST.get('commid')
+
+                    if comm_input_id:
+                        target_community = Community.objects.select_related('community_creator').get(id=comm_input_id)
+                        main_admin = target_community.community_creator
+                        join_request = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
+                        join_request.save()
+
+                        # Send email to community creator
+                        send_join_request_email_admin(request, join_request, target_community)
+
+                messages.add_message(request, messages.SUCCESS, 'Sent!')
+                return redirect('community-registry')
+
             else:
-                # Request To Join community
-                comm_input_id = request.POST.get('commid')
+                context = { 'communities': True, 'items': page, 'form': form, 'user_communities': user_communities,}
+                return render(request, 'accounts/registry.html', context)
 
-                if comm_input_id:
-                    target_community = Community.objects.select_related('community_creator').get(id=comm_input_id)
-                    main_admin = target_community.community_creator
-                    join_request = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
-                    join_request.save()
-
-                    # Send email to community creator
-                    send_join_request_email_admin(request, join_request, target_community)
-
-            messages.add_message(request, messages.SUCCESS, 'Sent!')
-            return redirect('community-registry')
-
-        else:
-            context = { 'communities': True, 'items': page, 'form': form, 'user_communities': user_communities,}
-            return render(request, 'accounts/registry.html', context)
-
-    context = { 'communities': True, 'items': page }
-    return render(request, 'accounts/registry.html', context)
+        context = { 'communities': True, 'items': page }
+        return render(request, 'accounts/registry.html', context)
+    except:
+        raise Http404()
 
 # REGISTRY : INSTITUTIONS
 def registry_institutions(request):
