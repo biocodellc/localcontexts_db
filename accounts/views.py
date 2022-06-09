@@ -346,88 +346,94 @@ def registry_communities(request):
 
 # REGISTRY : INSTITUTIONS
 def registry_institutions(request):
-    i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
-    p = Paginator(i, 5)
-    page_num = request.GET.get('page', 1)
-    page = p.page(page_num)
+    try:
+        i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
+        p = Paginator(i, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
 
-    if request.user.is_authenticated:
-        user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()
+        if request.user.is_authenticated:
+            user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()
+            form = ContactOrganizationForm(request.POST or None)
+
+            if request.method == 'POST':
+                if 'contact_btn' in request.POST:
+                    # contact institution
+                    if form.is_valid():
+                        to_email = ''
+                        from_name = form.cleaned_data['name']
+                        from_email = form.cleaned_data['email']
+                        message = form.cleaned_data['message']
+
+                        # which institution
+                        inst_contact_id = request.POST.get('instid_contact')
+                        
+                        if inst_contact_id:
+                            inst = Institution.objects.select_related('institution_creator').get(id=inst_contact_id)
+                            to_email = inst.institution_creator.email
+                        
+                        send_contact_email(to_email, from_name, from_email, message)
+                else:
+                    # Request To Join institution
+                    inst_input_id = request.POST.get('instid')
+
+                    if inst_input_id:
+                        target_institution = Institution.objects.select_related('institution_creator').get(id=inst_input_id)
+                        main_admin = target_institution.institution_creator
+                        join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
+                        join_request.save()
+
+                        # Send email to institution creator
+                        send_join_request_email_admin(request, join_request, target_institution)
+
+                messages.add_message(request, messages.SUCCESS, 'Sent!')
+                return redirect('institution-registry')
+
+            else:
+                context = { 'institutions': True, 'items': page, 'form': form, 'user_institutions': user_institutions,}
+                return render(request, 'accounts/registry.html', context)
+
+        context = { 'institutions': True, 'items': page,}
+        return render(request, 'accounts/registry.html', context)
+    except:
+        raise Http404()
+
+# REGISTRY : RESEARCHERS
+def registry_researchers(request):
+    try:
+        r = Researcher.objects.select_related('user').all().order_by('user__username')
+        p = Paginator(r, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+
         form = ContactOrganizationForm(request.POST or None)
 
         if request.method == 'POST':
             if 'contact_btn' in request.POST:
-                # contact institution
+                # contact researcher
                 if form.is_valid():
                     to_email = ''
                     from_name = form.cleaned_data['name']
                     from_email = form.cleaned_data['email']
                     message = form.cleaned_data['message']
 
-                    # which institution
-                    inst_contact_id = request.POST.get('instid_contact')
-                    
-                    if inst_contact_id:
-                        inst = Institution.objects.select_related('institution_creator').get(id=inst_contact_id)
-                        to_email = inst.institution_creator.email
-                    
+                    res_contact_id = request.POST.get('resid_contact')
+
+                    if res_contact_id:
+                        researcher = Researcher.objects.select_related('user').get(id=res_contact_id)
+                        to_email = researcher.contact_email
+
                     send_contact_email(to_email, from_name, from_email, message)
-            else:
-                # Request To Join institution
-                inst_input_id = request.POST.get('instid')
-
-                if inst_input_id:
-                    target_institution = Institution.objects.select_related('institution_creator').get(id=inst_input_id)
-                    main_admin = target_institution.institution_creator
-                    join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
-                    join_request.save()
-
-                    # Send email to institution creator
-                    send_join_request_email_admin(request, join_request, target_institution)
-
-            messages.add_message(request, messages.SUCCESS, 'Sent!')
-            return redirect('institution-registry')
-
+                    messages.add_message(request, messages.SUCCESS, 'Sent!')
+                    return redirect('researcher-registry')
         else:
-            context = { 'institutions': True, 'items': page, 'form': form, 'user_institutions': user_institutions,}
+            context = { 'researchers': True, 'items': page, 'form': form,}
             return render(request, 'accounts/registry.html', context)
 
-    context = { 'institutions': True, 'items': page,}
-    return render(request, 'accounts/registry.html', context)
-
-# REGISTRY : RESEARCHERS
-def registry_researchers(request):
-    r = Researcher.objects.select_related('user').all().order_by('user__username')
-    p = Paginator(r, 5)
-    page_num = request.GET.get('page', 1)
-    page = p.page(page_num)
-
-    form = ContactOrganizationForm(request.POST or None)
-
-    if request.method == 'POST':
-        if 'contact_btn' in request.POST:
-            # contact researcher
-            if form.is_valid():
-                to_email = ''
-                from_name = form.cleaned_data['name']
-                from_email = form.cleaned_data['email']
-                message = form.cleaned_data['message']
-
-                res_contact_id = request.POST.get('resid_contact')
-
-                if res_contact_id:
-                    researcher = Researcher.objects.select_related('user').get(id=res_contact_id)
-                    to_email = researcher.contact_email
-
-                send_contact_email(to_email, from_name, from_email, message)
-                messages.add_message(request, messages.SUCCESS, 'Sent!')
-                return redirect('researcher-registry')
-    else:
-        context = { 'researchers': True, 'items': page, 'form': form,}
+        context = { 'researchers': True, 'items': page,}
         return render(request, 'accounts/registry.html', context)
-
-    context = { 'researchers': True, 'items': page,}
-    return render(request, 'accounts/registry.html', context)
+    except:
+        raise Http404()
 
 # Hub stats page
 def hub_counter(request):
