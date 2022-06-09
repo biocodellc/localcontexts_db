@@ -27,9 +27,9 @@ urlpatterns = [
 
     path('select-account/', views.select_account, name='select-account'),
     
-    path('registry/communities', views.registry_communities, name='community-registry'),
-    path('registry/institutions', views.registry_institutions, name='institution-registry'),
-    path('registry/researchers', views.registry_researchers, name='researcher-registry'),
+    path('registry/communities/', views.registry_communities, name='community-registry'),
+    path('registry/institutions/', views.registry_institutions, name='institution-registry'),
+    path('registry/researchers/', views.registry_researchers, name='researcher-registry'),
     path('counter/', views.hub_counter, name='hub-counter'),
 
 
