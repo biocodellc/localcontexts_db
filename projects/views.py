@@ -3,19 +3,22 @@ from django.contrib.auth.decorators import login_required
 from .models import Project, ProjectContributors, ProjectCreator, ProjectPerson
 from helpers.models import Notice, InstitutionNotice
 from helpers.utils import render_to_pdf, generate_zip
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 import requests
 
 def view_project(request, unique_id):
-    project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
+    try:
+        project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
 
-    if project.project_privacy == 'Private':
-        if request.user.is_authenticated:
-            return render(request, 'projects/view-project.html', {'project': project})
+        if project.project_privacy == 'Private':
+            if request.user.is_authenticated:
+                return render(request, 'projects/view-project.html', {'project': project})
+            else:
+                return redirect('login')
         else:
-            return redirect('login')
-    else:
-        return render(request, 'projects/view-project.html', {'project': project})
+            return render(request, 'projects/view-project.html', {'project': project})
+    except:
+        raise Http404()
 
 
 def download_project_zip(request, unique_id):
