@@ -23,6 +23,7 @@ from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from helpers.models import Notice, InstitutionNotice
 from notifications.models import UserNotification
+from projects.models import Project, ProjectCreator
 
 from localcontexts.utils import dev_prod_or_local
 from researchers.utils import is_user_researcher
@@ -490,17 +491,17 @@ def hub_counter(request):
         # Project Counts -- excludes accounts created by ADMIN
         # Community projects
         for community in Community.objects.exclude(community_creator=admin):
-            comm_count = community.projects.count()
+            comm_count = ProjectCreator.objects.filter(community=community).count()
             community_projects += comm_count
         
         # Institution projects
         for institution in Institution.objects.exclude(institution_creator=admin):
-            inst_count = institution.projects.count()
+            inst_count = ProjectCreator.objects.filter(institution=institution).count()
             institution_projects += inst_count
 
         # Researcher projects
         for researcher in Researcher.objects.exclude(user=admin):
-            res_count = researcher.projects.count()
+            res_count = ProjectCreator.objects.filter(researcher=researcher).count()
             researcher_projects += res_count
 
         projects_count = community_projects + institution_projects + researcher_projects
@@ -533,17 +534,17 @@ def hub_counter(request):
         # Project Counts -- excludes accounts created by ADMIN
         # Community projects
         for community in Community.objects.all():
-            comm_count = community.projects.count()
+            comm_count = ProjectCreator.objects.filter(community=community).count()
             community_projects += comm_count
         
         # Institution projects
         for institution in Institution.objects.all():
-            inst_count = institution.projects.count()
+            inst_count = ProjectCreator.objects.filter(institution=institution).count()
             institution_projects += inst_count
 
         # Researcher projects
         for researcher in Researcher.objects.all():
-            res_count = researcher.projects.count()
+            res_count = ProjectCreator.objects.filter(researcher=researcher).count()
             researcher_projects += res_count
 
         projects_count = community_projects + institution_projects + researcher_projects
