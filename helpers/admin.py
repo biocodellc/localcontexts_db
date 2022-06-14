@@ -9,6 +9,9 @@ class InstitutionNoticeAdmin(admin.ModelAdmin):
     list_display = ('project', 'notice_type', 'institution', 'created', 'archived' )
     search_fields = ('project',)
 
+class OpenToCollaborateNoticeURLAdmin(admin.ModelAdmin):
+    list_display = ('institution', 'researcher', 'name', 'url')
+
 class LabelTranslationAdmin(admin.ModelAdmin):
     list_display = ('title', 'language', 'language_tag', 'translation', )
 
@@ -38,4 +41,5 @@ admin.site.register(ProjectStatus, ProjectStatusAdmin)
 admin.site.register(EntitiesNotified, EntitiesNotifiedAdmin)
 admin.site.register(LabelNote, LabelNoteAdmin)
 admin.site.register(Connections, ConnectionsAdmin)
+admin.site.register(OpenToCollaborateNoticeURL, OpenToCollaborateNoticeURLAdmin)
 

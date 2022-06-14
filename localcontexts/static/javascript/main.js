@@ -1168,3 +1168,15 @@ if (window.location.href.includes('dashboard')) {
     })
 }
 
+// addURLModal
+if (window.location.href.includes('notices')) { 
+    const modal = document.getElementById('addURLModal')
+    const addURLBtn = document.getElementById('addURLBtn')
+
+    addURLBtn.addEventListener('click', () => {
+        if (modal.classList.contains('hide')) { modal.classList.replace('hide', 'show')}
+    })
+
+    const closeModalBtn = document.querySelector('.close-modal-btn')
+    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+}

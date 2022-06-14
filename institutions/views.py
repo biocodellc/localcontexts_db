@@ -10,13 +10,13 @@ from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson, ProjectCreator
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
-from helpers.models import ProjectComment, ProjectStatus, Notice, InstitutionNotice, EntitiesNotified, Connections
+from helpers.models import ProjectComment, ProjectStatus, Notice, InstitutionNotice, EntitiesNotified, Connections, OpenToCollaborateNoticeURL
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
 
 from projects.forms import *
-from helpers.forms import ProjectCommentForm
+from helpers.forms import ProjectCommentForm, OpenToCollaborateNoticeURLForm
 from communities.forms import InviteMemberForm, JoinRequestForm
 from .forms import *
 
@@ -177,7 +177,23 @@ def institution_notices(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
-        return render(request, 'institutions/notices.html', {'institution': institution, 'member_role': member_role,})
+        urls = OpenToCollaborateNoticeURL.objects.filter(institution=institution)
+        form = OpenToCollaborateNoticeURLForm(request.POST or None)
+
+        if request.method == 'POST':
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.institution = institution
+                data.save()
+            return redirect('institution-notices', institution.id)
+
+        context = {
+            'institution': institution,
+            'member_role': member_role,
+            'form': form,
+            'urls': urls,
+        }
+        return render(request, 'institutions/notices.html', context)
 
 # Members
 @login_required(login_url='login')

@@ -590,7 +590,6 @@ def projects(request, pk):
         # projects where community is contributor
         projects_list = []
 
-        # TODO: IMPLEMENT THIS
         community_projects = ProjectCreator.objects.filter(community=community)
 
         for p in community_projects:

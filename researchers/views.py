@@ -10,11 +10,11 @@ from accounts.utils import get_users_name
 
 from communities.models import Community
 from notifications.models import ActionNotification
-from helpers.models import ProjectStatus, ProjectComment, Notice, EntitiesNotified, Connections
+from helpers.models import OpenToCollaborateNoticeURL, ProjectStatus, ProjectComment, Notice, EntitiesNotified, Connections
 from projects.models import ProjectContributors, Project, ProjectPerson, ProjectCreator
 
 from projects.forms import *
-from helpers.forms import ProjectCommentForm
+from helpers.forms import ProjectCommentForm, OpenToCollaborateNoticeURLForm
 
 from helpers.emails import *
 
@@ -109,9 +109,21 @@ def researcher_notices(request, pk):
     if user_can_view == False:
         return redirect('restricted')
     else:
+        urls = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher)
+        form = OpenToCollaborateNoticeURLForm(request.POST or None)
+
+        if request.method == 'POST':
+            if form.is_valid():
+                data = form.save(commit=False)
+                data.researcher = researcher
+                data.save()
+            return redirect('researcher-notices', researcher.id)
+
         context = {
             'researcher': researcher,
             'user_can_view': user_can_view,
+            'form': form,
+            'urls': urls,
         }
         return render(request, 'researchers/notices.html', context)
 

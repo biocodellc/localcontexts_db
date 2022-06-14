@@ -1,3 +1,4 @@
+from dataclasses import field
 from django import forms
 from .models import *
 from django.forms import modelformset_factory, inlineformset_factory
@@ -49,4 +50,13 @@ class LabelNoteForm(forms.ModelForm):
         fields = ['note']
         widgets = {
             'note': forms.Textarea(attrs={'class': 'w-100 margin-bottom-2', 'style': 'height: 150px; padding: 10px;', 'placeholder': 'Add Note About This Label'}),
+        }
+
+class OpenToCollaborateNoticeURLForm(forms.ModelForm):
+    class Meta:
+        model = OpenToCollaborateNoticeURL
+        fields = ['name', 'url']
+        widgets = { 
+            'name': forms.TextInput(attrs={'class': 'w-100 margin-bottom-8'}), 
+            'url': forms.TextInput(attrs={'class': 'w-100'}), 
         }
