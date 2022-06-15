@@ -3,17 +3,17 @@
 
         {% if community %}
             <a href="{% url 'select-label' community.id %}">
-                <div class="{% if 'labels' in request.path %} active-nav {% endif %}">Labels</div>
+                <div class="{% if '/labels/' in request.path %} active-nav {% endif %}">Labels</div>
             </a>
         {% endif %}
         {% if institution %}
             <a href="{% url 'institution-notices' institution.id %}">
-                <div class="{% if 'notices' in request.path %} active-nav {% endif %}">Notices</div>
+                <div class="{% if '/notices/' in request.path %} active-nav {% endif %}">Notices</div>
             </a>
         {% endif %}
         {% if researcher %}
             <a href="{% url 'researcher-notices' researcher.id %}">
-                <div class="{% if 'notices' in request.path %} active-nav {% endif %}">Notices</div>
+                <div class="{% if '/notices/' in request.path %} active-nav {% endif %}">Notices</div>
             </a>
         {% endif %}
 
