@@ -327,11 +327,17 @@ input:focus {
     height: 40px;
     border-radius: 5px;
     background-color: #5AA497;
+    transition: 0.3s;
+}
+
+.add-square-btn:hover {
+    background-color: #4b9789; 
 }
 
 .add-square-btn span {
     color: #fff;
-    font-size:25px;
+    font-size: 25px;
+    font-weight: bold;
 }
 
 /* Customize label */

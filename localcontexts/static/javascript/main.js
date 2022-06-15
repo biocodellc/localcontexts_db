@@ -572,23 +572,17 @@ function closeLabelInfoDiv(targetBtn) {
 }
 
 // Institutions/researchers: create-project: select Notices, show Notice descriptions
-function showDescription() {
-    let textinputs = document.querySelectorAll('input[type=checkbox]'); 
-    // stores selected inputs in an array
-    let selected = [].filter.call( textinputs, function( el ) {
+function showDescription(el) {
+    let target = document.getElementById(`show-description-${el.id}`)
+    let pTag = document.getElementById(`title-${el.id}`)
 
-        let target = document.getElementById(`show-description-${el.id}`)
-        let pTag = document.getElementById(`title-${el.id}`)
-
-        if (el.checked) {
-            target.classList.replace('hide', 'show')
-            pTag.classList.replace('grey-text', 'darkteal-text')
-        } else {
-            target.classList.replace('show', 'hide')
-            pTag.classList.replace('darkteal-text', 'grey-text')
-        }
-    });
-    // console.log('selected', selected)
+    if (el.checked) {
+        target.classList.replace('hide', 'show')
+        pTag.classList.replace('grey-text', 'darkteal-text')
+    } else {
+        target.classList.replace('show', 'hide')
+        pTag.classList.replace('darkteal-text', 'grey-text')
+    }
 }
 
 // CREATE PROJECT: PROJECT TYPE OTHER: TOGGLE VISIBILITY
@@ -696,8 +690,11 @@ if(addContributorBtn) { addContributorBtn.addEventListener('click', selectContri
 var count = 0
 
 function cloneForm(el) {
+    const clonedItemsContainer = document.getElementById('clonedItems')
+
     // In CREATE PROJECT:
     if (window.location.href.includes('/projects/create-project')) {
+
         // Total forms hidden input needs to be incremented
         let hiddenInputs = document.getElementsByName('form-TOTAL_FORMS')
         let totalFormInput = hiddenInputs[0]
@@ -707,6 +704,7 @@ function cloneForm(el) {
         let parentDiv = document.getElementById('person-form-0')
         let clone = parentDiv.cloneNode(true)
         clone.id = 'person-form-'+ count++ // needs to increment by 1 for unique id
+        clone.classList.add('margin-top-8')
 
         // Name input has name='form-0-name' and id='id_form-0-name'
         // Email input has name='form-0-email' and id='id_form-0-email'
@@ -722,7 +720,7 @@ function cloneForm(el) {
         totalFormInput.value = parseInt(totalFormInput.value) + 1
 
         // Append clone to sibling
-        el.parentElement.parentElement.append(clone)
+        clonedItemsContainer.appendChild(clone)
 
         // IN EDIT PROJECT:
     } else if (window.location.href.includes('/projects/edit-project')) {
@@ -750,9 +748,8 @@ function cloneForm(el) {
         totalFormInput.value = parseInt(totalFormInput.value) + 1
 
         // Append clone to sibling
-        el.parentElement.parentElement.append(clone)
+        clonedItemsContainer.appendChild(clone)
     }
-
 }
 
 // Communities: Projects: Notify status
@@ -772,7 +769,7 @@ function setProjectUUID(elem) {
 // Require Checkbox selection for Notices in create-project researcher and institution
 // h/t: https://vyspiansky.github.io/2019/07/13/javascript-at-least-one-checkbox-must-be-selected/
 
-if (window.location.href.includes('researcher/projects/create-project') || window.location.href.includes('institution/projects/create-project') ) { 
+if (window.location.href.includes('researchers/projects/create-project') || window.location.href.includes('institutions/projects/create-project') ) { 
     (function requireCheckbox() {
         let form = document.querySelector('#createProjectForm')
         let checkboxes = form.querySelectorAll('input[type=checkbox]')
