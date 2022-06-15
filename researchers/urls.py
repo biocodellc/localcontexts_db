@@ -11,6 +11,11 @@ urlpatterns = [
     path('notices/<str:pk>', views.researcher_notices, name="researcher-notices"),
 
     path('projects/<str:pk>', views.researcher_projects, name="researcher-projects"),
+    path('projects-labels/<str:pk>/', views.projects_with_labels, name="researcher-projects-labels"),
+    path('projects-notices/<str:pk>/', views.projects_with_notices, name="researcher-projects-notices"),
+    path('projects-created/<str:pk>/', views.projects_creator, name="researcher-projects-creator"),
+    path('projects-contributing/<str:pk>/', views.projects_contributor, name="researcher-projects-contributor"),
+
     path('projects/create-project/<str:pk>', views.create_project, name="researcher-create-project"),
     path('projects/edit-project/<str:researcher_id>/<str:project_uuid>', views.edit_project, name="researcher-edit-project"),
     path('projects/notify/<str:pk>/<str:proj_id>/', views.notify_others, name="researcher-notify-others"),

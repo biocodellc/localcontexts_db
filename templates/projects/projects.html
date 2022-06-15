@@ -33,10 +33,72 @@
         </div>
         <div>
             <p>
-                Filter: 
-                <a id="filterProjectsWithNotices" class="darkteal-text pointer underline-hover">Notices</a> |       
-                <a id="filterProjectsWithLabels" class="darkteal-text pointer underline-hover">Labels</a> |       
-                <a id="filterAll" class="darkteal-text pointer underline-hover bold">All</a> 
+                Browse Projects: 
+                <a 
+                    class="darkteal-text pointer underline-hover{% if 'projects/' in request.path %} bold {% endif %}" 
+                    {% if institution %}
+                        href="{% url 'institution-projects' institution.id %}"
+                    {% endif %}
+                    {% if researcher %}
+                        href="{% url 'researcher-projects' researcher.id %}"
+                    {% endif %}
+                    {% if community %}
+                        href="{% url 'community-projects' community.id %}"
+                    {% endif %}
+                >
+                All</a> |
+                <a 
+                    class="darkteal-text pointer underline-hover {% if 'projects-labels' in request.path %} bold {% endif %}" 
+                    {% if institution %}
+                        href="{% url 'institution-projects-labels' institution.id %}"
+                    {% endif %}
+                    {% if researcher %}
+                        href="{% url 'researcher-projects-labels' researcher.id %}"
+                    {% endif %}
+                    {% if community %}
+                        href="{% url 'community-projects-labels' community.id %}"
+                    {% endif %}
+                >
+                Labels</a> |
+                <a 
+                    class="darkteal-text pointer underline-hover {% if 'projects-notices' in request.path %} bold {% endif %}" 
+                    {% if institution %}
+                        href="{% url 'institution-projects-notices' institution.id %}"
+                    {% endif %}
+                    {% if researcher %}
+                        href="{% url 'researcher-projects-notices' researcher.id %}"
+                    {% endif %}
+                    {% if community %}
+                        href="{% url 'community-projects-notices' community.id %}"
+                    {% endif %}
+                >
+                Notices</a> |
+                <a 
+                    class="darkteal-text pointer underline-hover {% if 'projects-created' in request.path %} bold {% endif %}" 
+                    {% if institution %}
+                        href="{% url 'institution-projects-creator' institution.id %}"
+                    {% endif %}
+                    {% if researcher %}
+                        href="{% url 'researcher-projects-creator' researcher.id %}"
+                    {% endif %}
+                    {% if community %}
+                        href="{% url 'community-projects-creator' community.id %}"
+                    {% endif %}
+                >
+                Created</a> |
+                <a 
+                    class="darkteal-text pointer underline-hover {% if 'projects-contributing' in request.path %} bold {% endif %}" 
+                    {% if institution %}
+                        href="{% url 'institution-projects-contributor' institution.id %}"
+                    {% endif %}
+                    {% if researcher %}
+                        href="{% url 'researcher-projects-contributor' researcher.id %}"
+                    {% endif %}
+                    {% if community %}
+                        href="{% url 'community-projects-contributor' community.id %}"
+                    {% endif %}
+                >
+                Contributed</a> 
             </p>            
         </div>
 
