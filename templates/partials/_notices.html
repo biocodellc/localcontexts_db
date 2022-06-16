@@ -35,8 +35,10 @@
 <div class="content-card content-card-space white-bg">
     <div class="flex-this space-between">
         <div><h2 class="no-top-margin">Open to Collaborate Notice</h2></div>
-        <div><a href="{% url 'download-open-to-collaborate-notice' %}" class="primary-btn white-btn">Download Notice</a>
-    </div>
+        <div class="flex-this flex-end">
+            <div class="margin-top-8 margin-right-8"><a id="addURLBtn" class="darkteal-text underline-hover pointer">Add URL</a></div>
+            <div><a href="{% url 'download-open-to-collaborate-notice' %}" class="primary-btn white-btn">Download Notice</a></div>
+        </div>
     </div>
     <div class="flex-this">
         <div><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="119px" alt="black square with a rectangle and on hand on top and bottom in the middle in white"></div>
@@ -53,20 +55,57 @@
                     Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.                    </p>         
             </div>
 
-            <!-- TODO: BE ABLE TO ADD LINKS TO THIS TO DISPLAY -->
-            <!-- <div>
+            <div>
                 <p>
                     <span class="darkteal-text bold">Places this Notice is being used</span><br>
-                    <ul>
-                        <li><a class="darkteal-text underline-hover" href="#">Link to open to collab notice</a></li>
-                        <li><a class="darkteal-text underline-hover" href="#">Link to open to collab notice</a></li>
-                        <li><a class="darkteal-text underline-hover" href="#">Link to open to collab notice</a></li>
-                    </ul>
+                    {% if urls %}
+                        <ul>
+                            {% for url in urls %}
+                                <li>
+                                    <a class="darkteal-text underline-hover" href="{{ url.url }}">{{ url.name }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        Click on 'Add URL' to add a location where this Notice is currently displayed
+                    {% endif %}
                 </p>
-            </div> -->
+            </div>
             
         </div>
     </div>
+</div>
+
+<div id="addURLModal" class="modal hide">
+
+    <div class="modal-defaults notice-modal flex-this column w-100">
+        <div class="modal-content-padding w-100">
+            <form method="POST" autocomplete="off">
+                {% csrf_token %}
+
+                <div class="flex-this space-between">
+                    <div><h2 class="primary-black-text">Add Open to Collaborate Notice URL</h2></div>
+                    <div>
+                        <div class="primary-btn white-btn close-modal-btn">Close X</div>
+                    </div>            
+                </div>
+
+                <div>
+                    <p>
+                        Add URL where the Open to Collaborate Notice is displayed
+                    </p>  
+                    {{ form.name.label }}<br>
+                    {{ form.name }}<br>
+                    {{ form.url.label }}<br>
+                    {{ form.url }}
+                </div>
+                <div class="flex-this flex-end w-100 margin-top-16">
+                    <button class="primary-btn action-btn">Add URL</button>    
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 
 <div class="content-card content-card-space white-bg">

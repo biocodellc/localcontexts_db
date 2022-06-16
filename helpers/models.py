@@ -1,3 +1,5 @@
+from statistics import mode
+from tabnanny import verbose
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.fields import TextField
@@ -57,6 +59,19 @@ class InstitutionNotice(models.Model):
         verbose_name = 'Institution Notice'
         verbose_name_plural = 'Institution Notices'
         ordering = ('-created',)
+
+class OpenToCollaborateNoticeURL(models.Model):
+    institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
+    researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
+    name = models.CharField(max_length=250, null=True, blank=True)
+    url = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = 'Open To Collaborate Notice URL'
+        verbose_name_plural = 'Open To Collaborate Notice URLs'
 
 class EntitiesNotified(models.Model):
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_notified", db_index=True)

@@ -12,7 +12,7 @@
             </div>                    
         </div>
 
-        <form action="{% url 'login' %}" method="POST" class="flex-this column w-100">
+        <form action="{% url 'login' %}" method="POST" class="flex-this column w-100" autocomplete="off">
             {% csrf_token %}
             <div class="pad-top-1-5">
                 <label>Username</label>

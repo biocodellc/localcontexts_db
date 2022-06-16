@@ -327,11 +327,17 @@ input:focus {
     height: 40px;
     border-radius: 5px;
     background-color: #5AA497;
+    transition: 0.3s;
+}
+
+.add-square-btn:hover {
+    background-color: #4b9789; 
 }
 
 .add-square-btn span {
     color: #fff;
-    font-size:25px;
+    font-size: 25px;
+    font-weight: bold;
 }
 
 /* Customize label */
@@ -889,42 +895,6 @@ input:focus {
     visibility: visible;
     opacity: 1;
   }
-
-  /* Meatball menu Project Overview */
-.meatball {
-    cursor: pointer;   
-    margin: 30px 0px 5px 10px;
-    color: #007385;
-    transition: 0.3s;
-}
-
-.meatball:hover {
-    color: #338F9D;
-}
-
-.meatball-dropdown-content {
-    position: absolute;
-    padding: 10px;
-    background-color: #fff;
-    opacity: 1;
-    z-index: 1;
-    height: auto;
-    width: 150px;
-    border-radius: 5px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
-    left: 0;
-    margin-top: 10px;
-    margin-left: -70px;
-}
-
-.meatball-dropdown-content span {
-    display: block;
-    cursor: pointer;
-}
-
-.meatball-dropdown-content span:hover {
-    background-color: #dafaf4;
-}
 
 /* View Project: Researcher hover */
 .researcher-hover {
