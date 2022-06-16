@@ -571,20 +571,6 @@ function closeLabelInfoDiv(targetBtn) {
     }
 }
 
-// Institutions/researchers: create-project: select Notices, show Notice descriptions
-function showDescription(el) {
-    let target = document.getElementById(`show-description-${el.id}`)
-    let pTag = document.getElementById(`title-${el.id}`)
-
-    if (el.checked) {
-        target.classList.replace('hide', 'show')
-        pTag.classList.replace('grey-text', 'darkteal-text')
-    } else {
-        target.classList.replace('show', 'hide')
-        pTag.classList.replace('darkteal-text', 'grey-text')
-    }
-}
-
 // CREATE PROJECT: PROJECT TYPE OTHER: TOGGLE VISIBILITY
 var projectTypeSelect = document.getElementById('id_project_type')
 if (projectTypeSelect) {
@@ -595,27 +581,6 @@ if (projectTypeSelect) {
         } else {
             otherTypeField.classList.replace('show', 'hide')
         }
-    })
-}
-
-// CREATE PROJECT: Disable submit temporarily
-var submitProjectBtn = document.getElementById('submitProjectBtn')
-if (submitProjectBtn) {
-    submitProjectBtn.addEventListener('click', function(e) {
-        let createProjectForm = document.getElementById('createProjectForm')
-        createProjectForm.submit()
-
-        let oldValue = 'Save Project'
-        submitProjectBtn.setAttribute('disabled', true)
-        submitProjectBtn.classList.replace('action-btn', 'disabled-btn')
-        submitProjectBtn.innerText = 'Saving Project...'
-
-        setTimeout(function(){
-            submitProjectBtn.innerText = oldValue;
-            submitProjectBtn.classList.replace('disabled-btn', 'action-btn')
-            submitProjectBtn.removeAttribute('disabled');
-        }, 4000)
-
     })
 }
 
@@ -650,7 +615,7 @@ function cancelCommunitySelection(elem) {
     inputDivToRemove.innerHTML = ``
 }
 
-// INSTITUTION: create project : add contributors
+// CREATE PROJECT : add contributors
 function selectContributors() {
     let contribInput = document.getElementById('contributor-input')
     let contribOptionsArray = Array.from(document.getElementById('contributors').options)
@@ -766,39 +731,74 @@ function setProjectUUID(elem) {
     statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
 }
 
-// Require Checkbox selection for Notices in create-project researcher and institution
-// h/t: https://vyspiansky.github.io/2019/07/13/javascript-at-least-one-checkbox-must-be-selected/
+// Institutions/researchers: create-project: select Notices, show Notice descriptions
+var submitProjectBtn = document.getElementById('submitProjectBtn')
+if (submitProjectBtn) { 
+    const projectForm = document.querySelector('#createProjectForm')
+    const notices = projectForm.querySelectorAll('input[type=checkbox]')
 
-if (window.location.href.includes('researchers/projects/create-project') || window.location.href.includes('institutions/projects/create-project') ) { 
-    (function requireCheckbox() {
-        let form = document.querySelector('#createProjectForm')
-        let checkboxes = form.querySelectorAll('input[type=checkbox]')
-        let checkboxLength = checkboxes.length
-        let firstCheckbox = checkboxLength > 0 ? checkboxes[0] : null
-    
-        function start() {
-            if (firstCheckbox) {
-                for (let i = 0; i < checkboxLength; i++) {
-                    checkboxes[i].addEventListener('change', checkValidity)
-                }
-                checkValidity()
-            }
-        }
-    
-        function isChecked() {
-            for (let i = 0; i < checkboxLength; i++) {
-                if (checkboxes[i].checked) return true
-            }
-            return false
-        }
-    
-        function checkValidity() {
+    if (notices) {
+        for (let i = 0; i < notices.length; i++) {
+            notices[i].addEventListener('change', showDescription)
+        }        
+    }
+
+    submitProjectBtn.addEventListener('click', validateProjectDisableSubmitBtn) 
+}
+
+function showDescription() {
+    let target = document.getElementById(`show-description-${this.id}`)
+    let pTag = document.getElementById(`title-${this.id}`)
+
+    if (this.checked) {
+        target.classList.replace('hide', 'show')
+        pTag.classList.replace('grey-text', 'darkteal-text')
+    } else {
+        target.classList.replace('show', 'hide')
+        pTag.classList.replace('darkteal-text', 'grey-text')
+    }
+}
+
+function validateProjectDisableSubmitBtn() {
+    // Require Checkbox selection for Notices in create-project researcher and institution
+    // h/t: https://vyspiansky.github.io/2019/07/13/javascript-at-least-one-checkbox-must-be-selected/
+
+    let form = document.querySelector('#createProjectForm')
+    let checkboxes = form.querySelectorAll('input[type=checkbox]')
+
+    if (checkboxes.length == 0) {
+        disableSubmitBtn()
+    } else {
+        if (!isChecked()) {
             const errorMsg = !isChecked() ? 'At least one Notice must be selected.' : ''
-            firstCheckbox.setCustomValidity(errorMsg)
+            checkboxes[0].setCustomValidity(errorMsg)
+        } else {
+            disableSubmitBtn()
+        } 
+    }
+
+    function isChecked() {
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) return true
         }
-    
-        start()
-    })()
+        return false
+    }
+
+    function disableSubmitBtn() {
+        document.getElementById('createProjectForm').submit()
+
+        let oldValue = 'Save Project'
+        submitProjectBtn.setAttribute('disabled', true)
+        submitProjectBtn.classList.replace('action-btn', 'disabled-btn')
+        submitProjectBtn.innerText = 'Saving Project...'
+        
+        setTimeout(function(){
+            submitProjectBtn.innerText = oldValue;
+            submitProjectBtn.classList.replace('disabled-btn', 'action-btn')
+            submitProjectBtn.removeAttribute('disabled');
+        }, 5000)
+    }      
+
 }
 
 function toggleNotifications() {
