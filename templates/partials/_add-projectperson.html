@@ -9,21 +9,24 @@
         {% for hidden in f.hidden_fields %}
             {{ hidden }}
         {% endfor %}
-
-        <div id="person-form-0" class="flex-this row">
-            <div class="margin-right-1">
-                <label>{{ f.name.label }}</label><br>
-                {{ f.name }}
+        <div class="flex-this">
+            <div id="person-form-0" class="flex-this row margin-right-8">
+                <div class="margin-right-1">
+                    <label>{{ f.name.label }}</label><br>
+                    {{ f.name }}
+                </div>
+                
+                <div>
+                    <label>{{ f.email.label }}</label><br>
+                    {{ f.email }}
+                </div>
             </div>
-            
-            <div>
-                <label>{{ f.email.label }}</label><br>
-                {{ f.email }}
-            </div>
-            <div onclick="cloneForm(this)" class="clone-form-btn add-square-btn pointer">
+            <div onclick="cloneForm(this)" class="clone-form-btn add-square-btn pointer margin-top-8">
                 <span>+</span>
             </div>
         </div>
+
+        <div id="clonedItems"></div>
 
     {% endfor %}
 
