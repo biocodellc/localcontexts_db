@@ -12,7 +12,13 @@
         <div class="flex-this">
             <div id="person-form-0" class="flex-this row margin-right-8">
                 <div class="margin-right-1">
-                    <label>{{ f.name.label }}</label><br>
+                    <label>{{ f.name.label }}</label>
+                    <div class="tooltip"><strong>?</strong>
+                        <span class="tooltiptext">
+                            Add contributors who are not yet registered in the Hub.
+                        </span>
+                    </div>
+                    <br>
                     {{ f.name }}
                 </div>
                 

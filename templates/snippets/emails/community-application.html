@@ -4,11 +4,11 @@
 </h3>
 
 <p>
-    Contact Name: {{ data.contact_name }}<br>
+    Confirmation Contact Name: {{ data.contact_name }}<br>
     {% if data.contact_email == data.community_creator.email %}
-        Contact Email: {{ data.contact_email }}<br>
+        Confirmation Contact Email: {{ data.contact_email }}<br>
     {% else %}
-        Contact Email: {{ data.contact_email }}<br>
+        Confirmation Contact Email: {{ data.contact_email }}<br>
         Community Account Creator Email: {{ data.community_creator.email }}<br><br>
     {% endif %}
 
