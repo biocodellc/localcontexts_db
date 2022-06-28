@@ -55,8 +55,8 @@
                 <div id="expand-div-{{ institution.institution_name }}" class="hide">
                     <div class="border-bottom-dash-teal">
                         <p class="no-bottom-margin">
-                            <span class="bold">Contact Name</span> | {{ institution.contact_name }} 
-                            <span class="bold margin-left-8">Contact Email</span> | {{ institution.contact_email }}
+                            <span class="bold">Account Contact Name</span> | {{ institution.institution_creator.get_full_name }} 
+                            <span class="bold margin-left-8">Account Contact Email</span> | {{ institution.institution_creator.email }}
                             <span class="bold margin-left-8">Website</span> | {{ institution.website }} <br><br>
                         </p>                        
                     </div>
@@ -64,7 +64,7 @@
                     <div>
                         <h3> Related Projects </h3>
                         <ul>
-                            {% connections_organization_projects community institution as projects%}
+                            {% connections_organization_projects community institution as projects %}
                             {% for project in projects %}
                                 <li>
                                     <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
@@ -175,8 +175,8 @@
                 <div id="expand-div-{{ community.community_name }}" class="hide">
                     <div class="border-bottom-dash-teal">
                         <p class="no-bottom-margin">
-                            <span class="bold">Contact Name</span> | {{ community.contact_name }} 
-                            <span class="bold margin-left-8"> Contact Email</span> | {{ community.contact_email }} <br><br>
+                            <span class="bold">Account Contact Name</span> | {{ community.community_creator.get_full_name }} 
+                            <span class="bold margin-left-8">Account Contact Email</span> | {{ community.community_creator.email }} <br><br>
                         </p>      
                     </div>   
                     
