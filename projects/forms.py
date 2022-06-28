@@ -6,9 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 
 class CreateProjectForm(forms.ModelForm):
     PRIVACY = (
-        ('Public', 'Public: Accessible to everyone registered with Local Contexts'),
-        ('Discoverable', 'Discoverable: Accessible for accounts that have been notified'),
-        ('Private', 'Private: Can’t be accessed by other accounts on Local Contexts'),
+        ('Public', 'Public: Anyone with the project link can view all the project information.'),
+        ('Discoverable', 'Contributor View: Anyone with the link can view the project unique identifier and any Labels or Notices attached.'),
+        ('Private', 'Private: Only the project creator can see the project information.'),
     )
     TYPES = (
         ('Item', 'Item'),
@@ -19,8 +19,8 @@ class CreateProjectForm(forms.ModelForm):
         ('Exhibition', 'Exhibition'),
         ('Other', 'Other'),
     )
-    project_privacy = forms.ChoiceField(label=_('What is the privacy level of this project?'), choices=PRIVACY, initial='Public', widget=forms.RadioSelect(attrs={'class': 'ul-no-bullets'}))
-    project_type = forms.ChoiceField(label=_('Which of the following reflects your Local Contexts project? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
+    project_privacy = forms.ChoiceField(label=_('Who can view this project?'), choices=PRIVACY, initial='Public', widget=forms.RadioSelect(attrs={'class': 'ul-no-bullets'}))
+    project_type = forms.ChoiceField(label=_('What is your project type? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
 
     class Meta:
         model = Project
@@ -65,8 +65,8 @@ ProjectPersonFormsetInline = inlineformset_factory(
 class EditProjectForm(forms.ModelForm):
     PRIVACY = (
         ('Public', 'Public: Can be seen by anyone within and outside of the Local Contexts Hub'),
-        ('Discoverable', 'Discoverable: Can be seen by authenticated contributors of the project only'),
-        ('Private', 'Private: Can only be seen by project creator'),
+        ('Discoverable', 'Contributor View: Anyone with the link can view the project unique identifier and any Labels or Notices attached.'),
+        ('Private', 'Private: Only the project creator can see the project information.'),
     )
     TYPES = (
         ('Item', 'Item'),
@@ -77,8 +77,8 @@ class EditProjectForm(forms.ModelForm):
         ('Exhibition', 'Exhibition'),
         ('Other', 'Other'),
     )
-    project_privacy = forms.ChoiceField(label=_('What is the privacy level of this project?'), choices=PRIVACY, widget=forms.RadioSelect())
-    project_type = forms.ChoiceField(label=_('Which of the following reflects your Local Contexts project? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
+    project_privacy = forms.ChoiceField(label=_('Who can view this project?'), choices=PRIVACY, widget=forms.RadioSelect())
+    project_type = forms.ChoiceField(label=_('What is your project type? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
 
     class Meta:
         model = Project

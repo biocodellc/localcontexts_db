@@ -13,7 +13,22 @@
                 </small>
             </div>
             <h2 class="no-bottom-margin">Create a Local Contexts Project</h2>
-            <p>A Local Context Project describes the research that Notice(s) or Label(s) can be applied to.</p>
+            <p class="w-90">
+                {% if researcher or institution %}
+                    The first step for institutions and researchers to generate Notices is to create a Project within the Local Contexts Hub. 
+                    A project describes the context where a Notice is being applied. For example, a project could include: a website, a university syllabus, 
+                    a dissertation, a research publication, a dataset, a museum exhibition, an archival record, an item in a collection, a library database, 
+                    a photography collection, a voucher specimen, and/or metadata about a record. <br><br>
+
+                    To create a Local Contexts Project, you will be asked for project details and contacts, and have the option to add metadata.<br><br>
+
+                    Remember that the audience for the project is the communities that you wish to engage with and who have rights, responsibilities, 
+                    and interests in the material, information, and data.
+                {% endif %}
+                {% if community %}
+                    A Local Context Project describes the research that Label(s) can be applied to.
+                {% endif %}
+            </p>
 
         </div>
 
@@ -25,9 +40,20 @@
             <div class="content-card-v2 content-card-space white-bg">   
 
                 <h3>Project Notice</h3>
-                <p>Apply Local Contexts Notice(s) to this Project.</p><br>
+                <p>
+                    Select which Local Contexts Notice(s) apply to this Project. To use the Open to Collaborate Notice, 
+                    <a 
+                        {% if institution %}
+                            href="{% url 'institution-notices' institution.id %}"
+                        {% endif %}
+                        {% if researcher %}
+                            href="{% url 'researcher-notices' researcher.id %}"
+                        {% endif %}
+                        class="darkteal-text underline-hover"
+                    >go to the Notices page</a>.
+                </p><br>
 
-                <div class="flex-this w-20 space-between margin-left-16">     
+                <div class="flex-this w-40 space-between margin-left-16">     
                     <div class="flex-this column center-text">
                         <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="73px" alt="black square with white letters TK in the middle"></div>
                         <div><p id="title-tk-notice" class="grey-text">Traditional<br> Knowledge Notice</p></div>
@@ -68,28 +94,27 @@
                     </div>
 
                     <!-- Institutional Notices -->
-                    {% if institution %}
-                        <div class="flex-this column center-text margin-left-16">
-                            <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="73px"></div>
-                            <div><p id="title-attr-notice" class="grey-text">Attribution <br>Incomplete Notice</p></div>
-                            <div class="notice-checkbox-container">
 
-                                <input 
-                                    id="attr-notice" 
-                                    value="attribution_incomplete" 
-                                    type="checkbox" 
-                                    name="checkbox-notice"
-                                    {% if institution_notice %} 
-                                        {% if institution_notice.notice_type == 'attribution_incomplete'%} 
-                                            checked 
-                                        {% endif %}
+                    <div class="flex-this column center-text margin-left-16 align-center">
+                        <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="73px"></div>
+                        <div><p id="title-attr-notice" class="grey-text">Attribution Incomplete <br> Notice</p></div>
+                        <div class="notice-checkbox-container">
+
+                            <input 
+                                id="attr-notice" 
+                                value="attribution_incomplete" 
+                                type="checkbox" 
+                                name="checkbox-notice"
+                                {% if institution_notice %} 
+                                    {% if institution_notice.notice_type == 'attribution_incomplete'%} 
+                                        checked 
                                     {% endif %}
-                                >
+                                {% endif %}
+                            >
 
-                                <span class="margin-left-8">Select</span>
-                            </div>
+                            <span class="margin-left-8">Select</span>
                         </div>
-                    {% endif %}
+                    </div>
 
                 </div>
 
@@ -167,7 +192,11 @@
         <!-- Project Details -->
         <div class="content-card-v2 content-card-space white-bg">
             <h3>Project Details</h3>
-            <p>What is the high level information for this project?</p>
+            <p class="w-80">
+                Provide the project information. When creating a Project, remember that your audience are the communities 
+                that you wish to engage with and who have rights, responsibilities, and interests in the material, information, 
+                and data. This project information can be sent to communities as a notification after creating the project below. 
+            </p>
 
             {{ form.project_type.label }}
             <div class="tooltip"><strong>?</strong>
@@ -218,7 +247,7 @@
             <div class="padding-bottom-1 w-50">
                 <label>Project Title*</label>
                 <div class="tooltip"><strong>?</strong>
-                    <span class="tooltiptext">The project title should relate to the subject that is being captured in this project</span>
+                    <span class="tooltiptext">A couple of words identifying the project and making it accessible to your collaborators.</span>
                 </div>
                 <br>
                 {{ form.title }} <br>
@@ -230,7 +259,7 @@
             <div class="padding-bottom-1 w-50">
                 <label>Project Description*</label>
                 <div class="tooltip"><strong>?</strong>
-                    <span class="tooltiptext">The description can be thought of as an abstract or short summary of the project</span>
+                    <span class="tooltiptext">Briefly describe the project.</span>
                 </div>
                 <br>
                 {{ form.description }} <br>
@@ -242,7 +271,7 @@
             <div class="padding-bottom-1 w-50">
                 <label>Project Link (if applicable)</label>
                 <div class="tooltip"><strong>?</strong>
-                    <span class="tooltiptext">A relevant link to the object entry, collection or database</span>
+                    <span class="tooltiptext">A relevant link to the object entry, catalog, collection or database with more information about the project, or where Notices / Labels may be added.</span>
                 </div>
                 <br>
                 {{ form.url }} <br>
@@ -255,12 +284,16 @@
         <!-- Project Contacts -->
         <div class="content-card-v2 content-card-space white-bg">
             <h3>Project Contacts</h3>
-            <p>Who is involved with this project?</p>
+            <p class="w-80">
+                Who is involved with this project? <br>
+                At this stage, you are not adding Indigenous communities as contributors. 
+                This project information can be sent to communities as a notification after creating the project. 
+            </p>
 
             <div class="padding-bottom-1 w-50">
                 <label>Project Contact Name* </label>
                 <div class="tooltip"><strong>?</strong>
-                    <span class="tooltiptext">Primary contact to discuss this project</span>
+                    <span class="tooltiptext">Primary person to contact and discuss this project.</span>
                 </div>
                 <br>
                 {{ form.project_contact }} <br>
@@ -284,12 +317,14 @@
         <!-- Project Identifiers -->
         <div class="content-card-v2 content-card-space white-bg">
             <h3>Project Additional Information</h3>
-            <p>This is an optional step to apply any identifiers or citations associated with this project.</p>
+            <p>This is an optional step to apply any identifiers or metadata already associated with this project.</p>
 
             <div class="padding-bottom-1 w-50">
                 <label>Provider's Project ID</label>
                 <div class="tooltip"><strong>?</strong>
-                    <span class="tooltiptext">An external Project ID that is already being used in a different system from the Local Contexts Hub.</span>
+                    <span class="tooltiptext">
+                        An external Project ID, like a catalog or accession number (or alternate project ID), that is already being used in a different system from the Local Contexts Hub.                    
+                    </span>
                 </div>
                 <br>
                 {{ form.providers_id }} <br>
@@ -301,7 +336,9 @@
             <div class="padding-bottom-1 w-50">
                 <label>Project Data GUID</label>
                 <div class="tooltip"><strong>?</strong>
-                    <span class="tooltiptext">A globally unique identifier for the data in this project. Recommended to use a resolvable URL containing a DOI or ARK identifier.</span>
+                    <span class="tooltiptext">
+                        A Globally Unique Identifier, such as an ARK identifier.
+                    </span>
                 </div>
                 <br>
                 {{ form.project_data_guid }} <br>
@@ -313,24 +350,14 @@
             <div class="padding-bottom-1 w-50">
                 <label>Project DOI</label>
                 <div class="tooltip"><strong>?</strong>
-                    <span class="tooltiptext">A globally unique identifier for a publication</span>
+                    <span class="tooltiptext">
+                        A persistent, unique identifier commonly assigned to digital publications, such as ebooks and journal articles.                    
+                    </span>
                 </div>
                 <br>
                 {{ form.publication_doi }} <br>
                 {% if form.publication_doi.errors %}
                     <div class="msg-red w-50"><small>{{ form.publication_doi.errors.as_text }}</small></div>
-                {% endif %}
-            </div>
-
-            <div class="padding-bottom-1 w-50">
-                <label>Recommended Citation</label>
-                <div class="tooltip"><strong>?</strong>
-                    <span class="tooltiptext">Recommended citation is how you would like this project to be credited or cited, such as in a publication</span>
-                </div>
-                <br>
-                {{ form.recommended_citation }} <br>
-                {% if form.recommended_citation.errors %}
-                    <div class="msg-red w-50"><small>{{ form.recommended_citation.errors.as_text }}</small></div>
                 {% endif %}
             </div>
         </div>
@@ -339,7 +366,7 @@
         <div class="content-card-v2 content-card-space white-bg">
             <h3>Visibility</h3>
 
-            <div class="margin-bottom-1 margin-top-1 w-70">
+            <div class="margin-bottom-1 margin-top-1 w-80">
                 {{ form.project_privacy.label }}*<br> 
                 {{ form.project_privacy }}
                 {% if form.project_privacy.errors %}
