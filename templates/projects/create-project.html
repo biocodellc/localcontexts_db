@@ -53,7 +53,9 @@
                     >go to the Notices page</a>.
                 </p><br>
 
-                <div class="flex-this w-40 space-between margin-left-16">     
+                <div 
+                    class="flex-this {% if institution %}w-40{% endif %} {% if researcher %}w-20{% endif %} space-between margin-left-16"
+                >     
                     <div class="flex-this column center-text">
                         <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="73px" alt="black square with white letters TK in the middle"></div>
                         <div><p id="title-tk-notice" class="grey-text">Traditional<br> Knowledge Notice</p></div>
@@ -94,27 +96,29 @@
                     </div>
 
                     <!-- Institutional Notices -->
+                    <!-- TODO: ADD THIS NOTICE TO RESEARCHER WORKFLOW -->
+                    {% if institution %}
+                        <div class="flex-this column center-text margin-left-16 align-center">
+                            <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="73px"></div>
+                            <div><p id="title-attr-notice" class="grey-text">Attribution Incomplete <br> Notice</p></div>
+                            <div class="notice-checkbox-container">
 
-                    <div class="flex-this column center-text margin-left-16 align-center">
-                        <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="73px"></div>
-                        <div><p id="title-attr-notice" class="grey-text">Attribution Incomplete <br> Notice</p></div>
-                        <div class="notice-checkbox-container">
-
-                            <input 
-                                id="attr-notice" 
-                                value="attribution_incomplete" 
-                                type="checkbox" 
-                                name="checkbox-notice"
-                                {% if institution_notice %} 
-                                    {% if institution_notice.notice_type == 'attribution_incomplete'%} 
-                                        checked 
+                                <input 
+                                    id="attr-notice" 
+                                    value="attribution_incomplete" 
+                                    type="checkbox" 
+                                    name="checkbox-notice"
+                                    {% if institution_notice %} 
+                                        {% if institution_notice.notice_type == 'attribution_incomplete'%} 
+                                            checked 
+                                        {% endif %}
                                     {% endif %}
-                                {% endif %}
-                            >
+                                >
 
-                            <span class="margin-left-8">Select</span>
+                                <span class="margin-left-8">Select</span>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
 
                 </div>
 
