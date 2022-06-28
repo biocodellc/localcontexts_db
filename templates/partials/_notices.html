@@ -1,35 +1,33 @@
 {% load static %}
 <div class="content-card content-card-space white-bg">
-
     <div class="flex-this space-between">
-        <div class="w-60">
-            <h2 class="no-top-margin">Notices</h2>
-            <p>
-                The Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data.
-            </p>
-        </div>
-
-        {% if researcher %}
-            <div class="w-15 flex-this align-center">
-                <a class="primary-btn action-btn margin-top-2 " href="{% url 'researcher-create-project' researcher.id %}">
-                    Create a Project     <i class="fa fa-arrow-right"></i>
-                </a>
-            </div>
-        {% endif %}
-
-        {% if institution %}
-            <div class="w-15 flex-this align-center">
-                {% if member_role == 'viewer'%}
-                {% else %}
-                    <a class="primary-btn action-btn margin-top-2 " href="{% url 'inst-create-project' institution.id %}">
+        <div class="w-60"><h2 class="no-top-margin">Notices</h2></div>
+            {% if researcher %}
+                <div class="flex-this align-center">
+                    <a class="primary-btn action-btn margin-top-2 " href="{% url 'researcher-create-project' researcher.id %}">
                         Create a Project     <i class="fa fa-arrow-right"></i>
                     </a>
-                {% endif %}
-            </div>
-        {% endif %}
+                </div>
+            {% endif %}
 
+            {% if institution %}
+                <div class="flex-this align-center">
+                    {% if member_role == 'viewer'%}
+                    {% else %}
+                        <a class="primary-btn action-btn margin-top-2 " href="{% url 'inst-create-project' institution.id %}">
+                            Create a Project     <i class="fa fa-arrow-right"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="w-70">
+            <p class="no-top-margin">
+                Institutions and researchers can only generate Notices. Applying Notices allows institutions and researchers to engage, acknowledge, and make visible Indigenous interests in collections, information, and data. Notices are a precursor for communities to add their Labels to a project if they choose. <br><br>
+                We recommend beginning with the Open to Collaborate Notice, which you can download from this page without creating a Project. To apply the disclosure Notices, you will create a Project to describe the context.
+            </p>
+        </div>
     </div>
-
 </div>
 
 <div class="content-card content-card-space white-bg">
