@@ -373,7 +373,7 @@ if (window.location.href.includes('/labels/customize') || window.location.href.i
 }
 
 // Approve Label: show note div
-if (window.location.href.includes('community/labels/')) {
+if (window.location.href.includes('communities/labels/')) {
     const noBtn = document.getElementById('displayLabelNote')
     const closeNoteDivBtn = document.getElementById('closeNoteDiv')
 
