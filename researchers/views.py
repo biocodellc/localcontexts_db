@@ -421,18 +421,6 @@ def create_project(request, pk):
                 notices_selected = request.POST.getlist('checkbox-notice')
                 create_notices(notices_selected, researcher, data, None, None)
 
-                # if len(notices_selected) > 1:
-                #     notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_researcher=researcher, project=data)
-                #     set_notice_defaults(notice)
-                # else:
-                #     for selected in notices_selected:
-                #         if selected == 'bcnotice':
-                #             notice = Notice.objects.create(notice_type='biocultural', placed_by_researcher=researcher, project=data)
-                #             set_notice_defaults(notice)
-                #         elif selected == 'tknotice':
-                #             notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_researcher=researcher, project=data)
-                #             set_notice_defaults(notice)
-
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')
                 researchers_selected = request.POST.getlist('selected_researchers')
