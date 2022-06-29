@@ -6,7 +6,7 @@ class NoticeAdmin(admin.ModelAdmin):
     search_fields = ('project',)
 
 class InstitutionNoticeAdmin(admin.ModelAdmin):
-    list_display = ('project', 'notice_type', 'institution', 'created', 'archived' )
+    list_display = ('project', 'notice_type', 'institution', 'researcher', 'created', 'archived' )
     search_fields = ('project',)
 
 class OpenToCollaborateNoticeURLAdmin(admin.ModelAdmin):
