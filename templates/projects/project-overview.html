@@ -157,7 +157,7 @@
 
         <div class="w-70">
             <h3>Project Description</h3>
-            <p>{{ project.description }}</p>
+            <p>{{ project.description|linebreaks }}</p>
         </div>
 
         {% if researcher or institution %}
