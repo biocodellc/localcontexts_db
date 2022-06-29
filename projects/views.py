@@ -103,11 +103,11 @@ def download_project_zip(request, unique_id):
 
             # Create PNG and TXT files based on which Notices are attached to the Project
             if inst_notice.notice_type == 'attribution_incomplete':
-                get_img = requests.get(inst_notice.attribution_incomplete_img_url)
+                get_img = requests.get(inst_notice.img_url)
                 get_svg = requests.get(baseURL + 'labels/notices/ci-attribution-incomplete.svg')
                 files.append(('Attribution_Incomplete' + '.png', get_img.content))
                 files.append(('Attribution_Incomplete' + '.svg', get_svg.content))
-                files.append(('Attribution_Incomplete' + '.txt', inst_notice.attribution_incomplete_default_text))
+                files.append(('Attribution_Incomplete' + '.txt', inst_notice.default_text))
 
     if project_bclabels or project_tklabels:
         # Labels Usage guide PDF

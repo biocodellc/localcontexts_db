@@ -410,25 +410,28 @@ def create_project(request, pk):
                 data = form.save(commit=False)
                 data.project_creator = request.user
                 data.save()
+
                 # Add project to researcher projects
-                # researcher.projects.add(data)
                 ProjectCreator.objects.create(researcher=researcher, project=data)
 
                 #Create EntitiesNotified instance for the project
                 EntitiesNotified.objects.create(project=data)
 
+                # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                if len(notices_selected) > 1:
-                    notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_researcher=researcher, project=data)
-                    set_notice_defaults(notice)
-                else:
-                    for selected in notices_selected:
-                        if selected == 'bcnotice':
-                            notice = Notice.objects.create(notice_type='biocultural', placed_by_researcher=researcher, project=data)
-                            set_notice_defaults(notice)
-                        elif selected == 'tknotice':
-                            notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_researcher=researcher, project=data)
-                            set_notice_defaults(notice)
+                create_notices(notices_selected, researcher, data, None, None)
+
+                # if len(notices_selected) > 1:
+                #     notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_researcher=researcher, project=data)
+                #     set_notice_defaults(notice)
+                # else:
+                #     for selected in notices_selected:
+                #         if selected == 'bcnotice':
+                #             notice = Notice.objects.create(notice_type='biocultural', placed_by_researcher=researcher, project=data)
+                #             set_notice_defaults(notice)
+                #         elif selected == 'tknotice':
+                #             notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_researcher=researcher, project=data)
+                #             set_notice_defaults(notice)
 
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')

@@ -142,11 +142,11 @@
                         {% if notice.notice_type == 'attribution_incomplete' %}
                             <tr>
                                 <td class="image-td">
-                                    <img loading="lazy" src="{{ notice.attribution_incomplete_img_url }}" width="200px">
+                                    <img loading="lazy" src="{{ notice.img_url }}" width="200px">
                                 </td>
                                 <td class="text-td">
                                     <h1 class="no-bottom-margin">Attribution Incomplete Notice</h1>
-                                    <p> {{ notice.attribution_incomplete_default_text|linebreaks }} </p> 
+                                    <p> {{ notice.default_text|linebreaks }} </p> 
                                 </td>
                             </tr>
                         {% endif %}

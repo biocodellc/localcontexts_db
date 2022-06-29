@@ -591,8 +591,8 @@ def create_project(request, pk):
                 data = form.save(commit=False)
                 data.project_creator = request.user
                 data.save()
+                
                 # Add project to institution projects
-                # institution.projects.add(data)
                 ProjectCreator.objects.create(institution=institution, project=data)
 
                 #Create EntitiesNotified instance for the project
