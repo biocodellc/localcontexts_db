@@ -11,12 +11,12 @@
                     {{ project.date_added|date:'M d, Y' }} | 
                     {{ project.project_type }} | 
                     {{ project.project_privacy }}<br>
-                    Created: {{ project.project_creator.get_full_name }},  
 
                     {% which_account_created_project project as project_creator %}
-                    {% if project_creator.community %} {{ project_creator.community }} | Community {% endif %}
-                    {% if project_creator.institution %} {{ project_creator.institution }} | Institution {% endif %}
-                    {% if project_creator.researcher %} {{ project_creator.researcher }} | Researcher {% endif %}
+                    Created: {{ project.project_creator.get_full_name }}
+                    {% if project_creator.community %} at {{ project_creator.community }} | Community {% endif %}
+                    {% if project_creator.institution %} at {{ project_creator.institution }} | Institution {% endif %}
+                    {% if project_creator.researcher %} | Researcher {% endif %}
                 </p>
             </div>
             
@@ -157,7 +157,7 @@
 
         <div class="w-70">
             <h3>Project Description</h3>
-            <p>{{ project.description }}</p>
+            <p>{{ project.description|linebreaks }}</p>
         </div>
 
         {% if researcher or institution %}

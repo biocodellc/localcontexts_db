@@ -67,10 +67,11 @@ class NoticeSerializer(serializers.ModelSerializer):
 
 class InstitutionNoticeSerializer(serializers.ModelSerializer):
     institution = InstitutionSerializer()
+    researcher = ResearcherSerializer()
 
     class Meta:
         model = InstitutionNotice
-        fields = ('notice_type', 'institution', 'attribution_incomplete_img_url', 'attribution_incomplete_svg_url', 'attribution_incomplete_default_text', 'created', 'updated',)
+        fields = ('notice_type', 'institution', 'researcher', 'img_url', 'svg_url', 'default_text', 'created', 'updated',)
 
 class ProjectOverviewSerializer(serializers.ModelSerializer):
     class Meta:

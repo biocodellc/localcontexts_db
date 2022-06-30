@@ -271,6 +271,20 @@ def member_invitations(request):
     return render(request, 'accounts/member-invitations.html', context)
 
 @login_required(login_url='login')
+def delete_member_invitation(request, pk):
+    profile = Profile.objects.select_related('user').get(user=request.user)
+    member_invites = InviteMember.objects.filter(receiver=request.user)
+
+    target_member_invite = InviteMember.objects.get(id=pk)
+    target_member_invite.delete()
+
+    context = {
+        'profile': profile,
+        'member_invites': member_invites,
+    }
+    return render(request, 'accounts/member-invitations.html', context)
+
+@login_required(login_url='login')
 def invite_user(request):
     invite_form = SignUpInvitationForm(request.POST or None)
     if request.method == "POST":

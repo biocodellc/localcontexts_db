@@ -4,5 +4,6 @@ from .models import Researcher
 class ResearcherAdmin(admin.ModelAdmin):
     list_display = ('user', 'contact_email', 'orcid', 'primary_institution', 'date_connected')
     search_fields = ('contact_email', 'user',)
+    readonly_fields = ('orcid_auth_token',)
 
 admin.site.register(Researcher, ResearcherAdmin)

@@ -199,9 +199,9 @@ def set_notice_defaults(notice):
         attribution_incomplete_text = 'Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution.'
         
         if notice.notice_type == 'attribution_incomplete':
-            notice.attribution_incomplete_img_url = baseURL + 'ci-attribution-incomplete.png'
-            notice.attribution_incomplete_svg_url = baseURL + 'ci-attribution-incomplete.svg'
-            notice.attribution_incomplete_default_text = attribution_incomplete_text
+            notice.img_url = baseURL + 'ci-attribution-incomplete.png'
+            notice.svg_url = baseURL + 'ci-attribution-incomplete.svg'
+            notice.default_text = attribution_incomplete_text
 
     notice.save()  
 
@@ -232,21 +232,31 @@ def add_to_connections(target_org, org):
                 
     connections.save()
 
-# Helper function for creating/updating notices (institutions)
-def loop_through_notices(list, institution, project):
+# Helper function for creating/updating notices
+def loop_through_notices(list, organization, project):
     for selected in list:
-        if selected == 'bcnotice':
-            notice = Notice.objects.create(notice_type='biocultural', placed_by_institution=institution, project=project)
-        elif selected == 'tknotice':
-            notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_institution=institution, project=project)
-        elif selected == 'attribution_incomplete':
-            notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', institution=institution, project=project)
+        if isinstance(organization, Institution):
+            if selected == 'bcnotice':
+                notice = Notice.objects.create(notice_type='biocultural', placed_by_institution=organization, project=project)
+            elif selected == 'tknotice':
+                notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_institution=organization, project=project)
+            elif selected == 'attribution_incomplete':
+                notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', institution=organization, project=project)
+
+        if isinstance(organization, Researcher):
+            if selected == 'bcnotice':
+                notice = Notice.objects.create(notice_type='biocultural', placed_by_researcher=organization, project=project)
+            elif selected == 'tknotice':
+                notice = Notice.objects.create(notice_type='traditional_knowledge', placed_by_researcher=organization, project=project)
+            elif selected == 'attribution_incomplete':
+                notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', researcher=organization, project=project)
         
         set_notice_defaults(notice)
 
 
-# Create/Update Notices (institutions)
-def create_notices(selected_notices, institution, project, existing_notice, existing_inst_notice):
+# Create/Update Notices
+def create_notices(selected_notices, organization, project, existing_notice, existing_inst_notice):
+    # organization: either instance of institution or researcher
     # selected_notices would be a list: 
     # attribution_incomplete # bcnotice # tknotice
     
@@ -257,21 +267,39 @@ def create_notices(selected_notices, institution, project, existing_notice, exis
 
     # If Individual notices
     if len(selected_notices) == 1:
-        loop_through_notices(selected_notices, institution, project)
+        loop_through_notices(selected_notices, organization, project)
 
     elif len(selected_notices) == 2:
-        # If BC and TK Notices
-        if 'bcnotice' in selected_notices and 'tknotice' in selected_notices:
-            notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_institution=institution, project=project)
-            set_notice_defaults(notice)
-        else:
-            loop_through_notices(selected_notices, institution, project)
+        if isinstance(organization, Institution):
+            # If BC and TK Notices
+            if 'bcnotice' in selected_notices and 'tknotice' in selected_notices:
+                notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_institution=organization, project=project)
+                set_notice_defaults(notice)
+            else:
+                loop_through_notices(selected_notices, organization, project)
+
+        if isinstance(organization, Researcher):
+            # If BC and TK Notices
+            if 'bcnotice' in selected_notices and 'tknotice' in selected_notices:
+                notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_researcher=organization, project=project)
+                set_notice_defaults(notice)
+            else:
+                loop_through_notices(selected_notices, organization, project)
 
     elif len(selected_notices) == 3:
-        # Both BC and TK and one of the institution notices
-        if 'bcnotice' in selected_notices and 'tknotice' in selected_notices:
-            notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_institution=institution, project=project)
-            set_notice_defaults(notice)
-            institution_notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', institution=institution, project=project)
-            set_notice_defaults(institution_notice)
+        if isinstance(organization, Institution):
+            # Both BC and TK and one of the institution notices
+            if 'bcnotice' in selected_notices and 'tknotice' in selected_notices:
+                notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_institution=organization, project=project)
+                set_notice_defaults(notice)
+                institution_notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', institution=organization, project=project)
+                set_notice_defaults(institution_notice)
+
+        if isinstance(organization, Researcher):
+            # Both BC and TK and one of the institution notices
+            if 'bcnotice' in selected_notices and 'tknotice' in selected_notices:
+                notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', placed_by_researcher=organization, project=project)
+                set_notice_defaults(notice)
+                institution_notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', researcher=organization, project=project)
+                set_notice_defaults(institution_notice)
 
