@@ -50,6 +50,7 @@
                                 </div>
                             </div>
                             <div class="w-15 flex-this flex-end">
+                                <a href="{% url 'delete-member-invitation' invite.id %}" class="darkteal-text underline-hover margin-right-8 margin-top-8">Delete invite</a>
                                 <form method="POST" action="">
                                     {% csrf_token %}
                                     <input value="{{ invite.id }}" type="hidden" name="invite_id">
@@ -101,11 +102,14 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="w-15 flex-this flex-end">
+                            <div class="w-30 flex-this flex-end">
+
+                                <a href="{% url 'delete-member-invitation' invite.id %}" class="darkteal-text underline-hover margin-right-8 margin-top-8">Delete invite</a>
+
                                 <form method="POST" action="">
                                     {% csrf_token %}
                                     <input value="{{ invite.id }}" type="hidden" name="invite_id">
-                                    <button class="action-btn primary-btn">Accept Invite</button>
+                                    <button class="action-btn primary-btn">Accept invite</button>
                                 </form>
                             </div>
                         </div>
