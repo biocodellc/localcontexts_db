@@ -7,9 +7,14 @@
         <label for="contributors">Project Contributors</label>
         <div class="tooltip"><strong>?</strong>
             <span class="tooltiptext">
-                Key institutional or researcher contributors involved in the project. 
-                This can include other institutions or researchers. At this stage, you are not adding communities as contributors. 
-                This project information can be sent to communities as a notification after creating the project.            
+                {% if institution or researcher %}
+                    Key institutional or researcher contributors involved in the project. 
+                    This can include other institutions or researchers. At this stage, you are not adding communities as contributors. 
+                    This project information can be sent to communities as a notification after creating the project.     
+                {% endif %}       
+                {% if community %}
+                    Any institutional or researcher contributors involved in the project who are registered in the Hub.
+                {% endif %}
             </span>
         </div>
         <br>
