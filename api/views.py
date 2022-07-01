@@ -8,6 +8,7 @@ from rest_framework import status
 from .serializers import *
 from projects.models import Project
 from helpers.models import Notice, InstitutionNotice
+from projects.models import ProjectCreator
 
 @api_view(['GET'])
 def apiOverview(request, format=None):
@@ -78,7 +79,12 @@ def projects_by_user(request, username):
 def projects_by_institution(request, institution_id):
     try:
         institution = Institution.objects.get(id=institution_id)
-        projects = institution.projects.filter(project_privacy='Public')
+
+        projects = []
+        creators = ProjectCreator.objects.filter(institution=institution)
+        for x in creators:
+            projects.append(x.project)
+
         serializer = ProjectOverviewSerializer(projects, many=True)
         return Response(serializer.data)
     except:
@@ -88,7 +94,12 @@ def projects_by_institution(request, institution_id):
 def projects_by_researcher(request, researcher_id):
     try:
         researcher = Researcher.objects.get(id=researcher_id)
-        projects = researcher.projects.filter(project_privacy='Public')
+
+        projects = []
+        creators = ProjectCreator.objects.filter(researcher=researcher)
+        for x in creators:
+            projects.append(x.project)
+
         serializers = ProjectOverviewSerializer(projects, many=True)
         return Response(serializers.data)
     except:
