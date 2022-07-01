@@ -66,6 +66,7 @@ class OpenToCollaborateNoticeURL(models.Model):
     researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
     name = models.CharField(max_length=250, null=True, blank=True)
     url = models.URLField(blank=True, null=True)
+    added = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return self.name

@@ -10,7 +10,7 @@ class InstitutionNoticeAdmin(admin.ModelAdmin):
     search_fields = ('project',)
 
 class OpenToCollaborateNoticeURLAdmin(admin.ModelAdmin):
-    list_display = ('institution', 'researcher', 'name', 'url')
+    list_display = ('institution', 'researcher', 'name', 'url', 'added')
 
 class LabelTranslationAdmin(admin.ModelAdmin):
     list_display = ('title', 'language', 'language_tag', 'translation', )
