@@ -42,7 +42,12 @@
     <body>
         <h1>{{ project.title }}</h1>
         <p>
-            <strong>Created By:</strong> {{ project.project_creator.get_full_name }}
+            <strong>Created By:</strong> 
+            {% if project.project_creator.get_full_name %}
+                {{ project.project_creator.get_full_name }} ({{ project.project_creator }})
+            {% else %}
+                {{ project.project_creator.username }}
+            {% endif %}
             {% if project_creator.community %} {{ project_creator.community }} | Community {% endif %}
             {% if project_creator.institution %} {{ project_creator.institution }} | Institution {% endif %}
             {% if project_creator.researcher %} {{ project_creator.researcher }} | Researcher {% endif %}
@@ -69,7 +74,12 @@
                         {{ institution.institution_name }} | Institution <br>
                     {% endfor %}
                     {% for researcher in contributors.researchers.all %}
-                        {{ researcher.user.get_full_name }} | Researcher <br>
+                        {% if researcher.user.get_full_name %}
+                            {{ researcher.user.get_full_name }} ({{ researcher.user }})
+                        {% else %}
+                            {{ researcher.user.username }}
+                        {% endif %}
+                     | Researcher <br>
                     {% endfor %}
                 {% endif %}
 

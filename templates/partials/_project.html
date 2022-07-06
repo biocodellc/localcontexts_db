@@ -74,7 +74,13 @@
                                                 <img loading="lazy" src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="margin-top:2.5px;" alt="ORCID iD icon">
                                             </a>
                                         {% endif %}
-                                        {{ researcher.user.get_full_name }} | Researcher
+
+                                        {% if researcher.user.get_full_name %}
+                                            {{ researcher.user.get_full_name }}
+                                        {% else %}
+                                            {{ researcher.user.username }}
+                                        {% endif %}
+                                         | Researcher
                                         <div class="researcher-hover-info">
                                             <p>
                                                 <strong>Primary Institution Affiliation:</strong> {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% else %} None specified {% endif %}<br>
