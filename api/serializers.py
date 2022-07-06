@@ -4,7 +4,7 @@ from rest_framework.serializers import SerializerMethodField
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from helpers.models import LabelTranslation, Notice, InstitutionNotice
-from projects.models import Project
+from projects.models import Project, ProjectCreator
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
@@ -78,14 +78,30 @@ class ProjectOverviewSerializer(serializers.ModelSerializer):
         model = Project
         fields = ('unique_id', 'providers_id', 'title', 'project_privacy', 'date_added', 'date_modified',)
 
+class ProjectCreatorSerializer(serializers.ModelSerializer):
+    institution = InstitutionSerializer()
+    researcher = ResearcherSerializer()
+    community = SerializerMethodField()
+
+    class Meta:
+        model = ProjectCreator
+        fields = ('institution', 'researcher', 'community')
+    
+    def get_community(self, obj):
+        if obj.community: 
+            return str(obj.community.community_name)
+
+
 # Notices only   
 class ProjectSerializer(serializers.ModelSerializer):
+    created = ProjectCreatorSerializer(source="project_creator_project", many=True)
+
     notice = NoticeSerializer(source="project_notice", many=True)
     institution_notice = InstitutionNoticeSerializer(source="project_institutional_notice", many=True)
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'providers_id', 'title', 'project_privacy', 'date_added', 'date_modified', 'notice', 'institution_notice', 'project_boundary_geojson')
+        fields = ('unique_id', 'providers_id', 'title', 'project_privacy', 'date_added', 'date_modified', 'created', 'notice', 'institution_notice', 'project_boundary_geojson')
 
 # Labels only
 class ProjectNoNoticeSerializer(serializers.ModelSerializer):
