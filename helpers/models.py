@@ -91,13 +91,13 @@ class EntitiesNotified(models.Model):
 class LabelTranslation(models.Model):
     bclabel = models.ForeignKey(BCLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="bclabel_translation")
     tklabel = models.ForeignKey(TKLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="tklabel_translation")
-    title = models.CharField(max_length=150, blank=True)
+    translated_name = models.CharField(max_length=150, blank=True)
     language_tag = models.CharField(max_length=5, blank=True)
     language = models.CharField(max_length=150, blank=True)
-    translation = models.TextField(blank=True)
+    translated_text = models.TextField(blank=True)
 
     def __str__(self):
-        return self.title
+        return self.translated_name
     
     class Meta:
         verbose_name = "Label Translation"
