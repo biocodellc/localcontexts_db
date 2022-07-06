@@ -18,10 +18,22 @@ def apiOverview(request, format=None):
         'projects_by_username': '/projects/users/<USERNAME>/',
         'projects_by_institution_id': '/projects/institutions/<INSTITUTION_ID>/',
         'projects_by_researcher_id': '/projects/researchers/<RESEARCHER_ID>/',
+        'open_to_collaborate_notice': reverse('api-open-to-collaborate', request=request, format=format),
         'api_documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
         'usage_guide_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf',
         'usage_guide_ci_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf',
         'usage_guide_labels': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf',
+    }
+    return Response(api_urls)
+
+@api_view(['GET'])
+def openToCollaborateNotice(request):
+    api_urls = {
+        'title': 'Open to Collaborate Notice',
+        'default_text': 'Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.',
+        'img_png': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/ci-open-to-collaborate.png',
+        'img_svg': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/ci-open-to-collaborate.svg',
+        'usage_guide_ci_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf',
     }
     return Response(api_urls)
 

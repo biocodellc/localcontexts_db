@@ -5,6 +5,7 @@ from .api import *
 
 urlpatterns = [
     path('v1/', apiOverview, name="api-overview"),
+    path('v1/notices/open_to_collaborate', openToCollaborateNotice, name="api-open-to-collaborate"),
 
     path('v1/projects/', ProjectList.as_view(), name="api-projects"),
     path('v1/projects/<unique_id>/', ProjectDetail.as_view(), name="api-project-detail"),

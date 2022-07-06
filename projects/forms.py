@@ -24,7 +24,7 @@ class CreateProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'providers_id', 'publication_doi', 'project_data_guid', 'recommended_citation']
+        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'providers_id', 'publication_doi', 'project_data_guid']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-100'}),
             'other_type': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Specify other Project type'}),
@@ -34,7 +34,6 @@ class CreateProjectForm(forms.ModelForm):
             'publication_doi': forms.TextInput(attrs={'class': 'w-100'}),
             'project_data_guid': forms.TextInput(attrs={'class': 'w-100'}),
             'providers_id': forms.TextInput(attrs={'class': 'w-100'}),
-            'recommended_citation': forms.Textarea(attrs={'rows': 4, 'class': 'w-100'}),
             'url': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
@@ -82,7 +81,7 @@ class EditProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'providers_id', 'recommended_citation']
+        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'providers_id']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-100'}),
             'other_type': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Specify other Project type'}),
@@ -92,6 +91,5 @@ class EditProjectForm(forms.ModelForm):
             'publication_doi': forms.TextInput(attrs={'class': 'w-100'}),
             'project_data_guid': forms.TextInput(attrs={'class': 'w-100'}),
             'providers_id': forms.TextInput(attrs={'class': 'w-100'}),
-            'recommended_citation': forms.Textarea(attrs={'rows': 4, 'class': 'w-100'}),
             'url': forms.TextInput(attrs={'class': 'w-100'}),
         }
