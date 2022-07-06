@@ -16,7 +16,7 @@ def anchor(url_name, section_id, researcher_id):
 
 @register.simple_tag
 def get_notices_count(researcher):
-    return Notice.objects.filter(placed_by_researcher=researcher).count()
+    return Notice.objects.filter(researcher=researcher).count()
 
 @register.simple_tag
 def get_labels_count(researcher):
