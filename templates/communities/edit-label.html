@@ -19,8 +19,8 @@
                     {% if tklabel %} {{ tklabel.name }} {% endif %}
                 </p>
                 <div class="w-80">
-                    <label for="default_text">Label text</label>
-                    {{ form.default_text }}<br>
+                    <label for="label_text">Label text</label>
+                    {{ form.label_text }}<br>
                     <label>Upload audio file</label><br>
                     {% if bclabel.audiofile %} <div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
                     {% if tklabel.audiofile %} <div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}

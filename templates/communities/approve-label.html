@@ -63,7 +63,7 @@
                         {% if tklabel.audiofile %} <div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
 
                     </div>
-                    <div>{% if bclabel %}{{ bclabel.default_text }}{% endif %}{% if tklabel %}{{ tklabel.default_text }}{% endif %}</div>
+                    <div>{% if bclabel %}{{ bclabel.label_text }}{% endif %}{% if tklabel %}{{ tklabel.label_text }}{% endif %}</div>
                     
                     {% if bclabel %}
                         {% if bclabel.bclabel_translation.all %}

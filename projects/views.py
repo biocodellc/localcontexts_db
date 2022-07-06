@@ -126,7 +126,7 @@ def download_project_zip(request, unique_id):
         files.append((bclabel.name + '.svg', get_svg.content))
 
         # Default Label text
-        text_content = bclabel.name + '\n' + bclabel.default_text
+        text_content = bclabel.name + '\n' + bclabel.label_text
         text_addon = []
 
         if bclabel.bclabel_translation.all():
@@ -144,7 +144,7 @@ def download_project_zip(request, unique_id):
         files.append((tklabel.name + '.svg', get_svg.content))
         
         # Default Label text
-        text_content = tklabel.name + '\n' + tklabel.default_text
+        text_content = tklabel.name + '\n' + tklabel.label_text
         text_addon = []
 
         if tklabel.tklabel_translation.all():

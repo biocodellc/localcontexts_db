@@ -39,7 +39,7 @@ class TKLabel(models.Model):
     name = models.CharField(verbose_name='label name', max_length=90, null=True)
     language_tag = models.CharField(max_length=5, blank=True)
     language = models.CharField(max_length=150, blank=True)
-    default_text = models.TextField(null=True, blank=True)
+    label_text = models.TextField(null=True, blank=True)
     img_url = models.URLField(blank=True, null=True)
     svg_url = models.URLField(blank=True, null=True)
     is_approved = models.BooleanField(default=False, null=True)

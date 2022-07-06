@@ -211,7 +211,7 @@
                             <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
                             <p class="bold"> {{ bclabel.name }} </p>
                             {% if bclabel.audiofile %} <div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
-                            <p>{{ bclabel.default_text}}</p>
+                            <p>{{ bclabel.label_text}}</p>
 
                             {% include 'partials/_label-translation.html' %}
                         </div>
@@ -233,7 +233,7 @@
                             <p class="bold"> {{ tklabel.name }} </p>
                             {% if tklabel.audiofile %} <div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
 
-                            <p>{{ tklabel.default_text}}</p>
+                            <p>{{ tklabel.label_text}}</p>
 
                             {% include 'partials/_label-translation.html' %}
                         </div>
