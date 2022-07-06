@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import *
 
 class NoticeAdmin(admin.ModelAdmin):
-    list_display = ('project', 'notice_type', 'placed_by_researcher', 'placed_by_institution', 'created', 'archived' )
+    list_display = ('project', 'notice_type', 'researcher', 'institution', 'created', 'archived' )
     search_fields = ('project',)
 
 class InstitutionNoticeAdmin(admin.ModelAdmin):

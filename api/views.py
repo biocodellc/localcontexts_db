@@ -60,7 +60,7 @@ def project_detail_providers(request, providers_id):
             
             return Response(serializer.data)
         else:
-            raise PermissionDenied({"message":"You don't have permission to view this project", "unique_id": unique_id})
+            raise PermissionDenied({"message":"You don't have permission to view this project", "providers_id": providers_id})
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
 

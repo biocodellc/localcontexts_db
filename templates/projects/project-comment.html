@@ -65,8 +65,8 @@
             <h3 class="no-bottom-margin">Project Messages</h3>
             <div>
                 <p><span class="bold">
-                    {% if project.project_notice.placed_by_researcher %} {{ project.project_notice.placed_by_researcher.user.get_full_name }} {% endif %}
-                    {% if project.project_notice.placed_by_institution %} {{ project.project_notice.placed_by_institution.institution_name }} {% endif %}
+                    {% if project.project_notice.researcher %} {{ project.project_notice.researcher.user.get_full_name }} {% endif %}
+                    {% if project.project_notice.institution %} {{ project.project_notice.institution.institution_name }} {% endif %}
                 </span></p>
             </div>
 

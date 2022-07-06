@@ -58,12 +58,12 @@ class TKLabelSerializer(serializers.ModelSerializer):
         return str(obj.community.community_name)
 
 class NoticeSerializer(serializers.ModelSerializer):
-    placed_by_institution = InstitutionSerializer()
-    placed_by_researcher = ResearcherSerializer()
+    institution = InstitutionSerializer()
+    researcher = ResearcherSerializer()
 
     class Meta:
         model = Notice
-        fields = ('notice_type', 'bc_img_url', 'bc_svg_url', 'bc_default_text', 'tk_img_url', 'tk_svg_url', 'tk_default_text', 'placed_by_researcher', 'placed_by_institution', 'created', 'updated',)
+        fields = ('notice_type', 'bc_img_url', 'bc_svg_url', 'bc_default_text', 'tk_img_url', 'tk_svg_url', 'tk_default_text', 'researcher', 'institution', 'created', 'updated',)
 
 class InstitutionNoticeSerializer(serializers.ModelSerializer):
     institution = InstitutionSerializer()
