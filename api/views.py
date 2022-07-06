@@ -18,6 +18,7 @@ def apiOverview(request, format=None):
         'projects_by_username': '/projects/users/<USERNAME>/',
         'projects_by_institution_id': '/projects/institutions/<INSTITUTION_ID>/',
         'projects_by_researcher_id': '/projects/researchers/<RESEARCHER_ID>/',
+        'open_to_collaborate_notice': reverse('api-open-to-collaborate', request=request, format=format),
         'api_documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
         'usage_guide_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf',
         'usage_guide_ci_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf',
