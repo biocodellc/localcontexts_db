@@ -13,15 +13,15 @@ from projects.models import ProjectCreator
 @api_view(['GET'])
 def apiOverview(request, format=None):
     api_urls = {
-        'projects list': reverse('api-projects', request=request, format=format),
-        'project detail': '/projects/<PROJECT_UNIQUE_ID>/',
-        'projects by username': '/projects/users/<USERNAME>/',
-        'projects by institution id': '/projects/institutions/<INSTITUTION_ID>/',
-        'projects by researcher id': '/projects/researchers/<RESEARCHER_ID>/',
-        'API Documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
-        'Usage Guide for TK/BC Notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf',
-        'Usage Guide for Institution Notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf',
-        'Usage Guide for BC and TK Labels': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf',
+        'projects_list': reverse('api-projects', request=request, format=format),
+        'project_detail': '/projects/<PROJECT_UNIQUE_ID>/',
+        'projects_by_username': '/projects/users/<USERNAME>/',
+        'projects_by_institution_id': '/projects/institutions/<INSTITUTION_ID>/',
+        'projects_by_researcher_id': '/projects/researchers/<RESEARCHER_ID>/',
+        'api_documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
+        'usage_guide_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf',
+        'usage_guide_ci_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf',
+        'usage_guide_labels': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf',
     }
     return Response(api_urls)
 
