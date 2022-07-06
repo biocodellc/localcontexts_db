@@ -1,6 +1,13 @@
 {% autoescape off %}
 
-<h3>{{ data.sender.get_full_name }} has invited you to join  
+<h3>
+    {% if data.sender.get_full_name %}
+        {{ data.sender.get_full_name }} ({{ data.sender }})
+    {% else %}
+        {{ data.sender.username }}
+    {% endif %}
+    
+    has invited you to join  
     {% if institution %} {{ data.institution.institution_name }} {% endif %}
     {% if community %} {{ data.community.community_name }} {% endif %}
      as  

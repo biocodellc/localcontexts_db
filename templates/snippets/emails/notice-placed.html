@@ -3,14 +3,26 @@
     {% if sender.institution_name %}
         <h2>A Notice has been placed by {{ sender.institution_name }}</h2>
     {% elif sender.user %}
-        <h2>A Notice has been placed by {{ sender.user.get_full_name }}</h2>
+        <h2>A Notice has been placed by 
+            {% if sender.user.get_full_name %}
+                {{ sender.user.get_full_name }} ({{ sender.user }})
+            {% else %}
+                {{ sender.user.username }}
+            {% endif %}
+        </h2>
     {% endif %}
 
     <p>
         {% if sender.institution_name %}
             Institution {{ sender.institution_name }} has attached a Notice to their project "{{ project.title }}" and notified your community about it.<br><br>
         {% elif sender.user %}
-            Researcher {{ sender.user.get_full_name }} has attached a Notice to their project "{{ project.title }}" and notified your community about it.<br><br>
+            Researcher 
+            {% if sender.user.get_full_name %}
+                {{ sender.user.get_full_name }} ({{ sender.user }})
+            {% else %}
+                {{ sender.user.username }}
+            {% endif %}
+            has attached a Notice to their project "{{ project.title }}" and notified your community about it.<br><br>
         {% endif %}
 
     

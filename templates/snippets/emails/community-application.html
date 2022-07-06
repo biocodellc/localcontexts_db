@@ -1,6 +1,11 @@
 {% autoescape off %}
 <h3>
-    {{ data.community_creator.get_full_name }} ({{ data.community_creator }}) has applied to create a community.
+    {% if data.community_creator.get_full_name %}
+        {{ data.community_creator.get_full_name }} ({{ data.community_creator }})
+    {% else %}
+        {{ data.community_creator.username }}
+    {% endif %}
+    has applied to create a community.
 </h3>
 
 <p>

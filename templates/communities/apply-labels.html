@@ -15,7 +15,7 @@
             <div><p>{{ project.date_added|date:'M d, Y' }} | 
                 {{ project.project_type }} | 
                 {{ project.project_privacy }}<br>
-                Created: {{ project.project_creator.get_full_name }} 
+                Created: {% if project.project_creator.get_full_name %}{{ project.project_creator.get_full_name }} {% else %} project.project_creator.username {% endif %}
 
                 {% which_account_created_project project as project_creator %}
                 {% if project_creator.community %} at {{ project_creator.community }} | Community {% endif %}

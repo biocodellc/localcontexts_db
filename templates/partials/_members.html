@@ -62,7 +62,13 @@
         </div>
 
         <div class="w-70">
-            <h2 class="no-top-margin no-bottom-margin">{{ community.community_creator.get_full_name }} </h2>
+            <h2 class="no-top-margin no-bottom-margin">
+                {% if community.community_creator.get_full_name %}
+                    {{ community.community_creator.get_full_name }} 
+                {% else %}
+                    {{ community.community_creator.username }}
+                {% endif %}
+            </h2>
             {% if community.community_creator.profile.position %}
                 <h3 class="no-top-margin">{{ community.community_creator.profile.position }}</h3>
             {% endif %}
@@ -127,7 +133,13 @@
             </div>
 
             <div class="w-70">
-                <h2 class="no-top-margin no-bottom-margin">{{ admin.get_full_name }} </h2>
+                <h2 class="no-top-margin no-bottom-margin">
+                    {% if admin.get_full_name %}
+                        {{ admin.get_full_name }} 
+                    {% else %}
+                        {{ admin.username }}
+                    {% endif %}
+                </h2>
                 {% if admin.profile.position %}
                     <h3 class="no-top-margin">{{ admin.profile.position }}</h3>
                 {% endif %}
@@ -193,7 +205,13 @@
             </div>
 
             <div class="w-70">
-                <h2 class="no-top-margin no-bottom-margin">{{ editor.get_full_name }} </h2>
+                <h2 class="no-top-margin no-bottom-margin">
+                    {% if editor.get_full_name %}
+                        {{ editor.get_full_name }} 
+                    {% else %}
+                        {{ editor.username }}
+                    {% endif %}
+                </h2>
                 {% if editor.profile.position %}
                     <h3 class="no-top-margin">{{ editor.profile.position }}</h3>
                 {% endif %}
@@ -259,7 +277,13 @@
             </div>
 
             <div class="w-70">
-                <h2 class="no-top-margin no-bottom-margin">{{ viewer.get_full_name }} </h2>
+                <h2 class="no-top-margin no-bottom-margin">
+                    {% if viewer.get_full_name %}
+                        {{ viewer.get_full_name }} 
+                    {% else %}
+                        {{ viewer.username }}
+                    {% endif %}
+                </h2>
                 {% if viewer.profile.position %}
                     <h3 class="no-top-margin">{{ viewer.profile.position }}</h3>
                 {% endif %}
@@ -312,7 +336,13 @@
         </div>
 
         <div class="w-70">
-            <h2 class="no-top-margin no-bottom-margin">{{ institution.institution_creator.get_full_name }} </h2>
+            <h2 class="no-top-margin no-bottom-margin">
+                {% if institution.institution_creator.get_full_name %}
+                    {{ institution.institution_creator.get_full_name }} 
+                {% else %}
+                    {{ institution.institution_creator.username }}
+                {% endif %}
+            </h2>
             {% if institution.institution_creator.profile.position %}
                 <h3 class="no-top-margin">{{ institution.institution_creator.profile.position }}</h3>
             {% endif %}
@@ -377,7 +407,13 @@
             </div>
 
             <div class="w-70">
-                <h2 class="no-top-margin no-bottom-margin">{{ admin.get_full_name }} </h2>
+                <h2 class="no-top-margin no-bottom-margin">
+                    {% if admin.get_full_name %}
+                        {{ admin.get_full_name }}
+                    {% else %}
+                        {{ admin.username }}
+                    {% endif %}
+                </h2>
                 {% if admin.profile.position %}
                     <h3 class="no-top-margin">{{ admin.profile.position }}</h3>
                 {% endif %}
@@ -443,7 +479,13 @@
             </div>
 
             <div class="w-70">
-                <h2 class="no-top-margin no-bottom-margin">{{ editor.get_full_name }} </h2>
+                <h2 class="no-top-margin no-bottom-margin">
+                    {% if editor.get_full_name %}
+                        {{ editor.get_full_name }}
+                    {% else %}
+                        {{ editor.username }}
+                    {% endif %}
+                </h2>
                 {% if editor.profile.position %}
                     <h3 class="no-top-margin">{{ editor.profile.position }}</h3>
                 {% endif %}
@@ -509,7 +551,13 @@
             </div>
 
             <div class="w-70">
-                <h2 class="no-top-margin no-bottom-margin">{{ viewer.get_full_name }} </h2>
+                <h2 class="no-top-margin no-bottom-margin">
+                    {% if viewer.get_full_name %}
+                        {{ viewer.get_full_name }}
+                    {% else %}
+                        {{ viewer.username }}
+                    {% endif %}
+                </h2>
                 {% if viewer.profile.position %}
                     <h3 class="no-top-margin">{{ viewer.profile.position }}</h3>
                 {% endif %}
