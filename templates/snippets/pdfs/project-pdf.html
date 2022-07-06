@@ -162,7 +162,7 @@
                         </td>
                         <td class="text-td">
                             <h1 class="no-bottom-margin">{{ bclabel.name }} ({{ bclabel.community.community_name }})</h1>
-                            <p> {{ bclabel.default_text|linebreaks }} </p> 
+                            <p> {{ bclabel.label_text|linebreaks }} </p> 
 
                             {% if bclabel.bclabel_translation.all %}
                                 {% for translation in bclabel.bclabel_translation.all %}
@@ -183,7 +183,7 @@
                         </td>
                         <td class="text-td">
                             <h1 class="no-bottom-margin">{{ tklabel.name }} ({{ tklabel.community.community_name }})</h1>
-                            <p> {{ tklabel.default_text|linebreaks }} </p>  
+                            <p> {{ tklabel.label_text|linebreaks }} </p>  
 
                             {% if tklabel.tklabel_translation.all %}
                                 {% for translation in tklabel.tklabel_translation.all %}
