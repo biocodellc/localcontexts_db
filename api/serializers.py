@@ -28,7 +28,10 @@ class ResearcherSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'orcid')
 
     def get_user(self, obj):
-        return str(obj.user.first_name) + ' ' + str(obj.user.last_name)
+        if obj.user.first_name and obj.user.last_name:
+            return str(obj.user.first_name) + ' ' + str(obj.user.last_name)
+        else:
+            return str(obj.user.username)
 
 class LabelTranslationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -58,20 +61,14 @@ class TKLabelSerializer(serializers.ModelSerializer):
         return str(obj.community.community_name)
 
 class NoticeSerializer(serializers.ModelSerializer):
-    institution = InstitutionSerializer()
-    researcher = ResearcherSerializer()
-
     class Meta:
         model = Notice
-        fields = ('notice_type', 'bc_img_url', 'bc_svg_url', 'bc_default_text', 'tk_img_url', 'tk_svg_url', 'tk_default_text', 'researcher', 'institution', 'created', 'updated',)
+        fields = ('notice_type', 'bc_img_url', 'bc_svg_url', 'bc_default_text', 'tk_img_url', 'tk_svg_url', 'tk_default_text', 'created', 'updated',)
 
 class InstitutionNoticeSerializer(serializers.ModelSerializer):
-    institution = InstitutionSerializer()
-    researcher = ResearcherSerializer()
-
     class Meta:
         model = InstitutionNotice
-        fields = ('notice_type', 'institution', 'researcher', 'img_url', 'svg_url', 'default_text', 'created', 'updated',)
+        fields = ('notice_type', 'img_url', 'svg_url', 'default_text', 'created', 'updated',)
 
 class ProjectOverviewSerializer(serializers.ModelSerializer):
     class Meta:
@@ -91,11 +88,9 @@ class ProjectCreatorSerializer(serializers.ModelSerializer):
         if obj.community: 
             return str(obj.community.community_name)
 
-
 # Notices only   
 class ProjectSerializer(serializers.ModelSerializer):
     created = ProjectCreatorSerializer(source="project_creator_project", many=True)
-
     notice = NoticeSerializer(source="project_notice", many=True)
     institution_notice = InstitutionNoticeSerializer(source="project_institutional_notice", many=True)
 
