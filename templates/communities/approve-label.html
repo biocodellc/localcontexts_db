@@ -68,8 +68,8 @@
                     {% if bclabel %}
                         {% if bclabel.bclabel_translation.all %}
                             {% for translation in bclabel.bclabel_translation.all %}
-                                <div><p class="bold">{{ translation.title }} | {{ translation.language }}</p></div>
-                                <div class="margin-bottom-16">{{ translation.translation }}</div>
+                                <div><p class="bold">{{ translation.translated_name }} | {{ translation.language }}</p></div>
+                                <div class="margin-bottom-16">{{ translation.translated_text }}</div>
                             {% endfor %}
                         {% endif %}
                     {% endif %}
@@ -77,8 +77,8 @@
                     {% if tklabel %}
                         {% if tklabel.tklabel_translation.all %}
                             {% for translation in tklabel.tklabel_translation.all %}
-                                <div><p class="bold">{{ translation.title }} | {{ translation.language }}</p> </div>
-                                <div class="margin-bottom-16">{{ translation.translation }}</div>
+                                <div><p class="bold">{{ translation.translated_name }} | {{ translation.language }}</p> </div>
+                                <div class="margin-bottom-16">{{ translation.translated_text }}</div>
                             {% endfor %}
                         {% endif %}
                     {% endif %}

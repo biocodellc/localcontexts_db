@@ -131,7 +131,7 @@ def download_project_zip(request, unique_id):
 
         if bclabel.bclabel_translation.all():
             for translation in bclabel.bclabel_translation.all():
-                text_addon.append('\n\n' + translation.title + ' (' + translation.language + ') ' + '\n' + translation.translation)
+                text_addon.append('\n\n' + translation.translated_name + ' (' + translation.language + ') ' + '\n' + translation.translated_text)
             files.append((bclabel.name + '.txt', text_content + '\n'.join(text_addon)))
         else:
             files.append((bclabel.name + '.txt', text_content))
@@ -149,7 +149,7 @@ def download_project_zip(request, unique_id):
 
         if tklabel.tklabel_translation.all():
             for translation in tklabel.tklabel_translation.all():
-                text_addon.append('\n\n' + translation.title + ' (' + translation.language + ') ' + '\n' + translation.translation)
+                text_addon.append('\n\n' + translation.translated_name + ' (' + translation.language + ') ' + '\n' + translation.translated_text)
             files.append((tklabel.name + '.txt', text_content + '\n'.join(text_addon)))
         else:
             files.append((tklabel.name + '.txt', text_content))

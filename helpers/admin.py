@@ -13,7 +13,7 @@ class OpenToCollaborateNoticeURLAdmin(admin.ModelAdmin):
     list_display = ('institution', 'researcher', 'name', 'url', 'added')
 
 class LabelTranslationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'language', 'language_tag', 'translation', )
+    list_display = ('translated_name', 'language', 'language_tag', 'translated_text', )
 
 class ProjectCommentAdmin(admin.ModelAdmin):
     list_display = ('project', 'sender', 'community', 'message', 'created')

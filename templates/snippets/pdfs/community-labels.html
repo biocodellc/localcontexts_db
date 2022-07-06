@@ -53,8 +53,8 @@
 
                         {% if bclabel.bclabel_translation.all %}
                             {% for translation in bclabel.bclabel_translation.all %}
-                                <h1 class="no-bottom-margin">{{ translation.title }} ({{ translation.language }})</h1>
-                                <p> {{ translation.translation|linebreaks }} </p> 
+                                <h1 class="no-bottom-margin">{{ translation.translated_name }} ({{ translation.language }})</h1>
+                                <p> {{ translation.translated_text|linebreaks }} </p> 
                             {% endfor %}
                         {% endif %} 
                     </td>
@@ -71,8 +71,8 @@
 
                         {% if tklabel.tklabel_translation.all %}
                             {% for translation in tklabel.tklabel_translation.all %}
-                                <h1 class="no-bottom-margin">{{ translation.title }} ({{ translation.language }})</h1>
-                                <p> {{ translation.translation|linebreaks }} </p> 
+                                <h1 class="no-bottom-margin">{{ translation.translated_name }} ({{ translation.language }})</h1>
+                                <p> {{ translation.translated_text|linebreaks }} </p> 
                             {% endfor %}
                         {% endif %} 
                     </td>
