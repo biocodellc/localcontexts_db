@@ -1233,16 +1233,16 @@ def apply_labels(request, pk, project_uuid):
                     n.archived = True
                     n.save()
                     # send notification to either institution or researcher
-                    if n.placed_by_institution:
+                    if n.institution:
                         # Add institution to community connections, then add community to institution connections
-                        add_to_connections(community, n.placed_by_institution)
-                        add_to_connections(n.placed_by_institution, community)
-                        ActionNotification.objects.create(title=title, institution=n.placed_by_institution, notification_type='Labels', reference_id=reference_id)
-                    if n.placed_by_researcher:
+                        add_to_connections(community, n.institution)
+                        add_to_connections(n.institution, community)
+                        ActionNotification.objects.create(title=title, institution=n.institution, notification_type='Labels', reference_id=reference_id)
+                    if n.researcher:
                         # Add researcher to community connections, then add community to researcher connections
-                        add_to_connections(community, n.placed_by_researcher)
-                        add_to_connections(n.placed_by_researcher, community)
-                        ActionNotification.objects.create(title=title, researcher=n.placed_by_researcher, notification_type='Labels', reference_id=reference_id)
+                        add_to_connections(community, n.researcher)
+                        add_to_connections(n.researcher, community)
+                        ActionNotification.objects.create(title=title, researcher=n.researcher, notification_type='Labels', reference_id=reference_id)
                 
                 for inst_n in institution_notices:
                     inst_n.archived= True
@@ -1343,12 +1343,12 @@ def download_labels(request, pk):
         files.append((bclabel.name + '.svg', get_svg.content))
 
         # Default Label text
-        text_content = bclabel.name + '\n' + bclabel.default_text
+        text_content = bclabel.name + '\n' + bclabel.label_text
         text_addon = []
 
         if bclabel.bclabel_translation.all():
             for translation in bclabel.bclabel_translation.all():
-                text_addon.append('\n\n' + translation.title + ' (' + translation.language + ') ' + '\n' + translation.translation)
+                text_addon.append('\n\n' + translation.translated_name + ' (' + translation.language + ') ' + '\n' + translation.translated_text)
             files.append((bclabel.name + '.txt', text_content + '\n'.join(text_addon)))
         else:
             files.append((bclabel.name + '.txt', text_content))
@@ -1361,12 +1361,12 @@ def download_labels(request, pk):
         files.append((tklabel.name + '.svg', get_svg.content))
         
         # Default Label text
-        text_content = tklabel.name + '\n' + tklabel.default_text
+        text_content = tklabel.name + '\n' + tklabel.label_text
         text_addon = []
 
         if tklabel.tklabel_translation.all():
             for translation in tklabel.tklabel_translation.all():
-                text_addon.append('\n\n' + translation.title + ' (' + translation.language + ') ' + '\n' + translation.translation)
+                text_addon.append('\n\n' + translation.translated_name + ' (' + translation.language + ') ' + '\n' + translation.translated_text)
             files.append((tklabel.name + '.txt', text_content + '\n'.join(text_addon)))
         else:
             files.append((tklabel.name + '.txt', text_content))

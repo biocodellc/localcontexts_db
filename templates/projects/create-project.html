@@ -26,7 +26,11 @@
                     and interests in the material, information, and data.
                 {% endif %}
                 {% if community %}
-                    A Local Context Project describes the research that Label(s) can be applied to.
+                    You can apply your Traditional Knowledge and Biocultural Labels to projects. A project describes the context where a Label is being applied. 
+                    For example, a project could include: a website, a university syllabus, a dissertation, a research publication, a dataset, a museum exhibition, 
+                    an archival record, an item in a collection, a library database, a photography collection, a voucher specimen, and/or metadata about a record. <br><br>
+
+                    When you create a Local Contexts Project, you will be asked for project details and contacts, and have the option to add metadata.
                 {% endif %}
             </p>
 
@@ -192,9 +196,14 @@
         <div class="content-card-v2 content-card-space white-bg">
             <h3>Project Information</h3>
             <p class="w-80">
-                Provide the project information. When creating a Project, remember that your audience are the communities 
-                that you wish to engage with and who have rights, responsibilities, and interests in the material, information, 
-                and data. This project information can be sent to communities as a notification after creating the project below. 
+                {% if institution or researcher %}
+                    Provide the project information. When creating a Project, remember that your audience are the communities 
+                    that you wish to engage with and who have rights, responsibilities, and interests in the material, information, 
+                    and data. This project information can be sent to communities as a notification after creating the project below. 
+                {% endif %}
+                {% if community %}
+                    Provide a summary of the project information.
+                {% endif %}
             </p>
 
             {{ form.project_type.label }}
@@ -270,7 +279,12 @@
             <div class="padding-bottom-1 w-50">
                 <label>Project Link (if applicable)</label>
                 <div class="tooltip"><strong>?</strong>
-                    <span class="tooltiptext">A relevant link to the object entry, catalog, collection or database with more information about the project, or where Notices / Labels may be added.</span>
+                    <span class="tooltiptext">
+                        A relevant link to the object entry, catalog, collection or database with more information about the project, or where 
+                        {% if community %} Labels {% endif %}
+                        {% if researcher or institution %} Notices {% endif %}
+                        may be added.
+                    </span>
                 </div>
                 <br>
                 {{ form.url }} <br>
@@ -283,11 +297,21 @@
         <!-- Project Contacts -->
         <div class="content-card-v2 content-card-space white-bg">
             <h3>Project Contacts</h3>
+
+            <span>Who is involved with this project?</span>                 
+            <div class="tooltip"><strong>?</strong>
+                <span class="tooltiptext">
+                    Note that by adding project contributors, the visibility of this project will be set to contributor view.
+                </span>
+            </div>
+
             <p class="w-80">
-                Who is involved with this project? <br>
-                At this stage, you are not adding Indigenous communities as contributors. 
-                This project information can be sent to communities as a notification after creating the project. 
+                {% if institution or researcher %}
+                    At this stage, you are not adding Indigenous communities as contributors. <br>
+                    This project information can be sent to communities as a notification after creating the project. 
+                {% endif %}
             </p>
+
 
             <div class="padding-bottom-1 w-50">
                 <label>Project Contact Name* </label>
@@ -370,7 +394,7 @@
                 <div class="tooltip"><strong>?</strong>
                     <span class="tooltiptext">
                         <ul>
-                            <li><span class="bold">Public:</span> Contributors and notified communities will be able to interact with the project. Limited project details (title, unique ID, attched Notices or Labels) can be accessed through the Hub API.</li><br>
+                            <li><span class="bold">Public:</span> Contributors and notified communities will be able to interact with the project. Limited project details (title, unique ID, attached Notices or Labels) can be accessed through the Hub API.</li><br>
                             <li><span class="bold">Contributor View:</span>  Contributors and notified communities will be able to interact with the project. Limited project details (title, unique ID) can be accessed through the Hub API.</li><br>
                             <li><span class="bold">Private:</span>  If contributors are added, communities are notified, or Labels applied, then the private project will be changed to discoverable. Private projects cannot be accessed with the Hub API. </li>
                         </ul>                  

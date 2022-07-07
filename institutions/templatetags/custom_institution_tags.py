@@ -26,7 +26,7 @@ def anchor(url_name, section_id, institution_id):
 
 @register.simple_tag
 def get_notices_count(institution):
-    return Notice.objects.filter(placed_by_institution=institution).count()
+    return Notice.objects.filter(institution=institution).count()
 
 @register.simple_tag
 def get_labels_count(institution):

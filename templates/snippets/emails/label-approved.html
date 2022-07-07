@@ -1,15 +1,35 @@
 {% autoescape off %}
 
     {% if label.is_approved %}
-        <h3>{{ label.approved_by.get_full_name }} has approved your Label {{ label.name }} </h3>
+        <h3>
+            {% if label.approved_by.get_full_name %}
+                {{ label.approved_by.get_full_name }} ({{ label.approved_by }})
+            {% else %}
+                {{ label.approved_by.username }}
+            {% endif %}
+            has approved your Label {{ label.name }} 
+        </h3>
     {% else %}
-        <h3>{{ label.approved_by.get_full_name }} has not approved your Label {{ label.name }} </h3>
+        <h3>
+            {% if label.approved_by.get_full_name %}
+                {{ label.approved_by.get_full_name }} ({{ label.approved_by }})
+            {% else %}
+                {{ label.approved_by.username }}
+            {% endif %}
+            has not approved your Label {{ label.name }} 
+        </h3>
         {% if label_notes %}
             <p>
                 Notes included about why the Label was not approved:<br>
 
                 {% for note in label_notes %}
-                    From {{ note.sender.get_full_name }} : <br>
+                    From 
+                    {% if note.sender.get_full_name %}
+                        {{ note.sender.get_full_name }} ({{ note.sender }})
+                    {% else %}
+                        {{ note.sender.username }}
+                    {% endif %}
+                    : <br>
                     "{{ note.note }}" <br>
                 {% endfor %}
             </p>

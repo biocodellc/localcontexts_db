@@ -74,7 +74,13 @@
                                                 <img loading="lazy" src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="margin-top:2.5px;" alt="ORCID iD icon">
                                             </a>
                                         {% endif %}
-                                        {{ researcher.user.get_full_name }} | Researcher
+
+                                        {% if researcher.user.get_full_name %}
+                                            {{ researcher.user.get_full_name }}
+                                        {% else %}
+                                            {{ researcher.user.username }}
+                                        {% endif %}
+                                         | Researcher
                                         <div class="researcher-hover-info">
                                             <p>
                                                 <strong>Primary Institution Affiliation:</strong> {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% else %} None specified {% endif %}<br>
@@ -135,8 +141,6 @@
                     </div>
                     <div class="margin-left-1"><p class="no-top-margin"><span class="bold">Project Data GUID</span><br> <span id="guidToCopy">{{ project.project_data_guid }}</span><br></p></div>
                 </div>
-
-                <div><p><span class="bold">Recommended Citation</span><br> {% if project.recommended_citation %}{{ project.recommended_citation }} {% else %} None {% endif %}<br></p></div>
 
             </div>
         </div>
@@ -211,7 +215,7 @@
                             <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
                             <p class="bold"> {{ bclabel.name }} </p>
                             {% if bclabel.audiofile %} <div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
-                            <p>{{ bclabel.default_text}}</p>
+                            <p>{{ bclabel.label_text}}</p>
 
                             {% include 'partials/_label-translation.html' %}
                         </div>
@@ -233,7 +237,7 @@
                             <p class="bold"> {{ tklabel.name }} </p>
                             {% if tklabel.audiofile %} <div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
 
-                            <p>{{ tklabel.default_text}}</p>
+                            <p>{{ tklabel.label_text}}</p>
 
                             {% include 'partials/_label-translation.html' %}
                         </div>

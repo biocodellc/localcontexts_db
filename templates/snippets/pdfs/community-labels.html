@@ -49,12 +49,12 @@
                     </td>
                     <td class="text-td">
                         <h1 class="no-bottom-margin">{{ bclabel.name }}</h1>
-                        <p> {{ bclabel.default_text|linebreaks }} </p> 
+                        <p> {{ bclabel.label_text|linebreaks }} </p> 
 
                         {% if bclabel.bclabel_translation.all %}
                             {% for translation in bclabel.bclabel_translation.all %}
-                                <h1 class="no-bottom-margin">{{ translation.title }} ({{ translation.language }})</h1>
-                                <p> {{ translation.translation|linebreaks }} </p> 
+                                <h1 class="no-bottom-margin">{{ translation.translated_name }} ({{ translation.language }})</h1>
+                                <p> {{ translation.translated_text|linebreaks }} </p> 
                             {% endfor %}
                         {% endif %} 
                     </td>
@@ -67,12 +67,12 @@
                     </td>
                     <td class="text-td">
                         <h1 class="no-bottom-margin">{{ tklabel.name }}</h1>
-                        <p> {{ tklabel.default_text|linebreaks }} </p>  
+                        <p> {{ tklabel.label_text|linebreaks }} </p>  
 
                         {% if tklabel.tklabel_translation.all %}
                             {% for translation in tklabel.tklabel_translation.all %}
-                                <h1 class="no-bottom-margin">{{ translation.title }} ({{ translation.language }})</h1>
-                                <p> {{ translation.translation|linebreaks }} </p> 
+                                <h1 class="no-bottom-margin">{{ translation.translated_name }} ({{ translation.language }})</h1>
+                                <p> {{ translation.translated_text|linebreaks }} </p> 
                             {% endfor %}
                         {% endif %} 
                     </td>

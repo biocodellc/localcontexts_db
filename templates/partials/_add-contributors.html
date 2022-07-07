@@ -7,9 +7,13 @@
         <label for="contributors">Project Contributors</label>
         <div class="tooltip"><strong>?</strong>
             <span class="tooltiptext">
-                Key institutional or researcher contributors involved in the project. 
-                This can include other institutions or researchers. At this stage, you are not adding communities as contributors. 
-                This project information can be sent to communities as a notification after creating the project.            
+                {% if institution or researcher %}
+                    Key institutional or researcher contributors involved in the project. 
+                    This can include other institutions or researchers.    
+                {% endif %}       
+                {% if community %}
+                    Any institutional or researcher contributors involved in the project who are registered in the Hub.
+                {% endif %}
             </span>
         </div>
         <br>
@@ -17,7 +21,10 @@
         <datalist id="contributors">
             {% if all_researchers %}
                 {% for researcher in all_researchers %}
-                    <option value="{{ researcher.user.get_full_name }} (Researcher)" data-resid="{{ researcher.id }}">
+                    <option 
+                        value="{% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %} (Researcher)" 
+                        data-resid="{{ researcher.id }}"
+                    >
                 {% endfor %}
             {% endif %}
             {% if all_institutions %}
@@ -42,7 +49,13 @@
     {% for researcher in contributors.researchers.all %}
         <div id="selected-researcher-{{ researcher.id }}" class="hide">
             <div class="grey-chip flex-this row space-between">
-                <div><p class="center-name">{{ researcher.user.get_full_name }}</p></div>
+                <div><p class="center-name">
+                    {% if researcher.user.get_full_name %}
+                        {{ researcher.user.get_full_name }}
+                    {% else %}
+                        {{ researcher.user.username }}
+                    {% endif %}
+                </p></div>
                 <div id="close-res-{{ researcher.id }}" class="close-x pointer" onclick="cancelResearcherSelection(this)"><div>&times;</div></div>
             </div>
         </div>
@@ -69,7 +82,13 @@
     {% for researcher in all_researchers %}
         <div id="selected-researcher-{{ researcher.id }}" class="hide">
             <div class="grey-chip flex-this row space-between">
-                <div><p class="center-name">{{ researcher.user.get_full_name }}</p></div>
+                <div><p class="center-name">
+                    {% if researcher.user.get_full_name %}
+                        {{ researcher.user.get_full_name }}
+                    {% else %}
+                        {{ researcher.user.username }}
+                    {% endif %}
+                </p></div>
                 <div id="close-res-{{ researcher.id }}" class="close-x pointer" onclick="cancelResearcherSelection(this)"><div>&times;</div></div>
             </div>
         </div>

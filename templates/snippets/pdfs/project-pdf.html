@@ -42,10 +42,15 @@
     <body>
         <h1>{{ project.title }}</h1>
         <p>
-            <strong>Created By:</strong> {{ project.project_creator.get_full_name }}
+            <strong>Created By:</strong> 
+            {% if project.project_creator.get_full_name %}
+                {{ project.project_creator.get_full_name }} ({{ project.project_creator }})
+            {% else %}
+                {{ project.project_creator }}
+            {% endif %}
             {% if project_creator.community %} {{ project_creator.community }} | Community {% endif %}
             {% if project_creator.institution %} {{ project_creator.institution }} | Institution {% endif %}
-            {% if project_creator.researcher %} {{ project_creator.researcher }} | Researcher {% endif %}
+            {% if project_creator.researcher %} | Researcher {% endif %}
             <br>
             <strong>Date Added:</strong> {{ project.date_added }}<br>
             <strong>Date Last Modified:</strong> {{ project.date_modified }}<br>
@@ -69,7 +74,12 @@
                         {{ institution.institution_name }} | Institution <br>
                     {% endfor %}
                     {% for researcher in contributors.researchers.all %}
-                        {{ researcher.user.get_full_name }} | Researcher <br>
+                        {% if researcher.user.get_full_name %}
+                            {{ researcher.user.get_full_name }} ({{ researcher.user }})
+                        {% else %}
+                            {{ researcher.user.username }}
+                        {% endif %}
+                     | Researcher <br>
                     {% endfor %}
                 {% endif %}
 
@@ -80,7 +90,6 @@
                     {% endfor %}
                 {% endif %}
 
-                {% if project.recommended_citation %}<strong>Recommended Citation:</strong> {{ project.recommended_citation }}<br>{% endif %}
                 {% if project.description %}<br><strong>Project Description:</strong> {{ project.description|linebreaks }}<br>{% endif %}
 
             {% endif %}
@@ -162,12 +171,12 @@
                         </td>
                         <td class="text-td">
                             <h1 class="no-bottom-margin">{{ bclabel.name }} ({{ bclabel.community.community_name }})</h1>
-                            <p> {{ bclabel.default_text|linebreaks }} </p> 
+                            <p> {{ bclabel.label_text|linebreaks }} </p> 
 
                             {% if bclabel.bclabel_translation.all %}
                                 {% for translation in bclabel.bclabel_translation.all %}
-                                    <h1 class="no-bottom-margin">{{ translation.title }} ({{ translation.language }})</h1>
-                                    <p> {{ translation.translation|linebreaks }} </p> 
+                                    <h1 class="no-bottom-margin">{{ translation.translated_name }} ({{ translation.language }})</h1>
+                                    <p> {{ translation.translated_text|linebreaks }} </p> 
                                 {% endfor %}
                             {% endif %} 
                         </td>
@@ -183,12 +192,12 @@
                         </td>
                         <td class="text-td">
                             <h1 class="no-bottom-margin">{{ tklabel.name }} ({{ tklabel.community.community_name }})</h1>
-                            <p> {{ tklabel.default_text|linebreaks }} </p>  
+                            <p> {{ tklabel.label_text|linebreaks }} </p>  
 
                             {% if tklabel.tklabel_translation.all %}
                                 {% for translation in tklabel.tklabel_translation.all %}
-                                    <h1 class="no-bottom-margin">{{ translation.title }} ({{ translation.language }})</h1>
-                                    <p> {{ translation.translation|linebreaks }} </p> 
+                                    <h1 class="no-bottom-margin">{{ translation.translated_name }} ({{ translation.language }})</h1>
+                                    <p> {{ translation.translated_text|linebreaks }} </p> 
                                 {% endfor %}
                             {% endif %} 
                         </td>

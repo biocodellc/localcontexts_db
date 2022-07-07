@@ -1,6 +1,12 @@
 {% autoescape off %}
 
-<h3>{{ data.sender.get_full_name }} has invited you to join the Local Contexts Hub</h3>
+<h3>
+    {% if data.sender.get_full_name %}
+        {{ data.sender.get_full_name }} ({{ data.sender }})
+    {% else %}
+        {{ data.sender.username }}
+    {% endif %}
+    has invited you to join the Local Contexts Hub</h3>
 
 <p>
     Message included with the invitation:<br>

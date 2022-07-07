@@ -12,7 +12,12 @@
                         {% if request.user.first_name %} {{ request.user.get_full_name }}
                         {% else %}{{ request.user }}{% endif %}
                     </a> 
-                    >> {{ researcher.user.get_full_name }}            
+                    >>                        
+                    {% if researcher.user.get_full_name %}
+                        {{ researcher.user.get_full_name }}
+                    {% else %}
+                        {{ researcher.user.username }}
+                    {% endif %}         
                 </small>
             </div>
 
@@ -29,7 +34,13 @@
                         </a>
                         <div id="notification-v2" class="notification-dropdown-content">
                             <div class="border-bottom-solid-teal center-text">
-                                <span class="orange-text">{{ researcher.user.get_full_name }} Notifications</span>
+                                <span class="orange-text">
+                                    {% if researcher.user.get_full_name %}
+                                        {{ researcher.user.get_full_name }}
+                                    {% else %}
+                                        {{ researcher.user.username }}
+                                    {% endif %}
+                                    Notifications</span>
                             </div>
 
                             {% if notifications %}

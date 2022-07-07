@@ -18,8 +18,8 @@ class Notice(models.Model):
     )
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_notice", db_index=True)
     notice_type = models.CharField(max_length=50, null=True, choices=TYPES)
-    placed_by_researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
-    placed_by_institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
+    researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
+    institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
     bc_img_url = models.URLField(blank=True, null=True)
     bc_svg_url = models.URLField(blank=True, null=True)
     bc_default_text = models.TextField(null=True, blank=True)
@@ -66,6 +66,7 @@ class OpenToCollaborateNoticeURL(models.Model):
     researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
     name = models.CharField(max_length=250, null=True, blank=True)
     url = models.URLField(blank=True, null=True)
+    added = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return self.name
@@ -90,13 +91,13 @@ class EntitiesNotified(models.Model):
 class LabelTranslation(models.Model):
     bclabel = models.ForeignKey(BCLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="bclabel_translation")
     tklabel = models.ForeignKey(TKLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="tklabel_translation")
-    title = models.CharField(max_length=150, blank=True)
+    translated_name = models.CharField(max_length=150, blank=True)
     language_tag = models.CharField(max_length=5, blank=True)
     language = models.CharField(max_length=150, blank=True)
-    translation = models.TextField(blank=True)
+    translated_text = models.TextField(blank=True)
 
     def __str__(self):
-        return self.title
+        return self.translated_name
     
     class Meta:
         verbose_name = "Label Translation"

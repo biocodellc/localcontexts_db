@@ -29,7 +29,13 @@
                             <div class="flex-this w-80 project-comment">
                                 <div class="project-comment-teal"></div>
                                 <div class="project-comment-text">
-                                    <span class="bold">{{ comment.sender.get_full_name }}</span>
+                                    <span class="bold">
+                                        {% if  comment.sender.get_full_name %}
+                                            {{  comment.sender.get_full_name }}
+                                        {% else %}
+                                            {{  comment.sender.username }}
+                                        {% endif %}
+                                    </span>
                                     <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
                                     <p>{{ comment.message }}</p>
                                 </div>
@@ -65,8 +71,14 @@
             <h3 class="no-bottom-margin">Project Messages</h3>
             <div>
                 <p><span class="bold">
-                    {% if project.project_notice.placed_by_researcher %} {{ project.project_notice.placed_by_researcher.user.get_full_name }} {% endif %}
-                    {% if project.project_notice.placed_by_institution %} {{ project.project_notice.placed_by_institution.institution_name }} {% endif %}
+                    {% if project.project_notice.researcher %} 
+                        {% if project.project_notice.researcher.user.get_full_name %}
+                            {{ project.project_notice.researcher.user.get_full_name }}
+                        {% else %}
+                            {{ project.project_notice.researcher.user.username }}
+                        {% endif %}
+                    {% endif %}
+                    {% if project.project_notice.institution %} {{ project.project_notice.institution.institution_name }} {% endif %}
                 </span></p>
             </div>
 
@@ -74,7 +86,13 @@
                 <div class="flex-this w-80 project-comment">
                     <div class="project-comment-teal"></div>
                     <div class="project-comment-text">
-                        <span class="bold">{{ comment.sender.get_full_name }}</span>
+                        <span class="bold">
+                            {% if comment.sender.get_full_name %}
+                                {{ comment.sender.get_full_name }}
+                            {% else %}
+                                {{ comment.sender.username }}
+                            {% endif %}
+                        </span>
                         <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
                         <p>{{ comment.message }}</p>
                     </div>

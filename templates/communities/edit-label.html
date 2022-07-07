@@ -19,8 +19,8 @@
                     {% if tklabel %} {{ tklabel.name }} {% endif %}
                 </p>
                 <div class="w-80">
-                    <label for="default_text">Label text</label>
-                    {{ form.default_text }}<br>
+                    <label for="label_text">Label text</label>
+                    {{ form.label_text }}<br>
                     <label>Upload audio file</label><br>
                     {% if bclabel.audiofile %} <div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
                     {% if tklabel.audiofile %} <div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
@@ -42,14 +42,14 @@
                             <div class="flex-this space-between">
                                 <div class="w-50">
                                     <label>Customized title</label>
-                                    {{ translation_form.title }}
+                                    {{ translation_form.translated_name }}
                                 </div>
                                 <div>
                                     <label>Language</label>
                                     {{ translation_form.language }}
                                 </div>
                             </div>
-                            {{ translation_form.translation }}    
+                            {{ translation_form.translated_text }}    
                         {% endfor %}                
                     </div>
                 {% endif %}

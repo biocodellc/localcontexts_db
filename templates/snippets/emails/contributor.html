@@ -1,6 +1,13 @@
 {% autoescape off %}
 
-    <h3>{{ project.project_creator.get_full_name }} has added you as a contributor to the Local Contexts Hub Project "{{ project.title }}".</h3>
+    <h3>
+        {% if project.project_creator.get_full_name %}
+            {{ project.project_creator.get_full_name }}
+        {% else %}
+            {{ project.project_creator.username }}
+        {% endif %}
+        has added you as a contributor to the Local Contexts Hub Project "{{ project.title }}".
+    </h3>
 
     <p>
         {% if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable' %}

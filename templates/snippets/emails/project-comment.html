@@ -1,11 +1,29 @@
 {% autoescape off %}
 
     {% if sender.institution_name %}
-        <h2>A comment has been added to a Project by {{ user.get_full_name }} from {{ sender.institution_name }}</h2>
+        <h2>A comment has been added to a Project by 
+            {% if user.get_full_name %}
+                {{ user.get_full_name }} ({{ user }})
+            {% else %}
+                {{ user.username }}
+            {% endif %}
+            from {{ sender.institution_name }}</h2>
     {% elif sender.user %}
-        <h2>A comment has been added to a Project by {{ sender.user.get_full_name }}</h2>
+        <h2>A comment has been added to a Project by 
+            {% if sender.user.get_full_name %}
+                {{ sender.user.get_full_name }} ({{ sender.user }})
+            {% else %}
+                {{ sender.user.username }}
+            {% endif %}
+        </h2>
     {% elif sender.community_name %}
-        <h2>A comment has been added to a Project by {{ user.get_full_name }} from {{ sender.community_name }}</h2>
+        <h2>A comment has been added to a Project by 
+            {% if user.get_full_name %}
+                {{ user.get_full_name }} ({{ user }})
+            {% else %}
+                {{ user.username }}
+            {% endif %}
+            from {{ sender.community_name }}</h2>
     {% endif %}
 
     <p>

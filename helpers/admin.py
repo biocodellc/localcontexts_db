@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import *
 
 class NoticeAdmin(admin.ModelAdmin):
-    list_display = ('project', 'notice_type', 'placed_by_researcher', 'placed_by_institution', 'created', 'archived' )
+    list_display = ('project', 'notice_type', 'researcher', 'institution', 'created', 'archived' )
     search_fields = ('project',)
 
 class InstitutionNoticeAdmin(admin.ModelAdmin):
@@ -10,10 +10,10 @@ class InstitutionNoticeAdmin(admin.ModelAdmin):
     search_fields = ('project',)
 
 class OpenToCollaborateNoticeURLAdmin(admin.ModelAdmin):
-    list_display = ('institution', 'researcher', 'name', 'url')
+    list_display = ('institution', 'researcher', 'name', 'url', 'added')
 
 class LabelTranslationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'language', 'language_tag', 'translation', )
+    list_display = ('translated_name', 'language', 'language_tag', 'translated_text', )
 
 class ProjectCommentAdmin(admin.ModelAdmin):
     list_display = ('project', 'sender', 'community', 'message', 'created')
