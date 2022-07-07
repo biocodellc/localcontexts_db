@@ -111,7 +111,7 @@
                 <div id="expand-div-{{ researcher.id }}" class="hide">
                     <div class="border-bottom-dash-teal">
                         <p class="no-bottom-margin">
-                            <span class="bold">Contact Email</span> | {{ researcher.contact_email }} <br><br>
+                            <span class="bold">Contact Email</span> | {% if researcher.contact_email %} {{ researcher.contact_email }} {% else %} {{ researcher.user.email }} {% endif %} <br><br>
                         </p>   
                     </div> 
                     

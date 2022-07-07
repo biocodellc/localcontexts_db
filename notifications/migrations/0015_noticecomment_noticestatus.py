@@ -20,9 +20,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('seen', models.BooleanField(default=False)),
                 ('status', models.CharField(choices=[('pending', 'pending'), ('not_pending', 'not_pending')], max_length=20, null=True)),
-                ('bcnotice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='bcnotice_status', to='bclabels.BCNotice')),
+                # ('bcnotice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='bcnotice_status', to='bclabels.BCNotice')),
                 ('community', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='status_community', to='communities.Community')),
-                ('tknotice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='tknotice_status', to='tklabels.TKNotice')),
+                # ('tknotice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='tknotice_status', to='tklabels.TKNotice')),
             ],
             options={
                 'verbose_name': 'Notice Status',
@@ -35,9 +35,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('message', models.TextField(max_length=1500, null=True)),
                 ('created', models.DateField(auto_now_add=True, null=True)),
-                ('bcnotice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='bcnotice_comment', to='bclabels.BCNotice')),
+                # ('bcnotice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='bcnotice_comment', to='bclabels.BCNotice')),
                 ('community', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='comment_community', to='communities.Community')),
-                ('tknotice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='tknotice_comment', to='tklabels.TKNotice')),
+                # ('tknotice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='tknotice_comment', to='tklabels.TKNotice')),
             ],
             options={
                 'verbose_name': 'Comment',

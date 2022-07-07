@@ -22,10 +22,10 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('message', models.TextField(blank=True, max_length=1500, null=True)),
                 ('created', models.DateField(auto_now_add=True, null=True)),
-                ('bcnotice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='bcnotice_comment', to='bclabels.BCNotice')),
+                # ('bcnotice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='bcnotice_comment', to='bclabels.BCNotice')),
                 ('community', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='comment_community', to='communities.Community')),
                 ('sender', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='comment_sender', to=settings.AUTH_USER_MODEL)),
-                ('tknotice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='tknotice_comment', to='tklabels.TKNotice')),
+                # ('tknotice', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='tknotice_comment', to='tklabels.TKNotice')),
             ],
             options={
                 'verbose_name': 'Comment',

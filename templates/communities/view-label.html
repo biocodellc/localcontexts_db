@@ -22,12 +22,8 @@
             <div class="flex-this space-between">
                 <div>
                     <h2 class="no-top-margin">
-                        {% if bclabel %}
-                            {{ bclabel.name }}
-                        {% endif %}
-                        {% if tklabel %}
-                            {{ tklabel.name }}
-                        {% endif %}
+                        {% if bclabel %} {{ bclabel.name }} {% endif %}
+                        {% if tklabel %} {{ tklabel.name }} {% endif %}
                     </h2>                    
                 </div>
 
@@ -64,7 +60,7 @@
 
                     <span class="bold">Approved by</span> - 
                     {% if bclabel %}   
-                        {% if not bclabel.approved %}
+                        {% if not bclabel.is_approved %}
                             This Label has not been approved yet
                         {% else %}
                             {{ approver_name }}
@@ -72,7 +68,7 @@
                     {% endif %}
 
                     {% if tklabel %}   
-                        {% if not tklabel.approved %}
+                        {% if not tklabel.is_approved %}
                             This Label has not been approved yet
                         {% else %}
                             {{ approver_name }}

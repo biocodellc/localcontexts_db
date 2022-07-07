@@ -211,7 +211,6 @@ def get_labels_json():
     return data
 
 def add_to_connections(target_org, org):
-    connections = ''
 
     if isinstance(target_org, Community):
         connections = Connections.objects.get(community=target_org)
@@ -219,18 +218,19 @@ def add_to_connections(target_org, org):
             connections.institutions.add(org)
         if isinstance(org, Researcher):
             connections.researchers.add(org)
+        connections.save()
 
     if isinstance(target_org, Institution):
         connections = Connections.objects.get(institution=target_org)
         if isinstance(org, Community):
             connections.communities.add(org)
+        connections.save()
 
     if isinstance(target_org, Researcher):
         connections = Connections.objects.get(researcher=target_org)
         if isinstance(org, Community):
             connections.communities.add(org)
-                
-    connections.save()
+        connections.save()
 
 # Helper function for creating/updating notices
 def loop_through_notices(list, organization, project):

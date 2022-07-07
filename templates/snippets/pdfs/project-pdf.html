@@ -46,11 +46,11 @@
             {% if project.project_creator.get_full_name %}
                 {{ project.project_creator.get_full_name }} ({{ project.project_creator }})
             {% else %}
-                {{ project.project_creator.username }}
+                {{ project.project_creator }}
             {% endif %}
             {% if project_creator.community %} {{ project_creator.community }} | Community {% endif %}
             {% if project_creator.institution %} {{ project_creator.institution }} | Institution {% endif %}
-            {% if project_creator.researcher %} {{ project_creator.researcher }} | Researcher {% endif %}
+            {% if project_creator.researcher %} | Researcher {% endif %}
             <br>
             <strong>Date Added:</strong> {{ project.date_added }}<br>
             <strong>Date Last Modified:</strong> {{ project.date_modified }}<br>

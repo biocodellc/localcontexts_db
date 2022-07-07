@@ -10,18 +10,18 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='noticestatus',
-            name='bcnotice',
-        ),
+        # migrations.RemoveField(
+        #     model_name='noticestatus',
+        #     name='bcnotice',
+        # ),
         migrations.RemoveField(
             model_name='noticestatus',
             name='community',
         ),
-        migrations.RemoveField(
-            model_name='noticestatus',
-            name='tknotice',
-        ),
+        # migrations.RemoveField(
+        #     model_name='noticestatus',
+        #     name='tknotice',
+        # ),
         migrations.DeleteModel(
             name='NoticeComment',
         ),
