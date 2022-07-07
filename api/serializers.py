@@ -100,9 +100,10 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 # Labels only
 class ProjectNoNoticeSerializer(serializers.ModelSerializer):
+    created = ProjectCreatorSerializer(source="project_creator_project", many=True)
     bc_labels = BCLabelSerializer(many=True)
     tk_labels = TKLabelSerializer(many=True)
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'providers_id', 'title', 'project_privacy', 'date_added', 'date_modified', 'bc_labels', 'tk_labels', 'project_boundary_geojson')
+        fields = ('unique_id', 'providers_id', 'title', 'project_privacy', 'date_added', 'date_modified', 'created', 'bc_labels', 'tk_labels', 'project_boundary_geojson')
