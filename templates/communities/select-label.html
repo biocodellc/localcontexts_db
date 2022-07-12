@@ -41,20 +41,19 @@
             {% for bclabel in bclabels %}
 
                 {% if not bclabel.is_approved %}
-                <div class="w-20">
-                    <small class="center-text block bold darkteal-text margin-bottom-8">
-                        {% if request.user == tklabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
-                    </small>
-                    <div class="margin-top-16 margin-bottom-16">
-                        <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
-                            <div class="auto-margin">
-                                {% include 'bclabels/mini-labels.html' %}
-                                <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ bclabel.name }}</p>
+                    <div class="w-20">
+                        <small class="center-text block bold darkteal-text margin-bottom-8">
+                            {% if request.user == bclabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
+                        </small>
+                        <div class="margin-top-16 margin-bottom-16">
+                            <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
+                                <div class="auto-margin">
+                                    {% include 'bclabels/mini-labels.html' %}
+                                    <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ bclabel.name }}</p>
+                                </div>
                             </div>
-                        </div>
-                    </div>                    
-                </div>
-
+                        </div>                    
+                    </div>
                 {% endif %}
 
             {% endfor %}
@@ -127,9 +126,7 @@
                                             <div class="margin-top-1">
                                                 <a class="primary-btn action-btn" href="{% url 'approve-label' community.id bclabel.unique_id %}">Review for Approval</a>
                                             </div>
-                                        {% elif member_role == 'viewer' %}
-
-                                        {% endif %}
+                                        {% elif member_role == 'viewer' %}{% endif %}
                                     {% endif %}
                                 {% endif %}
 
