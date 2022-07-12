@@ -126,7 +126,7 @@
                                             <div class="margin-top-1">
                                                 <a class="primary-btn action-btn" href="{% url 'approve-label' community.id bclabel.unique_id %}">Review for Approval</a>
                                             </div>
-                                        {% elif member_role == 'viewer' %}{% endif %}
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
 
@@ -351,7 +351,7 @@
                                     {% if member_role == 'viewer' %}
 
                                     {% else %}
-                                        <button id="btnTKProv" class="primary-btn action-btn margin-top-2 ">Customize this Label <i class="fa fa-arrow-right"></i></button>
+                                        <button id="btnTKProv" class="primary-btn action-btn margin-top-2">Customize this Label <i class="fa fa-arrow-right"></i></button>
                                     {% endif %}
                                 </div>
                             </div>
