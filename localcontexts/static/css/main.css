@@ -977,3 +977,8 @@ input:focus {
     background-color: DodgerBlue !important;
     color: #ffffff;
   }
+
+  /* VIEW LABEL */
+  .small-labels {
+    width: 160px;
+  }

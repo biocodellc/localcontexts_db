@@ -50,41 +50,25 @@
             <div class="w-80">
                 <p class="no-top-margin">
                     <span class="bold">Created by</span> - 
-                    {% if bclabel %}
-                        {{ creator_name }} | {{ bclabel.community }} 
-                    {% endif %}
-                    {% if tklabel %}
-                        {{ creator_name }} | {{ tklabel.community }} 
-                    {% endif %}
+                    {% if bclabel %} {{ creator_name }} | {{ bclabel.community }} {% endif %}
+                    {% if tklabel %} {{ creator_name }} | {{ tklabel.community }} {% endif %}
                     <br>
 
                     <span class="bold">Approved by</span> - 
                     {% if bclabel %}   
-                        {% if not bclabel.is_approved %}
-                            This Label has not been approved yet
-                        {% else %}
-                            {{ approver_name }}
-                        {% endif %}
+                        {% if not bclabel.is_approved %} This Label has not been approved yet {% else %} {{ approver_name }} {% endif %}
                     {% endif %}
 
-                    {% if tklabel %}   
-                        {% if not tklabel.is_approved %}
-                            This Label has not been approved yet
-                        {% else %}
-                            {{ approver_name }}
-                        {% endif %}
+                    {% if tklabel %} 
+                        {% if not tklabel.is_approved %} This Label has not been approved yet {% else %} {{ approver_name }} {% endif %}
                     {% endif %}
 
                     {% if bclabel.audiofile %}<div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
                     <br>
 
                     <span class="bold">Label text</span> <br>
-                    {% if bclabel %}
-                        {{ bclabel.label_text }}
-                    {% endif %}
-                    {% if tklabel %}
-                        {{ tklabel.label_text }}
-                    {% endif %}
+                    {% if bclabel %} {{ bclabel.label_text }} {% endif %}
+                    {% if tklabel %} {{ tklabel.label_text }} {% endif %}
                 </p>
                 
                 {% if translations %}
@@ -116,10 +100,10 @@
     <div class="margin-left-16">
         <h3>Explore your other customized Labels</h3>
 
-        <div class="flex-this w-100">
+        <div class="flex-this w-100 wrap">
             {% if bclabels %}
                 {% for bclabel in bclabels %}
-                    <div class="w-20 center-text margin-right-16">
+                    <div class="small-labels center-text margin-right-16 margin-bottom-16">
                         <a class="primary-black-text" href="{% url 'view-label' community.id bclabel.unique_id %}">
                             {% include 'bclabels/mini-labels.html' %}
                             <small class="bold">{{ bclabel.name }}</small>
@@ -130,7 +114,7 @@
 
             {% if tklabels %}
                 {% for tklabel in tklabels %}
-                    <div class="w-20 center-text margin-right-16">
+                    <div class="small-labels center-text margin-right-16 margin-bottom-16">
                         <a class="primary-black-text" href="{% url 'view-label' community.id tklabel.unique_id %}">
                             {% include 'tklabels/mini-labels.html' %}
                             <small class="bold">{{ tklabel.name }}</small>
