@@ -44,7 +44,7 @@
                     {% endfor %}
                 {% endif %}
 
-                {% if member_role == 'viewer' %} {% else %}
+                {% if member_role == 'admin' or member_role == 'editor' %}
                     <form method="POST" action="">
                         {% csrf_token %}
                         <input type="hidden" value="{{ status.community.id }}" name="community-id">
@@ -99,10 +99,9 @@
                 </div>
             {% endfor %}
 
-            {% if member_role == 'viewer' %} {% else %}
+            {% if member_role == 'admin' or member_role == 'editor' %}
                 <form method="POST" action="">
                     {% csrf_token %}
-                    <!-- <input type="hidden" value="{{ notice.id }}" name="notice-id"> -->
                     <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
                     <div class="flex-this row">
                         <div class="w-50">{{ form.message }}</div>

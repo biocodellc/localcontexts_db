@@ -12,8 +12,7 @@
 
             {% if institution %}
                 <div class="flex-this align-center">
-                    {% if member_role == 'viewer'%}
-                    {% else %}
+                    {% if member_role == 'admin' or member_role == 'editor' %}
                         <a class="primary-btn action-btn margin-top-2 " href="{% url 'inst-create-project' institution.id %}">
                             Create a Project     <i class="fa fa-arrow-right"></i>
                         </a>

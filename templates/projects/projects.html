@@ -7,8 +7,7 @@
             <div class="w-60"><h2 class="no-top-margin">Local Contexts Projects</h2></div>
 
             {% if community or institution %}
-                {% if member_role == 'viewer' %}
-                {% else %}
+                {% if member_role == 'admin' or member_role == 'editor' %}
                     <div class="flex-this align-center">
                         <a class="primary-btn action-btn margin-top-2 "
                             {% if community %} href="{% url 'create-project' community.id %}" {% endif %}

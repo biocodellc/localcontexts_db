@@ -46,8 +46,7 @@
             <div class="flex-this margin-bottom-8 w-100 flex-end">
                 
                 {% if community %}
-                    {% if member_role == 'viewer' %}
-                    {% else %}
+                    {% if member_role == 'admin' or member_role == 'editor' %}
                         <div class="margin-right-1">
                             <a href="{% url 'apply-labels' community.id project.unique_id %}" class="primary-btn action-btn">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
                         </div>
@@ -184,8 +183,7 @@
                             <small class="margin-right-1 w-50 no-top-margin">In order to notify communities of your Project, your institution must be confirmed first.</small>
                         {% else %}
                             {% if project_creator.institution %}
-                                {% if member_role == 'viewer' %}
-                                {% else %}
+                                {% if member_role == 'admin' or member_role == 'editor' %}
                                     <div class="margin-right-1">
                                         <a href="{% url 'institution-notify-others' institution.id project.id %}" class="primary-btn action-btn">
                                             Notify Communities <i class="fa fa-users" aria-hidden="true"></i>

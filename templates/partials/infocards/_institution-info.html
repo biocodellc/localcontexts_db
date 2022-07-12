@@ -83,8 +83,7 @@
                     </div>
                 </div>
 
-                {% if member_role == 'viewer' or member_role == 'editor' %}
-                {% else %}
+                {% if member_role == 'admin' %}
                     <div class="margin-left-8">
                         <a href="{% url 'update-institution' institution.id%}" class="darkteal-text primary-btn white-btn"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
                     </div>
