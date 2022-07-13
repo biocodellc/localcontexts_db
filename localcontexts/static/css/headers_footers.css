@@ -8,16 +8,25 @@
 /* REGISTERING PROCESS HEADER */
 .reg-header {
     background-color: #3876aa;
-    width: 100%;
+    max-width: 100%;
     padding: 1% 2% 1% 4%;
 }
 
-.header-size, .nav-links-div {
+.header-content {
+    display: flex;
     justify-content: space-between;
+    width: 1700px;
+    margin: auto;
+}
+
+.nav-links-div {
+    justify-content: space-between;
+    width: 100%;
 }
 
 /* Active nav link orange underline */
-.active-link:after, .nav-links-div a:not(.active-link, .sign-out-btn, .sign-in-btn):hover:after  {
+.active-link:after, 
+.nav-links-div a:not(.active-link, .sign-out-btn, .sign-in-btn):hover:after  {
     content: '';
     display: block;
     margin: -2px auto;
@@ -42,15 +51,9 @@
     display: block;
 }
 
-.nav-links-div {
-    margin-left: 10px;
-    margin-right: 20px;
-    width: 100%;
-}
-
 .nav-links-div a {
     display: inline-block;
-    margin-left: 20px;
+    margin-left: 25px;
     margin-right: 20px;
 }
 
@@ -95,7 +98,6 @@
 .sign-out-btn:hover, .sign-in-btn:hover {
     opacity: 0.9;
 }
-
 
 /* AUTHENTICATED USER FOOTER */
 .footer-gradient {
