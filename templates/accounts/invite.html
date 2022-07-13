@@ -1,21 +1,21 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/headers/_auth-header.html' %}
-<section class="grey-bg">
-        <div class="content-card content-card-space white-bg">  
-            <h3>Invite New User</h3> 
-            <form method="POST" action="{% url 'invite' %}">
-                {% csrf_token %}
 
-                <label for="email"> Email Address </label><br>
-                {{ invite_form.email }}<br>
+    <div class="content-card content-card-space white-bg">  
+        <h3>Invite New User</h3> 
+        <form method="POST" action="{% url 'invite' %}">
+            {% csrf_token %}
 
-                <label for="message"> Output Message (Optional) </label><br>
-                {{ invite_form.message }}<br>
+            <label for="email"> Email Address </label><br>
+            {{ invite_form.email }}<br>
 
-                {% include 'partials/_alerts.html' %}
-                <button type="submit" class="primary-btn action-btn margin-top-2 ">Send Invitation</button>
-            </form>
-        </div>
-</section>
+            <label for="message"> Output Message (Optional) </label><br>
+            {{ invite_form.message }}<br>
+
+            {% include 'partials/_alerts.html' %}
+            <button type="submit" class="primary-btn action-btn margin-top-2 ">Send Invitation</button>
+        </form>
+    </div>
+
 
 {% include 'partials/footers/_auth-footer.html' %}
 {% endblock %}

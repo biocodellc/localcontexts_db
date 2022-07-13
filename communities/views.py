@@ -125,6 +125,10 @@ def confirm_community(request, community_id):
             return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'community': community,})
 
+def public_community_view(request, pk):
+    community = Community.objects.get(id=pk)
+    return render(request, 'public.html', { 'community': community })
+
 # Update Community / Settings
 @login_required(login_url='login')
 def update_community(request, pk):
@@ -272,7 +276,7 @@ def select_label(request, pk):
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')
+        return redirect('public-community', community.id)
     else:
         if request.method == "POST":
             bclabel_type = request.POST.get('bclabel-type')

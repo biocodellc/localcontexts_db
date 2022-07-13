@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block title %} | View Account {% endblock %}{% load static %} {% block content %}
+{% include 'partials/headers/_auth-header.html' %}
+
+    <div class="content-card-v2 content-card-space">
+
+        <div>
+            <h1>{{ community.community_name }}</h1>
+            <p>
+                <span class="bold">Community | Location</span><br><br>
+
+                {{ community.description }}
+            </p>
+        </div>
+
+        <div>
+            <h3>Community Labels used</h3>
+        </div>
+
+        <div>
+            <h3>Public Projects</h3>
+
+            <ul>
+
+            </ul>
+        </div>
+    </div>
+
+
+    {% include 'partials/footers/_auth-footer.html' %}
+{% endblock %}

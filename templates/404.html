@@ -1,19 +1,16 @@
 {% extends 'base.html' %}{% block title %} | 404 Not Found {% endblock %}{% load static %}{% block content %} {% include 'partials/headers/_auth-header.html' %}
-    <section class="grey-bg">
 
-        <div class="white-bg page-not-found-card content-card flex-this align-center justify-center">
-            <div class="flex-this row align-center w-90">
-                <div class="w-30 center-text"><img loading="lazy" src="{% static 'images/logos/logo-404.png' %}" alt="404 Local Contexts round logo"></div>
-                <div class="w-70">
-                    <div><h1 class="orange-text">Oops!</h1></div>
-                    <div><p>We can't seem to find the page you are looking for.<br><br>  <strong>Error Code: 404 Not Found</strong></p></div>
-                    <div><button class="primary-btn action-btn margin-top-2" onclick="location.href='/dashboard'">Back to my profile <i class="fa fa-arrow-right"></i> </button></div>
-                </div>
+    <div class="white-bg page-not-found-card content-card flex-this align-center justify-center">
+        <div class="flex-this row align-center w-90">
+            <div class="w-30 center-text"><img loading="lazy" src="{% static 'images/logos/logo-404.png' %}" alt="404 Local Contexts round logo"></div>
+            <div class="w-70">
+                <div><h1 class="orange-text">Oops!</h1></div>
+                <div><p>We can't seem to find the page you are looking for.<br><br>  <strong>Error Code: 404 Not Found</strong></p></div>
+                <div><button class="primary-btn action-btn margin-top-2" onclick="location.href='/dashboard'">Back to my profile <i class="fa fa-arrow-right"></i> </button></div>
             </div>
         </div>
+    </div>
     
-    </section>
-
 {% include 'partials/footers/_auth-footer.html' %}
 
 {% endblock %}
