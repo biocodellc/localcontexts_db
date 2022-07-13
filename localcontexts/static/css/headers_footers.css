@@ -105,10 +105,9 @@
     padding: 2.5% 3% 2% 3%;
 }
 
-.auth-footer-content p {
-    max-height: 112px;
-    min-height: 112px;
-    line-height: 19px;
+.footer-content {
+    width: 1350px;
+    margin: auto;
 }
 
 .underline {
