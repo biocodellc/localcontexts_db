@@ -1,61 +1,61 @@
 <!-- footer for when the user is authenticated -->
 {% load static %}
 
-<footer class="footer-gradient white-text flex-this column">
+<footer id="auth-footer">
     
-    <section class="footer-content flex-this column w-100">
+    <div class="footer-content-container">
+        <div class="footer-content">
+            <!-- LINKS AND COPYRIGHT -->
+            <div class="flex-this space-between">
+                <div class="flex-this column">
+                    <nav>
+                        <a class="underline-hover" href="https://localcontexts.org/contact/"> Contact Us</a> | 
+                        <a id="feedback-form" class="pointer underline-hover">Report an Issue</a> |
+                        <a class="underline-hover" href="{% url 'api-overview' %}">API</a> |
+                        <a class="underline-hover" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/LC%20Privacy%20Policy.pdf" target="_blank">Privacy Policy <i class="fa fa-external-link" aria-hidden="true"></i></a> | 
+                        <a class="underline-hover" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/Indigenous%20Data%20Sovereignty%20Agreement.pdf" target="_blank">Data Sovereignty Agreement <i class="fa fa-external-link" aria-hidden="true"></i></a> |
+                        <a class="underline-hover" href="https://linktr.ee/localcontexts" target="_blank">Resources <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                        {% if '/dashboard' in request.path %}
+                            | <a id="onboardingOn" class=" underline-hover" href="{% url 'onboarding-on' %}">Tutorial</a>
+                        {% endif %}
+                    </nav>
+                    <div>
+                        <h4 class="underline bold w-100"> Creative Commons License</h4>
+                        <p>
+                            This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.<br>
+                            Traditional Knowledge and Biocultural Labels, Notices and Template Text © 2015-2022 Local Contexts. All Rights Reserved.<br><br>
 
-        <div class="flex-this space-between">
-            <div class="flex-this column">
-                <nav>
-                    <a class="white-text underline-hover" href="https://localcontexts.org/contact/"> Contact Us</a> | 
-                    <a id="feedback-form" class="white-text pointer underline-hover">Report an Issue</a> |
-                    <a class="white-text underline-hover" href="{% url 'api-overview' %}">API</a> |
-                    <a class="white-text underline-hover" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/LC%20Privacy%20Policy.pdf" target="_blank">Privacy Policy <i class="fa fa-external-link" aria-hidden="true"></i></a> | 
-                    <a class="white-text underline-hover" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/Indigenous%20Data%20Sovereignty%20Agreement.pdf" target="_blank">Data Sovereignty Agreement <i class="fa fa-external-link" aria-hidden="true"></i></a> |
-                    <a class="white-text underline-hover" href="https://linktr.ee/localcontexts" target="_blank">Resources <i class="fa fa-external-link" aria-hidden="true"></i></a>
-                    {% if '/dashboard' in request.path %}
-                        | <a id="onboardingOn" class="white-text underline-hover" href="{% url 'onboarding-on' %}">Tutorial</a>
-                    {% endif %}
-                </nav>
-                <div>
-                    <h4 class="underline bold w-100"> Creative Commons License</h4>
-                    <p>
-                        This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.<br>
-                        Traditional Knowledge and Biocultural Labels, Notices and Template Text © 2015-2022 Local Contexts. All Rights Reserved.<br><br>
-
-                        All images and marks are subject to copyright and trademark protection.<br>
-                        All educational material is being shared collaboratively but does not constitute binding legal advice.<br>
-                    </p>        
-                </div>                 
+                            All images and marks are subject to copyright and trademark protection.<br>
+                            All educational material is being shared collaboratively but does not constitute binding legal advice.<br>
+                        </p>        
+                    </div>                 
+                </div>
+                
+                <!-- SOCIAL MEDIA ICONS -->
+                <div class="socials-container">
+                    <a href="https://twitter.com/localcontexts" class="socials" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a> 
+                    <a href="https://instagram.com/localcontexts" class="socials" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                    <a href="https://www.facebook.com/LocalContextsOrg/" class="socials" target="_blank"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
+                    <a href="https://www.youtube.com/channel/UC72kptCPm_kLfMSBFpjySNw" class="socials" target="_blank"><i class="fa fa-youtube-square" aria-hidden="true"></i></a>
+                    <a href="https://www.linkedin.com/company/localcontexts/" class="socials" target="_blank"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
+                </div>  
+                
             </div>
-            
-            <!-- SOCIAL MEDIA ICONS -->
-            <div class="flex-this">
-                <a href="https://twitter.com/localcontexts" class="white-text socials" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a> 
-                <a href="https://instagram.com/localcontexts" class="white-text socials" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                <a href="https://www.facebook.com/LocalContextsOrg/" class="white-text socials" target="_blank"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
-                <a href="https://www.youtube.com/channel/UC72kptCPm_kLfMSBFpjySNw" class="white-text socials" target="_blank"><i class="fa fa-youtube-square" aria-hidden="true"></i></a>
-                <a href="https://www.linkedin.com/company/localcontexts/" class="white-text socials" target="_blank"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a>
-            </div>  
-            
+
+            <!-- AFFILIATE LOGOS -->
+            <div class="w-100 margin-top-16">
+                <div class="flex-this row space-between wrap">
+                    <div><img loading="lazy" src="{% static 'images/footer/Local-Contexts-Logo-White.png' %}" alt="Local Contexts logo"></div>
+                    <div><img loading="lazy" src="{% static 'images/footer/NEH-Preferred-Seal-Transparent820.png' %}" alt="National Endowment for the Humanities logo"></div>
+                    <div><img loading="lazy" src="{% static 'images/footer/nyu_short_white.png' %}" alt="New York University logo"></div>
+                    <div><img loading="lazy" src="{% static 'images/footer/WSU-Logo.png' %} " alt="Washington State University logo"></div>
+                    <div><img loading="lazy" src="{% static 'images/footer/IDIA_Website_Logo.png' %} " alt="Indigenous Design & Innovation Aotearoa (IDIA) logo"></div>
+                    <div><img loading="lazy" src="{% static 'images/footer/Enrich_without_text.png' %} " alt="ENRICH logo"></div>
+                    <div><img loading="lazy" src="{% static 'images/footer/mellon.png' %} " alt="Mellon logo"></div>
+                </div>
+            </div>
         </div>
 
-        <!-- AFFILIATE LOGOS -->
-        <section class="w-100 margin-top-16">
-            <div class="flex-this row space-between wrap">
-                <div><img loading="lazy" src="{% static 'images/footer/Local-Contexts-Logo-White.png' %}" alt="Local Contexts logo"></div>
-                <div><img loading="lazy" src="{% static 'images/footer/NEH-Preferred-Seal-Transparent820.png' %}" alt="National Endowment for the Humanities logo"></div>
-                <div><img loading="lazy" src="{% static 'images/footer/nyu_short_white.png' %}" alt="New York University logo"></div>
-                <div><img loading="lazy" src="{% static 'images/footer/WSU-Logo.png' %} " alt="Washington State University logo"></div>
-                <div><img loading="lazy" src="{% static 'images/footer/IDIA_Website_Logo.png' %} " alt="Indigenous Design & Innovation Aotearoa (IDIA) logo"></div>
-                <div><img loading="lazy" src="{% static 'images/footer/Enrich_without_text.png' %} " alt="ENRICH logo"></div>
-                <div><img loading="lazy" src="{% static 'images/footer/mellon.png' %} " alt="Mellon logo"></div>
-            </div>
-        </section>
-        
-    </section>
-
-
+    </div>
 
 </footer>

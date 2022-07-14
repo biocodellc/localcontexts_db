@@ -1,29 +1,124 @@
 {% extends 'base.html' %} {% block title %} | View Account {% endblock %}{% load static %} {% block content %}
 {% include 'partials/headers/_auth-header.html' %}
 
-    <div class="content-card-v2 content-card-space">
+    {% if community %}
+        <div class="dashcard">
+            <div class="flex-this">
 
-        <div>
-            <h1>{{ community.community_name }}</h1>
-            <p>
-                <span class="bold">Community | Location</span><br><br>
+                <div class="dashcard-img-container">
+                    <img loading="lazy" 
+                        class="profile-img" 
+                        src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
+                        alt="{{ community.community_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3">{{ community }}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Community |
+                            {% if community.city_town %} {{ community.city_town }}, {% endif %} {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}
+                            {% if not community.city_town and not community.state_province_region and not community.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
+                </div>
 
-                {{ community.description }}
-            </p>
+            </div>
+            <div>
+                <div>
+                    <h3>Community Labels used</h3>
+
+                    <div class="flex-this w-100 wrap">
+                        {% if bclabels %}
+                            {% for bclabel in bclabels %}
+                                <div class="small-labels center-text margin-right-16 margin-bottom-16">
+                                    {% include 'bclabels/which-label.html' %}
+                                    <span class="bold">{{ bclabel.name }}</span>
+                                </div> 
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if tklabels %}
+                            {% for tklabel in tklabels %}
+                                <div class="small-labels center-text margin-right-16 margin-bottom-16">
+                                    {% include 'tklabels/which-label.html' %}
+                                    <span class="bold">{{ tklabel.name }}</span>
+                                </div> 
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+
+                </div>
+                
+                <div>
+                    <h3>Public Projects </h3>
+                    <ul>
+                        {% if projects %}
+                            {% for project in projects %}
+                                <li>
+                                    <a href="#" class="darkteal-text underline-hover">project title</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                                No public projects available
+                        {% endif %}                      
+                    </ul>                           
+                </div>
+            </div>
         </div>
+    {% endif %}
 
-        <div>
-            <h3>Community Labels used</h3>
+    {% if institution %}
+        <div class="dashcard">
+            <div class="flex-this">
+
+                <div class="dashcard-img-container">
+                    <img loading="lazy" 
+                        class="profile-img" 
+                        src="{% if institution.image %} {{ institution.image.url }} {% else %} {% static 'images/placeholders/institution-place.jpg' %}{% endif %}" 
+                        alt="{{ institution.institution_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3">{{ institution }}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Institution |
+                            {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}
+                            {% if not institution.city_town and not institution.state_province_region and not institution.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }}{% else %} No description provided. {% endif %}</p></div>
+                </div>
+
+            </div>
+            <div>
+                <div>
+                    <h3>Notices??</h3>
+                    
+                </div>
+                
+                <div>
+                    <h3>Public Projects </h3>
+                    <ul>
+                        <li>
+                            <a href="#" class="darkteal-text underline-hover">project title</a>
+                        </li>
+                        <li>
+                            <a href="#" class="darkteal-text underline-hover">project title</a>
+                        </li>
+                        <li>
+                            <a href="#" class="darkteal-text underline-hover">project title</a>
+                        </li>                        
+                    </ul>                           
+                </div>
+            </div>
         </div>
-
-        <div>
-            <h3>Public Projects</h3>
-
-            <ul>
-
-            </ul>
-        </div>
-    </div>
+    {% endif %}
 
 
     {% include 'partials/footers/_auth-footer.html' %}

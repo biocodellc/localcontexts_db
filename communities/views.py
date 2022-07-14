@@ -127,7 +127,22 @@ def confirm_community(request, community_id):
 
 def public_community_view(request, pk):
     community = Community.objects.get(id=pk)
-    return render(request, 'public.html', { 'community': community })
+    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
+    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+    created_projects = ProjectCreator.objects.filter(community=community)
+    projects = []
+
+    for p in created_projects:
+        if p.project.project_privacy == 'public':
+            projects.append(p.project)
+
+    context = {
+        'community': community,
+        'bclabels' : bclabels,
+        'tklabels' : tklabels,
+        'projects' : projects,
+    }
+    return render(request, 'public.html', context)
 
 # Update Community / Settings
 @login_required(login_url='login')
