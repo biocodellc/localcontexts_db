@@ -59,7 +59,7 @@
                         {% if projects %}
                             {% for project in projects %}
                                 <li>
-                                    <a href="#" class="darkteal-text underline-hover">project title</a>
+                                    <a href="#" class="darkteal-text underline-hover">{{ project.title }}</a>
                                 </li>
                             {% endfor %}
                         {% else %}
@@ -98,22 +98,22 @@
             </div>
             <div>
                 <div>
-                    <h3>Notices??</h3>
-                    
+                    <h3>Notices</h3>
+                    coming soon
                 </div>
                 
                 <div>
                     <h3>Public Projects </h3>
                     <ul>
-                        <li>
-                            <a href="#" class="darkteal-text underline-hover">project title</a>
-                        </li>
-                        <li>
-                            <a href="#" class="darkteal-text underline-hover">project title</a>
-                        </li>
-                        <li>
-                            <a href="#" class="darkteal-text underline-hover">project title</a>
-                        </li>                        
+                        {% if projects %}
+                            {% for project in projects %}
+                                <li>
+                                    <a href="{% url 'view-project' project.unique_id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                                No public projects available
+                        {% endif %}                        
                     </ul>                           
                 </div>
             </div>

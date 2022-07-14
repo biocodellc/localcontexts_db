@@ -141,6 +141,23 @@ def confirm_institution(request, institution_id):
                 return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
 
+def public_institution_view(request, pk):
+    institution = Institution.objects.get(id=pk)
+    created_projects = ProjectCreator.objects.filter(institution=institution)
+    notices = Notice.objects.filter(institution=institution)
+    projects = []
+
+    for p in created_projects:
+        if p.project.project_privacy == 'Public':
+            projects.append(p.project)
+
+    context = {
+        'institution': institution,
+        'projects' : projects,
+        'notices': notices,
+    }
+    return render(request, 'public.html', context)
+
 # Update institution
 @login_required(login_url='login')
 def update_institution(request, pk):
@@ -175,7 +192,7 @@ def institution_notices(request, pk):
 
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')
+        return redirect('public-institution', institution.id)
     else:
         urls = OpenToCollaborateNoticeURL.objects.filter(institution=institution)
         form = OpenToCollaborateNoticeURLForm(request.POST or None)

@@ -133,7 +133,7 @@ def public_community_view(request, pk):
     projects = []
 
     for p in created_projects:
-        if p.project.project_privacy == 'public':
+        if p.project.project_privacy == 'Public':
             projects.append(p.project)
 
     context = {
