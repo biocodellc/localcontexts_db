@@ -56,6 +56,23 @@ def connect_researcher(request):
     else:
         return redirect('researcher-notices', researcher.id)
 
+def public_researcher_view(request, pk):
+    researcher = Researcher.objects.get(id=pk)
+    created_projects = ProjectCreator.objects.filter(researcher=researcher)
+    notices = Notice.objects.filter(researcher=researcher)
+    projects = []
+
+    for p in created_projects:
+        if p.project.project_privacy == 'Public':
+            projects.append(p.project)
+
+    context = {
+        'researcher': researcher,
+        'projects' : projects,
+        'notices': notices,
+    }
+    return render(request, 'public.html', context)
+
 @login_required(login_url='login')
 def connect_orcid(request):
     researcher = Researcher.objects.get(user=request.user)
@@ -107,7 +124,7 @@ def researcher_notices(request, pk):
     researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
-        return redirect('restricted')
+        return redirect('public-researcher', researcher.id)
     else:
         urls = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher)
         form = OpenToCollaborateNoticeURLForm(request.POST or None)

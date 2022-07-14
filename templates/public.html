@@ -120,6 +120,56 @@
         </div>
     {% endif %}
 
+    {% if researcher %}
+        <div class="dashcard">
+            <div class="flex-this">
+
+                <div class="researcher-img-container">
+                    <img loading="lazy" 
+                        src=" {% if researcher.image %} {{ researcher.image.url }} {% else %} {% static 'images/placeholders/researcher-place.jpg' %} {% endif %}" 
+                        alt="{{ researcher.researcher_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3">{% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Researcher | 
+                            {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
+                            {% if profile.state_province_region %} {{ profile.state_province_region }}, {% endif %} 
+                            {% if profile.country.name %} {{ profile.country.name }}{% endif %}
+                            {% if not profile.city_town and not profile.state_province_region and not profile.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }}{% else %} No description provided. {% endif %}</p></div>
+                </div>
+
+            </div>
+            <div>
+                <div>
+                    <h3>Notices</h3>
+                    coming soon
+                </div>
+                
+                <div>
+                    <h3>Public Projects </h3>
+                    <ul>
+                        {% if projects %}
+                            {% for project in projects %}
+                                <li>
+                                    <a href="{% url 'view-project' project.unique_id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                                No public projects available
+                        {% endif %}                        
+                    </ul>                           
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
 
     {% include 'partials/footers/_auth-footer.html' %}
 {% endblock %}
