@@ -957,7 +957,7 @@ if (deactivateAccountBtn) {
 }
 
 // REGISTRY FILTERING AND JOIN REQUESTS / CONTACT MODAL
-if (window.location.href.includes('registry')) {
+if (window.location.href.includes('communities/view/') || window.location.href.includes('institutions/view/') || window.location.href.includes('researchers/view/') ) {
 
     // Send request to join institution or community
     const registryModal = document.getElementById('registryModal')

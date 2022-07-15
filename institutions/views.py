@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import Http404
 
 from localcontexts.utils import dev_prod_or_local
 from projects.utils import add_to_contributors
@@ -18,6 +19,7 @@ from accounts.models import UserAffiliation
 from projects.forms import *
 from helpers.forms import ProjectCommentForm, OpenToCollaborateNoticeURLForm
 from communities.forms import InviteMemberForm, JoinRequestForm
+from accounts.forms import ContactOrganizationForm
 from .forms import *
 
 from helpers.emails import *
@@ -150,13 +152,60 @@ def public_institution_view(request, pk):
     for p in created_projects:
         if p.project.project_privacy == 'Public':
             projects.append(p.project)
+    
+    try:
+        if request.user.is_authenticated:
+            user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()
+            form = ContactOrganizationForm(request.POST or None)
 
-    context = {
-        'institution': institution,
-        'projects' : projects,
-        'notices': notices,
-    }
-    return render(request, 'public.html', context)
+            if request.method == 'POST':
+                if 'contact_btn' in request.POST:
+                    # contact institution
+                    if form.is_valid():
+                        to_email = ''
+                        from_name = form.cleaned_data['name']
+                        from_email = form.cleaned_data['email']
+                        message = form.cleaned_data['message']
+                        to_email = institution.institution_creator.email
+                        
+                        send_contact_email(to_email, from_name, from_email, message)
+                else:
+                    # Request To Join institution
+                    main_admin = institution.institution_creator
+                    join_request = JoinRequest.objects.create(user_from=request.user, institution=institution, user_to=main_admin)
+                    join_request.save()
+
+                    # Send email to institution creator
+                    send_join_request_email_admin(request, join_request, institution)
+
+                messages.add_message(request, messages.SUCCESS, 'Sent!')
+                return redirect('public-institution', institution.id)
+
+            else:
+                context = { 
+                    'institution': institution,
+                    'projects' : projects,
+                    'notices': notices, 
+                    'form': form, 
+                    'user_institutions': user_institutions,
+                }
+                return render(request, 'public.html', context)
+
+        context = { 
+            'institution': institution,
+            'projects' : projects,
+            'notices': notices,
+        }
+        return render(request, 'public.html', context)
+    except:
+        raise Http404()
+
+    # context = {
+    #     'institution': institution,
+    #     'projects' : projects,
+    #     'notices': notices,
+    # }
+    # return render(request, 'public.html', context)
 
 # Update institution
 @login_required(login_url='login')

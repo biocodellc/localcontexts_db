@@ -14,6 +14,7 @@ from helpers.forms import AddLabelTranslationFormSet, LabelNoteForm, ProjectComm
 from bclabels.forms import *
 from tklabels.forms import *
 from projects.forms import *
+from accounts.forms import ContactOrganizationForm
 
 from localcontexts.utils import dev_prod_or_local
 from bclabels.utils import check_bclabel_type, assign_bclabel_img, assign_bclabel_svg
@@ -29,7 +30,7 @@ from .forms import *
 from .models import *
 
 # pdfs
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 
@@ -135,14 +136,52 @@ def public_community_view(request, pk):
     for p in created_projects:
         if p.project.project_privacy == 'Public':
             projects.append(p.project)
+    try: 
+        if request.user.is_authenticated:
+            user_communities = UserAffiliation.objects.prefetch_related('communities').get(user=request.user).communities.all()
+            form = ContactOrganizationForm(request.POST or None)
 
-    context = {
-        'community': community,
-        'bclabels' : bclabels,
-        'tklabels' : tklabels,
-        'projects' : projects,
-    }
-    return render(request, 'public.html', context)
+            if request.method == 'POST':
+                if 'contact_btn' in request.POST:
+                    # contact community
+                    if form.is_valid():
+                        from_name = form.cleaned_data['name']
+                        from_email = form.cleaned_data['email']
+                        message = form.cleaned_data['message']
+                        to_email = community.community_creator.email
+                        
+                        send_contact_email(to_email, from_name, from_email, message)
+                else:
+                    # Request To Join community
+                    join_request = JoinRequest.objects.create(user_from=request.user, community=community, user_to=community.community_creator)
+                    join_request.save()
+                    # Send email to community creator
+                    send_join_request_email_admin(request, join_request, community)
+
+                messages.add_message(request, messages.SUCCESS, 'Sent!')
+                return redirect('public-community', community.id)
+
+            else:
+                context = { 
+                    'community': community,
+                    'bclabels' : bclabels,
+                    'tklabels' : tklabels,
+                    'projects' : projects,  
+                    'form': form, 
+                    'user_communities': user_communities,
+                }
+                return render(request, 'public.html', context)
+
+        context = { 
+            'community': community, 
+            'bclabels' : bclabels,
+            'tklabels' : tklabels,
+            'projects' : projects,
+        }
+        return render(request, 'public.html', context)
+    except:
+        raise Http404()
+
 
 # Update Community / Settings
 @login_required(login_url='login')

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from communities.views import projects
+from django.http import Http404
 
 from localcontexts.utils import dev_prod_or_local
 from projects.utils import add_to_contributors
@@ -15,6 +15,7 @@ from projects.models import ProjectContributors, Project, ProjectPerson, Project
 
 from projects.forms import *
 from helpers.forms import ProjectCommentForm, OpenToCollaborateNoticeURLForm
+from accounts.forms import ContactOrganizationForm
 
 from helpers.emails import *
 
@@ -65,13 +66,39 @@ def public_researcher_view(request, pk):
     for p in created_projects:
         if p.project.project_privacy == 'Public':
             projects.append(p.project)
+    try:
+        form = ContactOrganizationForm(request.POST or None)
 
-    context = {
-        'researcher': researcher,
-        'projects' : projects,
-        'notices': notices,
-    }
-    return render(request, 'public.html', context)
+        if request.method == 'POST':
+            # contact researcher
+            if form.is_valid():
+                to_email = ''
+                from_name = form.cleaned_data['name']
+                from_email = form.cleaned_data['email']
+                message = form.cleaned_data['message']
+                to_email = researcher.contact_email
+
+                send_contact_email(to_email, from_name, from_email, message)
+                messages.add_message(request, messages.SUCCESS, 'Sent!')
+                return redirect('public-researcher', researcher.id)
+        else:
+            context = { 
+                'researcher': researcher,
+                'projects' : projects,
+                'notices': notices,
+                'form': form,
+            }
+            return render(request, 'public.html', context)
+
+        context = { 
+            'researcher': researcher,
+            'projects' : projects,
+            'notices': notices,
+        }
+        return render(request, 'public.html', context)
+    except:
+        raise Http404()
+
 
 @login_required(login_url='login')
 def connect_orcid(request):
