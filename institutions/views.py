@@ -200,13 +200,6 @@ def public_institution_view(request, pk):
     except:
         raise Http404()
 
-    # context = {
-    #     'institution': institution,
-    #     'projects' : projects,
-    #     'notices': notices,
-    # }
-    # return render(request, 'public.html', context)
-
 # Update institution
 @login_required(login_url='login')
 def update_institution(request, pk):
@@ -656,6 +649,13 @@ def create_project(request, pk):
             if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
                 data.project_creator = request.user
+
+                # Define project_page field
+                domain = request.get_host()
+                if 'localhost' in domain:
+                    data.project_page = f'http://{domain}/projects/{data.unique_id}'
+                else:
+                    data.project_page = f'https://{domain}/projects/{data.unique_id}'
                 data.save()
                 
                 # Add project to institution projects

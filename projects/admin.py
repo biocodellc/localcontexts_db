@@ -2,8 +2,8 @@ from django.contrib import admin
 from .models import Project, ProjectContributors, ProjectPerson, ProjectCreator
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('title', 'project_creator', 'project_contact', 'project_contact_email', 'project_privacy', 'date_added', 'unique_id')
-    readonly_fields = ('unique_id',)
+    list_display = ('title', 'project_creator', 'project_contact', 'project_contact_email', 'project_privacy', 'project_page', 'date_added', 'unique_id')
+    readonly_fields = ('unique_id', 'project_page')
 
 class ProjectContributorsAdmin(admin.ModelAdmin):
     list_display = ('project',)

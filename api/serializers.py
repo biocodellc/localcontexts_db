@@ -96,7 +96,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'providers_id', 'title', 'project_privacy', 'date_added', 'date_modified', 'created', 'notice', 'institution_notice', 'project_boundary_geojson')
+        fields = ('unique_id', 'providers_id', 'project_page', 'title', 'project_privacy', 'date_added', 'date_modified', 'created', 'notice', 'institution_notice', 'project_boundary_geojson')
 
 # Labels only
 class ProjectNoNoticeSerializer(serializers.ModelSerializer):
