@@ -19,7 +19,7 @@
     <strong>Next steps?</strong><br>
     Click on this link or copy it into your browser to register:<br>
 
-    http://{{domain}}{% url 'register' %}
+    {% if 'localhost' in domain %}http{% else %}https{% endif %}://{{domain}}{% url 'register' %}
 
     {% include 'snippets/emails/_footer-snippet.html' %}
 

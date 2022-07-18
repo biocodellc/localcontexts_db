@@ -31,7 +31,7 @@
 
     <br>
     <strong>Next steps?</strong><br>
-    Login <a href="http://{{domain}}{% url 'login' %}" target="_blank">here</a> to Local Contexts Hub and go to My Profile, you will now see 
+    Login <a href="{% if 'localhost' in domain %}http{% else %}https{% endif %}://{{domain}}{% url 'login' %}" target="_blank">here</a> to Local Contexts Hub and go to My Profile, you will now see 
     {% if organization.community_name %} {{ organization.community_name }} {% endif %} 
     {% if organization.institution_name %} {{ organization.institution_name }} {% endif %}
     in your dashboard.

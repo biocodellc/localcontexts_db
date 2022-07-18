@@ -3,7 +3,11 @@
 <p>
     Hello {{ user.username }}! <br>
     Thank you for registering with Local Contexts. <br>
-    Please click <a href="http://{{domain}}{% url 'activate' uidb64=uid token=token %}" target="_blank">this link</a> to activate your profile.<br>
+    Please click 
+    <a 
+        href="{% if 'localhost' in domain %}http{% else %}https{% endif %}://{{domain}}{% url 'activate' uidb64=uid token=token %}" 
+        target="_blank"
+    >this link</a> to activate your profile.<br>
 
     <br>
     If you're having issues with your profile activation, please email us at support@localcontexts.org<br><br>
