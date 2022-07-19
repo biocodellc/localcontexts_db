@@ -206,32 +206,14 @@ def add_to_connections(target_org, org):
         connections.save()
 
 def set_notice_defaults(notice):
-    # data = get_notices_json()
+    data = get_notices_json()
     baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/'
-    bc_text = 'The BC (Biocultural) Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information (DSI) generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC Labels are in development and their implementation is being negotiated.'
-    tk_text = 'The TK (Traditional Knowledge) Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated.'
-    attr_text = 'Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution.'
 
-    # TODO: uncomment when Notice model has been changed
-    # for item in data:
-    #     if item['noticeType'] == notice.notice_type:
-    #         notice.img_url = baseURL + item['imgFileName']
-    #         notice.svg_url = baseURL + item['svgFileName']
-    #         notice.default_text = item['noticeDefaultText']
-
-    if notice.notice_type == 'biocultural':
-        notice.bc_img_url = baseURL + 'bc-notice.png'
-        notice.bc_svg_url = baseURL + 'bc-notice.svg'
-        notice.bc_default_text = bc_text
-    if notice.notice_type == 'traditional_knowledge':
-        notice.tk_img_url = baseURL + 'tk-notice.png'
-        notice.tk_svg_url = baseURL + 'tk-notice.svg'
-        notice.tk_default_text = tk_text
-    if notice.notice_type == 'attribution_incomplete':
-        notice.bc_img_url = baseURL + 'ci-attribution-incomplete.png'
-        notice.bc_svg_url = baseURL + 'ci-attribution-incomplete.svg'
-        notice.bc_default_text = attr_text
-    
+    for item in data:
+        if item['noticeType'] == notice.notice_type:
+            notice.img_url = baseURL + item['imgFileName']
+            notice.svg_url = baseURL + item['svgFileName']
+            notice.default_text = item['noticeDefaultText']
     notice.save()  
 
 # Helper function for creating/updating notices

@@ -62,18 +62,18 @@ def download_project_zip(request, unique_id):
 
                 # Create PNG and TXT files based on which Notices are attached to the Project
                 if notice.notice_type == 'biocultural':
-                    get_img = requests.get(notice.bc_img_url)
+                    get_img = requests.get(notice.img_url)
                     get_svg = requests.get(baseURL + 'labels/notices/bc-notice.svg')
                     files.append(('Biocultural_Notice' + '.png', get_img.content))
                     files.append(('Biocultural_Notice' + '.svg', get_svg.content))
-                    files.append(('Biocultural_Notice' + '.txt', notice.bc_default_text))
+                    files.append(('Biocultural_Notice' + '.txt', notice.default_text))
 
                 if notice.notice_type == 'traditional_knowledge':
-                    get_img = requests.get(notice.tk_img_url)
+                    get_img = requests.get(notice.img_url)
                     get_svg = requests.get(baseURL + 'labels/notices/tk-notice.svg')
                     files.append(('Traditional_Knowledge_Notice' + '.png', get_img.content))
                     files.append(('Traditional_Knowledge_Notice' + '.svg', get_svg.content))
-                    files.append(('Traditional_Knowledge_Notice' + '.txt', notice.tk_default_text))
+                    files.append(('Traditional_Knowledge_Notice' + '.txt', notice.default_text))
                 
                 if notice.notice_type == 'attribution_incomplete':
                     get_img = requests.get(notice.img_url)
