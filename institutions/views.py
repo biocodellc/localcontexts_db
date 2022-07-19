@@ -706,7 +706,7 @@ def create_project(request, pk):
 def edit_project(request, institution_id, project_uuid):
     institution = Institution.objects.get(id=institution_id)
     project = Project.objects.get(unique_id=project_uuid)
-    notice_exists = Notice.objects.filter(project=project).exists()
+    notices = Notice.objects.filter(project=project)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
@@ -716,11 +716,6 @@ def edit_project(request, institution_id, project_uuid):
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
 
-
-        if notice_exists:
-            notice = Notice.objects.get(project=project)
-        else:
-            notice = None
 
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
@@ -750,7 +745,7 @@ def edit_project(request, institution_id, project_uuid):
             'member_role': member_role,
             'institution': institution, 
             'project': project, 
-            'notice': notice, 
+            'notices': notices, 
             'form': form,
             'formset': formset,
             'contributors': contributors,

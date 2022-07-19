@@ -68,10 +68,12 @@
                                 value="tknotice" 
                                 type="checkbox" 
                                 name="checkbox-notice" 
-                                {% if notice %}
-                                    {% if notice.notice_type == 'traditional_knowledge' %}
-                                        checked
-                                    {% endif %}
+                                {% if notices %}
+                                    {% for notice in notices %}
+                                        {% if notice.notice_type == 'traditional_knowledge' %}
+                                            checked
+                                        {% endif %}
+                                    {% endfor %}
                                 {% endif %}
                             > 
                         <span class="margin-left-8">Select</span></div>
@@ -87,10 +89,12 @@
                                 value="bcnotice" 
                                 type="checkbox" 
                                 name="checkbox-notice" 
-                                {% if notice %}
-                                    {% if notice.notice_type == 'biocultural' %}
-                                        checked
-                                    {% endif %}
+                                {% if notices %}
+                                    {% for notice in notices %}
+                                        {% if notice.notice_type == 'biocultural' %}
+                                            checked
+                                        {% endif %}
+                                    {% endfor %}
                                 {% endif %}
                             >
 
@@ -108,10 +112,12 @@
                                 value="attribution_incomplete" 
                                 type="checkbox" 
                                 name="checkbox-notice"
-                                {% if notice %} 
-                                    {% if notice.notice_type == 'attribution_incomplete'%} 
-                                        checked 
-                                    {% endif %}
+                                {% if notices %}
+                                    {% for notice in notices %} 
+                                        {% if notice.notice_type == 'attribution_incomplete'%} 
+                                            checked 
+                                        {% endif %}
+                                    {% endfor %}
                                 {% endif %}
                             >
                             <span class="margin-left-8">Select</span>
