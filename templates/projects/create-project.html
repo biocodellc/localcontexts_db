@@ -69,7 +69,7 @@
                                 type="checkbox" 
                                 name="checkbox-notice" 
                                 {% if notice %}
-                                    {% if notice.notice_type == 'traditional_knowledge' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                                    {% if notice.notice_type == 'traditional_knowledge' %}
                                         checked
                                     {% endif %}
                                 {% endif %}
@@ -88,7 +88,7 @@
                                 type="checkbox" 
                                 name="checkbox-notice" 
                                 {% if notice %}
-                                    {% if notice.notice_type == 'biocultural' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                                    {% if notice.notice_type == 'biocultural' %}
                                         checked
                                     {% endif %}
                                 {% endif %}
@@ -97,7 +97,6 @@
                         <span class="margin-left-8">Select</span></div>
                     </div>
 
-                    <!-- Institutional Notices -->
 
                     <div class="flex-this column center-text margin-left-16 align-center">
                         <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="73px"></div>
@@ -109,8 +108,8 @@
                                 value="attribution_incomplete" 
                                 type="checkbox" 
                                 name="checkbox-notice"
-                                {% if institution_notice %} 
-                                    {% if institution_notice.notice_type == 'attribution_incomplete'%} 
+                                {% if notice %} 
+                                    {% if notice.notice_type == 'attribution_incomplete'%} 
                                         checked 
                                     {% endif %}
                                 {% endif %}
@@ -125,7 +124,7 @@
                 <div 
                     id="show-description-tk-notice"
                     {% if notice %} 
-                        {% if notice.notice_type == 'traditional_knowledge' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                        {% if notice.notice_type == 'traditional_knowledge' %}
                             class="show"
                         {% else %}
                             class="hide"
@@ -146,7 +145,7 @@
                 <div   
                     id="show-description-bc-notice" 
                     {% if notice %}
-                        {% if notice.notice_type == 'biocultural' or notice.notice_type == 'biocultural_and_traditional_knowledge' %}
+                        {% if notice.notice_type == 'biocultural' %}
                             class="show"
                         {% else %}
                             class="hide"
@@ -167,8 +166,8 @@
 
                 <div 
                     id="show-description-attr-notice" 
-                    {% if institution_notice %} 
-                        {% if institution_notice.notice_type == 'attribution_incomplete' %}
+                    {% if notice %} 
+                        {% if notice.notice_type == 'attribution_incomplete' %}
                             class="show"
                         {% else %}
                             class="hide"

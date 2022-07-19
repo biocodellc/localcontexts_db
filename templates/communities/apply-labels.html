@@ -66,20 +66,11 @@
                             {% for notice in project.project_notice.all %}
                                 {% if not notice.archived %}
                                     {% if notice.notice_type == 'biocultural' %}
-                                        <div><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                    {% elif notice.notice_type == 'traditional_knowledge' %}
-                                        <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                                    {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                                        <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                        <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
                                     {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                        
-                        {% if project.project_institutional_notice.all %}
-                            {% for notice in project.project_institutional_notice.all %}
-                                {% if not notice.archived %}
+                                    {% if notice.notice_type == 'traditional_knowledge' %}
+                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                    {% endif %}
                                     {% if notice.notice_type == 'attribution_incomplete' %}
                                         <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
                                     {% endif %}

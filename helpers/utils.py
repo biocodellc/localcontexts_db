@@ -173,40 +173,13 @@ def generate_zip(files):
 
     return mem_zip.getvalue()
 
-def set_notice_defaults(notice):
-    baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/'
-    if isinstance(notice, Notice):
-        bc_text = 'The BC (Biocultural) Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information (DSI) generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC Labels are in development and their implementation is being negotiated.'
-        tk_text = 'The TK (Traditional Knowledge) Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated.'
-        
-        if notice.notice_type == 'biocultural':
-            notice.bc_img_url = baseURL + 'bc-notice.png'
-            notice.bc_svg_url = baseURL + 'bc-notice.svg'
-            notice.bc_default_text = bc_text
-        if notice.notice_type == 'traditional_knowledge':
-            notice.tk_img_url = baseURL + 'tk-notice.png'
-            notice.tk_svg_url = baseURL + 'tk-notice.svg'
-            notice.tk_default_text = tk_text
-
-        if notice.notice_type == 'biocultural_and_traditional_knowledge':
-            notice.bc_img_url = baseURL + 'bc-notice.png'
-            notice.bc_svg_url = baseURL + 'bc-notice.svg'
-            notice.bc_default_text = bc_text
-            notice.tk_img_url = baseURL + 'tk-notice.png'
-            notice.tk_svg_url = baseURL + 'tk-notice.svg'
-            notice.tk_default_text = tk_text
-    elif isinstance(notice, InstitutionNotice):
-        attribution_incomplete_text = 'Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution.'
-        
-        if notice.notice_type == 'attribution_incomplete':
-            notice.img_url = baseURL + 'ci-attribution-incomplete.png'
-            notice.svg_url = baseURL + 'ci-attribution-incomplete.svg'
-            notice.default_text = attribution_incomplete_text
-
-    notice.save()  
-
 def get_labels_json():
     json_data = open('./localcontexts/static/json/Labels.json')
+    data = json.load(json_data) #deserialize
+    return data
+
+def get_notices_json():
+    json_data = open('./localcontexts/static/json/Notices.json')
     data = json.load(json_data) #deserialize
     return data
 
@@ -232,6 +205,35 @@ def add_to_connections(target_org, org):
             connections.communities.add(org)
         connections.save()
 
+def set_notice_defaults(notice):
+    # data = get_notices_json()
+    baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/'
+    bc_text = 'The BC (Biocultural) Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information (DSI) generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC Labels are in development and their implementation is being negotiated.'
+    tk_text = 'The TK (Traditional Knowledge) Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated.'
+    attr_text = 'Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution.'
+
+    # TODO: uncomment when Notice model has been changed
+    # for item in data:
+    #     if item['noticeType'] == notice.notice_type:
+    #         notice.img_url = baseURL + item['imgFileName']
+    #         notice.svg_url = baseURL + item['svgFileName']
+    #         notice.default_text = item['noticeDefaultText']
+
+    if notice.notice_type == 'biocultural':
+        notice.bc_img_url = baseURL + 'bc-notice.png'
+        notice.bc_svg_url = baseURL + 'bc-notice.svg'
+        notice.bc_default_text = bc_text
+    if notice.notice_type == 'traditional_knowledge':
+        notice.tk_img_url = baseURL + 'tk-notice.png'
+        notice.tk_svg_url = baseURL + 'tk-notice.svg'
+        notice.tk_default_text = tk_text
+    if notice.notice_type == 'attribution_incomplete':
+        notice.bc_img_url = baseURL + 'ci-attribution-incomplete.png'
+        notice.bc_svg_url = baseURL + 'ci-attribution-incomplete.svg'
+        notice.bc_default_text = attr_text
+    
+    notice.save()  
+
 # Helper function for creating/updating notices
 def loop_through_notices(list, organization, project):
     for selected in list:
@@ -241,7 +243,7 @@ def loop_through_notices(list, organization, project):
             elif selected == 'tknotice':
                 notice = Notice.objects.create(notice_type='traditional_knowledge', institution=organization, project=project)
             elif selected == 'attribution_incomplete':
-                notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', institution=organization, project=project)
+                notice = Notice.objects.create(notice_type='attribution_incomplete', institution=organization, project=project)
 
         if isinstance(organization, Researcher):
             if selected == 'bcnotice':
@@ -249,57 +251,17 @@ def loop_through_notices(list, organization, project):
             elif selected == 'tknotice':
                 notice = Notice.objects.create(notice_type='traditional_knowledge', researcher=organization, project=project)
             elif selected == 'attribution_incomplete':
-                notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', researcher=organization, project=project)
+                notice = Notice.objects.create(notice_type='attribution_incomplete', researcher=organization, project=project)
         
         set_notice_defaults(notice)
 
 
 # Create/Update Notices
-def create_notices(selected_notices, organization, project, existing_notice, existing_inst_notice):
+def create_notices(selected_notices, organization, project, existing_notice):
     # organization: either instance of institution or researcher
-    # selected_notices would be a list: 
-    # attribution_incomplete # bcnotice # tknotice
+    # selected_notices would be a list: # attribution_incomplete # bcnotice # tknotice
     
     if existing_notice:
         existing_notice.delete()
-    if existing_inst_notice:
-        existing_inst_notice.delete()
-
-    # If Individual notices
-    if len(selected_notices) == 1:
-        loop_through_notices(selected_notices, organization, project)
-
-    elif len(selected_notices) == 2:
-        if isinstance(organization, Institution):
-            # If BC and TK Notices
-            if 'bcnotice' in selected_notices and 'tknotice' in selected_notices:
-                notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', institution=organization, project=project)
-                set_notice_defaults(notice)
-            else:
-                loop_through_notices(selected_notices, organization, project)
-
-        if isinstance(organization, Researcher):
-            # If BC and TK Notices
-            if 'bcnotice' in selected_notices and 'tknotice' in selected_notices:
-                notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', researcher=organization, project=project)
-                set_notice_defaults(notice)
-            else:
-                loop_through_notices(selected_notices, organization, project)
-
-    elif len(selected_notices) == 3:
-        if isinstance(organization, Institution):
-            # Both BC and TK and one of the institution notices
-            if 'bcnotice' in selected_notices and 'tknotice' in selected_notices:
-                notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', institution=organization, project=project)
-                set_notice_defaults(notice)
-                institution_notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', institution=organization, project=project)
-                set_notice_defaults(institution_notice)
-
-        if isinstance(organization, Researcher):
-            # Both BC and TK and one of the institution notices
-            if 'bcnotice' in selected_notices and 'tknotice' in selected_notices:
-                notice = Notice.objects.create(notice_type='biocultural_and_traditional_knowledge', researcher=organization, project=project)
-                set_notice_defaults(notice)
-                institution_notice = InstitutionNotice.objects.create(notice_type='attribution_incomplete', researcher=organization, project=project)
-                set_notice_defaults(institution_notice)
-
+    
+    loop_through_notices(selected_notices, organization, project)

@@ -14,7 +14,8 @@ class Notice(models.Model):
     TYPES = (
         ('biocultural', 'biocultural'),
         ('traditional_knowledge', 'traditional_knowledge'),
-        ('biocultural_and_traditional_knowledge', 'biocultural_and_traditional_knowledge')
+        ('biocultural_and_traditional_knowledge', 'biocultural_and_traditional_knowledge'),
+        ('attribution_incomplete', 'attribution_incomplete'),
     )
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_notice", db_index=True)
     notice_type = models.CharField(max_length=50, null=True, choices=TYPES)

@@ -470,7 +470,7 @@ def create_project(request, pk):
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                create_notices(notices_selected, researcher, data, None, None)
+                create_notices(notices_selected, researcher, data, None)
 
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')
@@ -513,7 +513,6 @@ def edit_project(request, researcher_id, project_uuid):
     else:
         project = Project.objects.get(unique_id=project_uuid)
         notice_exists = Notice.objects.filter(project=project)
-        institution_notice_exists = InstitutionNotice.objects.filter(project=project).exists()
         form = EditProjectForm(request.POST or None, instance=project)
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
@@ -523,11 +522,6 @@ def edit_project(request, researcher_id, project_uuid):
             notice = Notice.objects.get(project=project)
         else:
             notice = None
-        
-        if institution_notice_exists:
-            institution_notice = InstitutionNotice.objects.get(project=project)
-        else:
-            institution_notice = None
 
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
@@ -548,7 +542,7 @@ def edit_project(request, researcher_id, project_uuid):
             
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
-                create_notices(notices_selected, researcher, data, notice, institution_notice)
+                create_notices(notices_selected, researcher, data, notice)
 
             return redirect('researcher-projects', researcher.id)    
 
@@ -556,7 +550,6 @@ def edit_project(request, researcher_id, project_uuid):
             'researcher': researcher, 
             'project': project, 
             'notice': notice,
-            'institution_notice': institution_notice,
             'form': form, 
             'formset': formset,
             'contributors': contributors,

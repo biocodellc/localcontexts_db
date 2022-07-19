@@ -352,6 +352,7 @@ def hub_counter(request):
 
     bc_notice_count = 0
     tk_notice_count = 0
+    attr_notice_count = 0
 
     community_count = 0
     institution_count = 0
@@ -388,12 +389,9 @@ def hub_counter(request):
                 bc_notice_count += 1
             if notice.notice_type == 'traditional_knowledge':
                 tk_notice_count += 1
-            if notice.notice_type == 'biocultural_and_traditional_knowledge':
-                bc_notice_count += 1
-                tk_notice_count += 1
-        
-        institution_notices_count = InstitutionNotice.objects.exclude(institution=1).count()     
-        notices_total = bc_notice_count + tk_notice_count + institution_notices_count
+            if notice.notice_type == 'attribution_incomplete':
+                attr_notice_count += 1
+        notices_total = bc_notice_count + tk_notice_count + attr_notice_count
 
         # Project Counts -- excludes accounts created by ADMIN
         # Community projects
@@ -431,12 +429,9 @@ def hub_counter(request):
                 bc_notice_count += 1
             if notice.notice_type == 'traditional_knowledge':
                 tk_notice_count += 1
-            if notice.notice_type == 'biocultural_and_traditional_knowledge':
-                bc_notice_count += 1
-                tk_notice_count += 1
-                
-        institution_notices_count = InstitutionNotice.objects.count()     
-        notices_total = bc_notice_count + tk_notice_count + institution_notices_count
+            if notice.notice_type == 'attribution_incomplete':
+                attr_notice_count += 1
+        notices_total = bc_notice_count + tk_notice_count + attr_notice_count
 
         # Project Counts -- excludes accounts created by ADMIN
         # Community projects

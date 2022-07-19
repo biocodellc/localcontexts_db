@@ -666,7 +666,7 @@ def create_project(request, pk):
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                create_notices(notices_selected, institution, data, None, None)
+                create_notices(notices_selected, institution, data, None)
 
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')
@@ -707,7 +707,6 @@ def edit_project(request, institution_id, project_uuid):
     institution = Institution.objects.get(id=institution_id)
     project = Project.objects.get(unique_id=project_uuid)
     notice_exists = Notice.objects.filter(project=project).exists()
-    institution_notice_exists = InstitutionNotice.objects.filter(project=project).exists()
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
@@ -722,11 +721,6 @@ def edit_project(request, institution_id, project_uuid):
             notice = Notice.objects.get(project=project)
         else:
             notice = None
-        
-        if institution_notice_exists:
-            institution_notice = InstitutionNotice.objects.get(project=project)
-        else:
-            institution_notice = None
 
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
@@ -748,7 +742,7 @@ def edit_project(request, institution_id, project_uuid):
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
                 # Pass any existing notices as well as newly selected ones
-                create_notices(notices_selected, institution, data, notice, institution_notice)
+                create_notices(notices_selected, institution, data, notice)
 
             return redirect('institution-projects', institution.id)
 
@@ -757,7 +751,6 @@ def edit_project(request, institution_id, project_uuid):
             'institution': institution, 
             'project': project, 
             'notice': notice, 
-            'institution_notice': institution_notice,
             'form': form,
             'formset': formset,
             'contributors': contributors,

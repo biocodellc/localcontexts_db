@@ -57,57 +57,35 @@ def download_project_zip(request, unique_id):
 
     # Label / Notice Files
     if notice_exists:
-        notice = Notice.objects.get(project=project)
-        if not notice.archived:
-            # Add Usage Guide
-            usage_guide_url = baseURL + 'guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
-            response = requests.get(usage_guide_url) 
-            files.append(('TK_BC_Notice_Usage_Guide.pdf', response.content))
+        notices = Notice.objects.filter(project=project)
+        for notice in notices:
+            if not notice.archived:
+                # Add Usage Guide
+                usage_guide_url = baseURL + 'guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
+                response = requests.get(usage_guide_url) 
+                files.append(('Notices_Usage_Guide.pdf', response.content))
 
-            # Create PNG and TXT files based on which Notices are attached to the Project
-            if notice.notice_type == 'biocultural':
-                get_img = requests.get(notice.bc_img_url)
-                get_svg = requests.get(baseURL + 'labels/notices/bc-notice.svg')
-                files.append(('Biocultural_Notice' + '.png', get_img.content))
-                files.append(('Biocultural_Notice' + '.svg', get_svg.content))
-                files.append(('Biocultural_Notice' + '.txt', notice.bc_default_text))
+                # Create PNG and TXT files based on which Notices are attached to the Project
+                if notice.notice_type == 'biocultural':
+                    get_img = requests.get(notice.bc_img_url)
+                    get_svg = requests.get(baseURL + 'labels/notices/bc-notice.svg')
+                    files.append(('Biocultural_Notice' + '.png', get_img.content))
+                    files.append(('Biocultural_Notice' + '.svg', get_svg.content))
+                    files.append(('Biocultural_Notice' + '.txt', notice.bc_default_text))
 
-            if notice.notice_type == 'traditional_knowledge':
-                get_img = requests.get(notice.tk_img_url)
-                get_svg = requests.get(baseURL + 'labels/notices/tk-notice.svg')
-                files.append(('Traditional_Knowledge_Notice' + '.png', get_img.content))
-                files.append(('Traditional_Knowledge_Notice' + '.svg', get_svg.content))
-                files.append(('Traditional_Knowledge_Notice' + '.txt', notice.tk_default_text))
-
-            if notice.notice_type == 'biocultural_and_traditional_knowledge':
-                get_bc_img = requests.get(notice.bc_img_url)
-                get_tk_img = requests.get(notice.tk_img_url)
-                get_tk_svg = requests.get(baseURL + 'labels/notices/tk-notice.svg')
-                get_bc_svg = requests.get(baseURL + 'labels/notices/bc-notice.svg')
-                files.append(('Biocultural_Notice' + '.png', get_bc_img.content))
-                files.append(('Biocultural_Notice' + '.svg', get_bc_svg.content))
-                files.append(('Traditional_Knowledge_Notice' + '.png', get_tk_img.content))
-                files.append(('Traditional_Knowledge_Notice' + '.svg', get_tk_svg.content))
-                files.append(('Biocultural_Notice' + '.txt', notice.bc_default_text))
-                files.append(('Traditional_Knowledge_Notice' + '.txt', notice.tk_default_text))
-
-
-    # Institution notices
-    if institution_notice_exists:
-        inst_notice = InstitutionNotice.objects.get(project=project)
-        if not inst_notice.archived:
-            # Add Usage Guide
-            usage_guide_url = baseURL + 'guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf'
-            response = requests.get(usage_guide_url) 
-            files.append(('Institution_Notice_Usage_Guide.pdf', response.content))
-
-            # Create PNG and TXT files based on which Notices are attached to the Project
-            if inst_notice.notice_type == 'attribution_incomplete':
-                get_img = requests.get(inst_notice.img_url)
-                get_svg = requests.get(baseURL + 'labels/notices/ci-attribution-incomplete.svg')
-                files.append(('Attribution_Incomplete' + '.png', get_img.content))
-                files.append(('Attribution_Incomplete' + '.svg', get_svg.content))
-                files.append(('Attribution_Incomplete' + '.txt', inst_notice.default_text))
+                if notice.notice_type == 'traditional_knowledge':
+                    get_img = requests.get(notice.tk_img_url)
+                    get_svg = requests.get(baseURL + 'labels/notices/tk-notice.svg')
+                    files.append(('Traditional_Knowledge_Notice' + '.png', get_img.content))
+                    files.append(('Traditional_Knowledge_Notice' + '.svg', get_svg.content))
+                    files.append(('Traditional_Knowledge_Notice' + '.txt', notice.tk_default_text))
+                
+                if notice.notice_type == 'attribution_incomplete':
+                    get_img = requests.get(notice.img_url)
+                    get_svg = requests.get(baseURL + 'labels/notices/ci-attribution-incomplete.svg')
+                    files.append(('Attribution_Incomplete' + '.png', get_img.content))
+                    files.append(('Attribution_Incomplete' + '.svg', get_svg.content))
+                    files.append(('Attribution_Incomplete' + '.txt', notice.default_text))
 
     if project_bclabels or project_tklabels:
         # Labels Usage guide PDF

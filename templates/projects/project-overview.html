@@ -112,45 +112,23 @@
                 {% endwith %}
 
 
-                {% with notices=project.project_notice.all inst_notices=project.project_institutional_notice.all %}
-
-                    {% if notices or inst_notices %}
-                        <input id="notice-{{ project.unique_id }}" class="projectNoticesFilter" type="hidden" value="notice_true">
-
-                        {% if notices %}
-                            {% for notice in notices %}
-                                {% if not notice.archived %}
-                                    <div class="flex-this flex-end">
-                                        {% if notice.notice_type == 'biocultural' %}
-                                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                        {% elif notice.notice_type == 'traditional_knowledge' %}
-                                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                                        {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                                        {% endif %}
-                                    </div>
+                {% if project.project_notice.all %}
+                    {% for notice in project.project_notice.all %}
+                        {% if not notice.archived %}
+                            <div class="flex-this flex-end">
+                                {% if notice.notice_type == 'biocultural' %}
+                                    <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
                                 {% endif %}
-                            {% endfor %}
+                                {% if notice.notice_type == 'traditional_knowledge' %}
+                                    <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                {% endif %}
+                                {% if notice.notice_type == 'attribution_incomplete' %}
+                                    <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
+                                {% endif %}
+                            </div>
                         {% endif %}
-
-                        {% if inst_notices %}
-                            {% for notice in inst_notices %}
-                                {% if not notice.archived %}
-                                    <div class="flex-this flex-end">
-                                        {% if notice.notice_type == 'attribution_incomplete' %}
-                                            <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %} 
-
-                    {% endif %}
-
-                {% endwith %}
-
-
+                    {% endfor %}
+                {% endif %}
 
             </div>
         </div>

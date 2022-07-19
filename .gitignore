@@ -5,6 +5,8 @@ env-localdev.sh
 env-localprod.sh
 env-local.sh
 
+start.sh
+
 maintenance_mode_state.txt
 
 .vscode/
