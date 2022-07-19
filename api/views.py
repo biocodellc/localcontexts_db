@@ -7,7 +7,7 @@ from rest_framework import status
 
 from .serializers import *
 from projects.models import Project
-from helpers.models import Notice, InstitutionNotice
+from helpers.models import Notice
 from projects.models import ProjectCreator
 
 @api_view(['GET'])
@@ -54,7 +54,7 @@ class ProjectDetail(generics.RetrieveAPIView):
 
     def get_serializer_class(self):
         project = self.get_object()
-        if Notice.objects.filter(project=project, archived=False).exists() or InstitutionNotice.objects.filter(project=project, archived=False).exists():
+        if Notice.objects.filter(project=project, archived=False).exists():
             return ProjectSerializer
         else:
             return ProjectNoNoticeSerializer

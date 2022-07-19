@@ -21,7 +21,7 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
-from helpers.models import Notice, InstitutionNotice
+from helpers.models import Notice
 from notifications.models import UserNotification
 from projects.models import Project, ProjectCreator
 

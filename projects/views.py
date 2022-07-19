@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Project, ProjectContributors, ProjectCreator, ProjectPerson
-from helpers.models import Notice, InstitutionNotice
+from helpers.models import Notice
 from helpers.utils import render_to_pdf, generate_zip
 from django.http import HttpResponse, Http404
 import requests
@@ -31,7 +31,6 @@ def download_project_zip(request, unique_id):
     project_people = ProjectPerson.objects.filter(project=project)
 
     notice_exists = Notice.objects.filter(project=project).exists()
-    institution_notice_exists = InstitutionNotice.objects.filter(project=project).exists()
 
     template_path = 'snippets/pdfs/project-pdf.html'
     context = { 'project': project, 'project_creator': project_creator, 'contributors': contributors, 'project_people': project_people }
@@ -42,14 +41,10 @@ def download_project_zip(request, unique_id):
     readme_text = ''
 
     # Set README text if both types of notice present
-    if notice_exists and institution_notice_exists:
+    if notice_exists:
         institution_text = "The Institution Notices are for use by collecting institutions, data repositories and organizations who engage in collaborative curation with Indigenous and other marginalized communities who have been traditionally excluded from processes of documentation and record keeping.\nThe Institution Notices are intended to be displayed prominently on public-facing institutional websites, on digital collections pages and or in finding aids."
-        notice_text = "The BC and TK Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data. The Notices are a mechanism for researchers and institutional staff to identify Indigenous collections and Indigenous interests in data.\n\nThe Notices can function as place-holders on collections, data, or in a sample field until a TK or a BC Label is added by a community."
+        notice_text = "The BC, TK and Attribution Incomplete Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data. The Notices are a mechanism for researchers and institutional staff to identify Indigenous collections and Indigenous interests in data.\n\nThe Notices can function as place-holders on collections, data, or in a sample field until a TK or a BC Label is added by a community."
         readme_text = notice_text + '\n\n' + institution_text + '\n\nThis folder contains the following files:\n'
-    elif notice_exists and not institution_notice_exists:
-        readme_text = "The BC and TK Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data. The Notices are a mechanism for researchers and institutional staff to identify Indigenous collections and Indigenous interests in data.\n\nThe Notices can function as place-holders on collections, data, or in a sample field until a TK or a BC Label is added by a community. \n\nThis folder contains the following files:\n"
-    elif institution_notice_exists and not notice_exists:
-        readme_text = "The Institution Notices are for use by collecting institutions, data repositories and organizations who engage in collaborative curation with Indigenous and other marginalized communities who have been traditionally excluded from processes of documentation and record keeping.\nThe Institution Notices are intended to be displayed prominently on public-facing institutional websites, on digital collections pages and or in finding aids.\n\nThis folder contains the following files:\n"
 
     # Create PDF from project context, append to files list
     pdf = render_to_pdf(template_path, context)

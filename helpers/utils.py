@@ -9,7 +9,7 @@ from xhtml2pdf import pisa
 from communities.models import Community, JoinRequest, InviteMember
 from institutions.models import Institution
 from researchers.models import Researcher
-from .models import Connections, Notice, InstitutionNotice
+from .models import Connections, Notice
 from notifications.models import *
 
 from helpers.emails import send_membership_email

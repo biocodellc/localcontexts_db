@@ -11,7 +11,7 @@ from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson, ProjectCreator
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
-from helpers.models import ProjectComment, ProjectStatus, Notice, InstitutionNotice, EntitiesNotified, Connections, OpenToCollaborateNoticeURL
+from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified, Connections, OpenToCollaborateNoticeURL
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation

@@ -5,10 +5,6 @@ class NoticeAdmin(admin.ModelAdmin):
     list_display = ('project', 'notice_type', 'researcher', 'institution', 'created', 'archived' )
     search_fields = ('project',)
 
-class InstitutionNoticeAdmin(admin.ModelAdmin):
-    list_display = ('project', 'notice_type', 'institution', 'researcher', 'created', 'archived' )
-    search_fields = ('project',)
-
 class OpenToCollaborateNoticeURLAdmin(admin.ModelAdmin):
     list_display = ('institution', 'researcher', 'name', 'url', 'added')
 
@@ -34,7 +30,6 @@ class ConnectionsAdmin(admin.ModelAdmin):
     list_display = ('community', 'researcher', 'institution')
 
 admin.site.register(Notice, NoticeAdmin)
-admin.site.register(InstitutionNotice, InstitutionNoticeAdmin)
 admin.site.register(LabelTranslation, LabelTranslationAdmin)
 admin.site.register(ProjectComment, ProjectCommentAdmin)
 admin.site.register(ProjectStatus, ProjectStatusAdmin)
