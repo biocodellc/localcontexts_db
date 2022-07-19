@@ -4,7 +4,44 @@
 {% if 'anth-ja77-lc-dev-42d5' in request.get_host %}
     {% include 'partials/banners/_sandbox-banner.html' %}
 {% endif %}
+​
+<svg 
+    id="svg-header" 
+    viewBox="0 0 1440 200" 
+    xmlns="http://www.w3.org/2000/svg" 
+    class="transition duration-300 ease-in-out delay-150"
+    preserveAspectRatio="none"
+>
+    <defs>
+        <linearGradient 
+            id="gradient" 
+            x1="60%" 
+            y1="0%" 
+            x2="40%" 
+            y2="100%"
+        >
+            <stop 
+                offset="3%" 
+                stop-color="#058f73ff"
+            >
+            </stop>
+            <stop 
+                offset="97%" 
+                stop-color="#016ba7ff"
+            ></stop>
+        </linearGradient>
+    </defs>
+    <path 
+        d="M 0,400 C 0,400 0,200 0,200 C 205.71428571428572,257.14285714285717 822.8571428571429,228.57142857142858 1440,200 C 1440,200 1440,400 1440,400 Z" 
+        stroke="none" 
+        stroke-width="0" 
+        fill="url(#gradient)" 
+        class="transition-all duration-300 ease-in-out delay-150 path-0" 
+        transform="rotate(-180 720 200)"
+    >
+    </path>
+</svg>
 
-<header class="header-gradient header-size flex-this w-100">
+<header id="auth-header" class="header-size flex-this w-100">
     {% include 'partials/headers/header-content.html'%}
 </header>

@@ -251,39 +251,41 @@ function expandBCLabel(img) {
 
 // Will disable "customize Label" btn if Label exists (select-labels)
 function checkLabelExists(label, selectedLabelCode, labelType) {
-    let btnTKProv = document.getElementById(`btn${labelType}Prov`)
-    let btnTKProt = document.getElementById(`btn${labelType}Prot`)
-    let btnTKPerms = document.getElementById(`btn${labelType}Perms`)
+    let btnProv = document.getElementById(`btn${labelType}Prov`)
+    let btnProt = document.getElementById(`btn${labelType}Prot`)
+    let btnPerms = document.getElementById(`btn${labelType}Perms`)
 
-    // Takes all hidden inputs with the label_type of labels that have already been created by the community
-    let inputs = Array.from(document.querySelectorAll(`.check${labelType}LabelType`))
-    let values = []
-    inputs.forEach(input => values.push(input.value))
+    if (btnProv || btnProt || btnPerms) {
+        // Takes all hidden inputs with the label_type of labels that have already been created by the community
+        let inputs = Array.from(document.querySelectorAll(`.check${labelType}LabelType`))
+        let values = []
+        inputs.forEach(input => values.push(input.value))
 
-    if (label.labelCode == selectedLabelCode) {
-        if (values.includes(label.labelType)) {
-            if (label.labelCategory == 'provenance') {
-                btnTKProv.setAttribute("disabled","disabled")
-                btnTKProv.classList.replace('action-btn', 'disabled-btn')
-            } else if (label.labelCategory == 'protocol') {
-                btnTKProt.setAttribute("disabled","disabled")
-                btnTKProt.classList.replace('action-btn', 'disabled-btn')
-            } else if (label.labelCategory == 'permission') {
-                btnTKPerms.setAttribute("disabled","disabled")
-                btnTKPerms.classList.replace('action-btn', 'disabled-btn')
+        if (label.labelCode == selectedLabelCode) {
+            if (values.includes(label.labelType)) {
+                if (label.labelCategory == 'provenance') {
+                    btnProv.setAttribute("disabled","disabled")
+                    btnProv.classList.replace('action-btn', 'disabled-btn')
+                } else if (label.labelCategory == 'protocol') {
+                    btnProt.setAttribute("disabled","disabled")
+                    btnProt.classList.replace('action-btn', 'disabled-btn')
+                } else if (label.labelCategory == 'permission') {
+                    btnPerms.setAttribute("disabled","disabled")
+                    btnPerms.classList.replace('action-btn', 'disabled-btn')
+                }
+            }  else {
+                if (label.labelCategory == 'provenance') {
+                    btnProv.removeAttribute("disabled")
+                    btnProv.classList.replace('disabled-btn', 'action-btn')
+                } else if (label.labelCategory == 'protocol') {
+                    btnProt.removeAttribute("disabled")
+                    btnProt.classList.replace('disabled-btn', 'action-btn')
+                } else if (label.labelCategory == 'permission') {
+                    btnPerms.removeAttribute("disabled")
+                    btnPerms.classList.replace('disabled-btn', 'action-btn')
+                }
             }
-        }  else {
-            if (label.labelCategory == 'provenance') {
-                btnTKProv.removeAttribute("disabled")
-                btnTKProv.classList.replace('disabled-btn', 'action-btn')
-            } else if (label.labelCategory == 'protocol') {
-                btnTKProt.removeAttribute("disabled")
-                btnTKProt.classList.replace('disabled-btn', 'action-btn')
-            } else if (label.labelCategory == 'permission') {
-                btnTKPerms.removeAttribute("disabled")
-                btnTKPerms.classList.replace('disabled-btn', 'action-btn')
-            }
-        }
+        }        
     }
 }
 
@@ -955,7 +957,7 @@ if (deactivateAccountBtn) {
 }
 
 // REGISTRY FILTERING AND JOIN REQUESTS / CONTACT MODAL
-if (window.location.href.includes('registry')) {
+if (window.location.href.includes('communities/view/') || window.location.href.includes('institutions/view/') || window.location.href.includes('researchers/view/') ) {
 
     // Send request to join institution or community
     const registryModal = document.getElementById('registryModal')

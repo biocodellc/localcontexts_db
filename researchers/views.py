@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from communities.views import projects
+from django.http import Http404
 
 from localcontexts.utils import dev_prod_or_local
 from projects.utils import add_to_contributors
@@ -15,6 +15,7 @@ from projects.models import ProjectContributors, Project, ProjectPerson, Project
 
 from projects.forms import *
 from helpers.forms import ProjectCommentForm, OpenToCollaborateNoticeURLForm
+from accounts.forms import ContactOrganizationForm
 
 from helpers.emails import *
 
@@ -55,6 +56,49 @@ def connect_researcher(request):
         return render(request, 'researchers/connect-researcher.html', {'form': form})
     else:
         return redirect('researcher-notices', researcher.id)
+
+def public_researcher_view(request, pk):
+    researcher = Researcher.objects.get(id=pk)
+    created_projects = ProjectCreator.objects.filter(researcher=researcher)
+    notices = Notice.objects.filter(researcher=researcher)
+    projects = []
+
+    for p in created_projects:
+        if p.project.project_privacy == 'Public':
+            projects.append(p.project)
+    try:
+        form = ContactOrganizationForm(request.POST or None)
+
+        if request.method == 'POST':
+            # contact researcher
+            if form.is_valid():
+                to_email = ''
+                from_name = form.cleaned_data['name']
+                from_email = form.cleaned_data['email']
+                message = form.cleaned_data['message']
+                to_email = researcher.contact_email
+
+                send_contact_email(to_email, from_name, from_email, message)
+                messages.add_message(request, messages.SUCCESS, 'Sent!')
+                return redirect('public-researcher', researcher.id)
+        else:
+            context = { 
+                'researcher': researcher,
+                'projects' : projects,
+                'notices': notices,
+                'form': form,
+            }
+            return render(request, 'public.html', context)
+
+        context = { 
+            'researcher': researcher,
+            'projects' : projects,
+            'notices': notices,
+        }
+        return render(request, 'public.html', context)
+    except:
+        raise Http404()
+
 
 @login_required(login_url='login')
 def connect_orcid(request):
@@ -107,7 +151,7 @@ def researcher_notices(request, pk):
     researcher = Researcher.objects.get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
-        return redirect('restricted')
+        return redirect('public-researcher', researcher.id)
     else:
         urls = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher)
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
@@ -409,6 +453,13 @@ def create_project(request, pk):
             if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
                 data.project_creator = request.user
+
+                # Define project_page field
+                domain = request.get_host()
+                if 'localhost' in domain:
+                    data.project_page = f'http://{domain}/projects/{data.unique_id}'
+                else:
+                    data.project_page = f'https://{domain}/projects/{data.unique_id}'
                 data.save()
 
                 # Add project to researcher projects
@@ -419,7 +470,7 @@ def create_project(request, pk):
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                create_notices(notices_selected, researcher, data, None, None)
+                create_notices(notices_selected, researcher, data, None)
 
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')
@@ -462,7 +513,6 @@ def edit_project(request, researcher_id, project_uuid):
     else:
         project = Project.objects.get(unique_id=project_uuid)
         notice_exists = Notice.objects.filter(project=project)
-        institution_notice_exists = InstitutionNotice.objects.filter(project=project).exists()
         form = EditProjectForm(request.POST or None, instance=project)
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
@@ -472,11 +522,6 @@ def edit_project(request, researcher_id, project_uuid):
             notice = Notice.objects.get(project=project)
         else:
             notice = None
-        
-        if institution_notice_exists:
-            institution_notice = InstitutionNotice.objects.get(project=project)
-        else:
-            institution_notice = None
 
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
@@ -497,7 +542,7 @@ def edit_project(request, researcher_id, project_uuid):
             
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
-                create_notices(notices_selected, researcher, data, notice, institution_notice)
+                create_notices(notices_selected, researcher, data, notice)
 
             return redirect('researcher-projects', researcher.id)    
 
@@ -505,7 +550,6 @@ def edit_project(request, researcher_id, project_uuid):
             'researcher': researcher, 
             'project': project, 
             'notice': notice,
-            'institution_notice': institution_notice,
             'form': form, 
             'formset': formset,
             'contributors': contributors,

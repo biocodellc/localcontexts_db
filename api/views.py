@@ -7,7 +7,7 @@ from rest_framework import status
 
 from .serializers import *
 from projects.models import Project
-from helpers.models import Notice, InstitutionNotice
+from helpers.models import Notice
 from projects.models import ProjectCreator
 
 @api_view(['GET'])
@@ -15,7 +15,7 @@ def apiOverview(request, format=None):
     api_urls = {
         'projects_list': reverse('api-projects', request=request, format=format),
         'project_detail': '/projects/<PROJECT_UNIQUE_ID>/',
-        'projects_by_username': '/projects/users/<USERNAME>/',
+        'projects_by_user_id': '/projects/users/<USER_ID>/',
         'projects_by_institution_id': '/projects/institutions/<INSTITUTION_ID>/',
         'projects_by_researcher_id': '/projects/researchers/<RESEARCHER_ID>/',
         'open_to_collaborate_notice': reverse('api-open-to-collaborate', request=request, format=format),
@@ -54,7 +54,7 @@ class ProjectDetail(generics.RetrieveAPIView):
 
     def get_serializer_class(self):
         project = self.get_object()
-        if Notice.objects.filter(project=project, archived=False).exists() or InstitutionNotice.objects.filter(project=project, archived=False).exists():
+        if Notice.objects.filter(project=project, archived=False).exists():
             return ProjectSerializer
         else:
             return ProjectNoNoticeSerializer
@@ -77,11 +77,10 @@ def project_detail_providers(request, providers_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-def projects_by_user(request, username):
+def projects_by_user(request, pk):
     try:
-        # user = User.objects.get(username__iexact=username)
-        user = User.objects.get(username=username)
-        projects = Project.objects.filter(project_creator=user, project_privacy='Public')
+        user = User.objects.get(id=pk)
+        projects = Project.objects.filter(project_creator=user).exclude(project_privacy='Private')
         serializer = ProjectOverviewSerializer(projects, many=True)
         return Response(serializer.data)
     except:

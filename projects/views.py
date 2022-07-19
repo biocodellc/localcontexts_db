@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Project, ProjectContributors, ProjectCreator, ProjectPerson
-from helpers.models import Notice, InstitutionNotice
+from helpers.models import Notice
 from helpers.utils import render_to_pdf, generate_zip
 from django.http import HttpResponse, Http404
 import requests
@@ -31,7 +31,6 @@ def download_project_zip(request, unique_id):
     project_people = ProjectPerson.objects.filter(project=project)
 
     notice_exists = Notice.objects.filter(project=project).exists()
-    institution_notice_exists = InstitutionNotice.objects.filter(project=project).exists()
 
     template_path = 'snippets/pdfs/project-pdf.html'
     context = { 'project': project, 'project_creator': project_creator, 'contributors': contributors, 'project_people': project_people }
@@ -42,14 +41,10 @@ def download_project_zip(request, unique_id):
     readme_text = ''
 
     # Set README text if both types of notice present
-    if notice_exists and institution_notice_exists:
+    if notice_exists:
         institution_text = "The Institution Notices are for use by collecting institutions, data repositories and organizations who engage in collaborative curation with Indigenous and other marginalized communities who have been traditionally excluded from processes of documentation and record keeping.\nThe Institution Notices are intended to be displayed prominently on public-facing institutional websites, on digital collections pages and or in finding aids."
-        notice_text = "The BC and TK Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data. The Notices are a mechanism for researchers and institutional staff to identify Indigenous collections and Indigenous interests in data.\n\nThe Notices can function as place-holders on collections, data, or in a sample field until a TK or a BC Label is added by a community."
+        notice_text = "The BC, TK and Attribution Incomplete Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data. The Notices are a mechanism for researchers and institutional staff to identify Indigenous collections and Indigenous interests in data.\n\nThe Notices can function as place-holders on collections, data, or in a sample field until a TK or a BC Label is added by a community."
         readme_text = notice_text + '\n\n' + institution_text + '\n\nThis folder contains the following files:\n'
-    elif notice_exists and not institution_notice_exists:
-        readme_text = "The BC and TK Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data. The Notices are a mechanism for researchers and institutional staff to identify Indigenous collections and Indigenous interests in data.\n\nThe Notices can function as place-holders on collections, data, or in a sample field until a TK or a BC Label is added by a community. \n\nThis folder contains the following files:\n"
-    elif institution_notice_exists and not notice_exists:
-        readme_text = "The Institution Notices are for use by collecting institutions, data repositories and organizations who engage in collaborative curation with Indigenous and other marginalized communities who have been traditionally excluded from processes of documentation and record keeping.\nThe Institution Notices are intended to be displayed prominently on public-facing institutional websites, on digital collections pages and or in finding aids.\n\nThis folder contains the following files:\n"
 
     # Create PDF from project context, append to files list
     pdf = render_to_pdf(template_path, context)
@@ -57,57 +52,35 @@ def download_project_zip(request, unique_id):
 
     # Label / Notice Files
     if notice_exists:
-        notice = Notice.objects.get(project=project)
-        if not notice.archived:
-            # Add Usage Guide
-            usage_guide_url = baseURL + 'guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
-            response = requests.get(usage_guide_url) 
-            files.append(('TK_BC_Notice_Usage_Guide.pdf', response.content))
+        notices = Notice.objects.filter(project=project)
+        for notice in notices:
+            if not notice.archived:
+                # Add Usage Guide
+                usage_guide_url = baseURL + 'guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
+                response = requests.get(usage_guide_url) 
+                files.append(('Notices_Usage_Guide.pdf', response.content))
 
-            # Create PNG and TXT files based on which Notices are attached to the Project
-            if notice.notice_type == 'biocultural':
-                get_img = requests.get(notice.bc_img_url)
-                get_svg = requests.get(baseURL + 'labels/notices/bc-notice.svg')
-                files.append(('Biocultural_Notice' + '.png', get_img.content))
-                files.append(('Biocultural_Notice' + '.svg', get_svg.content))
-                files.append(('Biocultural_Notice' + '.txt', notice.bc_default_text))
+                # Create PNG and TXT files based on which Notices are attached to the Project
+                if notice.notice_type == 'biocultural':
+                    get_img = requests.get(notice.img_url)
+                    get_svg = requests.get(baseURL + 'labels/notices/bc-notice.svg')
+                    files.append(('Biocultural_Notice' + '.png', get_img.content))
+                    files.append(('Biocultural_Notice' + '.svg', get_svg.content))
+                    files.append(('Biocultural_Notice' + '.txt', notice.default_text))
 
-            if notice.notice_type == 'traditional_knowledge':
-                get_img = requests.get(notice.tk_img_url)
-                get_svg = requests.get(baseURL + 'labels/notices/tk-notice.svg')
-                files.append(('Traditional_Knowledge_Notice' + '.png', get_img.content))
-                files.append(('Traditional_Knowledge_Notice' + '.svg', get_svg.content))
-                files.append(('Traditional_Knowledge_Notice' + '.txt', notice.tk_default_text))
-
-            if notice.notice_type == 'biocultural_and_traditional_knowledge':
-                get_bc_img = requests.get(notice.bc_img_url)
-                get_tk_img = requests.get(notice.tk_img_url)
-                get_tk_svg = requests.get(baseURL + 'labels/notices/tk-notice.svg')
-                get_bc_svg = requests.get(baseURL + 'labels/notices/bc-notice.svg')
-                files.append(('Biocultural_Notice' + '.png', get_bc_img.content))
-                files.append(('Biocultural_Notice' + '.svg', get_bc_svg.content))
-                files.append(('Traditional_Knowledge_Notice' + '.png', get_tk_img.content))
-                files.append(('Traditional_Knowledge_Notice' + '.svg', get_tk_svg.content))
-                files.append(('Biocultural_Notice' + '.txt', notice.bc_default_text))
-                files.append(('Traditional_Knowledge_Notice' + '.txt', notice.tk_default_text))
-
-
-    # Institution notices
-    if institution_notice_exists:
-        inst_notice = InstitutionNotice.objects.get(project=project)
-        if not inst_notice.archived:
-            # Add Usage Guide
-            usage_guide_url = baseURL + 'guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf'
-            response = requests.get(usage_guide_url) 
-            files.append(('Institution_Notice_Usage_Guide.pdf', response.content))
-
-            # Create PNG and TXT files based on which Notices are attached to the Project
-            if inst_notice.notice_type == 'attribution_incomplete':
-                get_img = requests.get(inst_notice.img_url)
-                get_svg = requests.get(baseURL + 'labels/notices/ci-attribution-incomplete.svg')
-                files.append(('Attribution_Incomplete' + '.png', get_img.content))
-                files.append(('Attribution_Incomplete' + '.svg', get_svg.content))
-                files.append(('Attribution_Incomplete' + '.txt', inst_notice.default_text))
+                if notice.notice_type == 'traditional_knowledge':
+                    get_img = requests.get(notice.img_url)
+                    get_svg = requests.get(baseURL + 'labels/notices/tk-notice.svg')
+                    files.append(('Traditional_Knowledge_Notice' + '.png', get_img.content))
+                    files.append(('Traditional_Knowledge_Notice' + '.svg', get_svg.content))
+                    files.append(('Traditional_Knowledge_Notice' + '.txt', notice.default_text))
+                
+                if notice.notice_type == 'attribution_incomplete':
+                    get_img = requests.get(notice.img_url)
+                    get_svg = requests.get(baseURL + 'labels/notices/ci-attribution-incomplete.svg')
+                    files.append(('Attribution_Incomplete' + '.png', get_img.content))
+                    files.append(('Attribution_Incomplete' + '.svg', get_svg.content))
+                    files.append(('Attribution_Incomplete' + '.txt', notice.default_text))
 
     if project_bclabels or project_tklabels:
         # Labels Usage guide PDF

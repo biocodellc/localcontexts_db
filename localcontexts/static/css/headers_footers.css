@@ -1,23 +1,40 @@
 /* SIGNED IN HEADER */
-.header-gradient {
-    background: linear-gradient(180.59deg, #016BA7 0.51%, #058F73 134.01%);
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+#auth-header {
+    /* background: linear-gradient(180.59deg, #016BA7 0.51%, #058F73 134.01%); */
+    /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
     padding: 1% 2% 1% 4%;
+    position: absolute;
+    top: 0;
+}
+
+#svg-header {
+    margin-bottom: 20px;
+    width: 100%;
+    height: 130px;
 }
 
 /* REGISTERING PROCESS HEADER */
 .reg-header {
     background-color: #3876aa;
-    width: 100%;
+    max-width: 100%;
     padding: 1% 2% 1% 4%;
 }
 
-.header-size, .nav-links-div {
+.header-content {
+    display: flex;
     justify-content: space-between;
+    width: 1700px;
+    margin: auto;
 }
 
+/* .nav-links-div {
+    justify-content: space-between;
+    width: 100%;
+} */
+
 /* Active nav link orange underline */
-.active-link:after, .nav-links-div a:not(.active-link, .sign-out-btn, .sign-in-btn):hover:after  {
+.active-link:after, 
+.nav-links-div a:not(.active-link, .sign-out-btn, .sign-in-btn):hover:after  {
     content: '';
     display: block;
     margin: -2px auto;
@@ -42,15 +59,9 @@
     display: block;
 }
 
-.nav-links-div {
-    margin-left: 10px;
-    margin-right: 20px;
-    width: 100%;
-}
-
 .nav-links-div a {
     display: inline-block;
-    margin-left: 20px;
+    margin-left: 25px;
     margin-right: 20px;
 }
 
@@ -96,17 +107,22 @@
     opacity: 0.9;
 }
 
-
 /* AUTHENTICATED USER FOOTER */
-.footer-gradient {
+#auth-footer {
     background: linear-gradient(179.93deg, #045887 -12.22%, #058F73 156.81%);
-    padding: 2.5% 3% 2% 3%;
+    padding: 1%;
+    margin-top: 30px;
 }
 
-.auth-footer-content p {
-    max-height: 112px;
-    min-height: 112px;
-    line-height: 19px;
+.footer-content {
+    width: 1400px;
+    margin: 30px auto;
+    padding: 10px;
+    color: #fff;
+}
+
+.footer-content a {
+    color: #fff;
 }
 
 .underline {
@@ -114,7 +130,18 @@
     padding-bottom: 10px;
 }
 
+.socials-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 30%;
+    margin-bottom: 20px;
+}
+
 .socials {
+    height: 100%;
+    display: block;
+    color: #fff;
     height: 50px;
     margin-left: 0;
     margin-right: 0;

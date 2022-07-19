@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.http import Http404
 
 from localcontexts.utils import dev_prod_or_local
 from projects.utils import add_to_contributors
@@ -10,7 +11,7 @@ from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson, ProjectCreator
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
-from helpers.models import ProjectComment, ProjectStatus, Notice, InstitutionNotice, EntitiesNotified, Connections, OpenToCollaborateNoticeURL
+from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified, Connections, OpenToCollaborateNoticeURL
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
@@ -18,6 +19,7 @@ from accounts.models import UserAffiliation
 from projects.forms import *
 from helpers.forms import ProjectCommentForm, OpenToCollaborateNoticeURLForm
 from communities.forms import InviteMemberForm, JoinRequestForm
+from accounts.forms import ContactOrganizationForm
 from .forms import *
 
 from helpers.emails import *
@@ -141,6 +143,63 @@ def confirm_institution(request, institution_id):
                 return redirect('dashboard')
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
 
+def public_institution_view(request, pk):
+    institution = Institution.objects.get(id=pk)
+    created_projects = ProjectCreator.objects.filter(institution=institution)
+    notices = Notice.objects.filter(institution=institution)
+    projects = []
+
+    for p in created_projects:
+        if p.project.project_privacy == 'Public':
+            projects.append(p.project)
+    
+    try:
+        if request.user.is_authenticated:
+            user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()
+            form = ContactOrganizationForm(request.POST or None)
+
+            if request.method == 'POST':
+                if 'contact_btn' in request.POST:
+                    # contact institution
+                    if form.is_valid():
+                        to_email = ''
+                        from_name = form.cleaned_data['name']
+                        from_email = form.cleaned_data['email']
+                        message = form.cleaned_data['message']
+                        to_email = institution.institution_creator.email
+                        
+                        send_contact_email(to_email, from_name, from_email, message)
+                else:
+                    # Request To Join institution
+                    main_admin = institution.institution_creator
+                    join_request = JoinRequest.objects.create(user_from=request.user, institution=institution, user_to=main_admin)
+                    join_request.save()
+
+                    # Send email to institution creator
+                    send_join_request_email_admin(request, join_request, institution)
+
+                messages.add_message(request, messages.SUCCESS, 'Sent!')
+                return redirect('public-institution', institution.id)
+
+            else:
+                context = { 
+                    'institution': institution,
+                    'projects' : projects,
+                    'notices': notices, 
+                    'form': form, 
+                    'user_institutions': user_institutions,
+                }
+                return render(request, 'public.html', context)
+
+        context = { 
+            'institution': institution,
+            'projects' : projects,
+            'notices': notices,
+        }
+        return render(request, 'public.html', context)
+    except:
+        raise Http404()
+
 # Update institution
 @login_required(login_url='login')
 def update_institution(request, pk):
@@ -175,7 +234,7 @@ def institution_notices(request, pk):
 
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')
+        return redirect('public-institution', institution.id)
     else:
         urls = OpenToCollaborateNoticeURL.objects.filter(institution=institution)
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
@@ -590,6 +649,13 @@ def create_project(request, pk):
             if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
                 data.project_creator = request.user
+
+                # Define project_page field
+                domain = request.get_host()
+                if 'localhost' in domain:
+                    data.project_page = f'http://{domain}/projects/{data.unique_id}'
+                else:
+                    data.project_page = f'https://{domain}/projects/{data.unique_id}'
                 data.save()
                 
                 # Add project to institution projects
@@ -600,7 +666,7 @@ def create_project(request, pk):
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                create_notices(notices_selected, institution, data, None, None)
+                create_notices(notices_selected, institution, data, None)
 
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')
@@ -640,8 +706,7 @@ def create_project(request, pk):
 def edit_project(request, institution_id, project_uuid):
     institution = Institution.objects.get(id=institution_id)
     project = Project.objects.get(unique_id=project_uuid)
-    notice_exists = Notice.objects.filter(project=project).exists()
-    institution_notice_exists = InstitutionNotice.objects.filter(project=project).exists()
+    notices = Notice.objects.filter(project=project)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
@@ -651,16 +716,6 @@ def edit_project(request, institution_id, project_uuid):
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
 
-
-        if notice_exists:
-            notice = Notice.objects.get(project=project)
-        else:
-            notice = None
-        
-        if institution_notice_exists:
-            institution_notice = InstitutionNotice.objects.get(project=project)
-        else:
-            institution_notice = None
 
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
@@ -682,7 +737,7 @@ def edit_project(request, institution_id, project_uuid):
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
                 # Pass any existing notices as well as newly selected ones
-                create_notices(notices_selected, institution, data, notice, institution_notice)
+                create_notices(notices_selected, institution, data, notice)
 
             return redirect('institution-projects', institution.id)
 
@@ -690,8 +745,7 @@ def edit_project(request, institution_id, project_uuid):
             'member_role': member_role,
             'institution': institution, 
             'project': project, 
-            'notice': notice, 
-            'institution_notice': institution_notice,
+            'notices': notices, 
             'form': form,
             'formset': formset,
             'contributors': contributors,

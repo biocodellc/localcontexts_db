@@ -102,52 +102,25 @@
                         {% if notice.notice_type == 'biocultural' %}
                             <tr>
                                 <td class="image-td">
-                                    <img loading="lazy" src="{{ notice.bc_img_url }}" width="200px">
+                                    <img loading="lazy" src="{{ notice.img_url }}" width="200px">
                                 </td>
                                 <td class="text-td">
                                     <h1 class="no-bottom-margin">Biocultural Notice</h1>
-                                    <p> {{ notice.bc_default_text|linebreaks }} </p> 
+                                    <p> {{ notice.default_text|linebreaks }} </p> 
                                 </td>                        
                             </tr>
                         {% endif %}
                         {% if notice.notice_type == 'traditional_knowledge' %}
                             <tr>
                                 <td class="image-td">
-                                    <img loading="lazy" src="{{ notice.tk_img_url }}" width="200px">
+                                    <img loading="lazy" src="{{ notice.img_url }}" width="200px">
                                 </td>
                                 <td class="text-td">
                                     <h1 class="no-bottom-margin">Traditional Knowledge Notice</h1>
-                                    <p> {{ notice.tk_default_text|linebreaks }} </p> 
+                                    <p> {{ notice.default_text|linebreaks }} </p> 
                                 </td>                        
                             </tr>
                         {% endif %}
-                        {% if notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                            <tr>
-                                <td class="image-td">
-                                    <img loading="lazy" src="{{ notice.bc_img_url }}" width="200px">
-                                </td>
-                                <td class="text-td">
-                                    <h1 class="no-bottom-margin">Biocultural Notice</h1>
-                                    <p> {{ notice.bc_default_text|linebreaks }} </p> 
-                                </td>                        
-                            </tr>
-                            <tr>
-                                <td class="image-td">
-                                    <img loading="lazy" src="{{ notice.tk_img_url }}" width="200px">
-                                </td>
-                                <td class="text-td">
-                                    <h1 class="no-bottom-margin">Traditional Knowledge Notice</h1>
-                                    <p> {{ notice.tk_default_text|linebreaks }} </p> 
-                                </td>                        
-                            </tr>
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-
-            {% if project.project_institutional_notice.all %}
-                {% for notice in project.project_institutional_notice.all %}
-                    {% if not notice.archived %}
                         {% if notice.notice_type == 'attribution_incomplete' %}
                             <tr>
                                 <td class="image-td">

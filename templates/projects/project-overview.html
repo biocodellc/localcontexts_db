@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block title %} | Projects {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
 
-<div id="full-div-card-{{ project.unique_id }}" class="content-card-v2 content-card-space white-bg show filterProjects">
+<div id="full-div-card-{{ project.unique_id }}" class="content-card-v2 content-card-space show filterProjects">
     <div id="project-unique-{{ project.unique_id }}" class="flex-this space-between">
 
         <div class="w-60 flex-this column">
@@ -46,8 +46,7 @@
             <div class="flex-this margin-bottom-8 w-100 flex-end">
                 
                 {% if community %}
-                    {% if member_role == 'viewer' %}
-                    {% else %}
+                    {% if member_role == 'admin' or member_role == 'editor' %}
                         <div class="margin-right-1">
                             <a href="{% url 'apply-labels' community.id project.unique_id %}" class="primary-btn action-btn">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
                         </div>
@@ -113,45 +112,23 @@
                 {% endwith %}
 
 
-                {% with notices=project.project_notice.all inst_notices=project.project_institutional_notice.all %}
-
-                    {% if notices or inst_notices %}
-                        <input id="notice-{{ project.unique_id }}" class="projectNoticesFilter" type="hidden" value="notice_true">
-
-                        {% if notices %}
-                            {% for notice in notices %}
-                                {% if not notice.archived %}
-                                    <div class="flex-this flex-end">
-                                        {% if notice.notice_type == 'biocultural' %}
-                                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                        {% elif notice.notice_type == 'traditional_knowledge' %}
-                                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                                        {% elif notice.notice_type == 'biocultural_and_traditional_knowledge' %}
-                                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                                        {% endif %}
-                                    </div>
+                {% if project.project_notice.all %}
+                    {% for notice in project.project_notice.all %}
+                        {% if not notice.archived %}
+                            <div class="flex-this flex-end">
+                                {% if notice.notice_type == 'biocultural' %}
+                                    <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
                                 {% endif %}
-                            {% endfor %}
+                                {% if notice.notice_type == 'traditional_knowledge' %}
+                                    <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                {% endif %}
+                                {% if notice.notice_type == 'attribution_incomplete' %}
+                                    <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
+                                {% endif %}
+                            </div>
                         {% endif %}
-
-                        {% if inst_notices %}
-                            {% for notice in inst_notices %}
-                                {% if not notice.archived %}
-                                    <div class="flex-this flex-end">
-                                        {% if notice.notice_type == 'attribution_incomplete' %}
-                                            <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
-                                        {% endif %}
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %} 
-
-                    {% endif %}
-
-                {% endwith %}
-
-
+                    {% endfor %}
+                {% endif %}
 
             </div>
         </div>
@@ -184,8 +161,7 @@
                             <small class="margin-right-1 w-50 no-top-margin">In order to notify communities of your Project, your institution must be confirmed first.</small>
                         {% else %}
                             {% if project_creator.institution %}
-                                {% if member_role == 'viewer' %}
-                                {% else %}
+                                {% if member_role == 'admin' or member_role == 'editor' %}
                                     <div class="margin-right-1">
                                         <a href="{% url 'institution-notify-others' institution.id project.id %}" class="primary-btn action-btn">
                                             Notify Communities <i class="fa fa-users" aria-hidden="true"></i>

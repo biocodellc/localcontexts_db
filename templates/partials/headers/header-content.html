@@ -1,42 +1,41 @@
-        {% load static %}
-        <!-- LOGO -->
-        <div class="header-logo"><a href="{% url 'dashboard' %}"><img loading="lazy" src="{% static 'images/logos/logo.png' %}" alt="Local Contexts logo"></a></div>
+{% load static %}
 
-        <!-- NAV -->
-        <nav class="generic-nav flex-this flex-end">
+<div class="header-content">
+    <!-- LOGO -->
+    <div class="header-logo"><a href="{% url 'dashboard' %}"><img loading="lazy" src="{% static 'images/logos/logo.png' %}" alt="Local Contexts logo"></a></div>
 
-            <div class="nav-links-div flex-this align-center w-50">
-                <a 
-                    class="{% if request.get_full_path == '/registry/' %} active-link bold {% endif %} white-text upper" 
-                    href="{% url 'community-registry' %}"> Local Contexts Registry
+    <!-- NAV -->
+    <nav class="generic-nav flex-this flex-end">
+
+        <div class="nav-links-div flex-this space-between align-center w-100">
+            <a 
+                class="{% if request.get_full_path == '/registry/' %} active-link bold {% endif %} white-text upper" 
+                href="{% url 'community-registry' %}"> Local Contexts Registry
+            </a>
+            
+            {% if user.is_authenticated %}
+                <a
+                    class="{% if '/dashboard/' in request.path or '/update-profile/' in request.path or '/manage/' in request.path or '/change-password/' in request.path or '/deactivate/' in request.path %} 
+                                active-link bold 
+                            {% endif %} white-text upper" 
+                    href="{% url 'dashboard' %}">My Profile
                 </a>
-                
-                {% if user.is_authenticated %}
 
-                    <a
-                        class="{% if '/dashboard/' in request.path or '/update-profile/' in request.path or '/manage/' in request.path or '/change-password/' in request.path or '/deactivate/' in request.path %} 
-                                    active-link bold 
-                                {% endif %} white-text upper" 
-                        href="{% url 'dashboard' %}">My Profile
-                    </a>
+                <a class="auth-btn sign-out-btn" href="javascript:{document.getElementById('logout').submit()}">
+                    <form action="{% url 'logout' %}" method="POST" id="logout">
+                        {% csrf_token %}
+                        <input type="hidden">
+                    </form>
+                    Sign Out
+                </a>
+            {% else %}
+                <a
+                    class="{% if '/register/' in request.path %} active-link bold {% endif %} white-text upper" 
+                    href="{% url 'register' %}">Register
+                </a>
+                <a class="auth-btn sign-in-btn" href="{% url 'login' %}">Login</a>
+            {% endif %}
+        </div>
 
-                    <a class="auth-btn sign-out-btn" href="javascript:{document.getElementById('logout').submit()}">
-                        <form action="{% url 'logout' %}" method="POST" id="logout">
-                            {% csrf_token %}
-                            <input type="hidden">
-                        </form>
-                        Sign Out
-                    </a>
-
-                {% else %}
-
-                    <a
-                        class="{% if '/register/' in request.path %} active-link bold {% endif %} white-text upper" 
-                        href="{% url 'register' %}">Register
-                    </a>
-                    <a class="auth-btn sign-in-btn" href="{% url 'login' %}">Login</a>
-
-                {% endif %}
-            </div>
-
-        </nav>
+    </nav>            
+</div>

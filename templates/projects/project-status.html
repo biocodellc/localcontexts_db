@@ -12,7 +12,7 @@
 <div class="flex-this space-between margin-bottom-16">
     <div class="w-100">
 
-        {% if member_role == 'viewer' %}{% else %}
+        {% if member_role == 'admin' or member_role == 'editor' %}
 
             <form method="POST" action="">
                 {% csrf_token %}

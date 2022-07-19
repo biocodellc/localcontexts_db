@@ -1,0 +1,312 @@
+{% extends 'base.html' %} {% block title %} | View Account {% endblock %}{% load static %} {% load custom_acct_tags %} {% block content %}
+{% include 'partials/headers/_auth-header.html' %}
+
+    {% if community %}
+        <div class="dashcard">
+            <div class="flex-this">
+
+                <div class="dashcard-img-container">
+                    <img loading="lazy" 
+                        class="profile-img" 
+                        src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
+                        alt="{{ community.community_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3">{{ community }}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Community |
+                            {% if community.city_town %} {{ community.city_town }}, {% endif %} {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}
+                            {% if not community.city_town and not community.state_province_region and not community.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
+                    
+                    <!-- TODO: figure out where to put this -->
+                    {% include 'partials/_alerts.html' %}
+                    
+                </div>
+
+                {% if request.user.is_authenticated %}
+                    <div class="dashcard-btn-container">
+                        <div>
+                            {% join_request_comm community.id request.user as request_exists %}
+                            {% if request_exists or community in user_communities %}
+                                <div><a class="primary-btn disabled-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></a></div>
+                            {% else %}
+                                <form id="communityRegistryForm{{ community.id }}" method="POST" action="">
+                                    {% csrf_token %}
+                                    <div class="margin-top-8 margin-bottom-8"><a id="communityRequest-{{ community.id }}" class="darkteal-text underline-hover pointer">Request to join</a></div>
+                                </form>                                    
+                            {% endif %}                            
+                        </div>
+                        <div class="margin-left-16"><a id="communityContact-{{ community.id }}" class="primary-btn action-btn">Contact Us</a></div>
+                    </div>
+                {% if request.user.is_authenticated %}
+                    <div id="contactModalComm{{ community.id }}" class="modal hide">
+                        <div class="modal-defaults contact-modal flex-this column w-100">
+                            <div class="modal-content-padding w-100">
+                                <div class="flex-this space-between">
+                                    <div>
+                                        <h2 class="primary-black-text">Contact form</h2>  
+                                        <p>This message will be sent to the administrator of {{ community.community_name }}.</p>  
+                                    </div>
+                                    <div>
+                                        <div class="primary-btn white-btn close-modal-btn">Close X</div>
+                                    </div>
+                                </div>
+
+                                <form method="POST" action="">
+                                    {% csrf_token %}
+                                    
+                                    {{ form.as_p }}
+                    
+                                    <button class="primary-btn action-btn" name="contact_btn">Send message <i class="fa fa-envelope" aria-hidden="true"></i></button>
+                                </form>    
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            </div>
+            <div>
+                <div>
+                    <h3>Community Labels used</h3>
+
+                    <div class="flex-this w-100 wrap">
+                        {% if bclabels %}
+                            {% for bclabel in bclabels %}
+                                <div class="small-labels center-text margin-right-16 margin-bottom-16">
+                                    {% include 'bclabels/which-label.html' %}
+                                    <span class="bold">{{ bclabel.name }}</span>
+                                </div> 
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if tklabels %}
+                            {% for tklabel in tklabels %}
+                                <div class="small-labels center-text margin-right-16 margin-bottom-16">
+                                    {% include 'tklabels/which-label.html' %}
+                                    <span class="bold">{{ tklabel.name }}</span>
+                                </div> 
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+
+                </div>
+                
+                <div>
+                    <h3>Public Projects </h3>
+                    <ul>
+                        {% if projects %}
+                            {% for project in projects %}
+                                <li>
+                                    <a href="#" class="darkteal-text underline-hover">{{ project.title }}</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                                No public projects available
+                        {% endif %}                      
+                    </ul>                           
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if institution %}
+        <div class="dashcard">
+            <div class="flex-this">
+
+                <div class="dashcard-img-container">
+                    <img loading="lazy" 
+                        class="profile-img" 
+                        src="{% if institution.image %} {{ institution.image.url }} {% else %} {% static 'images/placeholders/institution-place.jpg' %}{% endif %}" 
+                        alt="{{ institution.institution_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3">{{ institution }}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Institution |
+                            {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}
+                            {% if not institution.city_town and not institution.state_province_region and not institution.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }}{% else %} No description provided. {% endif %}</p></div>
+                </div>
+
+                {% if request.user.is_authenticated %}
+                    <div class="dashcard-btn-container">
+                        <div>
+                            {% join_request_inst institution.id request.user as request_exists %}
+                            {% if request_exists or institution in user_institutions %}
+                                <div><a class="primary-btn disabled-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></a></div>
+                            {% else %}
+                                <form id="institutionRegistryForm{{ institution.id }}" method="POST" action="">
+                                    {% csrf_token %}
+                                    <div class="margin-top-8 margin-bottom-8"><a id="institutionRequest-{{ institution.id }}" class="darkteal-text underline-hover pointer">Request to join</a></div>
+                                </form>
+                            {% endif %}                                
+                        </div>
+                        
+                        <div class="margin-left-16"><a id="institutionContact-{{ institution.id }}" class="primary-btn action-btn">Contact Us</a></div>
+                    </div>
+
+                    {% if request.user.is_authenticated %}
+                        <div id="contactModalInst{{ institution.id }}" class="modal hide">
+                            <div class="modal-defaults contact-modal flex-this column w-100">
+                                <div class="modal-content-padding w-100">
+                                    <div class="flex-this space-between">
+                                        <div>
+                                            <h2 class="primary-black-text">Contact form</h2>  
+                                            <p>This message will be sent to the administrator of {{ institution.institution_name }}.</p>  
+                                        </div>
+                                        <div>
+                                            <div class="primary-btn white-btn close-modal-btn">Close X</div>
+                                        </div>
+                                    </div>
+
+                                    <form method="POST" action="">
+                                        {% csrf_token %}
+                                        {{ form.as_p }}
+                                        <button class="primary-btn action-btn" name="contact_btn">Send message</button>
+                                    </form>    
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+            </div>
+            <div>
+                <div>
+                    <h3>Notices</h3>
+                    coming soon
+                </div>
+                
+                <div>
+                    <h3>Public Projects </h3>
+                    <ul>
+                        {% if projects %}
+                            {% for project in projects %}
+                                <li>
+                                    <a href="{% url 'view-project' project.unique_id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                                No public projects available
+                        {% endif %}                        
+                    </ul>                           
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if researcher %}
+        <div class="dashcard">
+            <div class="flex-this">
+
+                <div class="researcher-img-container">
+                    <img loading="lazy" 
+                        src=" {% if researcher.image %} {{ researcher.image.url }} {% else %} {% static 'images/placeholders/researcher-place.jpg' %} {% endif %}" 
+                        alt="{{ researcher.researcher_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3">{% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Researcher | 
+                            {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
+                            {% if profile.state_province_region %} {{ profile.state_province_region }}, {% endif %} 
+                            {% if profile.country.name %} {{ profile.country.name }}{% endif %}
+                            {% if not profile.city_town and not profile.state_province_region and not profile.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }}{% else %} No description provided. {% endif %}</p></div>
+                </div>
+
+                {% if request.user.is_authenticated %}
+                    {% if researcher.contact_email_public %}
+                        <div class="dashcard-btn-container">
+                            <div class="margin-left-16"><a id="researcherContact-{{ researcher.id }}" class="primary-btn action-btn">Contact Me</a></div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {% if request.user.is_authenticated %}
+                    <div id="contactModalResearcher{{ researcher.id }}" class="modal hide">
+                        <div class="modal-defaults contact-modal flex-this column w-100">
+                            <div class="modal-content-padding w-100">
+                                <div class="flex-this space-between">
+                                    <div>
+                                        <h2 class="primary-black-text">Contact form</h2>  
+                                        <p>This message will be sent to {% if researcher.user.get_full_name %}{{ researcher.user.get_full_name }}{% else %} {{ researcher.user.username }}{% endif %}.</p>  
+                                    </div>
+                                    <div>
+                                        <div class="primary-btn white-btn close-modal-btn">Close X</div>
+                                    </div>
+                                </div>
+
+                                <form method="POST" action="">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                    
+                                    <button class="primary-btn action-btn" name="contact_btn">Send message</button>
+                                </form>    
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+            <div>
+                <div>
+                    <h3>Notices</h3>
+                    coming soon
+                </div>
+                
+                <div>
+                    <h3>Public Projects </h3>
+                    <ul>
+                        {% if projects %}
+                            {% for project in projects %}
+                                <li>
+                                    <a href="{% url 'view-project' project.unique_id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                                No public projects available
+                        {% endif %}                        
+                    </ul>                           
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+        <div id="registryModal" class="modal hide">
+            <div class="modal-defaults registry-modal flex-this column w-100">
+                <div class="modal-content-padding w-100">
+                    <div>
+                        <h2 class="primary-black-text">Just checking...</h2>  
+                        <p>Are you sure you want to send a request to join this account?</p>  
+                    </div>
+                    <div class="flex-this w-100 text-align-center">
+                        <div id="closeRegistryModal" class="primary-btn white-btn margin-right-1 w-50 center-text">Cancel</div>    
+                        <button id="submitRegistryForm" class="margin-left-1 primary-btn action-btn w-50 center-text">Send Request</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% include 'partials/footers/_auth-footer.html' %}
+{% endblock %}

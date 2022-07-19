@@ -1,6 +1,6 @@
 {% extends 'sub-base.html' %} {% block title %} | Select Label {% endblock %}{% load static %} {% load custom_tags%} {% block community_content %}
 
-<div class="content-card-v2 content-card-space white-bg">
+<div class="content-card-v2 content-card-space">
 
     <div class="w-70">
         <h2 class="no-top-margin">TK and BC Labels</h2>
@@ -11,7 +11,7 @@
 
 </div>
 
-<div class="content-card-v2 content-card-space white-bg">
+<div class="content-card-v2 content-card-space">
 
     <div class="w-100">
         <h2 class="no-bottom-margin no-top-margin">Customized Labels</h2>
@@ -41,20 +41,19 @@
             {% for bclabel in bclabels %}
 
                 {% if not bclabel.is_approved %}
-                <div class="w-20">
-                    <small class="center-text block bold darkteal-text margin-bottom-8">
-                        {% if request.user == tklabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
-                    </small>
-                    <div class="margin-top-16 margin-bottom-16">
-                        <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
-                            <div class="auto-margin">
-                                {% include 'bclabels/mini-labels.html' %}
-                                <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ bclabel.name }}</p>
+                    <div class="w-20">
+                        <small class="center-text block bold darkteal-text margin-bottom-8">
+                            {% if request.user == bclabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
+                        </small>
+                        <div class="margin-top-16 margin-bottom-16">
+                            <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
+                                <div class="auto-margin">
+                                    {% include 'bclabels/mini-labels.html' %}
+                                    <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ bclabel.name }}</p>
+                                </div>
                             </div>
-                        </div>
-                    </div>                    
-                </div>
-
+                        </div>                    
+                    </div>
                 {% endif %}
 
             {% endfor %}
@@ -127,8 +126,6 @@
                                             <div class="margin-top-1">
                                                 <a class="primary-btn action-btn" href="{% url 'approve-label' community.id bclabel.unique_id %}">Review for Approval</a>
                                             </div>
-                                        {% elif member_role == 'viewer' %}
-
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
@@ -179,8 +176,6 @@
                                             <div class="margin-top-1">
                                                 <a class="primary-btn action-btn" href="{% url 'approve-label' community.id tklabel.unique_id %}">Review for Approval</a>
                                             </div>
-                                        {% elif member_role == 'viewer' %}
-
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}
@@ -229,7 +224,7 @@
 
 
 <!-- TK Label Card -->
-<div id="collapsed-tkcard" class="content-card-v2 content-card-space white-bg flex-this column">
+<div id="collapsed-tkcard" class="content-card-v2 content-card-space flex-this column">
 
     <div id="tklabels-title-vertical" style="margin:auto 0;">
         <div class="flex-this space-between">
@@ -351,10 +346,8 @@
                                     <p id="label-template-text-tk-prov"></p>
                                 </div>
                                 <div class="right-text">
-                                    {% if member_role == 'viewer' %}
-
-                                    {% else %}
-                                        <button id="btnTKProv" class="primary-btn action-btn margin-top-2 ">Customize this Label <i class="fa fa-arrow-right"></i></button>
+                                    {% if member_role == 'admin' or member_role == 'editor' %}
+                                        <button id="btnTKProv" class="primary-btn action-btn margin-top-2">Customize this Label <i class="fa fa-arrow-right"></i></button>
                                     {% endif %}
                                 </div>
                             </div>
@@ -479,10 +472,8 @@
                                 </div>
 
                                 <div class="right-text">
-                                    {% if member_role == 'viewer' %}
-        
-                                    {% else %}
-                                        <button id="btnTKProt" class="primary-btn action-btn margin-top-2 ">Customize this Label <i class="fa fa-arrow-right"></i></button>
+                                    {% if member_role == 'admin' or member_role == 'editor' %}
+                                        <button id="btnTKProt" class="primary-btn action-btn margin-top-2">Customize this Label <i class="fa fa-arrow-right"></i></button>
                                     {% endif %}
                                 </div>
                             </div>
@@ -577,9 +568,7 @@
                                 </div>
 
                                 <div>
-                                    {% if member_role == 'viewer' %}
-
-                                    {% else %}
+                                    {% if member_role == 'admin' or member_role == 'editor' %}
                                         <button id="btnTKPerms" class="primary-btn action-btn margin-top-2">Customize Label <i class="fa fa-arrow-right"></i></button>
                                     {% endif %}
                                 </div>
@@ -595,7 +584,7 @@
 </div>
 
 <!-- BC Label Card -->
-<div id="collapsed-card" class="content-card-v2 content-card-space white-bg flex-this column">
+<div id="collapsed-card" class="content-card-v2 content-card-space flex-this column">
 
     <div id="bclabels-title-vertical" style="margin:auto 0;">
         <div class="flex-this space-between">
@@ -691,9 +680,7 @@
                             </div>
         
                             <div class="right-text">
-                                {% if member_role == 'viewer' %}
-        
-                                {% else %}
+                                {% if member_role == 'admin' or member_role == 'editor' %}
                                     <button id="btnBCProv" class="primary-btn action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-arrow-right"></i></button>
                                 {% endif %}
                             </div>
@@ -763,9 +750,7 @@
                             </div>
         
                             <div class="right-text">
-                                {% if member_role == 'viewer' %}
-        
-                                {% else %}
+                                {% if member_role == 'admin' or member_role == 'editor' %}
                                     <button id="btnBCProt" class="primary-btn action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-arrow-right"></i></button>
                                 {% endif %}
                             </div>
@@ -863,9 +848,7 @@
                             </div>
 
                             <div class="right-text">
-                                {% if member_role == 'viewer' %}
-
-                                {% else %}
+                                {% if member_role == 'admin' or member_role == 'editor' %}
                                     <button id="btnBCPerms" class="primary-btn action-btn margin-top-2 margin-bottom-8">Customize this Label <i class="fa fa-arrow-right"></i></button>
                                 {% endif %}
                             </div>

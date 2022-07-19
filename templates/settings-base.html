@@ -2,76 +2,73 @@
 
 {% if user.is_authenticated %}
 
-<section class="grey-bg">
     {% include 'partials/infocards/_user-info.html' %}
 
-        <div class="content-card-v2 content-card-space white-bg flex-this column">
-            <h2>User Settings</h2>
-    
-            <div class="flex-this w-100">
-    
-                <div class="flex-this column set-nav margin-right-1 margin-bottom-2" style="min-height: 350px;">
+    <div class="content-card-v2 content-card-space flex-this column">
+        <h2>User Settings</h2>
 
-                    <a href="{% url 'update-profile' %}">
-                        {% if 'update-profile' in request.path %} 
-                        <div class="flex-this side-nav-item selected">
-                        {% else %}
-                        <div class="flex-this side-nav-item grey-text">
-                        {% endif %}
-                            <div class="w-20 margin-right-8"><i class="fa fa-user fa-3x" aria-hidden="true"></i></div>
-                            <div class="w-80">
-                                <p class="no-top-margin"><strong>Profile</strong><br>Contact name, email, location</p>
-                            </div>  
-                        </div>   
-                    </a>
+        <div class="flex-this w-100">
 
-                    <a href="{% url 'manage-orgs' %}">
-                        {% if 'manage' in request.path %} 
-                        <div class="flex-this side-nav-item selected">
-                        {% else %}
-                        <div class="flex-this side-nav-item grey-text">
-                        {% endif %}
-                            <div class="w-20 margin-right-8"><i class="fa fa-users fa-3x" aria-hidden="true"></i></div>
-                            <div class="w-80">
-                                <p class="no-top-margin"><strong>Accounts</strong><br>Manage your accounts</p>
-                            </div>  
-                        </div>
-                    </a>
+            <div class="flex-this column set-nav margin-right-1 margin-bottom-2" style="min-height: 350px;">
 
-                    <a href="{% url 'change-password' %}">
-                        {% if 'change-password' in request.path %} 
-                        <div class="flex-this side-nav-item selected">
-                        {% else %}
-                        <div class="flex-this side-nav-item grey-text">
-                        {% endif %}
-                            <div class="w-20 margin-right-8"><i class="fa fa-key fa-3x" aria-hidden="true"></i></div>
-                            <div class="w-80">
-                                <p class="no-top-margin"><strong>Password</strong><br>Change your password</p>
-                            </div>  
-                        </div>
-                    </a>
+                <a href="{% url 'update-profile' %}">
+                    {% if 'update-profile' in request.path %} 
+                    <div class="flex-this side-nav-item selected">
+                    {% else %}
+                    <div class="flex-this side-nav-item grey-text">
+                    {% endif %}
+                        <div class="w-20 margin-right-8"><i class="fa fa-user fa-3x" aria-hidden="true"></i></div>
+                        <div class="w-80">
+                            <p class="no-top-margin"><strong>Profile</strong><br>Contact name, email, location</p>
+                        </div>  
+                    </div>   
+                </a>
 
-                    <a href="{% url 'deactivate-user' %}">
-                        {% if 'deactivate' in request.path %} 
-                        <div class="flex-this side-nav-item selected">
-                        {% else %}
-                        <div class="flex-this side-nav-item grey-text">
-                        {% endif %}
-                            <div class="w-20 margin-right-8"><i class="fa fa-power-off fa-3x" aria-hidden="true"></i></div>
-                            <div class="w-80">
-                                <p class="no-top-margin"><strong>Deactivate</strong><br>Deactivate your profile</p>
-                            </div>  
-                        </div>
-                    </a>
+                <a href="{% url 'manage-orgs' %}">
+                    {% if 'manage' in request.path %} 
+                    <div class="flex-this side-nav-item selected">
+                    {% else %}
+                    <div class="flex-this side-nav-item grey-text">
+                    {% endif %}
+                        <div class="w-20 margin-right-8"><i class="fa fa-users fa-3x" aria-hidden="true"></i></div>
+                        <div class="w-80">
+                            <p class="no-top-margin"><strong>Accounts</strong><br>Manage your accounts</p>
+                        </div>  
+                    </div>
+                </a>
 
-                </div>
+                <a href="{% url 'change-password' %}">
+                    {% if 'change-password' in request.path %} 
+                    <div class="flex-this side-nav-item selected">
+                    {% else %}
+                    <div class="flex-this side-nav-item grey-text">
+                    {% endif %}
+                        <div class="w-20 margin-right-8"><i class="fa fa-key fa-3x" aria-hidden="true"></i></div>
+                        <div class="w-80">
+                            <p class="no-top-margin"><strong>Password</strong><br>Change your password</p>
+                        </div>  
+                    </div>
+                </a>
 
-                {% block settings %}{% endblock %}
+                <a href="{% url 'deactivate-user' %}">
+                    {% if 'deactivate' in request.path %} 
+                    <div class="flex-this side-nav-item selected">
+                    {% else %}
+                    <div class="flex-this side-nav-item grey-text">
+                    {% endif %}
+                        <div class="w-20 margin-right-8"><i class="fa fa-power-off fa-3x" aria-hidden="true"></i></div>
+                        <div class="w-80">
+                            <p class="no-top-margin"><strong>Deactivate</strong><br>Deactivate your profile</p>
+                        </div>  
+                    </div>
+                </a>
+
             </div>
-    
+
+            {% block settings %}{% endblock %}
         </div>
 
-</section>
+    </div>
 
 {% endif %}
 

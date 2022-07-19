@@ -21,7 +21,7 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
-from helpers.models import Notice, InstitutionNotice
+from helpers.models import Notice
 from notifications.models import UserNotification
 from projects.models import Project, ProjectCreator
 
@@ -312,48 +312,6 @@ def registry_communities(request):
         p = Paginator(c, 5)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
-
-        if request.user.is_authenticated:
-            user_communities = UserAffiliation.objects.prefetch_related('communities').get(user=request.user).communities.all()
-            form = ContactOrganizationForm(request.POST or None)
-
-            if request.method == 'POST':
-                if 'contact_btn' in request.POST:
-                    # contact community
-                    if form.is_valid():
-                        to_email = ''
-                        from_name = form.cleaned_data['name']
-                        from_email = form.cleaned_data['email']
-                        message = form.cleaned_data['message']
-
-                        # which community
-                        comm_contact_id = request.POST.get('commid_contact')
-                        
-                        if comm_contact_id:
-                            comm = Community.objects.select_related('community_creator').get(id=comm_contact_id)
-                            to_email = comm.community_creator.email
-                        
-                        send_contact_email(to_email, from_name, from_email, message)
-                else:
-                    # Request To Join community
-                    comm_input_id = request.POST.get('commid')
-
-                    if comm_input_id:
-                        target_community = Community.objects.select_related('community_creator').get(id=comm_input_id)
-                        main_admin = target_community.community_creator
-                        join_request = JoinRequest.objects.create(user_from=request.user, community=target_community, user_to=main_admin)
-                        join_request.save()
-
-                        # Send email to community creator
-                        send_join_request_email_admin(request, join_request, target_community)
-
-                messages.add_message(request, messages.SUCCESS, 'Sent!')
-                return redirect('community-registry')
-
-            else:
-                context = { 'communities': True, 'items': page, 'form': form, 'user_communities': user_communities,}
-                return render(request, 'accounts/registry.html', context)
-
         context = { 'communities': True, 'items': page }
         return render(request, 'accounts/registry.html', context)
     except:
@@ -367,47 +325,6 @@ def registry_institutions(request):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
 
-        if request.user.is_authenticated:
-            user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()
-            form = ContactOrganizationForm(request.POST or None)
-
-            if request.method == 'POST':
-                if 'contact_btn' in request.POST:
-                    # contact institution
-                    if form.is_valid():
-                        to_email = ''
-                        from_name = form.cleaned_data['name']
-                        from_email = form.cleaned_data['email']
-                        message = form.cleaned_data['message']
-
-                        # which institution
-                        inst_contact_id = request.POST.get('instid_contact')
-                        
-                        if inst_contact_id:
-                            inst = Institution.objects.select_related('institution_creator').get(id=inst_contact_id)
-                            to_email = inst.institution_creator.email
-                        
-                        send_contact_email(to_email, from_name, from_email, message)
-                else:
-                    # Request To Join institution
-                    inst_input_id = request.POST.get('instid')
-
-                    if inst_input_id:
-                        target_institution = Institution.objects.select_related('institution_creator').get(id=inst_input_id)
-                        main_admin = target_institution.institution_creator
-                        join_request = JoinRequest.objects.create(user_from=request.user, institution=target_institution, user_to=main_admin)
-                        join_request.save()
-
-                        # Send email to institution creator
-                        send_join_request_email_admin(request, join_request, target_institution)
-
-                messages.add_message(request, messages.SUCCESS, 'Sent!')
-                return redirect('institution-registry')
-
-            else:
-                context = { 'institutions': True, 'items': page, 'form': form, 'user_institutions': user_institutions,}
-                return render(request, 'accounts/registry.html', context)
-
         context = { 'institutions': True, 'items': page,}
         return render(request, 'accounts/registry.html', context)
     except:
@@ -420,30 +337,6 @@ def registry_researchers(request):
         p = Paginator(r, 5)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
-
-        form = ContactOrganizationForm(request.POST or None)
-
-        if request.method == 'POST':
-            if 'contact_btn' in request.POST:
-                # contact researcher
-                if form.is_valid():
-                    to_email = ''
-                    from_name = form.cleaned_data['name']
-                    from_email = form.cleaned_data['email']
-                    message = form.cleaned_data['message']
-
-                    res_contact_id = request.POST.get('resid_contact')
-
-                    if res_contact_id:
-                        researcher = Researcher.objects.select_related('user').get(id=res_contact_id)
-                        to_email = researcher.contact_email
-
-                    send_contact_email(to_email, from_name, from_email, message)
-                    messages.add_message(request, messages.SUCCESS, 'Sent!')
-                    return redirect('researcher-registry')
-        else:
-            context = { 'researchers': True, 'items': page, 'form': form,}
-            return render(request, 'accounts/registry.html', context)
 
         context = { 'researchers': True, 'items': page,}
         return render(request, 'accounts/registry.html', context)
@@ -459,6 +352,7 @@ def hub_counter(request):
 
     bc_notice_count = 0
     tk_notice_count = 0
+    attr_notice_count = 0
 
     community_count = 0
     institution_count = 0
@@ -495,12 +389,9 @@ def hub_counter(request):
                 bc_notice_count += 1
             if notice.notice_type == 'traditional_knowledge':
                 tk_notice_count += 1
-            if notice.notice_type == 'biocultural_and_traditional_knowledge':
-                bc_notice_count += 1
-                tk_notice_count += 1
-        
-        institution_notices_count = InstitutionNotice.objects.exclude(institution=1).count()     
-        notices_total = bc_notice_count + tk_notice_count + institution_notices_count
+            if notice.notice_type == 'attribution_incomplete':
+                attr_notice_count += 1
+        notices_total = bc_notice_count + tk_notice_count + attr_notice_count
 
         # Project Counts -- excludes accounts created by ADMIN
         # Community projects
@@ -538,12 +429,9 @@ def hub_counter(request):
                 bc_notice_count += 1
             if notice.notice_type == 'traditional_knowledge':
                 tk_notice_count += 1
-            if notice.notice_type == 'biocultural_and_traditional_knowledge':
-                bc_notice_count += 1
-                tk_notice_count += 1
-                
-        institution_notices_count = InstitutionNotice.objects.count()     
-        notices_total = bc_notice_count + tk_notice_count + institution_notices_count
+            if notice.notice_type == 'attribution_incomplete':
+                attr_notice_count += 1
+        notices_total = bc_notice_count + tk_notice_count + attr_notice_count
 
         # Project Counts -- excludes accounts created by ADMIN
         # Community projects
