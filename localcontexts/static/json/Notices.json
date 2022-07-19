@@ -9,7 +9,7 @@
     },
     {
         "id": 2,
-        "noticeName": "Biocultural Notice",
+        "noticeName": "Biocultural (BC) Notice",
         "noticeType": "biocultural",
         "noticeDefaultText": "The BC (Biocultural) Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information (DSI) generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC Labels are in development and their implementation is being negotiated.",
         "imgFileName": "bc-notice.png",
@@ -17,7 +17,7 @@
     },
     {
         "id": 3,
-        "noticeName": "Traditional Knowledge Notice",
+        "noticeName": "Traditional Knowledge (TK) Notice",
         "noticeType": "traditional_knowledge",
         "noticeDefaultText": "The TK (Traditional Knowledge) Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated.",
         "imgFileName": "tk-notice.png",

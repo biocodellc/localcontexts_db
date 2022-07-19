@@ -63,7 +63,7 @@ class TKLabelSerializer(serializers.ModelSerializer):
 class NoticeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notice
-        fields = ('notice_type', 'img_url', 'svg_url', 'default_text', 'created', 'updated',)
+        fields = ('notice_type', 'name', 'img_url', 'svg_url', 'default_text', 'created', 'updated',)
 
 class ProjectOverviewSerializer(serializers.ModelSerializer):
     class Meta:

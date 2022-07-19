@@ -211,6 +211,7 @@ def set_notice_defaults(notice):
 
     for item in data:
         if item['noticeType'] == notice.notice_type:
+            notice.name = item['noticeName']
             notice.img_url = baseURL + item['imgFileName']
             notice.svg_url = baseURL + item['svgFileName']
             notice.default_text = item['noticeDefaultText']

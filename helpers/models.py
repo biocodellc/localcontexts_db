@@ -1,8 +1,5 @@
-from statistics import mode
-from tabnanny import verbose
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.fields import TextField
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from communities.models import Community
@@ -18,7 +15,7 @@ class Notice(models.Model):
     )
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_notice", db_index=True)
     notice_type = models.CharField(max_length=50, null=True, choices=TYPES)
-    notice_name = models.CharField(max_length=60, null=True, blank=True)
+    name = models.CharField(max_length=60, null=True, blank=True)
     researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
     institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
     img_url = models.URLField(blank=True, null=True)
