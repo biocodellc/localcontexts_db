@@ -58,37 +58,38 @@ def connect_researcher(request):
         return redirect('researcher-notices', researcher.id)
 
 def public_researcher_view(request, pk):
-    researcher = Researcher.objects.get(id=pk)
-    created_projects = ProjectCreator.objects.filter(researcher=researcher)
-    notices = Notice.objects.filter(researcher=researcher)
-    projects = []
-
-    for p in created_projects:
-        if p.project.project_privacy == 'Public':
-            projects.append(p.project)
     try:
-        form = ContactOrganizationForm(request.POST or None)
+        researcher = Researcher.objects.get(id=pk)
+        created_projects = ProjectCreator.objects.filter(researcher=researcher)
+        notices = Notice.objects.filter(researcher=researcher)
+        projects = []
 
-        if request.method == 'POST':
-            # contact researcher
-            if form.is_valid():
-                to_email = ''
-                from_name = form.cleaned_data['name']
-                from_email = form.cleaned_data['email']
-                message = form.cleaned_data['message']
-                to_email = researcher.contact_email
+        for p in created_projects:
+            if p.project.project_privacy == 'Public':
+                projects.append(p.project)
+        if request.user.is_authenticated:
+            form = ContactOrganizationForm(request.POST or None)
 
-                send_contact_email(to_email, from_name, from_email, message)
-                messages.add_message(request, messages.SUCCESS, 'Sent!')
-                return redirect('public-researcher', researcher.id)
-        else:
-            context = { 
-                'researcher': researcher,
-                'projects' : projects,
-                'notices': notices,
-                'form': form,
-            }
-            return render(request, 'public.html', context)
+            if request.method == 'POST':
+                # contact researcher
+                if form.is_valid():
+                    to_email = ''
+                    from_name = form.cleaned_data['name']
+                    from_email = form.cleaned_data['email']
+                    message = form.cleaned_data['message']
+                    to_email = researcher.contact_email
+
+                    send_contact_email(to_email, from_name, from_email, message)
+                    messages.add_message(request, messages.SUCCESS, 'Sent!')
+                    return redirect('public-researcher', researcher.id)
+            else:
+                context = { 
+                    'researcher': researcher,
+                    'projects' : projects,
+                    'notices': notices,
+                    'form': form,
+                }
+                return render(request, 'public.html', context)
 
         context = { 
             'researcher': researcher,

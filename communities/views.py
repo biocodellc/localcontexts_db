@@ -127,16 +127,17 @@ def confirm_community(request, community_id):
     return render(request, 'accounts/confirm-account.html', {'form': form, 'community': community,})
 
 def public_community_view(request, pk):
-    community = Community.objects.get(id=pk)
-    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
-    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
-    created_projects = ProjectCreator.objects.filter(community=community)
-    projects = []
-
-    for p in created_projects:
-        if p.project.project_privacy == 'Public':
-            projects.append(p.project)
     try: 
+        community = Community.objects.get(id=pk)
+        bclabels = BCLabel.objects.filter(community=community, is_approved=True)
+        tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+        created_projects = ProjectCreator.objects.filter(community=community)
+        projects = []
+
+        for p in created_projects:
+            if p.project.project_privacy == 'Public':
+                projects.append(p.project)
+
         if request.user.is_authenticated:
             user_communities = UserAffiliation.objects.prefetch_related('communities').get(user=request.user).communities.all()
             form = ContactOrganizationForm(request.POST or None)

@@ -144,16 +144,16 @@ def confirm_institution(request, institution_id):
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
 
 def public_institution_view(request, pk):
-    institution = Institution.objects.get(id=pk)
-    created_projects = ProjectCreator.objects.filter(institution=institution)
-    notices = Notice.objects.filter(institution=institution)
-    projects = []
-
-    for p in created_projects:
-        if p.project.project_privacy == 'Public':
-            projects.append(p.project)
-    
     try:
+        institution = Institution.objects.get(id=pk)
+        created_projects = ProjectCreator.objects.filter(institution=institution)
+        notices = Notice.objects.filter(institution=institution)
+        projects = []
+
+        for p in created_projects:
+            if p.project.project_privacy == 'Public':
+                projects.append(p.project)
+        
         if request.user.is_authenticated:
             user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()
             form = ContactOrganizationForm(request.POST or None)
