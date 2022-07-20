@@ -187,7 +187,20 @@
             <div>
                 <div>
                     <h3>Notices</h3>
-                    coming soon
+                    <div class="flex-this">
+                        {% if bcnotice %} 
+                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="115px" alt="black square with white letters BC in the middle"></div>
+                        {% endif %}
+
+                        {% if tknotice %} 
+                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="115px" alt="black square with white letters TK in the middle"></div>
+                        {% endif %}
+
+                        {% if attrnotice %} 
+                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="115px"></div>
+                        {% endif %}
+                        {% if not bcnotice and not tknotice and not attrnotice %} No Notices to display yet {% endif %}
+                    </div>
                 </div>
                 
                 <div>
@@ -235,9 +248,11 @@
 
                 {% if request.user.is_authenticated %}
                     {% if researcher.contact_email_public %}
-                        <div class="dashcard-btn-container">
-                            <div class="margin-left-16"><a id="researcherContact-{{ researcher.id }}" class="primary-btn action-btn">Contact Me</a></div>
-                        </div>
+                        {% if not researcher.user == request.user %}
+                            <div class="dashcard-btn-container">
+                                <div class="margin-left-16"><a id="researcherContact-{{ researcher.id }}" class="primary-btn action-btn">Contact Me</a></div>
+                            </div>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
 
@@ -270,7 +285,20 @@
             <div>
                 <div>
                     <h3>Notices</h3>
-                    coming soon
+                    <div class="flex-this">
+                        {% if bcnotice %} 
+                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="115px" alt="black square with white letters BC in the middle"></div>
+                        {% endif %}
+
+                        {% if tknotice %} 
+                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="115px" alt="black square with white letters TK in the middle"></div>
+                        {% endif %}
+
+                        {% if attrnotice %} 
+                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="115px"></div>
+                        {% endif %}
+                        {% if not bcnotice and not tknotice and not attrnotice %} No Notices to display yet {% endif %}
+                    </div>
                 </div>
                 
                 <div>

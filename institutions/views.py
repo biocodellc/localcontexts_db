@@ -144,16 +144,27 @@ def confirm_institution(request, institution_id):
     return render(request, 'accounts/confirm-account.html', {'form': form, 'institution': institution,})
 
 def public_institution_view(request, pk):
-    institution = Institution.objects.get(id=pk)
-    created_projects = ProjectCreator.objects.filter(institution=institution)
-    notices = Notice.objects.filter(institution=institution)
-    projects = []
-
-    for p in created_projects:
-        if p.project.project_privacy == 'Public':
-            projects.append(p.project)
-    
     try:
+        institution = Institution.objects.get(id=pk)
+        created_projects = ProjectCreator.objects.filter(institution=institution)
+
+        # Do notices exist
+        bcnotice = False
+        tknotice = False
+        attrnotice = False
+        if Notice.objects.filter(institution=institution, notice_type='biocultural').exists():
+            bcnotice = True
+        if Notice.objects.filter(institution=institution, notice_type='traditional_knowledge').exists():
+            tknotice = True
+        if Notice.objects.filter(institution=institution, notice_type='attribution_incomplete').exists():
+            attrnotice = True
+
+        projects = []
+
+        for p in created_projects:
+            if p.project.project_privacy == 'Public':
+                projects.append(p.project)
+        
         if request.user.is_authenticated:
             user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()
             form = ContactOrganizationForm(request.POST or None)
@@ -185,16 +196,20 @@ def public_institution_view(request, pk):
                 context = { 
                     'institution': institution,
                     'projects' : projects,
-                    'notices': notices, 
                     'form': form, 
                     'user_institutions': user_institutions,
+                    'bcnotice': bcnotice,
+                    'tknotice': tknotice,
+                    'attrnotice': attrnotice,
                 }
                 return render(request, 'public.html', context)
 
         context = { 
             'institution': institution,
             'projects' : projects,
-            'notices': notices,
+            'bcnotice': bcnotice,
+            'tknotice': tknotice,
+            'attrnotice': attrnotice,
         }
         return render(request, 'public.html', context)
     except:
