@@ -61,7 +61,18 @@ def public_researcher_view(request, pk):
     try:
         researcher = Researcher.objects.get(id=pk)
         created_projects = ProjectCreator.objects.filter(researcher=researcher)
-        notices = Notice.objects.filter(researcher=researcher)
+
+        # Do notices exist
+        bcnotice = False
+        tknotice = False
+        attrnotice = False
+        if Notice.objects.filter(researcher=researcher, notice_type='biocultural').exists():
+            bcnotice = True
+        if Notice.objects.filter(researcher=researcher, notice_type='traditional_knowledge').exists():
+            tknotice = True
+        if Notice.objects.filter(researcher=researcher, notice_type='attribution_incomplete').exists():
+            attrnotice = True
+
         projects = []
 
         for p in created_projects:
@@ -86,15 +97,19 @@ def public_researcher_view(request, pk):
                 context = { 
                     'researcher': researcher,
                     'projects' : projects,
-                    'notices': notices,
                     'form': form,
+                    'bcnotice': bcnotice,
+                    'tknotice': tknotice,
+                    'attrnotice': attrnotice,
                 }
                 return render(request, 'public.html', context)
 
         context = { 
             'researcher': researcher,
             'projects' : projects,
-            'notices': notices,
+            'bcnotice': bcnotice,
+            'tknotice': tknotice,
+            'attrnotice': attrnotice,
         }
         return render(request, 'public.html', context)
     except:
