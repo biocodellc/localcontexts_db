@@ -1254,12 +1254,10 @@ def apply_labels(request, pk, project_uuid):
     tklabels = TKLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community, is_approved=True)
 
     notices = project.project_notice.all()
-    institution_notices = project.project_institutional_notice.all()
 
     # Define Notification attrs
     reference_id = str(project.unique_id)
     truncated_project_title = str(project.title)[0:30]
-    title = community.community_name + ' has applied Labels to project ' + truncated_project_title + ' ...'
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -1283,7 +1281,7 @@ def apply_labels(request, pk, project_uuid):
                 tklabel = TKLabel.objects.get(unique_id=tklabel_uuid)
                 project.tk_labels.add(tklabel)
             
-            if notices or institution_notices:
+            if notices:
                 # add community to project contributors
                 contributors = ProjectContributors.objects.get(project=project)
                 contributors.communities.add(community)
@@ -1291,33 +1289,6 @@ def apply_labels(request, pk, project_uuid):
             else:
                 comm_title = 'Labels have been applied to the project ' + truncated_project_title + ' ...'
                 ActionNotification.objects.create(title=comm_title, notification_type='Projects', community=community, reference_id=reference_id)
-
-            # If Notice exists
-            if notices or institution_notices:
-                for n in notices:
-                    # Archive notice
-                    n.archived = True
-                    n.save()
-                    # send notification to either institution or researcher
-                    if n.institution:
-                        # Add institution to community connections, then add community to institution connections
-                        add_to_connections(community, n.institution)
-                        add_to_connections(n.institution, community)
-                        ActionNotification.objects.create(title=title, institution=n.institution, notification_type='Labels', reference_id=reference_id)
-                    if n.researcher:
-                        # Add researcher to community connections, then add community to researcher connections
-                        add_to_connections(community, n.researcher)
-                        add_to_connections(n.researcher, community)
-                        ActionNotification.objects.create(title=title, researcher=n.researcher, notification_type='Labels', reference_id=reference_id)
-                
-                for inst_n in institution_notices:
-                    inst_n.archived= True
-                    inst_n.save()
-
-                    # Notify institution and add to connections
-                    add_to_connections(community, inst_n.institution)
-                    add_to_connections(inst_n.institution, community)
-                    ActionNotification.objects.create(title=title, institution=inst_n.institution, notification_type='Labels', reference_id=reference_id)
 
             # send email to project creator
             send_email_labels_applied(project, community)
