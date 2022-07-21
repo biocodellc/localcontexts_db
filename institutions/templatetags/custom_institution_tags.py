@@ -1,6 +1,5 @@
 from django import template
 from django.urls import reverse
-from communities.views import projects
 from institutions.models import Institution
 from notifications.models import ActionNotification
 from helpers.models import Notice, Connections

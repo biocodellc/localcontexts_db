@@ -34,3 +34,10 @@ def unread_notifications_exist(user):
 @register.simple_tag
 def display_name(user):
     return get_users_name(user)
+
+@register.simple_tag
+def is_user_member(account, user):
+    if isinstance(account, Institution):
+        return account.is_user_in_institution(user)
+    if isinstance(account, Community):
+        return account.is_user_in_community(user)
