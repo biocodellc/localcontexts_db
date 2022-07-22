@@ -248,7 +248,7 @@ def deactivate_user(request):
 def manage_organizations(request):
     profile = Profile.objects.select_related('user').get(user=request.user)
     affiliations = UserAffiliation.objects.prefetch_related('communities', 'institutions').get(user=request.user)
-    researcher = ''
+    researcher = Researcher.objects.none()
     users_name = get_users_name(request.user)
     if Researcher.objects.filter(user=request.user).exists():
         researcher = Researcher.objects.get(user=request.user)
@@ -371,7 +371,7 @@ def hub_counter(request):
 
     if dev_prod_or_local(request.get_host()) == 'PROD':
         admin = User.objects.get(id=1)
-        researcher = ''
+        researcher = Researcher.objects.none()
         if Researcher.objects.filter(user=admin).exists():
             researcher = Researcher.objects.get(user=admin)
 
