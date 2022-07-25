@@ -1,3 +1,5 @@
+from pyexpat import model
+from tabnanny import verbose
 from django.db import models
 from django.contrib.auth.models import User
 from bclabels.models import BCLabel
@@ -119,6 +121,23 @@ class LabelNote(models.Model):
     class Meta:
         verbose_name = 'Label Note'
         verbose_name_plural = 'Label Notes'
+
+class LabelVersion(models.Model):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="version_creator", blank=True)
+    approved_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="version_approver", blank=True)
+    bclabel = models.ForeignKey(BCLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="bclabel_version")
+    tklabel = models.ForeignKey(TKLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="tklabel_version")
+    version = models.SmallIntegerField(blank=True)
+    version_text = models.TextField(blank=True)
+    created = models.DateTimeField(null=True)
+
+    def __str__(self):
+        return f"{self.bclabel} - {self.tklabel} - {self.version}"
+    
+    class Meta:
+        verbose_name = 'Label Version'
+        verbose_name_plural = 'Label Versions'
+
 
 class Connections(models.Model):
     community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE, blank=True,  related_name="community_connections", db_index=True)
