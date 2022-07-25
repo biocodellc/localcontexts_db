@@ -29,7 +29,12 @@ class LabelNoteAdmin(admin.ModelAdmin):
 class ConnectionsAdmin(admin.ModelAdmin):
     list_display = ('community', 'researcher', 'institution')
 
+class LabelVersionAdmin(admin.ModelAdmin):
+    list_display = ('version', 'bclabel', 'tklabel', 'created')
+    readonly_fields = ('bclabel', 'tklabel', 'version', 'version_text', 'created_by', 'approved_by', 'created',)
+
 admin.site.register(Notice, NoticeAdmin)
+admin.site.register(LabelVersion, LabelVersionAdmin)
 admin.site.register(LabelTranslation, LabelTranslationAdmin)
 admin.site.register(ProjectComment, ProjectCommentAdmin)
 admin.site.register(ProjectStatus, ProjectStatusAdmin)

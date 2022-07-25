@@ -4,7 +4,7 @@ from django.contrib import messages
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections
+from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections, LabelVersion
 from notifications.models import *
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
@@ -463,8 +463,9 @@ def approve_label(request, pk, label_id):
     if member_role == False or member_role == 'viewer':
         return redirect('restricted')    
     else:
-        bclabel = ''
-        tklabel = ''
+        # Init empty qs
+        bclabel = BCLabel.objects.none()
+        tklabel = TKLabel.objects.none()
         if bclabel_exists:
             bclabel = BCLabel.objects.select_related('approved_by').get(unique_id=label_id)
         if tklabel_exists:
@@ -500,11 +501,61 @@ def approve_label(request, pk, label_id):
                     bclabel.approved_by = request.user
                     bclabel.save()
                     send_email_label_approved(bclabel)
+
+                    # Check if previous version exists, create new version
+                    if LabelVersion.objects.filter(bclabel=bclabel).exists():
+                        latest_bcversion = LabelVersion.objects.filter(bclabel=bclabel).order_by('-version').first()
+                        version_num = latest_bcversion.version
+                        new_version = version_num + 1
+
+                        LabelVersion.objects.create(
+                            bclabel=bclabel,
+                            version=new_version, 
+                            created_by=bclabel.created_by, 
+                            approved_by=bclabel.approved_by,
+                            version_text=bclabel.label_text,
+                            created=bclabel.created
+                        )
+                    else:
+                        LabelVersion.objects.create(
+                            bclabel=bclabel,
+                            version=1, 
+                            created_by=bclabel.created_by, 
+                            approved_by=bclabel.approved_by,
+                            version_text=bclabel.label_text,
+                            created=bclabel.created
+                        )
+
                 if tklabel:
                     tklabel.is_approved = True
                     tklabel.approved_by = request.user
                     tklabel.save()
                     send_email_label_approved(tklabel)
+
+                    # Check if previous version exists, create new version
+                    if LabelVersion.objects.filter(tklabel=tklabel).exists():
+                        latest = LabelVersion.objects.filter(tklabel=tklabel).order_by('-version').first()
+                        version_num = latest.version
+                        new_version = version_num + 1
+
+                        LabelVersion.objects.create(
+                            tklabel=tklabel,
+                            version=new_version, 
+                            created_by=tklabel.created_by, 
+                            approved_by=tklabel.approved_by,
+                            version_text=tklabel.label_text,
+                            created=tklabel.created
+                        )
+                    else:
+                        LabelVersion.objects.create(
+                            tklabel=tklabel,
+                            version=1, 
+                            created_by=tklabel.created_by, 
+                            approved_by=tklabel.approved_by,
+                            version_text=tklabel.label_text,
+                            created=tklabel.created
+                        )
+
                 return redirect('select-label', community.id)
         
         context = {
@@ -520,8 +571,8 @@ def approve_label(request, pk, label_id):
 @login_required(login_url='login')
 def edit_label(request, pk, label_id):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    bclabel = ''
-    tklabel = ''
+    bclabel = BCLabel.objects.none()
+    tklabel = TKLabel.objects.none()
     form = ''
     formset = ''
 
