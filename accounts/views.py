@@ -465,7 +465,7 @@ def hub_counter(request):
 
         'bc_notice_count': bc_notice_count,
         'tk_notice_count': tk_notice_count,
-        'institution_notices_count': institution_notices_count,
+        'attr_notice_count': attr_notice_count,
         'notices_total': notices_total,
 
         'community_projects': community_projects,

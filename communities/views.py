@@ -571,8 +571,8 @@ def approve_label(request, pk, label_id):
 @login_required(login_url='login')
 def edit_label(request, pk, label_id):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    bclabel = ''
-    tklabel = ''
+    bclabel = BCLabel.objects.none()
+    tklabel = TKLabel.objects.none()
     form = ''
     formset = ''
 
