@@ -646,14 +646,14 @@ def view_label(request, pk, label_uuid):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        bclabel = ''
-        tklabel = ''
-        translations = ''
-        projects = ''
+        bclabel = BCLabel.objects.none()
+        tklabel = TKLabel.objects.none()
+        translations = LabelTranslation.objects.none()
+        projects = Project.objects.none()
         creator_name = ''
         approver_name = ''
-        bclabels = ''
-        tklabels = ''
+        bclabels = BCLabel.objects.none()
+        tklabels = TKLabel.objects.none()
 
         if BCLabel.objects.filter(unique_id=label_uuid).exists():
             bclabel = BCLabel.objects.get(unique_id=label_uuid)

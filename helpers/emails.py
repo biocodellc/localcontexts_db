@@ -198,7 +198,7 @@ def send_email_labels_applied(project, community):
 
 # Label has been approved or not
 def send_email_label_approved(label):
-    label_notes = ''
+    label_notes = LabelNote.objects.none()
     if isinstance(label, BCLabel):
         label_notes = LabelNote.objects.filter(bclabel=label)
     if isinstance(label, TKLabel):
@@ -279,12 +279,7 @@ def send_contributor_email(request, org, proj_id):
 
 def send_project_person_email(request, to_email, proj_id):
     current_site=get_current_site(request)
-    registered = ''
-
-    if User.objects.filter(email=to_email).exists():
-        registered = True
-    else:
-        registered = False
+    registered = User.objects.filter(email=to_email).exists()
 
     project_person = True
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
