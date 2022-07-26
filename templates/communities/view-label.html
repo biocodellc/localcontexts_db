@@ -119,7 +119,7 @@
         <div class="flex-this w-100 wrap">
             {% if bclabels %}
                 {% for bclabel in bclabels %}
-                    <div class="small-labels center-text margin-right-16 margin-bottom-16">
+                    <div class="condensed-labels center-text margin-right-16 margin-bottom-16">
                         <a class="primary-black-text" href="{% url 'view-label' community.id bclabel.unique_id %}">
                             {% include 'bclabels/mini-labels.html' %}
                             <small class="bold">{{ bclabel.name }}</small>
@@ -130,7 +130,7 @@
 
             {% if tklabels %}
                 {% for tklabel in tklabels %}
-                    <div class="small-labels center-text margin-right-16 margin-bottom-16">
+                    <div class="condensed-labels center-text margin-right-16 margin-bottom-16">
                         <a class="primary-black-text" href="{% url 'view-label' community.id tklabel.unique_id %}">
                             {% include 'tklabels/mini-labels.html' %}
                             <small class="bold">{{ tklabel.name }}</small>

@@ -3,30 +3,15 @@
 
     {% if community %}
         <div class="dashcard">
-            <div class="flex-this">
-
-                <div class="dashcard-img-container">
-                    <img loading="lazy" 
-                        class="profile-img" 
-                        src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
-                        alt="{{ community.community_name }} image"
-                    >
-                </div>
-                <div class="flex-this column dashcard-text-container">
-                    <div><h3 class="dashcard-h3">{{ community }}</h3></div>
-                    <div>
-                        <p class="dashcard-subheader">Community |
-                            {% if community.city_town %} {{ community.city_town }}, {% endif %} {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}
-                            {% if not community.city_town and not community.state_province_region and not community.country %}
-                                None specified
-                            {% endif %}
-                        </p>
-                    </div>
-                    <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
-                    
-                    <!-- TODO: figure out where to put this -->
-                    {% include 'partials/_alerts.html' %}
-                    
+            <div class="flex-this space-between">
+                <div class="loc grey-text bold margin-bottom-16">
+                    <small>
+                        <a href="{% url 'community-registry' %}" class="bold darkteal-text underline-hover">
+                            Local Contexts Registry
+                        </a> 
+                        >> {{ community.community_name }}  
+                        >> Public                  
+                    </small>
                 </div>
 
                 {% if request.user.is_authenticated %}
@@ -71,28 +56,56 @@
                             </div>
                         </div>
                     {% endif %}
-                {% endif %}
+                {% endif %}                
+            </div>
+
+
+            <div class="flex-this">
+
+                <div class="dashcard-img-container">
+                    <img loading="lazy" 
+                        class="profile-img" 
+                        src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
+                        alt="{{ community.community_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3">{{ community }}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Community |
+                            {% if community.city_town %} {{ community.city_town }}, {% endif %} {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}
+                            {% if not community.city_town and not community.state_province_region and not community.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
+                    
+                    <!-- TODO: figure out where to put this -->
+                    {% include 'partials/_alerts.html' %}
+                    
+                </div>
 
             </div>
             <div>
                 <div>
                     <h3>Community Labels used</h3>
 
-                    <div class="flex-this w-100 wrap">
+                    <div class="public-page-labels flex-this w-100 wrap">
                         {% if bclabels %}
                             {% for bclabel in bclabels %}
-                                <div class="small-labels center-text margin-right-16 margin-bottom-16">
+                                <div class="condensed-labels center-text margin-right-16 margin-bottom-16">
                                     {% include 'bclabels/which-label.html' %}
-                                    <span class="bold">{{ bclabel.name }}</span>
+                                    <span>{{ bclabel.name }}</span>
                                 </div> 
                             {% endfor %}
                         {% endif %}
 
                         {% if tklabels %}
                             {% for tklabel in tklabels %}
-                                <div class="small-labels center-text margin-right-16 margin-bottom-16">
+                                <div class="condensed-labels center-text margin-right-16 margin-bottom-16">
                                     {% include 'tklabels/which-label.html' %}
-                                    <span class="bold">{{ tklabel.name }}</span>
+                                    <span>{{ tklabel.name }}</span>
                                 </div> 
                             {% endfor %}
                         {% endif %}
@@ -121,28 +134,16 @@
 
     {% if institution %}
         <div class="dashcard">
-            <div class="flex-this">
-
-                <div class="dashcard-img-container">
-                    <img loading="lazy" 
-                        class="profile-img" 
-                        src="{% if institution.image %} {{ institution.image.url }} {% else %} {% static 'images/placeholders/institution-place.jpg' %}{% endif %}" 
-                        alt="{{ institution.institution_name }} image"
-                    >
+            <div class="flex-this space-between">
+                <div class="loc grey-text bold  margin-bottom-16">
+                    <small>
+                        <a href="{% url 'institution-registry' %}" class="bold darkteal-text underline-hover">
+                            Local Contexts Registry
+                        </a> 
+                        >> {{ institution.institution_name }}
+                        >> Public                    
+                    </small>
                 </div>
-                <div class="flex-this column dashcard-text-container">
-                    <div><h3 class="dashcard-h3">{{ institution }}</h3></div>
-                    <div>
-                        <p class="dashcard-subheader">Institution |
-                            {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}
-                            {% if not institution.city_town and not institution.state_province_region and not institution.country %}
-                                None specified
-                            {% endif %}
-                        </p>
-                    </div>
-                    <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }}{% else %} No description provided. {% endif %}</p></div>
-                </div>
-
                 {% if request.user.is_authenticated %}
                     {% is_user_member institution request.user as user_is_member %}
                     {% if not user_is_member %}
@@ -184,23 +185,45 @@
                             </div>
                         </div>
                     {% endif %}
-                {% endif %}
+                {% endif %}                
+            </div>
 
+
+            <div class="flex-this">
+                <div class="dashcard-img-container">
+                    <img loading="lazy" 
+                        class="profile-img" 
+                        src="{% if institution.image %} {{ institution.image.url }} {% else %} {% static 'images/placeholders/institution-place.jpg' %}{% endif %}" 
+                        alt="{{ institution.institution_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3">{{ institution }}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Institution |
+                            {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}
+                            {% if not institution.city_town and not institution.state_province_region and not institution.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }}{% else %} No description provided. {% endif %}</p></div>
+                </div>
             </div>
             <div>
                 <div>
-                    <h3>Notices</h3>
+                    <h3>Notices used</h3>
                     <div class="flex-this">
                         {% if bcnotice %} 
-                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="115px" alt="black square with white letters BC in the middle"></div>
+                            <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="90px" alt="black square with white letters BC in the middle"></div>
                         {% endif %}
 
                         {% if tknotice %} 
-                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="115px" alt="black square with white letters TK in the middle"></div>
+                            <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="90px" alt="black square with white letters TK in the middle"></div>
                         {% endif %}
 
                         {% if attrnotice %} 
-                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="115px"></div>
+                            <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="90px"></div>
                         {% endif %}
                         {% if not bcnotice and not tknotice and not attrnotice %} No Notices to display yet {% endif %}
                     </div>
@@ -226,27 +249,21 @@
 
     {% if researcher %}
         <div class="dashcard">
-            <div class="flex-this">
 
-                <div class="researcher-img-container">
-                    <img loading="lazy" 
-                        src=" {% if researcher.image %} {{ researcher.image.url }} {% else %} {% static 'images/placeholders/researcher-place.jpg' %} {% endif %}" 
-                        alt="{{ researcher.researcher_name }} image"
-                    >
-                </div>
-                <div class="flex-this column dashcard-text-container">
-                    <div><h3 class="dashcard-h3">{% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}</h3></div>
-                    <div>
-                        <p class="dashcard-subheader">Researcher | 
-                            {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
-                            {% if profile.state_province_region %} {{ profile.state_province_region }}, {% endif %} 
-                            {% if profile.country.name %} {{ profile.country.name }}{% endif %}
-                            {% if not profile.city_town and not profile.state_province_region and not profile.country %}
-                                None specified
-                            {% endif %}
-                        </p>
-                    </div>
-                    <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }}{% else %} No description provided. {% endif %}</p></div>
+            <div class="flex-this space-between">
+                <div class="loc grey-text bold margin-bottom-16">
+                    <small>
+                        <a href="{% url 'researcher-registry' %}" class="bold darkteal-text underline-hover">
+                            Local Contexts Registry
+                        </a> 
+                        >>                        
+                        {% if researcher.user.get_full_name %}
+                            {{ researcher.user.get_full_name }}
+                        {% else %}
+                            {{ researcher.user.username }}
+                        {% endif %}
+                        >> Public         
+                    </small>
                 </div>
 
                 {% if request.user.is_authenticated %}
@@ -257,9 +274,7 @@
                             </div>
                         {% endif %}
                     {% endif %}
-                {% endif %}
-
-                {% if request.user.is_authenticated %}
+                    
                     <div id="contactModalResearcher{{ researcher.id }}" class="modal hide">
                         <div class="modal-defaults contact-modal flex-this column w-100">
                             <div class="modal-content-padding w-100">
@@ -285,20 +300,45 @@
                 {% endif %}
 
             </div>
+
+            <div class="flex-this">
+
+                <div class="researcher-img-container">
+                    <img loading="lazy" 
+                        src=" {% if researcher.image %} {{ researcher.image.url }} {% else %} {% static 'images/placeholders/researcher-place.jpg' %} {% endif %}" 
+                        alt="{{ researcher.researcher_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3">{% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Researcher | 
+                            {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
+                            {% if profile.state_province_region %} {{ profile.state_province_region }}, {% endif %} 
+                            {% if profile.country.name %} {{ profile.country.name }}{% endif %}
+                            {% if not profile.city_town and not profile.state_province_region and not profile.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }}{% else %} No description provided. {% endif %}</p></div>
+                </div>
+
+            </div>
             <div>
                 <div>
-                    <h3>Notices</h3>
+                    <h3>Notices used</h3>
                     <div class="flex-this">
                         {% if bcnotice %} 
-                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="115px" alt="black square with white letters BC in the middle"></div>
+                            <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="90px" alt="black square with white letters BC in the middle"></div>
                         {% endif %}
 
                         {% if tknotice %} 
-                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="115px" alt="black square with white letters TK in the middle"></div>
+                            <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="90px" alt="black square with white letters TK in the middle"></div>
                         {% endif %}
 
                         {% if attrnotice %} 
-                            <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="115px"></div>
+                            <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="90px"></div>
                         {% endif %}
                         {% if not bcnotice and not tknotice and not attrnotice %} No Notices to display yet {% endif %}
                     </div>
