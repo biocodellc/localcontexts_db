@@ -138,6 +138,21 @@ class LabelVersion(models.Model):
         verbose_name = 'Label Version'
         verbose_name_plural = 'Label Versions'
 
+class LabelTranslationVersion(models.Model):
+    version_instance = models.ForeignKey(LabelVersion, null=True, blank=True, on_delete=models.CASCADE, related_name="label_version_translation")
+    translated_name = models.CharField(max_length=150, blank=True)
+    language_tag = models.CharField(max_length=5, blank=True)
+    language = models.CharField(max_length=150, blank=True)
+    translated_text = models.TextField(blank=True)
+    created = models.DateTimeField(null=True)
+
+    def __str__(self):
+        return f"{self.version_instance}"
+    
+    class Meta:
+        verbose_name = 'Label Translation Version'
+        verbose_name_plural = 'Label Translation Versions'
+
 
 class Connections(models.Model):
     community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE, blank=True,  related_name="community_connections", db_index=True)

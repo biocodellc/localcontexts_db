@@ -496,6 +496,7 @@ def approve_label(request, pk, label_id):
 
             # If approved, save Label
             elif 'approve_label_yes' in request.POST:
+                # BC LABEL
                 if bclabel:
                     bclabel.is_approved = True
                     bclabel.approved_by = request.user
@@ -525,7 +526,7 @@ def approve_label(request, pk, label_id):
                             version_text=bclabel.label_text,
                             created=bclabel.created
                         )
-
+                # TK LABEL
                 if tklabel:
                     tklabel.is_approved = True
                     tklabel.approved_by = request.user
