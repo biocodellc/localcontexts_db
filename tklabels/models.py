@@ -49,7 +49,7 @@ class TKLabel(models.Model):
     audiofile = models.FileField(upload_to=tklabel_audio_path, blank=True)
 
     def __str__(self):
-        return str(self.community) + ' ' + str(self.label_type) + ' ' + str(self.name)
+        return f"{self.community} - {self.name}"
     
     class Meta:
         verbose_name = 'TK Label'

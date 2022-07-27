@@ -503,29 +503,9 @@ def approve_label(request, pk, label_id):
                     bclabel.save()
                     send_email_label_approved(bclabel)
 
-                    # Check if previous version exists, create new version
-                    if LabelVersion.objects.filter(bclabel=bclabel).exists():
-                        latest_bcversion = LabelVersion.objects.filter(bclabel=bclabel).order_by('-version').first()
-                        version_num = latest_bcversion.version
-                        new_version = version_num + 1
+                    # handle Label versions and translation versions
+                    create_label_versions(bclabel)
 
-                        LabelVersion.objects.create(
-                            bclabel=bclabel,
-                            version=new_version, 
-                            created_by=bclabel.created_by, 
-                            approved_by=bclabel.approved_by,
-                            version_text=bclabel.label_text,
-                            created=bclabel.created
-                        )
-                    else:
-                        LabelVersion.objects.create(
-                            bclabel=bclabel,
-                            version=1, 
-                            created_by=bclabel.created_by, 
-                            approved_by=bclabel.approved_by,
-                            version_text=bclabel.label_text,
-                            created=bclabel.created
-                        )
                 # TK LABEL
                 if tklabel:
                     tklabel.is_approved = True
@@ -533,29 +513,8 @@ def approve_label(request, pk, label_id):
                     tklabel.save()
                     send_email_label_approved(tklabel)
 
-                    # Check if previous version exists, create new version
-                    if LabelVersion.objects.filter(tklabel=tklabel).exists():
-                        latest = LabelVersion.objects.filter(tklabel=tklabel).order_by('-version').first()
-                        version_num = latest.version
-                        new_version = version_num + 1
-
-                        LabelVersion.objects.create(
-                            tklabel=tklabel,
-                            version=new_version, 
-                            created_by=tklabel.created_by, 
-                            approved_by=tklabel.approved_by,
-                            version_text=tklabel.label_text,
-                            created=tklabel.created
-                        )
-                    else:
-                        LabelVersion.objects.create(
-                            tklabel=tklabel,
-                            version=1, 
-                            created_by=tklabel.created_by, 
-                            approved_by=tklabel.approved_by,
-                            version_text=tklabel.label_text,
-                            created=tklabel.created
-                        )
+                    # handle Label versions and translation versions
+                    create_label_versions(tklabel)
 
                 return redirect('select-label', community.id)
         

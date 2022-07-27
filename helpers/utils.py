@@ -4,6 +4,9 @@ import zipfile
 from django.template.loader import get_template
 from io import BytesIO
 from accounts.models import UserAffiliation
+from tklabels.models import TKLabel
+from bclabels.models import BCLabel
+from helpers.models import LabelTranslation, LabelVersion, LabelTranslationVersion
 from xhtml2pdf import pisa
 
 from communities.models import Community, JoinRequest, InviteMember
@@ -243,8 +246,63 @@ def loop_through_notices(list, organization, project):
 def create_notices(selected_notices, organization, project, existing_notice):
     # organization: either instance of institution or researcher
     # selected_notices would be a list: # attribution_incomplete # bcnotice # tknotice
-    
     if existing_notice:
         existing_notice.delete()
-    
+
     loop_through_notices(selected_notices, organization, project)
+
+
+def create_label_versions(label):
+    # passes instance of BCLabel or TKLabel
+    version = LabelVersion.objects.none()
+    translations = LabelTranslation.objects.none()
+    version_num = 0
+
+    if isinstance(label, BCLabel):
+        translations = LabelTranslation.objects.filter(bclabel=label)
+        # If version exists, set version number to 1 more than the latest
+        if LabelVersion.objects.filter(bclabel=label).exists():
+            latest = LabelVersion.objects.filter(bclabel=label).order_by('-version').first()
+            version_num = latest.version + 1
+        else:
+            version_num = 1
+
+        # Create Version for BC Label
+        version = LabelVersion.objects.create(
+            bclabel=label,
+            version=version_num, 
+            created_by=label.created_by, 
+            approved_by=label.approved_by,
+            version_text=label.label_text,
+            created=label.created
+        )
+
+    if isinstance(label, TKLabel):
+        translations = LabelTranslation.objects.filter(tklabel=label)
+        # If version exists, set version number to 1 more than the latest
+        if LabelVersion.objects.filter(tklabel=label).exists():
+            latest = LabelVersion.objects.filter(tklabel=label).order_by('-version').first()
+            version_num = latest.version + 1
+        else:
+            version_num = 1
+
+        # Create Version for TK Label
+        version = LabelVersion.objects.create(
+            tklabel=label,
+            version=version_num, 
+            created_by=label.created_by, 
+            approved_by=label.approved_by,
+            version_text=label.label_text,
+            created=label.created
+        )
+
+    # Create version translations
+    for t in translations:
+        LabelTranslationVersion.objects.create(
+            version_instance=version,
+            translated_name=t.translated_name,
+            language=t.language, 
+            language_tag=t.language_tag,
+            translated_text=t.translated_text,
+            created=version.created
+        )
