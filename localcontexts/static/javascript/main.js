@@ -1101,3 +1101,18 @@ if (window.location.href.includes('notices')) {
     const closeModalBtn = document.querySelector('.close-modal-btn')
     closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
 }
+
+if (window.location.href.includes('labels/view/')) {
+    const btn = document.getElementById('openLabelHistoryBtn')
+    let historyDiv = document.getElementById('labelHistoryDiv')
+
+    btn.onclick = function(e) {
+        if (historyDiv.classList.contains('hide')) {
+            historyDiv.classList.replace('hide', 'show')
+            btn.innerHTML = `View Label History <i class="fa fa-angle-up" aria-hidden="true"></i>`
+        } else {
+            historyDiv.classList.replace('show', 'hide')
+            btn.innerHTML = `View Label History <i class="fa fa-angle-down" aria-hidden="true"></i>`
+        }
+    }
+}

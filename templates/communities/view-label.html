@@ -66,8 +66,8 @@
             <div class="w-80">
                 <p class="no-top-margin">
                     <span class="bold">Created by</span> - 
-                    {% if bclabel %} {{ creator_name }} | {{ bclabel.community }} {% endif %}
-                    {% if tklabel %} {{ creator_name }} | {{ tklabel.community }} {% endif %}
+                    {% if bclabel %} {{ creator_name }} | {{ bclabel.community }} - {{ bclabel.created|date:'M Y'}} {% endif %}
+                    {% if tklabel %} {{ creator_name }} | {{ tklabel.community }} - {{ tklabel.created|date:'M Y'}} {% endif %}
                     <br>
 
                     <span class="bold">Approved by</span> - 
@@ -82,7 +82,7 @@
                     {% if bclabel.audiofile %}<div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
                     <br>
 
-                    <span class="bold">Label text</span> <br>
+                    <span class="bold block margin-top-8 margin-bottom-16">Label text</span>
                     {% if bclabel %} {{ bclabel.label_text }} {% endif %}
                     {% if tklabel %} {{ tklabel.label_text }} {% endif %}
                 </p>
@@ -90,7 +90,7 @@
                 {% if translations %}
                     <p>
                         {% for translation in translations %}
-                            <span class="bold">{{ translation.language }}</span><br>
+                            <span class="bold block margin-bottom-16">{{ translation.language }}</span>
                             {{translation.translated_text}}<br><br>
                         {% endfor %}
                     </p>
@@ -108,6 +108,31 @@
                         This label has not yet been applied to any Local Contexts Projects
                     {% endif %}
                 </p>
+
+                <div class="flex-this flex-end margin-bottom-8">
+                    <small id="openLabelHistoryBtn" class="darkteal-text underline-hover pointer block right-text">View Label History <i class="fa fa-angle-down" aria-hidden="true"></i></small>
+                </div>
+                <!-- <div id="labelHistoryDiv" class="margin-bottom-8" style="height:0px; overflow: hidden;"> -->
+                <div id="labelHistoryDiv" class="hide margin-bottom-8">
+                        <p>
+                        {% if label_versions %}
+                            {% for version in label_versions %}
+                                <h3 class="bold"><i>Version {{ version.version }}: Created {{ version.created|date:'M Y'}}</i></h3>
+                                <i>
+                                    <span class="bold block margin-bottom-16">Label text</span>
+                                    {{ version.version_text }}
+
+                                    {% if version.label_version_translation.all %}
+                                        {% for translated_version in version.label_version_translation.all %}
+                                            <span class="bold block margin-bottom-16 margin-top-16">{{ translated_version.language }}</span>
+                                            {{ translated_version.translated_text }}
+                                        {% endfor %}
+                                    {% endif %}
+                                </i>
+                            {% endfor %}
+                        {% endif %}
+                    </p>
+                </div>
             </div>
 
         </div>

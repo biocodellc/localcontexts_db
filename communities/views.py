@@ -614,6 +614,7 @@ def view_label(request, pk, label_uuid):
         approver_name = ''
         bclabels = BCLabel.objects.none()
         tklabels = TKLabel.objects.none()
+        label_versions = LabelVersion.objects.none()
 
         if BCLabel.objects.filter(unique_id=label_uuid).exists():
             bclabel = BCLabel.objects.get(unique_id=label_uuid)
@@ -621,6 +622,7 @@ def view_label(request, pk, label_uuid):
             projects = bclabel.project_bclabels.all()
             creator_name = get_users_name(bclabel.created_by)
             approver_name = get_users_name(bclabel.approved_by)
+            label_versions = LabelVersion.objects.filter(bclabel=bclabel).order_by('version')
             bclabels = BCLabel.objects.filter(community=community).exclude(unique_id=label_uuid)
             tklabels = TKLabel.objects.filter(community=community)
         if TKLabel.objects.filter(unique_id=label_uuid).exists():
@@ -629,6 +631,7 @@ def view_label(request, pk, label_uuid):
             projects = tklabel.project_tklabels.all()
             creator_name = get_users_name(tklabel.created_by)
             approver_name = get_users_name(tklabel.approved_by)
+            label_versions = LabelVersion.objects.filter(tklabel=tklabel).order_by('version')
             tklabels = TKLabel.objects.filter(community=community).exclude(unique_id=label_uuid)
             bclabels = BCLabel.objects.filter(community=community)
 
@@ -643,6 +646,7 @@ def view_label(request, pk, label_uuid):
             'projects': projects,
             'creator_name': creator_name,
             'approver_name': approver_name,
+            'label_versions': label_versions,
         }
 
         return render(request, 'communities/view-label.html', context)
