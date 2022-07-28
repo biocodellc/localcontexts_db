@@ -33,6 +33,7 @@ class TKLabel(models.Model):
         ('creative', 'creative'),  
     )
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
+    version = models.SmallIntegerField(blank=True, null=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="tklabel_creator")
     label_type = models.CharField(max_length=50, null=True, choices=TYPES)
     community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE)

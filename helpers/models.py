@@ -124,6 +124,7 @@ class LabelNote(models.Model):
 
 class LabelVersion(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="version_creator", blank=True)
+    is_approved = models.BooleanField(default=False, null=True)
     approved_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="version_approver", blank=True)
     bclabel = models.ForeignKey(BCLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="bclabel_version")
     tklabel = models.ForeignKey(TKLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="tklabel_version")
