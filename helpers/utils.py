@@ -266,6 +266,8 @@ def create_label_versions(label):
             version_num = latest.version + 1
         else:
             version_num = 1
+            label.version = 1
+            label.save()
 
         # Create Version for BC Label
         version = LabelVersion.objects.create(
@@ -285,6 +287,8 @@ def create_label_versions(label):
             version_num = latest.version + 1
         else:
             version_num = 1
+            label.version = 1
+            label.save()
 
         # Create Version for TK Label
         version = LabelVersion.objects.create(
