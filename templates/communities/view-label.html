@@ -82,6 +82,11 @@
                     {% if bclabel.audiofile %}<div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
                     <br>
 
+                    <span class="bold">Version </span> - 
+                    {% if bclabel %} {{ bclabel.version }} {% endif %}
+                    {% if tklabel %} {{ tklabel.version }} {% endif %}
+                    <br>
+
                     <span class="bold block margin-top-8 margin-bottom-16">Label text</span>
                     {% if bclabel %} {{ bclabel.label_text }} {% endif %}
                     {% if tklabel %} {{ tklabel.label_text }} {% endif %}
