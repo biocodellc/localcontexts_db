@@ -243,11 +243,12 @@ def loop_through_notices(list, organization, project):
 
 
 # Create/Update Notices
-def create_notices(selected_notices, organization, project, existing_notice):
+def create_notices(selected_notices, organization, project, existing_notices):
     # organization: either instance of institution or researcher
     # selected_notices would be a list: # attribution_incomplete # bcnotice # tknotice
-    if existing_notice:
-        existing_notice.delete()
+    if existing_notices:
+        for notice in existing_notices:
+            notice.delete()
 
     loop_through_notices(selected_notices, organization, project)
 

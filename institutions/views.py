@@ -721,7 +721,6 @@ def create_project(request, pk):
 def edit_project(request, institution_id, project_uuid):
     institution = Institution.objects.get(id=institution_id)
     project = Project.objects.get(unique_id=project_uuid)
-    notices = Notice.objects.filter(project=project)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
@@ -730,7 +729,11 @@ def edit_project(request, institution_id, project_uuid):
         form = EditProjectForm(request.POST or None, instance=project)
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
+        notices = Notice.objects.none()
 
+        # Check to see if notice exists for this project and pass to template
+        if Notice.objects.filter(project=project).exists():
+            notices = Notice.objects.filter(project=project)
 
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
@@ -752,7 +755,7 @@ def edit_project(request, institution_id, project_uuid):
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
                 # Pass any existing notices as well as newly selected ones
-                create_notices(notices_selected, institution, data, notice)
+                create_notices(notices_selected, institution, data, notices)
 
             return redirect('institution-projects', institution.id)
 
