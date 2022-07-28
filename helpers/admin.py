@@ -11,20 +11,9 @@ class OpenToCollaborateNoticeURLAdmin(admin.ModelAdmin):
 class LabelTranslationAdmin(admin.ModelAdmin):
     list_display = ('translated_name', 'language', 'language_tag', 'translated_text', )
 
-class ProjectCommentAdmin(admin.ModelAdmin):
-    list_display = ('project', 'sender', 'community', 'message', 'created')
-    search_fields = ('project',)
-
-class ProjectStatusAdmin(admin.ModelAdmin):
-    list_display = ('project', 'community', 'seen', 'status')
-    search_fields = ('project',)
-
 class EntitiesNotifiedAdmin(admin.ModelAdmin):
     list_display = ('project',)
     search_fields = ('project',)
-
-class LabelNoteAdmin(admin.ModelAdmin):
-    list_display = ('bclabel', 'tklabel', 'sender',)
 
 class ConnectionsAdmin(admin.ModelAdmin):
     list_display = ('community', 'researcher', 'institution')
@@ -33,13 +22,29 @@ class LabelVersionAdmin(admin.ModelAdmin):
     list_display = ('version', 'bclabel', 'tklabel', 'created')
     readonly_fields = ('bclabel', 'tklabel', 'version', 'version_text', 'created_by', 'approved_by', 'created',)
 
+class LabelTranslationVersionAdmin(admin.ModelAdmin):
+    list_display = ('version_instance', 'translated_name', 'language', 'created')
+    readonly_fields = ('version_instance', 'translated_name', 'language', 'language_tag', 'translated_text', 'created',)
+
+# class ProjectCommentAdmin(admin.ModelAdmin):
+#     list_display = ('project', 'sender', 'community', 'message', 'created')
+#     search_fields = ('project',)
+
+# class ProjectStatusAdmin(admin.ModelAdmin):
+#     list_display = ('project', 'community', 'seen', 'status')
+#     search_fields = ('project',)
+
+# class LabelNoteAdmin(admin.ModelAdmin):
+#     list_display = ('bclabel', 'tklabel', 'sender',)
+
+# admin.site.register(ProjectComment, ProjectCommentAdmin)
+# admin.site.register(ProjectStatus, ProjectStatusAdmin)
+# admin.site.register(LabelNote, LabelNoteAdmin)
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(LabelVersion, LabelVersionAdmin)
+admin.site.register(LabelTranslationVersion, LabelTranslationVersionAdmin)
 admin.site.register(LabelTranslation, LabelTranslationAdmin)
-admin.site.register(ProjectComment, ProjectCommentAdmin)
-admin.site.register(ProjectStatus, ProjectStatusAdmin)
 admin.site.register(EntitiesNotified, EntitiesNotifiedAdmin)
-admin.site.register(LabelNote, LabelNoteAdmin)
 admin.site.register(Connections, ConnectionsAdmin)
 admin.site.register(OpenToCollaborateNoticeURL, OpenToCollaborateNoticeURLAdmin)
 

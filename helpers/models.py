@@ -124,6 +124,7 @@ class LabelNote(models.Model):
 
 class LabelVersion(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="version_creator", blank=True)
+    is_approved = models.BooleanField(default=False, null=True)
     approved_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="version_approver", blank=True)
     bclabel = models.ForeignKey(BCLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="bclabel_version")
     tklabel = models.ForeignKey(TKLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="tklabel_version")
@@ -137,6 +138,21 @@ class LabelVersion(models.Model):
     class Meta:
         verbose_name = 'Label Version'
         verbose_name_plural = 'Label Versions'
+
+class LabelTranslationVersion(models.Model):
+    version_instance = models.ForeignKey(LabelVersion, null=True, blank=True, on_delete=models.CASCADE, related_name="label_version_translation")
+    translated_name = models.CharField(max_length=150, blank=True)
+    language_tag = models.CharField(max_length=5, blank=True)
+    language = models.CharField(max_length=150, blank=True)
+    translated_text = models.TextField(blank=True)
+    created = models.DateTimeField(null=True)
+
+    def __str__(self):
+        return f"{self.version_instance}"
+    
+    class Meta:
+        verbose_name = 'Label Translation Version'
+        verbose_name_plural = 'Label Translation Versions'
 
 
 class Connections(models.Model):

@@ -976,6 +976,12 @@ input:focus {
   }
 
   /* VIEW LABEL */
-  .small-labels {
+  .condensed-labels {
     width: 160px;
+  }
+
+  /* PUBLIC PAGE: COMMUNITY: LABELS USED */
+  .public-page-labels img {
+    width: 110px;
+    height: auto;
   }

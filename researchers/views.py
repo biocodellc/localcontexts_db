@@ -528,16 +528,14 @@ def edit_project(request, researcher_id, project_uuid):
         return redirect('restricted')
     else:
         project = Project.objects.get(unique_id=project_uuid)
-        notice_exists = Notice.objects.filter(project=project)
         form = EditProjectForm(request.POST or None, instance=project)
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
+        notices = Notice.objects.none()
 
         # Check to see if notice exists for this project and pass to template
-        if notice_exists:
-            notice = Notice.objects.get(project=project)
-        else:
-            notice = None
+        if Notice.objects.filter(project=project).exists():
+            notices = Notice.objects.filter(project=project)
 
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
@@ -565,7 +563,7 @@ def edit_project(request, researcher_id, project_uuid):
         context = {
             'researcher': researcher, 
             'project': project, 
-            'notice': notice,
+            'notices': notices,
             'form': form, 
             'formset': formset,
             'contributors': contributors,

@@ -18,7 +18,7 @@ class Project(models.Model):
     PRIVACY_LEVEL = {
         ('Public', 'Public'),
         ('Discoverable', 'Discoverable'),
-        ('Private', 'Private')
+        ('Private', 'Private'),
     }
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, db_index=True)
     project_creator = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="project_creator")

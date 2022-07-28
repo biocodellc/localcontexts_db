@@ -496,65 +496,25 @@ def approve_label(request, pk, label_id):
 
             # If approved, save Label
             elif 'approve_label_yes' in request.POST:
+                # BC LABEL
                 if bclabel:
                     bclabel.is_approved = True
                     bclabel.approved_by = request.user
                     bclabel.save()
                     send_email_label_approved(bclabel)
 
-                    # Check if previous version exists, create new version
-                    if LabelVersion.objects.filter(bclabel=bclabel).exists():
-                        latest_bcversion = LabelVersion.objects.filter(bclabel=bclabel).order_by('-version').first()
-                        version_num = latest_bcversion.version
-                        new_version = version_num + 1
+                    # handle Label versions and translation versions
+                    create_label_versions(bclabel)
 
-                        LabelVersion.objects.create(
-                            bclabel=bclabel,
-                            version=new_version, 
-                            created_by=bclabel.created_by, 
-                            approved_by=bclabel.approved_by,
-                            version_text=bclabel.label_text,
-                            created=bclabel.created
-                        )
-                    else:
-                        LabelVersion.objects.create(
-                            bclabel=bclabel,
-                            version=1, 
-                            created_by=bclabel.created_by, 
-                            approved_by=bclabel.approved_by,
-                            version_text=bclabel.label_text,
-                            created=bclabel.created
-                        )
-
+                # TK LABEL
                 if tklabel:
                     tklabel.is_approved = True
                     tklabel.approved_by = request.user
                     tklabel.save()
                     send_email_label_approved(tklabel)
 
-                    # Check if previous version exists, create new version
-                    if LabelVersion.objects.filter(tklabel=tklabel).exists():
-                        latest = LabelVersion.objects.filter(tklabel=tklabel).order_by('-version').first()
-                        version_num = latest.version
-                        new_version = version_num + 1
-
-                        LabelVersion.objects.create(
-                            tklabel=tklabel,
-                            version=new_version, 
-                            created_by=tklabel.created_by, 
-                            approved_by=tklabel.approved_by,
-                            version_text=tklabel.label_text,
-                            created=tklabel.created
-                        )
-                    else:
-                        LabelVersion.objects.create(
-                            tklabel=tklabel,
-                            version=1, 
-                            created_by=tklabel.created_by, 
-                            approved_by=tklabel.approved_by,
-                            version_text=tklabel.label_text,
-                            created=tklabel.created
-                        )
+                    # handle Label versions and translation versions
+                    create_label_versions(tklabel)
 
                 return redirect('select-label', community.id)
         
@@ -646,14 +606,15 @@ def view_label(request, pk, label_uuid):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        bclabel = ''
-        tklabel = ''
-        translations = ''
-        projects = ''
+        bclabel = BCLabel.objects.none()
+        tklabel = TKLabel.objects.none()
+        translations = LabelTranslation.objects.none()
+        projects = Project.objects.none()
         creator_name = ''
         approver_name = ''
-        bclabels = ''
-        tklabels = ''
+        bclabels = BCLabel.objects.none()
+        tklabels = TKLabel.objects.none()
+        label_versions = LabelVersion.objects.none()
 
         if BCLabel.objects.filter(unique_id=label_uuid).exists():
             bclabel = BCLabel.objects.get(unique_id=label_uuid)
@@ -661,6 +622,7 @@ def view_label(request, pk, label_uuid):
             projects = bclabel.project_bclabels.all()
             creator_name = get_users_name(bclabel.created_by)
             approver_name = get_users_name(bclabel.approved_by)
+            label_versions = LabelVersion.objects.filter(bclabel=bclabel).order_by('version')
             bclabels = BCLabel.objects.filter(community=community).exclude(unique_id=label_uuid)
             tklabels = TKLabel.objects.filter(community=community)
         if TKLabel.objects.filter(unique_id=label_uuid).exists():
@@ -669,6 +631,7 @@ def view_label(request, pk, label_uuid):
             projects = tklabel.project_tklabels.all()
             creator_name = get_users_name(tklabel.created_by)
             approver_name = get_users_name(tklabel.approved_by)
+            label_versions = LabelVersion.objects.filter(tklabel=tklabel).order_by('version')
             tklabels = TKLabel.objects.filter(community=community).exclude(unique_id=label_uuid)
             bclabels = BCLabel.objects.filter(community=community)
 
@@ -683,6 +646,7 @@ def view_label(request, pk, label_uuid):
             'projects': projects,
             'creator_name': creator_name,
             'approver_name': approver_name,
+            'label_versions': label_versions,
         }
 
         return render(request, 'communities/view-label.html', context)

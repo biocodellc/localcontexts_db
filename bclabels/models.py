@@ -23,6 +23,7 @@ class BCLabel(models.Model):
         ('outreach', 'outreach'),  
     )
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True)
+    version = models.SmallIntegerField(blank=True, null=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="bclabel_creator")
     label_type = models.CharField(max_length=20, null=True, choices=TYPES)
     community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE)
@@ -39,7 +40,7 @@ class BCLabel(models.Model):
     audiofile = models.FileField(upload_to=bclabel_audio_path, blank=True)
 
     def __str__(self):
-        return f"{self.community} - {self.label_type} - {self.name}"
+        return f"{self.community} - {self.name}"
     
     class Meta:
         verbose_name = 'BC Label'
