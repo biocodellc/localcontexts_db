@@ -78,13 +78,13 @@
                     {% if tklabel %} 
                         {% if not tklabel.is_approved %} This Label has not been approved yet {% else %} {{ approver_name }} {% endif %}
                     {% endif %}
-
-                    {% if bclabel.audiofile %}<div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
                     <br>
- 
+
                     {% if bclabel %} {% if bclabel.version %} <span class="bold">Version </span> - {{ bclabel.version }}{% endif %} <br> {% endif %}
                     {% if tklabel %} {% if tklabel.version %} <span class="bold">Version </span> - {{ tklabel.version }}{% endif %} <br> {% endif %}
-                    
+
+                    {% if bclabel.audiofile %}<div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
+                    <br>                    
 
                     <span class="bold block margin-top-8 margin-bottom-16">Label text</span>
                     {% if bclabel %} {{ bclabel.label_text }} {% endif %}
