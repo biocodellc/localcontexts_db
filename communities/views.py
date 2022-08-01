@@ -1301,6 +1301,11 @@ def apply_labels(request, pk, project_uuid):
                 contributors = ProjectContributors.objects.get(project=project)
                 contributors.communities.add(community)
                 contributors.save()
+
+                # Archive Notices
+                for notice in notices:
+                    notice.archived = True
+                    notice.save()
             else:
                 comm_title = 'Labels have been applied to the project ' + truncated_project_title + ' ...'
                 ActionNotification.objects.create(title=comm_title, notification_type='Projects', community=community, reference_id=reference_id)
