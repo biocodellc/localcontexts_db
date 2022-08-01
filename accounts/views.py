@@ -21,7 +21,7 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
-from helpers.models import Notice
+from helpers.models import Notice, OpenToCollaborateNoticeURL
 from notifications.models import UserNotification
 from projects.models import Project, ProjectCreator
 
@@ -346,6 +346,7 @@ def registry_researchers(request):
 # Hub stats page
 def hub_counter(request):
     current_datetime = datetime.datetime.now()
+    otc_notices = OpenToCollaborateNoticeURL.objects.all()
 
     reg_total = 0
     notices_total = 0
@@ -367,7 +368,6 @@ def hub_counter(request):
     total_labels = 0
 
     projects_count = 0
-
 
     if dev_prod_or_local(request.get_host()) == 'PROD':
         admin = User.objects.get(id=1)
@@ -477,6 +477,8 @@ def hub_counter(request):
         'tklabels_count': tklabels_count, 
         'total_labels': total_labels,
         'current_datetime': current_datetime,
+
+        'otc_notices': otc_notices,
     }
     
     return render(request, 'accounts/totals-count.html', context)

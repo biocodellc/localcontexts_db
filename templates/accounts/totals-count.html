@@ -50,6 +50,31 @@
 
     </div>    
 
+    <div class="content-card-v2 content-card-space">
+        <h3>Open to Collaborate Notice URLs (Total: {{ otc_notices.count }})</h3>
+        <div>
+            {% if otc_notices %}
+                <ol>
+                    {% for notice in otc_notices %}
+                        <li>
+                            <a href="{{ notice.url }}" class="darkteal-text underline-hover">
+                                {% if notice.name %}
+                                    {{ notice.name }}
+                                {% else %}
+                                    {{ notice.url }}
+                                {% endif %}
+                            </a> |
+                            {% if notice.institution %}
+                                <a href="{% url 'public-institution' notice.institution.id %}" class="darkteal-text underline-hover">{{ notice.institution }}</a>
+                            {% else %}
+                                <a href="{% url 'public-researcher' notice.researcher.id %}" class="darkteal-text underline-hover">{{ notice.researcher }}</a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% endif %}
+        </div>
+    </div>
 
 <style>
     .stats-count-div {

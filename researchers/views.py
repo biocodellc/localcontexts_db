@@ -78,6 +78,9 @@ def public_researcher_view(request, pk):
         for p in created_projects:
             if p.project.project_privacy == 'Public':
                 projects.append(p.project)
+        
+        otc_notices = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher)
+
         if request.user.is_authenticated:
             form = ContactOrganizationForm(request.POST or None)
 
@@ -101,6 +104,7 @@ def public_researcher_view(request, pk):
                     'bcnotice': bcnotice,
                     'tknotice': tknotice,
                     'attrnotice': attrnotice,
+                    'otc_notices': otc_notices,
                 }
                 return render(request, 'public.html', context)
 
@@ -110,6 +114,7 @@ def public_researcher_view(request, pk):
             'bcnotice': bcnotice,
             'tknotice': tknotice,
             'attrnotice': attrnotice,
+            'otc_notices': otc_notices,
         }
         return render(request, 'public.html', context)
     except:
