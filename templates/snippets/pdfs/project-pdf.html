@@ -90,6 +90,11 @@
                     {% endfor %}
                 {% endif %}
 
+                {% if project.project_page %} 
+                    <strong>Project Page URL:</strong><br>
+                    {{ project.project_page }}
+                {% endif %}
+
                 {% if project.description %}<br><strong>Project Description:</strong> {{ project.description|linebreaks }}<br>{% endif %}
 
             {% endif %}
