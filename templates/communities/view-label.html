@@ -41,6 +41,12 @@
                                     </div>
                                 {% endif %}
                             {% endif %}
+                        {% else %}
+                            {% if member_role == 'admin' or member_role == 'editor' %}
+                                <div>
+                                    <a class="primary-btn white-btn" href="{% url 'propose-edit-label' community.id bclabel.unique_id %}">Propose an edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                </div>   
+                            {% endif %}  
                         {% endif %}
                     {% endif %}
 
@@ -56,6 +62,12 @@
                                         <a class="primary-btn action-btn" href="{% url 'approve-label' community.id tklabel.unique_id %}">Review for Approval</a>
                                     </div>
                                 {% endif %}
+                            {% endif %}
+                        {% else %}
+                            {% if member_role == 'admin' or member_role == 'editor' %}
+                                <div>
+                                    <a class="primary-btn white-btn" href="{% url 'propose-edit-label' community.id tklabel.unique_id %}">Propose an edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                </div>
                             {% endif %}
                         {% endif %}
                     {% endif %}

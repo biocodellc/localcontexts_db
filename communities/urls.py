@@ -24,6 +24,7 @@ urlpatterns = [
     path('labels/customize/<str:pk>/<str:label_type>', views.customize_label, name="customize-label"),
     path('labels/<str:pk>/<str:label_id>/', views.approve_label, name="approve-label"),
     path('labels/edit/<str:pk>/<str:label_id>/', views.edit_label, name="edit-label"),
+    path('labels/propose-edit/<str:pk>/<str:label_id>/', views.propose_edit_label, name="propose-edit-label"),
 
     path('labels/apply-labels/<str:pk>/<str:project_uuid>', views.apply_labels, name="apply-labels"),
 

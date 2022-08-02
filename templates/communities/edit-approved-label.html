@@ -1,0 +1,16 @@
+{% extends 'sub-base.html' %} {% block title %} | Propose an Edit to a Label {% endblock %}{% load static %} {% load custom_tags%} {% block community_content %}
+
+<div class="content-card-v2 content-card-space">
+    <div class="margin-bottom-16">
+        <small class="bold">
+            <a class="darkteal-text"href="{% url 'select-label' community.id %}">Labels</a> 
+            <span class="grey-text"> >> Propose an edit</span>
+        </small>
+    </div>
+    <div class="w-70">
+        <h2 class="no-top-margin">Propose an edit</h2>
+        <p>Here you can propose edit to the text for this Label. Before your edit can be implemented, it must be approved by another Admin or Editor of this community.</p>
+    </div>
+</div>
+
+{% endblock %}

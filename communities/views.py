@@ -599,6 +599,31 @@ def edit_label(request, pk, label_id):
         return render(request, 'communities/edit-label.html', context)
 
 @login_required(login_url='login')
+def propose_edit_label(request, pk, label_id):
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    bclabel = BCLabel.objects.none()
+    tklabel = TKLabel.objects.none()
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False or member_role == 'viewer':
+        return redirect('restricted')    
+    else:
+        if BCLabel.objects.filter(unique_id=label_id).exists():
+            bclabel = BCLabel.objects.get(unique_id=label_id)
+
+        if TKLabel.objects.filter(unique_id=label_id).exists():
+            tklabel = TKLabel.objects.get(unique_id=label_id)
+
+        context = {
+            'community': community,
+            'member_role': member_role,
+            'bclabel': bclabel,
+            'tklabel': tklabel,
+        }
+        return render(request, 'communities/edit-approved-label.html', context)
+
+
+@login_required(login_url='login')
 def view_label(request, pk, label_uuid):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
 
