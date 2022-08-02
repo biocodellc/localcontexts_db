@@ -1,16 +1,48 @@
 {% extends 'sub-base.html' %} {% block title %} | Propose an Edit to a Label {% endblock %}{% load static %} {% load custom_tags%} {% block community_content %}
 
-<div class="content-card-v2 content-card-space">
-    <div class="margin-bottom-16">
-        <small class="bold">
-            <a class="darkteal-text"href="{% url 'select-label' community.id %}">Labels</a> 
-            <span class="grey-text"> >> Propose an edit</span>
-        </small>
+    <div class="content-card-v2 content-card-space">
+        <div class="margin-bottom-16">
+            <small class="bold">
+                <a class="darkteal-text"href="{% url 'select-label' community.id %}">Labels</a> 
+                <span class="grey-text"> >> Propose an edit</span>
+            </small>
+        </div>
+        <div class="w-70">
+            <h2 class="no-top-margin">Propose an edit</h2>
+            <p>Here you can propose edit to the text for this Label. Before your edit can be implemented, it must be approved by another Admin or Editor of this community.</p>
+        </div>
     </div>
-    <div class="w-70">
-        <h2 class="no-top-margin">Propose an edit</h2>
-        <p>Here you can propose edit to the text for this Label. Before your edit can be implemented, it must be approved by another Admin or Editor of this community.</p>
+
+    <div class="content-card-v2 content-card-space">
+        <h2 class="no-top-margin">Current Version</h2>
+
+        {% if bclabel %}
+            <div class="full-label-card flex-this">
+                <div class="margin-right-16"><img src="{{bclabel.img_url}}" class="img-sizedown-151-116"></div>
+                <div>
+                    <div><h3 class="no-top-margin">{{ bclabel.name }}</h3></div>
+                    {% if bclabel.audiofile %}<div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
+                    <p>{{ bclabel.label_text }}</p>
+                    {% include 'partials/_label-translation.html' %}
+                </div>
+            </div>    
+        {% endif %}
+
+        {% if tklabel %}
+            <div class="full-label-card flex-this">
+                <div class="margin-right-16"><img src="{{tklabel.img_url}}" class="img-sizedown-151-116"></div>
+                <div>
+                    <div><h3 class="no-top-margin">{{ tklabel.name }}</h3></div>
+                    {% if tklabel.audiofile %}<div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
+                    <p>{{ tklabel.label_text }}</p>
+                    {% include 'partials/_label-translation.html' %}
+                </div>
+            </div>    
+        {% endif %}
     </div>
-</div>
+
+    <div class="content-card-v2 content-card-space">
+        <h2 class="no-top-margin">Propose edit</h2>
+    </div>
 
 {% endblock %}
