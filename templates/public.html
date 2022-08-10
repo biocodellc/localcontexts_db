@@ -188,7 +188,6 @@
                 {% endif %}                
             </div>
 
-
             <div class="flex-this">
                 <div class="dashcard-img-container">
                     <img loading="lazy" 
@@ -211,9 +210,9 @@
                 </div>
             </div>
             <div>
-                <div>
-                    <h3>Notices used</h3>
-                    <div class="flex-this">
+                <h3>Notices used</h3>
+                <div class="flex-this">
+                    <div class="flex-this w-50">
                         {% if bcnotice %} 
                             <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="90px" alt="black square with white letters BC in the middle"></div>
                         {% endif %}
@@ -227,29 +226,43 @@
                         {% endif %}
                         {% if not bcnotice and not tknotice and not attrnotice %} No Notices to display yet {% endif %}
                     </div>
+
+                    {% if otc_notices %}
+                        <div class="flex-this">
+                            <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="90px" alt="black square with white rectangle being held by two hands in the middle"></div>
+                            <ul>
+                                {% for notice in otc_notices %}
+                                    <li>
+                                        <a href="{{ notice.url }}" class="darkteal-text underline-hover">
+                                            {% if notice.name %} {{ notice.name }} {% else %}{{ notice.url }}{% endif %}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>                                    
+                        </div>
+                    {% endif %}
                 </div>
+            </div>
                 
-                <div>
-                    <h3>Public Projects </h3>
-                    <ul>
-                        {% if projects %}
-                            {% for project in projects %}
-                                <li>
-                                    <a href="{% url 'view-project' project.unique_id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
-                                </li>
-                            {% endfor %}
-                        {% else %}
-                                No public projects available
-                        {% endif %}                        
-                    </ul>                           
-                </div>
+            <div>
+                <h3>Public Projects </h3>
+                <ul>
+                    {% if projects %}
+                        {% for project in projects %}
+                            <li>
+                                <a href="{% url 'view-project' project.unique_id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                            No public projects available
+                    {% endif %}                        
+                </ul>                           
             </div>
         </div>
     {% endif %}
 
     {% if researcher %}
         <div class="dashcard">
-
             <div class="flex-this space-between">
                 <div class="loc grey-text bold margin-bottom-16">
                     <small>
@@ -326,9 +339,9 @@
 
             </div>
             <div>
-                <div>
-                    <h3>Notices used</h3>
-                    <div class="flex-this">
+                <h3>Notices used</h3>
+                <div class="flex-this">
+                    <div class="flex-this w-50">
                         {% if bcnotice %} 
                             <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="90px" alt="black square with white letters BC in the middle"></div>
                         {% endif %}
@@ -342,22 +355,37 @@
                         {% endif %}
                         {% if not bcnotice and not tknotice and not attrnotice %} No Notices to display yet {% endif %}
                     </div>
+
+                    {% if otc_notices %}
+                        <div class="flex-this">
+                            <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="90px" alt="black square with white rectangle being held by two hands in the middle"></div>
+                            <ul>
+                                {% for notice in otc_notices %}
+                                    <li>
+                                        <a href="{{ notice.url }}" class="darkteal-text underline-hover">
+                                            {% if notice.name %} {{ notice.name }} {% else %}{{ notice.url }}{% endif %}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>                                    
+                        </div>
+                    {% endif %}
                 </div>
+            </div>
                 
-                <div>
-                    <h3>Public Projects </h3>
-                    <ul>
-                        {% if projects %}
-                            {% for project in projects %}
-                                <li>
-                                    <a href="{% url 'view-project' project.unique_id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
-                                </li>
-                            {% endfor %}
-                        {% else %}
-                                No public projects available
-                        {% endif %}                        
-                    </ul>                           
-                </div>
+            <div>
+                <h3>Public Projects </h3>
+                <ul>
+                    {% if projects %}
+                        {% for project in projects %}
+                            <li>
+                                <a href="{% url 'view-project' project.unique_id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                            No public projects available
+                    {% endif %}                        
+                </ul>                           
             </div>
         </div>
     {% endif %}

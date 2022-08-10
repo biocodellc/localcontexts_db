@@ -165,6 +165,8 @@ def public_institution_view(request, pk):
             if p.project.project_privacy == 'Public':
                 projects.append(p.project)
         
+        otc_notices = OpenToCollaborateNoticeURL.objects.filter(institution=institution)
+        
         if request.user.is_authenticated:
             user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()
             form = ContactOrganizationForm(request.POST or None)
@@ -201,6 +203,7 @@ def public_institution_view(request, pk):
                     'bcnotice': bcnotice,
                     'tknotice': tknotice,
                     'attrnotice': attrnotice,
+                    'otc_notices': otc_notices,
                 }
                 return render(request, 'public.html', context)
 
@@ -210,6 +213,7 @@ def public_institution_view(request, pk):
             'bcnotice': bcnotice,
             'tknotice': tknotice,
             'attrnotice': attrnotice,
+            'otc_notices': otc_notices,
         }
         return render(request, 'public.html', context)
     except:
