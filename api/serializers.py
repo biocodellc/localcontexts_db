@@ -44,7 +44,7 @@ class BCLabelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BCLabel
-        fields = ('name', 'label_type', 'language_tag', 'language', 'label_text', 'img_url', 'svg_url', 'audiofile',  'community', 'translations', 'created', 'updated')
+        fields = ('unique_id', 'name', 'label_type', 'language_tag', 'language', 'label_text', 'img_url', 'svg_url', 'audiofile',  'community', 'translations', 'created', 'updated')
     
     def get_community(self, obj):
         return str(obj.community.community_name)
@@ -55,7 +55,7 @@ class TKLabelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TKLabel
-        fields = ('name', 'label_type', 'language_tag', 'language', 'label_text', 'img_url', 'svg_url', 'audiofile', 'community', 'translations', 'created', 'updated')
+        fields = ('unique_id', 'name', 'label_type', 'language_tag', 'language', 'label_text', 'img_url', 'svg_url', 'audiofile', 'community', 'translations', 'created', 'updated')
 
     def get_community(self, obj):
         return str(obj.community.community_name)
