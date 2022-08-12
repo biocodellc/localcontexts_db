@@ -6,7 +6,7 @@
     Please click 
     <a 
         href="{% if 'localhost' in domain %}http{% else %}https{% endif %}://{{domain}}{% url 'activate' uidb64=uid token=token %}" 
-        target="_blank"
+        target="_blank" rel="noopener"
     >this link</a> to activate your profile.<br>
 
     <br>
