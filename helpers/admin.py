@@ -19,7 +19,7 @@ class ConnectionsAdmin(admin.ModelAdmin):
     list_display = ('community', 'researcher', 'institution')
 
 class LabelVersionAdmin(admin.ModelAdmin):
-    list_display = ('version', 'bclabel', 'tklabel', 'created')
+    list_display = ('version', 'bclabel', 'tklabel', 'created', 'is_approved')
     readonly_fields = ('bclabel', 'tklabel', 'version', 'version_text', 'created_by', 'approved_by', 'created',)
 
 class LabelTranslationVersionAdmin(admin.ModelAdmin):

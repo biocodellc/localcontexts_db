@@ -275,6 +275,7 @@ def create_label_versions(label):
             bclabel=label,
             version=version_num, 
             created_by=label.created_by, 
+            is_approved=True,
             approved_by=label.approved_by,
             version_text=label.label_text,
             created=label.created
@@ -296,6 +297,7 @@ def create_label_versions(label):
             tklabel=label,
             version=version_num, 
             created_by=label.created_by, 
+            is_approved=True,
             approved_by=label.approved_by,
             version_text=label.label_text,
             created=label.created

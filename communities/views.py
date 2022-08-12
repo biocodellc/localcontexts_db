@@ -457,8 +457,6 @@ def customize_label(request, pk, label_type):
 @login_required(login_url='login')
 def approve_label(request, pk, label_id):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    bclabel_exists = BCLabel.objects.filter(unique_id=label_id).exists()
-    tklabel_exists = TKLabel.objects.filter(unique_id=label_id).exists()
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer':
@@ -467,12 +465,20 @@ def approve_label(request, pk, label_id):
         # Init empty qs
         bclabel = BCLabel.objects.none()
         tklabel = TKLabel.objects.none()
-        if bclabel_exists:
+        version = LabelVersion.objects.none()
+        version_translations = LabelTranslationVersion.objects.none()
+
+        if BCLabel.objects.filter(unique_id=label_id).exists():
             bclabel = BCLabel.objects.select_related('approved_by').get(unique_id=label_id)
-        if tklabel_exists:
+            version = LabelVersion.objects.filter(bclabel=bclabel).order_by('-version').first()
+
+        if TKLabel.objects.filter(unique_id=label_id).exists():
             tklabel = TKLabel.objects.select_related('approved_by').get(unique_id=label_id)
+            version = LabelVersion.objects.filter(tklabel=tklabel).order_by('-version').first()
         
+        version_translations = LabelTranslationVersion.objects.filter(version_instance=version)
         form = LabelNoteForm(request.POST or None)
+
         if request.method == 'POST':
             # If not approved, mark not approved and who it was by
             if 'create_label_note' in request.POST:
@@ -525,6 +531,8 @@ def approve_label(request, pk, label_id):
             'bclabel': bclabel,
             'tklabel': tklabel,
             'form': form,
+            'version': version,
+            'version_translations': version_translations,
         }
         return render(request, 'communities/approve-label.html', context)
 
@@ -564,12 +572,21 @@ def edit_label(request, pk, label_id):
                 bclabel = BCLabel.objects.get(unique_id=label_id)
                 form = EditBCLabelForm(request.POST, request.FILES, instance=bclabel)
                 formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
+                # Label goes back into the approval process
+                if bclabel.is_approved:
+                    bclabel.is_approved = False
+                    bclabel.approved_by = None
+                    bclabel.save()
 
             if TKLabel.objects.filter(unique_id=label_id).exists():
                 tklabel = TKLabel.objects.get(unique_id=label_id)
                 form = EditTKLabelForm(request.POST, request.FILES, instance=tklabel)
                 formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
-
+                 # Label goes back into the approval process
+                if tklabel.is_approved:
+                    tklabel.is_approved = False
+                    tklabel.approved_by = None
+                    tklabel.save()
 
             if form.is_valid() and formset.is_valid() and add_translation_formset.is_valid():
                 form.save()
@@ -598,57 +615,6 @@ def edit_label(request, pk, label_id):
             'tklabel': tklabel,
         }
         return render(request, 'communities/edit-label.html', context)
-
-# Edit Label after its already been approved
-@login_required(login_url='login')
-def propose_edit_label(request, pk, label_id):
-    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    bclabel = BCLabel.objects.none()
-    tklabel = TKLabel.objects.none()
-
-    member_role = check_member_role(request.user, community)
-    if member_role == False or member_role == 'viewer':
-        return redirect('restricted')    
-    else:
-        latest = LabelVersion.objects.none()
-        form = LabelVersionForm(request.POST or None, initial={'version_text': ''})
-        if BCLabel.objects.filter(unique_id=label_id).exists():
-            bclabel = BCLabel.objects.get(unique_id=label_id)
-            latest = LabelVersion.objects.filter(bclabel=bclabel).order_by('-version').first()
-            form = LabelVersionForm(request.POST or None, initial={'version_text': bclabel.label_text})
-
-        if TKLabel.objects.filter(unique_id=label_id).exists():
-            tklabel = TKLabel.objects.get(unique_id=label_id)
-            latest = LabelVersion.objects.filter(tklabel=tklabel).order_by('-version').first()
-            form = LabelVersionForm(request.POST or None, initial={'version_text': tklabel.label_text})
-
-        if request.method == 'POST':
-            if form.is_valid():
-                # Save form, set version (is_approved = False on default in model)
-                data = form.save(commit=False)
-                data.created_by = request.user
-                data.created = datetime.now()
-                data.version = latest.version + 1
-                if bclabel:
-                    data.bclabel = bclabel
-                if tklabel:
-                    data.tklabel = tklabel
-                data.save()
-
-                if bclabel:
-                    return redirect('view-label', community.id, bclabel.unique_id)
-                if tklabel:
-                    return redirect('view-label', community.id, tklabel.unique_id)
-
-        context = {
-            'community': community,
-            'member_role': member_role,
-            'bclabel': bclabel,
-            'tklabel': tklabel,
-            'form': form,
-        }
-        return render(request, 'communities/edit-approved-label.html', context)
-
 
 @login_required(login_url='login')
 def view_label(request, pk, label_uuid):

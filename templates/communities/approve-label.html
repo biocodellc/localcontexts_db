@@ -43,7 +43,7 @@
         </div>
 
         <div class="content-card-v2 content-card-space"> 
-
+            <h2 class="no-top-margin">Proposed Edit</h2>
             <div class="flex-this margin-bottom-8 margin-top-8 about-this-label">
                 <div class="w-20 margin-left-16 margin-top-16 margin-bottom-16">
                     {% if bclabel %}
@@ -87,6 +87,46 @@
             </div>
 
         </div>
+
+        {% if version.is_approved %}
+            <div class="content-card-v2 content-card-space"> 
+                
+                <h2 class="no-top-margin">Previous Version (v{{ version.version }})</h2>
+                <p class="no-top-margin w-70">Compare this version to the proposed version to see the changes.</p>
+
+                <div class="flex-this margin-bottom-8 margin-top-8 about-this-label">
+                    <div class="w-20 margin-left-16 margin-top-16 margin-bottom-16">
+                        {% if bclabel %}
+                            {% include 'bclabels/which-label.html' %}
+                        {% endif %}
+                        {% if tklabel %}
+                            {% include 'tklabels/which-label.html' %}
+                        {% endif %}
+                    </div>   
+                    <div class="w-90 margin-right-16">
+                        <div>
+                            <p class="bold">
+                                {% if bclabel.name %}{{ bclabel.name }}{% endif %}
+                                {% if tklabel.name %}{{ tklabel.name }}{% endif %}
+                            </p>
+                            {% if bclabel.audiofile %} <div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
+                            {% if tklabel.audiofile %} <div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
+
+                        </div>
+                        <div class="margin-bottom-16">{% if bclabel %}{{ bclabel.label_text }}{% endif %}{% if tklabel %}{{ tklabel.label_text }}{% endif %}</div>
+                        
+                        {% if version_translations %}
+                            {% for translation in version_translations %}
+                                <div><p class="bold">{{ translation.translated_name }} | {{ translation.language }}</p></div>
+                                <div class="margin-bottom-16">{{ translation.translated_text }}</div>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>                
+                </div>
+
+            </div>
+        {% endif %}
         
     </form>
 
