@@ -465,18 +465,18 @@ def approve_label(request, pk, label_id):
         # Init empty qs
         bclabel = BCLabel.objects.none()
         tklabel = TKLabel.objects.none()
-        version = LabelVersion.objects.none()
+        latest_approved_version = LabelVersion.objects.none()
         version_translations = LabelTranslationVersion.objects.none()
 
         if BCLabel.objects.filter(unique_id=label_id).exists():
             bclabel = BCLabel.objects.select_related('approved_by').get(unique_id=label_id)
-            version = LabelVersion.objects.filter(bclabel=bclabel).order_by('-version').first()
+            latest_approved_version = LabelVersion.objects.filter(bclabel=bclabel, is_approved=True).order_by('-version').first()
 
         if TKLabel.objects.filter(unique_id=label_id).exists():
             tklabel = TKLabel.objects.select_related('approved_by').get(unique_id=label_id)
-            version = LabelVersion.objects.filter(tklabel=tklabel).order_by('-version').first()
+            latest_approved_version = LabelVersion.objects.filter(tklabel=tklabel, is_approved=True).order_by('-version').first()
         
-        version_translations = LabelTranslationVersion.objects.filter(version_instance=version)
+        version_translations = LabelTranslationVersion.objects.filter(version_instance=latest_approved_version)
         form = LabelNoteForm(request.POST or None)
 
         if request.method == 'POST':
@@ -510,8 +510,8 @@ def approve_label(request, pk, label_id):
                     bclabel.save()
                     send_email_label_approved(bclabel)
 
-                    # handle Label versions and translation versions
-                    create_label_versions(bclabel)
+                    # handle label versions and translation versions
+                    handle_label_versions(bclabel)
 
                 # TK LABEL
                 if tklabel:
@@ -521,7 +521,7 @@ def approve_label(request, pk, label_id):
                     send_email_label_approved(tklabel)
 
                     # handle Label versions and translation versions
-                    create_label_versions(tklabel)
+                    handle_label_versions(tklabel)
 
                 return redirect('select-label', community.id)
         
@@ -531,7 +531,7 @@ def approve_label(request, pk, label_id):
             'bclabel': bclabel,
             'tklabel': tklabel,
             'form': form,
-            'version': version,
+            'latest_approved_version': latest_approved_version,
             'version_translations': version_translations,
         }
         return render(request, 'communities/approve-label.html', context)
@@ -576,6 +576,7 @@ def edit_label(request, pk, label_id):
                 if bclabel.is_approved:
                     bclabel.is_approved = False
                     bclabel.approved_by = None
+                    bclabel.version += 1
                     bclabel.save()
 
             if TKLabel.objects.filter(unique_id=label_id).exists():
@@ -586,6 +587,7 @@ def edit_label(request, pk, label_id):
                 if tklabel.is_approved:
                     tklabel.is_approved = False
                     tklabel.approved_by = None
+                    tklabel.version += 1
                     tklabel.save()
 
             if form.is_valid() and formset.is_valid() and add_translation_formset.is_valid():
@@ -599,7 +601,7 @@ def edit_label(request, pk, label_id):
                         instance.bclabel = bclabel
                     elif TKLabel.objects.filter(unique_id=label_id).exists():
                         instance.tklabel = tklabel
-
+                    
                     instance.save()
                     set_language_code(instance)
 
