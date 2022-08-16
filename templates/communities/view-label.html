@@ -32,7 +32,7 @@
                         {% if not bclabel.is_approved %}
                             {% if bclabel.created_by == request.user %}
                                 <div>
-                                    <a class="primary-btn white-btn" href="{% url 'edit-label' community.id bclabel.unique_id %}">Edit Label</a>
+                                    <a class="primary-btn white-btn" href="{% url 'edit-label' community.id bclabel.unique_id %}">Edit Label <i class="fa fa-pencil" aria-hidden="true"></i></a>
                                 </div>
                             {% else %}
                                 {% if member_role == 'admin' or member_role == 'editor' %}
@@ -41,6 +41,12 @@
                                     </div>
                                 {% endif %}
                             {% endif %}
+                        {% else %}
+                            {% if bclabel.created_by == request.user %}
+                                <div>
+                                    <a class="primary-btn white-btn" href="{% url 'edit-label' community.id bclabel.unique_id %}">Propose an edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                </div>   
+                            {% endif %}  
                         {% endif %}
                     {% endif %}
 
@@ -48,7 +54,7 @@
                         {% if not tklabel.is_approved %}
                             {% if tklabel.created_by == request.user %}
                                 <div>
-                                    <a class="primary-btn white-btn" href="{% url 'edit-label' community.id tklabel.unique_id %}">Edit Label</a>
+                                    <a class="primary-btn white-btn" href="{% url 'edit-label' community.id tklabel.unique_id %}">Edit Label <i class="fa fa-pencil" aria-hidden="true"></i></a>
                                 </div>
                             {% else %}
                                 {% if member_role == 'admin' or member_role == 'editor' %}
@@ -56,6 +62,12 @@
                                         <a class="primary-btn action-btn" href="{% url 'approve-label' community.id tklabel.unique_id %}">Review for Approval</a>
                                     </div>
                                 {% endif %}
+                            {% endif %}
+                        {% else %}
+                            {% if tklabel.created_by == request.user %}
+                                <div>
+                                    <a class="primary-btn white-btn" href="{% url 'edit-label' community.id tklabel.unique_id %}">Propose an edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                </div>
                             {% endif %}
                         {% endif %}
                     {% endif %}
@@ -122,18 +134,21 @@
                                 <p>
                                 {% if label_versions %}
                                     {% for version in label_versions %}
-                                        <h3 class="bold"><i>Version {{ version.version }}: Created {{ version.created|date:'M Y'}}</i></h3>
-                                        <i>
-                                            <span class="bold block margin-bottom-16">Label text</span>
-                                            {{ version.version_text }}
+                                        {% if version.version == bclabel.version or version.version == tklabel.version %}
+                                        {% else %}
+                                            <h3 class="bold"><i>Version {{ version.version }}: Created {{ version.created|date:'M Y'}}</i></h3>
+                                            <i>
+                                                <span class="bold block margin-bottom-16">Label text</span>
+                                                {{ version.version_text }}
 
-                                            {% if version.label_version_translation.all %}
-                                                {% for translated_version in version.label_version_translation.all %}
-                                                    <span class="bold block margin-bottom-16 margin-top-16">{{ translated_version.language }}</span>
-                                                    {{ translated_version.translated_text }}
-                                                {% endfor %}
-                                            {% endif %}
-                                        </i>
+                                                {% if version.label_version_translation.all %}
+                                                    {% for translated_version in version.label_version_translation.all %}
+                                                        <span class="bold block margin-bottom-16 margin-top-16">{{ translated_version.language }}</span>
+                                                        {{ translated_version.translated_text }}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </i>
+                                        {% endif %}
                                     {% endfor %}
                                 {% endif %}
                             </p>

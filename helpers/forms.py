@@ -60,3 +60,11 @@ class OpenToCollaborateNoticeURLForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'w-100 margin-bottom-8'}), 
             'url': forms.TextInput(attrs={'class': 'w-100'}), 
         }
+
+class LabelVersionForm(forms.ModelForm):
+    class Meta:
+        model = LabelVersion
+        fields = ['version_text']
+        widgets = { 
+            'version_text': forms.Textarea(attrs={'class': 'w-100'}), 
+        }

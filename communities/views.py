@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from datetime import datetime
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
-from helpers.models import LabelTranslation, ProjectStatus, EntitiesNotified, Connections, LabelVersion
+from helpers.models import *
 from notifications.models import *
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from projects.models import ProjectContributors, Project, ProjectPerson, ProjectCreator
 
-from helpers.forms import AddLabelTranslationFormSet, LabelNoteForm, ProjectCommentForm, UpdateBCLabelTranslationFormSet, UpdateTKLabelTranslationFormSet
+from helpers.forms import *
 from bclabels.forms import *
 from tklabels.forms import *
 from projects.forms import *
@@ -376,22 +377,24 @@ def customize_label(request, pk, label_type):
                 label_name = request.POST.get('input-label-name')
 
                 if form.is_valid() and add_translation_formset.is_valid():
-                    label_form = form.save(commit=False)
-                    label_form.name = label_name
-                    label_form.label_type = tk_type
-                    label_form.community = community
-                    label_form.img_url = img_url
-                    label_form.svg_url = svg_url
-                    label_form.created_by = request.user
-                    label_form.is_approved = False
-                    label_form.save()
-                    set_language_code(label_form)
+                    data = form.save(commit=False)
+                    if not data.language:
+                        data.language = 'English'
+                    data.name = label_name
+                    data.label_type = tk_type
+                    data.community = community
+                    data.img_url = img_url
+                    data.svg_url = svg_url
+                    data.created_by = request.user
+                    data.is_approved = False
+                    data.save()
+                    set_language_code(data)
 
 
                     # Save all label translation instances
                     instances = add_translation_formset.save(commit=False)
                     for instance in instances:
-                        instance.tklabel = label_form
+                        instance.tklabel = data
                         instance.save()
                         set_language_code(instance)
                     
@@ -418,22 +421,24 @@ def customize_label(request, pk, label_type):
                 label_name = request.POST.get('input-label-name')
 
                 if form.is_valid() and add_translation_formset.is_valid():
-                    label_form = form.save(commit=False)
-                    label_form.name = label_name
-                    label_form.label_type = bc_type
-                    label_form.community = community
-                    label_form.img_url = img_url
-                    label_form.svg_url = svg_url
-                    label_form.created_by = request.user
-                    label_form.is_approved = False
-                    label_form.save()
-                    set_language_code(label_form)
+                    data = form.save(commit=False)
+                    if not data.language:
+                        data.language = 'English'
+                    data.name = label_name
+                    data.label_type = bc_type
+                    data.community = community
+                    data.img_url = img_url
+                    data.svg_url = svg_url
+                    data.created_by = request.user
+                    data.is_approved = False
+                    data.save()
+                    set_language_code(data)
 
 
                     # Save all label translation instances
                     instances = add_translation_formset.save(commit=False)
                     for instance in instances:
-                        instance.bclabel = label_form
+                        instance.bclabel = data
                         instance.save()
                         set_language_code(instance)
 
@@ -456,8 +461,6 @@ def customize_label(request, pk, label_type):
 @login_required(login_url='login')
 def approve_label(request, pk, label_id):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    bclabel_exists = BCLabel.objects.filter(unique_id=label_id).exists()
-    tklabel_exists = TKLabel.objects.filter(unique_id=label_id).exists()
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer':
@@ -466,12 +469,20 @@ def approve_label(request, pk, label_id):
         # Init empty qs
         bclabel = BCLabel.objects.none()
         tklabel = TKLabel.objects.none()
-        if bclabel_exists:
+        latest_approved_version = LabelVersion.objects.none()
+        version_translations = LabelTranslationVersion.objects.none()
+
+        if BCLabel.objects.filter(unique_id=label_id).exists():
             bclabel = BCLabel.objects.select_related('approved_by').get(unique_id=label_id)
-        if tklabel_exists:
+            latest_approved_version = LabelVersion.objects.filter(bclabel=bclabel, is_approved=True).order_by('-version').first()
+
+        if TKLabel.objects.filter(unique_id=label_id).exists():
             tklabel = TKLabel.objects.select_related('approved_by').get(unique_id=label_id)
+            latest_approved_version = LabelVersion.objects.filter(tklabel=tklabel, is_approved=True).order_by('-version').first()
         
+        version_translations = LabelTranslationVersion.objects.filter(version_instance=latest_approved_version)
         form = LabelNoteForm(request.POST or None)
+
         if request.method == 'POST':
             # If not approved, mark not approved and who it was by
             if 'create_label_note' in request.POST:
@@ -503,8 +514,8 @@ def approve_label(request, pk, label_id):
                     bclabel.save()
                     send_email_label_approved(bclabel)
 
-                    # handle Label versions and translation versions
-                    create_label_versions(bclabel)
+                    # handle label versions and translation versions
+                    handle_label_versions(bclabel)
 
                 # TK LABEL
                 if tklabel:
@@ -514,7 +525,7 @@ def approve_label(request, pk, label_id):
                     send_email_label_approved(tklabel)
 
                     # handle Label versions and translation versions
-                    create_label_versions(tklabel)
+                    handle_label_versions(tklabel)
 
                 return redirect('select-label', community.id)
         
@@ -524,10 +535,12 @@ def approve_label(request, pk, label_id):
             'bclabel': bclabel,
             'tklabel': tklabel,
             'form': form,
+            'latest_approved_version': latest_approved_version,
+            'version_translations': version_translations,
         }
         return render(request, 'communities/approve-label.html', context)
 
-# Edit Label
+# Edit Label before approval
 @login_required(login_url='login')
 def edit_label(request, pk, label_id):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
@@ -563,12 +576,23 @@ def edit_label(request, pk, label_id):
                 bclabel = BCLabel.objects.get(unique_id=label_id)
                 form = EditBCLabelForm(request.POST, request.FILES, instance=bclabel)
                 formset = UpdateBCLabelTranslationFormSet(request.POST or None, instance=bclabel)
+                # Label goes back into the approval process
+                if bclabel.is_approved:
+                    bclabel.is_approved = False
+                    bclabel.approved_by = None
+                    bclabel.version += 1
+                    bclabel.save()
 
             if TKLabel.objects.filter(unique_id=label_id).exists():
                 tklabel = TKLabel.objects.get(unique_id=label_id)
                 form = EditTKLabelForm(request.POST, request.FILES, instance=tklabel)
                 formset = UpdateTKLabelTranslationFormSet(request.POST or None, instance=tklabel)
-
+                 # Label goes back into the approval process
+                if tklabel.is_approved:
+                    tklabel.is_approved = False
+                    tklabel.approved_by = None
+                    tklabel.version += 1
+                    tklabel.save()
 
             if form.is_valid() and formset.is_valid() and add_translation_formset.is_valid():
                 form.save()
@@ -581,7 +605,7 @@ def edit_label(request, pk, label_id):
                         instance.bclabel = bclabel
                     elif TKLabel.objects.filter(unique_id=label_id).exists():
                         instance.tklabel = tklabel
-
+                    
                     instance.save()
                     set_language_code(instance)
 

@@ -4,7 +4,7 @@ from django.templatetags.static import static
 from institutions.models import Institution
 from notifications.models import ActionNotification
 from projects.models import Project, ProjectCreator
-from helpers.models import EntitiesNotified, Connections
+from helpers.models import EntitiesNotified, Connections, LabelVersion
 from bclabels.models import BCLabel
 from researchers.models import Researcher
 from tklabels.models import TKLabel

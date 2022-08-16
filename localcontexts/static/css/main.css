@@ -65,6 +65,8 @@ textarea {
     background-color: #fff;
     border: 1px solid #1F2937;
     border-radius: 4px;
+    padding: 10px 10px;
+    font-size: 15px;
 }
 
 input[type=checkbox] {

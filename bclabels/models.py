@@ -29,7 +29,7 @@ class BCLabel(models.Model):
     community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='label name', max_length=90, null=True)
     language_tag = models.CharField(max_length=5, blank=True)
-    language = models.CharField(max_length=150, blank=True)
+    language = models.CharField(max_length=150, blank=True, default="English")
     label_text = models.TextField(null=True, blank=True)
     img_url = models.URLField(blank=True, null=True)
     svg_url = models.URLField(blank=True, null=True)

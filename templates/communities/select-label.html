@@ -1,4 +1,4 @@
-{% extends 'sub-base.html' %} {% block title %} | Select Label {% endblock %}{% load static %} {% load custom_tags%} {% block community_content %}
+{% extends 'sub-base.html' %} {% block title %} | Select Label {% endblock %}{% load static %} {% load custom_tags %} {% block community_content %}
 
 <div class="content-card-v2 content-card-space">
 
@@ -21,7 +21,7 @@
                 <div><p>You currently have {{ bclabels.count }} BC Labels and {{ tklabels.count }} TK Labels customized</p></div>   
                 <div class="flex-this flex-end">
                     <div class="margin-right-8">
-                        <a class="white-btn primary-btn" href="{% url 'labels-pdf' community.id %}" target="_blank">View in PDF <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                        <a class="white-btn primary-btn" href="{% url 'labels-pdf' community.id %}" target="_blank" rel="noopener">View in PDF <i class="fa fa-external-link" aria-hidden="true"></i></a>
                     </div>
                     <div>
                         <a class="white-btn primary-btn" href="{% url 'download-labels' community.id %}">Download <i class="fa fa-download" aria-hidden="true"></i></a>
@@ -245,7 +245,7 @@
                 The TK Label text is intended to be customized by each community – giving the Labels specificity and context. 
                 The title of each TK Label can be translated into one or more languages and displayed in addition to the default Label title. 
                 The TK Label icons are not to be altered.  This is to ensure national and international recognition and integrity across content 
-                and collection management systems, online repositories, websites, and physical exhibits, learn more about <a class="darkteal-text underline-hover" href="https://localcontexts.org/labels/traditional-knowledge-labels/" target="_blank">TK Labels</a>.
+                and collection management systems, online repositories, websites, and physical exhibits, learn more about <a class="darkteal-text underline-hover" href="https://localcontexts.org/labels/traditional-knowledge-labels/" target="_blank" rel="noopener">TK Labels</a>.
                 <br><br>
                 Click on a Label to view more information*
             </p>
@@ -605,7 +605,7 @@
                 The title of each BC Label can be translated into one or more languages and displayed in addition to the default Label title. 
                 The BC Label icons are not to be altered.  This is to ensure national and international recognition and integrity across content and collection management systems, 
                 online repositories, websites, and physical exhibits. 
-                Learn more about <a class="darkteal-text underline-hover" href="https://localcontexts.org/labels/biocultural-labels/" target="_blank">BC Labels</a>.
+                Learn more about <a class="darkteal-text underline-hover" href="https://localcontexts.org/labels/biocultural-labels/" target="_blank" rel="noopener">BC Labels</a>.
                 <br><br>
                 Click on a Label to view more information*
             </p>
