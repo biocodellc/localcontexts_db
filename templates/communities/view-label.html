@@ -134,18 +134,21 @@
                                 <p>
                                 {% if label_versions %}
                                     {% for version in label_versions %}
-                                        <h3 class="bold"><i>Version {{ version.version }}: Created {{ version.created|date:'M Y'}}</i></h3>
-                                        <i>
-                                            <span class="bold block margin-bottom-16">Label text</span>
-                                            {{ version.version_text }}
+                                        {% if version.version == bclabel.version or version.version == tklabel.version %}
+                                        {% else %}
+                                            <h3 class="bold"><i>Version {{ version.version }}: Created {{ version.created|date:'M Y'}}</i></h3>
+                                            <i>
+                                                <span class="bold block margin-bottom-16">Label text</span>
+                                                {{ version.version_text }}
 
-                                            {% if version.label_version_translation.all %}
-                                                {% for translated_version in version.label_version_translation.all %}
-                                                    <span class="bold block margin-bottom-16 margin-top-16">{{ translated_version.language }}</span>
-                                                    {{ translated_version.translated_text }}
-                                                {% endfor %}
-                                            {% endif %}
-                                        </i>
+                                                {% if version.label_version_translation.all %}
+                                                    {% for translated_version in version.label_version_translation.all %}
+                                                        <span class="bold block margin-bottom-16 margin-top-16">{{ translated_version.language }}</span>
+                                                        {{ translated_version.translated_text }}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </i>
+                                        {% endif %}
                                     {% endfor %}
                                 {% endif %}
                             </p>

@@ -293,12 +293,13 @@ def handle_label_versions(label):
         # If approved version exists, set version number to 1 more than the latest
         latest_version = LabelVersion.objects.filter(tklabel=label).order_by('-version').first()
 
-        if latest_version.is_approved:
-            version_num = latest_version.version + 1
-        elif not latest_version.is_approved:
-            latest_version.is_approved = True
-            latest_version.save()
-        elif latest_version == None:
+        if latest_version is not None:
+            if latest_version.is_approved:
+                version_num = latest_version.version + 1
+            elif not latest_version.is_approved:
+                latest_version.is_approved = True
+                latest_version.save()
+        else:
             version_num = 1
             label.version = 1
             label.save()
