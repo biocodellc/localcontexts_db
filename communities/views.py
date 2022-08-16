@@ -377,22 +377,24 @@ def customize_label(request, pk, label_type):
                 label_name = request.POST.get('input-label-name')
 
                 if form.is_valid() and add_translation_formset.is_valid():
-                    label_form = form.save(commit=False)
-                    label_form.name = label_name
-                    label_form.label_type = tk_type
-                    label_form.community = community
-                    label_form.img_url = img_url
-                    label_form.svg_url = svg_url
-                    label_form.created_by = request.user
-                    label_form.is_approved = False
-                    label_form.save()
-                    set_language_code(label_form)
+                    data = form.save(commit=False)
+                    if not data.language:
+                        data.language = 'English'
+                    data.name = label_name
+                    data.label_type = tk_type
+                    data.community = community
+                    data.img_url = img_url
+                    data.svg_url = svg_url
+                    data.created_by = request.user
+                    data.is_approved = False
+                    data.save()
+                    set_language_code(data)
 
 
                     # Save all label translation instances
                     instances = add_translation_formset.save(commit=False)
                     for instance in instances:
-                        instance.tklabel = label_form
+                        instance.tklabel = data
                         instance.save()
                         set_language_code(instance)
                     
@@ -419,22 +421,24 @@ def customize_label(request, pk, label_type):
                 label_name = request.POST.get('input-label-name')
 
                 if form.is_valid() and add_translation_formset.is_valid():
-                    label_form = form.save(commit=False)
-                    label_form.name = label_name
-                    label_form.label_type = bc_type
-                    label_form.community = community
-                    label_form.img_url = img_url
-                    label_form.svg_url = svg_url
-                    label_form.created_by = request.user
-                    label_form.is_approved = False
-                    label_form.save()
-                    set_language_code(label_form)
+                    data = form.save(commit=False)
+                    if not data.language:
+                        data.language = 'English'
+                    data.name = label_name
+                    data.label_type = bc_type
+                    data.community = community
+                    data.img_url = img_url
+                    data.svg_url = svg_url
+                    data.created_by = request.user
+                    data.is_approved = False
+                    data.save()
+                    set_language_code(data)
 
 
                     # Save all label translation instances
                     instances = add_translation_formset.save(commit=False)
                     for instance in instances:
-                        instance.bclabel = label_form
+                        instance.bclabel = data
                         instance.save()
                         set_language_code(instance)
 
