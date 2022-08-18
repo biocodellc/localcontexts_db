@@ -36,7 +36,7 @@
                             <div class="modal-defaults contact-modal flex-this column w-100">
                                 <div class="modal-content-padding w-100">
                                     <div class="flex-this space-between">
-                                        <div>
+                                        <div class="w-80">
                                             <h2 class="primary-black-text">Contact form</h2>  
                                             <p>This message will be sent to the administrator of {{ community.community_name }}.</p>  
                                         </div>
@@ -45,12 +45,10 @@
                                         </div>
                                     </div>
 
-                                    <form method="POST" action="">
+                                    <form id="sendMsgForm" method="POST" action="">
                                         {% csrf_token %}
-                                        
                                         {{ form.as_p }}
-                        
-                                        <button class="primary-btn action-btn" name="contact_btn">Send message <i class="fa fa-envelope" aria-hidden="true"></i></button>
+                                        <button class="primary-btn action-btn" id="sendMsgBtn" name="contact_btn">Send message <i class="fa fa-envelope" aria-hidden="true"></i></button>
                                     </form>    
                                 </div>
                             </div>
@@ -167,7 +165,7 @@
                             <div class="modal-defaults contact-modal flex-this column w-100">
                                 <div class="modal-content-padding w-100">
                                     <div class="flex-this space-between">
-                                        <div>
+                                        <div class="w-70">
                                             <h2 class="primary-black-text">Contact form</h2>  
                                             <p>This message will be sent to the administrator of {{ institution.institution_name }}.</p>  
                                         </div>
@@ -176,10 +174,10 @@
                                         </div>
                                     </div>
 
-                                    <form method="POST" action="">
+                                    <form id="sendMsgForm" method="POST" action="">
                                         {% csrf_token %}
                                         {{ form.as_p }}
-                                        <button class="primary-btn action-btn" name="contact_btn">Send message</button>
+                                        <button class="primary-btn action-btn" id="sendMsgBtn" name="contact_btn">Send message <i class="fa fa-envelope" aria-hidden="true"></i></button>
                                     </form>    
                                 </div>
                             </div>
@@ -207,6 +205,7 @@
                         </p>
                     </div>
                     <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }}{% else %} No description provided. {% endif %}</p></div>
+                    {% include 'partials/_alerts.html' %}
                 </div>
             </div>
             <div>
@@ -301,11 +300,11 @@
                                     </div>
                                 </div>
 
-                                <form method="POST" action="">
+                                <form id="sendMsgForm" method="POST" action="">
                                     {% csrf_token %}
                                     {{ form.as_p }}
                     
-                                    <button class="primary-btn action-btn" name="contact_btn">Send message</button>
+                                    <button class="primary-btn action-btn" id="sendMsgBtn" name="contact_btn">Send message <i class="fa fa-envelope" aria-hidden="true"></i></button>
                                 </form>    
                             </div>
                         </div>
@@ -335,6 +334,7 @@
                         </p>
                     </div>
                     <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }}{% else %} No description provided. {% endif %}</p></div>
+                    {% include 'partials/_alerts.html' %}
                 </div>
 
             </div>
@@ -399,8 +399,8 @@
                         <p>Are you sure you want to send a request to join this account?</p>  
                     </div>
                     <div class="flex-this w-100 text-align-center">
-                        <div id="closeRegistryModal" class="primary-btn white-btn margin-right-1 w-50 center-text">Cancel</div>    
-                        <button id="submitRegistryForm" class="margin-left-1 primary-btn action-btn w-50 center-text">Send Request</button>
+                        <div id="closeRegistryModal" class="primary-btn white-btn margin-right-1 w-50 center-text">Cancel</div>
+                        <button id="submitRegistryForm" class="margin-left-1 primary-btn action-btn w-50 center-text">Send Request</button>  
                     </div>
                 </div>
             </div>

@@ -182,16 +182,21 @@ def public_institution_view(request, pk):
                         to_email = institution.institution_creator.email
                         
                         send_contact_email(to_email, from_name, from_email, message)
+                        messages.add_message(request, messages.SUCCESS, 'Sent!')
+                        return redirect('public-institution', institution.id)
                 else:
-                    # Request To Join institution
-                    main_admin = institution.institution_creator
-                    join_request = JoinRequest.objects.create(user_from=request.user, institution=institution, user_to=main_admin)
-                    join_request.save()
+                    if JoinRequest.objects.filter(user_from=request.user, institution=institution).exists():
+                        messages.add_message(request, messages.ERROR, "You have already sent a request to this institution")
+                        return redirect('public-institution', institution.id)
+                    else:
+                        # Request To Join institution
+                        join_request = JoinRequest.objects.create(user_from=request.user, institution=institution, user_to=institution.institution_creator)
+                        join_request.save()
 
-                    # Send email to institution creator
-                    send_join_request_email_admin(request, join_request, institution)
+                        # Send email to institution creator
+                        send_join_request_email_admin(request, join_request, institution)
 
-                messages.add_message(request, messages.SUCCESS, 'Sent!')
+                        messages.add_message(request, messages.SUCCESS, 'Sent!')
                 return redirect('public-institution', institution.id)
 
             else:

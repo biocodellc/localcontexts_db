@@ -153,14 +153,21 @@ def public_community_view(request, pk):
                         to_email = community.community_creator.email
                         
                         send_contact_email(to_email, from_name, from_email, message)
+                        messages.add_message(request, messages.SUCCESS, 'Sent!')
+                        return redirect('public-community', community.id)
+
                 else:
                     # Request To Join community
-                    join_request = JoinRequest.objects.create(user_from=request.user, community=community, user_to=community.community_creator)
-                    join_request.save()
-                    # Send email to community creator
-                    send_join_request_email_admin(request, join_request, community)
+                    if JoinRequest.objects.filter(user_from=request.user, community=community).exists():
+                        messages.add_message(request, messages.ERROR, "You have already sent a request to this community")
+                        return redirect('public-community', community.id)
+                    else:
+                        join_request = JoinRequest.objects.create(user_from=request.user, community=community, user_to=community.community_creator)
+                        join_request.save()
+                        # Send email to community creator
+                        send_join_request_email_admin(request, join_request, community)
 
-                messages.add_message(request, messages.SUCCESS, 'Sent!')
+                        messages.add_message(request, messages.SUCCESS, 'Sent!')
                 return redirect('public-community', community.id)
 
             else:

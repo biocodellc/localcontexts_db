@@ -978,7 +978,7 @@ if (window.location.href.includes('communities/view/') || window.location.href.i
                 registryModal.classList.replace('hide', 'show')
                 let targetId = e.target.id.split('-').pop()
                 submitJoinRequestFormBtn.addEventListener('click', function(e) { 
-                    disbleSendRequestBtn(submitJoinRequestFormBtn)
+                    disableSendBtn(submitJoinRequestFormBtn)
                     document.getElementById(`communityRegistryForm${targetId}`).submit() 
                 })    
             } else if (e.target.id.includes('institutionRequest')) {
@@ -986,7 +986,7 @@ if (window.location.href.includes('communities/view/') || window.location.href.i
                 registryModal.classList.replace('hide', 'show')
                 let targetId = e.target.id.split('-').pop()
                 submitJoinRequestFormBtn.addEventListener('click', function(e) { 
-                    disbleSendRequestBtn(submitJoinRequestFormBtn)
+                    disableSendBtn(submitJoinRequestFormBtn)
                     document.getElementById(`institutionRegistryForm${targetId}`).submit() 
                 })  
 
@@ -1009,12 +1009,19 @@ if (window.location.href.includes('communities/view/') || window.location.href.i
                 modal.classList.replace('hide', 'show')
                 closeModal(modal)
             }
+        } else {
+            // TODO: set this up to disable contact btn
+            // const sendMsgBtn = document.getElementById('sendMsgBtn')
+            // sendMsgBtn.addEventListener('click', function() {
+            //     disableSendBtn(sendMsgBtn)
+            //     document.getElementById('sendMsgForm').submit() 
+            // })
         }
     })  
 
     // Temporarily disable the submit button to prevent multiple form submission
-    function disbleSendRequestBtn(btn) {
-        let oldValue = 'Yes'
+    function disableSendBtn(btn) {
+        let oldValue = 'Send'
         btn.setAttribute('disabled', true)
         btn.classList.replace('action-btn', 'disabled-btn')
         btn.innerText = 'Sending'
