@@ -314,6 +314,7 @@ if (parentDiv) {
 
 function populateTemplate(id) {
     let templateText = document.getElementById('label-template-text')
+    let templateName = document.getElementById('label-template-name')
     let hiddenInput = document.getElementById('input-label-name')
     let whyUseText = document.getElementById('whyUseText')
 
@@ -326,6 +327,7 @@ function populateTemplate(id) {
                 if (id == bclabel.labelCode) {
                     whyUseText.textContent = bclabel.whyUseThisLabel
                     hiddenInput.value = bclabel.labelName
+                    templateName.value = bclabel.labelName
                     templateText.textContent = bclabel.labelDefaultText
                 }
             })
@@ -335,6 +337,7 @@ function populateTemplate(id) {
                 if (id == tklabel.labelCode) {
                     whyUseText.textContent = tklabel.whyUseThisLabel
                     hiddenInput.value = tklabel.labelName
+                    templateName.value = tklabel.labelName
                     templateText.textContent = tklabel.labelDefaultText
                 }
             })
@@ -1106,13 +1109,15 @@ if (window.location.href.includes('labels/view/')) {
     const btn = document.getElementById('openLabelHistoryBtn')
     let historyDiv = document.getElementById('labelHistoryDiv')
 
-    btn.onclick = function(e) {
-        if (historyDiv.classList.contains('hide')) {
-            historyDiv.classList.replace('hide', 'show')
-            btn.innerHTML = `View Label History <i class="fa fa-angle-up" aria-hidden="true"></i>`
-        } else {
-            historyDiv.classList.replace('show', 'hide')
-            btn.innerHTML = `View Label History <i class="fa fa-angle-down" aria-hidden="true"></i>`
+    if (btn) {
+        btn.onclick = function(e) {
+            if (historyDiv.classList.contains('hide')) {
+                historyDiv.classList.replace('hide', 'show')
+                btn.innerHTML = `View Label History <i class="fa fa-angle-up" aria-hidden="true"></i>`
+            } else {
+                historyDiv.classList.replace('show', 'hide')
+                btn.innerHTML = `View Label History <i class="fa fa-angle-down" aria-hidden="true"></i>`
+            }
         }
     }
 }
