@@ -294,6 +294,14 @@ input:focus {
     color: #fff;
 }
 
+.orange-btn {
+    background-color: #FF6000;
+}
+
+.orange-btn:hover {
+    background-color: #f17c33;
+}
+
 .disabled-btn {
     background: #F3F4F6;
     border: none;
