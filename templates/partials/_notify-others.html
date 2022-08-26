@@ -11,8 +11,7 @@
 
             <div><h3 class="no-bottom-margin no-top-margin">{{ project.title }}</h3></div>
             <div><p>{{ project.date_added|date:'M d, Y' }} | 
-                {{ project.project_type }} {% if project.other_type %}: {{ project.other_type }} {% endif %}
-                | 
+                {% if project.project_type == 'Other' %} {{ project.other_type }} {% else %} {{ project.project_type }} {% endif %}|
                 {{ project.project_privacy }}
                 </p>
             </div>
