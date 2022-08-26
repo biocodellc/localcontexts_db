@@ -33,7 +33,8 @@
     <div class="flex-this margin-right-1 margin-left-1">
         <div class="flex-this column w-60">
             <div><p class="p-28 bold">{{ project.title }}</p></div>
-            <div><p class="bold">{{ project.date_added|date:'d F Y' }} | {{ project.project_type }} | {{ project.project_privacy }}</p></div>
+            <div><p class="bold">{{ project.date_added|date:'d F Y' }} | {{ project.project_type }} {% if project.other_type %}: {{ project.other_type }} {% endif %}
+                | {{ project.project_privacy }}</p></div>
 
             <div>
                 <p class="p-24 bold no-top-margin">Project Information</p>

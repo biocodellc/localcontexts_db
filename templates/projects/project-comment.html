@@ -6,7 +6,7 @@
         {% project_status project as statuses %}
 
         {% if statuses %}
-            <h3 class="no-bottom-margin">Project Messages</h3>
+            <h3 class="no-bottom-margin">Project Comments</h3>
             {% for status in statuses %}
                 <div class="flex-this space-between w-100 margin-top-16">
                     <div><p><span class="bold">{{ status.community }}</span></p></div>
@@ -21,54 +21,97 @@
                     </div>    
                 </div>
 
-                <!-- TODO: FIX THIS, ORGANIZE MESSAGES BY COMMUNITY -->
-                {% project_comments_all project as all_project_comments %}
-                {% if all_project_comments %}
-                    {% for comment in all_project_comments %}
-                        {% if comment.community.community_name in status.community.community_name %}
-                            <div class="flex-this w-80 project-comment">
-                                <div class="project-comment-teal"></div>
-                                <div class="project-comment-text">
-                                    <span class="bold">
-                                        {% if  comment.sender.get_full_name %}
-                                            {{  comment.sender.get_full_name }}
-                                        {% else %}
-                                            {{  comment.sender.username }}
-                                        {% endif %}
-                                    </span>
-                                    <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-                                    <p>{{ comment.message }}</p>
+                {% if institution %}
+                    {% project_comments project status.community as comments %}
+                    {% if comments %}
+                        {% for comment in comments %}
+                            {% if comment.community.community_name in status.community.community_name %}
+                                <div class="flex-this w-80 project-comment">
+                                    <div class="project-comment-teal"></div>
+                                    <div class="project-comment-text">
+                                        <span class="bold">
+                                            {% if  comment.sender.get_full_name %}
+                                                {{  comment.sender.get_full_name }}
+                                            {% else %}
+                                                {{  comment.sender.username }}
+                                            {% endif %}
+                                        </span>
+                                        <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                        <p>{{ comment.message }}</p>
+                                    </div>
                                 </div>
+                            {% endif %}
+                        {% endfor %}
+                        {% if member_role == 'admin' or member_role == 'editor' %}
+                            <div class="margin-top-16">
+                                <form method="POST" action="">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
+                                    <input type="hidden" value="{{ status.community.id }}" name="community-id">
+                                    <div class="flex-this row">
+                                        <div class="w-50">{{ form.message }}</div>
+                                        <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
+                                    </div>
+                                    {% if form.errors %}
+                                        <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
+                                    {% endif %}
+                                </form>        
                             </div>
-                        {% endif %}
-                    {% endfor %}
+                        {% endif %} 
+                    {% endif %}
                 {% endif %}
 
-                {% if member_role == 'admin' or member_role == 'editor' %}
-                    <form method="POST" action="">
-                        {% csrf_token %}
-                        <input type="hidden" value="{{ status.community.id }}" name="community-id">
-                        <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
-                        <div class="flex-this row">
-                            <div class="w-50">{{ form.message }}</div>
-                            <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
-                        </div>
-                        {% if form.errors %}
-                            <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
-                        {% endif %}
-                    </form>
-                {% endif %}  
-
+                {% if researcher %}
+                    {% project_comments project status.community as comments %}
+                    {% if comments %}
+                        {% for comment in comments %}
+                            {% if comment.community.community_name in status.community.community_name %}
+                                <div class="flex-this w-80 project-comment">
+                                    <div class="project-comment-teal"></div>
+                                    <div class="project-comment-text">
+                                        <span class="bold">
+                                            {% if  comment.sender.get_full_name %}
+                                                {{  comment.sender.get_full_name }}
+                                            {% else %}
+                                                {{  comment.sender.username }}
+                                            {% endif %}
+                                        </span>
+                                        <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
+                                        <p>{{ comment.message }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        {% if member_role == 'admin' or member_role == 'editor' %}
+                            <div class="margin-top-16">
+                                <form method="POST" action="">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
+                                    <input type="hidden" value="{{ status.community.id }}" name="community-id">
+                                    <div class="flex-this row">
+                                        <div class="w-50">{{ form.message }}</div>
+                                        <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
+                                    </div>
+                                    {% if form.errors %}
+                                        <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
+                                    {% endif %}
+                                </form>        
+                            </div>
+                        {% endif %} 
+                    {% endif %}
+                {% endif %}
             {% endfor %}
+
         {% endif %}
     {% endif %}
 
     <!-- COMMUNITY  -->
     {% if community %}
-        {% project_comments project community as project_comments %}
+        {% project_comments project community as comments %}
+        <h3 class="no-bottom-margin">Project Comments</h3>
 
-        {% if project_comments %}
-            <h3 class="no-bottom-margin">Project Messages</h3>
+        {% if comments %}
+
             <div>
                 <p><span class="bold">
                     {% if project.project_notice.researcher %} 
@@ -82,7 +125,7 @@
                 </span></p>
             </div>
 
-            {% for comment in project_comments %}
+            {% for comment in comments %}
                 <div class="flex-this w-80 project-comment">
                     <div class="project-comment-teal"></div>
                     <div class="project-comment-text">
@@ -98,20 +141,22 @@
                     </div>
                 </div>
             {% endfor %}
-
             {% if member_role == 'admin' or member_role == 'editor' %}
-                <form method="POST" action="">
-                    {% csrf_token %}
-                    <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
-                    <div class="flex-this row">
-                        <div class="w-50">{{ form.message }}</div>
-                        <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
-                    </div>
-                    {% if form.errors %}
-                        <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
-                    {% endif %}
-                </form>
-            {% endif %}  
+                <div class="margin-top-16">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
+                        <input type="hidden" value="{{ status.community.id }}" name="community-id">
+                        <div class="flex-this row">
+                            <div class="w-50">{{ form.message }}</div>
+                            <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
+                        </div>
+                        {% if form.errors %}
+                            <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
+                        {% endif %}
+                    </form>        
+                </div>
+            {% endif %} 
         {% endif %}
     {% endif %}
 

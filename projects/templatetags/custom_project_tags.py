@@ -13,14 +13,10 @@ def which_account_created_project(project):
     return p[0] #1st in instances
 
 @register.simple_tag
-def project_comments(project, entity):
-    # TODO: pass instance of project and instance of researcher, community or institution
-    if isinstance(entity, Community):
-        return ProjectComment.objects.select_related('community', 'sender').filter(project=project, community=entity)
-
-@register.simple_tag
-def project_comments_all(project):
-    return ProjectComment.objects.select_related('community', 'sender').filter(project=project)
+def project_comments(project, community):
+    # pass instance of project and instance of community
+    if isinstance(community, Community):
+        return ProjectComment.objects.select_related('community', 'sender').filter(project=project, community=community)
 
 @register.simple_tag
 def project_status(project):

@@ -13,7 +13,8 @@
             <!-- title -->
             <div><h2 class="no-bottom-margin no-top-margin">{{ project.title }}</h2></div>
             <div><p>{{ project.date_added|date:'M d, Y' }} | 
-                {{ project.project_type }} | 
+                {{ project.project_type }} {% if project.other_type %}: {{ project.other_type }} {% endif %}
+                 | 
                 {{ project.project_privacy }}<br>
                 Created: {% if project.project_creator.get_full_name %}{{ project.project_creator.get_full_name }} {% else %} project.project_creator.username {% endif %}
 

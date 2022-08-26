@@ -812,7 +812,8 @@ def notify_others(request, pk, proj_id):
 
                 # Create project status, first comment and  notification
                 ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
-                ProjectComment.objects.create(project=project, community=community, sender=request.user, message=message)
+                if message:
+                    ProjectComment.objects.create(project=project, community=community, sender=request.user, message=message)
                 ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
                 entities_notified.save()
 

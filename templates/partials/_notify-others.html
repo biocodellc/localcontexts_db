@@ -9,10 +9,10 @@
                 <p>Once you have created a Project, you can send this Project to communities, institutions or researchers that could be interested in this Project.</p>
             </div>
 
-            <!-- title -->
             <div><h3 class="no-bottom-margin no-top-margin">{{ project.title }}</h3></div>
             <div><p>{{ project.date_added|date:'M d, Y' }} | 
-                {{ project.project_type }} | 
+                {{ project.project_type }} {% if project.other_type %}: {{ project.other_type }} {% endif %}
+                | 
                 {{ project.project_privacy }}
                 </p>
             </div>

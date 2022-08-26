@@ -9,7 +9,8 @@
             <div>
                 <p>
                     {{ project.date_added|date:'M d, Y' }} | 
-                    {{ project.project_type }} | 
+                    {{ project.project_type }} {% if project.other_type %}: {{ project.other_type }} {% endif %}
+                    | 
                     {{ project.project_privacy }}<br>
 
                     {% which_account_created_project project as project_creator %}
