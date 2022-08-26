@@ -56,6 +56,18 @@ class Project(models.Model):
             return True
         else:
             return False
+    
+    def has_bclabels(self):
+        if self.bc_labels.count() > 0:
+            return True
+        else:
+            return False
+    
+    def has_tklabels(self):
+        if self.tk_labels.count() > 0:
+            return True
+        else:
+            return False
 
     def has_notice(self):
         # Notices

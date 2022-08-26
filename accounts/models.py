@@ -12,7 +12,7 @@ class Profile(models.Model):
     state_province_region = models.CharField(verbose_name='state or province', max_length=100, blank=True, null=True)
     country = CountryField(blank=True, null=True)
     position = models.CharField(verbose_name='position', max_length=80, blank=True, null=True)
-    affiliation = models.CharField(verbose_name='affiliation', max_length=60, blank=True, null=True)
+    affiliation = models.CharField(verbose_name='affiliation', max_length=250, blank=True, null=True)
     preferred_language = models.CharField(verbose_name='preferred language', max_length=80, blank=True, null=True)
     languages_spoken = models.CharField(verbose_name='languages spoken', max_length=150, blank=True, null=True)    
     is_researcher = models.BooleanField(default=False, null=True)
