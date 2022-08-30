@@ -142,19 +142,7 @@
         {% endfor %}
     {% endif %}
 
-    <div class="pagination">
-        {% if items.has_previous %}
-            <a class="darkteal-text page" href="?page=1">&laquo;</a>
-            <a class="darkteal-text page" href="?page={{ items.previous_page_number }}">{{ items.previous_page_number }}</a>
-        {% endif %}
-
-        <span class="current"> {{ items.number }}</span>
-
-        {% if items.has_next %}
-            <a class="darkteal-text page" href="?page={{ items.next_page_number }}">{{ items.next_page_number }}</a>
-            <a class="darkteal-text page" href="?page={{ items.paginator.num_pages }}"> &raquo;</a>
-        {% endif %}
-    </div>
+    {% include 'snippets/pagination.html' %}
 
 </section>
 

@@ -70,16 +70,9 @@ class Project(models.Model):
             return False
 
     def has_notice(self):
-        # Notices
-        if self.project_notice.all().exists() or self.project_institutional_notice.all().exists():
+        if self.project_notice.all().exists():
             for notice in self.project_notice.all():
                 if notice.archived:
-                    return False
-                else:
-                    return True
-
-            for inst_notice in self.project_institutional_notice.all():
-                if inst_notice.archived:
                     return False
                 else:
                     return True

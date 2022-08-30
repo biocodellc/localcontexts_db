@@ -312,6 +312,7 @@ input:focus {
 
 /* PAGINATION */
 .pagination {
+    text-align: center;
     margin: 20px;
     padding: 5px;
 }
