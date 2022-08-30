@@ -51,13 +51,17 @@
                 {% if project.tk_labels.all or project.bc_labels.all %}
                     {% if project.tk_labels.all %}
                         {% for tklabel in project.tk_labels.all %}
-                            {% include 'tklabels/mini-labels.html' %}
+                            <div class="margin-left-8">
+                                {% include 'tklabels/mini-labels.html' %}
+                            </div>
                         {% endfor %}
                     {% endif %}
 
                     {% if project.bc_labels.all %}
                         {% for bclabel in project.bc_labels.all %}
-                            {% include 'bclabels/mini-labels.html' %}
+                            <div class="margin-left-8">
+                                {% include 'bclabels/mini-labels.html' %}
+                            </div>
                         {% endfor %}
                     {% endif %}
                 {% else %}
