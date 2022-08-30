@@ -317,6 +317,7 @@ function populateTemplate(id) {
     let templateName = document.getElementById('label-template-name')
     let hiddenInput = document.getElementById('input-label-name')
     let whyUseText = document.getElementById('whyUseText')
+    let labelNamePTag = document.getElementById('labelNamePTag')
 
     fetchLabels('both').then(populate)
 
@@ -325,6 +326,7 @@ function populateTemplate(id) {
             let bclabels = data.bcLabels
             bclabels.forEach(bclabel => {
                 if (id == bclabel.labelCode) {
+                    labelNamePTag.innerHTML = bclabel.labelName
                     whyUseText.textContent = bclabel.whyUseThisLabel
                     hiddenInput.value = bclabel.labelName
                     templateName.value = bclabel.labelName
@@ -335,6 +337,7 @@ function populateTemplate(id) {
             let tklabels = data.tkLabels
             tklabels.forEach(tklabel => {
                 if (id == tklabel.labelCode) {
+                    labelNamePTag.innerHTML = tklabel.labelName
                     whyUseText.textContent = tklabel.whyUseThisLabel
                     hiddenInput.value = tklabel.labelName
                     templateName.value = tklabel.labelName

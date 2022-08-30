@@ -381,13 +381,11 @@ def customize_label(request, pk, label_type):
 
             elif request.method == "POST":
                 add_translation_formset = AddLabelTranslationFormSet(request.POST)
-                # label_name = request.POST.get('input-label-name')
 
                 if form.is_valid() and add_translation_formset.is_valid():
                     data = form.save(commit=False)
                     if not data.language:
                         data.language = 'English'
-                    # data.name = label_name
                     data.label_type = tk_type
                     data.community = community
                     data.img_url = img_url
@@ -425,13 +423,11 @@ def customize_label(request, pk, label_type):
 
             elif request.method == "POST":
                 add_translation_formset = AddLabelTranslationFormSet(request.POST)
-                # label_name = request.POST.get('input-label-name')
 
                 if form.is_valid() and add_translation_formset.is_valid():
                     data = form.save(commit=False)
                     if not data.language:
                         data.language = 'English'
-                    # data.name = label_name
                     data.label_type = bc_type
                     data.community = community
                     data.img_url = img_url
