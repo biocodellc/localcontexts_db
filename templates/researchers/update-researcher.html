@@ -13,8 +13,11 @@
             </div>
     
             <div class="flex-this column w-80 border-left">
-    
-                    <div><h3>Contact Information</h3></div>
+
+                    <div class="flex-this space-between w-60">
+                        <div><h3 class="no-top-margin">Contact Information</h3></div>
+                        <div>Account ID: {{ researcher.id }}</div>
+                    </div>
     
                     <div class="w-70">
                         <form method="POST" action="{% url 'researcher-update' researcher.id %}" enctype="multipart/form-data">

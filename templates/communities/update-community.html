@@ -1,7 +1,7 @@
 {% extends 'sub-base.html' %} {% block title %} | Update {% endblock %}{% load static %} {% block community_content %}
 
 <div class="content-card content-card-space white-bg flex-this column">
-    <h3 class="no-top-margin">Community Account Settings</h3>
+    <h2 class="no-top-margin">Account Settings</h2>
 
     <div class="flex-this w-100">
 
@@ -13,8 +13,10 @@
         </div>
 
         <div class="flex-this column w-80 border-left">
-
-            <div><h3>Community Information</h3></div>
+            <div class="flex-this space-between w-60">
+                <div><h3 class="no-top-margin">Community Information</h3></div>
+                <div>Account ID: {{ community.id }}</div>
+            </div>
 
             <div class="w-60">
                 <form method="POST" action="{% url 'update-community' community.id %}" enctype="multipart/form-data">
