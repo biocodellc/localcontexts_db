@@ -204,6 +204,10 @@ input:focus {
     border-bottom: 1px solid #E6F1F3;
 }
 
+.border-bottom-grey { border-bottom: 1px solid #C4C4C4;}
+
+.border-top-grey { border-top: 1px solid #C4C4C4;}
+
 /* FLEX */
 .flex-this { display: flex; }
 

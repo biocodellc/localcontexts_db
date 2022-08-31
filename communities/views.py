@@ -9,7 +9,7 @@ from helpers.models import *
 from notifications.models import *
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
-from projects.models import ProjectContributors, Project, ProjectPerson, ProjectCreator
+from projects.models import *
 
 from helpers.forms import *
 from bclabels.forms import *
@@ -1334,8 +1334,8 @@ def apply_labels(request, pk, project_uuid):
     project_creator = ProjectCreator.objects.get(project=project)
     bclabels = BCLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community, is_approved=True)
-
     notices = project.project_notice.all()
+    notes = ProjectNote.objects.filter(project=project)
 
     # Define Notification attrs
     reference_id = str(project.unique_id)
@@ -1345,8 +1345,18 @@ def apply_labels(request, pk, project_uuid):
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
+        form = CreateProjectNoteForm(request.POST or None)
+
         if request.method == "POST":
-             # Set private project to discoverable
+
+            if form.data['note']:
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.community = community
+                    data.project = project
+                    data.save()
+
+            # Set private project to discoverable
             if project.project_privacy == 'Private':
                 project.project_privacy = 'Discoverable'
                 project.save()
@@ -1379,7 +1389,8 @@ def apply_labels(request, pk, project_uuid):
 
             # send email to project creator
             send_email_labels_applied(project, community)
-            return redirect('community-projects', community.id)
+            messages.add_message(request, messages.SUCCESS, "Labels applied!")
+            return redirect('apply-labels', community.id, project.unique_id)
 
     context = {
         'member_role': member_role,
@@ -1388,6 +1399,8 @@ def apply_labels(request, pk, project_uuid):
         'project_creator': project_creator,
         'bclabels': bclabels,
         'tklabels': tklabels,
+        'notes': notes,
+        'form': form,
     }
     return render(request, 'communities/apply-labels.html', context)
 

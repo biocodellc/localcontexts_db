@@ -122,3 +122,16 @@ class ProjectCreator(models.Model):
     class Meta:
         verbose_name = 'Project Creator'
         verbose_name_plural = 'Project Creator'
+
+class ProjectNote(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_note', null=True, blank=True)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community_note', null=True, blank=True)
+    note = models.TextField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return str(self.project)
+    
+    class Meta:
+        verbose_name = 'Project Note'
+        verbose_name_plural = 'Project Notes'

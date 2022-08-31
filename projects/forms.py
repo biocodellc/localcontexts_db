@@ -1,7 +1,6 @@
-from email.policy import default
 from django import forms
 from django.forms import modelformset_factory, inlineformset_factory
-from .models import Project, ProjectContributors, ProjectPerson
+from .models import *
 from django.utils.translation import ugettext_lazy as _
 
 class CreateProjectForm(forms.ModelForm):
@@ -92,4 +91,12 @@ class EditProjectForm(forms.ModelForm):
             'project_data_guid': forms.TextInput(attrs={'class': 'w-100'}),
             'providers_id': forms.TextInput(attrs={'class': 'w-100'}),
             'url': forms.TextInput(attrs={'class': 'w-100'}),
+        }
+
+class CreateProjectNoteForm(forms.ModelForm):
+    class Meta:
+        model = ProjectNote
+        fields = ['note']
+        widgets = {
+            'note': forms.Textarea(attrs={'rows': 1, 'class': 'w-100', 'placeholder': 'Add a note....'}),
         }
