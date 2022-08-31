@@ -125,7 +125,7 @@ def public_researcher_view(request, pk):
 @login_required(login_url='login')
 def connect_orcid(request):
     researcher = Researcher.objects.get(user=request.user)
-    return redirect('researcher-update', researcher.id)
+    return redirect('update-researcher', researcher.id)
 
 @login_required(login_url='login')
 def disconnect_orcid(request):
@@ -133,7 +133,7 @@ def disconnect_orcid(request):
     researcher.orcid = ''
     researcher.orcid_auth_token = ''
     researcher.save()
-    return redirect('researcher-update', researcher.id)
+    return redirect('update-researcher', researcher.id)
 
 @login_required(login_url='login')
 def update_researcher(request, pk):
@@ -157,7 +157,7 @@ def update_researcher(request, pk):
                     researcher.save()
 
                 messages.add_message(request, messages.SUCCESS, 'Updated!')
-                return redirect('researcher-update', researcher.id)
+                return redirect('update-researcher', researcher.id)
         else:
             update_form = UpdateResearcherForm(instance=researcher)
         
