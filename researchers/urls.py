@@ -9,7 +9,7 @@ urlpatterns = [
     # Public view
     path('view/<str:pk>/', views.public_researcher_view, name="public-researcher"),
 
-    path('update/<str:pk>', views.update_researcher, name="researcher-update"),
+    path('update/<str:pk>', views.update_researcher, name="update-researcher"),
 
     path('notices/<str:pk>', views.researcher_notices, name="researcher-notices"),
 

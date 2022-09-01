@@ -13,7 +13,7 @@
             <!-- title -->
             <div><h2 class="no-bottom-margin no-top-margin">{{ project.title }}</h2></div>
             <div><p>{{ project.date_added|date:'M d, Y' }} | 
-                {{ project.project_type }} | 
+                {% if project.project_type == 'Other' %} {{ project.other_type }} {% else %} {{ project.project_type }} {% endif %}| 
                 {{ project.project_privacy }}<br>
                 Created: {% if project.project_creator.get_full_name %}{{ project.project_creator.get_full_name }} {% else %} project.project_creator.username {% endif %}
 
@@ -51,13 +51,17 @@
                 {% if project.tk_labels.all or project.bc_labels.all %}
                     {% if project.tk_labels.all %}
                         {% for tklabel in project.tk_labels.all %}
-                            {% include 'tklabels/mini-labels.html' %}
+                            <div class="margin-left-8">
+                                {% include 'tklabels/mini-labels.html' %}
+                            </div>
                         {% endfor %}
                     {% endif %}
 
                     {% if project.bc_labels.all %}
                         {% for bclabel in project.bc_labels.all %}
-                            {% include 'bclabels/mini-labels.html' %}
+                            <div class="margin-left-8">
+                                {% include 'bclabels/mini-labels.html' %}
+                            </div>
                         {% endfor %}
                     {% endif %}
                 {% else %}
@@ -95,11 +99,13 @@
         <p class="no-top-margin w-70">
             {% if bclabels or tklabels %}
                 Your community can apply Labels to Projects, please choose from your customized Labels below.<br>
-                If you would like to customize more Labels, you can do so <a class="darkteal-text" href="{% url 'select-label' community.id %}">here</a>.</p>
+                If you would like to customize more Labels, you can do so <a class="darkteal-text underline-hover" href="{% url 'select-label' community.id %}">here</a>.
             {% else %}
-                It looks like currently you do not have any Labels customized. To customize a new Label, click <a class="darkteal-text" href="{% url 'select-label' community.id %}">here</a>.
+                It looks like currently you do not have any Labels customized. To customize a new Label, click <a class="darkteal-text underline-hover" href="{% url 'select-label' community.id %}">here</a>.
             {% endif %}
 
+            {% include 'partials/_alerts.html' %}
+        </p>
         <form method="POST" action="">
             {% csrf_token %}
 
@@ -179,7 +185,7 @@
                     {% for bclabel in bclabels %}
 
                         <div id="open-default-text-{{ bclabel.unique_id }}" style="height: 0; overflow: hidden;">
-                            <div class="flex-this">
+                            <div class="flex-this border-top-grey margin-top-16">
                                 <div class="small-label pad-top-1-5">
                                     {% include 'bclabels/which-label.html' %}
                                 </div>
@@ -193,7 +199,7 @@
 
                                 </div>
                             </div>
-                            <div class="border-bottom-solid-teal pad-top-1"></div>
+                            <!-- <div class="border-bottom-solid-teal pad-top-1"></div> -->
                         </div>
 
                     {% endfor %}
@@ -202,7 +208,7 @@
                 {% if tklabels %}
                     {% for tklabel in tklabels %}
                         <div id="open-default-text-{{ tklabel.unique_id }}" style="height: 0; overflow: hidden;">
-                            <div class="flex-this">
+                            <div class="flex-this border-top-grey margin-top-16">
                                 <div class="small-label pad-top-1-5">
                                     {% include 'tklabels/which-label.html' %}
                                 </div>
@@ -215,12 +221,33 @@
                                     {% include 'partials/_label-translation.html' %}
                                 </div>
                             </div>
-                            <div class="border-bottom-solid-teal pad-top-1"></div>
+                            <!-- <div class="border-bottom-solid-teal pad-top-1"></div> -->
                         </div>
                     {% endfor %}
                 {% endif %}
 
+                {% if notes %}
+                    <div class="border-top-grey margin-top-16">
+                        <h2>Note</h2>
+                        {% for note in notes %}
+                            <div class="margin-top-16 flex-this w-80 project-comment">
+                                <div class="project-comment-teal"></div>
+                                <div class="project-comment-text">
+                                    <span class="bold">
+                                        {{ note.community }}
+                                    </span>
+                                    <span class="grey-text">{{ note.created|date:'m/d/Y' }}</span><br>
+                                    <p>{{ note.note }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
                 {% if bclabels or tklabels %}
+                    <div class="w-40 margin-top-16">
+                        <div>{{ form }}</div>
+                    </div>
                     <div><button class="primary-btn action-btn margin-top-2">Apply Labels to Project <i class="fa fa-check" aria-hidden="true"></i></button></div>
                 {% endif %}
             </form>

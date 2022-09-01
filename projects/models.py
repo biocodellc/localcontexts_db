@@ -56,18 +56,23 @@ class Project(models.Model):
             return True
         else:
             return False
+    
+    def has_bclabels(self):
+        if self.bc_labels.count() > 0:
+            return True
+        else:
+            return False
+    
+    def has_tklabels(self):
+        if self.tk_labels.count() > 0:
+            return True
+        else:
+            return False
 
     def has_notice(self):
-        # Notices
-        if self.project_notice.all().exists() or self.project_institutional_notice.all().exists():
+        if self.project_notice.all().exists():
             for notice in self.project_notice.all():
                 if notice.archived:
-                    return False
-                else:
-                    return True
-
-            for inst_notice in self.project_institutional_notice.all():
-                if inst_notice.archived:
                     return False
                 else:
                     return True
@@ -117,3 +122,16 @@ class ProjectCreator(models.Model):
     class Meta:
         verbose_name = 'Project Creator'
         verbose_name_plural = 'Project Creator'
+
+class ProjectNote(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_note', null=True, blank=True)
+    community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community_note', null=True, blank=True)
+    note = models.TextField(null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return str(self.project)
+    
+    class Meta:
+        verbose_name = 'Project Note'
+        verbose_name_plural = 'Project Notes'

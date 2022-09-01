@@ -26,19 +26,19 @@ class LabelTranslationVersionAdmin(admin.ModelAdmin):
     list_display = ('version_instance', 'translated_name', 'language', 'created')
     readonly_fields = ('version_instance', 'translated_name', 'language', 'language_tag', 'translated_text', 'created',)
 
-# class ProjectCommentAdmin(admin.ModelAdmin):
-#     list_display = ('project', 'sender', 'community', 'message', 'created')
-#     search_fields = ('project',)
+class ProjectCommentAdmin(admin.ModelAdmin):
+    list_display = ('project', 'sender', 'community', 'message', 'created')
+    search_fields = ('project',)
 
-# class ProjectStatusAdmin(admin.ModelAdmin):
-#     list_display = ('project', 'community', 'seen', 'status')
-#     search_fields = ('project',)
+class ProjectStatusAdmin(admin.ModelAdmin):
+    list_display = ('project', 'community', 'seen', 'status')
+    search_fields = ('project',)
 
 # class LabelNoteAdmin(admin.ModelAdmin):
 #     list_display = ('bclabel', 'tklabel', 'sender',)
 
-# admin.site.register(ProjectComment, ProjectCommentAdmin)
-# admin.site.register(ProjectStatus, ProjectStatusAdmin)
+admin.site.register(ProjectComment, ProjectCommentAdmin)
+admin.site.register(ProjectStatus, ProjectStatusAdmin)
 # admin.site.register(LabelNote, LabelNoteAdmin)
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(LabelVersion, LabelVersionAdmin)

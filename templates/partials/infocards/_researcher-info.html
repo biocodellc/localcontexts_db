@@ -86,7 +86,7 @@
                     </div>
 
                     {% if user_can_view %}
-                        <div class="margin-left-8"><a href="{% url 'researcher-update' researcher.id %}" class="darkteal-text primary-btn white-btn"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a></div>
+                        <div class="margin-left-8"><a href="{% url 'update-researcher' researcher.id %}" class="darkteal-text primary-btn white-btn"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a></div>
                     {% endif %}
                 </div>
             {% endif %}

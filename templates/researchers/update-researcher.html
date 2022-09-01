@@ -1,23 +1,36 @@
 {% extends 'sub-base.html' %} {% block title %} | Update {% endblock %}{% load static %}{% block researcher_content %}
 
     <div class="content-card content-card-space white-bg flex-this column">
-        <h3> Researcher Account Settings</h3>
+        <h2 class="no-top-margin">Account Settings</h2>
 
         <div class="flex-this w-100">
 
-            <div class="flex-this w-20 set-nav">
-                <div class="flex-this side-nav-item grey-text">
-                    <div class="w-20 margin-right-1"><i class="fa fa-user fa-3x" aria-hidden="true"></i></div>
-                    <div class="w-80"><p class="no-top-margin"><strong>Researcher Account</strong><br>Contact email, primary institution, description</p></div>
-                </div>  
+            <div class="flex-this column set-nav margin-right-1 margin-bottom-2" style="min-height: 350px;">
+                
+                <a href="{% url 'update-researcher' researcher.id %}">
+                    {% if 'update' in request.path %} 
+                    <div class="flex-this side-nav-item selected">
+                    {% else %}
+                    <div class="flex-this side-nav-item grey-text">
+                    {% endif %}
+                        <div class="w-20 margin-right-8"><i class="fa fa-user fa-3x" aria-hidden="true"></i></div>
+                        <div class="w-80">
+                            <p class="no-top-margin"><strong>Researcher Account</strong><br>Contact email, primary institution, description</p>
+                        </div>  
+                    </div>   
+                </a>
+
             </div>
     
             <div class="flex-this column w-80 border-left">
-    
-                    <div><h3>Contact Information</h3></div>
+
+                    <div class="flex-this space-between w-70">
+                        <div><h3 class="no-top-margin">Contact Information</h3></div>
+                        <div>Account ID: {{ researcher.id }}</div>
+                    </div>
     
                     <div class="w-70">
-                        <form method="POST" action="{% url 'researcher-update' researcher.id %}" enctype="multipart/form-data">
+                        <form method="POST" action="{% url 'update-researcher' researcher.id %}" enctype="multipart/form-data">
                             {% csrf_token %}
 
                             <div class="w-100">

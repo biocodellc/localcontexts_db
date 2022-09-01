@@ -49,7 +49,7 @@
         </div>
         <div>
             <p>
-                Browse Projects: 
+                Sort by: 
                 <a 
                     class="darkteal-text pointer underline-hover{% if 'projects/' in request.path %} bold {% endif %}" 
                     {% if institution %}
@@ -121,9 +121,10 @@
     </div>
 
     <!-- Project  Overview Cards -->
-    {% for project in projects %}
+    {% for project in items %}
         {% include 'projects/project-overview.html' %}
     {% endfor %}
 
+    {% include 'snippets/pagination.html' %}
 
 {% endblock %}
