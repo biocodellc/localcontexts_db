@@ -14,4 +14,7 @@ urlpatterns = [
     path('v1/projects/users/<str:pk>/', projects_by_user, name="api-projects-user"),
     path('v1/projects/institutions/<str:institution_id>/', projects_by_institution, name="api-projects-institution"),
     path('v1/projects/researchers/<str:researcher_id>/', projects_by_researcher, name="api-projects-researcher"),
+
+    path('v1/community/slugs', CommunitySlugList.as_view(), name="api-slugs"),
+
 ]

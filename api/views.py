@@ -116,3 +116,10 @@ def projects_by_researcher(request, researcher_id):
         return Response(serializers.data)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+class CommunitySlugList(generics.ListAPIView):
+    queryset = Community.objects.exclude(native_land_slug=None)
+    serializer_class = CommunityNativeLandSlugSerializer
+
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['native_land_slug']
