@@ -334,8 +334,8 @@ def remove_member(request, pk, member_id):
 @login_required(login_url='login')
 def select_label(request, pk):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    bclabels = BCLabel.objects.select_related('created_by', 'approved_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community)
-    tklabels = TKLabel.objects.select_related('created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community)
+    bclabels = BCLabel.objects.select_related('created_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community)
+    tklabels = TKLabel.objects.select_related('created_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community)
 
     member_role = check_member_role(request.user, community)
     if member_role == False: # If user is not a member / does not have a role.

@@ -347,7 +347,6 @@ def registry_researchers(request):
 
 # Hub stats page
 def hub_counter(request):
-    current_datetime = datetime.datetime.now()
     otc_notices = OpenToCollaborateNoticeURL.objects.all()
 
     reg_total = 0
@@ -478,7 +477,6 @@ def hub_counter(request):
         'bclabels_count': bclabels_count,
         'tklabels_count': tklabels_count, 
         'total_labels': total_labels,
-        'current_datetime': current_datetime,
 
         'otc_notices': otc_notices,
     }
