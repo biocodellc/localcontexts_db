@@ -40,5 +40,4 @@ urlpatterns = [
     
     path('labels-pdf/<str:pk>/', views.labels_pdf, name="labels-pdf"),
     path('labels-download/<str:pk>/', views.download_labels, name="download-labels"),
-
 ]

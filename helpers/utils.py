@@ -253,7 +253,7 @@ def create_notices(selected_notices, organization, project, existing_notices):
     loop_through_notices(selected_notices, organization, project)
 
 
-def create_label_versions(label):
+def handle_label_versions(label):
     # passes instance of BCLabel or TKLabel
     version = LabelVersion.objects.none()
     translations = LabelTranslation.objects.none()
@@ -261,10 +261,16 @@ def create_label_versions(label):
 
     if isinstance(label, BCLabel):
         translations = LabelTranslation.objects.filter(bclabel=label)
-        # If version exists, set version number to 1 more than the latest
-        if LabelVersion.objects.filter(bclabel=label).exists():
-            latest = LabelVersion.objects.filter(bclabel=label).order_by('-version').first()
-            version_num = latest.version + 1
+
+        # If approved version exists, set version number to 1 more than the latest
+        latest_version = LabelVersion.objects.filter(bclabel=label).order_by('-version').first()
+
+        if latest_version is not None:
+            if latest_version.is_approved:
+                version_num = latest_version.version + 1
+            elif not latest_version.is_approved:
+                latest_version.is_approved = True
+                latest_version.save()
         else:
             version_num = 1
             label.version = 1
@@ -275,6 +281,7 @@ def create_label_versions(label):
             bclabel=label,
             version=version_num, 
             created_by=label.created_by, 
+            is_approved=True,
             approved_by=label.approved_by,
             version_text=label.label_text,
             created=label.created
@@ -282,10 +289,16 @@ def create_label_versions(label):
 
     if isinstance(label, TKLabel):
         translations = LabelTranslation.objects.filter(tklabel=label)
-        # If version exists, set version number to 1 more than the latest
-        if LabelVersion.objects.filter(tklabel=label).exists():
-            latest = LabelVersion.objects.filter(tklabel=label).order_by('-version').first()
-            version_num = latest.version + 1
+
+        # If approved version exists, set version number to 1 more than the latest
+        latest_version = LabelVersion.objects.filter(tklabel=label).order_by('-version').first()
+
+        if latest_version is not None:
+            if latest_version.is_approved:
+                version_num = latest_version.version + 1
+            elif not latest_version.is_approved:
+                latest_version.is_approved = True
+                latest_version.save()
         else:
             version_num = 1
             label.version = 1
@@ -296,6 +309,7 @@ def create_label_versions(label):
             tklabel=label,
             version=version_num, 
             created_by=label.created_by, 
+            is_approved=True,
             approved_by=label.approved_by,
             version_text=label.label_text,
             created=label.created

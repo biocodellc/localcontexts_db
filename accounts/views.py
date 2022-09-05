@@ -114,6 +114,8 @@ def verify(request):
 
 @unauthenticated_user
 def login(request):
+    envi = dev_prod_or_local(request.get_host())
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -133,7 +135,7 @@ def login(request):
             messages.error(request, 'Your username or password does not match an account')
             return redirect('login')
     else:
-        return render(request, "accounts/login.html")
+        return render(request, "accounts/login.html", {'envi': envi })
     
 @login_required(login_url='login')
 def logout(request):
@@ -345,7 +347,6 @@ def registry_researchers(request):
 
 # Hub stats page
 def hub_counter(request):
-    current_datetime = datetime.datetime.now()
     otc_notices = OpenToCollaborateNoticeURL.objects.all()
 
     reg_total = 0
@@ -476,7 +477,6 @@ def hub_counter(request):
         'bclabels_count': bclabels_count,
         'tklabels_count': tklabels_count, 
         'total_labels': total_labels,
-        'current_datetime': current_datetime,
 
         'otc_notices': otc_notices,
     }

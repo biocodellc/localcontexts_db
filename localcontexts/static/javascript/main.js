@@ -314,8 +314,10 @@ if (parentDiv) {
 
 function populateTemplate(id) {
     let templateText = document.getElementById('label-template-text')
+    let templateName = document.getElementById('label-template-name')
     let hiddenInput = document.getElementById('input-label-name')
     let whyUseText = document.getElementById('whyUseText')
+    let labelNamePTag = document.getElementById('labelNamePTag')
 
     fetchLabels('both').then(populate)
 
@@ -324,8 +326,10 @@ function populateTemplate(id) {
             let bclabels = data.bcLabels
             bclabels.forEach(bclabel => {
                 if (id == bclabel.labelCode) {
+                    labelNamePTag.innerHTML = bclabel.labelName
                     whyUseText.textContent = bclabel.whyUseThisLabel
                     hiddenInput.value = bclabel.labelName
+                    templateName.value = bclabel.labelName
                     templateText.textContent = bclabel.labelDefaultText
                 }
             })
@@ -333,8 +337,10 @@ function populateTemplate(id) {
             let tklabels = data.tkLabels
             tklabels.forEach(tklabel => {
                 if (id == tklabel.labelCode) {
+                    labelNamePTag.innerHTML = tklabel.labelName
                     whyUseText.textContent = tklabel.whyUseThisLabel
                     hiddenInput.value = tklabel.labelName
+                    templateName.value = tklabel.labelName
                     templateText.textContent = tklabel.labelDefaultText
                 }
             })
@@ -975,7 +981,7 @@ if (window.location.href.includes('communities/view/') || window.location.href.i
                 registryModal.classList.replace('hide', 'show')
                 let targetId = e.target.id.split('-').pop()
                 submitJoinRequestFormBtn.addEventListener('click', function(e) { 
-                    disbleSendRequestBtn(submitJoinRequestFormBtn)
+                    disableSendBtn(submitJoinRequestFormBtn)
                     document.getElementById(`communityRegistryForm${targetId}`).submit() 
                 })    
             } else if (e.target.id.includes('institutionRequest')) {
@@ -983,7 +989,7 @@ if (window.location.href.includes('communities/view/') || window.location.href.i
                 registryModal.classList.replace('hide', 'show')
                 let targetId = e.target.id.split('-').pop()
                 submitJoinRequestFormBtn.addEventListener('click', function(e) { 
-                    disbleSendRequestBtn(submitJoinRequestFormBtn)
+                    disableSendBtn(submitJoinRequestFormBtn)
                     document.getElementById(`institutionRegistryForm${targetId}`).submit() 
                 })  
 
@@ -1006,12 +1012,19 @@ if (window.location.href.includes('communities/view/') || window.location.href.i
                 modal.classList.replace('hide', 'show')
                 closeModal(modal)
             }
+        } else {
+            // TODO: set this up to disable contact btn
+            // const sendMsgBtn = document.getElementById('sendMsgBtn')
+            // sendMsgBtn.addEventListener('click', function() {
+            //     disableSendBtn(sendMsgBtn)
+            //     document.getElementById('sendMsgForm').submit() 
+            // })
         }
     })  
 
     // Temporarily disable the submit button to prevent multiple form submission
-    function disbleSendRequestBtn(btn) {
-        let oldValue = 'Yes'
+    function disableSendBtn(btn) {
+        let oldValue = 'Send'
         btn.setAttribute('disabled', true)
         btn.classList.replace('action-btn', 'disabled-btn')
         btn.innerText = 'Sending'
@@ -1106,13 +1119,15 @@ if (window.location.href.includes('labels/view/')) {
     const btn = document.getElementById('openLabelHistoryBtn')
     let historyDiv = document.getElementById('labelHistoryDiv')
 
-    btn.onclick = function(e) {
-        if (historyDiv.classList.contains('hide')) {
-            historyDiv.classList.replace('hide', 'show')
-            btn.innerHTML = `View Label History <i class="fa fa-angle-up" aria-hidden="true"></i>`
-        } else {
-            historyDiv.classList.replace('show', 'hide')
-            btn.innerHTML = `View Label History <i class="fa fa-angle-down" aria-hidden="true"></i>`
+    if (btn) {
+        btn.onclick = function(e) {
+            if (historyDiv.classList.contains('hide')) {
+                historyDiv.classList.replace('hide', 'show')
+                btn.innerHTML = `View Label History <i class="fa fa-angle-up" aria-hidden="true"></i>`
+            } else {
+                historyDiv.classList.replace('show', 'hide')
+                btn.innerHTML = `View Label History <i class="fa fa-angle-down" aria-hidden="true"></i>`
+            }
         }
     }
 }

@@ -65,6 +65,8 @@ textarea {
     background-color: #fff;
     border: 1px solid #1F2937;
     border-radius: 4px;
+    padding: 10px 10px;
+    font-size: 15px;
 }
 
 input[type=checkbox] {
@@ -202,6 +204,10 @@ input:focus {
     border-bottom: 1px solid #E6F1F3;
 }
 
+.border-bottom-grey { border-bottom: 1px solid #C4C4C4;}
+
+.border-top-grey { border-top: 1px solid #C4C4C4;}
+
 /* FLEX */
 .flex-this { display: flex; }
 
@@ -292,6 +298,14 @@ input:focus {
     color: #fff;
 }
 
+.orange-btn {
+    background-color: #FF6000;
+}
+
+.orange-btn:hover {
+    background-color: #f17c33;
+}
+
 .disabled-btn {
     background: #F3F4F6;
     border: none;
@@ -302,6 +316,7 @@ input:focus {
 
 /* PAGINATION */
 .pagination {
+    text-align: center;
     margin: 20px;
     padding: 5px;
 }

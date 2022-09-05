@@ -43,7 +43,7 @@ class OpenToCollaborateNoticeURL(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
     
     class Meta:
         verbose_name = 'Open To Collaborate Notice URL'
@@ -71,7 +71,7 @@ class LabelTranslation(models.Model):
     translated_text = models.TextField(blank=True)
 
     def __str__(self):
-        return self.translated_name
+        return str(self.translated_name)
     
     class Meta:
         verbose_name = "Label Translation"
