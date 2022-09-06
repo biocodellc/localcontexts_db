@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} | View Project {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
+{% extends 'base.html' %} {% block title %} View Project {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
 {% include 'partials/headers/_auth-header.html' %}
 {% discoverable_project_view request.user project.unique_id as user_can_view %}
 

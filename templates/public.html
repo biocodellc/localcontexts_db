@@ -1,5 +1,4 @@
-{% extends 'base.html' %} {% block title %} | View Account {% endblock %}{% load static %} {% load custom_acct_tags %} {% block content %}
-{% include 'partials/headers/_auth-header.html' %}
+{% extends 'auth-base.html' %} {% block title %} View Account {% endblock %}{% load static %} {% load custom_acct_tags %} {% block main %}
 
     {% if community %}
         <div class="dashcard">
@@ -407,5 +406,4 @@
         </div>
     {% endif %}
 
-    {% include 'partials/footers/_auth-footer.html' %}
 {% endblock %}
