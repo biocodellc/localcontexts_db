@@ -14,7 +14,7 @@
 }
 
 /* REGISTERING PROCESS HEADER */
-.reg-header {
+#reg-header {
     background-color: #3876aa;
     max-width: 100%;
     padding: 1% 2% 1% 4%;
@@ -26,11 +26,6 @@
     width: 1700px;
     margin: auto;
 }
-
-/* .nav-links-div {
-    justify-content: space-between;
-    width: 100%;
-} */
 
 /* Active nav link orange underline */
 .active-link:after, 

@@ -13,6 +13,19 @@ if (passwordField) {
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
+if (window.location.href.includes('anth-ja77-lc-dev-42d5')) {
+    let regHeader = document.getElementById('reg-header')
+    let authHeader = document.getElementById('auth-header')
+    let svgHeader = document.getElementById('svg-header')
+
+    if(regHeader) { regHeader.style.marginTop = '32px' }
+
+    if (authHeader){
+        svgHeader.style.marginTop = '32px'
+        authHeader.style.top = '50px'
+    }
+}
+
 // Get languages from the IANA directory
 function fetchLanguages() {
     const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
