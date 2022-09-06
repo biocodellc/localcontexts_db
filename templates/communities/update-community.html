@@ -1,20 +1,30 @@
 {% extends 'sub-base.html' %} {% block title %} | Update {% endblock %}{% load static %} {% block community_content %}
 
 <div class="content-card content-card-space white-bg flex-this column">
-    <h3 class="no-top-margin">Community Account Settings</h3>
+    <h2 class="no-top-margin">Account Settings</h2>
 
     <div class="flex-this w-100">
 
-        <div class="flex-this w-20 set-nav">
-            <div class="flex-this side-nav-item grey-text">
-                <div class="w-20 margin-right-1"><i class="fa fa-user fa-3x" aria-hidden="true"></i></div>
-                <div class="w-80"><p class="no-top-margin"><strong>Community Account</strong><br>Contact name, email, location, description</p></div>  
-            </div>   
+        <div class="flex-this column set-nav margin-right-1 margin-bottom-2" style="min-height: 350px;">
+            <a href="{% url 'update-community' community.id %}">
+                {% if 'update' in request.path %} 
+                <div class="flex-this side-nav-item selected">
+                {% else %}
+                <div class="flex-this side-nav-item grey-text">
+                {% endif %}
+                    <div class="w-20 margin-right-8"><i class="fa fa-user fa-3x" aria-hidden="true"></i></div>
+                    <div class="w-80">
+                        <p class="no-top-margin"><strong>Community Account</strong><br>Contact name, email, location, description</p>
+                    </div>  
+                </div>   
+            </a>
         </div>
 
         <div class="flex-this column w-80 border-left">
-
-            <div><h3>Community Information</h3></div>
+            <div class="flex-this space-between w-60">
+                <div><h3 class="no-top-margin">Community Information</h3></div>
+                <div>Account ID: {{ community.id }}</div>
+            </div>
 
             <div class="w-60">
                 <form method="POST" action="{% url 'update-community' community.id %}" enctype="multipart/form-data">

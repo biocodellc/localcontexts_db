@@ -10,6 +10,9 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'w-100'}),
+        }
     
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=False)
@@ -76,7 +79,7 @@ class SignUpInvitationForm(forms.ModelForm):
         }
 
 class ContactOrganizationForm(forms.Form):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-100'}))
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'w-100', 'autocomplete': 'off', }))
     email = forms.EmailField(label=_('Email Address'), required=True, widget=forms.EmailInput(attrs={'class': 'w-100', 'placeholder': 'email@domain.com'}))
     message= forms.CharField(widget=forms.Textarea(attrs={"rows":4, "cols":65, 'class': 'w-100'}))
     

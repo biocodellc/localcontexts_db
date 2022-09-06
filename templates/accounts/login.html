@@ -1,20 +1,19 @@
 {% extends 'reg-base.html' %} {% load static %} {% block title %} | Login {% endblock %}
 
 {% block card %}
-    <div class="form-container flex-this column w-90">
-        <div class="flex-this space-between">
-            <div>
-                <h2 class="margin-bottom-2">Welcome back!</h2>
-                <p>Please sign in to use the Local Contexts Hub</p>                    
-            </div>
-            <div>
-                <p class="grey-text">Not signed up yet?<a href="{% url 'register' %}" class="darkteal-text underline-hover"> Register</a></p>
-            </div>                    
+    <div class="flex-this space-between w-90">
+        <div>
+            <h2 class="margin-bottom-2">Welcome back!</h2>
+            <p>Please sign in to use the Local Contexts Hub</p>                    
         </div>
+        <div><p class="grey-text">Not signed up yet?<a href="{% url 'register' %}" class="darkteal-text underline-hover"> Register</a></p></div>                    
+    </div>
+
+    <div class="form-container flex-this column w-90">
 
         <form action="{% url 'login' %}" method="POST" class="flex-this column w-100" autocomplete="off">
             {% csrf_token %}
-            <div class="pad-top-1-5">
+            <div>
                 <label>Username</label>
                 <input type="username" name="username" required>
             </div>
@@ -24,7 +23,7 @@
             </div>
             <div class="flex-this space-between pad-top-1-5"> 
                 <div>
-                    <a href="{% url 'reset_password'%}" class="darkteal-text underline-hover">Forgot password?</a>
+                    <a href="{% url 'reset_password'%}" class="darkteal-text underline-hover bold">Forgot your password?</a>
                 </div>  
                 <div><button class="primary-btn action-btn margin-top-2 default-btn-width">Sign in</button></div>
             </div>
@@ -32,6 +31,17 @@
 
         <!-- Alerts -->
         {% include 'partials/_alerts.html' %}
+
+        {% if envi == 'PROD' or 'localhost' in request.get_host %}
+            <div class="flex-this w-100 test-hub-div">
+                <div class="w-70 margin-right-16">
+                    <p class="no-top-margin no-bottom-margin bold">First time using the Local Contexts Hub?</p>
+                    <small>We have a test site where you can practice and explore the Local Contexts Hub. Follow this button to go to the Hub test site.</small>
+                </div>
+                <div class="margin-left-16">
+                    <a class="primary-btn orange-btn block" href="https://anth-ja77-lc-dev-42d5.uc.r.appspot.com/login/" target="_blank" rel="noopener">Let's go <i class="fa fa-arrow-right margin-left-8"></i></a></div>            
+            </div>
+        {% endif %}
 
     </div>
 {% endblock %}
