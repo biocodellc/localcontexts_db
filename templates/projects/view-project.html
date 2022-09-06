@@ -1,5 +1,4 @@
-{% extends 'base.html' %} {% block title %} View Project {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
-{% include 'partials/headers/_auth-header.html' %}
+{% extends 'auth-base.html' %} {% block title %} View Project {% endblock %} {% load static %} {% load custom_project_tags %} {% block main %}
 {% discoverable_project_view request.user project.unique_id as user_can_view %}
 
     {% if project.project_privacy == 'Public' %}
@@ -30,7 +29,5 @@
         {% endif %}
 
     {% endif %}
-
-{% include 'partials/footers/_auth-footer.html' %}
 
 {% endblock %}
