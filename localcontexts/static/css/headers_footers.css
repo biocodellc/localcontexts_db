@@ -1,8 +1,5 @@
 /* SIGNED IN HEADER */
 #auth-header {
-    /* background: linear-gradient(180.59deg, #016BA7 0.51%, #058F73 134.01%); */
-    /* box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); */
-    padding: 1% 2% 1% 4%;
     position: absolute;
     top: 0;
 }
@@ -17,6 +14,9 @@
 #reg-header {
     background-color: #3876aa;
     max-width: 100%;
+}
+
+#auth-header, #reg-header {
     padding: 1% 2% 1% 4%;
 }
 
@@ -149,27 +149,8 @@
     transform: scale(1.5);
 }
 
-@media screen and (max-width: 817px) {
-    
-    /* HEADER */
-    .header-logo {
-        width: 100%;
-        margin: auto;
-        align-items: center;
-    }
-
-    .header-logo img {
-        display: block;
-        margin: auto;
-    }
-    .header-size, .nav-links-div {
-        justify-content: space-between;
-        flex-direction: column;
-    }
-
-    .generic-nav {
-        width: 100%;
-        margin: auto;
-        justify-content: center;
+@media screen and (max-width: 1400px) {
+    #reg-header, #auth-header, #svg-header, #auth-footer {
+        width: 1450px;
     }
 }
