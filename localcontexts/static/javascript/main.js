@@ -13,12 +13,12 @@ if (passwordField) {
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
-if (window.location.href.includes('anth-ja77-lc-dev-42d5')) {
+if (window.location.href.includes('anth-ja77-lc-dev-42d5') || window.location.href.includes('localhost')) {
     let regHeader = document.getElementById('reg-header')
     let authHeader = document.getElementById('auth-header')
     let svgHeader = document.getElementById('svg-header')
 
-    if(regHeader) { regHeader.style.marginTop = '32px' }
+    if(regHeader) { regHeader.style.marginTop = '50px' }
 
     if (authHeader){
         svgHeader.style.marginTop = '32px'
