@@ -13,7 +13,7 @@
         <ul class="menu ul-no-bullets">
             <li>
                 <a 
-                    class="{% if request.get_full_path == '/registry/' %} active-link bold {% endif %} white-text upper" 
+                    class="{% if '/registry/' in request.path %} active-link bold {% endif %} white-text upper" 
                     href="{% url 'community-registry' %}"> Local Contexts Registry
                 </a>
             </li>           
