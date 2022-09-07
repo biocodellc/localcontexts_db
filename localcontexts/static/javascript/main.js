@@ -26,6 +26,28 @@ if (window.location.href.includes('anth-ja77-lc-dev-42d5')) {
     }
 }
 
+if (window.location.href.includes('create-community') || window.location.href.includes('create-institution') || window.location.href.includes('connect-researcher') ) {
+    let textArea = document.getElementById('id_description')
+    let characterCounter = document.getElementById('charCount')
+    const maxNumOfChars = 200
+
+    const countCharacters = () => {
+        let numOfEnteredChars = textArea.value.length
+        let counter = maxNumOfChars - numOfEnteredChars
+        characterCounter.textContent = counter + '/200'
+
+        if (counter < 0) {
+            characterCounter.style.color = 'red'
+        } else if (counter < 50) {
+            characterCounter.style.color = '#EF6C00'
+        } else {
+            characterCounter.style.color = 'black'
+        }
+    }
+
+    textArea.addEventListener('input', countCharacters)
+}
+
 // Get languages from the IANA directory
 function fetchLanguages() {
     const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'

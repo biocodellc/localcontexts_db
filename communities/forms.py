@@ -11,7 +11,7 @@ class CreateCommunityForm(forms.ModelForm):
             'community_name': forms.TextInput(attrs={'class': 'w-100'}),
             'community_entity': forms.TextInput(attrs={'class': 'w-100'}),
             'state_province_region': forms.TextInput(attrs={'class': 'w-100'}),
-            'description': forms.Textarea(attrs={'rows': 3, 'class': 'w-100'}),
+            'description': forms.Textarea(attrs={'rows': 2, 'class': 'w-100'}),
         }
         error_messages = {
             'community_name': {
