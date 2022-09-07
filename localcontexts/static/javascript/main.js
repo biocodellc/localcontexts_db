@@ -13,7 +13,7 @@ if (passwordField) {
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
-if (window.location.href.includes('anth-ja77-lc-dev-42d5') || window.location.href.includes('localhost')) {
+if (window.location.href.includes('anth-ja77-lc-dev-42d5')) {
     let regHeader = document.getElementById('reg-header')
     let authHeader = document.getElementById('auth-header')
     let svgHeader = document.getElementById('svg-header')
