@@ -154,7 +154,7 @@
 #auth-footer {
     background: linear-gradient(179.93deg, #045887 -12.22%, #058F73 156.81%);
     padding: 1%;
-    margin-top: 30px;
+    margin-top: 3rem;
 }
 
 .footer-content {
@@ -197,7 +197,7 @@
     transform: scale(1.5);
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 1200px) {
     /* #reg-header, #auth-header, #svg-header, #auth-footer {
         width: 1450px;
     } */
@@ -240,5 +240,14 @@
       }
       .menu > li:not(:last-child) {
         border-bottom: 1px solid #444;
+      }
+
+      /* FOOTER */
+      .footer-content {
+        width: 100%;
+      }
+
+      .footer-content img {
+        width: 100px;
       }
 }
