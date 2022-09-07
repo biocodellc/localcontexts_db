@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} | Registry {% endblock %}{% load static %} {% load custom_acct_tags %}{% block content %} {% include 'partials/headers/_auth-header.html' %}
+{% extends 'auth-base.html' %} {% block title %} Registry {% endblock %}{% load static %} {% load custom_acct_tags %}{% block main %}
 
 <section class="flex-this column align-center">
 
@@ -146,5 +146,4 @@
 
 </section>
 
-{% include 'partials/footers/_auth-footer.html' %}
 {% endblock %}
