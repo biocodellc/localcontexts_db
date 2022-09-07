@@ -20,7 +20,7 @@
     padding: 1% 2% 1% 4%;
 }
 
-.header-content {
+#header-content {
     display: flex;
     justify-content: space-between;
     width: 1700px;
@@ -153,4 +153,17 @@
     #reg-header, #auth-header, #svg-header, #auth-footer {
         width: 1450px;
     }
+
+    /* #header-content {
+        border: 1px solid red;
+
+    }
+
+    .nav-links-div {
+    }
+
+    #header-content nav {
+        border: 1px solid yellow;
+        width: 800px;
+    } */
 }
