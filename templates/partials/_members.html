@@ -607,8 +607,8 @@
 <div id="memberModal" class="modal hide">
     <div class="modal-defaults add-member-modal flex-this column w-100">
     
-        <div class="flex-this flex-end close-modal-btn">
-            <div class="margin-right-8 primary-btn white-btn">Close X</div>
+        <div class="flex-this flex-end">
+            <div class="margin-right-8 primary-btn white-btn close-modal-btn">Close X</div>
         </div>
         <div class="modal-content-padding w-100">
 
@@ -625,7 +625,17 @@
                             <div>
                                 <div> 
                                     <label>Name</label> <br>
-                                    {{ form.receiver }} 
+                                    <input list="userList" name="userList" class="w-100" placeholder="Start typing name or username">
+                                    <datalist id="userList">
+                                        {% for user in users %}
+                                            {% if user.first_name and user.last_name %}
+                                                <option value="{{user.username}} ({{user.first_name}} {{user.last_name}})">
+                                            {% else %}
+                                                <option value="{{user.username}}">
+                                            {% endif %}
+                                        {% endfor %}
+                                    </datalist>
+
                                 </div>
                                 <div class="margin-top-8">
                                     <label>Proposed Responsibility</label><br>

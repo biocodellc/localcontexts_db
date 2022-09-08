@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import Http404
 from django.core.paginator import Paginator
+from itertools import chain
 
 from localcontexts.utils import dev_prod_or_local
 from projects.utils import add_to_contributors
@@ -287,8 +288,18 @@ def institution_members(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
+        # Get list of users, NOT in this institution, alphabetized by name
+        members = list(chain(
+            institution.admins.all().values_list('id', flat=True), 
+            institution.editors.all().values_list('id', flat=True), 
+            institution.viewers.all().values_list('id', flat=True),
+        ))
+        members.append(institution.institution_creator.id) # include institution creator
+        users = User.objects.exclude(id__in=members).order_by('username')
+
         join_requests_count = JoinRequest.objects.filter(institution=institution).count()
         form = InviteMemberForm(request.POST or None)
+
         if request.method == 'POST':
             if 'change_member_role_btn' in request.POST:
                 current_role = request.POST.get('current_role')
@@ -298,6 +309,8 @@ def institution_members(request, pk):
                 change_member_role(institution, member, current_role, new_role)
                 return redirect('institution-members', institution.id)
             else:
+                # TODO: get value of selected item in datalist and validate it
+
                 receiver = request.POST.get('receiver')
                 user_in_institution = is_organization_in_user_affiliation(receiver, institution)
 
@@ -326,6 +339,7 @@ def institution_members(request, pk):
             'form': form,
             'member_role': member_role,
             'join_requests_count': join_requests_count,
+            'users': users,
         }    
         return render(request, 'institutions/members.html', context)
 
