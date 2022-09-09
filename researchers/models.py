@@ -25,4 +25,4 @@ class Researcher(models.Model):
         return str(self.user)
     
     class Meta:
-        indexes = [models.Index(fields=['user', 'image'])]
+        indexes = [models.Index(fields=['id', 'user', 'image'])]

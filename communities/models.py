@@ -67,7 +67,7 @@ class Community(models.Model):
         return str(self.community_name)
 
     class Meta:
-        indexes = [models.Index(fields=['community_creator', 'image'])]
+        indexes = [models.Index(fields=['id', 'community_creator', 'image'])]
         verbose_name = 'Community'
         verbose_name_plural = 'Communities'
 
