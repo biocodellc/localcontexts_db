@@ -50,21 +50,19 @@ class Project(models.Model):
     tk_labels = models.ManyToManyField("tklabels.TKLabel", verbose_name="TK Labels", blank=True, related_name="project_tklabels", db_index=True)
 
     def has_labels(self):
-        bc_labels = self.bc_labels.count()
-        tk_labels = self.tk_labels.count()
-        if bc_labels + tk_labels > 0:
+        if self.bc_labels.exists() or self.tk_labels.exists():
             return True
         else:
             return False
     
     def has_bclabels(self):
-        if self.bc_labels.count() > 0:
+        if self.bc_labels.exists():
             return True
         else:
             return False
     
     def has_tklabels(self):
-        if self.tk_labels.count() > 0:
+        if self.tk_labels.exists():
             return True
         else:
             return False

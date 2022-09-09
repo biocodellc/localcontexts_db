@@ -628,11 +628,13 @@
                                     <input list="userList" name="userList" class="w-100" placeholder="Start typing name or username">
                                     <datalist id="userList">
                                         {% for user in users %}
-                                            {% if user.first_name and user.last_name %}
-                                                <option value="{{user.username}} ({{user.first_name}} {{user.last_name}})">
-                                            {% else %}
-                                                <option value="{{user.username}}">
-                                            {% endif %}
+                                            <option 
+                                                {% if user.first_name and user.last_name %}
+                                                    value="{{ user.username }} ({{ user.first_name }} {{ user.last_name }})"
+                                                {% else %}
+                                                    value="{{ user.username }}"
+                                                {% endif %}
+                                            >
                                         {% endfor %}
                                     </datalist>
 
