@@ -70,5 +70,6 @@ class Institution(models.Model):
         return str(self.institution_name)
 
     class Meta:
+        indexes = [models.Index(fields=['institution_creator', 'image'])]
         verbose_name = 'Institution'
         verbose_name_plural = 'Institutions'

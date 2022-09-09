@@ -20,6 +20,9 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.user)
+    
+    class Meta:
+        indexes = [models.Index(fields=['user'])]
 
 class UserAffiliation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, null=True)
@@ -35,6 +38,7 @@ class UserAffiliation(models.Model):
         return str(self.user)
     
     class Meta:
+        indexes = [models.Index(fields=['user'])]
         verbose_name = 'User Affiliation'
         verbose_name_plural = 'User Affiliations'
 

@@ -23,3 +23,6 @@ class Researcher(models.Model):
 
     def __str__(self):
         return str(self.user)
+    
+    class Meta:
+        indexes = [models.Index(fields=['user', 'image'])]

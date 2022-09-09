@@ -81,6 +81,7 @@ class Project(models.Model):
         return self.title
     
     class Meta:
+        indexes = [models.Index(fields=['unique_id', 'project_creator'])]
         ordering = ('-date_added',)
 
 class ProjectContributors(models.Model):
@@ -93,6 +94,7 @@ class ProjectContributors(models.Model):
         return str(self.project)
 
     class Meta:
+        indexes = [models.Index(fields=['project'])]
         verbose_name = 'Project Contributors'
         verbose_name_plural = 'Project Contributors'
 
@@ -105,6 +107,7 @@ class ProjectPerson(models.Model):
         return str(self.project)
     
     class Meta:
+        indexes = [models.Index(fields=['project'])]
         verbose_name = 'Additional Contributor'
         verbose_name_plural = 'Additional Contributors'
 
@@ -118,6 +121,7 @@ class ProjectCreator(models.Model):
         return str(self.project)
     
     class Meta:
+        indexes = [models.Index(fields=['project', 'community', 'institution', 'researcher'])]
         verbose_name = 'Project Creator'
         verbose_name_plural = 'Project Creator'
 
@@ -131,5 +135,6 @@ class ProjectNote(models.Model):
         return str(self.project)
     
     class Meta:
+        indexes = [models.Index(fields=['project', 'community'])]
         verbose_name = 'Project Note'
         verbose_name_plural = 'Project Notes'
