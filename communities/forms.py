@@ -44,16 +44,11 @@ class UpdateCommunityForm(forms.ModelForm):
 class InviteMemberForm(forms.ModelForm):
     class Meta:
         model = InviteMember
-        fields = ['receiver', 'role', 'message']
+        fields = ['role', 'message']
         widgets = {
-            'receiver': forms.Select(attrs={'class': 'w-100'}),
             'role': forms.Select(attrs={'class': 'w-100'}),
             'message': forms.Textarea(attrs={'rows': 2, 'class':'w-100'}),
         }
-    
-    def __init__(self, *args, **kwargs):
-        super(InviteMemberForm, self).__init__(*args, **kwargs)
-        self.fields['receiver'].label_from_instance = lambda obj: "%s" % get_users_name(obj)
 
 class JoinRequestForm(forms.ModelForm):
     class Meta:

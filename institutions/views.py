@@ -308,31 +308,38 @@ def institution_members(request, pk):
                 member = User.objects.get(id=user_id)
                 change_member_role(institution, member, current_role, new_role)
                 return redirect('institution-members', institution.id)
-            else:
-                # TODO: get value of selected item in datalist and validate it
 
-                receiver = request.POST.get('receiver')
-                user_in_institution = is_organization_in_user_affiliation(receiver, institution)
+            elif 'send_invite_btn' in request.POST:
+                selected_user = User.objects.none()
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if not user_in_institution: # If user is not an institution member
-                    invitation_exists = InviteMember.objects.filter(receiver=receiver, institution=institution).exists() # Check to see if invitation already exists
-                    join_request_exists = JoinRequest.objects.filter(user_from=receiver, institution=institution).exists() # Check to see if join request already exists
+                    # Get target User
+                    selected_username = request.POST.get('userList')
+                    if ' ' in selected_username: #if username includes spaces means it has a first and last name (last name,first name)
+                        x = selected_username.split(' ')
+                        selected_user = User.objects.get(username=x[0])
+                    else:
+                        selected_user = User.objects.get(username=selected_username)
+
+                    # Check to see if an invite or join request aleady exists
+                    invitation_exists = InviteMember.objects.filter(receiver=selected_user, institution=institution).exists() # Check to see if invitation already exists
+                    join_request_exists = JoinRequest.objects.filter(user_from=selected_user, institution=institution).exists() # Check to see if join request already exists
 
                     if not invitation_exists and not join_request_exists: # If invitation and join request does not exist, save form
-                        if form.is_valid():
-                            data = form.save(commit=False)
-                            data.sender = request.user
-                            data.status = 'sent'
-                            data.institution = institution
-                            data.save()
-                            # Send email to target user
-                            send_institution_invite_email(request, data, institution)
-                            messages.add_message(request, messages.INFO, 'Invitation Sent!')
-                            return redirect('institution-members', institution.id)
+                        data.receiver = selected_user
+                        data.sender = request.user
+                        data.status = 'sent'
+                        data.institution = institution
+                        data.save()
+                        
+                        send_institution_invite_email(request, data, institution) # Send email to target user
+                        messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
+                        return redirect('institution-members', institution.id)
                     else: 
-                        messages.add_message(request, messages.INFO, 'The user you are trying to add has already been invited to this institution.')
+                        messages.add_message(request, messages.INFO, f'The user you are trying to add already has an invitation pending to join {institution.institution_name}.')
                 else:
-                    messages.add_message(request, messages.ERROR, 'The user you are trying to add is already a member of this institution.')
+                    messages.add_message(request, messages.INFO, 'Something went wrong')
 
         context = { 
             'institution': institution,
