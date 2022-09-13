@@ -316,28 +316,35 @@ def institution_members(request, pk):
 
                     # Get target User
                     selected_username = request.POST.get('userList')
+                    username_to_check = ''
+
                     if ' ' in selected_username: #if username includes spaces means it has a first and last name (last name,first name)
                         x = selected_username.split(' ')
-                        selected_user = User.objects.get(username=x[0])
+                        username_to_check = x[0]
                     else:
-                        selected_user = User.objects.get(username=selected_username)
+                        username_to_check = selected_username
 
-                    # Check to see if an invite or join request aleady exists
-                    invitation_exists = InviteMember.objects.filter(receiver=selected_user, institution=institution).exists() # Check to see if invitation already exists
-                    join_request_exists = JoinRequest.objects.filter(user_from=selected_user, institution=institution).exists() # Check to see if join request already exists
+                    if not username_to_check in users.values_list('username', flat=True):
+                        messages.add_message(request, messages.INFO, 'Invalid user selection. Please select user from the list.')
+                    else:
+                        selected_user = User.objects.get(username=username_to_check)
+    
+                        # Check to see if an invite or join request aleady exists
+                        invitation_exists = InviteMember.objects.filter(receiver=selected_user, institution=institution).exists() # Check to see if invitation already exists
+                        join_request_exists = JoinRequest.objects.filter(user_from=selected_user, institution=institution).exists() # Check to see if join request already exists
 
-                    if not invitation_exists and not join_request_exists: # If invitation and join request does not exist, save form
-                        data.receiver = selected_user
-                        data.sender = request.user
-                        data.status = 'sent'
-                        data.institution = institution
-                        data.save()
-                        
-                        send_institution_invite_email(request, data, institution) # Send email to target user
-                        messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
-                        return redirect('institution-members', institution.id)
-                    else: 
-                        messages.add_message(request, messages.INFO, f'The user you are trying to add already has an invitation pending to join {institution.institution_name}.')
+                        if not invitation_exists and not join_request_exists: # If invitation and join request does not exist, save form
+                            data.receiver = selected_user
+                            data.sender = request.user
+                            data.status = 'sent'
+                            data.institution = institution
+                            data.save()
+                            
+                            send_institution_invite_email(request, data, institution) # Send email to target user
+                            messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
+                            return redirect('institution-members', institution.id)
+                        else: 
+                            messages.add_message(request, messages.INFO, f'The user you are trying to add already has an invitation pending to join {institution.institution_name}.')
                 else:
                     messages.add_message(request, messages.INFO, 'Something went wrong')
 
