@@ -50,7 +50,16 @@ label {
     font-weight: 400;
 }
 
-input[type=text], input[type=email], input[type=password], input[type=username], input[type=date], input[name=contributors], input[name=communities], input[name=institutions], select {
+input[type=text], 
+input[type=email], 
+input[type=password], 
+input[type=username], 
+input[type=date], 
+input[name=contributors], 
+input[name=communities], 
+input[name=institutions], 
+input[name=userList],
+select {
     max-height: 40px;
     min-height: 40px;
     background-color: #fff;
@@ -279,11 +288,11 @@ input:focus {
     color: #fff;
 }
 
-.action-btn:hover {
+.action-btn:hover:not([disabled]) {
     background-color: #338F9D;
 }
 
-.action-btn:active {
+.action-btn:active:not([disabled]) {
     background-color: #005C6A;
 }
 
@@ -293,7 +302,7 @@ input:focus {
     background-color: #fff;
 }
 
-.white-btn:hover {
+.white-btn:hover:not([disabled]) {
     background-color: #007385;
     color: #fff;
 }
@@ -302,10 +311,12 @@ input:focus {
     background-color: #FF6000;
 }
 
-.orange-btn:hover {
+.orange-btn:hover:not([disabled]) {
     background-color: #f17c33;
 }
 
+button:disabled,
+button[disabled],
 .disabled-btn {
     background: #F3F4F6;
     border: none;

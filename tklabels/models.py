@@ -53,6 +53,7 @@ class TKLabel(models.Model):
         return f"{self.community} - {self.name}"
     
     class Meta:
+        indexes = [models.Index(fields=['unique_id', 'created_by', 'community', 'is_approved', 'approved_by', 'audiofile'])]
         verbose_name = 'TK Label'
         verbose_name_plural = 'TK Labels'
         ordering = ('-created',)

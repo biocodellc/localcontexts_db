@@ -4,7 +4,7 @@ from django.templatetags.static import static
 from institutions.models import Institution
 from notifications.models import ActionNotification
 from projects.models import Project, ProjectCreator
-from helpers.models import EntitiesNotified, Connections, LabelVersion
+from helpers.models import EntitiesNotified, Connections
 from bclabels.models import BCLabel
 from researchers.models import Researcher
 from tklabels.models import TKLabel
@@ -17,13 +17,13 @@ register = template.Library()
 @register.simple_tag
 def get_label_count(community):
     count = 0
-    projects = Project.objects.prefetch_related('tk_labels', 'bc_labels').all()
+    # Get all labels in this community
+    # check to see if label exists in projects
 
-    # find all labels of this community that have been applied to projects
-    for project in projects:
-        if project.bc_labels.exists() or project.tk_labels.exists():
-            count = count + project.bc_labels.filter(community=community).count()
-            count = count + project.tk_labels.filter(community=community).count()
+    for label in BCLabel.objects.filter(community=community):
+        count = count + label.project_bclabels.count()
+    for label in TKLabel.objects.filter(community=community):
+        count = count + label.project_tklabels.count()
     return count
 
 # How many Projects has this community been notified of

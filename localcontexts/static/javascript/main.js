@@ -300,24 +300,18 @@ function checkLabelExists(label, selectedLabelCode, labelType) {
             if (values.includes(label.labelType)) {
                 if (label.labelCategory == 'provenance') {
                     btnProv.setAttribute("disabled","disabled")
-                    btnProv.classList.replace('action-btn', 'disabled-btn')
                 } else if (label.labelCategory == 'protocol') {
                     btnProt.setAttribute("disabled","disabled")
-                    btnProt.classList.replace('action-btn', 'disabled-btn')
                 } else if (label.labelCategory == 'permission') {
                     btnPerms.setAttribute("disabled","disabled")
-                    btnPerms.classList.replace('action-btn', 'disabled-btn')
                 }
             }  else {
                 if (label.labelCategory == 'provenance') {
                     btnProv.removeAttribute("disabled")
-                    btnProv.classList.replace('disabled-btn', 'action-btn')
                 } else if (label.labelCategory == 'protocol') {
                     btnProt.removeAttribute("disabled")
-                    btnProt.classList.replace('disabled-btn', 'action-btn')
                 } else if (label.labelCategory == 'permission') {
                     btnPerms.removeAttribute("disabled")
-                    btnPerms.classList.replace('disabled-btn', 'action-btn')
                 }
             }
         }        
@@ -832,12 +826,10 @@ function validateProjectDisableSubmitBtn() {
 
         let oldValue = 'Save Project'
         submitProjectBtn.setAttribute('disabled', true)
-        submitProjectBtn.classList.replace('action-btn', 'disabled-btn')
         submitProjectBtn.innerText = 'Saving Project...'
         
         setTimeout(function(){
             submitProjectBtn.innerText = oldValue;
-            submitProjectBtn.classList.replace('disabled-btn', 'action-btn')
             submitProjectBtn.removeAttribute('disabled');
         }, 5000)
     }      
@@ -960,6 +952,7 @@ function modalToggle(openBtnClasses, modalPartialId, closeBtnPartialId) {
 if (window.location.href.includes('members')) {
     modalToggle('.changeRoleBtn', 'changeRoleModal', 'closeRoleChangeModal')
     modalToggle('.removeMemberBtn', 'removeMemberModal', 'closeRemoveMemberModal')
+    document.getElementById('userListInput').addEventListener('input', disableBtnDuringInput)
 } 
 
 // Leave account
@@ -967,6 +960,11 @@ if (window.location.href.includes('manage')) {
     modalToggle('.leaveCommunityBtn', 'leaveCommAccountModal', 'closeLeaveCommModal')
     modalToggle('.leaveInstitutionBtn', 'leaveInstAccountModal', 'closeLeaveInstModal')
 } 
+
+function disableBtnDuringInput() {
+    const currentValue = document.getElementById('userListInput').value;
+    document.getElementById('sendMemberInviteBtn').disabled = currentValue.length === 0 || document.querySelector('option[value="' + currentValue + '"]') === null;
+}
 
 // Create institution: non-ROR modal
 if (window.location.href.includes('create-institution')) {
@@ -1061,12 +1059,10 @@ if (window.location.href.includes('communities/view/') || window.location.href.i
     function disableSendBtn(btn) {
         let oldValue = 'Send'
         btn.setAttribute('disabled', true)
-        btn.classList.replace('action-btn', 'disabled-btn')
         btn.innerText = 'Sending'
     
         setTimeout(function(){
             btn.innerText = oldValue;
-            btn.classList.replace('disabled-btn', 'action-btn')
             btn.removeAttribute('disabled');
         }, 9000)
     }

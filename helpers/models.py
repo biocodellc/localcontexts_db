@@ -31,6 +31,7 @@ class Notice(models.Model):
         return str(self.project.title)
     
     class Meta:
+        indexes = [models.Index(fields=['project', 'researcher', 'institution'])]
         verbose_name = 'Notice'
         verbose_name_plural = 'Notices'
         ordering = ('-created',)
@@ -46,6 +47,7 @@ class OpenToCollaborateNoticeURL(models.Model):
         return str(self.name)
     
     class Meta:
+        indexes = [models.Index(fields=['institution', 'researcher'])]
         verbose_name = 'Open To Collaborate Notice URL'
         verbose_name_plural = 'Open To Collaborate Notice URLs'
 
@@ -59,6 +61,7 @@ class EntitiesNotified(models.Model):
         return str(self.project.title)
     
     class Meta:
+        indexes = [models.Index(fields=['project'])]
         verbose_name = "Entities Notified"
         verbose_name_plural = "Entities Notified"
 
@@ -74,6 +77,7 @@ class LabelTranslation(models.Model):
         return str(self.translated_name)
     
     class Meta:
+        indexes = [models.Index(fields=['bclabel', 'tklabel'])]
         verbose_name = "Label Translation"
         verbose_name_plural = "Label Translations"
 
@@ -88,6 +92,7 @@ class ProjectComment(models.Model):
         return 'Comment {} by {}'.format(self.message, self.community)
 
     class Meta:
+        indexes = [models.Index(fields=['project', 'community', 'sender'])]
         verbose_name = 'Project Comment'
         verbose_name_plural = 'Project Comments'
         ordering = ('created',)
@@ -106,6 +111,7 @@ class ProjectStatus(models.Model):
         return f"{self.community} - {self.seen} - {self.status}"
 
     class Meta:
+        indexes = [models.Index(fields=['project', 'community'])]
         verbose_name = 'Project Status'
         verbose_name_plural = 'Project Statuses'
 
@@ -119,6 +125,7 @@ class LabelNote(models.Model):
         return f"{self.bclabel} - {self.tklabel} - {self.sender}"
 
     class Meta:
+        indexes = [models.Index(fields=['bclabel', 'tklabel'])]
         verbose_name = 'Label Note'
         verbose_name_plural = 'Label Notes'
 
@@ -167,5 +174,6 @@ class Connections(models.Model):
         return f"{self.community} - {self.institution} - {self.researcher}"
 
     class Meta:
+        indexes = [models.Index(fields=['community', 'institution', 'researcher'])]
         verbose_name = 'Connections'
         verbose_name_plural = 'Connections'
