@@ -189,18 +189,21 @@
                             {% if institution %}
                                 {% connections_projects_with_labels community institution as projects %}
                             {% endif %}
-                            {% for project in projects %}
-                                {% if researcher %}
-                                    <li>
-                                        <a href="{% anchor 'researcher-projects' project.unique_id researcher.id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
-                                    </li>
-                                {% endif %}
 
-                                {% if institution %}
-                                    <li>
-                                        <a href="{% anchor 'institution-projects' project.unique_id institution.id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
-                                    </li>
-                                {% endif %}
+                            {% for project in projects %}
+                                <li>
+                                    <a
+                                        class="darkteal-text underline-hover"
+                                        {% if researcher %}
+                                            href="{% anchor 'researcher-projects' project.unique_id researcher.id %}"
+                                        {% endif %}
+                                        {% if institution %}
+                                            href="{% anchor 'institution-projects' project.unique_id institution.id %}"
+                                        {% endif %}
+                                    >
+                                        {{ project.title }}
+                                    </a>
+                                </li>
                             {% endfor %}
                         </ul>                           
                     </div>

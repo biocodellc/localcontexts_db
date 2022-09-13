@@ -175,7 +175,7 @@ def researcher_notices(request, pk):
     if user_can_view == False:
         return redirect('public-researcher', researcher.id)
     else:
-        urls = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher)
+        urls = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher).values_list('url', 'name')
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
 
         if request.method == 'POST':
