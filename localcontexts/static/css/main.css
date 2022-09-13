@@ -288,11 +288,11 @@ input:focus {
     color: #fff;
 }
 
-.action-btn:hover {
+.action-btn:hover:not([disabled]) {
     background-color: #338F9D;
 }
 
-.action-btn:active {
+.action-btn:active:not([disabled]) {
     background-color: #005C6A;
 }
 
@@ -302,7 +302,7 @@ input:focus {
     background-color: #fff;
 }
 
-.white-btn:hover {
+.white-btn:hover:not([disabled]) {
     background-color: #007385;
     color: #fff;
 }
@@ -311,10 +311,12 @@ input:focus {
     background-color: #FF6000;
 }
 
-.orange-btn:hover {
+.orange-btn:hover:not([disabled]) {
     background-color: #f17c33;
 }
 
+button:disabled,
+button[disabled],
 .disabled-btn {
     background: #F3F4F6;
     border: none;
