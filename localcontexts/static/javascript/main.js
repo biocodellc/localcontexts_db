@@ -960,6 +960,7 @@ function modalToggle(openBtnClasses, modalPartialId, closeBtnPartialId) {
 if (window.location.href.includes('members')) {
     modalToggle('.changeRoleBtn', 'changeRoleModal', 'closeRoleChangeModal')
     modalToggle('.removeMemberBtn', 'removeMemberModal', 'closeRemoveMemberModal')
+    document.getElementById('userListInput').addEventListener('input', disableBtnDuringInput)
 } 
 
 // Leave account
@@ -967,6 +968,22 @@ if (window.location.href.includes('manage')) {
     modalToggle('.leaveCommunityBtn', 'leaveCommAccountModal', 'closeLeaveCommModal')
     modalToggle('.leaveInstitutionBtn', 'leaveInstAccountModal', 'closeLeaveInstModal')
 } 
+
+function disableBtnDuringInput() {
+    const currentValue = document.getElementById('userListInput').value;
+    console.log(currentValue)
+    let inviteBtn = document.getElementById("sendMemberInviteBtn")
+    inviteBtn.disabled = currentValue.length === 0 || document.querySelector('option[value="' + currentValue + '"]') === null;
+    // if (currentValue.length === 0 || document.querySelector('option[value="' + currentValue + '"]') === null) {
+    //     inviteBtn.disabled = true
+    // } else if (document.querySelector('option[value="' + currentValue + '"]')) {
+    //     inviteBtn.disabled = false
+    //     inviteBtn.classList.replace('disabled-btn', 'action-btn')
+    // }
+
+    //  do { inviteBtn.classList.replace('disabled-btn', 'action-btn') }
+    //  while (inviteBtn.disabled = false)
+}
 
 // Create institution: non-ROR modal
 if (window.location.href.includes('create-institution')) {

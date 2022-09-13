@@ -1,7 +1,9 @@
+import re
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
+from itertools import chain
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
@@ -228,8 +230,18 @@ def community_members(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
+        # Get list of users, NOT in this community, alphabetized by name
+        members = list(chain(
+            community.admins.all().values_list('id', flat=True), 
+            community.editors.all().values_list('id', flat=True), 
+            community.viewers.all().values_list('id', flat=True),
+        ))
+        members.append(community.community_creator.id) # include community creator
+        users = User.objects.exclude(id__in=members).order_by('username')
+
         join_requests_count = JoinRequest.objects.filter(community=community).count()
         form = InviteMemberForm(request.POST or None)
+
         if request.method == "POST":
             if 'change_member_role_btn' in request.POST:
                 current_role = request.POST.get('current_role')
@@ -238,35 +250,44 @@ def community_members(request, pk):
                 member = User.objects.get(id=user_id)
                 change_member_role(community, member, current_role, new_role)
                 return redirect('members', community.id)
-            else:
-                receiver = request.POST.get('receiver')
-                user_in_community = is_organization_in_user_affiliation(receiver, community)
-                
-                if not user_in_community: # If user is not community member
-                    invitation_exists = InviteMember.objects.filter(receiver=receiver, community=community).exists() # Check to see if invitation already exists
-                    join_request_exists = JoinRequest.objects.filter(user_from=receiver, community=community).exists() # Check to see if invitation already exists
+            elif 'send_invite_btn' in request.POST:
+                selected_user = User.objects.none()
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                    if not invitation_exists and not join_request_exists: # If invitation does not exist or join request does not exist, save form.
-                        if form.is_valid():
-                            data = form.save(commit=False)
-                            data.sender = request.user
-                            data.status = 'sent'
-                            data.community = community
-                            data.save()
-                            # Send email to target user
-                            send_community_invite_email(request, data, community)
-                            messages.add_message(request, messages.INFO, 'Invitation Sent!')
-                            return redirect('members', community.id)
+                    # Get target User
+                    selected_username = request.POST.get('userList')
+                    if ' ' in selected_username: #if username includes spaces means it has a first and last name (last name,first name)
+                        x = selected_username.split(' ')
+                        selected_user = User.objects.get(username=x[0])
+                    else:
+                        selected_user = User.objects.get(username=selected_username)
+
+                    # Check to see if an invite or join request aleady exists
+                    invitation_exists = InviteMember.objects.filter(receiver=selected_user, community=community).exists() # Check to see if invitation already exists
+                    join_request_exists = JoinRequest.objects.filter(user_from=selected_user, community=community).exists() # Check to see if join request already exists
+
+                    if not invitation_exists and not join_request_exists: # If invitation and join request does not exist, save form
+                        data.receiver = selected_user
+                        data.sender = request.user
+                        data.status = 'sent'
+                        data.community = community
+                        data.save()
+                        
+                        send_community_invite_email(request, data, community) # Send email to target user
+                        messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
+                        return redirect('members', community.id)
                     else: 
-                        messages.add_message(request, messages.INFO, 'The user you are trying to add has already been invited to this community.')
+                        messages.add_message(request, messages.INFO, f'The user you are trying to add already has an invitation pending to join {community.community_name}.')
                 else:
-                    messages.add_message(request, messages.ERROR, 'The user you are trying to add is already a member of this community.')
+                    messages.add_message(request, messages.INFO, 'Something went wrong')
 
         context = {
             'community': community,
             'member_role': member_role,
             'form': form,
             'join_requests_count': join_requests_count,
+            'users': users,
         }
         return render(request, 'communities/members.html', context)
 

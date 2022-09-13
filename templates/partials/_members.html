@@ -625,7 +625,13 @@
                             <div>
                                 <div> 
                                     <label>Name</label> <br>
-                                    <input list="userList" name="userList" class="w-100" placeholder="Start typing name or username">
+                                    <input 
+                                        id="userListInput" 
+                                        list="userList" 
+                                        name="userList" 
+                                        class="w-100" 
+                                        placeholder="Start typing name or username"
+                                    >
                                     <datalist id="userList">
                                         {% for user in users %}
                                             <option 
@@ -653,7 +659,12 @@
                     
                         <div class="flex-this w-100 margin-bottom-16">
                             <div class="w-50 margin-top-2">
-                                <button class="primary-btn action-btn" name="send_invite_btn">Send Invitation </button>
+                                <button 
+                                    id="sendMemberInviteBtn" 
+                                    class="primary-btn disabled-btn" 
+                                    name="send_invite_btn" 
+                                    disabled
+                                >Send Invitation </button>
                             </div>
     
                             <div class="w-50 margin-top-2 right-text">
