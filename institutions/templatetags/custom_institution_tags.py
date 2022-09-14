@@ -30,7 +30,7 @@ def get_notices_count(institution):
 @register.simple_tag
 def get_labels_count(institution):
     count = 0
-    for instance in ProjectCreator.objects.select_related('project').filter(institution=institution):
+    for instance in ProjectCreator.objects.select_related('project').prefetch_related('project__bc_labels', 'project__tk_labels').filter(institution=institution):
         if instance.project.has_labels():
             count += 1
 

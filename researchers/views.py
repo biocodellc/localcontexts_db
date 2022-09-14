@@ -196,65 +196,60 @@ def researcher_notices(request, pk):
 
 @login_required(login_url='login')
 def researcher_projects(request, pk):
-    try:
-        researcher = Researcher.objects.prefetch_related('user').get(id=pk)
-        user_can_view = checkif_user_researcher(researcher, request.user)
-        if user_can_view == False:
-            return redirect('restricted')
-        else:
-            # researcher projects + 
-            # projects researcher has been notified of + 
-            # projects where researcher is contributor
-            projects_list = []
+    researcher = Researcher.objects.prefetch_related('user').get(id=pk)
+    user_can_view = checkif_user_researcher(researcher, request.user)
+    if user_can_view == False:
+        return redirect('restricted')
+    else:
+        # researcher projects + 
+        # projects researcher has been notified of + 
+        # projects where researcher is contributor
+        projects_list = []
 
-            researcher_projects = ProjectCreator.objects.select_related('project').filter(researcher=researcher)
+        for p in researcher.researcher_created_project.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
+            projects_list.append(p.project)
 
-            for p in researcher_projects:
-                projects_list.append(p.project)
+        for n in researcher.researchers_notified.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
+            projects_list.append(n.project)
+        
+        for c in researcher.contributing_researchers.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
+            projects_list.append(c.project)
 
-            for n in EntitiesNotified.objects.select_related('project').filter(researchers=researcher):
-                projects_list.append(n.project)
-            
-            for c in ProjectContributors.objects.select_related('project').filter(researchers=researcher):
-                projects_list.append(c.project)
+        projects = list(set(projects_list))
+        
+        p = Paginator(projects, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+        
+        form = ProjectCommentForm(request.POST or None)
+        
+        if request.method == 'POST':
+            project_uuid = request.POST.get('project-uuid')
 
-            projects = list(set(projects_list))
-            
-            p = Paginator(projects, 5)
-            page_num = request.GET.get('page', 1)
-            page = p.page(page_num)
-            
-            form = ProjectCommentForm(request.POST or None)
-            
-            if request.method == 'POST':
-                project_uuid = request.POST.get('project-uuid')
+            community_id = request.POST.get('community-id')
+            community = Community.objects.get(id=community_id)
 
-                community_id = request.POST.get('community-id')
-                community = Community.objects.get(id=community_id)
+            if form.is_valid():
+                data = form.save(commit=False)
 
-                if form.is_valid():
-                    data = form.save(commit=False)
+                if project_uuid:
+                    project = Project.objects.get(unique_id=project_uuid)
+                    data.project = project
 
-                    if project_uuid:
-                        project = Project.objects.get(unique_id=project_uuid)
-                        data.project = project
+                data.sender = request.user
+                data.community = community
+                data.save()
+                
+                return redirect('researcher-projects', researcher.id)
 
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-                    
-                    return redirect('researcher-projects', researcher.id)
-
-            context = {
-                'projects': projects,
-                'researcher': researcher,
-                'form': form,
-                'user_can_view': user_can_view,
-                'items': page,
-            }
-            return render(request, 'researchers/projects.html', context)
-    except:
-        raise Http404()
+        context = {
+            'projects': projects,
+            'researcher': researcher,
+            'form': form,
+            'user_can_view': user_can_view,
+            'items': page,
+        }
+        return render(request, 'researchers/projects.html', context)
 
 @login_required(login_url='login')
 def projects_with_labels(request, pk):
