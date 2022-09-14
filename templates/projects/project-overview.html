@@ -207,12 +207,8 @@
                 {% endif %}
             {% endif %}
 
+            {% include 'projects/project-comment.html'%}
 
-            {% if project.project_notice.all %}
-                {% for notice in project.project_notice.all %}
-                    {% include 'projects/project-comment.html'%}
-                {% endfor %}
-            {% endif %}  
         </div>
     
     </div>
