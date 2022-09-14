@@ -19,17 +19,16 @@ def get_label_count(community):
     count = 0
     # Get all labels in this community
     # check to see if label exists in projects
-
-    for label in BCLabel.objects.filter(community=community):
+    for label in BCLabel.objects.prefetch_related('project_bclabels').filter(community=community):
         count = count + label.project_bclabels.count()
-    for label in TKLabel.objects.filter(community=community):
+    for label in TKLabel.objects.prefetch_related('project_tklabels').filter(community=community):
         count = count + label.project_tklabels.count()
     return count
 
 # How many Projects has this community been notified of
 @register.simple_tag
 def community_notified_count(community):
-    return EntitiesNotified.objects.prefetch_related('communities').filter(communities=community).count()
+    return community.communities_notified.count()
 
 # How many connections gave been created (how many unique institutions or researchers have had a Label applied to a project)
 @register.simple_tag

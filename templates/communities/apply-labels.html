@@ -15,12 +15,18 @@
             <div><p>{{ project.date_added|date:'M d, Y' }} | 
                 {% if project.project_type == 'Other' %} {{ project.other_type }} {% else %} {{ project.project_type }} {% endif %}| 
                 {{ project.project_privacy }}<br>
-                Created: {% if project.project_creator.get_full_name %}{{ project.project_creator.get_full_name }} {% else %} project.project_creator.username {% endif %}
+                Created: {% if project.project_creator.get_full_name %}{{ project.project_creator.get_full_name }} {% else %} {{project.project_creator.username}} {% endif %}
 
                 {% which_account_created_project project as project_creator %}
+                Created: 
+                {% if project.project_creator.get_full_name %}
+                    {{ project.project_creator.get_full_name }}
+                {% else %}
+                    {{ project.project_creator.username }}
+                {% endif %}
                 {% if project_creator.community %} at {{ project_creator.community }} | Community {% endif %}
                 {% if project_creator.institution %} at {{ project_creator.institution }} | Institution {% endif %}
-                {% if project_creator.researcher %} {{ project_creator.researcher}} | Researcher {% endif %}
+                {% if project_creator.researcher %} | Researcher {% endif %}
                 </p>
             </div>
             

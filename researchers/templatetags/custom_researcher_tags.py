@@ -21,8 +21,7 @@ def get_notices_count(researcher):
 @register.simple_tag
 def get_labels_count(researcher):
     count = 0
-    projects_created_researcher = ProjectCreator.objects.filter(researcher=researcher)
-    for instance in projects_created_researcher:
+    for instance in ProjectCreator.objects.select_related('project').prefetch_related('project__bc_labels', 'project__tk_labels').filter(researcher=researcher):
         if instance.project.has_labels():
             count += 1
     return count
@@ -33,10 +32,9 @@ def unread_notifications(researcher):
 
 @register.simple_tag
 def researcher_contributing_projects(researcher):
-    contributors = ProjectContributors.objects.filter(researchers=researcher)
-    return contributors
+    return ProjectContributors.objects.select_related('project').filter(researchers=researcher)
 
 @register.simple_tag
 def connections_count(researcher):
-    connections = Connections.objects.get(researcher=researcher)
+    connections = Connections.objects.prefetch_related('communities').get(researcher=researcher)
     return connections.communities.count()

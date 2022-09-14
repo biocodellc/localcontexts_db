@@ -36,7 +36,7 @@ class TKLabel(models.Model):
     version = models.SmallIntegerField(blank=True, null=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="tklabel_creator")
     label_type = models.CharField(max_length=50, null=True, choices=TYPES)
-    community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE)
+    community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE, related_name='tklabel_community')
     name = models.CharField(verbose_name='label name', max_length=90, null=True, blank=True)
     language_tag = models.CharField(max_length=5, blank=True)
     language = models.CharField(max_length=150, blank=True, default="English")

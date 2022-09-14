@@ -4,7 +4,7 @@
         <div class="w-60"><h2 class="no-top-margin">Notices</h2></div>
             {% if researcher %}
                 <div class="flex-this align-center">
-                    <a class="primary-btn action-btn margin-top-2 " href="{% url 'researcher-create-project' researcher.id %}">
+                    <a class="primary-btn action-btn margin-top-2" href="{% url 'researcher-create-project' researcher.id %}">
                         Create a Project     <i class="fa fa-arrow-right"></i>
                     </a>
                 </div>
@@ -13,7 +13,7 @@
             {% if institution %}
                 <div class="flex-this align-center">
                     {% if member_role == 'admin' or member_role == 'editor' %}
-                        <a class="primary-btn action-btn margin-top-2 " href="{% url 'inst-create-project' institution.id %}">
+                        <a class="primary-btn action-btn margin-top-2" href="{% url 'inst-create-project' institution.id %}">
                             Create a Project     <i class="fa fa-arrow-right"></i>
                         </a>
                     {% endif %}
@@ -49,7 +49,8 @@
             <div class="w-90">
                 <p>
                     <span class="darkteal-text bold">Notice Text</span><br>
-                    Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.                    </p>         
+                    Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.                    
+                </p>         
             </div>
 
             <div>
@@ -59,7 +60,7 @@
                         <ul>
                             {% for url in urls %}
                                 <li>
-                                    <a class="darkteal-text underline-hover" href="{{ url.url }}">{{ url.name }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                    <a class="darkteal-text underline-hover" href="{{ url.0 }}" target="_blank" rel="noopener">{{ url.1 }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
                                 </li>
                             {% endfor %}
                         </ul>
