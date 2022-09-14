@@ -9,8 +9,19 @@ register = template.Library()
 
 @register.simple_tag
 def which_account_created_project(project):
-    p = ProjectCreator.objects.filter(project=project)
-    return p[0] #1st in instances
+    return ProjectCreator.objects.select_related(
+        'community', 
+        'institution', 
+        'researcher', 
+        'researcher__user').filter(project=project).values(
+            'institution__institution_name',
+            'community__community_name',
+            'researcher__user'
+            )
+
+@register.simple_tag
+def show_project_notices(project):
+    return project.project_notice.all().values('archived', 'notice_type')
 
 @register.simple_tag
 def project_comments(project, community):

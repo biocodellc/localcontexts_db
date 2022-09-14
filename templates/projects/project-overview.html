@@ -13,15 +13,11 @@
                     {{ project.project_privacy }}<br>
 
                     {% which_account_created_project project as project_creator %}
-                    Created: 
-                    {% if project.project_creator.get_full_name %}
-                        {{ project.project_creator.get_full_name }}
-                    {% else %}
-                        {{ project.project_creator.username }}
-                    {% endif %}
-                    {% if project_creator.community %} at {{ project_creator.community }} | Community {% endif %}
-                    {% if project_creator.institution %} at {{ project_creator.institution }} | Institution {% endif %}
-                    {% if project_creator.researcher %} | Researcher {% endif %}
+                    {% for creator in project_creator %}
+                        {% if creator.community__community_name %} at {{ creator.community__community_name }} | Community {% endif %}
+                        {% if creator.institution__institution_name %} at {{ creator.institution__institution_name }} | Institution {% endif %}
+                        {% if creator.researcher__user %} {{ creator.researcher__user }} | Researcher {% endif %}
+                    {% endfor %}
                 </p>
             </div>
             
@@ -111,24 +107,22 @@
                     {% endif %}
                 {% endwith %}
 
-
-                {% if project.project_notice.all %}
-                    {% for notice in project.project_notice.all %}
-                        {% if not notice.archived %}
-                            <div class="flex-this flex-end">
-                                {% if notice.notice_type == 'biocultural' %}
-                                    <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
-                                {% endif %}
-                                {% if notice.notice_type == 'traditional_knowledge' %}
-                                    <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
-                                {% endif %}
-                                {% if notice.notice_type == 'attribution_incomplete' %}
-                                    <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
+                {% show_project_notices project as notices %}
+                {% for notice in notices %}
+                    {% if not notice.archived %}
+                        <div class="flex-this flex-end">
+                            {% if notice.notice_type == 'biocultural' %}
+                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                            {% endif %}
+                            {% if notice.notice_type == 'traditional_knowledge' %}
+                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                            {% endif %}
+                            {% if notice.notice_type == 'attribution_incomplete' %}
+                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
 
             </div>
         </div>

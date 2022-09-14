@@ -19,10 +19,9 @@ def get_label_count(community):
     count = 0
     # Get all labels in this community
     # check to see if label exists in projects
-
-    for label in BCLabel.objects.filter(community=community):
+    for label in BCLabel.objects.prefetch_related('project_bclabels').filter(community=community):
         count = count + label.project_bclabels.count()
-    for label in TKLabel.objects.filter(community=community):
+    for label in TKLabel.objects.prefetch_related('project_tklabels').filter(community=community):
         count = count + label.project_tklabels.count()
     return count
 
