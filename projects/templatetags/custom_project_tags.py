@@ -27,11 +27,11 @@ def show_project_notices(project):
 def project_comments(project, community):
     # pass instance of project and instance of community
     if isinstance(community, Community):
-        return ProjectComment.objects.select_related('community', 'sender').filter(project=project, community=community)
+        return ProjectComment.objects.select_related('community', 'sender', 'project').filter(project=project, community=community)
 
 @register.simple_tag
 def project_status(project):
-    return ProjectStatus.objects.select_related('community').filter(project=project)
+    return ProjectStatus.objects.select_related('community', 'project').filter(project=project)
 
 @register.simple_tag
 def get_all_researchers():
