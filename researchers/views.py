@@ -45,8 +45,8 @@ def connect_researcher(request):
                 Connections.objects.create(researcher=data)
 
                 # Mark current user as researcher
-                request.user.profile.is_researcher = True
-                request.user.profile.save()
+                request.user.user_profile.is_researcher = True
+                request.user.user_profile.save()
 
                 # Send support an email in prod only about a Researcher signing up
                 if dev_prod_or_local(request.get_host()) == 'PROD':
