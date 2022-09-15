@@ -5,6 +5,5 @@ from .models import Project, ProjectContributors
 @receiver(post_save, sender=Project)
 def create_contributors(sender, instance, created, **kwargs):
     if created:
-        obj_exists = ProjectContributors.objects.filter(project=instance).exists()
-        if not obj_exists:
+        if not ProjectContributors.objects.filter(project=instance).exists():
             ProjectContributors.objects.create(project=instance)

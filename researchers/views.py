@@ -45,8 +45,8 @@ def connect_researcher(request):
                 Connections.objects.create(researcher=data)
 
                 # Mark current user as researcher
-                request.user.profile.is_researcher = True
-                request.user.profile.save()
+                request.user.user_profile.is_researcher = True
+                request.user.user_profile.save()
 
                 # Send support an email in prod only about a Researcher signing up
                 if dev_prod_or_local(request.get_host()) == 'PROD':
@@ -597,7 +597,7 @@ def edit_project(request, researcher_id, project_uuid):
             
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
-                create_notices(notices_selected, researcher, data, notice)
+                create_notices(notices_selected, researcher, data, notices)
 
             return redirect('researcher-projects', researcher.id)    
 
