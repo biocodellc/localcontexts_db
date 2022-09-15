@@ -934,11 +934,11 @@ def projects_with_notices(request, pk):
                 projects_list.append(p.project)
 
         for n in community.communities_notified.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            if p.project.has_notice():
+            if n.project.has_notice():
                 projects_list.append(n.project)
         
         for c in community.contributing_communities.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            if p.project.has_notice():
+            if c.project.has_notice():
                 projects_list.append(c.project)
 
         projects = list(set(projects_list))
