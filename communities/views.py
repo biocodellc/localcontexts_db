@@ -716,6 +716,9 @@ def projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
+        # 1. community projects + 
+        # 2. projects community has been notified of 
+        # 3. projects where community is contributor
 
         projects_list = list(chain(
             community.community_created_project.all().values_list('project__id', flat=True), 

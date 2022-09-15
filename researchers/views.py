@@ -597,7 +597,7 @@ def edit_project(request, researcher_id, project_uuid):
             
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
-                create_notices(notices_selected, researcher, data, notice)
+                create_notices(notices_selected, researcher, data, notices)
 
             return redirect('researcher-projects', researcher.id)    
 
