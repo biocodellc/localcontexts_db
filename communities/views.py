@@ -716,21 +716,14 @@ def projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        # community projects + 
-        # projects community has been notified of + 
-        # projects where community is contributor
-        projects_list = []
 
-        for p in community.community_created_project.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            projects_list.append(p.project)
-
-        for n in community.communities_notified.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            projects_list.append(n.project)
-        
-        for c in community.contributing_communities.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            projects_list.append(c.project)
-
-        projects = list(set(projects_list))
+        projects_list = list(chain(
+            community.community_created_project.all().values_list('project__id', flat=True), 
+            community.communities_notified.all().values_list('project__id', flat=True), 
+            community.contributing_communities.all().values_list('project__id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids).order_by('-date_added')
 
         p = Paginator(projects, 5)
         page_num = request.GET.get('page', 1)
@@ -758,15 +751,15 @@ def projects(request, pk):
                         status.seen = True
 
                         if project_status == 'seen':
-                            title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
+                            title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
 
                         if project_status == 'pending':
                             status.status = 'pending'
-                            title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                            title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
 
                         if project_status == 'not_pending':
                             status.status = 'not_pending'
-                            title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                            title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
 
                         status.save()
 
@@ -794,7 +787,7 @@ def projects(request, pk):
                         status.seen = True
                         status.save()
 
-                        title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
+                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
                         # Send Notification
                         if creator.institution:
@@ -865,15 +858,15 @@ def projects_with_labels(request, pk):
                         status.seen = True
 
                         if project_status == 'seen':
-                            title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
+                            title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
 
                         if project_status == 'pending':
                             status.status = 'pending'
-                            title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                            title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
 
                         if project_status == 'not_pending':
                             status.status = 'not_pending'
-                            title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                            title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
 
                         status.save()
 
@@ -901,7 +894,7 @@ def projects_with_labels(request, pk):
                         status.seen = True
                         status.save()
 
-                        title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
+                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
                         # Send Notification
                         if creator.institution:
@@ -972,15 +965,15 @@ def projects_with_notices(request, pk):
                         status.seen = True
 
                         if project_status == 'seen':
-                            title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
+                            title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
 
                         if project_status == 'pending':
                             status.status = 'pending'
-                            title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                            title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
 
                         if project_status == 'not_pending':
                             status.status = 'not_pending'
-                            title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                            title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
 
                         status.save()
 
@@ -1008,7 +1001,7 @@ def projects_with_notices(request, pk):
                         status.seen = True
                         status.save()
 
-                        title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
+                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
                         # Send Notification
                         if creator.institution:
@@ -1034,12 +1027,8 @@ def projects_creator(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        projects_list = []
-        
-        for p in community.community_created_project.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            projects_list.append(p.project)
-
-        projects = list(set(projects_list))
+        created_projects = community.community_created_project.all().values_list('project__id', flat=True)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=created_projects).order_by('-date_added')
 
         p = Paginator(projects, 5)
         page_num = request.GET.get('page', 1)
@@ -1066,15 +1055,15 @@ def projects_creator(request, pk):
                         status.seen = True
 
                         if project_status == 'seen':
-                            title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
+                            title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
 
                         if project_status == 'pending':
                             status.status = 'pending'
-                            title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                            title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
 
                         if project_status == 'not_pending':
                             status.status = 'not_pending'
-                            title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                            title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
 
                         status.save()
 
@@ -1102,7 +1091,7 @@ def projects_creator(request, pk):
                         status.seen = True
                         status.save()
 
-                        title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
+                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
                         # Send Notification
                         if creator.institution:
@@ -1128,22 +1117,10 @@ def projects_contributor(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        # init list for projects where community is contributor but not creator
-        projects_list = []
-        created_projects = []
-
-        for x in ProjectContributors.objects.select_related('project').filter(communities=community):
-            projects_list.append(x.project)
-
-        for c in ProjectCreator.objects.select_related('project').filter(community=community):
-            created_projects.append(c.project)
-
-        # remove projects that were created by the community
-        for p in created_projects:
-            if p in projects_list:
-                projects_list.remove(p)
-
-        projects = list(set(projects_list))
+        # Get IDs of projects created by community and IDs of projects contributed, then exclude the created ones in the project call
+        created_projects = community.community_created_project.all().values_list('project__id', flat=True)
+        contrib = community.contributing_communities.all().values_list('project__id', flat=True)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=contrib).exclude(id__in=created_projects).order_by('-date_added')
 
         p = Paginator(projects, 5)
         page_num = request.GET.get('page', 1)
@@ -1170,15 +1147,15 @@ def projects_contributor(request, pk):
                         status.seen = True
 
                         if project_status == 'seen':
-                            title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
+                            title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
 
                         if project_status == 'pending':
                             status.status = 'pending'
-                            title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                            title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
 
                         if project_status == 'not_pending':
                             status.status = 'not_pending'
-                            title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                            title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
 
                         status.save()
 
@@ -1206,7 +1183,7 @@ def projects_contributor(request, pk):
                         status.seen = True
                         status.save()
 
-                        title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
+                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
                         # Send Notification
                         if creator.institution:
