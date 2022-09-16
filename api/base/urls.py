@@ -1,6 +1,5 @@
 from django.urls import path, re_path
 from .views import *
-from .api import *
 
 urlpatterns = [
     re_path(r'^$', apiOverview, name="api-overview"),

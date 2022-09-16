@@ -12,21 +12,7 @@ from projects.models import ProjectCreator
 
 @api_view(['GET'])
 def apiOverview(request, format=None):
-    if request.version == 'v2':
-        api_urls_v2 = {
-        'projects_list': reverse('api-projects', request=request, format=format),
-        'project_detail': '/projects/<PROJECT_UNIQUE_ID>/',
-        'projects_by_user_id': '/projects/users/<USER_ID>/',
-        'projects_by_institution_id': '/projects/institutions/<INSTITUTION_ID>/',
-        'projects_by_researcher_id': '/projects/researchers/<RESEARCHER_ID>/',
-        'api_documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
-        'usage_guide_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf',
-        'usage_guide_ci_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf',
-        'usage_guide_labels': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf',
-        }
-        return Response(api_urls_v2)
-    else:
-        api_urls_v1 = {
+    api_urls = {
         'projects_list': reverse('api-projects', request=request, format=format),
         'project_detail': '/projects/<PROJECT_UNIQUE_ID>/',
         'projects_by_user_id': '/projects/users/<USER_ID>/',
@@ -37,8 +23,8 @@ def apiOverview(request, format=None):
         'usage_guide_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf',
         'usage_guide_ci_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf',
         'usage_guide_labels': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf',
-        }
-        return Response(api_urls_v1)
+    }
+    return Response(api_urls)
 
 @api_view(['GET'])
 def openToCollaborateNotice(request):
