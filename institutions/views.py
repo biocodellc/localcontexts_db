@@ -652,7 +652,6 @@ def projects_contributor(request, pk):
         contrib = institution.contributing_institutions.all().values_list('project__id', flat=True)
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=contrib).exclude(id__in=created_projects).order_by('-date_added')
 
-
         p = Paginator(projects, 5)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
