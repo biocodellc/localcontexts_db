@@ -371,14 +371,14 @@ def select_label(request, pk):
         return redirect('public-community', community.id)
     else:
         if request.method == "POST":
-            bclabel_type = request.POST.get('bclabel-type')
-            tklabel_type = request.POST.get('tk-label-type')
+            bclabel_code = request.POST.get('bc-label-code')
+            tklabel_code = request.POST.get('tk-label-code')
 
-            if bclabel_type:
-                return redirect('customize-label', community.id, bclabel_type)
+            if bclabel_code:
+                return redirect('customize-label', community.id, bclabel_code)
 
-            if tklabel_type:
-                return redirect('customize-label', community.id, tklabel_type)
+            if tklabel_code:
+                return redirect('customize-label', community.id, tklabel_code)
         
         context = {
             'community': community,
@@ -390,7 +390,7 @@ def select_label(request, pk):
         return render(request, 'communities/select-label.html', context)
 
 @login_required(login_url='login')
-def customize_label(request, pk, label_type):
+def customize_label(request, pk, label_code):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
 
     member_role = check_member_role(request.user, community)
@@ -398,8 +398,8 @@ def customize_label(request, pk, label_type):
         return redirect('restricted')    
     else:
         # TK Label
-        if label_type.startswith('tk'):
-            tk_type = check_tklabel_type(label_type)
+        if label_code.startswith('tk'):
+            tk_type = check_tklabel_type(label_code)
 
             form = CustomizeTKLabelForm(request.POST or None, request.FILES)
 
@@ -436,8 +436,8 @@ def customize_label(request, pk, label_type):
                     return redirect('select-label', community.id)
 
         # BCLabel
-        if label_type.startswith('bc'):
-            bc_type = check_bclabel_type(label_type)
+        if label_code.startswith('bc'):
+            bc_type = check_bclabel_type(label_code)
 
             form = CustomizeBCLabelForm(request.POST or None, request.FILES)
 
@@ -476,7 +476,7 @@ def customize_label(request, pk, label_type):
         context = {
             'member_role': member_role,
             'community': community,
-            'label_type': label_type,
+            'label_code': label_code,
             'form': form,
             'add_translation_formset': add_translation_formset,
         }
