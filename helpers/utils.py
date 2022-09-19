@@ -167,11 +167,6 @@ def get_labels_json():
     data = json.load(json_data) #deserialize
     return data
 
-def get_notices_json():
-    json_data = open('./localcontexts/static/json/Notices.json')
-    data = json.load(json_data) #deserialize
-    return data
-
 def add_to_connections(target_org, org):
 
     if isinstance(target_org, Community):
@@ -192,41 +187,7 @@ def add_to_connections(target_org, org):
         connections = Connections.objects.get(researcher=target_org)
         if isinstance(org, Community):
             connections.communities.add(org)
-        connections.save()
-
-def set_notice_defaults(notice):
-    data = get_notices_json()
-    baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/'
-
-    for item in data:
-        if item['noticeType'] == notice.notice_type:
-            notice.name = item['noticeName']
-            notice.img_url = baseURL + item['imgFileName']
-            notice.svg_url = baseURL + item['svgFileName']
-            notice.default_text = item['noticeDefaultText']
-    notice.save()  
-
-# Helper function for creating/updating notices
-def loop_through_notices(list, organization, project):
-    for selected in list:
-        if isinstance(organization, Institution):
-            if selected == 'bcnotice':
-                notice = Notice.objects.create(notice_type='biocultural', institution=organization, project=project)
-            elif selected == 'tknotice':
-                notice = Notice.objects.create(notice_type='traditional_knowledge', institution=organization, project=project)
-            elif selected == 'attribution_incomplete':
-                notice = Notice.objects.create(notice_type='attribution_incomplete', institution=organization, project=project)
-
-        if isinstance(organization, Researcher):
-            if selected == 'bcnotice':
-                notice = Notice.objects.create(notice_type='biocultural', researcher=organization, project=project)
-            elif selected == 'tknotice':
-                notice = Notice.objects.create(notice_type='traditional_knowledge', researcher=organization, project=project)
-            elif selected == 'attribution_incomplete':
-                notice = Notice.objects.create(notice_type='attribution_incomplete', researcher=organization, project=project)
-        
-        set_notice_defaults(notice)
-
+        connections.save() 
 
 # Create/Update Notices
 def create_notices(selected_notices, organization, project, existing_notices):
@@ -236,7 +197,20 @@ def create_notices(selected_notices, organization, project, existing_notices):
         for notice in existing_notices:
             notice.delete()
 
-    loop_through_notices(selected_notices, organization, project)
+    for selected in selected_notices:
+        notice_type = ''
+        if selected == 'bcnotice':
+            notice_type = 'biocultural'
+        elif selected == 'tknotice':
+            notice_type='traditional_knowledge'
+        elif selected == 'attribution_incomplete':
+            notice_type='attribution_incomplete'
+
+        if isinstance(organization, Institution):
+            Notice.objects.create(notice_type=notice_type, institution=organization, project=project)
+
+        if isinstance(organization, Researcher):
+            Notice.objects.create(notice_type=notice_type, researcher=organization, project=project)
 
 
 def handle_label_versions(label):
