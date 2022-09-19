@@ -1,5 +1,5 @@
-from pyexpat import model
-from tabnanny import verbose
+import json
+import requests
 from django.db import models
 from django.contrib.auth.models import User
 from bclabels.models import BCLabel
@@ -26,6 +26,20 @@ class Notice(models.Model):
     archived = models.BooleanField(default=False, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        json_data = open('./localcontexts/static/json/Notices.json')
+        data = json.load(json_data) #deserialize
+
+        baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/'
+        for item in data:
+            if item['noticeType'] == self.notice_type:
+                self.name = item['noticeName']
+                self.img_url = baseURL + item['imgFileName']
+                self.svg_url = baseURL + item['svgFileName']
+                self.default_text = item['noticeDefaultText']
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.project.title)
@@ -72,6 +86,16 @@ class LabelTranslation(models.Model):
     language_tag = models.CharField(max_length=5, blank=True)
     language = models.CharField(max_length=150, blank=True)
     translated_text = models.TextField(blank=True)
+
+    def save(self, *args, **kwargs):
+        # set up language tag
+        url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
+        data = requests.get(url).json()
+
+        if self.language in data.keys():
+            self.language_tag = data[self.language]
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.translated_name)

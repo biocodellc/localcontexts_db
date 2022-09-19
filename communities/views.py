@@ -20,8 +20,8 @@ from projects.forms import *
 from accounts.forms import ContactOrganizationForm
 
 from localcontexts.utils import dev_prod_or_local
-from bclabels.utils import check_bclabel_type, assign_bclabel_img, assign_bclabel_svg
-from tklabels.utils import check_tklabel_type, assign_tklabel_img, assign_tklabel_svg
+from bclabels.utils import check_bclabel_type
+from tklabels.utils import check_tklabel_type
 from projects.utils import add_to_contributors
 from helpers.utils import *
 from accounts.utils import get_users_name
@@ -371,14 +371,14 @@ def select_label(request, pk):
         return redirect('public-community', community.id)
     else:
         if request.method == "POST":
-            bclabel_type = request.POST.get('bclabel-type')
-            tklabel_type = request.POST.get('tk-label-type')
+            bclabel_code = request.POST.get('bc-label-code')
+            tklabel_code = request.POST.get('tk-label-code')
 
-            if bclabel_type:
-                return redirect('customize-label', community.id, bclabel_type)
+            if bclabel_code:
+                return redirect('customize-label', community.id, bclabel_code)
 
-            if tklabel_type:
-                return redirect('customize-label', community.id, tklabel_type)
+            if tklabel_code:
+                return redirect('customize-label', community.id, tklabel_code)
         
         context = {
             'community': community,
@@ -390,101 +390,60 @@ def select_label(request, pk):
         return render(request, 'communities/select-label.html', context)
 
 @login_required(login_url='login')
-def customize_label(request, pk, label_type):
+def customize_label(request, pk, label_code):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer':
         return redirect('restricted')    
     else:
-        # TK Label
-        if label_type.startswith('tk'):
-            tk_type = check_tklabel_type(label_type)
-            img_url = assign_tklabel_img(label_type)
-            svg_url = assign_tklabel_svg(label_type)
+        label_type = ''
+        form = ''
+        title = ''
+        name = get_users_name(request.user)
 
+        if label_code.startswith('tk'):
+            label_type = check_tklabel_type(label_code)
             form = CustomizeTKLabelForm(request.POST or None, request.FILES)
+            title = f"A TK Label was customized by {name} and is waiting approval by another member of the community."
 
-            if request.method == "GET":
-                add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
-
-            elif request.method == "POST":
-                add_translation_formset = AddLabelTranslationFormSet(request.POST)
-
-                if form.is_valid() and add_translation_formset.is_valid():
-                    data = form.save(commit=False)
-                    if not data.language:
-                        data.language = 'English'
-                    data.label_type = tk_type
-                    data.community = community
-                    data.img_url = img_url
-                    data.svg_url = svg_url
-                    data.created_by = request.user
-                    data.is_approved = False
-                    data.save()
-                    set_language_code(data)
-
-
-                    # Save all label translation instances
-                    instances = add_translation_formset.save(commit=False)
-                    for instance in instances:
-                        instance.tklabel = data
-                        instance.save()
-                        set_language_code(instance)
-                    
-                    # Create notification
-                    name = get_users_name(request.user)
-                    title = f"A TK Label was customized by {name} and is waiting approval by another member of the community."
-                    ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
-
-                    return redirect('select-label', community.id)
-
-        # BCLabel
-        if label_type.startswith('bc'):
-            bc_type = check_bclabel_type(label_type)
-            img_url = assign_bclabel_img(label_type)
-            svg_url = assign_bclabel_svg(label_type)
-
+        elif label_code.startswith('bc'):
+            label_type = check_bclabel_type(label_code)
             form = CustomizeBCLabelForm(request.POST or None, request.FILES)
+            title = f"A BC Label was customized by {name} and is waiting approval by another member of the community."
 
-            if request.method == "GET":
-                add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+        if request.method == "GET":
+            add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
 
-            elif request.method == "POST":
-                add_translation_formset = AddLabelTranslationFormSet(request.POST)
+        elif request.method == "POST":
+            add_translation_formset = AddLabelTranslationFormSet(request.POST)
 
-                if form.is_valid() and add_translation_formset.is_valid():
-                    data = form.save(commit=False)
-                    if not data.language:
-                        data.language = 'English'
-                    data.label_type = bc_type
-                    data.community = community
-                    data.img_url = img_url
-                    data.svg_url = svg_url
-                    data.created_by = request.user
-                    data.is_approved = False
-                    data.save()
-                    set_language_code(data)
+            if form.is_valid() and add_translation_formset.is_valid():
+                data = form.save(commit=False)
+                if not data.language:
+                    data.language = 'English'
+                data.label_type = label_type
+                data.community = community
+                data.created_by = request.user
+                data.save()
 
-
-                    # Save all label translation instances
-                    instances = add_translation_formset.save(commit=False)
-                    for instance in instances:
+                # Save all label translation instances
+                instances = add_translation_formset.save(commit=False)
+                for instance in instances:
+                    if label_code.startswith('tk'):
+                        instance.tklabel = data
+                    elif label_code.startswith('bc'):
                         instance.bclabel = data
-                        instance.save()
-                        set_language_code(instance)
-
-                    # Send notification
-                    name = get_users_name(request.user)
-                    title = f"A BC Label was customized by {name} and is waiting approval by another member of the community."
-                    ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
-
-                    return redirect('select-label', community.id)
+                    instance.save()
+                
+                # Create notification
+                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+                return redirect('select-label', community.id)
             
         context = {
             'member_role': member_role,
             'community': community,
-            'label_type': label_type,
+            'label_code': label_code,
             'form': form,
             'add_translation_formset': add_translation_formset,
         }
@@ -639,7 +598,6 @@ def edit_label(request, pk, label_id):
                         instance.tklabel = tklabel
                     
                     instance.save()
-                    set_language_code(instance)
 
                 return redirect('select-label', community.id)
 

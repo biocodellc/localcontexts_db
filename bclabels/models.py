@@ -1,8 +1,11 @@
+import json
+from operator import imod
 import uuid
 from django.db import models
 from communities.models import Community
 from django.contrib.auth.models import User
 import os
+import requests
 
 def bclabel_audio_path(self, filename):
     ext = filename.split('.')[-1]
@@ -38,6 +41,32 @@ class BCLabel(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
     audiofile = models.FileField(upload_to=bclabel_audio_path, blank=True)
+
+    def save(self, *args, **kwargs):
+        # set up language tag
+        url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
+        data = requests.get(url).json()
+
+        if self.language in data.keys():
+            self.language_tag = data[self.language]
+
+        # set up label defaults (img + svg)
+        json_data = open('./localcontexts/static/json/Labels.json')
+        data = json.load(json_data) #deserialize
+
+        baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/bclabels/'
+        for key, values in data.items():
+            if key == 'bcLabels':
+                if(isinstance(values, list)):
+                    for value in values:
+                        if self.label_type == value['labelType']:
+                            self.img_url = baseURL + value['imgFileName']
+                            self.svg_url = baseURL + value['svgFileName']
+                        elif self.label_type == 'placeholder':
+                            self.img_url = None
+                            self.svg_url = None
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.community} - {self.name}"

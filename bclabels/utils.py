@@ -12,25 +12,3 @@ def check_bclabel_type(label):
                         return value['labelType']
                     elif label == 'placeholder':
                         return False
-
-storageBaseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/bclabels/'
-
-def assign_bclabel_img(label_type):
-    for key, values in data.items():
-        if key == 'bcLabels':
-            if(isinstance(values, list)):
-                for value in values:
-                    if label_type == value['labelCode']:
-                        return storageBaseURL + value['imgFileName']
-                    elif label_type == 'placeholder':
-                        return None
-
-def assign_bclabel_svg(label_type):
-    for key, values in data.items():
-        if key == 'bcLabels':
-            if(isinstance(values, list)):
-                for value in values:
-                    if label_type == value['labelCode']:
-                        return storageBaseURL + value['svgFileName']
-                    elif label_type == 'placeholder':
-                        return None
