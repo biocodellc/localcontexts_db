@@ -59,7 +59,6 @@ class BCLabel(models.Model):
             if key == 'bcLabels':
                 if(isinstance(values, list)):
                     for value in values:
-                        # !!!! This function was passing an instance of labelCode, not label_type
                         if self.label_type == value['labelType']:
                             self.img_url = baseURL + value['imgFileName']
                             self.svg_url = baseURL + value['svgFileName']

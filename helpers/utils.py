@@ -1,5 +1,4 @@
 import json
-import requests
 import zipfile
 from django.template.loader import get_template
 from io import BytesIO

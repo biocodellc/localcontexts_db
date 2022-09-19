@@ -397,73 +397,48 @@ def customize_label(request, pk, label_code):
     if member_role == False or member_role == 'viewer':
         return redirect('restricted')    
     else:
-        # TK Label
+        label_type = ''
+        form = ''
+        title = ''
+        name = get_users_name(request.user)
+
         if label_code.startswith('tk'):
-            tk_type = check_tklabel_type(label_code)
-
+            label_type = check_tklabel_type(label_code)
             form = CustomizeTKLabelForm(request.POST or None, request.FILES)
+            title = f"A TK Label was customized by {name} and is waiting approval by another member of the community."
 
-            if request.method == "GET":
-                add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
-
-            elif request.method == "POST":
-                add_translation_formset = AddLabelTranslationFormSet(request.POST)
-
-                if form.is_valid() and add_translation_formset.is_valid():
-                    data = form.save(commit=False)
-                    if not data.language:
-                        data.language = 'English'
-                    data.label_type = tk_type
-                    data.community = community
-                    data.created_by = request.user
-                    data.save()
-
-                    # Save all label translation instances
-                    instances = add_translation_formset.save(commit=False)
-                    for instance in instances:
-                        instance.tklabel = data
-                        instance.save()
-                    
-                    # Create notification
-                    name = get_users_name(request.user)
-                    title = f"A TK Label was customized by {name} and is waiting approval by another member of the community."
-                    ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
-
-                    return redirect('select-label', community.id)
-
-        # BCLabel
-        if label_code.startswith('bc'):
-            bc_type = check_bclabel_type(label_code)
-
+        elif label_code.startswith('bc'):
+            label_type = check_bclabel_type(label_code)
             form = CustomizeBCLabelForm(request.POST or None, request.FILES)
+            title = f"A BC Label was customized by {name} and is waiting approval by another member of the community."
 
-            if request.method == "GET":
-                add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+        if request.method == "GET":
+            add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
 
-            elif request.method == "POST":
-                add_translation_formset = AddLabelTranslationFormSet(request.POST)
+        elif request.method == "POST":
+            add_translation_formset = AddLabelTranslationFormSet(request.POST)
 
-                if form.is_valid() and add_translation_formset.is_valid():
-                    data = form.save(commit=False)
-                    if not data.language:
-                        data.language = 'English'
-                    data.label_type = bc_type
-                    data.community = community
-                    data.created_by = request.user
-                    data.save()
+            if form.is_valid() and add_translation_formset.is_valid():
+                data = form.save(commit=False)
+                if not data.language:
+                    data.language = 'English'
+                data.label_type = label_type
+                data.community = community
+                data.created_by = request.user
+                data.save()
 
-                    # Save all label translation instances
-                    instances = add_translation_formset.save(commit=False)
-                    for instance in instances:
+                # Save all label translation instances
+                instances = add_translation_formset.save(commit=False)
+                for instance in instances:
+                    if label_code.startswith('tk'):
+                        instance.tklabel = data
+                    elif label_code.startswith('bc'):
                         instance.bclabel = data
-                        instance.save()
-
-                    # Send notification
-                    name = get_users_name(request.user)
-                    title = f"A BC Label was customized by {name} and is waiting approval by another member of the community."
-                    ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
-
-                    return redirect('select-label', community.id)
+                    instance.save()
+                
+                # Create notification
+                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+                return redirect('select-label', community.id)
             
         context = {
             'member_role': member_role,
