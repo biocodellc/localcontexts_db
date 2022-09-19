@@ -20,8 +20,8 @@ from projects.forms import *
 from accounts.forms import ContactOrganizationForm
 
 from localcontexts.utils import dev_prod_or_local
-from bclabels.utils import check_bclabel_type, assign_bclabel_img, assign_bclabel_svg
-from tklabels.utils import check_tklabel_type, assign_tklabel_img, assign_tklabel_svg
+from bclabels.utils import check_bclabel_type
+from tklabels.utils import check_tklabel_type
 from projects.utils import add_to_contributors
 from helpers.utils import *
 from accounts.utils import get_users_name
@@ -400,8 +400,6 @@ def customize_label(request, pk, label_type):
         # TK Label
         if label_type.startswith('tk'):
             tk_type = check_tklabel_type(label_type)
-            img_url = assign_tklabel_img(label_type)
-            svg_url = assign_tklabel_svg(label_type)
 
             form = CustomizeTKLabelForm(request.POST or None, request.FILES)
 
@@ -417,8 +415,6 @@ def customize_label(request, pk, label_type):
                         data.language = 'English'
                     data.label_type = tk_type
                     data.community = community
-                    data.img_url = img_url
-                    data.svg_url = svg_url
                     data.created_by = request.user
                     data.is_approved = False
                     data.save()
@@ -442,8 +438,6 @@ def customize_label(request, pk, label_type):
         # BCLabel
         if label_type.startswith('bc'):
             bc_type = check_bclabel_type(label_type)
-            img_url = assign_bclabel_img(label_type)
-            svg_url = assign_bclabel_svg(label_type)
 
             form = CustomizeBCLabelForm(request.POST or None, request.FILES)
 
@@ -459,8 +453,6 @@ def customize_label(request, pk, label_type):
                         data.language = 'English'
                     data.label_type = bc_type
                     data.community = community
-                    data.img_url = img_url
-                    data.svg_url = svg_url
                     data.created_by = request.user
                     data.is_approved = False
                     data.save()
