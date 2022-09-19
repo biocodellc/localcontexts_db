@@ -50,21 +50,19 @@ class Project(models.Model):
     tk_labels = models.ManyToManyField("tklabels.TKLabel", verbose_name="TK Labels", blank=True, related_name="project_tklabels", db_index=True)
 
     def has_labels(self):
-        bc_labels = self.bc_labels.count()
-        tk_labels = self.tk_labels.count()
-        if bc_labels + tk_labels > 0:
+        if self.bc_labels.exists() or self.tk_labels.exists():
             return True
         else:
             return False
     
     def has_bclabels(self):
-        if self.bc_labels.count() > 0:
+        if self.bc_labels.exists():
             return True
         else:
             return False
     
     def has_tklabels(self):
-        if self.tk_labels.count() > 0:
+        if self.tk_labels.exists():
             return True
         else:
             return False
@@ -83,6 +81,7 @@ class Project(models.Model):
         return self.title
     
     class Meta:
+        indexes = [models.Index(fields=['unique_id', 'project_creator'])]
         ordering = ('-date_added',)
 
 class ProjectContributors(models.Model):
@@ -95,6 +94,7 @@ class ProjectContributors(models.Model):
         return str(self.project)
 
     class Meta:
+        indexes = [models.Index(fields=['project'])]
         verbose_name = 'Project Contributors'
         verbose_name_plural = 'Project Contributors'
 
@@ -107,6 +107,7 @@ class ProjectPerson(models.Model):
         return str(self.project)
     
     class Meta:
+        indexes = [models.Index(fields=['project'])]
         verbose_name = 'Additional Contributor'
         verbose_name_plural = 'Additional Contributors'
 
@@ -120,6 +121,7 @@ class ProjectCreator(models.Model):
         return str(self.project)
     
     class Meta:
+        indexes = [models.Index(fields=['project', 'community', 'institution', 'researcher'])]
         verbose_name = 'Project Creator'
         verbose_name_plural = 'Project Creator'
 
@@ -133,5 +135,6 @@ class ProjectNote(models.Model):
         return str(self.project)
     
     class Meta:
+        indexes = [models.Index(fields=['project', 'community'])]
         verbose_name = 'Project Note'
         verbose_name_plural = 'Project Notes'

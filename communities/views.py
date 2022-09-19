@@ -1,7 +1,9 @@
+import re
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
+from itertools import chain
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
@@ -228,8 +230,18 @@ def community_members(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
+        # Get list of users, NOT in this community, alphabetized by name
+        members = list(chain(
+            community.admins.all().values_list('id', flat=True), 
+            community.editors.all().values_list('id', flat=True), 
+            community.viewers.all().values_list('id', flat=True),
+        ))
+        members.append(community.community_creator.id) # include community creator
+        users = User.objects.exclude(id__in=members).order_by('username')
+
         join_requests_count = JoinRequest.objects.filter(community=community).count()
         form = InviteMemberForm(request.POST or None)
+
         if request.method == "POST":
             if 'change_member_role_btn' in request.POST:
                 current_role = request.POST.get('current_role')
@@ -238,35 +250,52 @@ def community_members(request, pk):
                 member = User.objects.get(id=user_id)
                 change_member_role(community, member, current_role, new_role)
                 return redirect('members', community.id)
-            else:
-                receiver = request.POST.get('receiver')
-                user_in_community = is_organization_in_user_affiliation(receiver, community)
-                
-                if not user_in_community: # If user is not community member
-                    invitation_exists = InviteMember.objects.filter(receiver=receiver, community=community).exists() # Check to see if invitation already exists
-                    join_request_exists = JoinRequest.objects.filter(user_from=receiver, community=community).exists() # Check to see if invitation already exists
 
-                    if not invitation_exists and not join_request_exists: # If invitation does not exist or join request does not exist, save form.
-                        if form.is_valid():
-                            data = form.save(commit=False)
+            elif 'send_invite_btn' in request.POST:
+                selected_user = User.objects.none()
+                if form.is_valid():
+                    data = form.save(commit=False)
+
+                    # Get target User
+                    selected_username = request.POST.get('userList')
+                    username_to_check = ''
+
+                    if ' ' in selected_username: #if username includes spaces means it has a first and last name (last name,first name)
+                        x = selected_username.split(' ')
+                        username_to_check = x[0]
+                    else:
+                        username_to_check = selected_username
+
+                    if not username_to_check in users.values_list('username', flat=True):
+                        messages.add_message(request, messages.INFO, 'Invalid user selection. Please select user from the list.')
+                    else:
+                        selected_user = User.objects.get(username=username_to_check)
+
+                        # Check to see if an invite or join request aleady exists
+                        invitation_exists = InviteMember.objects.filter(receiver=selected_user, community=community).exists() # Check to see if invitation already exists
+                        join_request_exists = JoinRequest.objects.filter(user_from=selected_user, community=community).exists() # Check to see if join request already exists
+
+                        if not invitation_exists and not join_request_exists: # If invitation and join request does not exist, save form
+                            data.receiver = selected_user
                             data.sender = request.user
                             data.status = 'sent'
                             data.community = community
                             data.save()
-                            # Send email to target user
-                            send_community_invite_email(request, data, community)
-                            messages.add_message(request, messages.INFO, 'Invitation Sent!')
+                            
+                            send_community_invite_email(request, data, community) # Send email to target user
+                            messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
                             return redirect('members', community.id)
-                    else: 
-                        messages.add_message(request, messages.INFO, 'The user you are trying to add has already been invited to this community.')
+                        else: 
+                            messages.add_message(request, messages.INFO, f'The user you are trying to add already has an invitation pending to join {community.community_name}.')
                 else:
-                    messages.add_message(request, messages.ERROR, 'The user you are trying to add is already a member of this community.')
+                    messages.add_message(request, messages.INFO, 'Something went wrong')
 
         context = {
             'community': community,
             'member_role': member_role,
             'form': form,
             'join_requests_count': join_requests_count,
+            'users': users,
         }
         return render(request, 'communities/members.html', context)
 
@@ -682,534 +711,499 @@ def view_label(request, pk, label_uuid):
 # Projects Main
 @login_required(login_url='login')
 def projects(request, pk):
-    try:
-        community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-        member_role = check_member_role(request.user, community)
-        if member_role == False: # If user is not a member / does not have a role.
-            return redirect('restricted')    
-        else:
-            # community projects + 
-            # projects community has been notified of + 
-            # projects where community is contributor
-            projects_list = []
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return redirect('restricted')    
+    else:
+        # 1. community projects + 
+        # 2. projects community has been notified of 
+        # 3. projects where community is contributor
 
-            for p in ProjectCreator.objects.filter(community=community):
-                projects_list.append(p.project)
+        projects_list = list(chain(
+            community.community_created_project.all().values_list('project__id', flat=True), 
+            community.communities_notified.all().values_list('project__id', flat=True), 
+            community.contributing_communities.all().values_list('project__id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids).order_by('-date_added')
 
-            for n in EntitiesNotified.objects.select_related('project').filter(communities=community):
-                projects_list.append(n.project)
-            
-            for c in ProjectContributors.objects.select_related('project').filter(communities=community):
-                projects_list.append(c.project)
+        p = Paginator(projects, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+        
+        form = ProjectCommentForm(request.POST or None)
 
-            projects = list(set(projects_list))
+        # Form: Notify project contributor if project was seen
+        if request.method == "POST":
+            project_uuid = request.POST.get('project-uuid')
+            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
+            creator = ProjectCreator.objects.get(project=project) # get project creator
+            reference_id = project.unique_id
+            truncated_project_title = str(project.title)[0:30]
 
-            p = Paginator(projects, 5)
-            page_num = request.GET.get('page', 1)
-            page = p.page(page_num)
-            
-            form = ProjectCommentForm(request.POST or None)
+            if "notify-btn" in request.POST:
 
-            # Form: Notify project contributor if project was seen
-            if request.method == "POST":
-                project_uuid = request.POST.get('project-uuid')
-                project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-                creator = ProjectCreator.objects.get(project=project) # get project creator
-                reference_id = project.unique_id
-                truncated_project_title = str(project.title)[0:30]
+                if project_uuid != None and project_uuid != 'placeholder':
+                    project_status = request.POST.get('project-status')
 
-                if "notify-btn" in request.POST:
+                    statuses = ProjectStatus.objects.filter(project=project, community=community)
 
-                    if project_uuid != None and project_uuid != 'placeholder':
-                        project_status = request.POST.get('project-status')
+                    title = ''
+                    for status in statuses:
+                        status.seen = True
 
-                        statuses = ProjectStatus.objects.filter(project=project, community=community)
+                        if project_status == 'seen':
+                            title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
 
-                        title = ''
-                        for status in statuses:
-                            status.seen = True
+                        if project_status == 'pending':
+                            status.status = 'pending'
+                            title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
 
-                            if project_status == 'seen':
-                                title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
+                        if project_status == 'not_pending':
+                            status.status = 'not_pending'
+                            title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
 
-                            if project_status == 'pending':
-                                status.status = 'pending'
-                                title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                        status.save()
 
-                            if project_status == 'not_pending':
-                                status.status = 'not_pending'
-                                title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                        # Send Notification
+                        if creator.institution:
+                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                        if creator.researcher:
+                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                            
+                    return redirect('community-projects', community.id)
 
-                            status.save()
+            # Form: Add comment to notice
+            elif "add-comment-btn" in request.POST:
+                status = ProjectStatus.objects.get(project=project, community=community)
 
-                            # Send Notification
-                            if creator.institution:
-                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                            if creator.researcher:
-                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
-                                
-                        return redirect('community-projects', community.id)
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.project = project
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
 
-                # Form: Add comment to notice
-                elif "add-comment-btn" in request.POST:
-                    status = ProjectStatus.objects.get(project=project, community=community)
+                    # If message is sent, set notice status to 'Seen'
+                    if status.seen == False:
+                        status.seen = True
+                        status.save()
 
-                    if form.is_valid():
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
+                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
-                        # If message is sent, set notice status to 'Seen'
-                        if status.seen == False:
-                            status.seen = True
-                            status.save()
+                        # Send Notification
+                        if creator.institution:
+                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                        if creator.researcher:
+                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
 
-                            title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
+                    return redirect('community-projects', community.id)
 
-                            # Send Notification
-                            if creator.institution:
-                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                            if creator.researcher:
-                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
-
-                        return redirect('community-projects', community.id)
-
-            context = {
-                'member_role': member_role,
-                'projects': projects,
-                'community': community,
-                'form': form,
-                'items': page,
-            }
-            return render(request, 'communities/projects.html', context)
-    except:
-        raise Http404()
+        context = {
+            'member_role': member_role,
+            'projects': projects,
+            'community': community,
+            'form': form,
+            'items': page,
+        }
+        return render(request, 'communities/projects.html', context)
 
 @login_required(login_url='login')
 def projects_with_labels(request, pk):
-    try:
-        community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-        member_role = check_member_role(request.user, community)
-        if member_role == False: # If user is not a member / does not have a role.
-            return redirect('restricted')    
-        else:
-            # init list for:
-            # 1. community projects + 
-            # 2. projects community has been notified of 
-            # 3. projects where community is contributor
-            projects_list = []
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return redirect('restricted')    
+    else:
+        # init list for:
+        # 1. community projects + 
+        # 2. projects community has been notified of 
+        # 3. projects where community is contributor
+        projects_list = []
 
-            for p in ProjectCreator.objects.select_related('project').filter(community=community): # projects created by community
-                if p.project.has_labels():
-                    projects_list.append(p.project)
+        for p in community.community_created_project.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
+            if p.project.has_labels():
+                projects_list.append(p.project)
 
-            for n in EntitiesNotified.objects.select_related('project').filter(communities=community):
-                if n.project.has_labels():
-                    projects_list.append(n.project)
-            
-            for c in ProjectContributors.objects.select_related('project').filter(communities=community):
-                if c.project.has_labels():
-                    projects_list.append(c.project)
+        for n in community.communities_notified.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
+            if p.project.has_labels():
+                projects_list.append(n.project)
+        
+        for c in community.contributing_communities.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
+            if p.project.has_labels():
+                projects_list.append(c.project)
 
-            projects = list(set(projects_list))
+        projects = list(set(projects_list))
 
-            p = Paginator(projects, 5)
-            page_num = request.GET.get('page', 1)
-            page = p.page(page_num)
-            
-            form = ProjectCommentForm(request.POST or None)
-    
-            if request.method == "POST":
-                project_uuid = request.POST.get('project-uuid')
-                project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-                creator = ProjectCreator.objects.get(project=project) # get project creator
-                reference_id = project.unique_id
-                truncated_project_title = str(project.title)[0:30]
+        p = Paginator(projects, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+        
+        form = ProjectCommentForm(request.POST or None)
 
-                if "notify-btn" in request.POST:
+        if request.method == "POST":
+            project_uuid = request.POST.get('project-uuid')
+            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
+            creator = ProjectCreator.objects.get(project=project) # get project creator
+            reference_id = project.unique_id
+            truncated_project_title = str(project.title)[0:30]
 
-                    if project_uuid != None and project_uuid != 'placeholder':
-                        project_status = request.POST.get('project-status')
+            if "notify-btn" in request.POST:
 
-                        statuses = ProjectStatus.objects.filter(project=project, community=community)
+                if project_uuid != None and project_uuid != 'placeholder':
+                    project_status = request.POST.get('project-status')
 
-                        title = ''
-                        for status in statuses:
-                            status.seen = True
+                    statuses = ProjectStatus.objects.filter(project=project, community=community)
 
-                            if project_status == 'seen':
-                                title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
+                    title = ''
+                    for status in statuses:
+                        status.seen = True
 
-                            if project_status == 'pending':
-                                status.status = 'pending'
-                                title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                        if project_status == 'seen':
+                            title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
 
-                            if project_status == 'not_pending':
-                                status.status = 'not_pending'
-                                title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                        if project_status == 'pending':
+                            status.status = 'pending'
+                            title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
 
-                            status.save()
+                        if project_status == 'not_pending':
+                            status.status = 'not_pending'
+                            title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
 
-                            # Send Notification
-                            if creator.institution:
-                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                            if creator.researcher:
-                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
-                                
-                        return redirect('community-projects-labels', community.id)
+                        status.save()
 
-                # Form: Add comment to notice
-                elif "add-comment-btn" in request.POST:
-                    status = ProjectStatus.objects.get(project=project, community=community)
+                        # Send Notification
+                        if creator.institution:
+                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                        if creator.researcher:
+                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                            
+                    return redirect('community-projects-labels', community.id)
 
-                    if form.is_valid():
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
+            # Form: Add comment to notice
+            elif "add-comment-btn" in request.POST:
+                status = ProjectStatus.objects.get(project=project, community=community)
 
-                        # If message is sent, set notice status to 'Seen'
-                        if status.seen == False:
-                            status.seen = True
-                            status.save()
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.project = project
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
 
-                            title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
+                    # If message is sent, set notice status to 'Seen'
+                    if status.seen == False:
+                        status.seen = True
+                        status.save()
 
-                            # Send Notification
-                            if creator.institution:
-                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                            if creator.researcher:
-                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
-                        return redirect('community-projects-labels', community.id)
+                        # Send Notification
+                        if creator.institution:
+                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                        if creator.researcher:
+                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
 
-            context = {
-                'projects': projects,
-                'community': community,
-                'form': form,
-                'member_role': member_role,
-                'items': page,
-            }
-            return render(request, 'communities/projects.html', context)
-    except:
-        raise Http404()
+                    return redirect('community-projects-labels', community.id)
+
+        context = {
+            'projects': projects,
+            'community': community,
+            'form': form,
+            'member_role': member_role,
+            'items': page,
+        }
+        return render(request, 'communities/projects.html', context)
 
 @login_required(login_url='login')
 def projects_with_notices(request, pk):
-    try:
-        community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-        member_role = check_member_role(request.user, community)
-        if member_role == False: # If user is not a member / does not have a role.
-            return redirect('restricted')    
-        else:
-            # init list for:
-            # 1. community projects + 
-            # 2. projects community has been notified of 
-            # 3. projects where community is contributor
-            projects_list = []
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return redirect('restricted')    
+    else:
+        # init list for:
+        # 1. community projects + 
+        # 2. projects community has been notified of 
+        # 3. projects where community is contributor
+        projects_list = []
 
-            for p in ProjectCreator.objects.select_related('project').filter(community=community): # projects created by community
-                if p.project.has_notice():
-                    projects_list.append(p.project)
+        for p in community.community_created_project.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
+            if p.project.has_notice():
+                projects_list.append(p.project)
 
-            for n in EntitiesNotified.objects.select_related('project').filter(communities=community):
-                if n.project.has_notice():
-                    projects_list.append(n.project)
-            
-            for c in ProjectContributors.objects.select_related('project').filter(communities=community):
-                if c.project.has_notice():
-                    projects_list.append(c.project)
+        for n in community.communities_notified.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
+            if n.project.has_notice():
+                projects_list.append(n.project)
+        
+        for c in community.contributing_communities.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
+            if c.project.has_notice():
+                projects_list.append(c.project)
 
-            projects = list(set(projects_list))
+        projects = list(set(projects_list))
 
-            p = Paginator(projects, 5)
-            page_num = request.GET.get('page', 1)
-            page = p.page(page_num)
-            
-            form = ProjectCommentForm(request.POST or None)
-    
-            if request.method == "POST":
-                project_uuid = request.POST.get('project-uuid')
-                project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-                creator = ProjectCreator.objects.get(project=project) # get project creator
-                reference_id = project.unique_id
-                truncated_project_title = str(project.title)[0:30]
+        p = Paginator(projects, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+        
+        form = ProjectCommentForm(request.POST or None)
 
-                if "notify-btn" in request.POST:
+        if request.method == "POST":
+            project_uuid = request.POST.get('project-uuid')
+            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
+            creator = ProjectCreator.objects.get(project=project) # get project creator
+            reference_id = project.unique_id
+            truncated_project_title = str(project.title)[0:30]
 
-                    if project_uuid != None and project_uuid != 'placeholder':
-                        project_status = request.POST.get('project-status')
+            if "notify-btn" in request.POST:
 
-                        statuses = ProjectStatus.objects.filter(project=project, community=community)
+                if project_uuid != None and project_uuid != 'placeholder':
+                    project_status = request.POST.get('project-status')
 
-                        title = ''
-                        for status in statuses:
-                            status.seen = True
+                    statuses = ProjectStatus.objects.filter(project=project, community=community)
 
-                            if project_status == 'seen':
-                                title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
+                    title = ''
+                    for status in statuses:
+                        status.seen = True
 
-                            if project_status == 'pending':
-                                status.status = 'pending'
-                                title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                        if project_status == 'seen':
+                            title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
 
-                            if project_status == 'not_pending':
-                                status.status = 'not_pending'
-                                title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                        if project_status == 'pending':
+                            status.status = 'pending'
+                            title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
 
-                            status.save()
+                        if project_status == 'not_pending':
+                            status.status = 'not_pending'
+                            title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
 
-                            # Send Notification
-                            if creator.institution:
-                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                            if creator.researcher:
-                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
-                                
-                        return redirect('community-projects-notices', community.id)
+                        status.save()
 
-                # Form: Add comment to notice
-                elif "add-comment-btn" in request.POST:
-                    status = ProjectStatus.objects.get(project=project, community=community)
+                        # Send Notification
+                        if creator.institution:
+                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                        if creator.researcher:
+                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                            
+                    return redirect('community-projects-notices', community.id)
 
-                    if form.is_valid():
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
+            # Form: Add comment to notice
+            elif "add-comment-btn" in request.POST:
+                status = ProjectStatus.objects.get(project=project, community=community)
 
-                        # If message is sent, set notice status to 'Seen'
-                        if status.seen == False:
-                            status.seen = True
-                            status.save()
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.project = project
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
 
-                            title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
+                    # If message is sent, set notice status to 'Seen'
+                    if status.seen == False:
+                        status.seen = True
+                        status.save()
 
-                            # Send Notification
-                            if creator.institution:
-                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                            if creator.researcher:
-                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
-                        return redirect('community-projects-notices', community.id)
+                        # Send Notification
+                        if creator.institution:
+                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                        if creator.researcher:
+                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
 
-            context = {
-                'projects': projects,
-                'community': community,
-                'form': form,
-                'member_role': member_role,
-                'items': page,
-            }
-            return render(request, 'communities/projects.html', context)
-    except:
-        raise Http404()
+                    return redirect('community-projects-notices', community.id)
+
+        context = {
+            'projects': projects,
+            'community': community,
+            'form': form,
+            'member_role': member_role,
+            'items': page,
+        }
+        return render(request, 'communities/projects.html', context)
 
 @login_required(login_url='login')
 def projects_creator(request, pk):
-    try:
-        community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-        member_role = check_member_role(request.user, community)
-        if member_role == False: # If user is not a member / does not have a role.
-            return redirect('restricted')    
-        else:
-            projects_list = []
-            
-            for p in ProjectCreator.objects.select_related('project').filter(community=community): # projects created by community
-                projects_list.append(p.project)
-            
-            projects = list(set(projects_list))
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return redirect('restricted')    
+    else:
+        created_projects = community.community_created_project.all().values_list('project__id', flat=True)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=created_projects).order_by('-date_added')
 
-            p = Paginator(projects, 5)
-            page_num = request.GET.get('page', 1)
-            page = p.page(page_num)
+        p = Paginator(projects, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
 
-            form = ProjectCommentForm(request.POST or None)
-    
-            if request.method == "POST":
-                project_uuid = request.POST.get('project-uuid')
-                project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-                creator = ProjectCreator.objects.get(project=project) # get project creator
-                reference_id = project.unique_id
-                truncated_project_title = str(project.title)[0:30]
+        form = ProjectCommentForm(request.POST or None)
 
-                if "notify-btn" in request.POST:
+        if request.method == "POST":
+            project_uuid = request.POST.get('project-uuid')
+            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
+            creator = ProjectCreator.objects.select_related('researcher', 'institution').get(project=project) # get project creator
+            reference_id = project.unique_id
+            truncated_project_title = str(project.title)[0:30]
 
-                    if project_uuid != None and project_uuid != 'placeholder':
-                        project_status = request.POST.get('project-status')
+            if "notify-btn" in request.POST:
 
-                        statuses = ProjectStatus.objects.filter(project=project, community=community)
+                if project_uuid != None and project_uuid != 'placeholder':
+                    project_status = request.POST.get('project-status')
 
-                        title = ''
-                        for status in statuses:
-                            status.seen = True
+                    statuses = ProjectStatus.objects.filter(project=project, community=community)
 
-                            if project_status == 'seen':
-                                title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
+                    title = ''
+                    for status in statuses:
+                        status.seen = True
 
-                            if project_status == 'pending':
-                                status.status = 'pending'
-                                title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                        if project_status == 'seen':
+                            title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
 
-                            if project_status == 'not_pending':
-                                status.status = 'not_pending'
-                                title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+                        if project_status == 'pending':
+                            status.status = 'pending'
+                            title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
 
-                            status.save()
+                        if project_status == 'not_pending':
+                            status.status = 'not_pending'
+                            title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
 
-                            # Send Notification
-                            if creator.institution:
-                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                            if creator.researcher:
-                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
-                                
-                        return redirect('community-projects-creator', community.id)
+                        status.save()
 
-                # Form: Add comment to notice
-                elif "add-comment-btn" in request.POST:
-                    status = ProjectStatus.objects.get(project=project, community=community)
+                        # Send Notification
+                        if creator.institution:
+                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                        if creator.researcher:
+                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                            
+                    return redirect('community-projects-creator', community.id)
 
-                    if form.is_valid():
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
+            # Form: Add comment to notice
+            elif "add-comment-btn" in request.POST:
+                status = ProjectStatus.objects.get(project=project, community=community)
 
-                        # If message is sent, set notice status to 'Seen'
-                        if status.seen == False:
-                            status.seen = True
-                            status.save()
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.project = project
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
 
-                            title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
+                    # If message is sent, set notice status to 'Seen'
+                    if status.seen == False:
+                        status.seen = True
+                        status.save()
 
-                            # Send Notification
-                            if creator.institution:
-                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                            if creator.researcher:
-                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
-                        return redirect('community-projects-creator', community.id)
+                        # Send Notification
+                        if creator.institution:
+                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                        if creator.researcher:
+                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
 
-            context = {
-                'projects': projects,
-                'community': community,
-                'form': form,
-                'member_role': member_role,
-                'items': page,
-            }
-            return render(request, 'communities/projects.html', context)
-    except:
-        raise Http404()
+                    return redirect('community-projects-creator', community.id)
+
+        context = {
+            'projects': projects,
+            'community': community,
+            'form': form,
+            'member_role': member_role,
+            'items': page,
+        }
+        return render(request, 'communities/projects.html', context)
 
 @login_required(login_url='login')
 def projects_contributor(request, pk):
-    try:
-        community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-        member_role = check_member_role(request.user, community)
-        if member_role == False: # If user is not a member / does not have a role.
-            return redirect('restricted')    
-        else:
-            # init list for projects where institution is contributor but not creator
-            projects_list = []
-            created_projects = []
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return redirect('restricted')    
+    else:
+        # Get IDs of projects created by community and IDs of projects contributed, then exclude the created ones in the project call
+        created_projects = community.community_created_project.all().values_list('project__id', flat=True)
+        contrib = community.contributing_communities.all().values_list('project__id', flat=True)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=contrib).exclude(id__in=created_projects).order_by('-date_added')
 
-            for x in ProjectContributors.objects.select_related('project').filter(communities=community):
-                projects_list.append(x.project)
+        p = Paginator(projects, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+        
+        form = ProjectCommentForm(request.POST or None)
 
-            for c in ProjectCreator.objects.select_related('project').filter(community=community):
-                created_projects.append(c.project)
+        if request.method == "POST":
+            project_uuid = request.POST.get('project-uuid')
+            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
+            creator = ProjectCreator.objects.get(project=project) # get project creator
+            reference_id = project.unique_id
+            truncated_project_title = str(project.title)[0:30]
 
-            # remove projects that were created by the institution
-            for p in created_projects:
-                if p in projects_list:
-                    projects_list.remove(p)
+            if "notify-btn" in request.POST:
 
-            projects = list(set(projects_list))
+                if project_uuid != None and project_uuid != 'placeholder':
+                    project_status = request.POST.get('project-status')
 
-            p = Paginator(projects, 5)
-            page_num = request.GET.get('page', 1)
-            page = p.page(page_num)
-            
-            form = ProjectCommentForm(request.POST or None)
-    
-            if request.method == "POST":
-                project_uuid = request.POST.get('project-uuid')
-                project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-                creator = ProjectCreator.objects.get(project=project) # get project creator
-                reference_id = project.unique_id
-                truncated_project_title = str(project.title)[0:30]
+                    statuses = ProjectStatus.objects.filter(project=project, community=community)
 
-                if "notify-btn" in request.POST:
+                    title = ''
+                    for status in statuses:
+                        status.seen = True
 
-                    if project_uuid != None and project_uuid != 'placeholder':
-                        project_status = request.POST.get('project-status')
+                        if project_status == 'seen':
+                            title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
 
-                        statuses = ProjectStatus.objects.filter(project=project, community=community)
+                        if project_status == 'pending':
+                            status.status = 'pending'
+                            title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
 
-                        title = ''
-                        for status in statuses:
-                            status.seen = True
+                        if project_status == 'not_pending':
+                            status.status = 'not_pending'
+                            title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
 
-                            if project_status == 'seen':
-                                title = community.community_name + ' has seen and acknowledged your Project: ' + truncated_project_title
+                        status.save()
 
-                            if project_status == 'pending':
-                                status.status = 'pending'
-                                title = community.community_name + ' is in the process of applying Labels to your Project: ' + truncated_project_title
+                        # Send Notification
+                        if creator.institution:
+                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                        if creator.researcher:
+                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                            
+                    return redirect('community-projects-contributor', community.id)
 
-                            if project_status == 'not_pending':
-                                status.status = 'not_pending'
-                                title = community.community_name + ' will not be applying Labels to your Project: ' + truncated_project_title
+            # Form: Add comment to notice
+            elif "add-comment-btn" in request.POST:
+                status = ProjectStatus.objects.get(project=project, community=community)
 
-                            status.save()
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.project = project
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
 
-                            # Send Notification
-                            if creator.institution:
-                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                            if creator.researcher:
-                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
-                                
-                        return redirect('community-projects-contributor', community.id)
+                    # If message is sent, set notice status to 'Seen'
+                    if status.seen == False:
+                        status.seen = True
+                        status.save()
 
-                # Form: Add comment to notice
-                elif "add-comment-btn" in request.POST:
-                    status = ProjectStatus.objects.get(project=project, community=community)
+                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
-                    if form.is_valid():
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
+                        # Send Notification
+                        if creator.institution:
+                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                        if creator.researcher:
+                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
 
-                        # If message is sent, set notice status to 'Seen'
-                        if status.seen == False:
-                            status.seen = True
-                            status.save()
+                    return redirect('community-projects-contributor', community.id)
 
-                            title = community.community_name + ' has added a comment to your Project: ' + truncated_project_title
-
-                            # Send Notification
-                            if creator.institution:
-                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                            if creator.researcher:
-                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
-
-                        return redirect('community-projects-contributor', community.id)
-
-            context = {
-                'projects': projects,
-                'community': community,
-                'form': form,
-                'member_role': member_role,
-                'items': page,
-            }
-            return render(request, 'communities/projects.html', context)
-    except:
-        raise Http404()
+        context = {
+            'projects': projects,
+            'community': community,
+            'form': form,
+            'member_role': member_role,
+            'items': page,
+        }
+        return render(request, 'communities/projects.html', context)
 
 
 # Create Project

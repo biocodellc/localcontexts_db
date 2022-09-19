@@ -13,6 +13,41 @@ if (passwordField) {
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
+if (window.location.href.includes('anth-ja77-lc-dev-42d5')) {
+    let regHeader = document.getElementById('reg-header')
+    let authHeader = document.getElementById('auth-header')
+    let svgHeader = document.getElementById('svg-header')
+
+    if(regHeader) { regHeader.style.marginTop = '50px' }
+
+    if (authHeader){
+        svgHeader.style.marginTop = '32px'
+        authHeader.style.top = '50px'
+    }
+}
+
+if (window.location.href.includes('create-community') || window.location.href.includes('create-institution') || window.location.href.includes('connect-researcher') ) {
+    let textArea = document.getElementById('id_description')
+    let characterCounter = document.getElementById('charCount')
+    const maxNumOfChars = 200
+
+    const countCharacters = () => {
+        let numOfEnteredChars = textArea.value.length
+        let counter = maxNumOfChars - numOfEnteredChars
+        characterCounter.textContent = counter + '/200'
+
+        if (counter < 0) {
+            characterCounter.style.color = 'red'
+        } else if (counter < 50) {
+            characterCounter.style.color = '#EF6C00'
+        } else {
+            characterCounter.style.color = 'black'
+        }
+    }
+
+    textArea.addEventListener('input', countCharacters)
+}
+
 // Get languages from the IANA directory
 function fetchLanguages() {
     const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
@@ -265,24 +300,18 @@ function checkLabelExists(label, selectedLabelCode, labelType) {
             if (values.includes(label.labelType)) {
                 if (label.labelCategory == 'provenance') {
                     btnProv.setAttribute("disabled","disabled")
-                    btnProv.classList.replace('action-btn', 'disabled-btn')
                 } else if (label.labelCategory == 'protocol') {
                     btnProt.setAttribute("disabled","disabled")
-                    btnProt.classList.replace('action-btn', 'disabled-btn')
                 } else if (label.labelCategory == 'permission') {
                     btnPerms.setAttribute("disabled","disabled")
-                    btnPerms.classList.replace('action-btn', 'disabled-btn')
                 }
             }  else {
                 if (label.labelCategory == 'provenance') {
                     btnProv.removeAttribute("disabled")
-                    btnProv.classList.replace('disabled-btn', 'action-btn')
                 } else if (label.labelCategory == 'protocol') {
                     btnProt.removeAttribute("disabled")
-                    btnProt.classList.replace('disabled-btn', 'action-btn')
                 } else if (label.labelCategory == 'permission') {
                     btnPerms.removeAttribute("disabled")
-                    btnPerms.classList.replace('disabled-btn', 'action-btn')
                 }
             }
         }        
@@ -797,12 +826,10 @@ function validateProjectDisableSubmitBtn() {
 
         let oldValue = 'Save Project'
         submitProjectBtn.setAttribute('disabled', true)
-        submitProjectBtn.classList.replace('action-btn', 'disabled-btn')
         submitProjectBtn.innerText = 'Saving Project...'
         
         setTimeout(function(){
             submitProjectBtn.innerText = oldValue;
-            submitProjectBtn.classList.replace('disabled-btn', 'action-btn')
             submitProjectBtn.removeAttribute('disabled');
         }, 5000)
     }      
@@ -925,6 +952,7 @@ function modalToggle(openBtnClasses, modalPartialId, closeBtnPartialId) {
 if (window.location.href.includes('members')) {
     modalToggle('.changeRoleBtn', 'changeRoleModal', 'closeRoleChangeModal')
     modalToggle('.removeMemberBtn', 'removeMemberModal', 'closeRemoveMemberModal')
+    document.getElementById('userListInput').addEventListener('input', disableBtnDuringInput)
 } 
 
 // Leave account
@@ -932,6 +960,11 @@ if (window.location.href.includes('manage')) {
     modalToggle('.leaveCommunityBtn', 'leaveCommAccountModal', 'closeLeaveCommModal')
     modalToggle('.leaveInstitutionBtn', 'leaveInstAccountModal', 'closeLeaveInstModal')
 } 
+
+function disableBtnDuringInput() {
+    const currentValue = document.getElementById('userListInput').value;
+    document.getElementById('sendMemberInviteBtn').disabled = currentValue.length === 0 || document.querySelector('option[value="' + currentValue + '"]') === null;
+}
 
 // Create institution: non-ROR modal
 if (window.location.href.includes('create-institution')) {
@@ -1026,12 +1059,10 @@ if (window.location.href.includes('communities/view/') || window.location.href.i
     function disableSendBtn(btn) {
         let oldValue = 'Send'
         btn.setAttribute('disabled', true)
-        btn.classList.replace('action-btn', 'disabled-btn')
         btn.innerText = 'Sending'
     
         setTimeout(function(){
             btn.innerText = oldValue;
-            btn.classList.replace('disabled-btn', 'action-btn')
             btn.removeAttribute('disabled');
         }, 9000)
     }

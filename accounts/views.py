@@ -152,13 +152,25 @@ def select_account(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-    n = UserNotification.objects.filter(to_user=request.user)
-    researcher = is_user_researcher(request.user)
-    user_affiliation = UserAffiliation.objects.prefetch_related('communities', 'institutions').get(user=request.user)
+    user = request.user
+    n = UserNotification.objects.filter(to_user=user)
+    researcher = is_user_researcher(user)
 
-    user_communities = user_affiliation.communities.prefetch_related('admins', 'editors', 'viewers').all()
-    user_institutions = user_affiliation.institutions.prefetch_related('admins', 'editors', 'viewers').all()
-    profile = Profile.objects.select_related('user').get(user=request.user)
+    affiliation = user.user_affiliations.prefetch_related(
+        'communities', 
+        'institutions', 
+        'communities__admins', 
+        'communities__editors', 
+        'communities__viewers',
+        'institutions__admins', 
+        'institutions__editors', 
+        'institutions__viewers'
+        ).all().first()
+
+    user_communities = affiliation.communities.all()    
+    user_institutions = affiliation.institutions.all()
+
+    profile = user.user_profile
 
     if request.method == 'POST':
         profile.onboarding_on = False
@@ -175,22 +187,22 @@ def dashboard(request):
 
 @login_required(login_url='login')
 def onboarding_on(request):
-    request.user.profile.onboarding_on = True
-    request.user.profile.save()
+    request.user.user_profile.onboarding_on = True
+    request.user.user_profile.save()
     return redirect('dashboard')
 
 @login_required(login_url='login')
 def create_profile(request):
     if request.method == 'POST':
         user_form = UserCreateProfileForm(request.POST, instance=request.user)
-        profile_form = ProfileCreationForm(request.POST, instance=request.user.profile)
+        profile_form = ProfileCreationForm(request.POST, instance=request.user.user_profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
             return redirect('select-account')
     else:
         user_form = UserCreateProfileForm(instance=request.user)
-        profile_form = ProfileCreationForm(instance=request.user.profile)
+        profile_form = ProfileCreationForm(instance=request.user.user_profile)
 
     context = { 'user_form': user_form, 'profile_form': profile_form,}
     return render(request, 'accounts/create-profile.html', context)
@@ -201,7 +213,7 @@ def update_profile(request):
 
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.user_profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -212,7 +224,7 @@ def update_profile(request):
             return redirect('update-profile')
     else:
         user_form = UserUpdateForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=request.user.profile)
+        profile_form = ProfileUpdateForm(instance=request.user.user_profile)
 
     context = { 'profile': profile, 'user_form': user_form, 'profile_form': profile_form }
     return render(request, 'accounts/update-profile.html', context)

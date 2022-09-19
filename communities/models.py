@@ -67,6 +67,7 @@ class Community(models.Model):
         return str(self.community_name)
 
     class Meta:
+        indexes = [models.Index(fields=['id', 'community_creator', 'image'])]
         verbose_name = 'Community'
         verbose_name_plural = 'Communities'
 
@@ -96,6 +97,7 @@ class InviteMember(models.Model):
         return f"{self.sender}-{self.receiver}-{self.status}"
     
     class Meta:
+        indexes = [models.Index(fields=['sender', 'receiver', 'community', 'institution'])]
         verbose_name = 'Member Invitation'
         verbose_name_plural = 'Member Invitations'
         ordering = ('-created',)
@@ -125,6 +127,7 @@ class JoinRequest(models.Model):
         return f"{self.user_from}-{self.user_to}-{self.status}"
 
     class Meta:
+        indexes = [models.Index(fields=['user_from', 'user_to', 'community', 'institution'])]
         verbose_name = 'Join Request'
         verbose_name_plural = 'Join Requests'
         ordering = ('-date_sent',)

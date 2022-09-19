@@ -9,7 +9,7 @@ class CreateInstitutionForm(forms.ModelForm):
         widgets = {
             'city_town': forms.TextInput(attrs={'class': 'w-100'}),
             'state_province_region': forms.TextInput(attrs={'class': 'w-100'}),
-            'description': forms.Textarea(attrs={'class': 'w-100', 'rows': 3,}),
+            'description': forms.Textarea(attrs={'class': 'w-100', 'rows': 2,}),
         }
 
 class CreateInstitutionNoRorForm(forms.ModelForm):

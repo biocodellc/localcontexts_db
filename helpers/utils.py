@@ -17,20 +17,6 @@ from notifications.models import *
 
 from helpers.emails import send_membership_email
 
-def is_organization_in_user_affiliation(user, organization):
-    affiliation = UserAffiliation.objects.prefetch_related('communities').get(user=user)
-    if isinstance(organization, Community):
-        if organization in affiliation.communities.all():
-            return True
-        else:
-            return False
-            
-    if isinstance(organization, Institution):
-        if organization in affiliation.institutions.all():
-            return True
-        else:
-            return False
-
 def check_member_role(user, organization):
     role = ''
     if isinstance(organization, Community):

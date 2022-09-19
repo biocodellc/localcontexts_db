@@ -10,7 +10,6 @@ def read_notification(request, pk):
     n = UserNotification.objects.get(id=pk)
     n.viewed = True
     n.save()
-    # return render(request, 'notifications/read.html', {'notification': n})
     return redirect('dashboard')
 
 

@@ -8,7 +8,7 @@ class ConnectResearcherForm(forms.ModelForm):
         fields = ['primary_institution', 'description']
         widgets = {
             'primary_institution': forms.TextInput(attrs={'class': 'w-100'}),
-            'description': forms.Textarea(attrs={'class': 'w-100', 'rows': 3,}),
+            'description': forms.Textarea(attrs={'class': 'w-100', 'rows': 2,}),
         }
 
 class UpdateResearcherForm(forms.ModelForm):
