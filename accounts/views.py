@@ -261,7 +261,7 @@ def deactivate_user(request):
 @login_required(login_url='login')
 def manage_organizations(request):
     profile = Profile.objects.select_related('user').get(user=request.user)
-    affiliations = UserAffiliation.objects.prefetch_related('communities', 'institutions').get(user=request.user)
+    affiliations = UserAffiliation.objects.prefetch_related('communities', 'institutions', 'communities__community_creator', 'institutions__institution_creator').get(user=request.user)
     researcher = Researcher.objects.none()
     users_name = get_users_name(request.user)
     if Researcher.objects.filter(user=request.user).exists():
@@ -359,7 +359,7 @@ def registry_researchers(request):
 
 # Hub stats page
 def hub_counter(request):
-    otc_notices = OpenToCollaborateNoticeURL.objects.all()
+    otc_notices = OpenToCollaborateNoticeURL.objects.select_related('researcher', 'institution').all()
 
     reg_total = 0
     notices_total = 0
@@ -382,92 +382,33 @@ def hub_counter(request):
 
     projects_count = 0
 
-    if dev_prod_or_local(request.get_host()) == 'PROD':
-        admin = User.objects.get(id=1)
-        researcher = Researcher.objects.none()
-        if Researcher.objects.filter(user=admin).exists():
-            researcher = Researcher.objects.get(user=admin)
+    # Registered accounts
+    community_count = Community.objects.count() 
+    institution_count = Institution.objects.count() 
+    researcher_count = Researcher.objects.count()
+    reg_total = community_count + institution_count + researcher_count
 
+    # Notices
+    bc_notice_count = Notice.objects.filter(notice_type="biocultural").count()
+    tk_notice_count = Notice.objects.filter(notice_type="traditional_knowledge").count()
+    attr_notice_count = Notice.objects.filter(notice_type="attribution_incomplete").count()
+    notices_total = bc_notice_count + tk_notice_count + attr_notice_count
 
-        # Registered
-        # exclude any account created by admin
-        community_count = Community.objects.exclude(community_creator=1).count() # sample community
-        institution_count = Institution.objects.exclude(institution_creator=1).count() # sample institution
-        researcher_count = Researcher.objects.exclude(user=1).count() # admin's researcher account
-        reg_total = community_count + institution_count + researcher_count
+    # How many projects were created by which account
+    for project in ProjectCreator.objects.select_related('institution', 'community', 'researcher').all():
+        if project.institution:
+            institution_projects += 1
+        if project.community:
+            community_projects += 1
+        if project.researcher:
+            researcher_projects += 1
 
-        # Notices
-        for notice in Notice.objects.exclude(researcher=researcher, institution=1):
-            if notice.notice_type == 'biocultural':
-                bc_notice_count += 1
-            if notice.notice_type == 'traditional_knowledge':
-                tk_notice_count += 1
-            if notice.notice_type == 'attribution_incomplete':
-                attr_notice_count += 1
-        notices_total = bc_notice_count + tk_notice_count + attr_notice_count
+    projects_count = community_projects + institution_projects + researcher_projects
 
-        # Project Counts -- excludes accounts created by ADMIN
-        # Community projects
-        for community in Community.objects.exclude(community_creator=admin):
-            comm_count = ProjectCreator.objects.filter(community=community).count()
-            community_projects += comm_count
-        
-        # Institution projects
-        for institution in Institution.objects.exclude(institution_creator=admin):
-            inst_count = ProjectCreator.objects.filter(institution=institution).count()
-            institution_projects += inst_count
-
-        # Researcher projects
-        for researcher in Researcher.objects.exclude(user=admin):
-            res_count = ProjectCreator.objects.filter(researcher=researcher).count()
-            researcher_projects += res_count
-
-        projects_count = community_projects + institution_projects + researcher_projects
-
-        # Labels
-        bclabels_count = BCLabel.objects.exclude(created_by=admin).count()
-        tklabels_count = TKLabel.objects.exclude(created_by=admin).count()
-        total_labels = bclabels_count + tklabels_count
-
-    else:
-        # Registered, everyone's account is shown
-        community_count = Community.objects.count() 
-        institution_count = Institution.objects.count() 
-        researcher_count = Researcher.objects.count()
-        reg_total = community_count + institution_count + researcher_count
-
-        # Notices
-        for notice in Notice.objects.all():
-            if notice.notice_type == 'biocultural':
-                bc_notice_count += 1
-            if notice.notice_type == 'traditional_knowledge':
-                tk_notice_count += 1
-            if notice.notice_type == 'attribution_incomplete':
-                attr_notice_count += 1
-        notices_total = bc_notice_count + tk_notice_count + attr_notice_count
-
-        # Project Counts -- excludes accounts created by ADMIN
-        # Community projects
-        for community in Community.objects.all():
-            comm_count = ProjectCreator.objects.filter(community=community).count()
-            community_projects += comm_count
-        
-        # Institution projects
-        for institution in Institution.objects.all():
-            inst_count = ProjectCreator.objects.filter(institution=institution).count()
-            institution_projects += inst_count
-
-        # Researcher projects
-        for researcher in Researcher.objects.all():
-            res_count = ProjectCreator.objects.filter(researcher=researcher).count()
-            researcher_projects += res_count
-
-        projects_count = community_projects + institution_projects + researcher_projects
-
-        # Labels
-        bclabels_count = BCLabel.objects.count()
-        tklabels_count = TKLabel.objects.count()
-        total_labels = bclabels_count + tklabels_count
+    # Labels
+    bclabels_count = BCLabel.objects.count()
+    tklabels_count = TKLabel.objects.count()
+    total_labels = bclabels_count + tklabels_count
 
 
     context = {
