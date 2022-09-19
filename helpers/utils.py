@@ -131,16 +131,6 @@ def accepted_join_request(org, join_request_id, selected_role):
             # Delete join request
             join_request.delete()
 
-
-def set_language_code(instance):
-    url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
-    data = requests.get(url).json()
-
-    if instance.language in data.keys():
-        instance.language_tag = data[instance.language]
-        instance.save()
-
-
 # h/t: https://stackoverflow.com/questions/59695870/generate-multiple-pdfs-and-zip-them-for-download-all-in-a-single-view
 def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)

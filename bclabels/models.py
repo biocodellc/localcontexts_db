@@ -1,9 +1,11 @@
 import json
+from operator import imod
 import uuid
 from django.db import models
 from communities.models import Community
 from django.contrib.auth.models import User
 import os
+import requests
 
 def bclabel_audio_path(self, filename):
     ext = filename.split('.')[-1]
@@ -41,6 +43,14 @@ class BCLabel(models.Model):
     audiofile = models.FileField(upload_to=bclabel_audio_path, blank=True)
 
     def save(self, *args, **kwargs):
+        # set up language tag
+        url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
+        data = requests.get(url).json()
+
+        if self.language in data.keys():
+            self.language_tag = data[self.language]
+
+        # set up label defaults (img + svg)
         json_data = open('./localcontexts/static/json/Labels.json')
         data = json.load(json_data) #deserialize
 
@@ -56,7 +66,7 @@ class BCLabel(models.Model):
                         elif self.label_type == 'placeholder':
                             self.img_url = None
                             self.svg_url = None
-                            
+
         super().save(*args, **kwargs)
 
     def __str__(self):

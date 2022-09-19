@@ -416,17 +416,13 @@ def customize_label(request, pk, label_code):
                     data.label_type = tk_type
                     data.community = community
                     data.created_by = request.user
-                    data.is_approved = False
                     data.save()
-                    set_language_code(data)
-
 
                     # Save all label translation instances
                     instances = add_translation_formset.save(commit=False)
                     for instance in instances:
                         instance.tklabel = data
                         instance.save()
-                        set_language_code(instance)
                     
                     # Create notification
                     name = get_users_name(request.user)
@@ -454,17 +450,13 @@ def customize_label(request, pk, label_code):
                     data.label_type = bc_type
                     data.community = community
                     data.created_by = request.user
-                    data.is_approved = False
                     data.save()
-                    set_language_code(data)
-
 
                     # Save all label translation instances
                     instances = add_translation_formset.save(commit=False)
                     for instance in instances:
                         instance.bclabel = data
                         instance.save()
-                        set_language_code(instance)
 
                     # Send notification
                     name = get_users_name(request.user)
@@ -631,7 +623,6 @@ def edit_label(request, pk, label_id):
                         instance.tklabel = tklabel
                     
                     instance.save()
-                    set_language_code(instance)
 
                 return redirect('select-label', community.id)
 

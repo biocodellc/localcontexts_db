@@ -1,4 +1,5 @@
 import json
+import requests
 from django.db import models
 from django.contrib.auth.models import User
 from bclabels.models import BCLabel
@@ -85,6 +86,16 @@ class LabelTranslation(models.Model):
     language_tag = models.CharField(max_length=5, blank=True)
     language = models.CharField(max_length=150, blank=True)
     translated_text = models.TextField(blank=True)
+
+    def save(self, *args, **kwargs):
+        # set up language tag
+        url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
+        data = requests.get(url).json()
+
+        if self.language in data.keys():
+            self.language_tag = data[self.language]
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.translated_name)
