@@ -631,23 +631,23 @@ def view_label(request, pk, label_uuid):
         label_versions = LabelVersion.objects.none()
 
         if BCLabel.objects.filter(unique_id=label_uuid).exists():
-            bclabel = BCLabel.objects.get(unique_id=label_uuid)
+            bclabel = BCLabel.objects.select_related('created_by', 'approved_by').get(unique_id=label_uuid)
             translations = LabelTranslation.objects.filter(bclabel=bclabel)
             projects = bclabel.project_bclabels.all()
             creator_name = get_users_name(bclabel.created_by)
             approver_name = get_users_name(bclabel.approved_by)
             label_versions = LabelVersion.objects.filter(bclabel=bclabel).order_by('version')
-            bclabels = BCLabel.objects.filter(community=community).exclude(unique_id=label_uuid)
-            tklabels = TKLabel.objects.filter(community=community)
+            bclabels = BCLabel.objects.filter(community=community).exclude(unique_id=label_uuid).values('unique_id', 'name', 'label_type', 'is_approved')
+            tklabels = TKLabel.objects.filter(community=community).values('unique_id', 'name', 'label_type', 'is_approved')
         if TKLabel.objects.filter(unique_id=label_uuid).exists():
-            tklabel = TKLabel.objects.get(unique_id=label_uuid)
+            tklabel = TKLabel.objects.select_related('created_by', 'approved_by').get(unique_id=label_uuid)
             translations = LabelTranslation.objects.filter(tklabel=tklabel)
             projects = tklabel.project_tklabels.all()
             creator_name = get_users_name(tklabel.created_by)
             approver_name = get_users_name(tklabel.approved_by)
             label_versions = LabelVersion.objects.filter(tklabel=tklabel).order_by('version')
-            tklabels = TKLabel.objects.filter(community=community).exclude(unique_id=label_uuid)
-            bclabels = BCLabel.objects.filter(community=community)
+            tklabels = TKLabel.objects.filter(community=community).exclude(unique_id=label_uuid).values('unique_id', 'name', 'label_type', 'is_approved')
+            bclabels = BCLabel.objects.filter(community=community).values('unique_id', 'name', 'label_type', 'is_approved')
 
         context = {
             'community': community,
