@@ -98,9 +98,6 @@ def create_community(request):
                 affiliation = UserAffiliation.objects.prefetch_related('communities').get(user=request.user)
                 affiliation.communities.add(data)
                 affiliation.save()
-
-                # Create a Connections instance
-                Connections.objects.create(community=data)
                 return redirect('dashboard')
             else:
                 data.save()
@@ -109,9 +106,6 @@ def create_community(request):
                 affiliation = UserAffiliation.objects.prefetch_related('communities').get(user=request.user)
                 affiliation.communities.add(data)
                 affiliation.save()
-
-                # Create a Connections instance
-                Connections.objects.create(community=data)
                 return redirect('confirm-community', data.id)
     return render(request, 'communities/create-community.html', {'form': form})
 
@@ -1196,7 +1190,6 @@ def create_project(request, pk):
                 data.save()
 
                 # Add project to community projects
-                # community.projects.add(data)
                 ProjectCreator.objects.create(community=community, project=data)
 
                 #Create EntitiesNotified instance for the project
@@ -1300,7 +1293,6 @@ def apply_labels(request, pk, project_uuid):
         form = CreateProjectNoteForm(request.POST or None)
 
         if request.method == "POST":
-
             if form.data['note']:
                 if form.is_valid():
                     data = form.save(commit=False)
@@ -1330,6 +1322,16 @@ def apply_labels(request, pk, project_uuid):
                 contributors = ProjectContributors.objects.get(project=project)
                 contributors.communities.add(community)
                 contributors.save()
+
+                # Add project creator account to community connections
+                # Add community to project creator connections
+                creator = project.project_creator_project.select_related('institution', 'researcher').first()
+                if creator.institution:
+                    add_to_connections(community, creator.institution)
+                    add_to_connections(creator.institution, community)
+                elif creator.researcher:
+                    add_to_connections(community, creator.researcher)
+                    add_to_connections(creator.researcher, community)
 
                 # Archive Notices
                 for notice in notices:

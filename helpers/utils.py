@@ -157,6 +157,8 @@ def get_labels_json():
     return data
 
 def add_to_connections(target_org, org):
+    # target_org: whose connections
+    # org: who is being added
 
     if isinstance(target_org, Community):
         connections = Connections.objects.get(community=target_org)

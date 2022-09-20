@@ -96,9 +96,6 @@ def create_institution(request):
                         # Add to user affiliations
                         affiliation.institutions.add(data)
                         affiliation.save()
-
-                        # Create a Connections instance
-                        Connections.objects.create(institution=data)
                         return redirect('dashboard')
                     else:
                         data.save()
@@ -106,9 +103,6 @@ def create_institution(request):
                         # Add to user affiliations
                         affiliation.institutions.add(data)
                         affiliation.save()
-
-                        # Create a Connections instance
-                        Connections.objects.create(institution=data)
                         return redirect('confirm-institution', data.id)
         elif 'create-institution-noror-btn' in request.POST:
             if noror_form.is_valid():
@@ -120,9 +114,6 @@ def create_institution(request):
                 # Add to user affiliations
                 affiliation.institutions.add(data)
                 affiliation.save()
-
-                #  Create a Connections instance
-                Connections.objects.create(institution=data)
                 return redirect('confirm-institution', data.id)
     return render(request, 'institutions/create-institution.html', {'form': form, 'noror_form': noror_form,})
 
@@ -863,13 +854,27 @@ def notify_others(request, pk, proj_id):
 
 @login_required(login_url='login')
 def connections(request, pk):
-    institution = Institution.objects.get(id=pk)
+    institution = Institution.objects.select_related('institution_creator').get(id=pk)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
-        connections = Connections.objects.get(institution=institution)
+        connections = Connections.objects.prefetch_related(
+            'communities', 
+            'institutions', 
+            'researchers',
+            'communities__community_creator',
+            'institutions__institution_creator',
+            'researchers__user',
+            'communities__admins',
+            'communities__editors',
+            'communities__viewers',
+            'institutions__admins',
+            'institutions__editors',
+            'institutions__viewers',
+            ).get(institution=institution)
+            
         context = {
             'member_role': member_role,
             'institution': institution,
