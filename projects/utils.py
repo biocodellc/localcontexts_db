@@ -9,30 +9,30 @@ def add_to_contributors(request, contributors, institutions_list, researchers_li
     # Add each institution and researcher to contributors
     if institutions_list:
         for institution_id in institutions_list:
-            inst = Institution.objects.select_related('institution_creator').get(id=institution_id)
-            contributors.institutions.add(inst)
+            institution = Institution.objects.select_related('institution_creator').get(id=institution_id)
+            contributors.institutions.add(institution)
 
             # create notification
             ActionNotification.objects.create(
-                institution=inst, 
+                institution=institution, 
                 notification_type='Projects',
                 reference_id = project_id,
                 title = 'Your institution has been added as a contributor on a Project'
             )
             # create email
-            send_contributor_email(request, inst, project_id)
+            send_contributor_email(request, institution, project_id)
 
     if researchers_list:
         for researcher_id in researchers_list:
-            res = Researcher.objects.get(id=researcher_id)
-            contributors.researchers.add(res)
+            researcher = Researcher.objects.get(id=researcher_id)
+            contributors.researchers.add(researcher)
 
             # create notification
             ActionNotification.objects.create(
-                researcher=res, 
+                researcher=researcher, 
                 notification_type='Projects',
                 reference_id = project_id,
                 title = 'You have been added as a contributor on a Project'
             )
             # create email
-            send_contributor_email(request, res, project_id)
+            send_contributor_email(request, researcher, project_id)

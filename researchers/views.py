@@ -42,9 +42,6 @@ def connect_researcher(request):
                 data.orcid = orcid_id
                 data.save()
 
-                # Create a Connections instance
-                Connections.objects.create(researcher=data)
-
                 # Mark current user as researcher
                 request.user.user_profile.is_researcher = True
                 request.user.user_profile.save()
