@@ -92,39 +92,39 @@
 
             <div class="w-70">
                 <h2 class="no-top-margin no-bottom-margin">{% if join_request.user_from.get_full_name %}{{ join_request.user_from.get_full_name }} {% else %} {{ join_request.user_from.username }} {% endif %} </h2>
-                {% if join_request.user_from.profile.position %}
-                    <h3 class="no-top-margin">{{ join_request.user_from.profile.position }}</h3>
+                {% if join_request.user_from.user_profile.position %}
+                    <h3 class="no-top-margin">{{ join_request.user_from.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not join_request.user_from.profile.city_town and not join_request.user_from.profile.state_province_region and not join_request.user_from.profile.country.name %}
+                {% if not join_request.user_from.user_profile.city_town and not join_request.user_from.user_profile.state_province_region and not join_request.user_from.user_profile.country.name %}
                 {% else %}
                     <h4 class="no-top-margin">
-                        {% if join_request.user_from.profile.city_town %} {{ join_request.user_from.profile.city_town }}, {% endif %}
-                        {% if join_request.user_from.profile.state_province_region %}{{ join_request.user_from.profile.state_province_region }}, {% endif %}
-                        {% if join_request.user_from.profile.country %} {{ join_request.user_from.profile.country.name }} {% endif%}
+                        {% if join_request.user_from.user_profile.city_town %} {{ join_request.user_from.user_profile.city_town }}, {% endif %}
+                        {% if join_request.user_from.user_profile.state_province_region %}{{ join_request.user_from.user_profile.state_province_region }}, {% endif %}
+                        {% if join_request.user_from.user_profile.country %} {{ join_request.user_from.user_profile.country.name }} {% endif%}
                     </h4>
                 {% endif %}
 
-                {% if join_request.user_from.profile.languages_spoken %}
+                {% if join_request.user_from.user_profile.languages_spoken %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Languages</small>
-                            <p class="no-top-margin">{{ join_request.user_from.profile.languages_spoken }}</p>
+                            <p class="no-top-margin">{{ join_request.user_from.user_profile.languages_spoken }}</p>
                         </div>
                     </div>
                 {% endif %}
 
-                {% if join_request.user_from.profile.affiliation %}
+                {% if join_request.user_from.user_profile.affiliation %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Affiliations</small>
-                            <p class="no-top-margin">{{ join_request.user_from.profile.affiliation }}</p>
+                            <p class="no-top-margin">{{ join_request.user_from.user_profile.affiliation }}</p>
                         </div>
                     </div>
                 {% endif %}
@@ -174,39 +174,39 @@
 
             <div class="w-70">
                 <h2 class="no-top-margin no-bottom-margin">{% if invite.receiver.get_full_name %}{{ invite.receiver.get_full_name }} {% else %} {{ invite.receiver.username }} {% endif %} </h2>
-                {% if invite.receiver.profile.position %}
-                    <h3 class="no-top-margin">{{ invite.receiver.profile.position }}</h3>
+                {% if invite.receiver.user_profile.position %}
+                    <h3 class="no-top-margin">{{ invite.receiver.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not invite.receiver.profile.city_town and not invite.receiver.profile.state_province_region and not invite.receiver.profile.country.name %}
+                {% if not invite.receiver.user_profile.city_town and not invite.receiver.user_profile.state_province_region and not invite.receiver.user_profile.country.name %}
                 {% else %}
                     <h4 class="no-top-margin">
-                        {% if invite.receiver.profile.city_town %} {{ invite.receiver.profile.city_town }}, {% endif %}
-                        {% if invite.receiver.profile.state_province_region %}{{ invite.receiver.profile.state_province_region }}, {% endif %}
-                        {% if invite.receiver.profile.country %} {{ invite.receiver.profile.country.name }} {% endif%}
+                        {% if invite.receiver.user_profile.city_town %} {{ invite.receiver.user_profile.city_town }}, {% endif %}
+                        {% if invite.receiver.user_profile.state_province_region %}{{ invite.receiver.user_profile.state_province_region }}, {% endif %}
+                        {% if invite.receiver.user_profile.country %} {{ invite.receiver.user_profile.country.name }} {% endif%}
                     </h4>
                 {% endif %}
 
-                {% if invite.receiver.profile.languages_spoken %}
+                {% if invite.receiver.user_profile.languages_spoken %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Languages</small>
-                            <p class="no-top-margin">{{ invite.receiver.profile.languages_spoken }}</p>
+                            <p class="no-top-margin">{{ invite.receiver.user_profile.languages_spoken }}</p>
                         </div>
                     </div>
                 {% endif %}
 
-                {% if invite.receiver.profile.affiliation %}
+                {% if invite.receiver.user_profile.affiliation %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Affiliations</small>
-                            <p class="no-top-margin">{{ invite.receiver.profile.affiliation }}</p>
+                            <p class="no-top-margin">{{ invite.receiver.user_profile.affiliation }}</p>
                         </div>
                     </div>
                 {% endif %}

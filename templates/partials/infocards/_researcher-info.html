@@ -107,8 +107,8 @@
                     </div>
                     <div>
                         <p class="dashcard-subheader">Researcher | {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% endif %}<br>
-                            Location: {% if researcher.user.profile.city_town %} {{ researcher.user.profile.city_town }}, {% endif %} {% if researcher.user.profile.state_province_region %} {{ researcher.user.profile.state_province_region }}, {% endif %} {% if researcher.user.profile.country.name %} {{ researcher.user.profile.country.name }}{% endif %}
-                            {% if not researcher.user.profile.city_town and not researcher.user.profile.state_province_region and not researcher.user.profile.country %} None specified {% endif %}
+                            Location: {% if researcher.user.user_profile.city_town %} {{ researcher.user.user_profile.city_town }}, {% endif %} {% if researcher.user.user_profile.state_province_region %} {{ researcher.user.user_profile.state_province_region }}, {% endif %} {% if researcher.user.user_profile.country.name %} {{ researcher.user.user_profile.country.name }}{% endif %}
+                            {% if not researcher.user.user_profile.city_town and not researcher.user.user_profile.state_province_region and not researcher.user.user_profile.country %} None specified {% endif %}
                         </p>
                     </div>
 
