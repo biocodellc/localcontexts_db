@@ -69,39 +69,39 @@
                     {{ community.community_creator.username }}
                 {% endif %}
             </h2>
-            {% if community.community_creator.profile.position %}
-                <h3 class="no-top-margin">{{ community.community_creator.profile.position }}</h3>
+            {% if community.community_creator.user_profile.position %}
+                <h3 class="no-top-margin">{{ community.community_creator.user_profile.position }}</h3>
             {% endif %}
 
-            {% if not community.community_creator.profile.city_town and not community.community_creator.profile.state_province_region and not community.community_creator.profile.country.name %}
+            {% if not community.community_creator.user_profile.city_town and not community.community_creator.user_profile.state_province_region and not community.community_creator.user_profile.country.name %}
             {% else %}
                 <h4 class="no-top-margin">
-                    {% if community.community_creator.profile.city_town %} {{ community.community_creator.profile.city_town }}, {% endif %}
-                    {% if community.community_creator.profile.state_province_region %}{{ community.community_creator.profile.state_province_region }}, {% endif %}
-                    {% if community.community_creator.profile.country %} {{ community.community_creator.profile.country.name }} {% endif%}
+                    {% if community.community_creator.user_profile.city_town %} {{ community.community_creator.user_profile.city_town }}, {% endif %}
+                    {% if community.community_creator.user_profile.state_province_region %}{{ community.community_creator.user_profile.state_province_region }}, {% endif %}
+                    {% if community.community_creator.user_profile.country %} {{ community.community_creator.user_profile.country.name }} {% endif%}
                 </h4>
             {% endif %}
 
-            {% if community.community_creator.profile.languages_spoken %}
+            {% if community.community_creator.user_profile.languages_spoken %}
                 <div class="flex-this">
                     <div class="dash-icons-big">
                         <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
                     </div>
                     <div>
                         <small class="orange-text">Languages</small>
-                        <p class="no-top-margin">{{ community.community_creator.profile.languages_spoken }}</p>
+                        <p class="no-top-margin">{{ community.community_creator.user_profile.languages_spoken }}</p>
                     </div>
                 </div>
             {% endif %}
 
-            {% if community.community_creator.profile.affiliation %}
+            {% if community.community_creator.user_profile.affiliation %}
                 <div class="flex-this">
                     <div class="dash-icons-big">
                         <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
                     </div>
                     <div>
                         <small class="orange-text">Affiliations</small>
-                        <p class="no-top-margin">{{ community.community_creator.profile.affiliation }}</p>
+                        <p class="no-top-margin">{{ community.community_creator.user_profile.affiliation }}</p>
                     </div>
                 </div>
             {% endif %}
@@ -140,39 +140,39 @@
                         {{ admin.username }}
                     {% endif %}
                 </h2>
-                {% if admin.profile.position %}
-                    <h3 class="no-top-margin">{{ admin.profile.position }}</h3>
+                {% if admin.user_profile.position %}
+                    <h3 class="no-top-margin">{{ admin.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not admin.profile.city_town and not admin.profile.state_province_region and not admin.profile.country.name %}
+                {% if not admin.user_profile.city_town and not admin.user_profile.state_province_region and not admin.user_profile.country.name %}
                 {% else %}
                     <h4 class="no-top-margin">
-                        {% if admin.profile.city_town %} {{ admin.profile.city_town }}, {% endif %}
-                        {% if admin.profile.state_province_region %}{{ admin.profile.state_province_region }}, {% endif %}
-                        {% if admin.profile.country %} {{ admin.profile.country.name }} {% endif%}
+                        {% if admin.user_profile.city_town %} {{ admin.user_profile.city_town }}, {% endif %}
+                        {% if admin.user_profile.state_province_region %}{{ admin.user_profile.state_province_region }}, {% endif %}
+                        {% if admin.user_profile.country %} {{ admin.user_profile.country.name }} {% endif%}
                     </h4>
                 {% endif %}
 
-                {% if admin.profile.languages_spoken %}
+                {% if admin.user_profile.languages_spoken %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Languages</small>
-                            <p class="no-top-margin">{{ admin.profile.languages_spoken }}</p>
+                            <p class="no-top-margin">{{ admin.user_profile.languages_spoken }}</p>
                         </div>
                     </div>
                 {% endif %}
 
-                {% if admin.profile.affiliation %}
+                {% if admin.user_profile.affiliation %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Affiliations</small>
-                            <p class="no-top-margin">{{ admin.profile.affiliation }}</p>
+                            <p class="no-top-margin">{{ admin.user_profile.affiliation }}</p>
                         </div>
                     </div>
                 {% endif %}
@@ -212,39 +212,39 @@
                         {{ editor.username }}
                     {% endif %}
                 </h2>
-                {% if editor.profile.position %}
-                    <h3 class="no-top-margin">{{ editor.profile.position }}</h3>
+                {% if editor.user_profile.position %}
+                    <h3 class="no-top-margin">{{ editor.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not editor.profile.city_town and not editor.profile.state_province_region and not editor.profile.country.name %}
+                {% if not editor.user_profile.city_town and not editor.user_profile.state_province_region and not editor.user_profile.country.name %}
                 {% else %}
                     <h4 class="no-top-margin">
-                        {% if editor.profile.city_town %} {{ editor.profile.city_town }}, {% endif %}
-                        {% if editor.profile.state_province_region %}{{ editor.profile.state_province_region }}, {% endif %}
-                        {% if editor.profile.country %} {{ editor.profile.country.name }} {% endif%}
+                        {% if editor.user_profile.city_town %} {{ editor.user_profile.city_town }}, {% endif %}
+                        {% if editor.user_profile.state_province_region %}{{ editor.user_profile.state_province_region }}, {% endif %}
+                        {% if editor.user_profile.country %} {{ editor.user_profile.country.name }} {% endif%}
                     </h4>
                 {% endif %}
 
-                {% if editor.profile.languages_spoken %}
+                {% if editor.user_profile.languages_spoken %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Languages</small>
-                            <p class="no-top-margin">{{ editor.profile.languages_spoken }}</p>
+                            <p class="no-top-margin">{{ editor.user_profile.languages_spoken }}</p>
                         </div>
                     </div>
                 {% endif %}
 
-                {% if editor.profile.affiliation %}
+                {% if editor.user_profile.affiliation %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Affiliations</small>
-                            <p class="no-top-margin">{{ editor.profile.affiliation }}</p>
+                            <p class="no-top-margin">{{ editor.user_profile.affiliation }}</p>
                         </div>
                     </div>
                 {% endif %}
@@ -284,39 +284,39 @@
                         {{ viewer.username }}
                     {% endif %}
                 </h2>
-                {% if viewer.profile.position %}
-                    <h3 class="no-top-margin">{{ viewer.profile.position }}</h3>
+                {% if viewer.user_profile.position %}
+                    <h3 class="no-top-margin">{{ viewer.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not viewer.profile.city_town and not viewer.profile.state_province_region and not viewer.profile.country.name %}
+                {% if not viewer.user_profile.city_town and not viewer.user_profile.state_province_region and not viewer.user_profile.country.name %}
                 {% else %}
                     <h4 class="no-top-margin">
-                        {% if viewer.profile.city_town %} {{ viewer.profile.city_town }}, {% endif %}
-                        {% if viewer.profile.state_province_region %}{{ viewer.profile.state_province_region }}, {% endif %}
-                        {% if viewer.profile.country %} {{ viewer.profile.country.name }} {% endif%}
+                        {% if viewer.user_profile.city_town %} {{ viewer.user_profile.city_town }}, {% endif %}
+                        {% if viewer.user_profile.state_province_region %}{{ viewer.user_profile.state_province_region }}, {% endif %}
+                        {% if viewer.user_profile.country %} {{ viewer.user_profile.country.name }} {% endif%}
                     </h4>
                 {% endif %}
 
-                {% if viewer.profile.languages_spoken %}
+                {% if viewer.user_profile.languages_spoken %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Languages</small>
-                            <p class="no-top-margin">{{ viewer.profile.languages_spoken }}</p>
+                            <p class="no-top-margin">{{ viewer.user_profile.languages_spoken }}</p>
                         </div>
                     </div>
                 {% endif %}
 
-                {% if viewer.profile.affiliation %}
+                {% if viewer.user_profile.affiliation %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Affiliations</small>
-                            <p class="no-top-margin">{{ viewer.profile.affiliation }}</p>
+                            <p class="no-top-margin">{{ viewer.user_profile.affiliation }}</p>
                         </div>
                     </div>
                 {% endif %}
@@ -343,39 +343,39 @@
                     {{ institution.institution_creator.username }}
                 {% endif %}
             </h2>
-            {% if institution.institution_creator.profile.position %}
-                <h3 class="no-top-margin">{{ institution.institution_creator.profile.position }}</h3>
+            {% if institution.institution_creator.user_profile.position %}
+                <h3 class="no-top-margin">{{ institution.institution_creator.user_profile.position }}</h3>
             {% endif %}
 
-            {% if not institution.institution_creator.profile.city_town and not institution.institution_creator.profile.state_province_region and not institution.institution_creator.profile.country.name %}
+            {% if not institution.institution_creator.user_profile.city_town and not institution.institution_creator.user_profile.state_province_region and not institution.institution_creator.user_profile.country.name %}
             {% else %}
                 <h4 class="no-top-margin">
-                    {% if institution.institution_creator.profile.city_town %} {{ institution.institution_creator.profile.city_town }}, {% endif %}
-                    {% if institution.institution_creator.profile.state_province_region %}{{ institution.institution_creator.profile.state_province_region }}, {% endif %}
-                    {% if institution.institution_creator.profile.country %} {{ institution.institution_creator.profile.country.name }} {% endif%}
+                    {% if institution.institution_creator.user_profile.city_town %} {{ institution.institution_creator.user_profile.city_town }}, {% endif %}
+                    {% if institution.institution_creator.user_profile.state_province_region %}{{ institution.institution_creator.user_profile.state_province_region }}, {% endif %}
+                    {% if institution.institution_creator.user_profile.country %} {{ institution.institution_creator.user_profile.country.name }} {% endif%}
                 </h4>
             {% endif %}
 
-            {% if institution.institution_creator.profile.languages_spoken %}
+            {% if institution.institution_creator.user_profile.languages_spoken %}
                 <div class="flex-this">
                     <div class="dash-icons-big">
                         <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
                     </div>
                     <div>
                         <small class="orange-text">Languages</small>
-                        <p class="no-top-margin">{{ institution.institution_creator.profile.languages_spoken }}</p>
+                        <p class="no-top-margin">{{ institution.institution_creator.user_profile.languages_spoken }}</p>
                     </div>
                 </div>
             {% endif %}
 
-            {% if institution.institution_creator.profile.affiliation %}
+            {% if institution.institution_creator.user_profile.affiliation %}
                 <div class="flex-this">
                     <div class="dash-icons-big">
                         <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
                     </div>
                     <div>
                         <small class="orange-text">Affiliations</small>
-                        <p class="no-top-margin">{{ institution.institution_creator.profile.affiliation }}</p>
+                        <p class="no-top-margin">{{ institution.institution_creator.user_profile.affiliation }}</p>
                     </div>
                 </div>
             {% endif %}
@@ -414,39 +414,39 @@
                         {{ admin.username }}
                     {% endif %}
                 </h2>
-                {% if admin.profile.position %}
-                    <h3 class="no-top-margin">{{ admin.profile.position }}</h3>
+                {% if admin.user_profile.position %}
+                    <h3 class="no-top-margin">{{ admin.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not admin.profile.city_town and not admin.profile.state_province_region and not admin.profile.country.name %}
+                {% if not admin.user_profile.city_town and not admin.user_profile.state_province_region and not admin.user_profile.country.name %}
                 {% else %}
                     <h4 class="no-top-margin">
-                        {% if admin.profile.city_town %} {{ admin.profile.city_town }}, {% endif %}
-                        {% if admin.profile.state_province_region %}{{ admin.profile.state_province_region }}, {% endif %}
-                        {% if admin.profile.country %} {{ admin.profile.country.name }} {% endif%}
+                        {% if admin.user_profile.city_town %} {{ admin.user_profile.city_town }}, {% endif %}
+                        {% if admin.user_profile.state_province_region %}{{ admin.user_profile.state_province_region }}, {% endif %}
+                        {% if admin.user_profile.country %} {{ admin.user_profile.country.name }} {% endif%}
                     </h4>
                 {% endif %}
 
-                {% if admin.profile.languages_spoken %}
+                {% if admin.user_profile.languages_spoken %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Languages</small>
-                            <p class="no-top-margin">{{ admin.profile.languages_spoken }}</p>
+                            <p class="no-top-margin">{{ admin.user_profile.languages_spoken }}</p>
                         </div>
                     </div>
                 {% endif %}
 
-                {% if admin.profile.affiliation %}
+                {% if admin.user_profile.affiliation %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Affiliations</small>
-                            <p class="no-top-margin">{{ admin.profile.affiliation }}</p>
+                            <p class="no-top-margin">{{ admin.user_profile.affiliation }}</p>
                         </div>
                     </div>
                 {% endif %}
@@ -486,39 +486,39 @@
                         {{ editor.username }}
                     {% endif %}
                 </h2>
-                {% if editor.profile.position %}
-                    <h3 class="no-top-margin">{{ editor.profile.position }}</h3>
+                {% if editor.user_profile.position %}
+                    <h3 class="no-top-margin">{{ editor.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not editor.profile.city_town and not editor.profile.state_province_region and not editor.profile.country.name %}
+                {% if not editor.user_profile.city_town and not editor.user_profile.state_province_region and not editor.user_profile.country.name %}
                 {% else %}
                     <h4 class="no-top-margin">
-                        {% if editor.profile.city_town %} {{ editor.profile.city_town }}, {% endif %}
-                        {% if editor.profile.state_province_region %}{{ editor.profile.state_province_region }}, {% endif %}
-                        {% if editor.profile.country %} {{ editor.profile.country.name }} {% endif%}
+                        {% if editor.user_profile.city_town %} {{ editor.user_profile.city_town }}, {% endif %}
+                        {% if editor.user_profile.state_province_region %}{{ editor.user_profile.state_province_region }}, {% endif %}
+                        {% if editor.user_profile.country %} {{ editor.user_profile.country.name }} {% endif%}
                     </h4>
                 {% endif %}
 
-                {% if editor.profile.languages_spoken %}
+                {% if editor.user_profile.languages_spoken %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Languages</small>
-                            <p class="no-top-margin">{{ editor.profile.languages_spoken }}</p>
+                            <p class="no-top-margin">{{ editor.user_profile.languages_spoken }}</p>
                         </div>
                     </div>
                 {% endif %}
 
-                {% if editor.profile.affiliation %}
+                {% if editor.user_profile.affiliation %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Affiliations</small>
-                            <p class="no-top-margin">{{ editor.profile.affiliation }}</p>
+                            <p class="no-top-margin">{{ editor.user_profile.affiliation }}</p>
                         </div>
                     </div>
                 {% endif %}
@@ -558,39 +558,39 @@
                         {{ viewer.username }}
                     {% endif %}
                 </h2>
-                {% if viewer.profile.position %}
-                    <h3 class="no-top-margin">{{ viewer.profile.position }}</h3>
+                {% if viewer.user_profile.position %}
+                    <h3 class="no-top-margin">{{ viewer.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not viewer.profile.city_town and not viewer.profile.state_province_region and not viewer.profile.country.name %}
+                {% if not viewer.user_profile.city_town and not viewer.user_profile.state_province_region and not viewer.user_profile.country.name %}
                 {% else %}
                     <h4 class="no-top-margin">
-                        {% if viewer.profile.city_town %} {{ viewer.profile.city_town }}, {% endif %}
-                        {% if viewer.profile.state_province_region %}{{ viewer.profile.state_province_region }}, {% endif %}
-                        {% if viewer.profile.country %} {{ viewer.profile.country.name }} {% endif%}
+                        {% if viewer.user_profile.city_town %} {{ viewer.user_profile.city_town }}, {% endif %}
+                        {% if viewer.user_profile.state_province_region %}{{ viewer.user_profile.state_province_region }}, {% endif %}
+                        {% if viewer.user_profile.country %} {{ viewer.user_profile.country.name }} {% endif%}
                     </h4>
                 {% endif %}
 
-                {% if viewer.profile.languages_spoken %}
+                {% if viewer.user_profile.languages_spoken %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-language fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Languages</small>
-                            <p class="no-top-margin">{{ viewer.profile.languages_spoken }}</p>
+                            <p class="no-top-margin">{{ viewer.user_profile.languages_spoken }}</p>
                         </div>
                     </div>
                 {% endif %}
 
-                {% if viewer.profile.affiliation %}
+                {% if viewer.user_profile.affiliation %}
                     <div class="flex-this">
                         <div class="dash-icons-big">
                             <i class="fa fa-object-group fa-2x orange-text" aria-hidden="true"></i>
                         </div>
                         <div>
                             <small class="orange-text">Affiliations</small>
-                            <p class="no-top-margin">{{ viewer.profile.affiliation }}</p>
+                            <p class="no-top-margin">{{ viewer.user_profile.affiliation }}</p>
                         </div>
                     </div>
                 {% endif %}
