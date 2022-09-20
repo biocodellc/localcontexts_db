@@ -122,10 +122,10 @@
                         <div><h3 class="dashcard-h3 darkteal-text">{% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}</h3></div>
                         <div>
                             <p class="dashcard-subheader">Researcher | Location: 
-                                {% if researcher.user.profile.city_town %} {{ researcher.user.profile.city_town }}, {% endif %} 
-                                {% if researcher.user.profile.state_province_region %} {{ researcher.user.profile.state_province_region }}, {% endif %} 
-                                {% if researcher.user.profile.country.name %} {{ researcher.user.profile.country.name }}{% endif %}
-                                {% if not researcher.user.profile.city_town and not researcher.user.profile.state_province_region and not researcher.user.profile.country %}
+                                {% if researcher.user.user_profile.city_town %} {{ researcher.user.user_profile.city_town }}, {% endif %} 
+                                {% if researcher.user.user_profile.state_province_region %} {{ researcher.user.user_profile.state_province_region }}, {% endif %} 
+                                {% if researcher.user.user_profile.country.name %} {{ researcher.user.user_profile.country.name }}{% endif %}
+                                {% if not researcher.user.user_profile.city_town and not researcher.user.user_profile.state_province_region and not researcher.user.user_profile.country %}
                                     None specified
                                 {% endif %}
                             </p>
