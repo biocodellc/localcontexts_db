@@ -1366,7 +1366,20 @@ def connections(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        connections = Connections.objects.get(community=community)
+        connections = Connections.objects.prefetch_related(
+            'communities', 
+            'institutions', 
+            'researchers',
+            'communities__community_creator',
+            'institutions__institution_creator',
+            'researchers__user',
+            'communities__admins',
+            'communities__editors',
+            'communities__viewers',
+            'institutions__admins',
+            'institutions__editors',
+            'institutions__viewers',
+            ).get(community=community)
 
         context = {
             'member_role': member_role,
@@ -1381,8 +1394,6 @@ def labels_pdf(request, pk):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
-    # combine two querysets
-    # labels = list(chain(bclabels,tklabels))
 
     template_path = 'snippets/pdfs/community-labels.html'
     context = {'community': community, 'bclabels': bclabels, 'tklabels': tklabels,}
