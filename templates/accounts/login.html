@@ -15,6 +15,9 @@
             {% csrf_token %}
             <div>
                 <label>Username</label>
+                <div class="tooltip" style="margin-top: 15px; margin-left: 5px;"><strong>i</strong>
+                    <span class="tooltiptext">Log-in with the username you created during the registration process, not your email</span>
+                </div>
                 <input type="username" name="username" required>
             </div>
             <div class="pad-top-1-5">
