@@ -1,17 +1,12 @@
 from django import template
 from django.urls import reverse
 from django.templatetags.static import static
-from institutions.models import Institution
 from notifications.models import ActionNotification
-from projects.models import Project, ProjectCreator
-from helpers.models import EntitiesNotified, Connections
+from helpers.models import Connections
 from bclabels.models import BCLabel
-from researchers.models import Researcher
 from tklabels.models import TKLabel
 
 register = template.Library()
-
-# COUNTERS
 
 # How many total Labels have been applied to projects
 @register.simple_tag
@@ -35,39 +30,6 @@ def community_notified_count(community):
 def connections_count(community):
     connections = Connections.objects.prefetch_related('researchers', 'institutions').get(community=community)
     return connections.researchers.count() + connections.institutions.count()
-
-# Community Connections page
-@register.simple_tag
-def connections_organization_projects(community, organization):
-    # can pass instance of institution or researcher 
-
-    # get all labels from target community
-    bclabels = BCLabel.objects.prefetch_related('project_bclabels').filter(community=community)
-    tklabels = TKLabel.objects.prefetch_related('project_tklabels').filter(community=community)
-
-    # set up a storage of projects to check for these labels
-    all_projects = []
-    # if project has particular label from these lists, append project
-    for bclabel in bclabels:
-        for project in bclabel.project_bclabels.all():
-            all_projects.append(project)
-    for tklabel in tklabels:
-        for project in tklabel.project_tklabels.all():
-            all_projects.append(project)
-    
-    # if project is found in target institution projects, append to target list
-    target_projects = []
-    for project in all_projects:
-        if isinstance(organization, Institution):
-            if ProjectCreator.objects.filter(institution=organization, project=project).exists():
-                target_projects.append(project)
-        if isinstance(organization, Researcher):
-            if ProjectCreator.objects.filter(researcher=organization, project=project).exists():
-                target_projects.append(project)
-
-    # Removes duplicates from the list
-    projects = set(target_projects)
-    return projects
 
 @register.simple_tag
 def anchor(url_name, section_id, community_id):

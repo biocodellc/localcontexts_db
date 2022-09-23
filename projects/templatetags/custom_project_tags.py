@@ -4,6 +4,7 @@ from researchers.models import Researcher
 from communities.models import Community
 from projects.models import Project, ProjectContributors, ProjectCreator
 from helpers.models import ProjectStatus, ProjectComment
+from itertools import chain
 
 register = template.Library()
 
@@ -46,6 +47,29 @@ def define(val=None):
 @register.simple_tag
 def which_communities_notified(project):
     return ProjectStatus.objects.select_related('community').filter(project=project)
+
+@register.simple_tag
+def connections_projects_through_labels(community, organization):
+    # pass instance of researcher or institution
+    # in organization created projects check if labels applied by target community
+
+    projects = Project.objects.none()
+
+    if isinstance(organization, Institution):
+        projects_list = list(chain(
+            organization.institution_created_project.filter(project__bc_labels__community=community).values_list('project__unique_id', flat=True),
+            organization.institution_created_project.filter(project__tk_labels__community=community).values_list('project__unique_id', flat=True)
+        ))
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=projects_list).order_by('-date_added')
+
+    if isinstance(organization, Researcher):
+        projects_list = list(chain(
+            organization.researcher_created_project.filter(project__bc_labels__community=community).values_list('project__unique_id', flat=True),
+            organization.researcher_created_project.filter(project__tk_labels__community=community).values_list('project__unique_id', flat=True)
+        ))
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=projects_list).order_by('-date_added')
+
+    return projects
 
 @register.simple_tag
 def discoverable_project_view(user, project_uuid):

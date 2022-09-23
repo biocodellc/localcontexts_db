@@ -1,4 +1,4 @@
-{% load static %}{% load custom_tags %} {% load custom_institution_tags %} {% load custom_researcher_tags %}
+{% load static %}{% load custom_project_tags %}{% load custom_tags %} {% load custom_institution_tags %} {% load custom_researcher_tags %}
 
 <div class="content-card-v2 content-card-space">
 
@@ -64,7 +64,7 @@
                     <div>
                         <h3> Related Projects </h3>
                         <ul>
-                            {% connections_organization_projects community institution as projects %}
+                            {% connections_projects_through_labels community institution as projects %}
                             {% for project in projects %}
                                 <li>
                                     <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
@@ -119,7 +119,7 @@
                         <h3> Related Projects </h3>
                         <p>
                             <ul>
-                                {% connections_organization_projects community researcher as projects%}
+                                {% connections_projects_through_labels community researcher as projects %}
                                 {% for project in projects %}
                                     <li>
                                         <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
@@ -184,10 +184,10 @@
                         <h3>Related Projects </h3>
                         <ul>
                             {% if researcher %}
-                                {% connections_projects_with_labels community researcher as projects %}
+                                {% connections_projects_through_labels community researcher as projects %}
                             {% endif %}
                             {% if institution %}
-                                {% connections_projects_with_labels community institution as projects %}
+                                {% connections_projects_through_labels community institution as projects %}
                             {% endif %}
 
                             {% for project in projects %}
