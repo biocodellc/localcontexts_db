@@ -731,26 +731,29 @@ def projects(request, pk):
                 status = ProjectStatus.objects.get(project=project, community=community)
 
                 if form.is_valid():
-                    data = form.save(commit=False)
-                    data.project = project
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
+                    if request.POST.get('comment_message'):
+                        data = form.save(commit=False)
+                        data.project = project
+                        data.sender = request.user
+                        data.community = community
+                        data.save()
 
-                    # If message is sent, set notice status to 'Seen'
-                    if status.seen == False:
-                        status.seen = True
-                        status.save()
+                        # If message is sent, set notice status to 'Seen'
+                        if status.seen == False:
+                            status.seen = True
+                            status.save()
 
-                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
+                            title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
-                        # Send Notification
-                        if creator.institution:
-                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                        if creator.researcher:
-                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                            # Send Notification
+                            if creator.institution:
+                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                            if creator.researcher:
+                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
 
-                    return redirect('community-projects', community.id)
+                        return redirect('community-projects', community.id)
+                    else:
+                        return redirect('community-projects', community.id)
 
         context = {
             'member_role': member_role,
@@ -838,26 +841,29 @@ def projects_with_labels(request, pk):
                 status = ProjectStatus.objects.get(project=project, community=community)
 
                 if form.is_valid():
-                    data = form.save(commit=False)
-                    data.project = project
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
+                    if request.POST.get('comment_message'):
+                        data = form.save(commit=False)
+                        data.project = project
+                        data.sender = request.user
+                        data.community = community
+                        data.save()
 
-                    # If message is sent, set notice status to 'Seen'
-                    if status.seen == False:
-                        status.seen = True
-                        status.save()
+                        # If message is sent, set notice status to 'Seen'
+                        if status.seen == False:
+                            status.seen = True
+                            status.save()
 
-                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
+                            title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
-                        # Send Notification
-                        if creator.institution:
-                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                        if creator.researcher:
-                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                            # Send Notification
+                            if creator.institution:
+                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                            if creator.researcher:
+                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
 
-                    return redirect('community-projects-labels', community.id)
+                        return redirect('community-projects', community.id)
+                    else:
+                        return redirect('community-projects', community.id)
 
         context = {
             'projects': projects,
@@ -945,26 +951,29 @@ def projects_with_notices(request, pk):
                 status = ProjectStatus.objects.get(project=project, community=community)
 
                 if form.is_valid():
-                    data = form.save(commit=False)
-                    data.project = project
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
+                    if request.POST.get('comment_message'):
+                        data = form.save(commit=False)
+                        data.project = project
+                        data.sender = request.user
+                        data.community = community
+                        data.save()
 
-                    # If message is sent, set notice status to 'Seen'
-                    if status.seen == False:
-                        status.seen = True
-                        status.save()
+                        # If message is sent, set notice status to 'Seen'
+                        if status.seen == False:
+                            status.seen = True
+                            status.save()
 
-                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
+                            title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
-                        # Send Notification
-                        if creator.institution:
-                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                        if creator.researcher:
-                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                            # Send Notification
+                            if creator.institution:
+                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                            if creator.researcher:
+                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
 
-                    return redirect('community-projects-notices', community.id)
+                        return redirect('community-projects', community.id)
+                    else:
+                        return redirect('community-projects', community.id)
 
         context = {
             'projects': projects,
@@ -1035,26 +1044,29 @@ def projects_creator(request, pk):
                 status = ProjectStatus.objects.get(project=project, community=community)
 
                 if form.is_valid():
-                    data = form.save(commit=False)
-                    data.project = project
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
+                    if request.POST.get('comment_message'):
+                        data = form.save(commit=False)
+                        data.project = project
+                        data.sender = request.user
+                        data.community = community
+                        data.save()
 
-                    # If message is sent, set notice status to 'Seen'
-                    if status.seen == False:
-                        status.seen = True
-                        status.save()
+                        # If message is sent, set notice status to 'Seen'
+                        if status.seen == False:
+                            status.seen = True
+                            status.save()
 
-                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
+                            title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
-                        # Send Notification
-                        if creator.institution:
-                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                        if creator.researcher:
-                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                            # Send Notification
+                            if creator.institution:
+                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                            if creator.researcher:
+                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
 
-                    return redirect('community-projects-creator', community.id)
+                        return redirect('community-projects', community.id)
+                    else:
+                        return redirect('community-projects', community.id)
 
         context = {
             'projects': projects,
@@ -1127,26 +1139,29 @@ def projects_contributor(request, pk):
                 status = ProjectStatus.objects.get(project=project, community=community)
 
                 if form.is_valid():
-                    data = form.save(commit=False)
-                    data.project = project
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
+                    if request.POST.get('comment_message'):
+                        data = form.save(commit=False)
+                        data.project = project
+                        data.sender = request.user
+                        data.community = community
+                        data.save()
 
-                    # If message is sent, set notice status to 'Seen'
-                    if status.seen == False:
-                        status.seen = True
-                        status.save()
+                        # If message is sent, set notice status to 'Seen'
+                        if status.seen == False:
+                            status.seen = True
+                            status.save()
 
-                        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
+                            title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
-                        # Send Notification
-                        if creator.institution:
-                            send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
-                        if creator.researcher:
-                            send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
+                            # Send Notification
+                            if creator.institution:
+                                send_simple_action_notification(request.user, creator.institution, title, 'Projects', reference_id)
+                            if creator.researcher:
+                                send_simple_action_notification(request.user, creator.researcher, title, 'Projects', reference_id)
 
-                    return redirect('community-projects-contributor', community.id)
+                        return redirect('community-projects', community.id)
+                    else:
+                        return redirect('community-projects', community.id)
 
         context = {
             'projects': projects,
