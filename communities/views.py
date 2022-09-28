@@ -999,14 +999,15 @@ def create_project(request, pk):
                 creator.community = community
                 creator.save()
 
-                # Get a project contributor object and add community to it.
-                contributors = ProjectContributors.objects.prefetch_related('communities').get(project=data)
-                contributors.communities.add(community)
-
                 # Get lists of contributors entered in form
                 institutions_selected = request.POST.getlist('selected_institutions')
                 researchers_selected = request.POST.getlist('selected_researchers')
 
+                # Get a project contributor object and add community to it.
+                contributors = ProjectContributors.objects.prefetch_related('communities').get(project=data)
+                contributors.communities.add(community)
+
+                # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
                 
                 # Project person formset

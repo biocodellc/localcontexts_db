@@ -475,7 +475,7 @@ def projects_contributor(request, pk):
 # Create Project
 @login_required(login_url='login')
 def create_project(request, pk):
-    researcher = Researcher.objects.get(id=pk)
+    researcher = Researcher.objects.select_related('user').get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')
@@ -504,10 +504,6 @@ def create_project(request, pk):
                 creator.researcher = researcher
                 creator.save()
 
-                 # Get a project contributor object and add researcher to it.
-                contributors = ProjectContributors.objects.prefetch_related('researchers').get(project=data)
-                contributors.researchers.add(researcher)
-
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
                 create_notices(notices_selected, researcher, data, None)
@@ -516,9 +512,10 @@ def create_project(request, pk):
                 institutions_selected = request.POST.getlist('selected_institutions')
                 researchers_selected = request.POST.getlist('selected_researchers')
 
-                # Get project contributors instance and add researcher to it
-                contributors = ProjectContributors.objects.get(project=data)
+                 # Get a project contributor object and add researcher to it.
+                contributors = ProjectContributors.objects.prefetch_related('researchers').get(project=data)
                 contributors.researchers.add(researcher)
+            
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
 

@@ -720,10 +720,6 @@ def create_project(request, pk):
                 creator.institution = institution
                 creator.save()
 
-                 # Get a project contributor object and add institution to it.
-                contributors = ProjectContributors.objects.prefetch_related('institutions').get(project=data)
-                contributors.institutions.add(institution)
-
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
                 create_notices(notices_selected, institution, data, None)
@@ -732,9 +728,10 @@ def create_project(request, pk):
                 institutions_selected = request.POST.getlist('selected_institutions')
                 researchers_selected = request.POST.getlist('selected_researchers')
 
-                # Get project contributors instance and add institution
-                contributors = ProjectContributors.objects.get(project=data)
+                 # Get a project contributor object and add institution to it.
+                contributors = ProjectContributors.objects.prefetch_related('institutions').get(project=data)
                 contributors.institutions.add(institution)
+                
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
 
