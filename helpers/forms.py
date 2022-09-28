@@ -40,7 +40,7 @@ class ProjectCommentForm(forms.ModelForm):
         model = ProjectComment
         fields = ['message']
         widgets = {
-            'message': forms.Textarea(attrs={'class': 'w-100', 'style': 'height: 111px; padding: 10px;', 'placeholder': 'Add Comment', 'name': 'comment_message'})
+            'message': forms.Textarea(attrs={'class': 'w-100', 'style': 'height: 111px; padding: 10px;', 'placeholder': 'Add comment'})
         }
 
 class LabelNoteForm(forms.ModelForm):
