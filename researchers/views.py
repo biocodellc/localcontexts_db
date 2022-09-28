@@ -500,10 +500,13 @@ def create_project(request, pk):
                 data.save()
 
                 # Add project to researcher projects
-                ProjectCreator.objects.create(researcher=researcher, project=data)
+                creator = ProjectCreator.objects.select_related('researcher').get(project=data)
+                creator.researcher = researcher
+                creator.save()
 
-                #Create EntitiesNotified instance for the project
-                EntitiesNotified.objects.create(project=data)
+                 # Get a project contributor object and add researcher to it.
+                contributors = ProjectContributors.objects.prefetch_related('researchers').get(project=data)
+                contributors.researchers.add(researcher)
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')

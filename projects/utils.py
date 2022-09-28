@@ -55,8 +55,6 @@ def project_status_seen_at_comment(user, community, creator, project):
 
 
 def add_to_contributors(request, contributors, institutions_list, researchers_list, project_id):
-    # TODO: Remove researchers and institutions on edit
-
     # Add each institution and researcher to contributors
     if institutions_list:
         for institution_id in institutions_list:
@@ -64,12 +62,7 @@ def add_to_contributors(request, contributors, institutions_list, researchers_li
             contributors.institutions.add(institution)
 
             # create notification
-            ActionNotification.objects.create(
-                institution=institution, 
-                notification_type='Projects',
-                reference_id = project_id,
-                title = 'Your institution has been added as a contributor on a Project'
-            )
+            send_simple_action_notification(None, institution, 'Your institution has been added as a contributor on a Project', 'Projects', project_id)
             # create email
             send_contributor_email(request, institution, project_id)
 
@@ -79,11 +72,6 @@ def add_to_contributors(request, contributors, institutions_list, researchers_li
             contributors.researchers.add(researcher)
 
             # create notification
-            ActionNotification.objects.create(
-                researcher=researcher, 
-                notification_type='Projects',
-                reference_id = project_id,
-                title = 'You have been added as a contributor on a Project'
-            )
+            send_simple_action_notification(None, researcher, 'You have been added as a contributor on a Project', 'Projects', project_id)
             # create email
             send_contributor_email(request, researcher, project_id)

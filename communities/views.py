@@ -966,7 +966,7 @@ def projects_contributor(request, pk):
 # Create Project
 @login_required(login_url='login')
 def create_project(request, pk):
-    community = Community.objects.get(id=pk)
+    community = Community.objects.select_related('community_creator').get(id=pk)
 
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
@@ -995,13 +995,12 @@ def create_project(request, pk):
                 data.save()
 
                 # Add project to community projects
-                ProjectCreator.objects.create(community=community, project=data)
+                creator = ProjectCreator.objects.select_related('community').get(project=data)
+                creator.community = community
+                creator.save()
 
-                #Create EntitiesNotified instance for the project
-                EntitiesNotified.objects.create(project=data)
-
-                # Get a project contrubutor object and add community to it.
-                contributors = ProjectContributors.objects.get(project=data)
+                # Get a project contributor object and add community to it.
+                contributors = ProjectContributors.objects.prefetch_related('communities').get(project=data)
                 contributors.communities.add(community)
 
                 # Get lists of contributors entered in form

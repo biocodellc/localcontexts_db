@@ -690,7 +690,7 @@ def projects_contributor(request, pk):
 # Create Project
 @login_required(login_url='login')
 def create_project(request, pk):
-    institution = Institution.objects.get(id=pk)
+    institution = Institution.objects.select_related('institution_creator').get(id=pk)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
@@ -716,10 +716,13 @@ def create_project(request, pk):
                 data.save()
                 
                 # Add project to institution projects
-                ProjectCreator.objects.create(institution=institution, project=data)
+                creator = ProjectCreator.objects.select_related('institution').get(project=data)
+                creator.institution = institution
+                creator.save()
 
-                #Create EntitiesNotified instance for the project
-                EntitiesNotified.objects.create(project=data)
+                 # Get a project contributor object and add institution to it.
+                contributors = ProjectContributors.objects.prefetch_related('institutions').get(project=data)
+                contributors.institutions.add(institution)
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
