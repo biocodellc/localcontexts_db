@@ -44,6 +44,7 @@
                                         <option value="seen"> Acknowledge Notice </option>
                                         <option value="pending"> Labels Pending </option>
                                         <option value="not_pending"> No Labels Pending </option>
+                                        <option value="labels_applied" disabled> Labels Applied </option>
                                     {% endif %} 
 
                                     {% if status.seen and status.status == None %}
@@ -51,6 +52,7 @@
                                         <option value="seen" selected="selected"> Acknowledge Notice </option>
                                         <option value="pending"> Labels Pending </option>
                                         <option value="not_pending"> No Labels Pending </option>
+                                        <option value="labels_applied" disabled> Labels Applied </option>
                                     {% endif %} 
 
                                     {% if status.seen and status.status == 'pending' %}
@@ -58,6 +60,7 @@
                                         <option value="seen"> Acknowledge Notice </option>
                                         <option value="pending" selected="selected"> Labels Pending </option>
                                         <option value="not_pending"> No Labels Pending </option>
+                                        <option value="labels_applied" disabled> Labels Applied </option>
                                     {% endif %}
 
                                     {% if status.seen and status.status == 'not_pending' %}
@@ -65,6 +68,15 @@
                                         <option value="seen"> Acknowledge Notice </option>
                                         <option value="pending"> Labels Pending </option>
                                         <option value="not_pending" selected="selected"> No Labels Pending </option>
+                                        <option value="labels_applied" disabled> Labels Applied </option>
+                                    {% endif %}
+
+                                    {% if status.seen and status.status == 'labels_applied' %}
+                                        <option disabled> ----------------- </option>
+                                        <option value="seen"> Acknowledge Notice </option>
+                                        <option value="pending"> Labels Pending </option>
+                                        <option value="not_pending"> No Labels Pending </option>
+                                        <option value="labels_applied" selected="selected" disabled> Labels Applied </option>
                                     {% endif %}
 
                                 {% endif %}

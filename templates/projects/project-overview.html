@@ -196,6 +196,7 @@
                             {% if status.seen and status.status == None %} Seen <br>{% endif %}                            
                             {% if status.seen and status.status == 'pending' %} Labels Pending <br>{% endif %}
                             {% if status.seen and status.status == 'not_pending' %} No Labels Pending <br>{% endif %}
+                            {% if status.seen and status.status == 'labels_applied' %} Labels Applied <br>{% endif %}
                         {% endfor %}
                     </p>
                 </div>

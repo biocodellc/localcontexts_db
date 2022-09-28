@@ -1145,7 +1145,8 @@ def apply_labels(request, pk, project_uuid):
                 
                 #reset status
                 status = ProjectStatus.objects.get(project=project, community=community)
-                status.status = None
+                status.seen = True
+                status.status = 'labels_applied'
                 status.save()
             else:
                 comm_title = 'Labels have been applied to the project ' + truncated_project_title + ' ...'

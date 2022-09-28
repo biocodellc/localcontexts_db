@@ -219,21 +219,23 @@ def researcher_projects(request, pk):
         
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
-                
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    
+                    return redirect('researcher-projects', researcher.id)
+            else:
                 return redirect('researcher-projects', researcher.id)
 
         context = {
@@ -282,20 +284,22 @@ def projects_with_labels(request, pk):
 
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('researcher-projects-labels', researcher.id)
+            else:
                 return redirect('researcher-projects-labels', researcher.id)
 
         context = {
@@ -343,20 +347,22 @@ def projects_with_notices(request, pk):
 
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('researcher-projects-notices', researcher.id)
+            else:
                 return redirect('researcher-projects-notices', researcher.id)
 
         context = {
@@ -388,20 +394,22 @@ def projects_creator(request, pk):
 
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('researcher-projects-creator', researcher.id)
+            else:
                 return redirect('researcher-projects-creator', researcher.id)
 
         context = {
@@ -435,20 +443,22 @@ def projects_contributor(request, pk):
 
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('researcher-projects-contributor', researcher.id)
+            else:
                 return redirect('researcher-projects-contributor', researcher.id)
 
         context = {
