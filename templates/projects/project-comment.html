@@ -40,39 +40,13 @@
                             {% endif %}
                         {% endfor %}
                         {% if member_role == 'admin' or member_role == 'editor' %}
-                            <div class="margin-top-16">
-                                <form method="POST" action="">
-                                    {% csrf_token %}
-                                    <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
-                                    <input type="hidden" value="{{ status.community.id }}" name="community-id">
-                                    <div class="flex-this row">
-                                        <div class="w-50">{{ form.message }}</div>
-                                        <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
-                                    </div>
-                                    {% if form.errors %}
-                                        <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
-                                    {% endif %}
-                                </form>        
-                            </div>
+                            {% include 'snippets/comment-box.html' %}
                         {% endif %} 
                     {% else %}
                         No comments yet
 
                         {% if member_role == 'admin' or member_role == 'editor' %}
-                            <div class="margin-top-16">
-                                <form method="POST" action="">
-                                    {% csrf_token %}
-                                    <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
-                                    <input type="hidden" value="{{ status.community.id }}" name="community-id">
-                                    <div class="flex-this row">
-                                        <div class="w-50">{{ form.message }}</div>
-                                        <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
-                                    </div>
-                                    {% if form.errors %}
-                                        <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
-                                    {% endif %}
-                                </form>        
-                            </div>
+                            {% include 'snippets/comment-box.html' %}
                         {% endif %}
                     {% endif %}
             {% endfor %}
@@ -114,39 +88,11 @@
                         </div>
                     {% endif %}
                 {% endfor %}
-                <div class="margin-top-16">
-                    <form method="POST" action="">
-                        {% csrf_token %}
-                        <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
-                        <input type="hidden" value="{{ status.community.id }}" name="community-id">
-                        <div class="flex-this row">
-                            <div class="w-50">{{ form.message }}</div>
-                            <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
-                        </div>
-                        {% if form.errors %}
-                            <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
-                        {% endif %}
-                    </form>        
-                </div>
+                {% include 'snippets/comment-box.html' %}
             {% else %}
                 No comments yet
-
-                <div class="margin-top-16">
-                    <form method="POST" action="">
-                        {% csrf_token %}
-                        <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
-                        <input type="hidden" value="{{ status.community.id }}" name="community-id">
-                        <div class="flex-this row">
-                            <div class="w-50">{{ form.message }}</div>
-                            <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
-                        </div>
-                        {% if form.errors %}
-                            <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
-                        {% endif %}
-                    </form>        
-                </div>
+                {% include 'snippets/comment-box.html' %}
             {% endif %}
-
 
         {% endfor %}
     {% endif %}
@@ -190,37 +136,13 @@
                 </div>
             {% endfor %}
             {% if member_role == 'admin' or member_role == 'editor' %}
-                <div class="margin-top-16">
-                    <form method="POST" action="">
-                        {% csrf_token %}
-                        <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
-                        <input type="hidden" value="{{ status.community.id }}" name="community-id">
-                        <div class="flex-this row">
-                            <div class="w-50">{{ form.message }}</div>
-                            <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
-                        </div>
-                        {% if form.errors %}
-                            <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
-                        {% endif %}
-                    </form>        
-                </div>
+                {% include 'snippets/comment-box.html' %}
             {% endif %} 
         {% else %}
+            No comments yet
+
             {% if member_role == 'admin' or member_role == 'editor' %}
-                <div class="margin-top-16">
-                    <form method="POST" action="">
-                        {% csrf_token %}
-                        <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
-                        <input type="hidden" value="{{ status.community.id }}" name="community-id">
-                        <div class="flex-this row">
-                            <div class="w-50">{{ form.message }}</div>
-                            <div class="margin-left-1"><button class="primary-btn action-btn" name="add-comment-btn">Send</button></div>
-                        </div>
-                        {% if form.errors %}
-                            <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
-                        {% endif %}
-                    </form>        
-                </div>
+                {% include 'snippets/comment-box.html' %}
             {% endif %} 
         {% endif %}
 
