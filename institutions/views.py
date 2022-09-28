@@ -437,20 +437,22 @@ def institution_projects(request, pk):
 
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('institution-projects', institution.id)
+            else:
                 return redirect('institution-projects', institution.id)
 
         context = {
@@ -498,20 +500,22 @@ def projects_with_labels(request, pk):
 
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('institution-projects-labels', institution.id)
+            else:
                 return redirect('institution-projects-labels', institution.id)
 
         context = {
@@ -560,20 +564,22 @@ def projects_with_notices(request, pk):
 
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('institution-projects-notices', institution.id)
+            else:
                 return redirect('institution-projects-notices', institution.id)
 
         context = {
@@ -604,20 +610,22 @@ def projects_creator(request, pk):
 
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('institution-projects-creator', institution.id)
+            else:
                 return redirect('institution-projects-creator', institution.id)
 
         context = {
@@ -655,16 +663,19 @@ def projects_contributor(request, pk):
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('institution-projects-contributor', institution.id)
+            else:
                 return redirect('institution-projects-contributor', institution.id)
 
         context = {

@@ -777,9 +777,9 @@ def projects_with_labels(request, pk):
                         data.save()
 
                         project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects', community.id)
+                        return redirect('community-projects-labels', community.id)
                     else:
-                        return redirect('community-projects', community.id)
+                        return redirect('community-projects-labels', community.id)
 
         context = {
             'projects': projects,
@@ -845,9 +845,9 @@ def projects_with_notices(request, pk):
                         data.save()
 
                         project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects', community.id)
+                        return redirect('community-projects-notices', community.id)
                     else:
-                        return redirect('community-projects', community.id)
+                        return redirect('community-projects-notices', community.id)
 
         context = {
             'projects': projects,
@@ -896,9 +896,9 @@ def projects_creator(request, pk):
                         data.save()
 
                         project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects', community.id)
+                        return redirect('community-projects-creator', community.id)
                     else:
-                        return redirect('community-projects', community.id)
+                        return redirect('community-projects-creator', community.id)
 
         context = {
             'projects': projects,
@@ -949,9 +949,9 @@ def projects_contributor(request, pk):
                         data.save()
 
                         project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects', community.id)
+                        return redirect('community-projects-contributor', community.id)
                     else:
-                        return redirect('community-projects', community.id)
+                        return redirect('community-projects-contributor', community.id)
 
         context = {
             'projects': projects,
