@@ -783,10 +783,14 @@ button[disabled],
     height: 116px;
 }
 
-/* Project Overview:Labels  */
+/* Small Labels  */
 .img-sizedown-small {
     width: 82px;
-    height: 62px;
+}
+
+/* Tiny Labels  */
+.img-sizedown-tiny {
+    width: 62px;
 }
 
 /* PROJECT: Notify */

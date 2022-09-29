@@ -58,7 +58,7 @@
                     {% if project.tk_labels.all %}
                         {% for tklabel in project.tk_labels.all %}
                             <div class="margin-left-8">
-                                {% include 'tklabels/mini-labels.html' %}
+                                {% include 'tklabels/tiny-labels.html' %}
                             </div>
                         {% endfor %}
                     {% endif %}
@@ -66,7 +66,7 @@
                     {% if project.bc_labels.all %}
                         {% for bclabel in project.bc_labels.all %}
                             <div class="margin-left-8">
-                                {% include 'bclabels/mini-labels.html' %}
+                                {% include 'bclabels/tiny-labels.html' %}
                             </div>
                         {% endfor %}
                     {% endif %}
@@ -76,13 +76,13 @@
                             {% for notice in project.project_notice.all %}
                                 {% if not notice.archived %}
                                     {% if notice.notice_type == 'biocultural' %}
-                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="62px"></div>
                                     {% endif %}
                                     {% if notice.notice_type == 'traditional_knowledge' %}
-                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="62px"></div>
                                     {% endif %}
                                     {% if notice.notice_type == 'attribution_incomplete' %}
-                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
+                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="62px"></div>
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}
