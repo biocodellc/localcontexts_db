@@ -42,7 +42,7 @@
                                 {% endif %}
                             {% endif %}
                         {% else %}
-                            {% if bclabel.created_by == request.user %}
+                            {% if member_role == 'admin' or member_role == 'editor' %}
                                 <div>
                                     <a class="primary-btn white-btn" href="{% url 'edit-label' community.id bclabel.unique_id %}">Propose an edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
                                 </div>   
@@ -64,7 +64,7 @@
                                 {% endif %}
                             {% endif %}
                         {% else %}
-                            {% if tklabel.created_by == request.user %}
+                            {% if member_role == 'admin' or member_role == 'editor' %}
                                 <div>
                                     <a class="primary-btn white-btn" href="{% url 'edit-label' community.id tklabel.unique_id %}">Propose an edit <i class="fa fa-pencil" aria-hidden="true"></i></a>
                                 </div>

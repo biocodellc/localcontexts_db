@@ -125,6 +125,7 @@ class ProjectStatus(models.Model):
     CHOICES = (
         ('pending', 'pending'),
         ('not_pending', 'not_pending'),
+        ('labels_applied', 'labels_applied'),
     )
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_status", db_index=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="status_community", blank=True)
