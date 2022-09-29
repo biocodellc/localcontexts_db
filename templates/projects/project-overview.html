@@ -42,7 +42,7 @@
             </div>
         </div>
 
-        <div class="w-40 flex-this column align-right margin-top-16">
+        <div class="w-40 flex-this column align-right">
             <div class="flex-this margin-bottom-8 w-100 flex-end">
                 
                 {% if community %}
@@ -96,7 +96,7 @@
                         {% if tklabels %}
                             {% for tklabel in tklabels %}
                                 <div class="margin-left-8">
-                                    {% include 'tklabels/mini-labels.html' %}
+                                    {% include 'tklabels/tiny-labels.html' %}
                                 </div>
                             {% endfor %}
                         {% endif %}
@@ -104,7 +104,7 @@
                         {% if bclabels %}
                             {% for bclabel in bclabels %}
                                 <div class="margin-left-8">
-                                    {% include 'bclabels/mini-labels.html' %}
+                                    {% include 'bclabels/tiny-labels.html' %}
                                 </div>
                             {% endfor %}
                         {% endif %}
@@ -116,13 +116,13 @@
                     {% if not notice.archived %}
                         <div class="flex-this flex-end">
                             {% if notice.notice_type == 'biocultural' %}
-                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="62px"></div>
                             {% endif %}
                             {% if notice.notice_type == 'traditional_knowledge' %}
-                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="62px"></div>
                             {% endif %}
                             {% if notice.notice_type == 'attribution_incomplete' %}
-                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
+                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="62px"></div>
                             {% endif %}
                         </div>
                     {% endif %}
