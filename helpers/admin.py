@@ -15,9 +15,6 @@ class EntitiesNotifiedAdmin(admin.ModelAdmin):
     list_display = ('project',)
     search_fields = ('project',)
 
-class ConnectionsAdmin(admin.ModelAdmin):
-    list_display = ('community', 'researcher', 'institution')
-
 class LabelVersionAdmin(admin.ModelAdmin):
     list_display = ('version', 'bclabel', 'tklabel', 'created', 'is_approved')
     readonly_fields = ('bclabel', 'tklabel', 'version', 'version_text', 'created_by', 'approved_by', 'created',)
@@ -45,6 +42,5 @@ admin.site.register(LabelVersion, LabelVersionAdmin)
 admin.site.register(LabelTranslationVersion, LabelTranslationVersionAdmin)
 admin.site.register(LabelTranslation, LabelTranslationAdmin)
 admin.site.register(EntitiesNotified, EntitiesNotifiedAdmin)
-admin.site.register(Connections, ConnectionsAdmin)
 admin.site.register(OpenToCollaborateNoticeURL, OpenToCollaborateNoticeURLAdmin)
 
