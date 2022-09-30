@@ -39,11 +39,7 @@ class Project(models.Model):
     project_data_guid = models.CharField(max_length=200, blank=True, null=True)
     providers_id = models.CharField(max_length=200, blank=True, null=True)
     project_boundary_geojson = models.JSONField(blank=True, null=True)
-    recommended_citation = models.TextField(null=True, blank=True)
-    geome_project_id = models.IntegerField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
-    publication_date = models.DateField(null=True, blank=True)
-    publication_date_ongoing = models.BooleanField(default=False, blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     date_modified = models.DateTimeField(auto_now=True, null=True)
     bc_labels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_bclabels", db_index=True)
@@ -68,12 +64,11 @@ class Project(models.Model):
             return False
 
     def has_notice(self):
-        if self.project_notice.all().exists():
-            for notice in self.project_notice.all():
-                if notice.archived:
-                    return False
-                else:
-                    return True
+        if self.project_notice.exists():
+            if self.project_notice.filter(archived=True).exists():
+                return False
+            elif self.project_notice.filter(archived=False).exists():
+                return True
         else:
             return False
 

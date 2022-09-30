@@ -19,6 +19,7 @@
                     {% else %}
                         {{ project.project_creator.username }}
                     {% endif %}
+                    
                     {% if project_creator.community %} at {{ project_creator.community }} | Community {% endif %}
                     {% if project_creator.institution %} at {{ project_creator.institution }} | Institution {% endif %}
                     {% if project_creator.researcher %} | Researcher {% endif %}
