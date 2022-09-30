@@ -10,12 +10,11 @@ register = template.Library()
 
 @register.simple_tag
 def which_account_created_project(project):
-    p = ProjectCreator.objects.select_related(
+    return ProjectCreator.objects.select_related(
         'community', 
         'institution', 
         'researcher', 
-        'researcher__user').filter(project=project)
-    return p[0] #1st in instances
+        'researcher__user').get(project=project)
 
 @register.simple_tag
 def show_project_notices(project):
