@@ -1128,16 +1128,6 @@ def apply_labels(request, pk, project_uuid):
                 contributors.communities.add(community)
                 contributors.save()
 
-                # Add project creator account to community connections
-                # Add community to project creator connections
-                creator = project.project_creator_project.select_related('institution', 'researcher').first()
-                if creator.institution:
-                    add_to_connections(community, creator.institution)
-                    add_to_connections(creator.institution, community)
-                elif creator.researcher:
-                    add_to_connections(community, creator.researcher)
-                    add_to_connections(creator.researcher, community)
-
                 # Archive Notices
                 for notice in notices:
                     notice.archived = True
@@ -1177,25 +1167,22 @@ def connections(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        connections = Connections.objects.prefetch_related(
-            'communities', 
-            'institutions', 
-            'researchers',
-            'communities__community_creator',
-            'institutions__institution_creator',
-            'researchers__user',
-            'communities__admins',
-            'communities__editors',
-            'communities__viewers',
-            'institutions__admins',
-            'institutions__editors',
-            'institutions__viewers',
-            ).get(community=community)
+        institution_ids = list(chain(
+            community.contributing_communities.exclude(institutions__id=None).values_list('institutions__id', flat=True),
+        ))
+
+        researcher_ids = list(chain(
+            community.contributing_communities.exclude(researchers__id=None).values_list('researchers__id', flat=True),
+        ))
+
+        institutions = Institution.objects.select_related('institution_creator').filter(id__in=institution_ids)
+        researchers = Researcher.objects.select_related('user').filter(id__in=researcher_ids)
 
         context = {
             'member_role': member_role,
             'community': community,
-            'connections': connections,
+            'researchers': researchers,
+            'institutions': institutions
         }
         return render(request, 'communities/connections.html', context)
         

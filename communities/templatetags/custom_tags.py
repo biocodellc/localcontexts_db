@@ -2,9 +2,9 @@ from django import template
 from django.urls import reverse
 from django.templatetags.static import static
 from notifications.models import ActionNotification
-from helpers.models import Connections
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
+from itertools import chain
 
 register = template.Library()
 
@@ -28,8 +28,11 @@ def community_notified_count(community):
 # How many connections gave been created (how many unique institutions or researchers have had a Label applied to a project)
 @register.simple_tag
 def connections_count(community):
-    connections = Connections.objects.prefetch_related('researchers', 'institutions').get(community=community)
-    return connections.researchers.count() + connections.institutions.count()
+    contributor_ids = list(chain(
+        community.contributing_communities.exclude(institutions__id=None).values_list('institutions__id', flat=True),
+        community.contributing_communities.exclude(researchers__id=None).values_list('researchers__id', flat=True),
+    ))
+    return len(contributor_ids)
 
 @register.simple_tag
 def anchor(url_name, section_id, community_id):

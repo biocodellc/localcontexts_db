@@ -1,8 +1,9 @@
 from django import template
 from django.urls import reverse
 from notifications.models import ActionNotification
-from helpers.models import Notice, Connections
+from helpers.models import Notice
 from projects.models import ProjectContributors, ProjectCreator
+from itertools import chain
 
 register = template.Library()
 
@@ -36,5 +37,7 @@ def researcher_contributing_projects(researcher):
 
 @register.simple_tag
 def connections_count(researcher):
-    connections = Connections.objects.prefetch_related('communities').get(researcher=researcher)
-    return connections.communities.count()
+    contributor_ids = list(chain(
+        researcher.contributing_researchers.exclude(communities__id=None).values_list('communities__id', flat=True),
+    ))
+    return len(contributor_ids)

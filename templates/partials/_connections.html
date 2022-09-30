@@ -18,198 +18,194 @@
 </div>
 
 {% if community %}
-    {% if connections %}
-        {% for institution in connections.institutions.all %}
+    {% for institution in institutions %}
 
-            <div class="dashcard show">
-                <div class="flex-this">
+        <div class="dashcard show">
+            <div class="flex-this">
 
-                    <div class="dashcard-img-container">
-                        <img loading="lazy" 
-                            class="profile-img" 
-                            src="{% if institution.image %} {{ institution.image.url }} {% else %} {% static 'images/placeholders/institution-place.jpg' %}{% endif %}" 
-                            alt="{{ institution.institution_name }} image"
-                        >
+                <div class="dashcard-img-container">
+                    <img loading="lazy" 
+                        class="profile-img" 
+                        src="{% if institution.image %} {{ institution.image.url }} {% else %} {% static 'images/placeholders/institution-place.jpg' %}{% endif %}" 
+                        alt="{{ institution.institution_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | 
+                            Location: {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}
+                            {% if not institution.city_town and not institution.state_province_region and not institution.country %}
+                                None specified
+                            {% endif %}
+                        </p>
                     </div>
-                    <div class="flex-this column dashcard-text-container">
-                        <div><h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3></div>
-                        <div>
-                            <p class="dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | 
-                                Location: {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}
-                                {% if not institution.city_town and not institution.state_province_region and not institution.country %}
-                                    None specified
-                                {% endif %}
-                            </p>
-                        </div>
-                        <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p></div>
-                    </div>
-
-                    <div class="dashcard-btn-container">
-                        <div>
-                            <span id="{{ institution.institution_name }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
-                        </div>
-                    </div>
-
+                    <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p></div>
                 </div>
 
-                <div id="expand-div-{{ institution.institution_name }}" class="hide">
-                    <div class="border-bottom-dash-teal">
-                        <p class="no-bottom-margin">
-                            <span class="bold">Account Contact Name</span> | {% if institution.institution_creator.get_full_name %}{{ institution.institution_creator.get_full_name }} {% else %} {{ institution.institution_creator.username }} {% endif %}
-                            <span class="bold margin-left-8">Account Contact Email</span> | {{ institution.institution_creator.email }}
-                            <span class="bold margin-left-8">Website</span> | {{ institution.website }} <br><br>
-                        </p>                        
-                    </div>
-
+                <div class="dashcard-btn-container">
                     <div>
-                        <h3> Related Projects </h3>
+                        <span id="{{ institution.institution_name }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="expand-div-{{ institution.institution_name }}" class="hide">
+                <div class="border-bottom-dash-teal">
+                    <p class="no-bottom-margin">
+                        <span class="bold">Account Contact Name</span> | {% if institution.institution_creator.get_full_name %}{{ institution.institution_creator.get_full_name }} {% else %} {{ institution.institution_creator.username }} {% endif %}
+                        <span class="bold margin-left-8">Account Contact Email</span> | {{ institution.institution_creator.email }}
+                        <span class="bold margin-left-8">Website</span> | {{ institution.website }} <br><br>
+                    </p>                        
+                </div>
+
+                <div>
+                    <h3> Related Projects </h3>
+                    <ul>
+                        {% projects_contributed_to community institution as projects %}
+                        {% for project in projects %}
+                            <li>
+                                <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    {% endfor %}
+    {% for researcher in researchers %}
+
+        <div class="dashcard show">
+            <div class="flex-this">
+                <div class="researcher-img-container">
+                    <img loading="lazy" 
+                        src=" {% if researcher.image %} {{ researcher.image.url }} {% else %} {% static 'images/placeholders/researcher-place.jpg' %} {% endif %}" 
+                        alt="{{ researcher.researcher_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3 darkteal-text">{% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Researcher | Location: 
+                            {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
+                            {% if profile.state_province_region %} {{ profile.state_province_region }}, {% endif %} 
+                            {% if profile.country.name %} {{ profile.country.name }}{% endif %}
+                            {% if not profile.city_town and not profile.state_province_region and not profile.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p></div>
+                </div>
+                <div class="dashcard-btn-container">
+                    <div>
+                        <span id="{{ researcher.id }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="expand-div-{{ researcher.id }}" class="hide">
+                <div class="border-bottom-dash-teal">
+                    <p class="no-bottom-margin">
+                        <span class="bold">Contact Email</span> | {% if researcher.contact_email %} {{ researcher.contact_email }} {% else %} {{ researcher.user.email }} {% endif %} <br><br>
+                    </p>   
+                </div> 
+                
+                <div>
+                    <h3> Related Projects </h3>
+                    <p>
                         <ul>
-                            {% connections_projects_through_labels community institution as projects %}
+                            {% projects_contributed_to community researcher as projects %}
                             {% for project in projects %}
                                 <li>
                                     <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
                                 </li>
-                            {% endfor %}
+                            {% endfor %}                                
                         </ul>
-                    </div>
+                    </p>
                 </div>
 
             </div>
 
-        {% endfor %}
-        {% for researcher in connections.researchers.all %}
+        </div>
 
-            <div class="dashcard show">
-                <div class="flex-this">
-                    <div class="researcher-img-container">
-                        <img loading="lazy" 
-                            src=" {% if researcher.image %} {{ researcher.image.url }} {% else %} {% static 'images/placeholders/researcher-place.jpg' %} {% endif %}" 
-                            alt="{{ researcher.researcher_name }} image"
-                        >
-                    </div>
-                    <div class="flex-this column dashcard-text-container">
-                        <div><h3 class="dashcard-h3 darkteal-text">{% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}</h3></div>
-                        <div>
-                            <p class="dashcard-subheader">Researcher | Location: 
-                                {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
-                                {% if profile.state_province_region %} {{ profile.state_province_region }}, {% endif %} 
-                                {% if profile.country.name %} {{ profile.country.name }}{% endif %}
-                                {% if not profile.city_town and not profile.state_province_region and not profile.country %}
-                                    None specified
-                                {% endif %}
-                            </p>
-                        </div>
-                        <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p></div>
-                    </div>
-                    <div class="dashcard-btn-container">
-                        <div>
-                            <span id="{{ researcher.id }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="expand-div-{{ researcher.id }}" class="hide">
-                    <div class="border-bottom-dash-teal">
-                        <p class="no-bottom-margin">
-                            <span class="bold">Contact Email</span> | {% if researcher.contact_email %} {{ researcher.contact_email }} {% else %} {{ researcher.user.email }} {% endif %} <br><br>
-                        </p>   
-                    </div> 
-                    
-                    <div>
-                        <h3> Related Projects </h3>
-                        <p>
-                            <ul>
-                                {% connections_projects_through_labels community researcher as projects %}
-                                {% for project in projects %}
-                                    <li>
-                                        <a href="{% anchor 'community-projects' project.unique_id community.id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
-                                    </li>
-                                {% endfor %}                                
-                            </ul>
-                        </p>
-                    </div>
-
-                </div>
-
-            </div>
-
-        {% endfor %}
-    {% endif %}
+    {% endfor %}
 {% endif %}
 
 {% if institution or researcher %}
-    {% if connections %}
-        {% for community in connections.communities.all %}
+    {% for community in communities %}
 
-            <div class="dashcard show">
-                <div class="flex-this">
+        <div class="dashcard show">
+            <div class="flex-this">
 
-                    <div class="dashcard-img-container">
-                        <img loading="lazy" 
-                            class="profile-img" 
-                            src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
-                            alt="{{ community.community_name }} image"
-                        >
-                    </div>
-                    <div class="flex-this column dashcard-text-container">
-                        <div><h3 class="dashcard-h3 darkteal-text">{{ community }}</h3></div>
-                        <div>
-                            <p class="dashcard-subheader">Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %} | 
-                                Location: {% if community.city_town %} {{ community.city_town }}, {% endif %} {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}
-                                {% if not community.city_town and not community.state_province_region and not community.country %}
-                                    None specified
-                                {% endif %}
-                            </p>
-                        </div>
-                        <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
-                    </div>
-
-                    <div class="dashcard-btn-container">
-                        <div>
-                            <span id="{{ community.community_name }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
-                        </div>
-                    </div>
-
-
+                <div class="dashcard-img-container">
+                    <img loading="lazy" 
+                        class="profile-img" 
+                        src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
+                        alt="{{ community.community_name }} image"
+                    >
                 </div>
-                <div id="expand-div-{{ community.community_name }}" class="hide">
-                    <div class="border-bottom-dash-teal">
-                        <p class="no-bottom-margin">
-                            <span class="bold">Account Contact Name</span> | {% if community.community_creator.get_full_name %} {{ community.community_creator.get_full_name }} {% else %} {{ community.community_creator.get_full_name }} {% endif %}
-                            <span class="bold margin-left-8">Account Contact Email</span> | {{ community.community_creator.email }} <br><br>
-                        </p>      
-                    </div>   
-                    
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3 darkteal-text">{{ community }}</h3></div>
                     <div>
-                        <h3>Related Projects </h3>
-                        <ul>
-                            {% if researcher %}
-                                {% connections_projects_through_labels community researcher as projects %}
+                        <p class="dashcard-subheader">Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %} | 
+                            Location: {% if community.city_town %} {{ community.city_town }}, {% endif %} {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}
+                            {% if not community.city_town and not community.state_province_region and not community.country %}
+                                None specified
                             {% endif %}
-                            {% if institution %}
-                                {% connections_projects_through_labels community institution as projects %}
-                            {% endif %}
-
-                            {% for project in projects %}
-                                <li>
-                                    <a
-                                        class="darkteal-text underline-hover"
-                                        {% if researcher %}
-                                            href="{% anchor 'researcher-projects' project.unique_id researcher.id %}"
-                                        {% endif %}
-                                        {% if institution %}
-                                            href="{% anchor 'institution-projects' project.unique_id institution.id %}"
-                                        {% endif %}
-                                    >
-                                        {{ project.title }}
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>                           
+                        </p>
                     </div>
+                    <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
+                </div>
+
+                <div class="dashcard-btn-container">
+                    <div>
+                        <span id="{{ community.community_name }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+
+
+            </div>
+            <div id="expand-div-{{ community.community_name }}" class="hide">
+                <div class="border-bottom-dash-teal">
+                    <p class="no-bottom-margin">
+                        <span class="bold">Account Contact Name</span> | {% if community.community_creator.get_full_name %} {{ community.community_creator.get_full_name }} {% else %} {{ community.community_creator.get_full_name }} {% endif %}
+                        <span class="bold margin-left-8">Account Contact Email</span> | {{ community.community_creator.email }} <br><br>
+                    </p>      
+                </div>   
+                
+                <div>
+                    <h3>Related Projects </h3>
+                    <ul>
+                        {% if researcher %}
+                            {% projects_contributed_to community researcher as projects %}
+                        {% endif %}
+                        {% if institution %}
+                            {% projects_contributed_to community institution as projects %}
+                        {% endif %}
+
+                        {% for project in projects %}
+                            <li>
+                                <a
+                                    class="darkteal-text underline-hover"
+                                    {% if researcher %}
+                                        href="{% anchor 'researcher-projects' project.unique_id researcher.id %}"
+                                    {% endif %}
+                                    {% if institution %}
+                                        href="{% anchor 'institution-projects' project.unique_id institution.id %}"
+                                    {% endif %}
+                                >
+                                    {{ project.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>                           
                 </div>
             </div>
-            
-        {% endfor %}
-    {% endif %}
+        </div>
+    
+    {% endfor %}
 {% endif %}
