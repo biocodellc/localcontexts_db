@@ -185,20 +185,3 @@ class LabelTranslationVersion(models.Model):
     class Meta:
         verbose_name = 'Label Translation Version'
         verbose_name_plural = 'Label Translation Versions'
-
-
-class Connections(models.Model):
-    community = models.OneToOneField(Community, null=True, on_delete=models.CASCADE, blank=True,  related_name="community_connections", db_index=True)
-    institution = models.OneToOneField(Institution, null=True, on_delete=models.CASCADE, blank=True, related_name="institution_connections",  db_index=True)
-    researcher = models.OneToOneField(Researcher, null=True, on_delete=models.CASCADE, blank=True, related_name="researcher_connections", db_index=True)
-    communities = models.ManyToManyField(Community, blank=True, related_name="communities_connected", db_index=True)
-    institutions = models.ManyToManyField(Institution, blank=True, related_name="institutions_connected", db_index=True)
-    researchers = models.ManyToManyField(Researcher, blank=True, related_name="researchers_connected", db_index=True)
-
-    def __str__(self):
-        return f"{self.community} - {self.institution} - {self.researcher}"
-
-    class Meta:
-        indexes = [models.Index(fields=['community', 'institution', 'researcher'])]
-        verbose_name = 'Connections'
-        verbose_name_plural = 'Connections'
