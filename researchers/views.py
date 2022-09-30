@@ -12,7 +12,7 @@ from accounts.utils import get_users_name
 
 from communities.models import Community
 from notifications.models import ActionNotification
-from helpers.models import OpenToCollaborateNoticeURL, ProjectStatus, ProjectComment, Notice, EntitiesNotified, Connections
+from helpers.models import OpenToCollaborateNoticeURL, ProjectStatus, ProjectComment, Notice, EntitiesNotified
 from projects.models import ProjectContributors, Project, ProjectPerson, ProjectCreator
 
 from projects.forms import *
@@ -652,10 +652,14 @@ def connections(request, pk):
     if user_can_view == False:
         return redirect('restricted')
     else:
-        connections = Connections.objects.get(researcher=researcher)
+        community_ids = list(chain(
+            researcher.contributing_researchers.exclude(communities__id=None).values_list('communities__id', flat=True),
+        ))
+        communities = Community.objects.select_related('community_creator').filter(id__in=community_ids)
+
         context = {
             'researcher': researcher,
-            'connections': connections,
             'user_can_view': user_can_view,
+            'communities': communities,
         }
         return render(request, 'researchers/connections.html', context)

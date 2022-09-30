@@ -13,7 +13,7 @@ from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson, ProjectCreator
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
-from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified, Connections, OpenToCollaborateNoticeURL
+from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified, OpenToCollaborateNoticeURL
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
@@ -871,24 +871,27 @@ def connections(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
-        connections = Connections.objects.prefetch_related(
-            'communities', 
-            'institutions', 
-            'researchers',
-            'communities__community_creator',
-            'institutions__institution_creator',
-            'researchers__user',
-            'communities__admins',
-            'communities__editors',
-            'communities__viewers',
-            'institutions__admins',
-            'institutions__editors',
-            'institutions__viewers',
-            ).get(institution=institution)
+        # TODO: figure out if this is needed
+        # institution_ids = list(chain(
+        #     institution.contributing_institutions.exclude(institutions__id=None).values_list('institutions__id', flat=True),
+        # ))
+
+        # researcher_ids = list(chain(
+        #     institution.contributing_institutions.exclude(researchers__id=None).values_list('researchers__id', flat=True),
+        # ))
+
+        community_ids = list(chain(
+            institution.contributing_institutions.exclude(communities__id=None).values_list('communities__id', flat=True),
+        ))
+        communities = Community.objects.select_related('community_creator').filter(id__in=community_ids)
+        # institutions = Institution.objects.select_related('institution_creator').filter(id__in=institution_ids)
+        # researchers = Researcher.objects.select_related('user').filter(id__in=researcher_ids)
             
         context = {
             'member_role': member_role,
             'institution': institution,
-            'connections': connections,
+            'communities': communities,
+            # 'researchers': researchers,
+            # 'institutions': institutions
         }
         return render(request, 'institutions/connections.html', context)

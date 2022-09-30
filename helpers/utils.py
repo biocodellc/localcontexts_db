@@ -11,7 +11,7 @@ from xhtml2pdf import pisa
 from communities.models import Community, JoinRequest, InviteMember
 from institutions.models import Institution
 from researchers.models import Researcher
-from .models import Connections, Notice
+from .models import Notice
 from notifications.models import *
 
 from helpers.emails import send_membership_email
@@ -155,30 +155,6 @@ def get_labels_json():
     json_data = open('./localcontexts/static/json/Labels.json')
     data = json.load(json_data) #deserialize
     return data
-
-def add_to_connections(target_org, org):
-    # target_org: whose connections
-    # org: who is being added
-
-    if isinstance(target_org, Community):
-        connections = Connections.objects.get(community=target_org)
-        if isinstance(org, Institution):
-            connections.institutions.add(org)
-        if isinstance(org, Researcher):
-            connections.researchers.add(org)
-        connections.save()
-
-    if isinstance(target_org, Institution):
-        connections = Connections.objects.get(institution=target_org)
-        if isinstance(org, Community):
-            connections.communities.add(org)
-        connections.save()
-
-    if isinstance(target_org, Researcher):
-        connections = Connections.objects.get(researcher=target_org)
-        if isinstance(org, Community):
-            connections.communities.add(org)
-        connections.save() 
 
 # Create/Update Notices
 def create_notices(selected_notices, organization, project, existing_notices):
