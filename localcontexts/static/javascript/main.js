@@ -828,10 +828,10 @@ function validateProjectDisableSubmitBtn() {
         submitProjectBtn.setAttribute('disabled', true)
         submitProjectBtn.innerText = 'Saving Project...'
         
-        setTimeout(function(){
+        window.addEventListener('load', function() {
             submitProjectBtn.innerText = oldValue;
             submitProjectBtn.removeAttribute('disabled');
-        }, 5000)
+        })
     }      
 
 }
@@ -1060,11 +1060,11 @@ if (window.location.href.includes('communities/view/') || window.location.href.i
         let oldValue = 'Send'
         btn.setAttribute('disabled', true)
         btn.innerText = 'Sending'
-    
-        setTimeout(function(){
+
+        window.addEventListener('load', function() {
             btn.innerText = oldValue;
-            btn.removeAttribute('disabled');
-        }, 9000)
+            btn.removeAttribute('disabled')
+        })
     }
 
     function closeModal(modal) {  
