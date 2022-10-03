@@ -680,7 +680,7 @@ def projects(request, pk):
         project_ids = list(set(projects_list)) # remove duplicate ids
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids).order_by('-date_added')
 
-        p = Paginator(projects, 5)
+        p = Paginator(projects, 10)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
@@ -749,7 +749,7 @@ def projects_with_labels(request, pk):
 
         projects = list(set(projects_list))
 
-        p = Paginator(projects, 5)
+        p = Paginator(projects, 10)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
@@ -817,7 +817,7 @@ def projects_with_notices(request, pk):
 
         projects = list(set(projects_list))
 
-        p = Paginator(projects, 5)
+        p = Paginator(projects, 10)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
@@ -868,7 +868,7 @@ def projects_creator(request, pk):
         created_projects = community.community_created_project.all().values_list('project__id', flat=True)
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=created_projects).order_by('-date_added')
 
-        p = Paginator(projects, 5)
+        p = Paginator(projects, 10)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
 
@@ -921,7 +921,7 @@ def projects_contributor(request, pk):
         contrib = community.contributing_communities.all().values_list('project__id', flat=True)
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=contrib).exclude(id__in=created_projects).order_by('-date_added')
 
-        p = Paginator(projects, 5)
+        p = Paginator(projects, 10)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
