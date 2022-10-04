@@ -1,4 +1,3 @@
-from re import search
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
@@ -422,6 +421,14 @@ def projects_creator(request, pk):
                     return redirect('researcher-projects-creator', researcher.id)
             else:
                 return redirect('researcher-projects-creator', researcher.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
@@ -429,6 +436,7 @@ def projects_creator(request, pk):
             'form': form,
             'user_can_view': user_can_view,
             'items': page,
+            'results': results,
         }
         return render(request, 'researchers/projects.html', context)
 
@@ -471,6 +479,14 @@ def projects_contributor(request, pk):
                     return redirect('researcher-projects-contributor', researcher.id)
             else:
                 return redirect('researcher-projects-contributor', researcher.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
@@ -478,9 +494,9 @@ def projects_contributor(request, pk):
             'form': form,
             'user_can_view': user_can_view,
             'items': page,
+            'results': results,
         }
         return render(request, 'researchers/projects.html', context)
-
 
 
 # Create Project

@@ -1,6 +1,7 @@
 import re
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.contrib import messages
 from django.core.paginator import Paginator
 from itertools import chain
@@ -712,6 +713,14 @@ def projects(request, pk):
                         return redirect('community-projects', community.id)
                     else:
                         return redirect('community-projects', community.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'member_role': member_role,
@@ -719,6 +728,7 @@ def projects(request, pk):
             'community': community,
             'form': form,
             'items': page,
+            'results': results,
         }
         return render(request, 'communities/projects.html', context)
 
@@ -899,6 +909,14 @@ def projects_creator(request, pk):
                         return redirect('community-projects-creator', community.id)
                     else:
                         return redirect('community-projects-creator', community.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
@@ -906,6 +924,7 @@ def projects_creator(request, pk):
             'form': form,
             'member_role': member_role,
             'items': page,
+            'results': results,
         }
         return render(request, 'communities/projects.html', context)
 
@@ -952,6 +971,14 @@ def projects_contributor(request, pk):
                         return redirect('community-projects-contributor', community.id)
                     else:
                         return redirect('community-projects-contributor', community.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
@@ -959,6 +986,7 @@ def projects_contributor(request, pk):
             'form': form,
             'member_role': member_role,
             'items': page,
+            'results': results,
         }
         return render(request, 'communities/projects.html', context)
 

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.contrib import messages
 from django.http import Http404
 from django.core.paginator import Paginator
@@ -454,6 +455,14 @@ def institution_projects(request, pk):
                     return redirect('institution-projects', institution.id)
             else:
                 return redirect('institution-projects', institution.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
@@ -461,6 +470,7 @@ def institution_projects(request, pk):
             'form': form,
             'member_role': member_role,
             'items': page,
+            'results': results,
         }
         return render(request, 'institutions/projects.html', context)
 
@@ -627,6 +637,14 @@ def projects_creator(request, pk):
                     return redirect('institution-projects-creator', institution.id)
             else:
                 return redirect('institution-projects-creator', institution.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
@@ -634,6 +652,7 @@ def projects_creator(request, pk):
             'form': form,
             'member_role': member_role,
             'items': page,
+            'results': results,
         }
         return render(request, 'institutions/projects.html', context)
 
@@ -677,6 +696,14 @@ def projects_contributor(request, pk):
                     return redirect('institution-projects-contributor', institution.id)
             else:
                 return redirect('institution-projects-contributor', institution.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
@@ -684,6 +711,7 @@ def projects_contributor(request, pk):
             'form': form,
             'member_role': member_role,
             'items': page,
+            'results': results,
         }
         return render(request, 'institutions/projects.html', context)
 
