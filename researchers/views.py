@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
+from django.db.models import Q
 from django.contrib import messages
 from django.http import Http404
 from django.core.paginator import Paginator
@@ -265,26 +266,19 @@ def projects_with_labels(request, pk):
     if user_can_view == False:
         return redirect('restricted')
     else:
-
         # 1. researcher projects + 
         # 2. projects researcher has been notified of 
         # 3. projects where researcher is contributor
+        projects_list = list(chain(
+            researcher.researcher_created_project.all().values_list('project__id', flat=True), 
+            researcher.researchers_notified.all().values_list('project__id', flat=True), 
+            researcher.contributing_researchers.all().values_list('project__id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
 
-        projects_list = []
-
-        for p in researcher.researcher_created_project.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            if p.project.has_labels():
-                projects_list.append(p.project)
-
-        for n in researcher.researchers_notified.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            if n.project.has_labels():
-                projects_list.append(n.project)
-
-        for c in researcher.contributing_researchers.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            if c.project.has_labels():
-                projects_list.append(c.project)
-
-        projects = list(set(projects_list))
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids
+            ).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids
+            ).exclude(tk_labels=None).order_by('-date_added')
 
         p = Paginator(projects, 10)
         page_num = request.GET.get('page', 1)
@@ -311,6 +305,14 @@ def projects_with_labels(request, pk):
                     return redirect('researcher-projects-labels', researcher.id)
             else:
                 return redirect('researcher-projects-labels', researcher.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
@@ -318,6 +320,7 @@ def projects_with_labels(request, pk):
             'form': form,
             'user_can_view': user_can_view,
             'items': page,
+            'results': results,
         }
         return render(request, 'researchers/projects.html', context)
 
