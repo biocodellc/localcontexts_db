@@ -70,6 +70,61 @@ select {
 
 input[name=contributors] { width: 416px; }
 
+/* Project Searchbar */
+
+.searchbar-divider {
+    border: 1px solid #B3D5DA;
+    margin-bottom: 16px;
+}
+
+.project-searchbar {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #007385;
+    border-radius: 4px;
+    width: 377px;
+}
+
+input[name=q] { width: 85%; }
+
+input[name=q], .search-btn { 
+    display: block;
+    padding: 8px 16px;
+    height: 40px;
+    border: none;
+    border-radius: 4px;
+}
+
+.project-sort {
+    display: block;
+    padding: 8px 16px;
+    height: 42px;
+    border: 1px solid #007385;
+    border-radius: 4px;
+}
+
+input[name=q]::placeholder, .project-sort {
+    color: #007385;
+    font-weight: bold;
+}
+
+input[name=q]:focus, .project-sort:focus {
+    outline: none;
+    border: 1px solid #007385;
+    border-radius: 4px;
+}
+input[name=q]:focus {
+    border-right: 2px solid #007385;
+}
+
+.search-btn {
+    width: 15%;
+    background-color: #fff;
+    color:#007385;
+    cursor: pointer;
+    padding: 8px 16px;
+}
+
 textarea {
     background-color: #fff;
     border: 1px solid #1F2937;
