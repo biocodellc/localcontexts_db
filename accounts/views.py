@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages, auth
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.views.generic import View
 from django.contrib.auth.views import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
@@ -323,10 +324,19 @@ def registry_communities(request):
     try:
         # Paginate the query of all approved communities
         c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
+        if request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('community_name')
+                query = SearchQuery(q)
+                results = c.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
+            
         p = Paginator(c, 5)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
-        context = { 'communities': True, 'items': page }
+        context = { 'communities': True, 'items': page, 'results': results }
         return render(request, 'accounts/registry.html', context)
     except:
         raise Http404()
@@ -335,11 +345,20 @@ def registry_communities(request):
 def registry_institutions(request):
     try:
         i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
+        if request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('institution_name')
+                query = SearchQuery(q)
+                results = i.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
+
         p = Paginator(i, 5)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
 
-        context = { 'institutions': True, 'items': page,}
+        context = { 'institutions': True, 'items': page, 'results': results}
         return render(request, 'accounts/registry.html', context)
     except:
         raise Http404()
@@ -348,11 +367,20 @@ def registry_institutions(request):
 def registry_researchers(request):
     try:
         r = Researcher.objects.select_related('user').all().order_by('user__username')
+        if request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('user')
+                query = SearchQuery(q)
+                results = r.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
+
         p = Paginator(r, 5)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
 
-        context = { 'researchers': True, 'items': page,}
+        context = { 'researchers': True, 'items': page, 'results': results}
         return render(request, 'accounts/registry.html', context)
     except:
         raise Http404()

@@ -16,7 +16,7 @@
 
             <form method="POST" action="">
                 {% csrf_token %}
-                <input id="project-id-input-{{ project.unique_id }}" type="hidden" value="placeholder" name="project-uuid">
+                <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
                 <input id="status-selection-input-{{ project.unique_id }}" type="hidden" value="placeholder" name="project-status">
 
                 <div class="border-top-solid-teal">
@@ -33,7 +33,7 @@
 
                 <div><span>Project Decision </span></div>
                 <div class="flex-this">
-                    <div class="margin-right-1"><select id="select-{{ project.unique_id }}" onchange="setProjectUUID(this)">
+                    <div class="margin-right-1"><select id="select-{{ project.unique_id }}" onchange="setProjectStatus(this)">
                         {% project_status project as statuses %}
 
                         {% if statuses %}

@@ -77,7 +77,7 @@ input[name=contributors] { width: 416px; }
     margin-bottom: 16px;
 }
 
-.project-searchbar {
+.default-searchbar {
     display: flex;
     justify-content: space-between;
     border: 1px solid #007385;
