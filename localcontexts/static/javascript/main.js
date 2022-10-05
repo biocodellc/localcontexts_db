@@ -755,15 +755,12 @@ function cloneForm(el) {
 }
 
 // Communities: Projects: Notify status
-function setProjectUUID(elem) {
+function setProjectStatus(elem) {
     let elementId = elem.id
     let projectID = elementId.slice(7)
     let statusSelect = document.getElementById(elementId)
-    let projectIdInput = document.getElementById(`project-id-input-${projectID}`)
     let statusSelectedInput = document.getElementById(`status-selection-input-${projectID}`)
 
-    // Set first hidden value to project UUID
-    projectIdInput.value = projectID
     // Set second hidden value to value of option selected
     statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
 }
