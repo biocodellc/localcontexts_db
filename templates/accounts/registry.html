@@ -54,11 +54,11 @@
     {% if communities %}
         {% if results %}
             {% for community in results %}
-                {% include 'partials/infocards/_account-card.html' %}
+                {% include 'partials/infocards/_community-card.html' %}
             {% endfor %}
         {% else %}
             {% for community in items %}
-                {% include 'partials/infocards/_account-card.html' %}
+                {% include 'partials/infocards/_community-card.html' %}
             {% endfor %}
         {% endif %}
     {% endif %}
@@ -66,11 +66,11 @@
     {% if institutions %}
         {% if results %}
             {% for institution in results %}
-                {% include 'partials/infocards/_account-card.html' %}
+                {% include 'partials/infocards/_institution-card.html' %}
             {% endfor %}
         {% else %}
             {% for institution in items %}
-                {% include 'partials/infocards/_account-card.html' %}
+                {% include 'partials/infocards/_institution-card.html' %}
             {% endfor %}
         {% endif %}
     {% endif %}
@@ -78,11 +78,11 @@
     {% if researchers %}
         {% if results %}
             {% for researcher in results %}
-                {% include 'partials/infocards/_account-card.html' %}
+                {% include 'partials/infocards/_researcher-card.html' %}
             {% endfor %}
         {% else %}
             {% for researcher in items %}
-                {% include 'partials/infocards/_account-card.html' %}
+                {% include 'partials/infocards/_researcher-card.html' %}
             {% endfor %}
         {% endif %}
     {% endif %}
