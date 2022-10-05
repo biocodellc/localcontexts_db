@@ -5,24 +5,32 @@
         <div>
             <h2 class="no-top-margin">Verify your email</h2>              
         </div>
-        <p class="no-top-margin">A verification link has been sent to the email you provided. <br>
-    
-        If you have verified your email, you're all set! You can close this window. <br><br>
-        
-        Didn't get an email? <br>Check your spam inbox or enter the email you used at registration to send it again.</p>
-            
+        <div class="w-90">
+            <p class="no-top-margin">
+                <strong>A verification link has been sent to the email you provided.</strong><br>
+                <ul>
+                    <li>Your email must be verified within 30 days in order to be activated.</li>
+                    <li>If you have verified your email, you’re all set! You can close this window.</li>
+                </ul>
+
+                <strong>Didn't get an email?</strong><br>
+                <ul>
+                    <li>Check your spam or junk folder for an email from no-reply@localcontextshub.org</li>
+                    <li>If you do not receive an email within 5 minutes, please enter your email below to send it again. If you have not received an email after this, please contact us.</li>
+                </ul>
+            </p>            
+        </div>
+        <br>
+        <br>
+
         <form method="POST" action="">
             {% csrf_token %}
-            <div class="w-100 flex-this">
+            <div class="w-100 flex-this justify-center">
     
-                <div class="w-60">
-                    {{ form.email }}
+                <div class="w-50">{{ form.email }}</div>
+                <div class="margin-left-8">
+                    <button class="primary-btn action-btn">Resend email</button>    
                 </div>
-    
-                <div class="w-40">
-                    <button id="resend-email-btn" class="primary-btn action-btn">Resend email</button>    
-                </div>
-        
             </div>
         </form>
     </div>

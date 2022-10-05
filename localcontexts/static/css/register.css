@@ -152,16 +152,6 @@
     text-align: center;
 }
 
-/* Verify Buttons */
-
-#resend-email-btn {
-    border: none;
-    max-width: 130px;
-    min-width: 130px;
-    margin-left: 2%;
-    margin-top: 2px;
-}
-
 /* Create Profile Page Country Select */
 .country-container select{
     width: 100%;

@@ -158,15 +158,11 @@ input:focus {
 /* CURSOR */
 .pointer { cursor: pointer;}
 
-/* TEXT */
+/* TEXT SIZE & WEIGHT */
 .bold { font-weight: bold; }
-
 .p-28 { font-size: 28px; }
-
 .p-24 { font-size: 24px; }
-
 .font-size-14 { font-size: 14px; }
-
 .font-size-12 { font-size: 12px; }
 
 /* Underline text on hover */
@@ -175,84 +171,49 @@ input:focus {
 /* TEXT COLORS */
 
 .darkteal-text { color: #007585; }
-
 .white-text { color: #fff; }
-
 .primary-black-text { color: #333; }
-
 .orange-text { color: #EF6C00; }
-
 .grey-text { color: #A09D9D; }
-
 .red-text { color:#ff0000; }
 
 /* BACKGROUND COLORS */
 
 .orange-bg { background-color: #EF6C00; }
-
 .white-bg { background-color: #fff; }
-
 .grey { background-color: #A09D9D; }
 
 /* TEXT */
 .upper { text-transform: uppercase;}
-
 .center-text { text-align: center; }
-
 .right-text { text-align: right; }
 
 /* MARGIN & PADDING */
-
 .margin-top-1 { margin-top: 1%; }
-
 .margin-right-1 { margin-right: 1%; }
-
 .margin-left-1 { margin-left: 1%; }
-
 .margin-top-2 { margin-top: 2%; }
-
 .margin-bottom-2 { margin-bottom: 2%; }
-
 .auto-margin { margin: auto; }
-
 .no-top-margin { margin-top: 0; }
-
 .no-bottom-margin { margin-bottom: 0; }
-
 .margin-top-8 { margin-top: 8px; }
-
 .margin-bottom-8 { margin-bottom: 8px; }
-
 .margin-left-8 { margin-left: 8px; }
-
 .margin-right-8 { margin-right: 8px; }
-
 .margin-left-16 { margin-left: 16px; }
-
 .margin-right-16 { margin-right: 16px; }
-
 .margin-top-16 { margin-top: 16px; }
-
 .margin-bottom-16 { margin-bottom: 16px; }
-
 .no-top-pad { padding-top: 0; }
-
 .no-bottom-pad { padding-bottom: 0px; }
-
 .pad-top-1 { padding-top: 1%; }
-
 .pad-top-1-5 { padding-top: 1.5%; }
-
 .pad-left-1-5 { padding-left: 1.5%; }
-
 .pad-left-2 { padding-left: 2%; }
-
 .pad-right-1{ padding-right: 1%; }
-
 .padding-bottom-1 { padding-bottom: 1%; }
-
 .padding-bottom-2 { padding-bottom: 2%; }
-
 .no-left-padding { padding-left: 0; }
 
 /* BORDERS */
@@ -274,50 +235,29 @@ input:focus {
 
 /* FLEX */
 .flex-this { display: flex; }
-
 .row { flex-direction: row; }
-
 .column { flex-direction: column; }
-
 .flex-end { justify-content: flex-end; }
-
 .flex-start { justify-content: flex-start; }
-
 .space-between { justify-content: space-between; }
-
 .justify-center { justify-content: center; }
-
 .align-center { align-items: center; }
-
 .align-right { align-items: flex-end; }
-
 .wrap {flex-wrap: wrap; }
-
 .block {display: block; }
 
 /* WIDTHS */
 .w-5 { width: 5%; }
-
 .w-10 { width: 10%; }
-
 .w-15 { width: 15%; }
-
 .w-20 { width: 20%; }
-
 .w-30 { width: 30%; }
-
 .w-40 { width: 40%; }
-
 .w-50 { width: 50%; }
-
 .w-60 { width: 60%; }
-
 .w-70 { width: 70%; }
-
 .w-80 { width: 80%; }
-
 .w-90 { width: 90%; }
-
 .w-100 { width: 100%; }
 
 /* ACTION Buttons / Register,Sign in, etc. */
