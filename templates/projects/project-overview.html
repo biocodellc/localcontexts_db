@@ -58,27 +58,24 @@
                     <a href="{% url 'view-project' project.unique_id %}" class="primary-btn white-btn">View <i class="fa fa-arrow-right"></i></a>
                 </div>
 
-                {% if not project.has_labels %}
-                    {% if request.user == project.project_creator %}
-                        <div class="margin-right-1">
-                            <a
-                                class="primary-btn white-btn"
-
-                                {% if community %}
-                                    href="{% url 'edit-project' community.id project.unique_id %}"
-                                {% endif %}
-                                {% if institution %}
-                                    href="{% url 'inst-edit-project' institution.id project.unique_id %}"
-                                {% endif %}                        
-                                {% if researcher %}
-                                    href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
-                                {% endif %}   
-                            >
-                                Edit <i class="fa fa-edit" aria-hidden="true"></i>
-                            </a>                     
-                        </div>
-                    {% endif %}   
-                {% endif %}
+                {% if request.user == project.project_creator %}
+                    <div class="margin-right-1">
+                        <a
+                            class="primary-btn white-btn"
+                            {% if community %}
+                                href="{% url 'edit-project' community.id project.unique_id %}"
+                            {% endif %}
+                            {% if institution %}
+                                href="{% url 'inst-edit-project' institution.id project.unique_id %}"
+                            {% endif %}                        
+                            {% if researcher %}
+                                href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
+                            {% endif %}   
+                        >
+                            Edit <i class="fa fa-edit" aria-hidden="true"></i>
+                        </a>                     
+                    </div>
+                {% endif %}   
 
                 <div class="text-align-right">
                     <a id="{{ project.unique_id }}" class="primary-btn white-btn" onclick='showMore(this)'>
