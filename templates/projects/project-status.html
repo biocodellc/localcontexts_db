@@ -16,23 +16,24 @@
 
             <form method="POST" action="">
                 {% csrf_token %}
-                <input id="project-id-input-{{ project.unique_id }}" type="hidden" value="placeholder" name="project-uuid">
+                <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
                 <input id="status-selection-input-{{ project.unique_id }}" type="hidden" value="placeholder" name="project-status">
 
                 <div class="border-top-solid-teal">
                     <h3>Project Decision</h3>
                     <p>
                         The three options your community can choose are:<br>
-                        <strong>Acknowledge Notice</strong> - Meaning you've seen the Project but have not made a decision about applying Labels.<br>
-                        <strong>Labels Pending</strong>  - Meaning your community could apply Labels.<br>
-                        <strong>No Labels Pending</strong> - Meaning your community will not be applying Labels.
+                        <i>Acknowledge Notice</i> - You have seen the Project but have not made a decision about applying Labels.<br>
+                        <i>Labels Pending</i>  - You are deciding which Label(s) to apply to the Project.<br>
+                        <i>No Labels Pending</i> - You will not apply Labels to the Project.<br>
+                        <i>Labels Applied</i> - This will automatically be your status if you have applied Labels to the Project.
                     </p>                            
                 </div>
 
 
                 <div><span>Project Decision </span></div>
                 <div class="flex-this">
-                    <div class="margin-right-1"><select id="select-{{ project.unique_id }}" onchange="setProjectUUID(this)">
+                    <div class="margin-right-1"><select id="select-{{ project.unique_id }}" onchange="setProjectStatus(this)">
                         {% project_status project as statuses %}
 
                         {% if statuses %}

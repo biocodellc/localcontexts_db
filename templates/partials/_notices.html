@@ -4,7 +4,7 @@
         <div class="w-60"><h2 class="no-top-margin">Notices</h2></div>
             {% if researcher %}
                 <div class="flex-this align-center">
-                    <a class="primary-btn action-btn margin-top-2" href="{% url 'researcher-create-project' researcher.id %}">
+                    <a class="primary-btn green-btn margin-top-2" href="{% url 'researcher-create-project' researcher.id %}">
                         Create a Project     <i class="fa fa-arrow-right"></i>
                     </a>
                 </div>
@@ -13,7 +13,7 @@
             {% if institution %}
                 <div class="flex-this align-center">
                     {% if member_role == 'admin' or member_role == 'editor' %}
-                        <a class="primary-btn action-btn margin-top-2" href="{% url 'inst-create-project' institution.id %}">
+                        <a class="primary-btn green-btn margin-top-2" href="{% url 'inst-create-project' institution.id %}">
                             Create a Project     <i class="fa fa-arrow-right"></i>
                         </a>
                     {% endif %}
@@ -33,7 +33,7 @@
     <div class="flex-this space-between">
         <div><h2 class="no-top-margin">Open to Collaborate Notice</h2></div>
         <div class="flex-this flex-end">
-            <div class="margin-top-8 margin-right-8"><a id="addURLBtn" class="darkteal-text underline-hover pointer">Add URL</a></div>
+            <div class="margin-top-8 margin-right-8"><a id="addURLBtn" class="darkteal-text underline-hover pointer">Add Link</a></div>
             <div><a href="{% url 'download-open-to-collaborate-notice' %}" class="primary-btn white-btn">Download Notice</a></div>
         </div>
     </div>
@@ -43,19 +43,19 @@
             <div class="w-90">
                 <p class="no-top-margin">
                     <span class="darkteal-text bold">Why Use this Notice?</span><br>
-                    The Open to Collaborate Notice indicates that a researcher or an institution is committed to developing new modes of collaboration, engagement, and partnership over Indigenous collections and data that have colonial and/or problematic histories or unclear provenance. This notice indicates a commitment to change and to develop new processes for the care and stewardship of past and future heritage collections.                    
-                </p>        
-            </div>
-            <div class="w-90">
+                    The Open to Collaborate Notice indicates that a researcher or an institution is committed to developing new modes of collaboration, engagement, and partnership over Indigenous collections and data that have colonial and/or problematic histories or unclear provenance. This notice indicates a commitment to change and to develop new processes for the care and stewardship of past and future heritage collections.
+                </p>
                 <p>
                     <span class="darkteal-text bold">Notice Text</span><br>
                     Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.                    
-                </p>         
-            </div>
-
-            <div>
+                </p> 
                 <p>
-                    <span class="darkteal-text bold">Places this Notice is being used</span><br>
+                    <span class="darkteal-text bold">How can I apply this Notice?</span><br>
+                    Unlike the other Notices, you do not need to make a project to generate an Open to Collaborate Notice. Click the “Download Notice” button on this page to download the icon image file, Notice text, and usage guide. The usage guide includes information about how to apply the Notice.<br>
+                    If you add your Open to Collaborate Notice to a website, click the “Add Link” button and enter the information about where your Notice is displayed. If you have applied the Notice in multiple places, you can add multiple links.
+                </p>             
+                <p>
+                    <span class="darkteal-text bold">Places this Notice has been applied</span><br>
                     {% if urls %}
                         <ul>
                             {% for url in urls %}
@@ -65,7 +65,7 @@
                             {% endfor %}
                         </ul>
                     {% else %}
-                        Click on 'Add URL' to add a location where this Notice is currently displayed
+                        Click on the 'Add Link’ button to add where your Notice is displayed. These links will be visible on your account’s page in the registry.
                     {% endif %}
                 </p>
             </div>
@@ -82,7 +82,7 @@
                 {% csrf_token %}
 
                 <div class="flex-this space-between">
-                    <div><h2 class="primary-black-text">Add Open to Collaborate Notice URL</h2></div>
+                    <div><h2 class="primary-black-text">Add Open to Collaborate Notice Link</h2></div>
                     <div>
                         <div class="primary-btn white-btn close-modal-btn">Close X</div>
                     </div>            
@@ -90,15 +90,23 @@
 
                 <div>
                     <p>
-                        Add URL where the Open to Collaborate Notice is displayed
+                        If you have added an Open to Collaborate Notice to a website, add the link where it appears. If you have applied the Notice in multiple places, you can add multiple links.
                     </p>  
-                    {{ form.name.label }}<br>
+                    {{ form.name.label }}
+                    <div class="tooltip"><strong>i</strong>
+                        <span class="tooltiptext">The name of the website or webpage where the Notice is displayed. This will appear on your account’s public page in the registry.</span>
+                    </div>
+                    <br>
                     {{ form.name }}<br>
-                    {{ form.url.label }}<br>
+                    {{ form.url.label }}
+                    <div class="tooltip"><strong>i</strong>
+                        <span class="tooltiptext">The web address or link where the Notice is displayed.</span>
+                    </div>
+                    <br>
                     {{ form.url }}
                 </div>
                 <div class="flex-this flex-end w-100 margin-top-16">
-                    <button class="primary-btn action-btn">Add URL</button>    
+                    <button class="primary-btn action-btn">Add Link</button>    
                 </div>
             </form>
         </div>

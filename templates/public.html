@@ -188,10 +188,10 @@
                 {% include 'partials/_alerts.html' %}
             </div>
         </div>
-        <div>
-            <h3>Notices used</h3>
-            <div class="flex-this">
-                <div class="flex-this w-50">
+        <div class="flex-this">
+            <div class="flex-this column w-50">
+                <h3>Notices Used</h3>
+                <div class="flex-this">
                     {% if bcnotice %} 
                         <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="90px" alt="black square with white letters BC in the middle"></div>
                     {% endif %}
@@ -205,10 +205,13 @@
                     {% endif %}
                     {% if not bcnotice and not tknotice and not attrnotice %} No Notices to display yet {% endif %}
                 </div>
+            </div>
 
-                {% if otc_notices %}
+            {% if otc_notices %}
+                <div class="flex-this column">
+                    <h3>Open To Collaboration</h3>
                     <div class="flex-this">
-                        <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="90px" alt="black square with white rectangle being held by two hands in the middle"></div>
+                        <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="90px" alt="black square with white rectangle being held by two hands in the middle"></div>
                         <ul>
                             {% for notice in otc_notices %}
                                 <li>
@@ -217,10 +220,10 @@
                                     </a>
                                 </li>
                             {% endfor %}
-                        </ul>                                    
-                    </div>
-                {% endif %}
-            </div>
+                        </ul>                          
+                    </div>          
+                </div>
+            {% endif %}
         </div>
     {% endif %}
 
@@ -297,10 +300,11 @@
             </div>
 
         </div>
-        <div>
-            <h3>Notices used</h3>
-            <div class="flex-this">
-                <div class="flex-this w-50">
+
+        <div class="flex-this">
+            <div class="flex-this column w-50">
+                <h3>Notices Used</h3>
+                <div class="flex-this">
                     {% if bcnotice %} 
                         <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="90px" alt="black square with white letters BC in the middle"></div>
                     {% endif %}
@@ -314,10 +318,13 @@
                     {% endif %}
                     {% if not bcnotice and not tknotice and not attrnotice %} No Notices to display yet {% endif %}
                 </div>
+            </div>
 
-                {% if otc_notices %}
+            {% if otc_notices %}
+                <div class="flex-this column">
+                    <h3>Open To Collaboration</h3>
                     <div class="flex-this">
-                        <div class="margin-right-16"><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="90px" alt="black square with white rectangle being held by two hands in the middle"></div>
+                        <div class="margin-right-8"><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="90px" alt="black square with white rectangle being held by two hands in the middle"></div>
                         <ul>
                             {% for notice in otc_notices %}
                                 <li>
@@ -326,10 +333,10 @@
                                     </a>
                                 </li>
                             {% endfor %}
-                        </ul>                                    
-                    </div>
-                {% endif %}
-            </div>
+                        </ul>                          
+                    </div>          
+                </div>
+            {% endif %}
         </div>
     {% endif %}
 
@@ -354,7 +361,10 @@
                 <div class="modal-content-padding w-100">
                     <div>
                         <h2 class="primary-black-text">Just checking...</h2>  
-                        <p>Are you sure you want to send a request to join this account?</p>  
+                        <p>
+                            Are you sure you want to send a request to join this account? <strong>You should request to join community and institution accounts you are already affiliated with. </strong> <br><br>
+                            If you wish to collaborate with a community or institution you are not affiliated with, you will connect with them through Projects. You do not need to join their account.
+                        </p>  
                     </div>
                     <div class="flex-this w-100 text-align-center">
                         <div id="closeRegistryModal" class="primary-btn white-btn margin-right-1 w-50 center-text">Cancel</div>

@@ -1,6 +1,7 @@
 import re
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.contrib import messages
 from django.core.paginator import Paginator
 from itertools import chain
@@ -680,7 +681,7 @@ def projects(request, pk):
         project_ids = list(set(projects_list)) # remove duplicate ids
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids).order_by('-date_added')
 
-        p = Paginator(projects, 5)
+        p = Paginator(projects, 10)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
@@ -712,6 +713,14 @@ def projects(request, pk):
                         return redirect('community-projects', community.id)
                     else:
                         return redirect('community-projects', community.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'member_role': member_role,
@@ -719,6 +728,7 @@ def projects(request, pk):
             'community': community,
             'form': form,
             'items': page,
+            'results': results,
         }
         return render(request, 'communities/projects.html', context)
 
@@ -733,23 +743,18 @@ def projects_with_labels(request, pk):
         # 1. community projects + 
         # 2. projects community has been notified of 
         # 3. projects where community is contributor
-        projects_list = []
+        projects_list = list(chain(
+            community.community_created_project.all().values_list('project__id', flat=True), 
+            community.communities_notified.all().values_list('project__id', flat=True), 
+            community.contributing_communities.all().values_list('project__id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
 
-        for p in community.community_created_project.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            if p.project.has_labels():
-                projects_list.append(p.project)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids
+            ).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids
+            ).exclude(tk_labels=None).order_by('-date_added')
 
-        for n in community.communities_notified.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            if p.project.has_labels():
-                projects_list.append(n.project)
-        
-        for c in community.contributing_communities.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            if p.project.has_labels():
-                projects_list.append(c.project)
-
-        projects = list(set(projects_list))
-
-        p = Paginator(projects, 5)
+        p = Paginator(projects, 10)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
@@ -780,6 +785,14 @@ def projects_with_labels(request, pk):
                         return redirect('community-projects-labels', community.id)
                     else:
                         return redirect('community-projects-labels', community.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
@@ -787,6 +800,7 @@ def projects_with_labels(request, pk):
             'form': form,
             'member_role': member_role,
             'items': page,
+            'results': results,
         }
         return render(request, 'communities/projects.html', context)
 
@@ -801,23 +815,15 @@ def projects_with_notices(request, pk):
         # 1. community projects + 
         # 2. projects community has been notified of 
         # 3. projects where community is contributor
-        projects_list = []
+        projects_list = list(chain(
+            community.community_created_project.all().values_list('project__id', flat=True), 
+            community.communities_notified.all().values_list('project__id', flat=True), 
+            community.contributing_communities.all().values_list('project__id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids, tk_labels=None, bc_labels=None).order_by('-date_added')
 
-        for p in community.community_created_project.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            if p.project.has_notice():
-                projects_list.append(p.project)
-
-        for n in community.communities_notified.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            if n.project.has_notice():
-                projects_list.append(n.project)
-        
-        for c in community.contributing_communities.select_related('project', 'project__project_creator').prefetch_related('project__bc_labels', 'project__tk_labels').all():
-            if c.project.has_notice():
-                projects_list.append(c.project)
-
-        projects = list(set(projects_list))
-
-        p = Paginator(projects, 5)
+        p = Paginator(projects, 10)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
@@ -848,6 +854,14 @@ def projects_with_notices(request, pk):
                         return redirect('community-projects-notices', community.id)
                     else:
                         return redirect('community-projects-notices', community.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
@@ -855,6 +869,7 @@ def projects_with_notices(request, pk):
             'form': form,
             'member_role': member_role,
             'items': page,
+            'results': results,
         }
         return render(request, 'communities/projects.html', context)
 
@@ -868,7 +883,7 @@ def projects_creator(request, pk):
         created_projects = community.community_created_project.all().values_list('project__id', flat=True)
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=created_projects).order_by('-date_added')
 
-        p = Paginator(projects, 5)
+        p = Paginator(projects, 10)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
 
@@ -899,6 +914,14 @@ def projects_creator(request, pk):
                         return redirect('community-projects-creator', community.id)
                     else:
                         return redirect('community-projects-creator', community.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
@@ -906,6 +929,7 @@ def projects_creator(request, pk):
             'form': form,
             'member_role': member_role,
             'items': page,
+            'results': results,
         }
         return render(request, 'communities/projects.html', context)
 
@@ -921,7 +945,7 @@ def projects_contributor(request, pk):
         contrib = community.contributing_communities.all().values_list('project__id', flat=True)
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=contrib).exclude(id__in=created_projects).order_by('-date_added')
 
-        p = Paginator(projects, 5)
+        p = Paginator(projects, 10)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
@@ -952,6 +976,14 @@ def projects_contributor(request, pk):
                         return redirect('community-projects-contributor', community.id)
                     else:
                         return redirect('community-projects-contributor', community.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
@@ -959,6 +991,7 @@ def projects_contributor(request, pk):
             'form': form,
             'member_role': member_role,
             'items': page,
+            'results': results,
         }
         return render(request, 'communities/projects.html', context)
 

@@ -1,0 +1,50 @@
+{% load static %}
+<div class="dashcard show">
+    <div class="flex-this">
+
+        <div class="researcher-img-container">
+            <img loading="lazy" 
+                class="profile-img" 
+                src=" {% if researcher.image %} {{ researcher.image.url }} {% else %} {% static 'images/placeholders/researcher-place.jpg' %} {% endif %}" 
+                alt="{{ researcher.researcher_name }} image"
+            >
+        </div>
+        <div class="flex-this column dashcard-text-container">
+            <div><h3 class="dashcard-h3 darkteal-text">
+                {% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}
+            </h3></div>
+            <div>
+                <p class="dashcard-subheader">
+                    Researcher | Location: 
+                    {% if researcher.user.user_profile.city_town %} {{ researcher.user.user_profile.city_town }}, {% endif %} 
+                    {% if researcher.user.user_profile.state_province_region %} {{ researcher.user.user_profile.state_province_region }}, {% endif %} 
+                    {% if researcher.user.user_profile.country.name %} {{ researcher.user.user_profile.country.name }}{% endif %}
+                    {% if not researcher.user.user_profile.city_town and not researcher.user.user_profile.state_province_region and not researcher.user.user_profile.country %}
+                        None specified
+                    {% endif %}
+                </p>
+            </div>
+            <div><p class="dashcard-description description-sm">
+                {% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}
+            </p></div>
+        </div>
+
+        <div class="dashcard-btn-container">
+            <div class="margin-left-16">
+                {% if '/registry/' in request.path %}
+                    <a 
+                        class="primary-btn action-btn"
+                        href="{% url 'public-researcher' researcher.id %}"
+                    >View public page</a>
+                {% endif %}
+                {% if '/dashboard/' in request.path %}
+                    <a 
+                        class="primary-btn action-btn"
+                        href="{% url 'researcher-notices' researcher.id %}"
+                    >View account</a>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>

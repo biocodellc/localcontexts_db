@@ -755,15 +755,12 @@ function cloneForm(el) {
 }
 
 // Communities: Projects: Notify status
-function setProjectUUID(elem) {
+function setProjectStatus(elem) {
     let elementId = elem.id
     let projectID = elementId.slice(7)
     let statusSelect = document.getElementById(elementId)
-    let projectIdInput = document.getElementById(`project-id-input-${projectID}`)
     let statusSelectedInput = document.getElementById(`status-selection-input-${projectID}`)
 
-    // Set first hidden value to project UUID
-    projectIdInput.value = projectID
     // Set second hidden value to value of option selected
     statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
 }
@@ -828,10 +825,10 @@ function validateProjectDisableSubmitBtn() {
         submitProjectBtn.setAttribute('disabled', true)
         submitProjectBtn.innerText = 'Saving Project...'
         
-        setTimeout(function(){
+        window.addEventListener('load', function() {
             submitProjectBtn.innerText = oldValue;
             submitProjectBtn.removeAttribute('disabled');
-        }, 5000)
+        })
     }      
 
 }
@@ -1060,11 +1057,11 @@ if (window.location.href.includes('communities/view/') || window.location.href.i
         let oldValue = 'Send'
         btn.setAttribute('disabled', true)
         btn.innerText = 'Sending'
-    
-        setTimeout(function(){
+
+        window.addEventListener('load', function() {
             btn.innerText = oldValue;
-            btn.removeAttribute('disabled');
-        }, 9000)
+            btn.removeAttribute('disabled')
+        })
     }
 
     function closeModal(modal) {  

@@ -147,10 +147,12 @@
                 <div class="w-70 margin-top-16">
                     <h3 class="no-bottom-margin no-top-margin">Notify Communities</h3>
                     <p>
-                        Listed below is an overview of the communities you have notified for this Project. Here you can monitor the status on their decision that they make based on this Project. The formal replies might be... <br><br>
-                        <strong>Labels Pending:</strong> Which means that the community is going to apply Labels to this Project or..<br>
-                        <strong>No - Labels Pending:</strong> Which means that the community is not going to apply Labels to this Project.<br><br>
-                        You can message these communities directly in this section. Please remember to be kind. 
+                        Listed below are the communities you have notified about this project. After the name of the notified community is the status of their decision about the Project.<br><br>
+                        The status options are:<br>
+                        <i>Seen:</i> The community has acknowledged the Project but has not made a decision about applying Labels.
+                        <i>No Labels Pending:</i> The community will not apply Labels to the Project.<br>
+                        <i>Labels Pending:</i> The community is deciding which Label(s) to apply to the Project.<br>
+                        <i>Labels Applied:</i> The community has applied Labels to the Project.
                     </p>
                 </div>
 
@@ -190,7 +192,7 @@
             {% if statuses %}
                 <div>
                     <p>
-                        <span class="bold">Communities notified about this project and their status</span><br>
+                        <span class="bold">Notified Communities and Label Status</span><br>
                         {% for status in statuses %}
                             {{ status.community.community_name }} -- 
                             {% if not status.seen and status.status == None %} Sent <br>{% endif %}
