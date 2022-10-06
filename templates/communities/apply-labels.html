@@ -234,7 +234,7 @@
 
                 {% if notes %}
                     <div class="border-top-grey margin-top-16">
-                        <h2>Note</h2>
+                        <h2>Community Notes</h2>
                         {% for note in notes %}
                             <div class="margin-top-16 flex-this w-80 project-comment">
                                 <div class="project-comment-teal"></div>
@@ -252,7 +252,13 @@
 
                 {% if bclabels or tklabels %}
                     <div class="w-40 margin-top-16">
-                        <div>{{ form }}</div>
+                        {{ form.note.label }}
+                        <div class="tooltip"><strong>i</strong>
+                            <span class="tooltiptext">
+                                Document internal community information about how the Labels are being used on this Project and why. This will only be visible to members of your community.
+                            </span>
+                        </div>
+                        {{ form.note }}
                     </div>
                     <div><button class="primary-btn action-btn margin-top-2">Apply Labels to Project <i class="fa fa-check" aria-hidden="true"></i></button></div>
                 {% endif %}
