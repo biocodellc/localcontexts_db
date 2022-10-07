@@ -6,7 +6,14 @@
         {% else %}
             {{ project.project_creator.username }}
         {% endif %}
+
+        {% if create %} 
         has added you as a contributor to the Local Contexts Hub Project "{{ project.title }}".
+        {% endif %}
+        {% if edit %}
+        has edited the Project "{{ project.title }}".
+        {% endif %}
+
     </h3>
 
     <p>
@@ -16,12 +23,18 @@
 
         {% if project_person %}
             {% if not registered %}
-                If you wish to interact with this Project, please register with the Local Contexts Hub <a href="{% if 'localhost' in domain %}http{% else %}https{% endif %}://{{domain}}{% url 'register' %}">here</a>.
+                If you wish to interact with this Project, please register with the Local Contexts Hub <a href="{% if 'localhost' in domain %}http{% else %}https{% endif %}://{{domain}}{% url 'register' %}">here</a>.<br><br>
             {% endif %}
         {% else %}
             <strong>Next steps?</strong><br>
             You can see and interact with this Project in your account's dashboard under the 'Projects' tab.<br>
-        {% endif %}    
+        {% endif %}   
+        
+        <br>
+        <strong>Why am I getting this message?</strong><br>
+        {% if edit %}
+        You are receiving this message because you are listed as a contributor on this Project.
+        {% endif %}
 
         {% include 'snippets/emails/_footer-snippet.html' %}
     </p>

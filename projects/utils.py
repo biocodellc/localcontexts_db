@@ -61,9 +61,12 @@ def add_to_contributors(request, contributors, institutions_list, researchers_li
             institution = Institution.objects.select_related('institution_creator').get(id=institution_id)
             contributors.institutions.add(institution)
 
-            # create notification
-            send_simple_action_notification(None, institution, 'Your institution has been added as a contributor on a Project', 'Projects', project_id)
-            # create email
+            if '/edit-project/' in request.path:
+                send_simple_action_notification(None, institution, 'Edits have been made to a Project', 'Projects', project_id)
+            elif '/create-project/' in request.path:
+                # create notification
+                send_simple_action_notification(None, institution, 'Your institution has been added as a contributor on a Project', 'Projects', project_id)
+                # create email
             send_contributor_email(request, institution, project_id)
 
     if researchers_list:
@@ -71,7 +74,10 @@ def add_to_contributors(request, contributors, institutions_list, researchers_li
             researcher = Researcher.objects.get(id=researcher_id)
             contributors.researchers.add(researcher)
 
-            # create notification
-            send_simple_action_notification(None, researcher, 'You have been added as a contributor on a Project', 'Projects', project_id)
-            # create email
+            if '/edit-project/' in request.path:
+                send_simple_action_notification(None, researcher, 'Edits have been made to a Project', 'Projects', project_id)
+            elif '/create-project/' in request.path:
+                # create notification
+                send_simple_action_notification(None, researcher, 'You have been added as a contributor on a Project', 'Projects', project_id)
+                # create email
             send_contributor_email(request, researcher, project_id)
