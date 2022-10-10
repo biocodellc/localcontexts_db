@@ -1220,6 +1220,7 @@ def connections(request, pk):
         return render(request, 'communities/connections.html', context)
         
 # show community Labels in a PDF
+@login_required(login_url='login')
 def labels_pdf(request, pk):
     # Get approved labels customized by community
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
@@ -1249,6 +1250,7 @@ def labels_pdf(request, pk):
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
 
+@login_required(login_url='login')
 def download_labels(request, pk):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
