@@ -102,18 +102,9 @@
     {% if community %}
 
         {% project_comments project community as comments %}
-        <h3 class="no-bottom-margin">Project Comments</h3>
+        <h3>Project Comments</h3>
 
         {% if comments %}
-            <div>
-                <p><span class="bold">
-                    {% if project.project_notice.researcher %} 
-                        {% firstof project.project_notice.researcher.user.get_full_name project.project_notice.researcher.user.username %}
-                    {% endif %}
-                    {% if project.project_notice.institution %} {{ project.project_notice.institution.institution_name }} {% endif %}
-                </span></p>
-            </div>
-
             {% for comment in comments %}
                 <div class="flex-this w-80 project-comment">
                     <div class="project-comment-teal"></div>
