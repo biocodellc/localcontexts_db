@@ -370,7 +370,7 @@ def registry_researchers(request):
         if request.method == 'GET':
             q = request.GET.get('q')
             if q:
-                vector = SearchVector('user')
+                vector = SearchVector('user__username', 'user__first_name', 'user__last_name')
                 query = SearchQuery(q)
                 results = r.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
             else:

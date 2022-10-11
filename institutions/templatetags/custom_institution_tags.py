@@ -18,7 +18,7 @@ def unread_notifications(institution):
 
 @register.simple_tag
 def anchor(url_name, section_id, institution_id):
-    return reverse(url_name, kwargs={'pk': institution_id}) + "#project-unique-" + str(section_id)
+    return reverse(url_name, kwargs={'pk': institution_id}) + f"#project-unique-{str(section_id)}"
 
 @register.simple_tag
 def get_notices_count(institution):

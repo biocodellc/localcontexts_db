@@ -1,11 +1,7 @@
 {% autoescape off %}
 
     <h3>
-        {% if project.project_creator.get_full_name %}
-            {{ project.project_creator.get_full_name }}
-        {% else %}
-            {{ project.project_creator.username }}
-        {% endif %}
+        {% firstof project.project_creator.get_full_name project.project_creator.username %}
 
         {% if create %} 
         has added you as a contributor to the Local Contexts Hub Project "{{ project.title }}".

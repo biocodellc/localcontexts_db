@@ -3,22 +3,32 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from communities.models import Community
 from projects.models import Project, ProjectContributors, ProjectCreator
-from helpers.models import ProjectStatus, ProjectComment
+from helpers.models import ProjectStatus, ProjectComment, Notice
 from itertools import chain
 
 register = template.Library()
 
 @register.simple_tag
 def which_account_created_project(project):
-    return ProjectCreator.objects.select_related(
-        'community', 
-        'institution', 
-        'researcher', 
-        'researcher__user').get(project=project)
+    created = ProjectCreator.objects.filter(project=project).values(
+            'community__community_name',
+            'institution__institution_name',
+            'researcher__user__username',           
+        )
+        
+    string = ''
+    for x in created:
+        if x['community__community_name']:
+            string = f'at {x["community__community_name"]} | Community'
+        if x['institution__institution_name']:
+            string = f'at {x["institution__institution_name"]} | Institution'
+        if x['researcher__user__username']:
+            string = f' | Researcher'
+    return string
 
 @register.simple_tag
 def show_project_notices(project):
-    return project.project_notice.all().values('archived', 'notice_type')
+    return Notice.objects.filter(project=project).values('archived', 'notice_type')
 
 @register.simple_tag
 def project_comments(project, community):

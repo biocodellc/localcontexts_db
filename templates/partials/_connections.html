@@ -54,7 +54,7 @@
             <div id="expand-div-{{ institution.institution_name }}" class="hide">
                 <div class="border-bottom-dash-teal">
                     <p class="no-bottom-margin">
-                        <span class="bold">Account Contact Name</span> | {% if institution.institution_creator.get_full_name %}{{ institution.institution_creator.get_full_name }} {% else %} {{ institution.institution_creator.username }} {% endif %}
+                        <span class="bold">Account Contact Name</span> | {% firstof institution.institution_creator.get_full_name  institution.institution_creator.username %}
                         <span class="bold margin-left-8">Account Contact Email</span> | {{ institution.institution_creator.email }}
                         <span class="bold margin-left-8">Website</span> | {{ institution.website }} <br><br>
                     </p>                        
@@ -87,7 +87,7 @@
                     >
                 </div>
                 <div class="flex-this column dashcard-text-container">
-                    <div><h3 class="dashcard-h3 darkteal-text">{% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}</h3></div>
+                    <div><h3 class="dashcard-h3 darkteal-text">{% firstof researcher.user.get_full_name researcher.user.username %}</h3></div>
                     <div>
                         <p class="dashcard-subheader">Researcher | Location: 
                             {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
@@ -172,7 +172,7 @@
             <div id="expand-div-{{ community.community_name }}" class="hide">
                 <div class="border-bottom-dash-teal">
                     <p class="no-bottom-margin">
-                        <span class="bold">Account Contact Name</span> | {% if community.community_creator.get_full_name %} {{ community.community_creator.get_full_name }} {% else %} {{ community.community_creator.get_full_name }} {% endif %}
+                        <span class="bold">Account Contact Name</span> | {% firstof community.community_creator.get_full_name community.community_creator.get_full_name %}
                         <span class="bold margin-left-8">Account Contact Email</span> | {{ community.community_creator.email }} <br><br>
                     </p>      
                 </div>   
