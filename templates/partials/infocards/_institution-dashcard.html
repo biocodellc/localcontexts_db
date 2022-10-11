@@ -47,7 +47,7 @@
                                         {% endif %}
                                         {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
                                             {% if n.reference_id %}
-                                                href="{% anchor 'institution-projects' n.reference_id institution.id %}" 
+                                                href="{% anchor 'institution-projects' n.reference_id institution.id items.next_page_number %}" 
                                             {% else %}
                                                 href="{% url 'institution-projects' institution.id %}" 
                                             {% endif %}
