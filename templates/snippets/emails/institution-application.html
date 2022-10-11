@@ -1,10 +1,6 @@
 {% autoescape off %}
 <h3>
-    {% if data.institution_creator.get_full_name %}
-        {{ data.institution_creator.get_full_name }} ({{ data.institution_creator }})
-    {% else %}
-        {{ data.institution_creator.username }}
-    {% endif %}
+    {% firstof data.institution_creator.get_full_name data.institution_creator.username %}
     has applied to create a institution.
 </h3>
 

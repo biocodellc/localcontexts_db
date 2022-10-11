@@ -139,7 +139,7 @@
                             <h4>A note was added to this Label:</h4>
                             {% for note in bclabel.bclabel_note.all %}
                                 <div class="margin-top-16 note-container">
-                                    <p> Member {% if note.sender.get_full_name %}{{ note.sender.get_full_name }}{% else %}{{ note.sender.username }}{% endif %} wrote: <br>{{ note.note }}</p>
+                                    <p> Member {% firstof note.sender.get_full_name note.sender.username %} wrote: <br>{{ note.note }}</p>
                                 </div>
                             {% endfor %}
                         {% endif %}
@@ -188,7 +188,7 @@
                             <h4>A note was added to this Label:</h4>
                             {% for note in bclabel.bclabel_note.all %}
                                 <div class="margin-top-16 note-container">
-                                    <p> Member {% if note.sender.get_full_name %}{{ note.sender.get_full_name }}{% else %}{{ note.sender.username }}{% endif %} wrote: <br>{{ note.note }}</p>
+                                    <p> Member {% firstof note.sender.get_full_name note.sender.username %} wrote: <br>{{ note.note }}</p>
                                 </div>
                             {% endfor %}
                         {% endif %}

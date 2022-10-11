@@ -91,7 +91,7 @@
             </div>
 
             <div class="w-70">
-                <h2 class="no-top-margin no-bottom-margin">{% if join_request.user_from.get_full_name %}{{ join_request.user_from.get_full_name }} {% else %} {{ join_request.user_from.username }} {% endif %} </h2>
+                <h2 class="no-top-margin no-bottom-margin">{% firstof join_request.user_from.get_full_name join_request.user_from.username %}</h2>
                 {% if join_request.user_from.user_profile.position %}
                     <h3 class="no-top-margin">{{ join_request.user_from.user_profile.position }}</h3>
                 {% endif %}
@@ -173,7 +173,7 @@
             </div>
 
             <div class="w-70">
-                <h2 class="no-top-margin no-bottom-margin">{% if invite.receiver.get_full_name %}{{ invite.receiver.get_full_name }} {% else %} {{ invite.receiver.username }} {% endif %} </h2>
+                <h2 class="no-top-margin no-bottom-margin">{% firstof invite.receiver.get_full_name invite.receiver.username %} </h2>
                 {% if invite.receiver.user_profile.position %}
                     <h3 class="no-top-margin">{{ invite.receiver.user_profile.position }}</h3>
                 {% endif %}
@@ -214,7 +214,7 @@
                 {% if invite.sender %}
                     <div>
                         <span class="bold">Invited by:</span>
-                        <i>{% if invite.sender.get_full_name %}{{ invite.sender.get_full_name }} {% else %} {{ invite.sender.username }} {% endif %}</i>
+                        <i>{% firstof invite.sender.get_full_name invite.sender.username %}</i>
                     </div>
                 {% endif %}
 

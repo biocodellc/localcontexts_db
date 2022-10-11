@@ -234,8 +234,8 @@
                     <a href="{% url 'researcher-registry' %}" class="bold darkteal-text underline-hover">
                         Local Contexts Registry
                     </a> 
-                    >>                        
-                    {% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}
+                    >>    
+                    {% firstof researcher.user.get_full_name researcher.user.username %}
                     >> Public         
                 </small>
             </div>
@@ -255,7 +255,7 @@
                             <div class="flex-this space-between">
                                 <div>
                                     <h2 class="primary-black-text">Contact form</h2>  
-                                    <p>This message will be sent to {% if researcher.user.get_full_name %}{{ researcher.user.get_full_name }}{% else %} {{ researcher.user.username }}{% endif %}.</p>  
+                                    <p>This message will be sent to {% firstof researcher.user.get_full_name researcher.user.username %}.</p>  
                                 </div>
                                 <div>
                                     <div class="primary-btn white-btn close-modal-btn">Close X</div>
@@ -284,7 +284,7 @@
                 >
             </div>
             <div class="flex-this column dashcard-text-container">
-                <div><h3 class="dashcard-h3">{% if researcher.user.get_full_name %} {{ researcher.user.get_full_name }} {% else %} {{ researcher.user.username }} {% endif %}</h3></div>
+                <div><h3 class="dashcard-h3">{% firstof researcher.user.get_full_name researcher.user.username %}</h3></div>
                 <div>
                     <p class="dashcard-subheader">Researcher | 
                         {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
