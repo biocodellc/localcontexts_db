@@ -9,8 +9,7 @@
             <div class="loc grey-text bold">
                 <small>
                     <a href="{% url 'dashboard' %}" class="bold darkteal-text underline-hover">
-                        {% if request.user.first_name %} {{ request.user.get_full_name }}
-                        {% else %}{{ request.user }}{% endif %}
+                        {% firstof request.user.first_name request.user %}
                     </a> 
                     >> {{ institution.institution_name }}                    
                 </small>

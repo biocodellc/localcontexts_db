@@ -63,11 +63,7 @@
 
         <div class="w-70">
             <h2 class="no-top-margin no-bottom-margin">
-                {% if community.community_creator.get_full_name %}
-                    {{ community.community_creator.get_full_name }} 
-                {% else %}
-                    {{ community.community_creator.username }}
-                {% endif %}
+                {% firstof community.community_creator.get_full_name community.community_creator.username %}
             </h2>
             {% if community.community_creator.user_profile.position %}
                 <h3 class="no-top-margin">{{ community.community_creator.user_profile.position }}</h3>
@@ -134,11 +130,7 @@
 
             <div class="w-70">
                 <h2 class="no-top-margin no-bottom-margin">
-                    {% if admin.get_full_name %}
-                        {{ admin.get_full_name }} 
-                    {% else %}
-                        {{ admin.username }}
-                    {% endif %}
+                    {% firstof admin.get_full_name admin.username %}
                 </h2>
                 {% if admin.user_profile.position %}
                     <h3 class="no-top-margin">{{ admin.user_profile.position }}</h3>
@@ -206,11 +198,7 @@
 
             <div class="w-70">
                 <h2 class="no-top-margin no-bottom-margin">
-                    {% if editor.get_full_name %}
-                        {{ editor.get_full_name }} 
-                    {% else %}
-                        {{ editor.username }}
-                    {% endif %}
+                    {% firstof editor.get_full_name editor.username %}
                 </h2>
                 {% if editor.user_profile.position %}
                     <h3 class="no-top-margin">{{ editor.user_profile.position }}</h3>
@@ -278,11 +266,7 @@
 
             <div class="w-70">
                 <h2 class="no-top-margin no-bottom-margin">
-                    {% if viewer.get_full_name %}
-                        {{ viewer.get_full_name }} 
-                    {% else %}
-                        {{ viewer.username }}
-                    {% endif %}
+                    {% firstof viewer.get_full_name viewer.username %}
                 </h2>
                 {% if viewer.user_profile.position %}
                     <h3 class="no-top-margin">{{ viewer.user_profile.position }}</h3>
@@ -337,11 +321,7 @@
 
         <div class="w-70">
             <h2 class="no-top-margin no-bottom-margin">
-                {% if institution.institution_creator.get_full_name %}
-                    {{ institution.institution_creator.get_full_name }} 
-                {% else %}
-                    {{ institution.institution_creator.username }}
-                {% endif %}
+                {% firstof institution.institution_creator.get_full_name institution.institution_creator.username %}
             </h2>
             {% if institution.institution_creator.user_profile.position %}
                 <h3 class="no-top-margin">{{ institution.institution_creator.user_profile.position }}</h3>
@@ -408,11 +388,7 @@
 
             <div class="w-70">
                 <h2 class="no-top-margin no-bottom-margin">
-                    {% if admin.get_full_name %}
-                        {{ admin.get_full_name }}
-                    {% else %}
-                        {{ admin.username }}
-                    {% endif %}
+                    {% firstof admin.get_full_name admin.username %}
                 </h2>
                 {% if admin.user_profile.position %}
                     <h3 class="no-top-margin">{{ admin.user_profile.position }}</h3>
@@ -480,11 +456,7 @@
 
             <div class="w-70">
                 <h2 class="no-top-margin no-bottom-margin">
-                    {% if editor.get_full_name %}
-                        {{ editor.get_full_name }}
-                    {% else %}
-                        {{ editor.username }}
-                    {% endif %}
+                    {% firstof editor.get_full_name editor.username %}
                 </h2>
                 {% if editor.user_profile.position %}
                     <h3 class="no-top-margin">{{ editor.user_profile.position }}</h3>
@@ -552,11 +524,7 @@
 
             <div class="w-70">
                 <h2 class="no-top-margin no-bottom-margin">
-                    {% if viewer.get_full_name %}
-                        {{ viewer.get_full_name }}
-                    {% else %}
-                        {{ viewer.username }}
-                    {% endif %}
+                    {% firstof viewer.get_full_name viewer.username %}
                 </h2>
                 {% if viewer.user_profile.position %}
                     <h3 class="no-top-margin">{{ viewer.user_profile.position }}</h3>

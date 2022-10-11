@@ -30,8 +30,7 @@
                                     <div class="project-comment-teal"></div>
                                     <div class="project-comment-text">
                                         <span class="bold">
-                                            {% if comment.sender.get_full_name %} {{ comment.sender.get_full_name }}
-                                            {% else %} {{ comment.sender.username }}{% endif %}
+                                            {% firstof comment.sender.get_full_name comment.sender.username %}
                                         </span>
                                         <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
                                         <p>{{ comment.message }}</p>
@@ -80,7 +79,7 @@
                             <div class="project-comment-teal"></div>
                             <div class="project-comment-text">
                                 <span class="bold">
-                                    {% if  comment.sender.get_full_name %} {{ comment.sender.get_full_name }} {% else %} {{  comment.sender.username }}{% endif %}
+                                    {% firstof comment.sender.get_full_name comment.sender.username %}
                                 </span>
                                 <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
                                 <p>{{ comment.message }}</p>
@@ -109,11 +108,7 @@
             <div>
                 <p><span class="bold">
                     {% if project.project_notice.researcher %} 
-                        {% if project.project_notice.researcher.user.get_full_name %}
-                            {{ project.project_notice.researcher.user.get_full_name }}
-                        {% else %}
-                            {{ project.project_notice.researcher.user.username }}
-                        {% endif %}
+                        {% firstof project.project_notice.researcher.user.get_full_name project.project_notice.researcher.user.username %}
                     {% endif %}
                     {% if project.project_notice.institution %} {{ project.project_notice.institution.institution_name }} {% endif %}
                 </span></p>
@@ -124,11 +119,7 @@
                     <div class="project-comment-teal"></div>
                     <div class="project-comment-text">
                         <span class="bold">
-                            {% if comment.sender.get_full_name %}
-                                {{ comment.sender.get_full_name }}
-                            {% else %}
-                                {{ comment.sender.username }}
-                            {% endif %}
+                            {% firstof comment.sender.get_full_name comment.sender.username %}
                         </span>
                         <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
                         <p>{{ comment.message }}</p>

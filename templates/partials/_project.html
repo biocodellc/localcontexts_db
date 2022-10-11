@@ -71,12 +71,7 @@
                                             </a>
                                         {% endif %}
 
-                                        {% if researcher.user.get_full_name %}
-                                            {{ researcher.user.get_full_name }}
-                                        {% else %}
-                                            {{ researcher.user.username }}
-                                        {% endif %}
-                                         | Researcher
+                                        {% firstof researcher.user.get_full_name researcher.user.username %} | Researcher
                                         <div class="researcher-hover-info">
                                             <p>
                                                 <strong>Primary Institution Affiliation:</strong> {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% else %} None specified {% endif %}<br>
