@@ -1153,11 +1153,13 @@ def apply_labels(request, pk, project_uuid):
             bclabels_selected = request.POST.getlist('selected_bclabels')
             tklabels_selected = request.POST.getlist('selected_tklabels')
 
-            # if bc and tk labels are not null, clear
-            if project.bc_labels.exists():
-                project.bc_labels.clear()
-            if project.tk_labels.exists():
-                project.tk_labels.clear()
+            # find target community labels and clear those only!
+            if project.bc_labels.filter(community=community).exists():
+                for bclabel in project.bc_labels.filter(community=community):
+                    project.bc_labels.remove(bclabel)
+            if project.tk_labels.filter(community=community).exists():
+                for tklabel in project.tk_labels.filter(community=community):
+                    project.tk_labels.remove(tklabel)
 
             # apply all selected labels
             for bclabel_uuid in bclabels_selected:
