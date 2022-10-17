@@ -1153,6 +1153,15 @@ def apply_labels(request, pk, project_uuid):
             bclabels_selected = request.POST.getlist('selected_bclabels')
             tklabels_selected = request.POST.getlist('selected_tklabels')
 
+            # find target community labels and clear those only!
+            if project.bc_labels.filter(community=community).exists():
+                for bclabel in project.bc_labels.filter(community=community):
+                    project.bc_labels.remove(bclabel)
+            if project.tk_labels.filter(community=community).exists():
+                for tklabel in project.tk_labels.filter(community=community):
+                    project.tk_labels.remove(tklabel)
+
+            # apply all selected labels
             for bclabel_uuid in bclabels_selected:
                 bclabel = BCLabel.objects.get(unique_id=bclabel_uuid)
                 project.bc_labels.add(bclabel)
@@ -1160,6 +1169,8 @@ def apply_labels(request, pk, project_uuid):
             for tklabel_uuid in tklabels_selected:
                 tklabel = TKLabel.objects.get(unique_id=tklabel_uuid)
                 project.tk_labels.add(tklabel)
+            
+            project.save()
             
             if notices:
                 # add community to project contributors
