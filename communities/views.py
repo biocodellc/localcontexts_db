@@ -1153,6 +1153,13 @@ def apply_labels(request, pk, project_uuid):
             bclabels_selected = request.POST.getlist('selected_bclabels')
             tklabels_selected = request.POST.getlist('selected_tklabels')
 
+            # if bc and tk labels are not null, clear
+            if project.bc_labels.exists():
+                project.bc_labels.clear()
+            if project.tk_labels.exists():
+                project.tk_labels.clear()
+
+            # apply all selected labels
             for bclabel_uuid in bclabels_selected:
                 bclabel = BCLabel.objects.get(unique_id=bclabel_uuid)
                 project.bc_labels.add(bclabel)
@@ -1160,6 +1167,8 @@ def apply_labels(request, pk, project_uuid):
             for tklabel_uuid in tklabels_selected:
                 tklabel = TKLabel.objects.get(unique_id=tklabel_uuid)
                 project.tk_labels.add(tklabel)
+            
+            project.save()
             
             if notices:
                 # add community to project contributors
