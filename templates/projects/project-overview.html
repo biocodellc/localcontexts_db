@@ -152,26 +152,30 @@
                         {% if institution.is_approved == False %}
                             <small class="margin-right-1 w-50 no-top-margin">In order to notify communities of your Project, your institution must be confirmed first.</small>
                         {% else %}
-                            {% if project_creator.institution %}
-                                {% if member_role == 'admin' or member_role == 'editor' %}
-                                    <div class="margin-right-1">
-                                        <a href="{% url 'institution-notify-others' institution.id project.id %}" class="primary-btn action-btn">
-                                            Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
-                                        </a>
-                                    </div>
+                            {% for creator in project.project_creator_project.all %}
+                                {% if creator.institution %}
+                                    {% if member_role == 'admin' or member_role == 'editor' %}
+                                        <div class="margin-right-1">
+                                            <a href="{% url 'institution-notify-others' institution.id project.id %}" class="primary-btn action-btn">
+                                                Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
+                            {% endfor %}
                         {% endif %}
                     {% endif %}
 
                     {% if researcher %}
-                        {% if project_creator.researcher %}
-                            <div class="margin-right-1">
-                                <a href="{% url 'researcher-notify-others' researcher.id project.id %}" class="primary-btn action-btn">
-                                    Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                        {% endif %}
+                        {% for creator in project.project_creator_project.all %}
+                            {% if creator.researcher %}
+                                <div class="margin-right-1">
+                                    <a href="{% url 'researcher-notify-others' researcher.id project.id %}" class="primary-btn action-btn">
+                                        Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
                 </div>            
             </div>
