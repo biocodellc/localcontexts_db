@@ -21,18 +21,19 @@
                         <div>
                             {% join_request_comm community.id request.user as request_exists %}
                             {% if request_exists or community in user_communities %}
-                                <div><a class="primary-btn disabled-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></a></div>
+                                <div class="primary-btn disabled-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></div>
                             {% else %}
-                                <form id="communityRegistryForm{{ community.id }}" method="POST" action="">
-                                    {% csrf_token %}
-                                    <div class="margin-top-8 margin-bottom-8"><a id="communityRequest-{{ community.id }}" class="darkteal-text underline-hover pointer">Request to join</a></div>
-                                </form>                                    
+                                <div class="margin-top-8 margin-bottom-8">
+                                    <a id="openRequestToJoinModalBtn" class="darkteal-text underline-hover pointer">Request to join</a>
+                                </div>
                             {% endif %}                            
                         </div>
-                        <div class="margin-left-16"><a id="communityContact-{{ community.id }}" class="primary-btn action-btn">Contact Us</a></div>
+                        <div class="margin-left-16">
+                            <a id="openContactModalBtn" class="primary-btn action-btn">Contact Us</a>
+                        </div>
                     </div>
 
-                    <div id="contactModalComm{{ community.id }}" class="modal hide">
+                    <div id="contactModal" class="modal hide">
                         <div class="modal-defaults contact-modal flex-this column w-100">
                             <div class="modal-content-padding w-100">
                                 <div class="flex-this space-between">
@@ -41,18 +42,20 @@
                                         <p>This message will be sent to the administrator of {{ community.community_name }}.</p>  
                                     </div>
                                     <div>
-                                        <div class="primary-btn white-btn close-modal-btn">Close X</div>
+                                        <div class="primary-btn white-btn close-modal-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
                                     </div>
                                 </div>
 
                                 <form id="sendMsgForm" method="POST" action="">
                                     {% csrf_token %}
                                     {{ form.as_p }}
-                                    <button class="primary-btn action-btn" id="sendMsgBtn" name="contact_btn">Send message <i class="fa fa-envelope" aria-hidden="true"></i></button>
+                                    <input type="hidden" name="contact_btn">
+                                    <button class="primary-btn action-btn" id="sendMsgBtn">Send message <i class="fa fa-envelope" aria-hidden="true"></i></button>
                                 </form>    
                             </div>
                         </div>
                     </div>
+
                 {% endif %}
             {% endif %}                
         </div>
@@ -129,19 +132,20 @@
                         <div>
                             {% join_request_inst institution.id request.user as request_exists %}
                             {% if request_exists or institution in user_institutions %}
-                                <div><a class="primary-btn disabled-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></a></div>
+                                <div class="primary-btn disabled-btn">Request sent <i class="fa fa-check" aria-hidden="true"></i></div>
                             {% else %}
-                                <form id="institutionRegistryForm{{ institution.id }}" method="POST" action="">
-                                    {% csrf_token %}
-                                    <div class="margin-top-8 margin-bottom-8"><a id="institutionRequest-{{ institution.id }}" class="darkteal-text underline-hover pointer">Request to join</a></div>
-                                </form>
+                                <div class="margin-top-8 margin-bottom-8">
+                                    <a id="openRequestToJoinModalBtn" class="darkteal-text underline-hover pointer">Request to join</a>
+                                </div>
                             {% endif %}                                
                         </div>
                         
-                        <div class="margin-left-16"><a id="institutionContact-{{ institution.id }}" class="primary-btn action-btn">Contact Us</a></div>
+                        <div class="margin-left-16">
+                            <a id="openContactModalBtn" class="primary-btn action-btn">Contact Us</a>
+                        </div>
                     </div>
 
-                    <div id="contactModalInst{{ institution.id }}" class="modal hide">
+                    <div id="contactModal" class="modal hide">
                         <div class="modal-defaults contact-modal flex-this column w-100">
                             <div class="modal-content-padding w-100">
                                 <div class="flex-this space-between">
@@ -150,14 +154,15 @@
                                         <p>This message will be sent to the administrator of {{ institution.institution_name }}.</p>  
                                     </div>
                                     <div>
-                                        <div class="primary-btn white-btn close-modal-btn">Close X</div>
+                                        <div class="primary-btn white-btn close-modal-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
                                     </div>
                                 </div>
 
                                 <form id="sendMsgForm" method="POST" action="">
                                     {% csrf_token %}
                                     {{ form.as_p }}
-                                    <button class="primary-btn action-btn" id="sendMsgBtn" name="contact_btn">Send message <i class="fa fa-envelope" aria-hidden="true"></i></button>
+                                    <input type="hidden" name="contact_btn">
+                                    <button class="primary-btn action-btn" id="sendMsgBtn">Send message <i class="fa fa-envelope" aria-hidden="true"></i></button>
                                 </form>    
                             </div>
                         </div>
@@ -243,13 +248,13 @@
             {% if request.user.is_authenticated %}
                 {% if researcher.contact_email_public %}
                     {% if not researcher.user == request.user %}
-                        <div class="dashcard-btn-container">
-                            <div class="margin-left-16"><a id="researcherContact-{{ researcher.id }}" class="primary-btn action-btn">Contact Me</a></div>
+                        <div class="margin-left-16">
+                            <a id="openContactModalBtn" class="primary-btn action-btn">Contact Me</a>
                         </div>
                     {% endif %}
                 {% endif %}
                 
-                <div id="contactModalResearcher{{ researcher.id }}" class="modal hide">
+                <div id="contactModal" class="modal hide">
                     <div class="modal-defaults contact-modal flex-this column w-100">
                         <div class="modal-content-padding w-100">
                             <div class="flex-this space-between">
@@ -258,15 +263,15 @@
                                     <p>This message will be sent to {% firstof researcher.user.get_full_name researcher.user.username %}.</p>  
                                 </div>
                                 <div>
-                                    <div class="primary-btn white-btn close-modal-btn">Close X</div>
+                                    <div class="primary-btn white-btn close-modal-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
                                 </div>
                             </div>
 
                             <form id="sendMsgForm" method="POST" action="">
                                 {% csrf_token %}
                                 {{ form.as_p }}
-                
-                                <button class="primary-btn action-btn" id="sendMsgBtn" name="contact_btn">Send message <i class="fa fa-envelope" aria-hidden="true"></i></button>
+                                <input type="hidden" name="contact_btn">
+                                <button class="primary-btn action-btn" id="sendMsgBtn">Send message <i class="fa fa-envelope" aria-hidden="true"></i></button>
                             </form>    
                         </div>
                     </div>
@@ -356,7 +361,7 @@
 </div> <!-- dashcard-->
 
     {% if request.user.is_authenticated %}
-        <div id="registryModal" class="modal hide">
+        <div id="requestToJoinModal" class="modal hide">
             <div class="modal-defaults registry-modal flex-this column w-100">
                 <div class="modal-content-padding w-100">
                     <div>
@@ -366,10 +371,18 @@
                             If you wish to collaborate with a community or institution you are not affiliated with, you will connect with them through Projects. You do not need to join their account.
                         </p>  
                     </div>
-                    <div class="flex-this w-100 text-align-center">
-                        <div id="closeRegistryModal" class="primary-btn white-btn margin-right-1 w-50 center-text">Cancel</div>
-                        <button id="submitRegistryForm" class="margin-left-1 primary-btn action-btn w-50 center-text">Send Request</button>  
+
+                    <div class="flex-this justify-center center-text w-100">
+                        <a class="primary-btn white-btn close-modal-btn w-50 margin-right-8">Cancel</a>
+                        <div class="margin-left-8">
+                            <form id="requestToJoinForm" method="POST" action="">
+                                {% csrf_token %}
+                                <input type="hidden" name="join_request">
+                                <button id="sendRequestToJoinBtn" class="primary-btn action-btn">Send Request</button>  
+                            </form> 
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>

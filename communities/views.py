@@ -148,12 +148,16 @@ def public_community_view(request, pk):
                         from_email = form.cleaned_data['email']
                         message = form.cleaned_data['message']
                         to_email = community.community_creator.email
-                        
-                        send_contact_email(to_email, from_name, from_email, message)
-                        messages.add_message(request, messages.SUCCESS, 'Sent!')
-                        return redirect('public-community', community.id)
 
-                else:
+                        send_contact_email(to_email, from_name, from_email, message)
+                        messages.add_message(request, messages.SUCCESS, 'Message sent!')
+                        return redirect('public-community', community.id)
+                    else:
+                        if not form.data['message']:
+                            messages.add_message(request, messages.ERROR, 'Unable to send an empty message.')
+                            return redirect('public-community', community.id)
+
+                elif 'join_request' in request.POST:
                     # Request To Join community
                     if JoinRequest.objects.filter(user_from=request.user, community=community).exists():
                         messages.add_message(request, messages.ERROR, "You have already sent a request to this community")
@@ -161,28 +165,30 @@ def public_community_view(request, pk):
                     else:
                         join_request = JoinRequest.objects.create(user_from=request.user, community=community, user_to=community.community_creator)
                         join_request.save()
+
                         # Send email to community creator
                         send_join_request_email_admin(request, join_request, community)
-
-                        messages.add_message(request, messages.SUCCESS, 'Sent!')
-                return redirect('public-community', community.id)
-
-            else:
-                context = { 
-                    'community': community,
-                    'bclabels' : bclabels,
-                    'tklabels' : tklabels,
-                    'projects' : projects,  
-                    'form': form, 
-                    'user_communities': user_communities,
-                }
-                return render(request, 'public.html', context)
+                        messages.add_message(request, messages.SUCCESS, 'Request sent!')
+                        return redirect('public-community', community.id)
+                else:
+                    messages.add_message(request, messages.ERROR, 'Something went wrong')
+                    return redirect('public-community', community.id)
+        else:
+            context = { 
+                'community': community, 
+                'bclabels' : bclabels,
+                'tklabels' : tklabels,
+                'projects' : projects,
+            }
+            return render(request, 'public.html', context)
 
         context = { 
             'community': community, 
             'bclabels' : bclabels,
             'tklabels' : tklabels,
             'projects' : projects,
+            'form': form, 
+            'user_communities': user_communities,
         }
         return render(request, 'public.html', context)
     except:
