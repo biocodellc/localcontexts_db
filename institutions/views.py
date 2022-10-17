@@ -143,15 +143,9 @@ def public_institution_view(request, pk):
         created_projects = ProjectCreator.objects.filter(institution=institution)
 
         # Do notices exist
-        bcnotice = False
-        tknotice = False
-        attrnotice = False
-        if Notice.objects.filter(institution=institution, notice_type='biocultural').exists():
-            bcnotice = True
-        if Notice.objects.filter(institution=institution, notice_type='traditional_knowledge').exists():
-            tknotice = True
-        if Notice.objects.filter(institution=institution, notice_type='attribution_incomplete').exists():
-            attrnotice = True
+        bcnotice = Notice.objects.filter(institution=institution, notice_type='biocultural').exists()
+        tknotice = Notice.objects.filter(institution=institution, notice_type='traditional_knowledge').exists()
+        attrnotice = Notice.objects.filter(institution=institution, notice_type='attribution_incomplete').exists()
 
         projects = []
 
@@ -169,16 +163,20 @@ def public_institution_view(request, pk):
                 if 'contact_btn' in request.POST:
                     # contact institution
                     if form.is_valid():
-                        to_email = ''
                         from_name = form.cleaned_data['name']
                         from_email = form.cleaned_data['email']
                         message = form.cleaned_data['message']
                         to_email = institution.institution_creator.email
                         
                         send_contact_email(to_email, from_name, from_email, message)
-                        messages.add_message(request, messages.SUCCESS, 'Sent!')
+                        messages.add_message(request, messages.SUCCESS, 'Message sent!')
                         return redirect('public-institution', institution.id)
-                else:
+                    else:
+                        if not form.data['message']:
+                            messages.add_message(request, messages.ERROR, 'Unable to send an empty message.')
+                            return redirect('public-institution', institution.id)
+
+                elif 'join_request' in request.POST:
                     if JoinRequest.objects.filter(user_from=request.user, institution=institution).exists():
                         messages.add_message(request, messages.ERROR, "You have already sent a request to this institution")
                         return redirect('public-institution', institution.id)
@@ -189,26 +187,28 @@ def public_institution_view(request, pk):
 
                         # Send email to institution creator
                         send_join_request_email_admin(request, join_request, institution)
+                        messages.add_message(request, messages.SUCCESS, 'Request sent!')
+                        return redirect('public-institution', institution.id)
+                else:
+                    messages.add_message(request, messages.ERROR, 'Something went wrong')
+                    return redirect('public-institution', institution.id)
 
-                        messages.add_message(request, messages.SUCCESS, 'Sent!')
-                return redirect('public-institution', institution.id)
-
-            else:
-                context = { 
-                    'institution': institution,
-                    'projects' : projects,
-                    'form': form, 
-                    'user_institutions': user_institutions,
-                    'bcnotice': bcnotice,
-                    'tknotice': tknotice,
-                    'attrnotice': attrnotice,
-                    'otc_notices': otc_notices,
-                }
-                return render(request, 'public.html', context)
+        else:
+            context = { 
+                'institution': institution,
+                'projects' : projects,
+                'bcnotice': bcnotice,
+                'tknotice': tknotice,
+                'attrnotice': attrnotice,
+                'otc_notices': otc_notices,
+            }
+            return render(request, 'public.html', context)
 
         context = { 
             'institution': institution,
             'projects' : projects,
+            'form': form, 
+            'user_institutions': user_institutions,
             'bcnotice': bcnotice,
             'tknotice': tknotice,
             'attrnotice': attrnotice,

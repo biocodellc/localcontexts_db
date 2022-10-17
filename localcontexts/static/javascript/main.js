@@ -995,71 +995,47 @@ if (deactivateAccountBtn) {
 // REGISTRY FILTERING AND JOIN REQUESTS / CONTACT MODAL
 if (window.location.href.includes('communities/view/') || window.location.href.includes('institutions/view/') || window.location.href.includes('researchers/view/') ) {
 
-    // Send request to join institution or community
-    const registryModal = document.getElementById('registryModal')
-    const submitJoinRequestFormBtn = document.getElementById('submitRegistryForm')
+    // Join request modal and form
+    const openRequestToJoinModalBtn = document.getElementById('openRequestToJoinModalBtn') 
+    const requestToJoinModal = document.getElementById('requestToJoinModal') 
 
-    const closeRegistryModalBtn = document.getElementById('closeRegistryModal')
-    closeRegistryModalBtn.addEventListener('click', function(e) { registryModal.classList.replace('show', 'hide') })
+    const requestToJoinForm = document.getElementById('requestToJoinForm') 
+    const sendRequestToJoinBtn = document.getElementById('sendRequestToJoinBtn') 
 
-    document.addEventListener('click', function(e) {
+    const openContactModalBtn = document.getElementById('openContactModalBtn') 
+    const contactModal = document.getElementById('contactModal') 
+    const sendMsgForm = document.getElementById('sendMsgForm') 
+    const sendMsgBtn = document.getElementById('sendMsgBtn') 
 
-        if (e.target.tagName == 'A') {
-            // get Id and btn type, based on which organization it is, submit
-            if (e.target.id.includes('communityRequest')) {
-                // show modal
-                registryModal.classList.replace('hide', 'show')
-                let targetId = e.target.id.split('-').pop()
-                submitJoinRequestFormBtn.addEventListener('click', function(e) { 
-                    disableSendBtn(submitJoinRequestFormBtn)
-                    document.getElementById(`communityRegistryForm${targetId}`).submit() 
-                })    
-            } else if (e.target.id.includes('institutionRequest')) {
-                // show modal
-                registryModal.classList.replace('hide', 'show')
-                let targetId = e.target.id.split('-').pop()
-                submitJoinRequestFormBtn.addEventListener('click', function(e) { 
-                    disableSendBtn(submitJoinRequestFormBtn)
-                    document.getElementById(`institutionRegistryForm${targetId}`).submit() 
-                })  
+    // Open either modal
+    if (openRequestToJoinModalBtn) {
+        openRequestToJoinModalBtn.addEventListener('click', function() { requestToJoinModal.classList.replace('hide', 'show') })
+    }
+    openContactModalBtn.addEventListener('click', function() { contactModal.classList.replace('hide', 'show') })
 
-                // open contact form modal
-            } else if (e.target.id.includes('communityContact')) {
-                let targetId = e.target.id.split('-').pop()
-                let modal = document.getElementById(`contactModalComm${targetId}`)
-                modal.classList.replace('hide', 'show')
-                closeModal(modal)
+    // Contact modal
+    sendMsgBtn.addEventListener('click', function() { 
+        let btnContent = `Send message <i class="fa fa-envelope" aria-hidden="true"></i>`
+        disableSendBtn(sendMsgBtn, btnContent, sendMsgForm) 
+    })
 
-            } else if (e.target.id.includes('institutionContact')) {
-                let targetId = e.target.id.split('-').pop()
-                let modal = document.getElementById(`contactModalInst${targetId}`)
-                modal.classList.replace('hide', 'show')
-                closeModal(modal)
-                
-            } else if (e.target.id.includes('researcherContact')) {
-                let targetId = e.target.id.split('-').pop()
-                let modal = document.getElementById(`contactModalResearcher${targetId}`)
-                modal.classList.replace('hide', 'show')
-                closeModal(modal)
-            }
-        } else {
-            // TODO: set this up to disable contact btn
-            // const sendMsgBtn = document.getElementById('sendMsgBtn')
-            // sendMsgBtn.addEventListener('click', function() {
-            //     disableSendBtn(sendMsgBtn)
-            //     document.getElementById('sendMsgForm').submit() 
-            // })
-        }
-    })  
+    sendRequestToJoinBtn.addEventListener('click', function() {
+        let btnContent = `Send request`
+        disableSendBtn(sendRequestToJoinBtn, btnContent, requestToJoinForm) 
+    })
+
+    closeModal(requestToJoinModal)
+    closeModal(contactModal)
 
     // Temporarily disable the submit button to prevent multiple form submission
-    function disableSendBtn(btn) {
-        let oldValue = 'Send'
+    function disableSendBtn(btn, btnContent, formToSubmit) {
+        formToSubmit.submit() 
+
         btn.setAttribute('disabled', true)
-        btn.innerText = 'Sending'
+        btn.innerText = 'Sending...'
 
         window.addEventListener('load', function() {
-            btn.innerText = oldValue;
+            btn.innerText = btnContent;
             btn.removeAttribute('disabled')
         })
     }

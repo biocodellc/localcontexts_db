@@ -63,15 +63,9 @@ def public_researcher_view(request, pk):
         created_projects = ProjectCreator.objects.filter(researcher=researcher)
 
         # Do notices exist
-        bcnotice = False
-        tknotice = False
-        attrnotice = False
-        if Notice.objects.filter(researcher=researcher, notice_type='biocultural').exists():
-            bcnotice = True
-        if Notice.objects.filter(researcher=researcher, notice_type='traditional_knowledge').exists():
-            tknotice = True
-        if Notice.objects.filter(researcher=researcher, notice_type='attribution_incomplete').exists():
-            attrnotice = True
+        bcnotice = Notice.objects.filter(researcher=researcher, notice_type='biocultural').exists()
+        tknotice = Notice.objects.filter(researcher=researcher, notice_type='traditional_knowledge').exists()
+        attrnotice = Notice.objects.filter(researcher=researcher, notice_type='attribution_incomplete').exists()
 
         projects = []
 
@@ -85,28 +79,34 @@ def public_researcher_view(request, pk):
             form = ContactOrganizationForm(request.POST or None)
 
             if request.method == 'POST':
-                # contact researcher
-                if form.is_valid():
-                    to_email = ''
-                    from_name = form.cleaned_data['name']
-                    from_email = form.cleaned_data['email']
-                    message = form.cleaned_data['message']
-                    to_email = researcher.contact_email
+                if 'contact_btn' in request.POST:
+                    # contact researcher
+                    if form.is_valid():
+                        from_name = form.cleaned_data['name']
+                        from_email = form.cleaned_data['email']
+                        message = form.cleaned_data['message']
+                        to_email = researcher.contact_email
 
-                    send_contact_email(to_email, from_name, from_email, message)
-                    messages.add_message(request, messages.SUCCESS, 'Sent!')
+                        send_contact_email(to_email, from_name, from_email, message)
+                        messages.add_message(request, messages.SUCCESS, 'Message sent!')
+                        return redirect('public-researcher', researcher.id)
+                    else:
+                        if not form.data['message']:
+                            messages.add_message(request, messages.ERROR, 'Unable to send an empty message.')
+                            return redirect('public-researcher', researcher.id)
+                else:
+                    messages.add_message(request, messages.ERROR, 'Something went wrong')
                     return redirect('public-researcher', researcher.id)
-            else:
-                context = { 
-                    'researcher': researcher,
-                    'projects' : projects,
-                    'form': form,
-                    'bcnotice': bcnotice,
-                    'tknotice': tknotice,
-                    'attrnotice': attrnotice,
-                    'otc_notices': otc_notices,
-                }
-                return render(request, 'public.html', context)
+        else:
+            context = { 
+                'researcher': researcher,
+                'projects' : projects,
+                'bcnotice': bcnotice,
+                'tknotice': tknotice,
+                'attrnotice': attrnotice,
+                'otc_notices': otc_notices,
+            }
+            return render(request, 'public.html', context)
 
         context = { 
             'researcher': researcher,
@@ -115,6 +115,7 @@ def public_researcher_view(request, pk):
             'tknotice': tknotice,
             'attrnotice': attrnotice,
             'otc_notices': otc_notices,
+            'form': form, 
         }
         return render(request, 'public.html', context)
     except:
