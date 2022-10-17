@@ -1,5 +1,4 @@
 import json
-from operator import imod
 import uuid
 from django.db import models
 from communities.models import Community
