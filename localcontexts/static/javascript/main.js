@@ -407,6 +407,20 @@ if (window.location.href.includes('/labels/customize') || window.location.href.i
     }
 
     fetchLanguages()
+
+    const saveLabelBtn = document.getElementById('saveLabelBtn')
+    saveLabelBtn.addEventListener('click', function() {    
+        document.getElementById('saveLabelForm').submit()
+
+        let oldValue = 'Save Label'
+        saveLabelBtn.setAttribute('disabled', true)
+        saveLabelBtn.innerText = 'Saving...'
+        
+        window.addEventListener('load', function() {
+            saveLabelBtn.innerText = oldValue;
+            saveLabelBtn.removeAttribute('disabled');
+        })
+    })
 }
 
 // Approve Label: show note div
@@ -465,7 +479,22 @@ function displayDefaultText(elem) {
         targetDiv.style.height = '0'
         labelName.classList.replace('darkteal-text', 'grey-text')
     }
+}
 
+if (window.location.href.includes('/labels/apply-labels/')) {
+    const applyLabelsBtn = document.getElementById('applyLabelsBtn')
+    applyLabelsBtn.addEventListener('click', function() {    
+        document.getElementById('applyLabelsForm').submit()
+
+        let oldValue = '<i class="fa fa-check" aria-hidden="true"></i>'
+        applyLabelsBtn.setAttribute('disabled', true)
+        applyLabelsBtn.innerText = 'Applying Labels...'
+        
+        window.addEventListener('load', function() {
+            applyLabelsBtn.innerText = oldValue;
+            applyLabelsBtn.removeAttribute('disabled');
+        })
+    })
 }
 
 

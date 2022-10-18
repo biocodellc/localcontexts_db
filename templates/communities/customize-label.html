@@ -209,7 +209,7 @@
 <div class="content-card-v2 content-card-space">
 
     <div class="flex-this column border-bottom-solid-teal">
-        <form method="POST" action="" enctype="multipart/form-data">
+        <form id="saveLabelForm" method="POST" action="" enctype="multipart/form-data">
             {% csrf_token %}
             <div>
                 <h3 class="no-top-margin no-bottom-margin">Step 2. Customize Label</h3>
@@ -246,7 +246,7 @@
             {% include 'partials/_add-translation.html' %}
 
             <div class="text-align-right margin-bottom-16">
-                <button class="primary-btn action-btn margin-top-2">Save Label</button> 
+                <button id="saveLabelBtn" class="primary-btn action-btn margin-top-2">Save Label</button> 
             </div>
         </form>
     </div>

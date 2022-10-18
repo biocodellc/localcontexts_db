@@ -104,7 +104,7 @@
 
             {% include 'partials/_alerts.html' %}
         </p>
-        <form method="POST" action="">
+        <form id="applyLabelsForm" method="POST" action="">
             {% csrf_token %}
 
             <div class="flex-this">
@@ -252,7 +252,7 @@
                         </div>
                         {{ form.note }}
                     </div>
-                    <div><button class="primary-btn action-btn margin-top-2">Apply Labels to Project <i class="fa fa-check" aria-hidden="true"></i></button></div>
+                    <div><button id="applyLabelsBtn" class="primary-btn action-btn margin-top-2">Apply Labels to Project <i class="fa fa-check" aria-hidden="true"></i></button></div>
                 {% endif %}
             </form>
 
