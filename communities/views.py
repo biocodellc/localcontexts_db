@@ -1217,13 +1217,8 @@ def connections(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        institution_ids = list(chain(
-            community.contributing_communities.exclude(institutions__id=None).values_list('institutions__id', flat=True),
-        ))
-
-        researcher_ids = list(chain(
-            community.contributing_communities.exclude(researchers__id=None).values_list('researchers__id', flat=True),
-        ))
+        institution_ids = community.contributing_communities.exclude(institutions__id=None).values_list('institutions__id', flat=True)
+        researcher_ids = community.contributing_communities.exclude(researchers__id=None).values_list('researchers__id', flat=True)
 
         institutions = Institution.objects.select_related('institution_creator').filter(id__in=institution_ids)
         researchers = Researcher.objects.select_related('user').filter(id__in=researcher_ids)

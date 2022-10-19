@@ -913,9 +913,7 @@ def connections(request, pk):
         #     institution.contributing_institutions.exclude(researchers__id=None).values_list('researchers__id', flat=True),
         # ))
 
-        community_ids = list(chain(
-            institution.contributing_institutions.exclude(communities__id=None).values_list('communities__id', flat=True),
-        ))
+        community_ids = institution.contributing_institutions.exclude(communities__id=None).values_list('communities__id', flat=True)
         communities = Community.objects.select_related('community_creator').filter(id__in=community_ids)
         # institutions = Institution.objects.select_related('institution_creator').filter(id__in=institution_ids)
         # researchers = Researcher.objects.select_related('user').filter(id__in=researcher_ids)

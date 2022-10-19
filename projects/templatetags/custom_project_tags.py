@@ -65,15 +65,11 @@ def projects_contributed_to(community, organization):
     projects = Project.objects.none()
 
     if isinstance(organization, Institution):
-        projects_list = list(chain(
-            community.contributing_communities.filter(institutions=organization).values_list('project__unique_id', flat=True)
-        ))
+        projects_list = community.contributing_communities.filter(institutions=organization).values_list('project__unique_id', flat=True)
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=projects_list).order_by('-date_added')
 
     if isinstance(organization, Researcher):
-        projects_list = list(chain(
-            community.contributing_communities.filter(researchers=organization).values_list('project__unique_id', flat=True)
-        ))
+        projects_list = community.contributing_communities.filter(researchers=organization).values_list('project__unique_id', flat=True)
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=projects_list).order_by('-date_added')
     return projects
 

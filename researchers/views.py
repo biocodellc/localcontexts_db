@@ -682,9 +682,7 @@ def connections(request, pk):
     if user_can_view == False:
         return redirect('restricted')
     else:
-        community_ids = list(chain(
-            researcher.contributing_researchers.exclude(communities__id=None).values_list('communities__id', flat=True),
-        ))
+        community_ids = researcher.contributing_researchers.exclude(communities__id=None).values_list('communities__id', flat=True)
         communities = Community.objects.select_related('community_creator').filter(id__in=community_ids)
 
         context = {
