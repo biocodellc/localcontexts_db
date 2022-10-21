@@ -1217,17 +1217,26 @@ def connections(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
+
+        communities = Community.objects.none()
+
         institution_ids = community.contributing_communities.exclude(institutions__id=None).values_list('institutions__id', flat=True)
         researcher_ids = community.contributing_communities.exclude(researchers__id=None).values_list('researchers__id', flat=True)
 
-        institutions = Institution.objects.select_related('institution_creator').filter(id__in=institution_ids)
+        institutions = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').filter(id__in=institution_ids)
         researchers = Researcher.objects.select_related('user').filter(id__in=researcher_ids)
+
+        project_ids = community.contributing_communities.values_list('project__unique_id', flat=True)
+        contributors = ProjectContributors.objects.filter(project__unique_id__in=project_ids)
+        for c in contributors:
+            communities = c.communities.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').exclude(id=community.id)
 
         context = {
             'member_role': member_role,
             'community': community,
             'researchers': researchers,
-            'institutions': institutions
+            'institutions': institutions,
+            'communities': communities,
         }
         return render(request, 'communities/connections.html', context)
         
