@@ -1,9 +1,11 @@
+from django.db.models import Q
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework import generics, filters
 from rest_framework.exceptions import PermissionDenied
 from rest_framework import status
+from rest_framework.viewsets import ViewSet
 
 from .serializers import *
 from projects.models import Project
@@ -15,6 +17,7 @@ def apiOverview(request, format=None):
     api_urls = {
         'projects_list': reverse('api-projects', request=request, format=format),
         'project_detail': '/projects/<PROJECT_UNIQUE_ID>/',
+        'multi_project_detail':'/projects/multi/<PROJECT_UNIQUE_ID_1>,<PROJECT_UNIQUE_ID_2>/',
         'projects_by_user_id': '/projects/users/<USER_ID>/',
         'projects_by_institution_id': '/projects/institutions/<INSTITUTION_ID>/',
         'projects_by_researcher_id': '/projects/researchers/<RESEARCHER_ID>/',
@@ -116,3 +119,32 @@ def projects_by_researcher(request, researcher_id):
         return Response(serializers.data)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+class MultiProjectListDetail(ViewSet):
+
+    def multisearch(self, request, unique_id):
+        try:
+            project = Project.objects.all()
+
+            if unique_id is not None:
+                unique_id = unique_id.split(',')
+                query= Q()
+                for x in unique_id:
+                    q = Q(unique_id=x)
+                    query |= q  
+                project=project.filter(query).exclude(project_privacy='Private')
+            notices = project.filter(Q(project_notice__isnull=False) & (Q(bc_labels__isnull=True) & Q(tk_labels__isnull=True)))
+            labels = project.filter(Q(bc_labels__isnull=False) | Q(tk_labels__isnull=False))
+            no_notice_labels = project.filter(Q(project_notice__isnull=True) & (Q(bc_labels__isnull=True) & Q(tk_labels__isnull=True)))
+
+            notices_serializer = ProjectSerializer(notices, many=True)
+            labels_serializer = ProjectNoNoticeSerializer(labels, many=True)
+            no_notice_labels_serializer = ProjectNoNoticeSerializer(no_notice_labels, many=True)
+
+            return Response({
+                "notices_only":notices_serializer.data,
+                "labels_only":labels_serializer.data,
+                "no_labels_or_notices":no_notice_labels_serializer.data
+            })
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)

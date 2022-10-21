@@ -10,6 +10,9 @@ projects_by_institution = ProjectsByIdViewSet.as_view({
 projects_by_researcher = ProjectsByIdViewSet.as_view({
     'get':'projects_by_researcher'
 })
+multisearch = MultiProjectListDetail.as_view({
+    'get':'multisearch'
+})
 
 
 api_key_list = APIKeyView.as_view({
@@ -29,7 +32,6 @@ urlpatterns = [
     path('projects/researchers/<str:researcher_id>/', projects_by_researcher, name="api-projects-researcher"),
 
     path('keytest/', api_key_list, name="api-key")
-]
 
-# Check single class with different def calls
-# Button for subscribers to stay up-to-date on changes to API
+    path('projects/multi/<unique_id>/', multisearch, name="api-projects-multi")
+]
