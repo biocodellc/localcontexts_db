@@ -57,22 +57,6 @@ def which_communities_notified(project):
     return ProjectStatus.objects.select_related('community').filter(project=project)
 
 @register.simple_tag
-def projects_contributed_to(community, organization):
-    # pass instance of researcher or institution
-    # in community contribs, find contributing researchers and institutions and get project ids
-
-    projects = Project.objects.none()
-
-    if isinstance(organization, Institution):
-        projects_list = community.contributing_communities.filter(institutions=organization).values_list('project__unique_id', flat=True)
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=projects_list).order_by('-date_added')
-
-    if isinstance(organization, Researcher):
-        projects_list = community.contributing_communities.filter(researchers=organization).values_list('project__unique_id', flat=True)
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=projects_list).order_by('-date_added')
-    return projects
-
-@register.simple_tag
 def connections_collaborative_projects(target_account, collaborating_account):
     projects = Project.objects.none()
     projects_list = []
