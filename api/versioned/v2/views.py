@@ -8,16 +8,17 @@ from rest_framework.viewsets import ViewSet
 class APIOverview(APIView):
     def get(self, request, format=None):
         api_urls = {
-            'projects_list': reverse('api-projects', request=request, format=format),
-            'project_detail': '/projects/<PROJECT_UNIQUE_ID>/',
-            'projects_by_user_id': '/projects/users/<USER_ID>/',
-            'projects_by_institution_id': '/projects/institutions/<INSTITUTION_ID>/',
-            'projects_by_researcher_id': '/projects/researchers/<RESEARCHER_ID>/',
-            'open_to_collaborate_notice': reverse('api-open-to-collaborate', request=request, format=format),
-            'api_documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
-            'usage_guide_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf',
-            'usage_guide_ci_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf',
-            'usage_guide_labels': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf',
+        'projects_list': reverse('api-projects', request=request, format=format),
+        'project_detail': '/projects/<PROJECT_UNIQUE_ID>/',
+        'multi_project_detail':'/projects/multi/<PROJECT_UNIQUE_ID_1>,<PROJECT_UNIQUE_ID_2>/',
+        'projects_by_user_id': '/projects/users/<USER_ID>/',
+        'projects_by_institution_id': '/projects/institutions/<INSTITUTION_ID>/',
+        'projects_by_researcher_id': '/projects/researchers/<RESEARCHER_ID>/',
+        'open_to_collaborate_notice': reverse('api-open-to-collaborate', request=request, format=format),
+        'api_documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
+        'usage_guide_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf',
+        'usage_guide_ci_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf',
+        'usage_guide_labels': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf',
         }
         return Response(api_urls)
 
