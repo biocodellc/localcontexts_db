@@ -1,3 +1,189 @@
-{% extends 'account-base.html' %} {% block title %} Connections {% endblock %}{% load static %} {% block community_content %}
-    {% include 'partials/_connections.html' %}
+{% extends 'account-base.html' %} {% block title %} Connections {% endblock %}{% load static %} {% block community_content %}{% load custom_project_tags %}{% load custom_tags %}
+    <div class="content-card-v2 content-card-space">
+        <div class="w-70">
+            <h2 class="no-top-margin">Connections</h2>
+            <p>
+                Connections are established when Labels are applied to a Project.
+                Here you can see all the accounts that have notified your community of a Project where you have applied Labels.
+            </p>
+        </div>
+    </div>
+
+    {% for institution in institutions %}
+        <div class="dashcard">
+            <div class="flex-this">
+
+                <div class="dashcard-img-container">
+                    <img loading="lazy" 
+                        class="profile-img" 
+                        src="{% if institution.image %} {{ institution.image.url }} {% else %} {% static 'images/placeholders/institution-place.jpg' %}{% endif %}" 
+                        alt="{{ institution.institution_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | 
+                            Location: {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}
+                            {% if not institution.city_town and not institution.state_province_region and not institution.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p></div>
+                </div>
+
+                <div class="dashcard-btn-container">
+                    <div>
+                        <span id="{{ institution.institution_name }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="expand-div-{{ institution.institution_name }}" class="hide">
+                <div class="border-bottom-dash-teal">
+                    <p class="no-bottom-margin">
+                        <span class="bold">Account Contact Name</span> | {% firstof institution.institution_creator.get_full_name  institution.institution_creator.username %}
+                        <span class="bold margin-left-8">Account Contact Email</span> | {{ institution.institution_creator.email }}
+                        <span class="bold margin-left-8">Website</span> | {{ institution.website }} <br><br>
+                    </p>                        
+                </div>
+
+                <div>
+                    <h3> Related Projects </h3>
+                    <ul>
+                        {% connections_collaborative_projects community institution as projects %}
+                        {% for project in projects %}
+                            <li>
+                                <a 
+                                    class="darkteal-text underline-hover"
+                                    href="{% anchor 'community-projects' project.unique_id community.id %}" 
+                                >{{ project.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    {% endfor %}
+
+    {% for researcher in researchers %}
+        <div class="dashcard">
+            <div class="flex-this">
+                <div class="researcher-img-container">
+                    <img loading="lazy" 
+                        src=" {% if researcher.image %} {{ researcher.image.url }} {% else %} {% static 'images/placeholders/researcher-place.jpg' %} {% endif %}" 
+                        alt="{{ researcher.researcher_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3 darkteal-text">{% firstof researcher.user.get_full_name researcher.user.username %}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Researcher | Location: 
+                            {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
+                            {% if profile.state_province_region %} {{ profile.state_province_region }}, {% endif %} 
+                            {% if profile.country.name %} {{ profile.country.name }}{% endif %}
+                            {% if not profile.city_town and not profile.state_province_region and not profile.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p></div>
+                </div>
+                <div class="dashcard-btn-container">
+                    <div>
+                        <span id="{{ researcher.id }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="expand-div-{{ researcher.id }}" class="hide">
+                <div class="border-bottom-dash-teal">
+                    <p class="no-bottom-margin">
+                        <span class="bold">Contact Email</span> | {% if researcher.contact_email %} {{ researcher.contact_email }} {% else %} {{ researcher.user.email }} {% endif %} <br><br>
+                    </p>   
+                </div> 
+                
+                <div>
+                    <h3> Related Projects </h3>
+                    <p>
+                        <ul>
+                            {% connections_collaborative_projects community researcher as projects %}
+                            {% for project in projects %}
+                                <li>
+                                    <a 
+                                        class="darkteal-text underline-hover"
+                                        href="{% anchor 'community-projects' project.unique_id community.id %}" 
+                                    >{{ project.title }}</a>
+                                </li>
+                            {% endfor %}                                
+                        </ul>
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    {% endfor %}
+
+    {% for comm in communities %}
+        <div class="dashcard">
+            <div class="flex-this">
+
+                <div class="dashcard-img-container">
+                    <img loading="lazy" 
+                        class="profile-img" 
+                        src="{% if comm.image %} {{ comm.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
+                        alt="{{ comm.community_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3 darkteal-text">{{ comm }}</h3></div>
+                    <div>
+                        <p class="dashcard-subheader">Community | Members: {% if comm.get_member_count < 10 %}0{{ comm.get_member_count }}{% else %}{{ comm.get_member_count }}{% endif %} | 
+                            Location: {% if comm.city_town %} {{ comm.city_town }}, {% endif %} {% if comm.state_province_region %} {{ comm.state_province_region }}, {% endif %} {% if comm.country.name %} {{ comm.country.name }}{% endif %}
+                            {% if not comm.city_town and not comm.state_province_region and not comm.country %}
+                                None specified
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if comm.description %}{{ comm.description }}{% else %} No description provided. {% endif %}</p></div>
+                </div>
+
+                <div class="dashcard-btn-container">
+                    <div>
+                        <span id="{{ comm.community_name }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div id="expand-div-{{ comm.community_name }}" class="hide">
+                <div class="border-bottom-dash-teal">
+                    <p class="no-bottom-margin">
+                        <span class="bold">Account Contact Name</span> | {% firstof comm.community_creator.get_full_name comm.community_creator.get_full_name %}
+                        <span class="bold margin-left-8">Account Contact Email</span> | {{ comm.community_creator.email }} <br><br>
+                    </p>      
+                </div>   
+                
+                <div>
+                    <h3>Related Projects </h3>
+                    <ul>
+
+                        {% connections_collaborative_projects community comm as projects %}
+                        {% for project in projects %}
+                            <li>
+                                <a
+                                    class="darkteal-text underline-hover"
+                                    href="{% anchor 'community-projects' project.unique_id community.id %}" 
+                                >
+                                    {{ project.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>                           
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
