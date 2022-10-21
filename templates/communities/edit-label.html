@@ -1,4 +1,4 @@
-{% extends 'sub-base.html' %} {% block title %} | Edit Label {% endblock %}{% load static %} {% load custom_tags%} {% block community_content %}
+{% extends 'account-base.html' %} {% block title %} Edit Label {% endblock %}{% load static %} {% load custom_tags%} {% block community_content %}
 
 <div class="content-card-v2 content-card-space">
     <div class="w-70">
@@ -13,7 +13,7 @@
 
     <div class="flex-this column border-bottom-solid-teal">
 
-        <form method="POST" action="" enctype="multipart/form-data">
+        <form id="saveLabelForm" method="POST" action="" enctype="multipart/form-data">
             {% csrf_token %}
             <div>
                 <p class="w-30">
@@ -61,7 +61,7 @@
             {% include 'partials/_add-translation.html' %}
 
             <div class="text-align-right margin-bottom-8">
-                <button class="primary-btn action-btn margin-top-1">Save as draft</button> 
+                <button id="saveLabelBtn" class="primary-btn action-btn margin-top-1">Save Label</button> 
             </div>
         </form>
     

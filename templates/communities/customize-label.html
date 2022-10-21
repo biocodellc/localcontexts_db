@@ -1,4 +1,4 @@
-{% extends 'sub-base.html' %} {% block title %} | Customize {% endblock %}{% load static %} {% block community_content %}
+{% extends 'account-base.html' %} {% block title %} Customize {% endblock %}{% load static %} {% block community_content %}
 
 <div class="content-card-v2 content-card-space">
     <div class="w-70">
@@ -22,172 +22,172 @@
             <div id="target-img-div" class="margin-top-16">
                 <img 
                     loading="lazy"
-                    {% if label_type == 'bcr' %}
+                    {% if label_code == 'bcr' %}
                         id="bcr" 
                         src="{% static 'images/bc-labels/bc-research-use.png' %}"  
                         alt="BC Research Use (BC R) Label" 
                     {% endif %}
-                    {% if label_type == 'bccv' %}
+                    {% if label_code == 'bccv' %}
                         id="bccv" 
                         src="{% static 'images/bc-labels/bc-consent-verified.png' %}" 
                         alt="BC Consent Verified (BC CV) Label"
                     {% endif %}
-                    {% if label_type == 'bcoc' %}
+                    {% if label_code == 'bcoc' %}
                         id="bcoc" 
                         src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" 
                         alt="BC Open to Commercialization (BC OC) Label"
                     {% endif %}
-                    {% if label_type == 'bccb' %}
+                    {% if label_code == 'bccb' %}
                         id="bccb" 
                         src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" 
                         alt="BC Open to Collaboration (BC CB) Label"
                     {% endif %}
-                    {% if label_type == 'bcmc' %}
+                    {% if label_code == 'bcmc' %}
                         id="bcmc" 
                         src="{% static 'images/bc-labels/bc-multiple-community.png' %}" 
                         alt="BC Multiple Communities (BC MC) Label"
                     {% endif %}
-                    {% if label_type == 'bcp' %}
+                    {% if label_code == 'bcp' %}
                         id="bcp" 
                         src="{% static 'images/bc-labels/bc-provenance.png' %}" 
                         alt="BC Provenance (BC P) Label"
                     {% endif %}
-                    {% if label_type == 'bccl' %}
+                    {% if label_code == 'bccl' %}
                         id="bccl" 
                         src="{% static 'images/bc-labels/bc-clan.png' %}" 
                         alt="BC Clan (BC CL) Label"
                     {% endif %}
-                    {% if label_type == 'bco' %}
+                    {% if label_code == 'bco' %}
                         id="bco" 
                         src="{% static 'images/bc-labels/bc-outreach.png' %}" 
                         alt="BC Outreach (BC O) Label"
                     {% endif %}
-                    {% if label_type == 'bccnv' %}
+                    {% if label_code == 'bccnv' %}
                         id="bccnv" 
                         src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" 
                         alt="BC Consent Non-Verified (BC CNV) Label"
                     {% endif %}
-                    {% if label_type == 'bcnc' %}
+                    {% if label_code == 'bcnc' %}
                         id="bcnc" 
                         src="{% static 'images/bc-labels/bc-non-commercial.png' %}" 
                         alt="BC Non-Commercial (BC NC) Label"
                     {% endif %}
 
-                    {% if label_type == 'tka' %}
+                    {% if label_code == 'tka' %}
                         id="tka" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-attribution.png' %}" 
                         alt="TK Attribution (TK A) Label"
                     {% endif %}
-                    {% if label_type == 'tkcl' %}
+                    {% if label_code == 'tkcl' %}
                         id="tkcl" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-clan.png' %}" 
                         alt="TK Clan (TK CL) Label"
                     {% endif %}
-                    {% if label_type == 'tkf' %}
+                    {% if label_code == 'tkf' %}
                         id="tkf" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-family.png' %}" 
                         alt="TK Family (TK F) Label"
                     {% endif %}
-                    {% if label_type == 'tkmc' %}
+                    {% if label_code == 'tkmc' %}
                         id="tkmc" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-multiple-community.png' %}" 
                         alt="TK Multiple Communities (TK MC) Label"
                     {% endif %}
-                    {% if label_type == 'tko' %}
+                    {% if label_code == 'tko' %}
                         id="tko" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-outreach.png' %}" 
                         alt="TK Outreach (TK O) Label"
                     {% endif %}
-                    {% if label_type == 'tknv' %}
+                    {% if label_code == 'tknv' %}
                         id="tknv" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-non-verified.png' %}" 
                         alt="TK Non-Verified (TK NV) Label"
                     {% endif %}
-                    {% if label_type == 'tkv' %}
+                    {% if label_code == 'tkv' %}
                         id="tkv" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-verified.png' %}" 
                         alt="TK Verified (TK V) Label"
                     {% endif %}
-                    {% if label_type == 'tknc' %}
+                    {% if label_code == 'tknc' %}
                         id="tknc" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-non-commercial.png' %}" 
                         alt="TK Non-Commercial (TK NC) Label"
                     {% endif %}
-                    {% if label_type == 'tkoc' %}
+                    {% if label_code == 'tkoc' %}
                         id="tkoc" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-commercial.png' %}" 
                         alt="TK Open to Commercialization (TK OC) Label"
                     {% endif %}
-                    {% if label_type == 'tkcs' %}
+                    {% if label_code == 'tkcs' %}
                         id="tkcs" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-culturally-sensitive.png' %}" 
                         alt="TK Culturally Sensitive (TK CS) Label"
                     {% endif %}
-                    {% if label_type == 'tkcv' %}
+                    {% if label_code == 'tkcv' %}
                         id="tkcv" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-community-voice.png' %}" 
                         alt="TK Community Voice (TK CV) Label" 
                     {% endif %}
-                    {% if label_type == 'tkco' %}
+                    {% if label_code == 'tkco' %}
                         id="tkco" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-community-use-only.png' %}" 
                         alt="TK Community Use Only (TK CO) Label"
                     {% endif %}
-                    {% if label_type == 'tks' %}
+                    {% if label_code == 'tks' %}
                         id="tks" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-seasonal.png' %}" 
                         alt="TK Seasonal (TK S) Label"
                     {% endif %}
-                    {% if label_type == 'tkwg' %}
+                    {% if label_code == 'tkwg' %}
                         id="tkwg" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-women-general.png' %}" 
                         alt="TK Weomen General (TK WG) Label"
                     {% endif %}
-                    {% if label_type == 'tkmg' %}
+                    {% if label_code == 'tkmg' %}
                         id="tkmg" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-men-general.png' %}" 
                         alt="TK Men General (TK MG) Label"
                     {% endif %}
-                    {% if label_type == 'tkmr' %}
+                    {% if label_code == 'tkmr' %}
                         id="tkmr" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-men-restricted.png' %}" 
                         alt="TK Men Restricted (TK MR) Label"
                     {% endif %}
-                    {% if label_type == 'tkwr' %}
+                    {% if label_code == 'tkwr' %}
                         id="tkwr" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-women-restricted.png' %}" 
                         alt="TK Women Restricted (TK WR) Label"
                     {% endif %}
-                    {% if label_type == 'tkss' %}
+                    {% if label_code == 'tkss' %}
                         id="tkss" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-secret-sacred.png' %}" 
                         alt="TK Secret Sacred (TK SS) Label"
                     {% endif %}
-                    {% if label_type == 'tkcb' %}
+                    {% if label_code == 'tkcb' %}
                         id="tkcb" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-open-to-collaboration.png' %}" 
                         alt="TK Open to Collaboration (TK CB) Label"
                     {% endif %}
-                    {% if label_type == 'tkcr' %}
+                    {% if label_code == 'tkcr' %}
                         id="tkcr" 
                         class="img-sizedown-151-116" 
                         src="{% static 'images/tk-labels/tk-creative.png' %}" 
@@ -209,7 +209,7 @@
 <div class="content-card-v2 content-card-space">
 
     <div class="flex-this column border-bottom-solid-teal">
-        <form method="POST" action="" enctype="multipart/form-data">
+        <form id="saveLabelForm" method="POST" action="" enctype="multipart/form-data">
             {% csrf_token %}
             <div>
                 <h3 class="no-top-margin no-bottom-margin">Step 2. Customize Label</h3>
@@ -246,7 +246,7 @@
             {% include 'partials/_add-translation.html' %}
 
             <div class="text-align-right margin-bottom-16">
-                <button class="primary-btn action-btn margin-top-2">Save Label</button> 
+                <button id="saveLabelBtn" class="primary-btn action-btn margin-top-2">Save Label</button> 
             </div>
         </form>
     </div>

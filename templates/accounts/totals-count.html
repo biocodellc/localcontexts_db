@@ -1,11 +1,11 @@
-{% extends 'base.html' %} {% block title %} | Counter {% endblock %}{% load static %} {% block content %} {% include 'partials/headers/_auth-header.html' %}
+{% extends 'auth-base.html' %} {% block title %} Counter {% endblock %}{% load static %} {% block main %}
 
     <div class="content-card-v2 content-card-space">
 
         <div class="center-text">
             <h1 class="no-top-margin">Hub Summary</h1>
             <p>
-                Today: {{ current_datetime }} UTC<br>
+                Today: {% now "M. d, Y, H:i e" %} <br>
             </p>                
         </div>
 
@@ -90,5 +90,4 @@
     #colorPicker > div:nth-of-type(4) { background-color: #108670;}
 </style>
 
-{% include 'partials/footers/_auth-footer.html' %}
 {% endblock %}

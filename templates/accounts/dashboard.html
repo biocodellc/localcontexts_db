@@ -1,14 +1,18 @@
-{% extends 'base.html' %} {% block title %} | Home {% endblock %}{% load static %} {% block content %} {% include 'partials/headers/_auth-header.html' %}
+{% extends 'auth-base.html' %} {% block title %} Home {% endblock %}{% load static %} {% block main %}
 
-    {% include 'partials/infocards/_user-info.html' %}
+    {% include 'partials/infocards/_user-dashcard.html' %}
 
     <div class="flex-this justify-center">{% include 'partials/_alerts.html' %}</div>
-
-    {% if profile.onboarding_on %}
-        <input id="openOnboarding" value="true" type="hidden">
-    {% else %}
-        <input id="openOnboarding" value="false" type="hidden">
-    {% endif %}
+    
+    <input 
+        id="openOnboarding"
+        type="hidden"
+        {% if profile.onboarding_on %}
+            value="true"
+        {% else %}
+        value="false"
+        {% endif %}
+    >
 
     {% include 'snippets/modals/onboarding.html' %}
 
@@ -19,98 +23,21 @@
         {% endif %}
 
         {% if researcher %}
-            <div class="dashcard">
-                <a href="{% url 'researcher-notices' researcher.id %}">
-                    <div class="flex-this">
-                        <div class="researcher-img-container">
-                            <img loading="lazy" 
-                                src=" {% if researcher.image %} {{ researcher.image.url }} {% else %} {% static 'images/placeholders/researcher-place.jpg' %} {% endif %}" 
-                                alt="{{ researcher.researcher_name }} image"
-                            >
-                        </div>
-                        <div class="flex-this column dashcard-text-container">
-                            <div><h3 class="dashcard-h3 darkteal-text">{% if researcher.user.get_full_name  %}{{ researcher.user.get_full_name }} {% else %}{{ researcher.user.username }}{% endif %}</h3></div>
-                            <div>
-                                <p class="dashcard-subheader">Researcher | Location: 
-                                    {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
-                                    {% if profile.state_province_region %} {{ profile.state_province_region }}, {% endif %} 
-                                    {% if profile.country.name %} {{ profile.country.name }}{% endif %}
-                                    {% if not profile.city_town and not profile.state_province_region and not profile.country %}
-                                        None specified
-                                    {% endif %}
-                                </p>
-                            </div>
-                            <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p></div>
-                        </div>
-
-                    </div>
-                </a>
-            </div>
+            {% include 'partials/infocards/_researcher-card.html' %}
         {% endif %}
 
         {% if user_communities %}
             {% for community in user_communities %}
-                <div class="dashcard">
-                    <a href="{% url 'select-label' community.id %}">
-                        <div class="flex-this">
-
-                            <div class="dashcard-img-container">
-                                <img loading="lazy" 
-                                    class="profile-img" 
-                                    src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
-                                    alt="{{ community.community_name }} image"
-                                >
-                            </div>
-                            <div class="flex-this column dashcard-text-container">
-                                <div><h3 class="dashcard-h3 darkteal-text">{{ community }}</h3></div>
-                                <div>
-                                    <p class="dashcard-subheader">Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %} | 
-                                        Location: {% if community.city_town %} {{ community.city_town }}, {% endif %} {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}
-                                        {% if not community.city_town and not community.state_province_region and not community.country %}
-                                            None specified
-                                        {% endif %}
-                                    </p>
-                                </div>
-                                <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }}{% else %} No description provided. {% endif %}</p></div>
-                            </div>
-
-                        </div>
-                    </a>
-                </div>
+                {% include 'partials/infocards/_community-card.html' %}
             {% endfor %}
         {% endif %}
 
-    {% if user_institutions %}
-        {% for institution in user_institutions %}
-            <div class="dashcard">
-                <a href="{% url 'institution-notices' institution.id %}">
-                    <div class="flex-this">
-                        <div class="dashcard-img-container">
-                            <img loading="lazy" 
-                                class="profile-img" 
-                                src="{% if institution.image %} {{ institution.image.url }} {% else %} {% static 'images/placeholders/institution-place.jpg' %}{% endif %}" 
-                                alt="{{ institution.institution_name }} image"
-                            >
-                        </div>
-                        <div class="flex-this column dashcard-text-container">
-                            <div><h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3></div>
-                            <div>
-                                <p class="dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | 
-                                    Location: {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}
-                                    {% if not institution.city_town and not institution.state_province_region and not institution.country %}
-                                        None specified
-                                    {% endif %}
-                                </p>
-                            </div>
-                            <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p></div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        {% endfor %}
-    {% endif %}
+        {% if user_institutions %}
+            {% for institution in user_institutions %}
+                {% include 'partials/infocards/_institution-card.html' %}
+            {% endfor %}
+        {% endif %}
 
     </section>
 
-{% include 'partials/footers/_auth-footer.html' %}
 {% endblock %}

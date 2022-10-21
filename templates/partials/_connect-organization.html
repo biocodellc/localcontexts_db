@@ -12,16 +12,9 @@
             <div class="margin-top-16">Or <a class="darkteal-text underline-hover" href="{% url 'select-account' %}">choose another account</a></div>
         </div>
         <p class="w-90">
-            Please first check if your
-            {% if community %} community {% endif %}
-            {% if institution %} institution {% endif %}
-            is already registered. If your 
-            {% if community %} community {% endif %}
-            {% if institution %} institution {% endif %}
-            is not in our register, you can create a new 
-            {% if community %} community {% endif %}
-            {% if institution %} institution {% endif %}
-            account.
+            Search the registry of {% if community %} communities {% endif %}{% if institution %} institutions {% endif %} that have accounts on the Local Contexts Hub. 
+            <strong>You should request to join {% if community %} a community {% endif %}{% if institution %} an institution {% endif %} you are already affiliated with.</strong> 
+            If your {% if community %} community {% endif %}{% if institution %} institution {% endif %} is not in our register, you can create a new {% if community %} community {% endif %}{% if institution %} institution {% endif %} account.
         </p>    
     </div>
 
@@ -90,7 +83,7 @@
         <div class="flex-this space-between">
             <div class="modal-content-padding"><h2 class="primary-black-text">Request to join</h2></div>
             <div class="close-modal-btn">
-                <div class="margin-right-8 primary-btn white-btn">Close X</div>
+                <div class="margin-right-8 primary-btn white-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
             </div>            
         </div>
 

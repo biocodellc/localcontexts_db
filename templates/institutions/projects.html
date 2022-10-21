@@ -1,6 +1,4 @@
-{% extends 'sub-base.html' %} {% block title %} | Projects {% endblock %}{% load static %} {% load custom_institution_tags %} {% block institution_content %}
+{% extends 'account-base.html' %} {% block title %} Projects {% endblock %}{% load static %} {% load custom_institution_tags %} {% block institution_content %}
 {% institution_contributing_projects institution as institution_projects_contrib %}
-
     {% include 'projects/projects.html' %}
-
 {% endblock %}

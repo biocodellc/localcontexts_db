@@ -1,45 +1,40 @@
 {% load static %}
 
 <div class="content-card-v2 content-card-space">
-
     <div class="flex-this w-100">
         <div class="flex-this w-50">
             {% if request.user.is_authenticated %}
                 <div><a class="primary-btn green-btn margin-top-2" onClick="window.history.back();return false;"><i class="fa fa-arrow-left"></i> Back</a></div>
             {% endif %}
         </div>
-
         <div class="flex-this flex-end w-50">
             <div class="margin-left-8"><a class="primary-btn white-btn margin-top-2" href="{% url 'download-project-zip' project.unique_id %}">Download <i class="fa fa-download" aria-hidden="true"></i></a></div>
         </div>
-
     </div>
-
-
-    <div class="flex-this space-between w-100">
-        <div class="flex-this column">
-            <div class="margin-top-1">
-                <p class="p-24 bold">Project View</p>
-                <p>Listed below is the information that is associated with this Project.<br>
-                    If you would like to edit this Project, you can do so until a community has applied a Label to this Project. </p>
-            </div>
-        </div>
+    <div class="w-100">
+        <h3 class="no-bottom-margin">Project View</h3>
+        <p>Listed below is the information that is associated with this Project.<br>
+            If you would like to edit this Project, you can do so until a community has applied a Label to this Project. </p>
     </div>
-
 </div>
 
 <div class="content-card-v2 content-card-space">
     
-    <div class="flex-this margin-right-1 margin-left-1">
+    <div class="flex-this margin-left-16">
         <div class="flex-this column w-60">
-            <div><p class="p-28 bold">{{ project.title }}</p></div>
-            <div><p class="bold">{{ project.date_added|date:'d F Y' }} | {% if project.project_type == 'Other' %} {{ project.other_type }} {% else %} {{ project.project_type }} {% endif %}| 
+            <div><p class="p-28 bold no-bottom-margin">{{ project.title }}</p></div>
+            <div><p>{{ project.date_added|date:'d F Y' }} | {% if project.project_type == 'Other' %} {{ project.other_type }} {% else %} {{ project.project_type }} {% endif %}| 
                 {{ project.project_privacy }}</p></div>
 
             <div>
                 <p class="p-24 bold no-top-margin">Project Information</p>
                 <span class="bold">Project Description</span><br>
                 <p>{{ project.description|linebreaks }}</p>
+            </div>
+
+            <div>
+                <p class="bold">Project Link</p>
+                {{ project.url }}
             </div>
 
             <div>
@@ -76,12 +71,7 @@
                                             </a>
                                         {% endif %}
 
-                                        {% if researcher.user.get_full_name %}
-                                            {{ researcher.user.get_full_name }}
-                                        {% else %}
-                                            {{ researcher.user.username }}
-                                        {% endif %}
-                                         | Researcher
+                                        {% firstof researcher.user.get_full_name researcher.user.username %} | Researcher
                                         <div class="researcher-hover-info">
                                             <p>
                                                 <strong>Primary Institution Affiliation:</strong> {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% else %} None specified {% endif %}<br>

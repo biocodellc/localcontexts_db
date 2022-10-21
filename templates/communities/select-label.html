@@ -1,4 +1,4 @@
-{% extends 'sub-base.html' %} {% block title %} | Select Label {% endblock %}{% load static %} {% load custom_tags %} {% block community_content %}
+{% extends 'account-base.html' %} {% block title %} Select Label {% endblock %}{% load static %} {% load custom_tags %} {% block community_content %}
 
 <div class="content-card-v2 content-card-space">
 
@@ -37,190 +37,182 @@
     
     <div class="flex-this wrap">
         <!-- UNAPPROVED BCLABELS -->
-        {% if bclabels %}
-            {% for bclabel in bclabels %}
-
-                {% if not bclabel.is_approved %}
-                    <div class="w-20">
-                        <small class="center-text block bold darkteal-text margin-bottom-8">
-                            {% if request.user == bclabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
-                        </small>
-                        <div class="margin-top-16 margin-bottom-16">
-                            <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
-                                <div class="auto-margin">
-                                    {% include 'bclabels/mini-labels.html' %}
-                                    <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ bclabel.name }}</p>
-                                </div>
-                            </div>
-                        </div>                    
-                    </div>
-                {% endif %}
-
-            {% endfor %}
-        {% endif %}
-
-        <!-- UNAPPROVED TK LABELS -->
-        {% if tklabels %}
-            {% for tklabel in tklabels %}
-                {% if not tklabel.is_approved %}
-                    <div class="w-20">
-                        <small class="center-text block bold darkteal-text margin-bottom-8">
-                            {% if request.user == tklabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
-                        </small>
-                        <div class="margin-top-16 margin-bottom-16">
-                            <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
-                                {% include 'tklabels/mini-labels.html' %}
-                                <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ tklabel.name }}</p>
-                            </div>
-                        </div>                    
-                    </div>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-
-        <!-- APPROVED BC LABELS -->
-        {% if bclabels %}
-            {% for bclabel in bclabels %}
-                {% if bclabel.is_approved %}
-                    <div class="w-20">
-                        <div class="margin-top-16 margin-bottom-16">
-                            <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
+        {% for bclabel in bclabels %}
+            {% if not bclabel.is_approved %}
+                <div class="w-20">
+                    <small class="center-text block bold darkteal-text margin-bottom-8">
+                        {% if request.user == bclabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
+                    </small>
+                    <div class="margin-top-16 margin-bottom-16">
+                        <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
+                            <div class="auto-margin">
                                 {% include 'bclabels/mini-labels.html' %}
                                 <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ bclabel.name }}</p>
                             </div>
-                        </div>                    
-                    </div>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
+                        </div>
+                    </div>                    
+                </div>
+            {% endif %}
+        {% empty %}
+        {% endfor %}
 
-        <!-- APPROVED TKLABELS -->
-        {% if tklabels %}
-            {% for tklabel in tklabels %}
-                {% if tklabel.is_approved %}
-                    <div class="w-20 margin-top-16 margin-bottom-16">
+        <!-- UNAPPROVED TK LABELS -->
+        {% for tklabel in tklabels %}
+            {% if not tklabel.is_approved %}
+                <div class="w-20">
+                    <small class="center-text block bold darkteal-text margin-bottom-8">
+                        {% if request.user == tklabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
+                    </small>
+                    <div class="margin-top-16 margin-bottom-16">
                         <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
                             {% include 'tklabels/mini-labels.html' %}
                             <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ tklabel.name }}</p>
                         </div>
+                    </div>                    
+                </div>
+            {% endif %}
+        {% empty %}
+        {% endfor %}
+
+        <!-- APPROVED BC LABELS -->
+        {% for bclabel in bclabels %}
+            {% if bclabel.is_approved %}
+                <div class="w-20">
+                    <div class="margin-top-16 margin-bottom-16">
+                        <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
+                            {% include 'bclabels/mini-labels.html' %}
+                            <p id="toggle-color-{{ bclabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ bclabel.name }}</p>
+                        </div>
+                    </div>                    
+                </div>
+            {% endif %}
+        {% empty %}
+        {% endfor %}
+
+        <!-- APPROVED TKLABELS -->
+        {% for tklabel in tklabels %}
+            {% if tklabel.is_approved %}
+                <div class="w-20 margin-top-16 margin-bottom-16">
+                    <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
+                        {% include 'tklabels/mini-labels.html' %}
+                        <p id="toggle-color-{{ tklabel.unique_id }}" class="toggle-txt-color bold primary-black-text label-name-box auto-margin">{{ tklabel.name }}</p>
                     </div>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
+                </div>
+            {% endif %}
+        {% empty %}
+        {% endfor %}
 
     </div>
 
-    {% if bclabels %}
-        {% for bclabel in bclabels %}
-            <div id="open-div-{{ bclabel.unique_id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
-                <div class="full-label-card flex-this">
-                    <div class="margin-right-16"><img src="{{bclabel.img_url}}" class="img-sizedown-151-116"></div>
-                    <div>
-                        <div class="flex-this space-between">
-                            <div><h3 class="no-top-margin">{{ bclabel.name }}</h3></div>
+    {% for bclabel in bclabels %}
+        <div id="open-div-{{ bclabel.unique_id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
+            <div class="full-label-card flex-this">
+                <div class="margin-right-16"><img src="{{bclabel.img_url}}" class="img-sizedown-151-116"></div>
+                <div>
+                    <div class="flex-this space-between">
+                        <div><h3 class="no-top-margin">{{ bclabel.name }}</h3></div>
 
-                            <div class="flex-this flex-end">
-                                {% if not bclabel.is_approved %}
-                                    {% if not bclabel.created_by == request.user %}
-                                        {% if member_role == 'admin' or member_role == 'editor' %}
-                                            <div class="margin-top-1">
-                                                <a class="primary-btn action-btn" href="{% url 'approve-label' community.id bclabel.unique_id %}">Review for Approval</a>
-                                            </div>
-                                        {% endif %}
+                        <div class="flex-this flex-end">
+                            {% if not bclabel.is_approved %}
+                                {% if not bclabel.created_by == request.user %}
+                                    {% if member_role == 'admin' or member_role == 'editor' %}
+                                        <div class="margin-top-1">
+                                            <a class="primary-btn action-btn" href="{% url 'approve-label' community.id bclabel.unique_id %}">Review for Approval</a>
+                                        </div>
                                     {% endif %}
                                 {% endif %}
+                            {% endif %}
 
-                                <div class="margin-top-1 margin-left-8">
-                                    <a class="primary-btn white-btn block" href="{% url 'view-label' community.id bclabel.unique_id %}">View Label</a>
-                                </div>
+                            <div class="margin-top-1 margin-left-8">
+                                <a class="primary-btn white-btn block" href="{% url 'view-label' community.id bclabel.unique_id %}">View Label</a>
                             </div>
                         </div>
+                    </div>
 
-                        {% if bclabel.audiofile %}<div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
-                        <p>{{ bclabel.label_text }}</p>
-                        {% include 'partials/_label-translation.html' %}
+                    {% if bclabel.audiofile %}<div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
+                    <p>{{ bclabel.label_text }}</p>
+                    {% include 'partials/_label-translation.html' %}
 
 
-                        {% if not bclabel.is_approved %}
-                            {% if bclabel.bclabel_note.all %}
-                                <h4>A note was added to this Label:</h4>
-                                {% for note in bclabel.bclabel_note.all %}
-                                    <div class="margin-top-16 note-container">
-                                        <p> Member {% if note.sender.get_full_name %}{{ note.sender.get_full_name }}{% else %}{{ note.sender.username }}{% endif %} wrote: <br>{{ note.note }}</p>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
+                    {% if not bclabel.is_approved %}
+                        {% if bclabel.bclabel_note.all %}
+                            <h4>A note was added to this Label:</h4>
+                            {% for note in bclabel.bclabel_note.all %}
+                                <div class="margin-top-16 note-container">
+                                    <p> Member {% firstof note.sender.get_full_name note.sender.username %} wrote: <br>{{ note.note }}</p>
+                                </div>
+                            {% endfor %}
                         {% endif %}
-                    </div>
-
+                    {% endif %}
                 </div>
+
             </div>
-        {% endfor %}
-    {% endif %}
+        </div>
+    {% empty %}
+    {% endfor %}
 
-    {% if tklabels %}
-        {% for tklabel in tklabels %}
-            <div id="open-div-{{ tklabel.unique_id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
-                <div class="full-label-card flex-this">
-                    <div class="margin-right-16">
-                        <img src="{{ tklabel.img_url }}" class="img-sizedown-151-116">
-                    </div>
-                    <div>
-                        <div class="flex-this space-between">
-                            <div><h3 class="no-top-margin">{{ tklabel.name }}</h3></div>
+    {% for tklabel in tklabels %}
+        <div id="open-div-{{ tklabel.unique_id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
+            <div class="full-label-card flex-this">
+                <div class="margin-right-16">
+                    <img src="{{ tklabel.img_url }}" class="img-sizedown-151-116">
+                </div>
+                <div>
+                    <div class="flex-this space-between">
+                        <div><h3 class="no-top-margin">{{ tklabel.name }}</h3></div>
 
-                            <div class="flex-this flex-end">
-                                {% if not tklabel.is_approved %}
-                                    {% if not tklabel.created_by == request.user %}
-                                        {% if member_role == 'admin' or member_role == 'editor' %}
-                                            <div class="margin-top-1">
-                                                <a class="primary-btn action-btn" href="{% url 'approve-label' community.id tklabel.unique_id %}">Review for Approval</a>
-                                            </div>
-                                        {% endif %}
+                        <div class="flex-this flex-end">
+                            {% if not tklabel.is_approved %}
+                                {% if not tklabel.created_by == request.user %}
+                                    {% if member_role == 'admin' or member_role == 'editor' %}
+                                        <div class="margin-top-1">
+                                            <a class="primary-btn action-btn" href="{% url 'approve-label' community.id tklabel.unique_id %}">Review for Approval</a>
+                                        </div>
                                     {% endif %}
                                 {% endif %}
+                            {% endif %}
 
-                                <div class="margin-top-1 margin-left-8">
-                                    <a class="primary-btn white-btn block" href="{% url 'view-label' community.id tklabel.unique_id %}">View Label</a>
-                                </div>
+                            <div class="margin-top-1 margin-left-8">
+                                <a class="primary-btn white-btn block" href="{% url 'view-label' community.id tklabel.unique_id %}">View Label</a>
                             </div>
                         </div>
-
-                        {% if tklabel.audiofile %}<div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
-                        <p>{{ tklabel.label_text }}</p>
-                        {% include 'partials/_label-translation.html' %}
-
-
-                        {% if not bclabel.is_approved %}
-                            {% if bclabel.bclabel_note.all %}
-                                <h4>A note was added to this Label:</h4>
-                                {% for note in bclabel.bclabel_note.all %}
-                                    <div class="margin-top-16 note-container">
-                                        <p> Member {% if note.sender.get_full_name %}{{ note.sender.get_full_name }}{% else %}{{ note.sender.username }}{% endif %} wrote: <br>{{ note.note }}</p>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        {% endif %}
                     </div>
 
+                    {% if tklabel.audiofile %}<div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
+                    <p>{{ tklabel.label_text }}</p>
+                    {% include 'partials/_label-translation.html' %}
+
+
+                    {% if not bclabel.is_approved %}
+                        {% if bclabel.bclabel_note.all %}
+                            <h4>A note was added to this Label:</h4>
+                            {% for note in bclabel.bclabel_note.all %}
+                                <div class="margin-top-16 note-container">
+                                    <p> Member {% firstof note.sender.get_full_name note.sender.username %} wrote: <br>{{ note.note }}</p>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
                 </div>
+
             </div>
-        {% endfor %}
-    {% endif %}
+        </div>
+    {% empty %}
+    {% endfor %}
 
 </div>
 
-<!-- To check if labels exist -->
-{% if tklabels %}
-    {% for tklabel in tklabels %}
-        <input type="hidden" value="{{ tklabel.label_type }}" class="checkTKLabelType">
-    {% endfor %}
-{% endif %}
-{% if bclabels %}
-    {% for bclabel in bclabels %}
-        <input type="hidden" value="{{ bclabel.label_type }}" class="checkBCLabelType">
-    {% endfor %}
-{% endif %}
+<!-- To check if labels already exist -->
+
+{% for tklabel in tklabels %}
+    <input type="hidden" value="{{ tklabel.label_type }}" class="checkTKLabelType">
+{% empty %}
+{% endfor %}
+
+{% for bclabel in bclabels %}
+    <input type="hidden" value="{{ bclabel.label_type }}" class="checkBCLabelType">
+{% empty %}
+{% endfor %}
 
 
 <!-- TK Label Card -->
@@ -328,11 +320,11 @@
                             {% csrf_token %}
                             <div class="flex-this space-between">
                                 <div>
-                                    <input id="tk-label-value-type-prov" type="hidden" value="placeholder" name="tk-label-type">
+                                    <input id="tk-label-value-type-prov" type="hidden" value="placeholder" name="tk-label-code">
                                     <div><h3 class="bold" id="tk-label-title-prov" name="tk-label-title"></h3></div>
                                 </div>
 
-                                <div class="margin-top-2"><div id="close-tk-prov" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close X</div></div>                                
+                                <div class="margin-top-2"><div id="close-tk-prov" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div></div>                                
                             </div>
 
 
@@ -454,10 +446,10 @@
                             {% csrf_token %}
                             <div class="flex-this space-between">
                                 <div>
-                                    <input id="tk-label-value-type-prot" type="hidden" value="placeholder" name="tk-label-type">
+                                    <input id="tk-label-value-type-prot" type="hidden" value="placeholder" name="tk-label-code">
                                     <div><h3 class="bold" id="tk-label-title-prot" name="tk-label-title"></h3></div>
                                 </div>
-                                <div class="margin-top-2"><div id="close-tk-prot" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close X</div></div>                                
+                                <div class="margin-top-2"><div id="close-tk-prot" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div></div>                                
                             </div>
 
                         
@@ -550,10 +542,10 @@
                             {% csrf_token %}
                             <div class="flex-this space-between">
                                 <div>
-                                    <input id="tk-label-value-type-perm" type="hidden" value="placeholder" name="tk-label-type">
+                                    <input id="tk-label-value-type-perm" type="hidden" value="placeholder" name="tk-label-code">
                                     <div><h3 class="bold " id="tk-label-title-perm" name="tk-label-title"></h3></div>
                                 </div>
-                                <div class="margin-top-2"><div id="close-tk-perm" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close X</div></div>                                
+                                <div class="margin-top-2"><div id="close-tk-perm" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div></div>                                
                             </div>
 
             
@@ -661,10 +653,10 @@
                             {% csrf_token %}
                             <div class="flex-this space-between">
                                 <div>
-                                    <input id="bc-label-value-type-prov" type="hidden" value="placeholder" name="bclabel-type">
+                                    <input id="bc-label-value-type-prov" type="hidden" value="placeholder" name="bc-label-code">
                                     <div><h3 id="bc-label-title-prov" name="bc-label-title"></h3></div>
                                 </div>
-                                <div class="margin-top-2"><div id="close-bc-prov" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close X</div></div>                                
+                                <div class="margin-top-2"><div id="close-bc-prov" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div></div>                                
                             </div>
 
             
@@ -731,10 +723,10 @@
                             {% csrf_token %}
                             <div class="flex-this space-between">
                                 <div>
-                                    <input id="bc-label-value-type-prot" type="hidden" value="placeholder" name="bclabel-type">
+                                    <input id="bc-label-value-type-prot" type="hidden" value="placeholder" name="bc-label-code">
                                     <div><h3 id="bc-label-title-prot" name="bc-label-title"></h3></div>
                                 </div>
-                                <div class="margin-top-2"><div id="close-bc-prot" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close X</div></div>                                
+                                <div class="margin-top-2"><div id="close-bc-prot" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div></div>                                
                             </div>
 
             
@@ -829,10 +821,10 @@
                             {% csrf_token %}
                             <div class="flex-this space-between">
                                 <div>
-                                    <input id="bc-label-value-type-perm" type="hidden" value="placeholder" name="bclabel-type">
+                                    <input id="bc-label-value-type-perm" type="hidden" value="placeholder" name="bc-label-code">
                                     <div><h3 id="bc-label-title-perm" name="bc-label-title"></h3></div>
                                 </div>
-                                <div class="margin-top-2"><div id="close-bc-perm" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close X</div></div>                                
+                                <div class="margin-top-2"><div id="close-bc-perm" onclick="closeLabelInfoDiv(this)" class="primary-btn white-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div></div>                                
                             </div>
 
             

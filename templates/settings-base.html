@@ -1,8 +1,8 @@
-{% extends 'base.html' %} {% block title %} | Update Profile {% endblock %} {% load static %} {% block content %} {% include 'partials/headers/_auth-header.html' %}
+{% extends 'auth-base.html' %} {% block title %} Update Profile {% endblock %} {% load static %} {% block main %}
 
 {% if user.is_authenticated %}
 
-    {% include 'partials/infocards/_user-info.html' %}
+    {% include 'partials/infocards/_user-dashcard.html' %}
 
     <div class="content-card-v2 content-card-space flex-this column">
         <h2 class="no-top-margin">User Settings</h2>
@@ -72,5 +72,4 @@
 
 {% endif %}
 
-{% include 'partials/footers/_auth-footer.html' %}
 {% endblock %}
