@@ -7,6 +7,7 @@ from django.contrib.auth import update_session_auth_hash
 
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user
+from rest_framework_api_key.models import APIKey
 
 from django.core.paginator import Paginator
 
@@ -484,3 +485,17 @@ def hub_counter(request):
     }
     
     return render(request, 'accounts/totals-count.html', context)
+
+# apikeys request
+@login_required(login_url='login')
+def api_keys(request):
+    key = APIKey.objects.none()
+
+    if request.POST:
+        api_key, key = APIKey.objects.create_key(name=request.user.username)
+
+        context ={"api_key": key}
+        
+        return render(request, 'accounts/apikeys.html', context)
+
+    return render(request, 'accounts/apikeys.html')

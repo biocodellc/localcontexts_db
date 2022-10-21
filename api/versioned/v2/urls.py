@@ -11,6 +11,11 @@ projects_by_researcher = ProjectsByIdViewSet.as_view({
     'get':'projects_by_researcher'
 })
 
+
+api_key_list = APIKeyView.as_view({
+    'get':'api_key_list'
+})
+
 urlpatterns = [
     re_path(r'^$', APIOverview.as_view(), name="api-overview"),
     path('notices/open_to_collaborate', OpenToCollaborateNotice.as_view(), name="api-open-to-collaborate"),
@@ -22,6 +27,8 @@ urlpatterns = [
     path('projects/users/<str:pk>/', projects_by_user, name="api-projects-user"),
     path('projects/institutions/<str:institution_id>/', projects_by_institution, name="api-projects-institution"),
     path('projects/researchers/<str:researcher_id>/', projects_by_researcher, name="api-projects-researcher"),
+
+    path('keytest/', api_key_list, name="api-key")
 ]
 
 # Check single class with different def calls

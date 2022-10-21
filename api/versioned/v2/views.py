@@ -4,7 +4,10 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from . import serializers as v2_serializers
 from rest_framework.viewsets import ViewSet
+from rest_framework_api_key.permissions import HasAPIKey
 
+from rest_framework_api_key.models import APIKey
+from .models import *
 class APIOverview(APIView):
     def get(self, request, format=None):
         api_urls = {
@@ -33,7 +36,33 @@ class OpenToCollaborateNotice(APIView):
         }
         return Response(api_urls)
 
+class ProjectList(generics.ListAPIView):
+    permission_classes = [HasAPIKey]
+    queryset = Project.objects.exclude(project_privacy='Private')
+    serializer_class = ProjectOverviewSerializer
+
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^providers_id', '=unique_id', '$title']
+
+    # '^' starts-with search
+    # '=' exact matches
+    # '$' regex search
+
+class ProjectDetail(generics.RetrieveAPIView):
+    permission_classes = [HasAPIKey]
+    lookup_field = 'unique_id'
+    queryset = Project.objects.exclude(project_privacy='Private')
+
+    def get_serializer_class(self):
+        project = self.get_object()
+        if Notice.objects.filter(project=project, archived=False).exists():
+            return ProjectSerializer
+        else:
+            return ProjectNoNoticeSerializer
+
 class ProjectsByIdViewSet(ViewSet):
+    permission_classes = [HasAPIKey]
+
     def projects_by_user(self, request, pk):
         try:
             user = User.objects.get(id=pk)
@@ -85,3 +114,39 @@ class ProjectsByIdViewSet(ViewSet):
                 raise PermissionDenied({"message":"You don't have permission to view this project", "providers_id": providers_id})
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+class APIKeyView(ViewSet):
+    queryset = test = APIKey.objects.all()
+
+
+    def api_key_list(self, request):
+        test = APIKey.objects.get_usable_keys()
+        serializer = v2_serializers.APIKeySerializer(test, many=True)
+        return Response(serializer.data)
+
+
+# >>> from rest_framework_api_key.models import APIKey
+# >>> keys = APIKey.objects.all()
+# >>> keys
+# IKey: Test2>, <APIKey: Test>]>
+# >>> for key in keys:
+# ... key
+#   File "<console>", line 2
+#     key
+#       ^
+# IndentationError: expected an indented block
+# >>> for key in keys:
+# ...     key
+# ...
+# <APIKey: code-test>
+# <APIKey: code-test>
+# <APIKey: code-test>
+# <APIKey: code-test>
+# 'expiry_date': None, '_initial_revoked': False}
+# >>> keys.last().__dict__
+# {'_state': <django.db.models.base.ModelState object at 0x000001FC9B9493C8>, 'id': 'AeyDeEOV.pbkdf2_sha256$216000$gDz2sqMxpa7N$TXbBjA2SBrIDa7dH+dD2hLdd5ybNmNdEo0yGjKd/kcU=', 'prefix': 'AeyDeEOV', 'hashed_key': 'pbkdf2_sha256$216000$gDz2sqMxpa7N$TXbBjA2SBrIDa7dH+dD2hLdd5ybNmNdEo0yGjKd/kcU=', 'created': datetime.datetime(2022, 9, 23, 17, 24, 4, 84564, tzinfo=<UTC>), 'name': 'Test', 'revoked': False, 'expiry_date': None, '_initial_revoked': False}
+# >>> api_key, key = APIKey.objects.create_key(name="testingcode")
+# >>> api_key
+# <APIKey: testingcode>
+# >>> key
+# 'vtegH08H.QLj4TGwtzzjxxzACHVyeynpVGSD2xdla'

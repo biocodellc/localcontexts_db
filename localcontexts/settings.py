@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'storages',
 
     'rest_framework',
+    'rest_framework_api_key',
     'corsheaders',
     'debug_toolbar',
 ]
@@ -214,10 +215,15 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'localcontexts/static')
 ]
 
+API_KEY_CUSTOM_HEADER = "HTTP_X_API_KEY"
+
 REST_FRAMEWORK = {
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    # "DEFAULT_PERMISSION_CLASSES": [
+    #     "rest_framework_api_key.permissions.HasAPIKey",
+    # ]
 }
 
 # Session expires after an hour of inactivity.
