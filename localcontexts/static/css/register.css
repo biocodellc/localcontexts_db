@@ -1,5 +1,5 @@
 /* Main container */
-.gradient-section {
+#gradient-section {
     width: 100%;
     justify-content: center;
     background: linear-gradient(to bottom, #3876aa, #2876a5, #18769e, #087697, #007590, #00778d, #007989, #007b85, #008083, #008680, #008a7a, #058f73);
@@ -8,7 +8,6 @@
 
 /* The entire card */
 .base-card {
-    /* justify-content: center; */
     border-radius: 5px 5px;
     max-width: 1200px;
     min-width: 1200px;
@@ -30,7 +29,7 @@
 
 /* Form Container || THE WHITE PART */
 .registration-form-container {
-    padding: 40px;
+    padding: 35px;
     max-width: 65%;
     min-width: 65%;
     border-radius: 0px 5px 5px 0px;
@@ -39,9 +38,6 @@
     align-items: center;
 }
 
-#id_email {
-    width: 100%;
-}
 
 /* Progress Container */
 #progress-ul-container {
@@ -119,7 +115,8 @@
 
 /* DIV that houses the h4, form and register button */
 .form-container {
-    justify-content: center;
+    height: 450px;
+    position: relative;
 }
 
 /* THE FORM ITSELF */
@@ -153,16 +150,6 @@
     padding-bottom: 2%;
     width: 70%;
     text-align: center;
-}
-
-/* Verify Buttons */
-
-#resend-email-btn {
-    border: none;
-    max-width: 130px;
-    min-width: 130px;
-    margin-left: 2%;
-    margin-top: 2px;
 }
 
 /* Create Profile Page Country Select */
@@ -258,4 +245,20 @@ input[type=checkbox] {
 .tiny-notice {
     width: 42.59px;
     height: 42.59px;
+}
+
+/* Little orange div on login page */
+.test-hub-div {
+    background-color:#ffe0c8;
+    padding: 16px 32px 16px 32px;
+    position: absolute;
+    bottom: 0;
+}
+
+.test-hub-div p {
+    font-size: 16px;
+}
+
+.test-hub-div small {
+    font-size: 14px;
 }

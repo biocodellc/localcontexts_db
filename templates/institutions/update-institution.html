@@ -1,94 +1,104 @@
-{% extends 'sub-base.html' %} {% block title %} | Update {% endblock %}{% load static %} {% block institution_content %}
+{% extends 'account-base.html' %} {% block title %} Update {% endblock %}{% load static %} {% block institution_content %}
 
     <div class="content-card content-card-space white-bg flex-this column">
-        <h3 class="no-top-margin">Institution Account Settings</h3>
+        <h2 class="no-top-margin">Account Settings</h2>
 
         <div class="flex-this w-100">
 
-            <div class="flex-this w-20 set-nav">
-                <div class="flex-this side-nav-item grey-text">
-                    <div class="w-20 margin-right-1"><i class="fa fa-user fa-3x" aria-hidden="true"></i></div>
-                    <div class="w-80"><p class="no-top-margin"><strong>Institution Account</strong><br>Contact name, email, location, description</p></div>  
-                </div>   
+            <div class="flex-this column set-nav margin-right-1 margin-bottom-2" style="min-height: 350px;">
+                <a href="{% url 'update-institution' institution.id %}">
+                    {% if 'update' in request.path %} 
+                    <div class="flex-this side-nav-item selected">
+                    {% else %}
+                    <div class="flex-this side-nav-item grey-text">
+                    {% endif %}
+                        <div class="w-20 margin-right-8"><i class="fa fa-user fa-3x" aria-hidden="true"></i></div>
+                        <div class="w-80">
+                            <p class="no-top-margin"><strong>Institution Account</strong><br>Contact name, email, location, description</p>
+                        </div>  
+                    </div>   
+                </a>
             </div>
-    
+
             <div class="flex-this column w-80 border-left">
-    
-                    <div><h3>Institution Information</h3></div>
-    
-                    <div class="w-60">
-                        <form method="POST" action="{% url 'update-institution' institution.id %}" enctype="multipart/form-data">
-                            {% csrf_token %}
-
-                                <div>
-                                    {{ update_form.description.label }} <br>
-                                    {{ update_form.description }}
-                                    {% if update_form.description.errors %}
-                                        <div class="msg-red w-80"><small>{{ update_form.description.errors.as_text }}</small></div> 
-                                    {% endif %}
-                                </div>
-
-                                <div class="w-100 margin-top-8">
-                                    <div class="flex-this">
-                                        <div class="w-50 margin-right-1">
-                                            <label for="city_town">City or Town</label> <br>
-                                            {{ update_form.city_town }}
-                                        </div>
-                                        <div class="w-50">
-                                            <label for="state_province_region">State, Province, or Region</label> <br>
-                                            {{ update_form.state_province_region }}
-                                        </div>                                        
-                                    </div>
-                                    {% if update_form.city_town.errors %}
-                                        <div class="msg-red w-50"><small>{{ update_form.city_town.errors.as_text }}</small></div> 
-                                    {% endif %}
-                                    {% if update_form.state_province_region.errors %}
-                                        <div class="msg-red w-50"><small>{{ update_form.state_province_region.errors.as_text }}</small></div> 
-                                    {% endif %}
-                                </div>
-
-                                <div class="margin-top-8">
-                                    <label for="country">Country</label>  <br>
-                                    {{ update_form.country }}
-                                </div>
-
-                                <div class="margin-top-8">
-                                    {{ update_form.image.label }} <br>
-                                    {{ update_form.image }}
-                                    {% if update_form.image.errors %}
-                                        <div class="msg-red w-50"><small>{{ update_form.image.errors.as_text }}</small></div> 
-                                    {% endif %}
-                                </div>
-
-                                <div><h3>Institution Contact</h3></div>
-                                <div class="w-100">
-                                    <div class="flex-this">
-                                        <div class="w-50 margin-right-1">
-                                            <label for="contact_name"> Name </label><br>  
-                                            {{ update_form.contact_name }}                                         
-                                        </div>
-                                        <div class="w-50">
-                                            <label for="contact_email"> Email </label><br>                                       
-                                            {{ update_form.contact_email }}
-                                        </div>                                        
-                                    </div>
-                                    {% if update_form.contact_name.errors %}
-                                        <div class="msg-red w-50"><small>{{ update_form.contact_name.errors.as_text }}</small></div> 
-                                    {% endif %}
-                                    {% if update_form.contact_email.errors %}
-                                        <div class="msg-red w-50"><small>{{ update_form.contact_email.errors.as_text }}</small></div> 
-                                    {% endif %}
-                                </div>
-
-                                {% include 'partials/_alerts.html' %}
-
-                                <div class="margin-top-16">
-                                    <button class="primary-btn action-btn margin-top-2  default-btn-width">Save</button>
-                                </div>
-                        </form>
-                    </div>
-    
+                <div class="flex-this space-between w-60">
+                    <div><h3 class="no-top-margin">Institution Information</h3></div>
+                    <div>Account ID: {{ institution.id }}</div>
                 </div>
+
+                <div class="w-60">
+                    <form method="POST" action="{% url 'update-institution' institution.id %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div>
+                            {{ update_form.description.label }} <br>
+                            {{ update_form.description }}
+                            {% if update_form.description.errors %}
+                                <div class="msg-red w-80"><small>{{ update_form.description.errors.as_text }}</small></div> 
+                            {% endif %}
+                        </div>
+
+                        <div class="w-100 margin-top-8">
+                            <div class="flex-this">
+                                <div class="w-50 margin-right-1">
+                                    <label for="city_town">City or Town</label> <br>
+                                    {{ update_form.city_town }}
+                                </div>
+                                <div class="w-50">
+                                    <label for="state_province_region">State, Province, or Region</label> <br>
+                                    {{ update_form.state_province_region }}
+                                </div>                                        
+                            </div>
+                            {% if update_form.city_town.errors %}
+                                <div class="msg-red w-50"><small>{{ update_form.city_town.errors.as_text }}</small></div> 
+                            {% endif %}
+                            {% if update_form.state_province_region.errors %}
+                                <div class="msg-red w-50"><small>{{ update_form.state_province_region.errors.as_text }}</small></div> 
+                            {% endif %}
+                        </div>
+
+                        <div class="margin-top-8">
+                            <label for="country">Country</label>  <br>
+                            {{ update_form.country }}
+                        </div>
+
+                        <div class="margin-top-8">
+                            {{ update_form.image.label }} <br>
+                            {{ update_form.image }}
+                            {% if update_form.image.errors %}
+                                <div class="msg-red w-50"><small>{{ update_form.image.errors.as_text }}</small></div> 
+                            {% endif %}
+                        </div>
+
+                        <div><h3>Institution Contact</h3></div>
+                        <div class="w-100">
+                            <div class="flex-this">
+                                <div class="w-50 margin-right-1">
+                                    <label for="contact_name"> Name </label><br>  
+                                    {{ update_form.contact_name }}                                         
+                                </div>
+                                <div class="w-50">
+                                    <label for="contact_email"> Email </label><br>                                       
+                                    {{ update_form.contact_email }}
+                                </div>                                        
+                            </div>
+                            {% if update_form.contact_name.errors %}
+                                <div class="msg-red w-50"><small>{{ update_form.contact_name.errors.as_text }}</small></div> 
+                            {% endif %}
+                            {% if update_form.contact_email.errors %}
+                                <div class="msg-red w-50"><small>{{ update_form.contact_email.errors.as_text }}</small></div> 
+                            {% endif %}
+                        </div>
+
+                        {% include 'partials/_alerts.html' %}
+
+                        <div class="margin-top-16">
+                            <button class="primary-btn action-btn margin-top-2  default-btn-width">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
         </div>
 
     </div>

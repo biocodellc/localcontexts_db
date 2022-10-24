@@ -1,10 +1,6 @@
 {% autoescape off %}
 <h3>
-    {% if data.institution_creator.get_full_name %}
-        {{ data.institution_creator.get_full_name }} ({{ data.institution_creator }})
-    {% else %}
-        {{ data.institution_creator.username }}
-    {% endif %}
+    {% firstof data.institution_creator.get_full_name data.institution_creator.username %}
     has applied to create a institution.
 </h3>
 
@@ -23,7 +19,7 @@
     <br><br>
     
     {% if data.is_ror == False %}
-        If you would like to add this institution to ROR, you can fill out <a href="https://docs.google.com/forms/d/e/1FAIpQLSdJYaMTCwS7muuTa-B_CnAtCSkKzt19lkirAKG4u7umH9Nosg/viewform" target="_blank">this form</a>.
+        If you would like to add this institution to ROR, you can fill out <a href="https://docs.google.com/forms/d/e/1FAIpQLSdJYaMTCwS7muuTa-B_CnAtCSkKzt19lkirAKG4u7umH9Nosg/viewform" target="_blank" rel="noopener">this form</a>.
     {% endif %}
 </p>
 

@@ -1,4 +1,5 @@
-{% extends 'reg-base.html' %} {% block title %} | Register {% endblock %} {% load static %} {% block card %}
+{% extends 'register-base.html' %} {% block title %} Register {% endblock %} {% load static %} {% block card %}
+<script src='https://www.google.com/recaptcha/api.js' type="text/javascript" defer></script>
 
 <div class="flex-this space-between w-90">
     <div><h2>Register with Local Contexts</h2></div>
@@ -6,77 +7,76 @@
 </div>
 
 <div class="form-container flex-this column w-90">
+    <form action="{% url 'register' %}" method="POST" class="flex-this column w-100">
+        {% csrf_token %}
 
-<form action="{% url 'register' %}" method="POST" class="flex-this column w-100">
-    {% csrf_token %}
+        <div class="pad-top-1-5">
+            <label for="username">Username</label><br>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="msg-red w-50"><small>{{ form.username.errors.as_text }}</small></div> 
+            {% endif %}
+        </div>
 
-    <div class="pad-top-1-5">
-        <label for="username">Username</label><br>
-        {{ form.username }}
-        {% if form.username.errors %}
-            <div class="msg-red w-50"><small>{{ form.username.errors.as_text }}</small></div> 
+        <div class="pad-top-1-5">
+            <label for="email">Email address</label><br>
+            {{ form.email }}
+        </div>
+        {% if form.email.errors %}
+            <div class="msg-red w-50"><small>{{ form.email.errors.as_text }}</small></div> 
         {% endif %}
-    </div>
 
-    <div class="pad-top-1-5">
-        <label for="email">Email address</label><br>
-        {{ form.email }}
-    </div>
-    {% if form.email.errors %}
-        <div class="msg-red w-50"><small>{{ form.email.errors.as_text }}</small></div> 
-    {% endif %}
+        <div class="flex-this w-100 pad-top-1-5">
 
-    <div class="flex-this w-100 pad-top-1-5">
-
-        <div class="pad-right w-50" style="position: relative;">
-            <label for="password">Password</label><br>
-            <div class="flex-this pass-field">
-                {{ form.password1 }}
+            <div class="pad-right w-50" style="position: relative;">
+                <label for="password">Password</label><br>
+                <div class="flex-this pass-field">
+                    {{ form.password1 }}
+                </div>
+                <div id="help-text-pw" style="position: absolute;">
+                    <small>{{ form.password1.help_text }}</small>
+                </div>
             </div>
-            <div id="help-text-pw" style="position: absolute;">
-                <small>{{ form.password1.help_text }}</small>
+
+            <div class="pad-left w-50">
+                <label for="confirm-password">Confirm password</label><br>
+                <div class="flex-this pass-field">
+                    {{ form.password2 }} <br>
+                </div>
             </div>
+
         </div>
 
-        <div class="pad-left w-50">
-            <label for="confirm-password">Confirm password</label><br>
-            <div class="flex-this pass-field">
-                {{ form.password2 }} <br>
+        {% if form.password1.errors %}
+            <div class="msg-red w-50"><small>{{ form.password1.errors.as_text }}</small></div> 
+        {% endif %}
+        {% if form.password2.errors %}
+            <div class="msg-red w-50"><small>{{ form.password2.errors.as_text }}</small></div> 
+        {% endif %}
+
+        <div class="flex-this row margin-top-16">
+            <div class="flex-this space-between">
+                <div class="text-align-right checkbox-space">
+                    <input type="checkbox" name="terms-agreement" required>
+                </div>
+                <div class="checkbox-label w-100">
+                    <p><span>Creating an account means you agree with the</span> <a href="https://localcontexts.org/indigenous-data-sovereignty/" target="_blank" rel="noopener" class="darkteal-text">Data Sovereignty Agreement</a>.</p>
+                </div>
             </div>
+
+            <div><div class="g-recaptcha" data-sitekey="6Lde2coaAAAAAB4T8Ln0hGur0H7-x4roy47qByAU"></div></div>
+        </div>
+        <br>
+
+        <div class="flex-this flex-end">
+            <button class="primary-btn action-btn margin-top-2">Continue <i class="fa fa-arrow-right"></i></button>
         </div>
 
-    </div>
-
-    {% if form.password1.errors %}
-        <div class="msg-red w-50"><small>{{ form.password1.errors.as_text }}</small></div> 
-    {% endif %}
-    {% if form.password2.errors %}
-        <div class="msg-red w-50"><small>{{ form.password2.errors.as_text }}</small></div> 
-    {% endif %}
-
-    <div class="flex-this row margin-top-16">
-        <div class="flex-this space-between">
-            <div class="text-align-right checkbox-space">
-                <input type="checkbox" name="terms-agreement" required>
-            </div>
-            <div class="checkbox-label w-100">
-                <p><span>Creating an account means you agree with the</span> <a href="https://localcontexts.org/indigenous-data-sovereignty/" target="_blank" class="darkteal-text">Data Sovereignty Agreement</a>.</p>
-            </div>
-        </div>
-
-        <div><div class="g-recaptcha" data-sitekey="6Lde2coaAAAAAB4T8Ln0hGur0H7-x4roy47qByAU"></div></div>
-    </div>
-    <br>
-
-    <div class="flex-this flex-end">
-        <button class="primary-btn action-btn margin-top-2">Continue <i class="fa fa-arrow-right"></i></button>
-    </div>
-
-    <!-- Alerts -->
-{% include 'partials/_alerts.html' %}
+        <!-- Alerts -->
+    {% include 'partials/_alerts.html' %}
 
 
-</form>
+    </form>
 </div>
 
 {% endblock %}

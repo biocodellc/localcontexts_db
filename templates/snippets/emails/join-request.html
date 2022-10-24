@@ -19,7 +19,7 @@
 <p>
 
     <strong>Next steps?</strong><br>
-    Login <a href="{% if 'localhost' in domain %}http{% else %}https{% endif %}://{{domain}}{% url 'login' %}" target="_blank">here</a> to Local Contexts Hub and go to the  
+    Login <a href="{% if 'localhost' in domain %}http{% else %}https{% endif %}://{{domain}}{% url 'login' %}" target="_blank" rel="noopener">here</a> to Local Contexts Hub and go to the  
     {% if organization.community_name %}{{ organization.community_name }}{% elif organization.institution_name %}{{ organization.institution_name }}{% endif %}
    account Notifications, to see and respond to this join request.
     

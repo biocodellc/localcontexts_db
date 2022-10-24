@@ -1,12 +1,9 @@
 from django import template
 from django.urls import reverse
-from institutions.models import Institution
 from notifications.models import ActionNotification
-from helpers.models import Notice, Connections
+from helpers.models import Notice
 from projects.models import ProjectContributors, ProjectCreator
-from bclabels.models import BCLabel
-from researchers.models import Researcher
-from tklabels.models import TKLabel
+from itertools import chain
 
 register = template.Library()
 
@@ -21,66 +18,26 @@ def unread_notifications(institution):
 
 @register.simple_tag
 def anchor(url_name, section_id, institution_id):
-    return reverse(url_name, kwargs={'pk': institution_id}) + "#project-unique-" + str(section_id)
+    return reverse(url_name, kwargs={'pk': institution_id}) + f"#project-unique-{str(section_id)}"
 
 @register.simple_tag
 def get_notices_count(institution):
-    return Notice.objects.filter(institution=institution).count()
+    return Notice.objects.filter(institution=institution, archived=False).count()
 
 @register.simple_tag
 def get_labels_count(institution):
     count = 0
-    projects_created_institution = ProjectCreator.objects.filter(institution=institution)
-    for instance in projects_created_institution:
+    for instance in ProjectCreator.objects.select_related('project').prefetch_related('project__bc_labels', 'project__tk_labels').filter(institution=institution):
         if instance.project.has_labels():
             count += 1
+
     return count
 
 @register.simple_tag
 def institution_contributing_projects(institution):
-    return ProjectContributors.objects.filter(institutions=institution)
+    return ProjectContributors.objects.select_related('project').filter(institutions=institution)
 
 @register.simple_tag
 def connections_count(institution):
-    connections = Connections.objects.get(institution=institution)
-    return connections.communities.count()
-
-@register.simple_tag
-def connections_projects_with_labels(community, organization):
-    # pass instance of researcher or institution
-
-    # get all labels from target community
-    bclabels = BCLabel.objects.filter(community=community)
-    tklabels = TKLabel.objects.filter(community=community)
-
-    target_projects = []
-
-    for bclabel in bclabels:
-        for project in bclabel.project_bclabels.all():
-            if isinstance(organization, Institution):
-                if ProjectCreator.objects.filter(institution=organization, project=project).exists():
-                    org_created_project = ProjectCreator.objects.get(institution=organization, project=project)
-                    target_projects.append(org_created_project.project)
-
-            if isinstance(organization, Researcher):
-                if ProjectCreator.objects.filter(researcher=organization, project=project).exists():
-                    org_created_project = ProjectCreator.objects.get(researcher=organization, project=project)
-                    target_projects.append(org_created_project.project)
-
-    for tklabel in tklabels:
-        for project in tklabel.project_tklabels.all():
-
-            if isinstance(organization, Institution):
-                if ProjectCreator.objects.filter(institution=organization, project=project).exists():
-                    org_created_project = ProjectCreator.objects.get(institution=organization, project=project)
-                    target_projects.append(org_created_project.project)
-
-            if isinstance(organization, Researcher):
-                if ProjectCreator.objects.filter(researcher=organization, project=project).exists():
-                    org_created_project = ProjectCreator.objects.get(researcher=organization, project=project)
-                    target_projects.append(org_created_project.project)
-
-    projects = set(target_projects)
-    return projects
-
-    
+    contributor_ids = institution.contributing_institutions.exclude(communities__id=None).values_list('communities__id', flat=True)
+    return len(contributor_ids)

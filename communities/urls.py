@@ -21,7 +21,7 @@ urlpatterns = [
     path('labels/select/<str:pk>/', views.select_label, name="select-label"),
     path('labels/view/<str:pk>/<uuid:label_uuid>/', views.view_label, name="view-label"),
 
-    path('labels/customize/<str:pk>/<str:label_type>', views.customize_label, name="customize-label"),
+    path('labels/customize/<str:pk>/<str:label_code>', views.customize_label, name="customize-label"),
     path('labels/<str:pk>/<str:label_id>/', views.approve_label, name="approve-label"),
     path('labels/edit/<str:pk>/<str:label_id>/', views.edit_label, name="edit-label"),
 
@@ -40,5 +40,4 @@ urlpatterns = [
     
     path('labels-pdf/<str:pk>/', views.labels_pdf, name="labels-pdf"),
     path('labels-download/<str:pk>/', views.download_labels, name="download-labels"),
-
 ]

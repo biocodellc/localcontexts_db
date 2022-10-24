@@ -1,8 +1,8 @@
-{% extends 'sub-base.html' %} {% block title %} | Customize {% endblock %}{% load static %} {% block community_content %}
+{% extends 'account-base.html' %} {% block title %} Customize {% endblock %}{% load static %} {% block community_content %}
 
 <div class="content-card-v2 content-card-space">
     <div class="w-70">
-        <h2>Customize a Label</h2>
+        <h2 class="no-top-margin">Customize a Label</h2>
         <p>Now that you have selected a Label to customize this Label will now sit in this bucket where you can store all of the Labels your account customizes. The Label is currently faded to indicate there is still some work to do to customize and make this Label your own. </p>
         <strong>How this process works:</strong>
         <ol>
@@ -15,359 +15,213 @@
 </div>
 
 <div class="content-card-v2 content-card-space">
-    <h3>Step 1. Select a Label to customize</h3>
+    <h3 class="no-top-margin">Step 1. Select a Label to customize</h3>
     <div class="margin-bottom-16 margin-top-16 w-100 about-this-label">    
         <div class="flex-this margin-left-16 margin-right-16">
 
-        {% if label_type == 'bcr' %}
             <div id="target-img-div" class="margin-top-16">
-                <img loading="lazy" id="bcr" src="{% static 'images/bc-labels/bc-research-use.png' %}" alt="BC Research Use (BC R) Label">
+                <img 
+                    loading="lazy"
+                    {% if label_code == 'bcr' %}
+                        id="bcr" 
+                        src="{% static 'images/bc-labels/bc-research-use.png' %}"  
+                        alt="BC Research Use (BC R) Label" 
+                    {% endif %}
+                    {% if label_code == 'bccv' %}
+                        id="bccv" 
+                        src="{% static 'images/bc-labels/bc-consent-verified.png' %}" 
+                        alt="BC Consent Verified (BC CV) Label"
+                    {% endif %}
+                    {% if label_code == 'bcoc' %}
+                        id="bcoc" 
+                        src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" 
+                        alt="BC Open to Commercialization (BC OC) Label"
+                    {% endif %}
+                    {% if label_code == 'bccb' %}
+                        id="bccb" 
+                        src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" 
+                        alt="BC Open to Collaboration (BC CB) Label"
+                    {% endif %}
+                    {% if label_code == 'bcmc' %}
+                        id="bcmc" 
+                        src="{% static 'images/bc-labels/bc-multiple-community.png' %}" 
+                        alt="BC Multiple Communities (BC MC) Label"
+                    {% endif %}
+                    {% if label_code == 'bcp' %}
+                        id="bcp" 
+                        src="{% static 'images/bc-labels/bc-provenance.png' %}" 
+                        alt="BC Provenance (BC P) Label"
+                    {% endif %}
+                    {% if label_code == 'bccl' %}
+                        id="bccl" 
+                        src="{% static 'images/bc-labels/bc-clan.png' %}" 
+                        alt="BC Clan (BC CL) Label"
+                    {% endif %}
+                    {% if label_code == 'bco' %}
+                        id="bco" 
+                        src="{% static 'images/bc-labels/bc-outreach.png' %}" 
+                        alt="BC Outreach (BC O) Label"
+                    {% endif %}
+                    {% if label_code == 'bccnv' %}
+                        id="bccnv" 
+                        src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" 
+                        alt="BC Consent Non-Verified (BC CNV) Label"
+                    {% endif %}
+                    {% if label_code == 'bcnc' %}
+                        id="bcnc" 
+                        src="{% static 'images/bc-labels/bc-non-commercial.png' %}" 
+                        alt="BC Non-Commercial (BC NC) Label"
+                    {% endif %}
+
+                    {% if label_code == 'tka' %}
+                        id="tka" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-attribution.png' %}" 
+                        alt="TK Attribution (TK A) Label"
+                    {% endif %}
+                    {% if label_code == 'tkcl' %}
+                        id="tkcl" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-clan.png' %}" 
+                        alt="TK Clan (TK CL) Label"
+                    {% endif %}
+                    {% if label_code == 'tkf' %}
+                        id="tkf" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-family.png' %}" 
+                        alt="TK Family (TK F) Label"
+                    {% endif %}
+                    {% if label_code == 'tkmc' %}
+                        id="tkmc" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-multiple-community.png' %}" 
+                        alt="TK Multiple Communities (TK MC) Label"
+                    {% endif %}
+                    {% if label_code == 'tko' %}
+                        id="tko" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-outreach.png' %}" 
+                        alt="TK Outreach (TK O) Label"
+                    {% endif %}
+                    {% if label_code == 'tknv' %}
+                        id="tknv" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-non-verified.png' %}" 
+                        alt="TK Non-Verified (TK NV) Label"
+                    {% endif %}
+                    {% if label_code == 'tkv' %}
+                        id="tkv" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-verified.png' %}" 
+                        alt="TK Verified (TK V) Label"
+                    {% endif %}
+                    {% if label_code == 'tknc' %}
+                        id="tknc" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-non-commercial.png' %}" 
+                        alt="TK Non-Commercial (TK NC) Label"
+                    {% endif %}
+                    {% if label_code == 'tkoc' %}
+                        id="tkoc" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-commercial.png' %}" 
+                        alt="TK Open to Commercialization (TK OC) Label"
+                    {% endif %}
+                    {% if label_code == 'tkcs' %}
+                        id="tkcs" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-culturally-sensitive.png' %}" 
+                        alt="TK Culturally Sensitive (TK CS) Label"
+                    {% endif %}
+                    {% if label_code == 'tkcv' %}
+                        id="tkcv" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-community-voice.png' %}" 
+                        alt="TK Community Voice (TK CV) Label" 
+                    {% endif %}
+                    {% if label_code == 'tkco' %}
+                        id="tkco" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-community-use-only.png' %}" 
+                        alt="TK Community Use Only (TK CO) Label"
+                    {% endif %}
+                    {% if label_code == 'tks' %}
+                        id="tks" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-seasonal.png' %}" 
+                        alt="TK Seasonal (TK S) Label"
+                    {% endif %}
+                    {% if label_code == 'tkwg' %}
+                        id="tkwg" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-women-general.png' %}" 
+                        alt="TK Weomen General (TK WG) Label"
+                    {% endif %}
+                    {% if label_code == 'tkmg' %}
+                        id="tkmg" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-men-general.png' %}" 
+                        alt="TK Men General (TK MG) Label"
+                    {% endif %}
+                    {% if label_code == 'tkmr' %}
+                        id="tkmr" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-men-restricted.png' %}" 
+                        alt="TK Men Restricted (TK MR) Label"
+                    {% endif %}
+                    {% if label_code == 'tkwr' %}
+                        id="tkwr" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-women-restricted.png' %}" 
+                        alt="TK Women Restricted (TK WR) Label"
+                    {% endif %}
+                    {% if label_code == 'tkss' %}
+                        id="tkss" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-secret-sacred.png' %}" 
+                        alt="TK Secret Sacred (TK SS) Label"
+                    {% endif %}
+                    {% if label_code == 'tkcb' %}
+                        id="tkcb" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-open-to-collaboration.png' %}" 
+                        alt="TK Open to Collaboration (TK CB) Label"
+                    {% endif %}
+                    {% if label_code == 'tkcr' %}
+                        id="tkcr" 
+                        class="img-sizedown-151-116" 
+                        src="{% static 'images/tk-labels/tk-creative.png' %}" 
+                        alt="TK Creative (TK CR) Label"
+                    {% endif %}
+                >
             </div>
 
             <div class="margin-left-16 w-70">
-                <p class="bold">Research Use (BC R)</p>
+                <p id="labelNamePTag" class="bold"></p>
                 <small class="bold">Why Use This Label?</small>
                 <p id="whyUseText"></p>
             </div>
-        {% endif %}
-    
-        {% if label_type == 'bccv' %}
-            <div id="target-img-div" class="margin-top-16">
-                <img loading="lazy" id="bccv" src="{% static 'images/bc-labels/bc-consent-verified.png' %}" alt="BC Consent Verified (BC CV) Label">
-            </div>
-            <div class="margin-left-16 w-70">
-                <p class="bold">Consent Verified (BC CV)</p>
-                <small class="bold">Why Use This Label?</small>
-                <p id="whyUseText"></p>
-            </div>
-        {% endif %}
-    
-        {% if label_type == 'bcoc' %}
-            <div id="target-img-div" class="margin-top-16">
-                <img loading="lazy" id="bcoc" src="{% static 'images/bc-labels/bc-open-to-commercialization.png' %}" alt="BC Open to Commercialization (BC OC) Label">
-            </div>
-            <div class="margin-left-16 w-70">
-                <p class="bold">Open to Commercialization (BC OC)</p>
-                <small class="bold">Why Use This Label?</small>
-                <p id="whyUseText"></p>
-            </div>
-        {% endif %}
-    
-        {% if label_type == 'bccb' %}
-            <div id="target-img-div" class="margin-top-16">
-                <img loading="lazy" id="bccb" src="{% static 'images/bc-labels/bc-open-to-collaboration.png' %}" alt="BC Open to Collaboration (BC CB) Label">
-            </div>
-            <div class="margin-left-16 w-70">
-                <p class="bold">Open to Collaboration (BC OC)</p>
-                <small class="bold">Why Use This Label?</small>
-                <p id="whyUseText"></p>
-            </div>
-        {% endif %}
-    
-        {% if label_type == 'bcmc' %}
-            <div id="target-img-div" class="margin-top-16">
-                <img loading="lazy" id="bcmc" src="{% static 'images/bc-labels/bc-multiple-community.png' %}" alt="BC Multiple Communities (BC MC) Label">
-            </div>
-            <div class="margin-left-16 w-70">
-                <p class="bold">Multiple Community (BC MC)</p>
-                <small class="bold">Why Use This Label?</small>
-                <p id="whyUseText"></p>
-            </div>
-        {% endif %}
-    
-        {% if label_type == 'bcp' %}
-            <div id="target-img-div" class="margin-top-16">
-                <img loading="lazy" id="bcp" src="{% static 'images/bc-labels/bc-provenance.png' %}" alt="BC Provenance (BC P) Label">
-            </div>
-            <div class="margin-left-16 w-70">
-                <p class="bold">Provenance (BC P)</p>
-                <small class="bold">Why Use This Label?</small>
-                <p id="whyUseText"></p>
-            </div>
-        {% endif %}
-
-        {% if label_type == 'bccl' %}
-            <div id="target-img-div" class="margin-top-16">
-                <img loading="lazy" id="bccl" src="{% static 'images/bc-labels/bc-clan.png' %}" alt="BC Clan (BC CL) Label">
-            </div>
-            <div class="margin-left-16 w-70">
-                <p class="bold">Clan (BC CL)</p>
-                <small class="bold">Why Use This Label?</small>
-                <p id="whyUseText"></p>
-            </div>
-        {% endif %}
-
-        {% if label_type == 'bco' %}
-            <div id="target-img-div" class="margin-top-16">
-                <img loading="lazy" id="bco" src="{% static 'images/bc-labels/bc-outreach.png' %}" alt="BC Outreach (BC O) Label">
-            </div>
-            <div class="margin-left-16 w-70">
-                <p class="bold">Outreach (BC O)</p>
-                <small class="bold">Why Use This Label?</small>
-                <p id="whyUseText"></p>
-            </div>
-        {% endif %}
-
-        {% if label_type == 'bccnv' %}
-            <div id="target-img-div" class="margin-top-16">
-                <img loading="lazy" id="bccnv" src="{% static 'images/bc-labels/bc-consent-non-verified.png' %}" alt="BC Consent Non-Verified (BC CNV) Label">
-            </div>
-            <div class="margin-left-16 w-70">
-                <p class="bold">Consent Non-Verified (BC CNV)</p>
-                <small class="bold">Why Use This Label?</small>
-                <p id="whyUseText"></p>
-            </div>
-        {% endif %}
-
-        {% if label_type == 'bcnc' %}
-            <div id="target-img-div" class="margin-top-16">
-                <img loading="lazy" id="bcnc" src="{% static 'images/bc-labels/bc-non-commercial.png' %}" alt="BC Non-Commercial (BC NC) Label">
-            </div>
-            <div class="margin-left-16 w-70">
-                <p class="bold">Non-Commercial (BC NC)</p>
-                <small class="bold">Why Use This Label?</small>
-                <p id="whyUseText"></p>
-            </div>
-        {% endif %}
-
-            {% if label_type == 'tka' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tka" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-attribution.png' %}" alt="TK Attribution (TK A) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Attribution (TK A)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-    
-            {% if label_type == 'tkcl' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkcl" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-clan.png' %}" alt="TK Clan (TK CL) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Clan (TK CL)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-    
-            {% if label_type == 'tkf' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkf" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-family.png' %}" alt="TK Family (TK F) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Family (TK F)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-    
-            {% if label_type == 'tkmc' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkmc" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-multiple-community.png' %}" alt="TK Multiple Communities (TK MC) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Multiple Community (TK MC)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-    
-            {% if label_type == 'tko' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tko" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-outreach.png' %}" alt="TK Outreach (TK O) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Outreach (TK O)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-    
-            {% if label_type == 'tknv' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tknv" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-non-verified.png' %}" alt="TK Non-Verified (TK NV) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Non-Verified (TK NV)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tkv' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkv" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-verified.png' %}" alt="TK Verified (TK V) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Verified (TK V)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tknc' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tknc" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-non-commercial.png' %}" alt="TK Non-Commercial (TK NC) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Non-Commercial (TK NC)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tkoc' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkoc" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-commercial.png' %}" alt="TK Open to Commercialization (TK OC) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Open to Commercialization (TK OC)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tkcs' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkcs" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-culturally-sensitive.png' %}" alt="TK Culturally Sensitive (TK CS) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Culturally Sensitive (TK CS)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tkcv' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkcv" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-community-voice.png' %}" alt="TK Community Voice (TK CV) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Community Voice (TK CV)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tkco' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkco" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-community-use-only.png' %}" alt="TK Community Use Only (TK CO) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Community Use Only (TK CO)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tks' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tks" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-seasonal.png' %}" alt="TK Seasonal (TK S) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Seasonal (TK S)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tkwg' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkwg" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-women-general.png' %}" alt="TK Weomen General (TK WG) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Women General (TK WG)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tkmg' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkmg" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-men-general.png' %}" alt="TK Men General (TK MG) Label">
-                </div>
-                <div><p class="bold"></p></div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Men General (TK MG)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tkmr' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkmr" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-men-restricted.png' %}" alt="TK Men Restricted (TK MR) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Men Restricted (TK MR)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tkwr' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkwr" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-women-restricted.png' %}" alt="TK Women Restricted (TK WR) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Women Restricted (TK WR)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-            
-            {% if label_type == 'tkss' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkss" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-secret-sacred.png' %}" alt="TK Secret Sacred (TK SS) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Secret Sacred (TK SS)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tkcb' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkcb" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-open-to-collaboration.png' %}" alt="TK Open to Collaboration (TK CB) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Open to Collaboration (TK CB)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
-            {% if label_type == 'tkcr' %}
-                <div id="target-img-div" class="margin-top-16">
-                    <img loading="lazy" id="tkcr" class="img-sizedown-151-116" src="{% static 'images/tk-labels/tk-creative.png' %}" alt="TK Creative (TK CR) Label">
-                </div>
-                <div class="margin-left-16 w-70">
-                    <p class="bold">Creative (TK CR)</p>
-                    <small class="bold">Why Use This Label?</small>
-                    <p id="whyUseText"></p>
-                </div>
-            {% endif %}
-
 
         </div>
     </div>
-    </div>
+</div>
 
 <div class="content-card-v2 content-card-space">
 
     <div class="flex-this column border-bottom-solid-teal">
-
-        <form method="POST" action="" enctype="multipart/form-data">
+        <form id="saveLabelForm" method="POST" action="" enctype="multipart/form-data">
             {% csrf_token %}
             <div>
-                <h3 class="no-bottom-margin">Step 2. Customize Label</h3>
+                <h3 class="no-top-margin no-bottom-margin">Step 2. Customize Label</h3>
                 <p class="w-80">You can edit the Label template text, and add a local name that reflects your community alongside the Label name.</p>
             </div>
             <div>
                 <input id="input-label-name" type="hidden" value="" name="input-label-name">
+
+                <div class="w-30 margin-bottom-16">
+                    <label>Label name</label>
+                    {{ form.name }}
+                </div>
 
                 <div class="w-30 margin-bottom-16">
                     <label>Label language</label>
@@ -392,13 +246,10 @@
             {% include 'partials/_add-translation.html' %}
 
             <div class="text-align-right margin-bottom-16">
-                <button class="primary-btn action-btn margin-top-2 ">Save as draft</button> 
-                <!-- <button class="white-bg darkteal-text">Cancel</button> -->
+                <button id="saveLabelBtn" class="primary-btn action-btn margin-top-2">Save Label</button> 
             </div>
         </form>
-        
     </div>
 </div>
 
 {% endblock %}
-

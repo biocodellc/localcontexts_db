@@ -1,12 +1,11 @@
-from email.policy import default
 from django import forms
 from django.forms import modelformset_factory, inlineformset_factory
-from .models import Project, ProjectContributors, ProjectPerson
+from .models import *
 from django.utils.translation import ugettext_lazy as _
 
 class CreateProjectForm(forms.ModelForm):
     PRIVACY = (
-        ('Public', 'Public: Anyone with the project link can view all the project information.'),
+        ('Public', 'Public: All project details can be viewed at the project link and through your public page in the registry.'),
         ('Discoverable', 'Contributor View: Anyone with the link can view the project unique identifier and any Labels or Notices attached.'),
         ('Private', 'Private: Only the project creator can see the project information.'),
     )
@@ -63,7 +62,7 @@ ProjectPersonFormsetInline = inlineformset_factory(
 
 class EditProjectForm(forms.ModelForm):
     PRIVACY = (
-        ('Public', 'Public: Can be seen by anyone within and outside of the Local Contexts Hub'),
+        ('Public', 'Public: All project details can be viewed at the project link and through your public page in the registry.'),
         ('Discoverable', 'Contributor View: Anyone with the link can view the project unique identifier and any Labels or Notices attached.'),
         ('Private', 'Private: Only the project creator can see the project information.'),
     )
@@ -92,4 +91,12 @@ class EditProjectForm(forms.ModelForm):
             'project_data_guid': forms.TextInput(attrs={'class': 'w-100'}),
             'providers_id': forms.TextInput(attrs={'class': 'w-100'}),
             'url': forms.TextInput(attrs={'class': 'w-100'}),
+        }
+
+class CreateProjectNoteForm(forms.ModelForm):
+    class Meta:
+        model = ProjectNote
+        fields = ['note']
+        widgets = {
+            'note': forms.Textarea(attrs={'rows': 1, 'class': 'w-100', 'placeholder': 'Add a note....'}),
         }

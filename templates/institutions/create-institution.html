@@ -1,8 +1,9 @@
-{% extends 'reg-base.html' %} {% block title %} | Create Institution {% endblock %}{% load static %} {% block card %}
+{% extends 'register-base.html' %} {% block title %} Create Institution {% endblock %}{% load static %} {% block card %}
+<script src="{% static 'javascript/ror.js' %}" type="text/javascript" defer></script>
 
 <div class="flex-this column w-90">
     <div class="flex-this space-between">
-        <div><h2 class="no-top-margin">Institution Account</h2></div>
+        <div><h2 class="no-top-margin margin-bottom-8">Institution Account</h2></div>
         <div>Or <a class="darkteal-text underline-hover" href="{% url 'connect-institution' %}">request to join an existing institution</a>  </div>
     </div>
 
@@ -38,7 +39,7 @@
                 </div>
             </div>
 
-            <small>These institutions come from <a class="darkteal-text underline-hover" href="https://ror.org/" target="_blank">ROR</a>. If your institution is not listed here, <span id="openNORORModalBtn" class="darkteal-text underline-hover pointer">please fill out this form</span>.</small>
+            <small>These institutions come from <a class="darkteal-text underline-hover" href="https://ror.org/" target="_blank" rel="noopener">ROR</a>. If your institution is not listed here, <span id="openNORORModalBtn" class="darkteal-text underline-hover pointer">please fill out this form</span>.</small>
 
         </div>
 
@@ -59,21 +60,30 @@
             </div>
         </div>
 
-        <div class="w-100 margin-top-8">
-            <label for="description">Institution Description</label>
-            <div class="tooltip"><strong>i</strong>
-                <span class="tooltiptext">An institution description allows you to share key public information about your institution or organization with other users on the Hub.</span>
+        <div class="w-100">
+            <div class="pad-top-1-5">
+                <label for="description">Institution Description</label>
+                <div class="tooltip"><strong>i</strong>
+                    <span class="tooltiptext">An institution description allows you to share key public information about your institution or organization with other users on the Hub.</span>
+                </div>
+
+                <br>
+                {{ form.description }}
             </div>
-            {{ form.description }}
-            {% if form.description.errors %}
-                <div class="msg-red w-80"><small>{{ form.description.errors.as_text }}</small></div> 
-            {% endif %}
+            <small id="charCount" class="block text-align-right">200/200</small>
         </div>
 
-        {% include 'partials/_alerts.html' %}
-
-        <div class="flex-this flex-end">
-            <button class="primary-btn action-btn margin-top-2" name="create-institution-btn">Continue <i class="fa fa-arrow-right"></i></button>
+        <div class="flex-this space-between">
+            <div>
+                {% if form.errors %}
+                    <small class="red-text">{{ form.description.errors.as_text }}</small>
+                {% endif %}
+                {% include 'partials/_alerts.html' %}
+            </div>
+    
+            <div class="margin-top-8">
+                <button class="primary-btn action-btn margin-top-2" name="create-institution-btn">Continue <i class="fa fa-arrow-right"></i></button>
+            </div>
         </div>
 
     </form>
@@ -93,7 +103,7 @@
                 </div>
     
                 <div>
-                    <div id="closeNORORmodal" class="primary-btn white-btn">Close X</div>
+                    <div id="closeNORORmodal" class="primary-btn white-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
                 </div>
             </div>
 

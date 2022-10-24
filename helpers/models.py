@@ -1,5 +1,5 @@
-from pyexpat import model
-from tabnanny import verbose
+import json
+import requests
 from django.db import models
 from django.contrib.auth.models import User
 from bclabels.models import BCLabel
@@ -27,10 +27,25 @@ class Notice(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        json_data = open('./localcontexts/static/json/Notices.json')
+        data = json.load(json_data) #deserialize
+
+        baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/'
+        for item in data:
+            if item['noticeType'] == self.notice_type:
+                self.name = item['noticeName']
+                self.img_url = baseURL + item['imgFileName']
+                self.svg_url = baseURL + item['svgFileName']
+                self.default_text = item['noticeDefaultText']
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return str(self.project.title)
     
     class Meta:
+        indexes = [models.Index(fields=['project', 'researcher', 'institution'])]
         verbose_name = 'Notice'
         verbose_name_plural = 'Notices'
         ordering = ('-created',)
@@ -38,14 +53,15 @@ class Notice(models.Model):
 class OpenToCollaborateNoticeURL(models.Model):
     institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
     researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
-    name = models.CharField(max_length=250, null=True, blank=True)
-    url = models.URLField(null=True)
+    name = models.CharField('Name of Website', max_length=250, null=True, blank=True)
+    url = models.URLField('Link', null=True)
     added = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
     
     class Meta:
+        indexes = [models.Index(fields=['institution', 'researcher'])]
         verbose_name = 'Open To Collaborate Notice URL'
         verbose_name_plural = 'Open To Collaborate Notice URLs'
 
@@ -59,6 +75,7 @@ class EntitiesNotified(models.Model):
         return str(self.project.title)
     
     class Meta:
+        indexes = [models.Index(fields=['project'])]
         verbose_name = "Entities Notified"
         verbose_name_plural = "Entities Notified"
 
@@ -70,10 +87,21 @@ class LabelTranslation(models.Model):
     language = models.CharField(max_length=150, blank=True)
     translated_text = models.TextField(blank=True)
 
+    def save(self, *args, **kwargs):
+        # set up language tag
+        url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
+        data = requests.get(url).json()
+
+        if self.language in data.keys():
+            self.language_tag = data[self.language]
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return self.translated_name
+        return str(self.translated_name)
     
     class Meta:
+        indexes = [models.Index(fields=['bclabel', 'tklabel'])]
         verbose_name = "Label Translation"
         verbose_name_plural = "Label Translations"
 
@@ -88,6 +116,7 @@ class ProjectComment(models.Model):
         return 'Comment {} by {}'.format(self.message, self.community)
 
     class Meta:
+        indexes = [models.Index(fields=['project', 'community', 'sender'])]
         verbose_name = 'Project Comment'
         verbose_name_plural = 'Project Comments'
         ordering = ('created',)
@@ -96,6 +125,7 @@ class ProjectStatus(models.Model):
     CHOICES = (
         ('pending', 'pending'),
         ('not_pending', 'not_pending'),
+        ('labels_applied', 'labels_applied'),
     )
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_status", db_index=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="status_community", blank=True)
@@ -106,6 +136,7 @@ class ProjectStatus(models.Model):
         return f"{self.community} - {self.seen} - {self.status}"
 
     class Meta:
+        indexes = [models.Index(fields=['project', 'community'])]
         verbose_name = 'Project Status'
         verbose_name_plural = 'Project Statuses'
 
@@ -119,6 +150,7 @@ class LabelNote(models.Model):
         return f"{self.bclabel} - {self.tklabel} - {self.sender}"
 
     class Meta:
+        indexes = [models.Index(fields=['bclabel', 'tklabel'])]
         verbose_name = 'Label Note'
         verbose_name_plural = 'Label Notes'
 
@@ -153,19 +185,3 @@ class LabelTranslationVersion(models.Model):
     class Meta:
         verbose_name = 'Label Translation Version'
         verbose_name_plural = 'Label Translation Versions'
-
-
-class Connections(models.Model):
-    community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE, blank=True,  related_name="community_connections", db_index=True)
-    institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, related_name="institution_connections",  db_index=True)
-    researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, related_name="researcher_connections", db_index=True)
-    communities = models.ManyToManyField(Community, blank=True, related_name="communities_connected", db_index=True)
-    institutions = models.ManyToManyField(Institution, blank=True, related_name="institutions_connected", db_index=True)
-    researchers = models.ManyToManyField(Researcher, blank=True, related_name="researchers_connected", db_index=True)
-
-    def __str__(self):
-        return f"{self.community} - {self.institution} - {self.researcher}"
-
-    class Meta:
-        verbose_name = 'Connections'
-        verbose_name_plural = 'Connections'

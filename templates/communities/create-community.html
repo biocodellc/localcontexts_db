@@ -1,4 +1,4 @@
-{% extends 'reg-base.html' %} {% block title %} | Create Community {% endblock %}{% load static %} {% block card %}
+{% extends 'register-base.html' %} {% block title %} Create Community {% endblock %}{% load static %} {% block card %}
     
 <div class="flex-this column w-90">
     <div class="flex-this space-between">
@@ -8,7 +8,7 @@
         <div> Or <a class="darkteal-text" href="{% url 'connect-community' %}">request to join an existing community</a> </div> 
     </div>
 
-    <p>Community accounts created in Local Contexts can be discoverable in the Local Contexts registery, the information displayed will be the information you provide on behalf of the community below. Read more about our privacy standards <a class="darkteal-text underline-hover" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/LC%20Privacy%20Policy.pdf" target="_blank">here <i class="fa fa-external-link" aria-hidden="true"></i></a>.</p>
+    <p class="no-top-margin">Community accounts created in Local Contexts can be discoverable in the Local Contexts registery, the information displayed will be the information you provide on behalf of the community below. Read more about our privacy standards <a class="darkteal-text underline-hover" href="https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/LC%20Privacy%20Policy.pdf" target="_blank" rel="noopener">here <i class="fa fa-external-link" aria-hidden="true"></i></a>.</p>
     
     <form action="" method="POST" class="flex-this column w-100">
         {% csrf_token %}
@@ -57,6 +57,7 @@
                 <br>
                 {{ form.description }}
             </div>
+            <small id="charCount" class="block text-align-right">200/200</small>
         </div>
 
         <div class="flex-this space-between">
@@ -67,7 +68,7 @@
                 {% include 'partials/_alerts.html' %}
             </div>
     
-            <div class="text-align-right">
+            <div class="margin-top-8">
                 <button class="primary-btn action-btn margin-top-2">Continue <i class="fa fa-arrow-right"></i></button>
             </div>
         </div>

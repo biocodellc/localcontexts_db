@@ -6,9 +6,7 @@
         <title>Project PDF</title>
         <style>
 
-            h1 {
-                font-size: 18px;
-            }
+            h1 { font-size: 18px; }
 
             p {
                 font-size: 15px;
@@ -18,19 +16,16 @@
             table {
                 padding-top: 10px;
                 padding-bottom: 10px;
-
                 border-bottom-style: solid;
                 border-bottom-color: #007585;
+                border-bottom-width: 0.5px;
+                border-top-style: solid;
+                border-top-color: #007585;
                 border-top-width: 0.5px;
             }
 
-            .text-width {
-                width: 400px;
-            }
-
-            .no-bottom-margin {
-                margin-bottom: 1px;
-            }
+            .text-width { width: 400px;}
+            .no-bottom-margin { margin-bottom: 1px;}
 
             .image-td {
                 width: 170px;
@@ -92,7 +87,12 @@
 
                 {% if project.project_page %} 
                     <strong>Project Page URL:</strong><br>
-                    {{ project.project_page }}
+                    {{ project.project_page }} <br>
+                {% endif %}
+
+                {% if project.url %}
+                    <strong>Project Link</strong><br>
+                    {{ project.url }}<br>
                 {% endif %}
 
                 {% if project.description %}<br><strong>Project Description:</strong> {{ project.description|linebreaks }}<br>{% endif %}

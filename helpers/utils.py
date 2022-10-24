@@ -1,5 +1,4 @@
 import json
-import requests
 import zipfile
 from django.template.loader import get_template
 from io import BytesIO
@@ -12,24 +11,10 @@ from xhtml2pdf import pisa
 from communities.models import Community, JoinRequest, InviteMember
 from institutions.models import Institution
 from researchers.models import Researcher
-from .models import Connections, Notice
+from .models import Notice
 from notifications.models import *
 
 from helpers.emails import send_membership_email
-
-def is_organization_in_user_affiliation(user, organization):
-    affiliation = UserAffiliation.objects.prefetch_related('communities').get(user=user)
-    if isinstance(organization, Community):
-        if organization in affiliation.communities.all():
-            return True
-        else:
-            return False
-            
-    if isinstance(organization, Institution):
-        if organization in affiliation.institutions.all():
-            return True
-        else:
-            return False
 
 def check_member_role(user, organization):
     role = ''
@@ -145,16 +130,6 @@ def accepted_join_request(org, join_request_id, selected_role):
             # Delete join request
             join_request.delete()
 
-
-def set_language_code(instance):
-    url = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
-    data = requests.get(url).json()
-
-    if instance.language in data.keys():
-        instance.language_tag = data[instance.language]
-        instance.save()
-
-
 # h/t: https://stackoverflow.com/questions/59695870/generate-multiple-pdfs-and-zip-them-for-download-all-in-a-single-view
 def render_to_pdf(template_src, context_dict={}):
     template = get_template(template_src)
@@ -181,67 +156,6 @@ def get_labels_json():
     data = json.load(json_data) #deserialize
     return data
 
-def get_notices_json():
-    json_data = open('./localcontexts/static/json/Notices.json')
-    data = json.load(json_data) #deserialize
-    return data
-
-def add_to_connections(target_org, org):
-
-    if isinstance(target_org, Community):
-        connections = Connections.objects.get(community=target_org)
-        if isinstance(org, Institution):
-            connections.institutions.add(org)
-        if isinstance(org, Researcher):
-            connections.researchers.add(org)
-        connections.save()
-
-    if isinstance(target_org, Institution):
-        connections = Connections.objects.get(institution=target_org)
-        if isinstance(org, Community):
-            connections.communities.add(org)
-        connections.save()
-
-    if isinstance(target_org, Researcher):
-        connections = Connections.objects.get(researcher=target_org)
-        if isinstance(org, Community):
-            connections.communities.add(org)
-        connections.save()
-
-def set_notice_defaults(notice):
-    data = get_notices_json()
-    baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/'
-
-    for item in data:
-        if item['noticeType'] == notice.notice_type:
-            notice.name = item['noticeName']
-            notice.img_url = baseURL + item['imgFileName']
-            notice.svg_url = baseURL + item['svgFileName']
-            notice.default_text = item['noticeDefaultText']
-    notice.save()  
-
-# Helper function for creating/updating notices
-def loop_through_notices(list, organization, project):
-    for selected in list:
-        if isinstance(organization, Institution):
-            if selected == 'bcnotice':
-                notice = Notice.objects.create(notice_type='biocultural', institution=organization, project=project)
-            elif selected == 'tknotice':
-                notice = Notice.objects.create(notice_type='traditional_knowledge', institution=organization, project=project)
-            elif selected == 'attribution_incomplete':
-                notice = Notice.objects.create(notice_type='attribution_incomplete', institution=organization, project=project)
-
-        if isinstance(organization, Researcher):
-            if selected == 'bcnotice':
-                notice = Notice.objects.create(notice_type='biocultural', researcher=organization, project=project)
-            elif selected == 'tknotice':
-                notice = Notice.objects.create(notice_type='traditional_knowledge', researcher=organization, project=project)
-            elif selected == 'attribution_incomplete':
-                notice = Notice.objects.create(notice_type='attribution_incomplete', researcher=organization, project=project)
-        
-        set_notice_defaults(notice)
-
-
 # Create/Update Notices
 def create_notices(selected_notices, organization, project, existing_notices):
     # organization: either instance of institution or researcher
@@ -250,10 +164,23 @@ def create_notices(selected_notices, organization, project, existing_notices):
         for notice in existing_notices:
             notice.delete()
 
-    loop_through_notices(selected_notices, organization, project)
+    for selected in selected_notices:
+        notice_type = ''
+        if selected == 'bcnotice':
+            notice_type = 'biocultural'
+        elif selected == 'tknotice':
+            notice_type='traditional_knowledge'
+        elif selected == 'attribution_incomplete':
+            notice_type='attribution_incomplete'
+
+        if isinstance(organization, Institution):
+            Notice.objects.create(notice_type=notice_type, institution=organization, project=project)
+
+        if isinstance(organization, Researcher):
+            Notice.objects.create(notice_type=notice_type, researcher=organization, project=project)
 
 
-def create_label_versions(label):
+def handle_label_versions(label):
     # passes instance of BCLabel or TKLabel
     version = LabelVersion.objects.none()
     translations = LabelTranslation.objects.none()
@@ -261,10 +188,16 @@ def create_label_versions(label):
 
     if isinstance(label, BCLabel):
         translations = LabelTranslation.objects.filter(bclabel=label)
-        # If version exists, set version number to 1 more than the latest
-        if LabelVersion.objects.filter(bclabel=label).exists():
-            latest = LabelVersion.objects.filter(bclabel=label).order_by('-version').first()
-            version_num = latest.version + 1
+
+        # If approved version exists, set version number to 1 more than the latest
+        latest_version = LabelVersion.objects.filter(bclabel=label).order_by('-version').first()
+
+        if latest_version is not None:
+            if latest_version.is_approved:
+                version_num = latest_version.version + 1
+            elif not latest_version.is_approved:
+                latest_version.is_approved = True
+                latest_version.save()
         else:
             version_num = 1
             label.version = 1
@@ -275,6 +208,7 @@ def create_label_versions(label):
             bclabel=label,
             version=version_num, 
             created_by=label.created_by, 
+            is_approved=True,
             approved_by=label.approved_by,
             version_text=label.label_text,
             created=label.created
@@ -282,10 +216,16 @@ def create_label_versions(label):
 
     if isinstance(label, TKLabel):
         translations = LabelTranslation.objects.filter(tklabel=label)
-        # If version exists, set version number to 1 more than the latest
-        if LabelVersion.objects.filter(tklabel=label).exists():
-            latest = LabelVersion.objects.filter(tklabel=label).order_by('-version').first()
-            version_num = latest.version + 1
+
+        # If approved version exists, set version number to 1 more than the latest
+        latest_version = LabelVersion.objects.filter(tklabel=label).order_by('-version').first()
+
+        if latest_version is not None:
+            if latest_version.is_approved:
+                version_num = latest_version.version + 1
+            elif not latest_version.is_approved:
+                latest_version.is_approved = True
+                latest_version.save()
         else:
             version_num = 1
             label.version = 1
@@ -296,6 +236,7 @@ def create_label_versions(label):
             tklabel=label,
             version=version_num, 
             created_by=label.created_by, 
+            is_approved=True,
             approved_by=label.approved_by,
             version_text=label.label_text,
             created=label.created

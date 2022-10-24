@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.contrib import messages
 from django.http import Http404
+from django.core.paginator import Paginator
+from itertools import chain
 
 from localcontexts.utils import dev_prod_or_local
 from projects.utils import add_to_contributors
@@ -10,7 +13,7 @@ from accounts.utils import get_users_name
 
 from communities.models import Community
 from notifications.models import ActionNotification
-from helpers.models import OpenToCollaborateNoticeURL, ProjectStatus, ProjectComment, Notice, EntitiesNotified, Connections
+from helpers.models import OpenToCollaborateNoticeURL, ProjectStatus, ProjectComment, Notice, EntitiesNotified
 from projects.models import ProjectContributors, Project, ProjectPerson, ProjectCreator
 
 from projects.forms import *
@@ -40,12 +43,9 @@ def connect_researcher(request):
                 data.orcid = orcid_id
                 data.save()
 
-                # Create a Connections instance
-                Connections.objects.create(researcher=data)
-
                 # Mark current user as researcher
-                request.user.profile.is_researcher = True
-                request.user.profile.save()
+                request.user.user_profile.is_researcher = True
+                request.user.user_profile.save()
 
                 # Send support an email in prod only about a Researcher signing up
                 if dev_prod_or_local(request.get_host()) == 'PROD':
@@ -63,15 +63,9 @@ def public_researcher_view(request, pk):
         created_projects = ProjectCreator.objects.filter(researcher=researcher)
 
         # Do notices exist
-        bcnotice = False
-        tknotice = False
-        attrnotice = False
-        if Notice.objects.filter(researcher=researcher, notice_type='biocultural').exists():
-            bcnotice = True
-        if Notice.objects.filter(researcher=researcher, notice_type='traditional_knowledge').exists():
-            tknotice = True
-        if Notice.objects.filter(researcher=researcher, notice_type='attribution_incomplete').exists():
-            attrnotice = True
+        bcnotice = Notice.objects.filter(researcher=researcher, notice_type='biocultural').exists()
+        tknotice = Notice.objects.filter(researcher=researcher, notice_type='traditional_knowledge').exists()
+        attrnotice = Notice.objects.filter(researcher=researcher, notice_type='attribution_incomplete').exists()
 
         projects = []
 
@@ -85,28 +79,34 @@ def public_researcher_view(request, pk):
             form = ContactOrganizationForm(request.POST or None)
 
             if request.method == 'POST':
-                # contact researcher
-                if form.is_valid():
-                    to_email = ''
-                    from_name = form.cleaned_data['name']
-                    from_email = form.cleaned_data['email']
-                    message = form.cleaned_data['message']
-                    to_email = researcher.contact_email
+                if 'contact_btn' in request.POST:
+                    # contact researcher
+                    if form.is_valid():
+                        from_name = form.cleaned_data['name']
+                        from_email = form.cleaned_data['email']
+                        message = form.cleaned_data['message']
+                        to_email = researcher.contact_email
 
-                    send_contact_email(to_email, from_name, from_email, message)
-                    messages.add_message(request, messages.SUCCESS, 'Sent!')
+                        send_contact_email(to_email, from_name, from_email, message)
+                        messages.add_message(request, messages.SUCCESS, 'Message sent!')
+                        return redirect('public-researcher', researcher.id)
+                    else:
+                        if not form.data['message']:
+                            messages.add_message(request, messages.ERROR, 'Unable to send an empty message.')
+                            return redirect('public-researcher', researcher.id)
+                else:
+                    messages.add_message(request, messages.ERROR, 'Something went wrong')
                     return redirect('public-researcher', researcher.id)
-            else:
-                context = { 
-                    'researcher': researcher,
-                    'projects' : projects,
-                    'form': form,
-                    'bcnotice': bcnotice,
-                    'tknotice': tknotice,
-                    'attrnotice': attrnotice,
-                    'otc_notices': otc_notices,
-                }
-                return render(request, 'public.html', context)
+        else:
+            context = { 
+                'researcher': researcher,
+                'projects' : projects,
+                'bcnotice': bcnotice,
+                'tknotice': tknotice,
+                'attrnotice': attrnotice,
+                'otc_notices': otc_notices,
+            }
+            return render(request, 'public.html', context)
 
         context = { 
             'researcher': researcher,
@@ -115,6 +115,7 @@ def public_researcher_view(request, pk):
             'tknotice': tknotice,
             'attrnotice': attrnotice,
             'otc_notices': otc_notices,
+            'form': form, 
         }
         return render(request, 'public.html', context)
     except:
@@ -124,7 +125,7 @@ def public_researcher_view(request, pk):
 @login_required(login_url='login')
 def connect_orcid(request):
     researcher = Researcher.objects.get(user=request.user)
-    return redirect('researcher-update', researcher.id)
+    return redirect('update-researcher', researcher.id)
 
 @login_required(login_url='login')
 def disconnect_orcid(request):
@@ -132,7 +133,7 @@ def disconnect_orcid(request):
     researcher.orcid = ''
     researcher.orcid_auth_token = ''
     researcher.save()
-    return redirect('researcher-update', researcher.id)
+    return redirect('update-researcher', researcher.id)
 
 @login_required(login_url='login')
 def update_researcher(request, pk):
@@ -156,7 +157,7 @@ def update_researcher(request, pk):
                     researcher.save()
 
                 messages.add_message(request, messages.SUCCESS, 'Updated!')
-                return redirect('researcher-update', researcher.id)
+                return redirect('update-researcher', researcher.id)
         else:
             update_form = UpdateResearcherForm(instance=researcher)
         
@@ -174,7 +175,7 @@ def researcher_notices(request, pk):
     if user_can_view == False:
         return redirect('public-researcher', researcher.id)
     else:
-        urls = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher)
+        urls = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher).values_list('url', 'name')
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
 
         if request.method == 'POST':
@@ -203,47 +204,57 @@ def researcher_projects(request, pk):
         # researcher projects + 
         # projects researcher has been notified of + 
         # projects where researcher is contributor
-        projects_list = []
 
-        researcher_projects = ProjectCreator.objects.select_related('project').filter(researcher=researcher)
-
-        for p in researcher_projects:
-            projects_list.append(p.project)
-
-        for n in EntitiesNotified.objects.select_related('project').filter(researchers=researcher):
-            projects_list.append(n.project)
+        projects_list = list(chain(
+            researcher.researcher_created_project.all().values_list('project__id', flat=True), 
+            researcher.researchers_notified.all().values_list('project__id', flat=True), 
+            researcher.contributing_researchers.all().values_list('project__id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids).order_by('-date_added')
         
-        for c in ProjectContributors.objects.select_related('project').filter(researchers=researcher):
-            projects_list.append(c.project)
-
-        projects = list(set(projects_list))
+        p = Paginator(projects, 10)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
         
         form = ProjectCommentForm(request.POST or None)
         
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
-                
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    
+                    return redirect('researcher-projects', researcher.id)
+            else:
                 return redirect('researcher-projects', researcher.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
             'researcher': researcher,
             'form': form,
             'user_can_view': user_can_view,
+            'items': page,
+            'results': results,
         }
         return render(request, 'researchers/projects.html', context)
 
@@ -255,51 +266,61 @@ def projects_with_labels(request, pk):
     if user_can_view == False:
         return redirect('restricted')
     else:
-        # init list for:
         # 1. researcher projects + 
         # 2. projects researcher has been notified of 
         # 3. projects where researcher is contributor
-        projects_list = []
+        projects_list = list(chain(
+            researcher.researcher_created_project.all().values_list('project__id', flat=True), 
+            researcher.researchers_notified.all().values_list('project__id', flat=True), 
+            researcher.contributing_researchers.all().values_list('project__id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
 
-        for p in ProjectCreator.objects.select_related('project').filter(researcher=researcher): # projects created by researcher
-            if p.project.has_labels():
-                projects_list.append(p.project)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids
+            ).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids
+            ).exclude(tk_labels=None).order_by('-date_added')
 
-        for n in EntitiesNotified.objects.select_related('project').filter(researchers=researcher):
-            if n.project.has_labels():
-                projects_list.append(n.project)
-        
-        for c in ProjectContributors.objects.select_related('project').filter(researchers=researcher):
-            if c.project.has_labels():
-                projects_list.append(c.project)
-
-        projects = list(set(projects_list))
+        p = Paginator(projects, 10)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
         
         form = ProjectCommentForm(request.POST or None)
-  
+
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('researcher-projects-labels', researcher.id)
+            else:
                 return redirect('researcher-projects-labels', researcher.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
             'researcher': researcher,
             'form': form,
             'user_can_view': user_can_view,
+            'items': page,
+            'results': results,
         }
         return render(request, 'researchers/projects.html', context)
 
@@ -311,53 +332,61 @@ def projects_with_notices(request, pk):
     if user_can_view == False:
         return redirect('restricted')
     else:
-        # init list for:
         # 1. researcher projects + 
         # 2. projects researcher has been notified of 
         # 3. projects where researcher is contributor
-        projects_list = []
+        projects_list = list(chain(
+            researcher.researcher_created_project.all().values_list('project__id', flat=True), 
+            researcher.researchers_notified.all().values_list('project__id', flat=True), 
+            researcher.contributing_researchers.all().values_list('project__id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids, tk_labels=None, bc_labels=None).order_by('-date_added')
 
-        for p in ProjectCreator.objects.select_related('project').filter(researcher=researcher): # projects created by researcher
-            if not p.project.has_labels():
-                projects_list.append(p.project)
-
-        for n in EntitiesNotified.objects.select_related('project').filter(researchers=researcher):
-            if not n.project.has_labels():
-                projects_list.append(n.project)
-        
-        for c in ProjectContributors.objects.select_related('project').filter(researchers=researcher):
-            if not c.project.has_labels():
-                projects_list.append(c.project)
-
-        projects = list(set(projects_list))
+        p = Paginator(projects, 10)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
         
         form = ProjectCommentForm(request.POST or None)
-  
+
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('researcher-projects-notices', researcher.id)
+            else:
                 return redirect('researcher-projects-notices', researcher.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
             'researcher': researcher,
             'form': form,
             'user_can_view': user_can_view,
+            'items': page,
+            'results': results,
         }
         return render(request, 'researchers/projects.html', context)
+
 
 @login_required(login_url='login')
 def projects_creator(request, pk):
@@ -367,38 +396,50 @@ def projects_creator(request, pk):
     if user_can_view == False:
         return redirect('restricted')
     else:
-        projects_list = []
-        
-        for p in ProjectCreator.objects.select_related('project').filter(researcher=researcher): # projects created by researcher
-            projects_list.append(p.project)
-        
-        projects = list(set(projects_list))
+        created_projects = researcher.researcher_created_project.all().values_list('project__id', flat=True)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=created_projects).order_by('-date_added')
+
+        p = Paginator(projects, 10)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
 
         form = ProjectCommentForm(request.POST or None)
-  
+
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('researcher-projects-creator', researcher.id)
+            else:
                 return redirect('researcher-projects-creator', researcher.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
             'researcher': researcher,
             'form': form,
             'user_can_view': user_can_view,
+            'items': page,
+            'results': results,
         }
         return render(request, 'researchers/projects.html', context)
 
@@ -410,48 +451,53 @@ def projects_contributor(request, pk):
     if user_can_view == False:
         return redirect('restricted')
     else:
-        # init list for projects where researcher is contributor but not creator
-        projects_list = []
-        created_projects = []
+        # Get IDs of projects created by researcher and IDs of projects contributed, then exclude the created ones in the project call
+        created_projects = researcher.researcher_created_project.all().values_list('project__id', flat=True)
+        contrib = researcher.contributing_researchers.all().values_list('project__id', flat=True)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=contrib).exclude(id__in=created_projects).order_by('-date_added')
 
-        for x in ProjectContributors.objects.select_related('project').filter(researchers=researcher):
-            projects_list.append(x.project)
 
-        for c in ProjectCreator.objects.select_related('project').filter(researcher=researcher):
-            created_projects.append(c.project)
-
-        # remove projects that were created by the researcher
-        for p in created_projects:
-            if p in projects_list:
-                projects_list.remove(p)
-
-        projects = list(set(projects_list))
+        p = Paginator(projects, 10)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
         
         form = ProjectCommentForm(request.POST or None)
-  
+
         if request.method == 'POST':
             project_uuid = request.POST.get('project-uuid')
-
             community_id = request.POST.get('community-id')
             community = Community.objects.get(id=community_id)
 
-            if form.is_valid():
-                data = form.save(commit=False)
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                if project_uuid:
-                    project = Project.objects.get(unique_id=project_uuid)
-                    data.project = project
+                    if project_uuid:
+                        project = Project.objects.get(unique_id=project_uuid)
+                        data.project = project
 
-                data.sender = request.user
-                data.community = community
-                data.save()
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('researcher-projects-contributor', researcher.id)
+            else:
                 return redirect('researcher-projects-contributor', researcher.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
         context = {
             'projects': projects,
             'researcher': researcher,
             'form': form,
             'user_can_view': user_can_view,
+            'items': page,
+            'results': results,
         }
         return render(request, 'researchers/projects.html', context)
 
@@ -459,7 +505,7 @@ def projects_contributor(request, pk):
 # Create Project
 @login_required(login_url='login')
 def create_project(request, pk):
-    researcher = Researcher.objects.get(id=pk)
+    researcher = Researcher.objects.select_related('user').get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')
@@ -484,10 +530,9 @@ def create_project(request, pk):
                 data.save()
 
                 # Add project to researcher projects
-                ProjectCreator.objects.create(researcher=researcher, project=data)
-
-                #Create EntitiesNotified instance for the project
-                EntitiesNotified.objects.create(project=data)
+                creator = ProjectCreator.objects.select_related('researcher').get(project=data)
+                creator.researcher = researcher
+                creator.save()
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
@@ -497,9 +542,10 @@ def create_project(request, pk):
                 institutions_selected = request.POST.getlist('selected_institutions')
                 researchers_selected = request.POST.getlist('selected_researchers')
 
-                # Get project contributors instance and add researcher to it
-                contributors = ProjectContributors.objects.get(project=data)
+                 # Get a project contributor object and add researcher to it.
+                contributors = ProjectContributors.objects.prefetch_related('researchers').get(project=data)
                 contributors.researchers.add(researcher)
+            
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
 
@@ -561,7 +607,7 @@ def edit_project(request, researcher_id, project_uuid):
             
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
-                create_notices(notices_selected, researcher, data, notice)
+                create_notices(notices_selected, researcher, data, notices)
 
             return redirect('researcher-projects', researcher.id)    
 
@@ -611,7 +657,8 @@ def notify_others(request, pk, proj_id):
 
                 # Create project status, first comment and  notification
                 ProjectStatus.objects.create(project=project, community=community, seen=False)
-                ProjectComment.objects.create(project=project, community=community, sender=request.user, message=message)
+                if message:
+                    ProjectComment.objects.create(project=project, community=community, sender=request.user, message=message)
                 ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
                 entities_notified.save()
                 
@@ -635,10 +682,25 @@ def connections(request, pk):
     if user_can_view == False:
         return redirect('restricted')
     else:
-        connections = Connections.objects.get(researcher=researcher)
+
+        researchers = Researcher.objects.none()
+
+        institution_ids = researcher.contributing_researchers.exclude(institutions__id=None).values_list('institutions__id', flat=True)
+        institutions = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').filter(id__in=institution_ids)
+    
+        community_ids = researcher.contributing_researchers.exclude(communities__id=None).values_list('communities__id', flat=True)
+        communities = Community.objects.select_related('community_creator').filter(id__in=community_ids)
+        
+        project_ids = researcher.contributing_researchers.values_list('project__unique_id', flat=True)
+        contributors = ProjectContributors.objects.filter(project__unique_id__in=project_ids)
+        for c in contributors:
+            researchers = c.researchers.select_related('user').exclude(id=researcher.id)
+
         context = {
             'researcher': researcher,
-            'connections': connections,
             'user_can_view': user_can_view,
+            'communities': communities,
+            'researchers': researchers,
+            'institutions': institutions,
         }
         return render(request, 'researchers/connections.html', context)

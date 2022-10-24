@@ -1,0 +1,75 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/headers/_reg-header.html' %}
+
+<section id="gradient-section" class="flex-this">
+    <div class="base-card flex-this row">
+
+        <div id="registration-progress-container" class="orange-bg white-text flex-this column justify-center">
+            
+            {% if '/login' in request.path or 'reset' in request.path %}
+                <div class="login-logo-container">
+                    <img loading="lazy" class="login-logo" src="{% static 'images/logos/lc-logo-signin.png' %}" alt="Local Contexts logo">
+                </div>
+            {% else %}
+
+                <div id="progress-ul-container" class="flex-this">
+                    <ul id="progress-ul" class="flex-this column ul-no-bullets">
+                        <li>
+                            {% if '/register' in request.path %}
+                                {% include 'snippets/bullet-big.html'%}
+                            {% else %}
+                                {% include 'snippets/bullet.html'%}
+                            {% endif %}
+                            Register
+                        </li>
+                        <li>
+                            {% if '/verify' in request.path %}
+                                {% include 'snippets/bullet-big.html'%}
+                            {% else %}
+                                {% include 'snippets/bullet.html'%}
+                            {% endif %}
+                                Verify email
+                        </li>
+                        <li>
+                            {% if '/create-profile' in request.path %}
+                                {% include 'snippets/bullet-big.html'%}
+                            {% else %}
+                                {% include 'snippets/bullet.html'%}
+                            {% endif %}
+                            Create your personal profile
+                        </li>
+                        <li>
+                            {% if '/select-account/' in request.path %}
+                                {% include 'snippets/bullet-big.html'%}
+                            {% else %}
+                                {% include 'snippets/bullet.html'%}
+                            {% endif %}
+                            Select an account
+                        </li>
+                        <li>
+                            {% if 'connect-community' in request.path or 'create-community' in request.path or 'confirm-community' in request.path or 'connect-institution' in request.path or 'create-institution' in request.path or 'confirm-institution' in request.path or 'create-institution/no-ror/' in request.path or 'connect-researcher' in request.path or 'preparation-step' in request.path %}
+                                {% include 'snippets/bullet-big.html'%}
+                            {% else %}
+                                {% include 'snippets/bullet.html'%}
+                            {% endif %}
+                                Join or create an account</li>
+                        <li>
+                            {% include 'snippets/bullet.html'%}
+                            Get started!
+                        </li>
+                    </ul>
+                </div>
+
+            {% endif %}
+
+            <div id="progress-bottom-container"><div><h2>Grounding Indigenous Rights</h2></div></div>
+
+        </div>
+    
+        <div class="registration-form-container flex-this column">
+            {% block card %} {% endblock %}    
+        </div>
+
+    </div>
+</section>
+{% include 'partials/footers/_reg-footer.html' %}
+{% endblock %}

@@ -12,6 +12,7 @@ class SignUpInvitationAdmin(admin.ModelAdmin):
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'position', 'affiliation', 'is_researcher')
+    readonly_fields = ('api_key',)
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(UserAffiliation)

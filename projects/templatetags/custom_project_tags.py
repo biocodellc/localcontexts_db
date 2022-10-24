@@ -3,28 +3,41 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from communities.models import Community
 from projects.models import Project, ProjectContributors, ProjectCreator
-from helpers.models import ProjectStatus, ProjectComment
+from helpers.models import ProjectStatus, ProjectComment, Notice
 
 register = template.Library()
 
 @register.simple_tag
 def which_account_created_project(project):
-    p = ProjectCreator.objects.filter(project=project)
-    return p[0] #1st in instances
+    created = ProjectCreator.objects.filter(project=project).values(
+            'community__community_name',
+            'institution__institution_name',
+            'researcher__user__username',           
+        )
+        
+    string = ''
+    for x in created:
+        if x['community__community_name']:
+            string = f'at {x["community__community_name"]} | Community'
+        if x['institution__institution_name']:
+            string = f'at {x["institution__institution_name"]} | Institution'
+        if x['researcher__user__username']:
+            string = f' | Researcher'
+    return string
 
 @register.simple_tag
-def project_comments(project, entity):
-    # TODO: pass instance of project and instance of researcher, community or institution
-    if isinstance(entity, Community):
-        return ProjectComment.objects.select_related('community', 'sender').filter(project=project, community=entity)
+def show_project_notices(project):
+    return Notice.objects.filter(project=project).values('archived', 'notice_type')
 
 @register.simple_tag
-def project_comments_all(project):
-    return ProjectComment.objects.select_related('community', 'sender').filter(project=project)
+def project_comments(project, community):
+    # pass instance of project and instance of community
+    if isinstance(community, Community):
+        return ProjectComment.objects.select_related('community', 'sender', 'project').filter(project=project, community=community)
 
 @register.simple_tag
 def project_status(project):
-    return ProjectStatus.objects.select_related('community').filter(project=project)
+    return ProjectStatus.objects.select_related('community', 'project').filter(project=project)
 
 @register.simple_tag
 def get_all_researchers():
@@ -42,6 +55,38 @@ def define(val=None):
 @register.simple_tag
 def which_communities_notified(project):
     return ProjectStatus.objects.select_related('community').filter(project=project)
+
+@register.simple_tag
+def connections_collaborative_projects(target_account, collaborating_account):
+    projects = Project.objects.none()
+    projects_list = []
+
+    if isinstance(target_account, Institution):
+        if isinstance(collaborating_account, Institution):
+            projects_list = ProjectContributors.objects.filter(institutions=collaborating_account).filter(institutions=target_account).values_list('project__unique_id', flat=True)
+        if isinstance(collaborating_account, Community):
+            projects_list = target_account.contributing_institutions.filter(communities=collaborating_account).values_list('project__unique_id', flat=True)
+        if isinstance(collaborating_account, Researcher):
+            projects_list = target_account.contributing_institutions.filter(researchers=collaborating_account).values_list('project__unique_id', flat=True)
+    
+    if isinstance(target_account, Community):
+        if isinstance(collaborating_account, Community):
+            projects_list = ProjectContributors.objects.filter(communities=collaborating_account).filter(communities=target_account).values_list('project__unique_id', flat=True)
+        if isinstance(collaborating_account, Institution):
+            projects_list = target_account.contributing_communities.filter(institutions=collaborating_account).values_list('project__unique_id', flat=True)
+        if isinstance(collaborating_account, Researcher):
+            projects_list = target_account.contributing_communities.filter(researchers=collaborating_account).values_list('project__unique_id', flat=True)
+    
+    if isinstance(target_account, Researcher):
+        if isinstance(collaborating_account, Researcher):
+            projects_list = ProjectContributors.objects.filter(researchers=collaborating_account).filter(researchers=target_account).values_list('project__unique_id', flat=True)
+        if isinstance(collaborating_account, Community):
+            projects_list = target_account.contributing_researchers.filter(communities=collaborating_account).values_list('project__unique_id', flat=True)
+        if isinstance(collaborating_account, Institution):
+            projects_list = target_account.contributing_researchers.filter(institutions=collaborating_account).values_list('project__unique_id', flat=True)
+
+    projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=projects_list).order_by('-date_added')
+    return projects
 
 @register.simple_tag
 def discoverable_project_view(user, project_uuid):

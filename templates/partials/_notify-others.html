@@ -2,21 +2,27 @@
 
 <div class="content-card-v2 content-card-space">
     <div class="flex-this space-between">
+        <div>
+            <h2 class="no-bottom-margin no-top-margin">Notify Communities</h2>
+            <p>Once you have created a Project, you can send this Project to communities, institutions or researchers that could be interested in this Project.</p>
+        </div>
 
-        <div class="w-60 flex-this column">
-            <div>
-                <h2 class="no-bottom-margin no-top-margin">Notify Communities</h2>
-                <p>Once you have created a Project, you can send this Project to communities, institutions or researchers that could be interested in this Project.</p>
+        <div class="w-40 flex-this column align-right">
+            <div class="flex-this margin-bottom-16 w-100 flex-end">
+                <div><a href="{% url 'view-project' project.unique_id %}" class="primary-btn white-btn">View Project <i class="fa fa-arrow-right"></i></a></div>
             </div>
+        </div>
+    </div>
 
-            <!-- title -->
+    <div class="flex-this space-between w-100">
+        <div>
             <div><h3 class="no-bottom-margin no-top-margin">{{ project.title }}</h3></div>
             <div><p>{{ project.date_added|date:'M d, Y' }} | 
-                {{ project.project_type }} | 
+                {% if project.project_type == 'Other' %} {{ project.other_type }} {% else %} {{ project.project_type }} {% endif %}|
                 {{ project.project_privacy }}
                 </p>
             </div>
-            
+
             <div class="margin-bottom-16">
                 <div class="flex-this">
                     {% if project.publication_doi %}
@@ -31,29 +37,25 @@
                         <div><a href="{{ project.url }}" class="primary-btn green-btn">Project Link <i class="fa fa-external-link" aria-hidden="true"></i></a></div>
                     {% endif %}
                 </div>
-            </div>
+            </div>            
         </div>
-
-        <div class="w-40 flex-this column align-right margin-top-16">
-
-            <div class="flex-this margin-bottom-16 w-100 flex-end">
-                <div><a href="{% url 'view-project' project.unique_id %}" class="primary-btn white-btn">View Project <i class="fa fa-arrow-right"></i></a></div>
-            </div>
-            <div>
-                {% if notices %}
-                    {% for notice in notices %}
+        <div class="flex-this flex-end">
+            {% if project.project_notice.all %}
+                {% for notice in project.project_notice.all %}
+                    {% if not notice.archived %}
                         {% if notice.notice_type == 'biocultural' %}
-                            <div><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                            <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="62px"></div>
                         {% endif %}
                         {% if notice.notice_type == 'traditional_knowledge' %}
-                            <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                            <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="62px"></div>
                         {% endif %}
-                    {% endfor %}
-                {% endif %}
-            </div>
-
-        </div>
-
+                        {% if notice.notice_type == 'attribution_incomplete' %}
+                            <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="62px"></div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>   
     </div>
 </div>
 

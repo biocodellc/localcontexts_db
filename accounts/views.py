@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages, auth
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.views.generic import View
 from django.contrib.auth.views import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
@@ -114,6 +115,8 @@ def verify(request):
 
 @unauthenticated_user
 def login(request):
+    envi = dev_prod_or_local(request.get_host())
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -133,7 +136,7 @@ def login(request):
             messages.error(request, 'Your username or password does not match an account')
             return redirect('login')
     else:
-        return render(request, "accounts/login.html")
+        return render(request, "accounts/login.html", {'envi': envi })
     
 @login_required(login_url='login')
 def logout(request):
@@ -150,13 +153,25 @@ def select_account(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-    n = UserNotification.objects.filter(to_user=request.user)
-    researcher = is_user_researcher(request.user)
-    user_affiliation = UserAffiliation.objects.prefetch_related('communities', 'institutions').get(user=request.user)
+    user = request.user
+    n = UserNotification.objects.filter(to_user=user)
+    researcher = is_user_researcher(user)
 
-    user_communities = user_affiliation.communities.prefetch_related('admins', 'editors', 'viewers').all()
-    user_institutions = user_affiliation.institutions.prefetch_related('admins', 'editors', 'viewers').all()
-    profile = Profile.objects.select_related('user').get(user=request.user)
+    affiliation = user.user_affiliations.prefetch_related(
+        'communities', 
+        'institutions', 
+        'communities__admins', 
+        'communities__editors', 
+        'communities__viewers',
+        'institutions__admins', 
+        'institutions__editors', 
+        'institutions__viewers'
+        ).all().first()
+
+    user_communities = affiliation.communities.all()    
+    user_institutions = affiliation.institutions.all()
+
+    profile = user.user_profile
 
     if request.method == 'POST':
         profile.onboarding_on = False
@@ -173,22 +188,22 @@ def dashboard(request):
 
 @login_required(login_url='login')
 def onboarding_on(request):
-    request.user.profile.onboarding_on = True
-    request.user.profile.save()
+    request.user.user_profile.onboarding_on = True
+    request.user.user_profile.save()
     return redirect('dashboard')
 
 @login_required(login_url='login')
 def create_profile(request):
     if request.method == 'POST':
         user_form = UserCreateProfileForm(request.POST, instance=request.user)
-        profile_form = ProfileCreationForm(request.POST, instance=request.user.profile)
+        profile_form = ProfileCreationForm(request.POST, instance=request.user.user_profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
             return redirect('select-account')
     else:
         user_form = UserCreateProfileForm(instance=request.user)
-        profile_form = ProfileCreationForm(instance=request.user.profile)
+        profile_form = ProfileCreationForm(instance=request.user.user_profile)
 
     context = { 'user_form': user_form, 'profile_form': profile_form,}
     return render(request, 'accounts/create-profile.html', context)
@@ -199,7 +214,7 @@ def update_profile(request):
 
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.user_profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -210,7 +225,7 @@ def update_profile(request):
             return redirect('update-profile')
     else:
         user_form = UserUpdateForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=request.user.profile)
+        profile_form = ProfileUpdateForm(instance=request.user.user_profile)
 
     context = { 'profile': profile, 'user_form': user_form, 'profile_form': profile_form }
     return render(request, 'accounts/update-profile.html', context)
@@ -247,7 +262,7 @@ def deactivate_user(request):
 @login_required(login_url='login')
 def manage_organizations(request):
     profile = Profile.objects.select_related('user').get(user=request.user)
-    affiliations = UserAffiliation.objects.prefetch_related('communities', 'institutions').get(user=request.user)
+    affiliations = UserAffiliation.objects.prefetch_related('communities', 'institutions', 'communities__community_creator', 'institutions__institution_creator').get(user=request.user)
     researcher = Researcher.objects.none()
     users_name = get_users_name(request.user)
     if Researcher.objects.filter(user=request.user).exists():
@@ -309,10 +324,19 @@ def registry_communities(request):
     try:
         # Paginate the query of all approved communities
         c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
+        if request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('community_name')
+                query = SearchQuery(q)
+                results = c.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
+            
         p = Paginator(c, 5)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
-        context = { 'communities': True, 'items': page }
+        context = { 'communities': True, 'items': page, 'results': results }
         return render(request, 'accounts/registry.html', context)
     except:
         raise Http404()
@@ -321,11 +345,20 @@ def registry_communities(request):
 def registry_institutions(request):
     try:
         i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
+        if request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('institution_name')
+                query = SearchQuery(q)
+                results = i.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
+
         p = Paginator(i, 5)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
 
-        context = { 'institutions': True, 'items': page,}
+        context = { 'institutions': True, 'items': page, 'results': results}
         return render(request, 'accounts/registry.html', context)
     except:
         raise Http404()
@@ -334,19 +367,27 @@ def registry_institutions(request):
 def registry_researchers(request):
     try:
         r = Researcher.objects.select_related('user').all().order_by('user__username')
+        if request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('user__username', 'user__first_name', 'user__last_name')
+                query = SearchQuery(q)
+                results = r.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
+
         p = Paginator(r, 5)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
 
-        context = { 'researchers': True, 'items': page,}
+        context = { 'researchers': True, 'items': page, 'results': results}
         return render(request, 'accounts/registry.html', context)
     except:
         raise Http404()
 
 # Hub stats page
 def hub_counter(request):
-    current_datetime = datetime.datetime.now()
-    otc_notices = OpenToCollaborateNoticeURL.objects.all()
+    otc_notices = OpenToCollaborateNoticeURL.objects.select_related('researcher', 'institution').all()
 
     reg_total = 0
     notices_total = 0
@@ -369,92 +410,33 @@ def hub_counter(request):
 
     projects_count = 0
 
-    if dev_prod_or_local(request.get_host()) == 'PROD':
-        admin = User.objects.get(id=1)
-        researcher = Researcher.objects.none()
-        if Researcher.objects.filter(user=admin).exists():
-            researcher = Researcher.objects.get(user=admin)
+    # Registered accounts
+    community_count = Community.objects.count() 
+    institution_count = Institution.objects.count() 
+    researcher_count = Researcher.objects.count()
+    reg_total = community_count + institution_count + researcher_count
 
+    # Notices
+    bc_notice_count = Notice.objects.filter(notice_type="biocultural").count()
+    tk_notice_count = Notice.objects.filter(notice_type="traditional_knowledge").count()
+    attr_notice_count = Notice.objects.filter(notice_type="attribution_incomplete").count()
+    notices_total = bc_notice_count + tk_notice_count + attr_notice_count
 
-        # Registered
-        # exclude any account created by admin
-        community_count = Community.objects.exclude(community_creator=1).count() # sample community
-        institution_count = Institution.objects.exclude(institution_creator=1).count() # sample institution
-        researcher_count = Researcher.objects.exclude(user=1).count() # admin's researcher account
-        reg_total = community_count + institution_count + researcher_count
+    # How many projects were created by which account
+    for project in ProjectCreator.objects.select_related('institution', 'community', 'researcher').all():
+        if project.institution:
+            institution_projects += 1
+        if project.community:
+            community_projects += 1
+        if project.researcher:
+            researcher_projects += 1
 
-        # Notices
-        for notice in Notice.objects.exclude(researcher=researcher, institution=1):
-            if notice.notice_type == 'biocultural':
-                bc_notice_count += 1
-            if notice.notice_type == 'traditional_knowledge':
-                tk_notice_count += 1
-            if notice.notice_type == 'attribution_incomplete':
-                attr_notice_count += 1
-        notices_total = bc_notice_count + tk_notice_count + attr_notice_count
+    projects_count = community_projects + institution_projects + researcher_projects
 
-        # Project Counts -- excludes accounts created by ADMIN
-        # Community projects
-        for community in Community.objects.exclude(community_creator=admin):
-            comm_count = ProjectCreator.objects.filter(community=community).count()
-            community_projects += comm_count
-        
-        # Institution projects
-        for institution in Institution.objects.exclude(institution_creator=admin):
-            inst_count = ProjectCreator.objects.filter(institution=institution).count()
-            institution_projects += inst_count
-
-        # Researcher projects
-        for researcher in Researcher.objects.exclude(user=admin):
-            res_count = ProjectCreator.objects.filter(researcher=researcher).count()
-            researcher_projects += res_count
-
-        projects_count = community_projects + institution_projects + researcher_projects
-
-        # Labels
-        bclabels_count = BCLabel.objects.exclude(created_by=admin).count()
-        tklabels_count = TKLabel.objects.exclude(created_by=admin).count()
-        total_labels = bclabels_count + tklabels_count
-
-    else:
-        # Registered, everyone's account is shown
-        community_count = Community.objects.count() 
-        institution_count = Institution.objects.count() 
-        researcher_count = Researcher.objects.count()
-        reg_total = community_count + institution_count + researcher_count
-
-        # Notices
-        for notice in Notice.objects.all():
-            if notice.notice_type == 'biocultural':
-                bc_notice_count += 1
-            if notice.notice_type == 'traditional_knowledge':
-                tk_notice_count += 1
-            if notice.notice_type == 'attribution_incomplete':
-                attr_notice_count += 1
-        notices_total = bc_notice_count + tk_notice_count + attr_notice_count
-
-        # Project Counts -- excludes accounts created by ADMIN
-        # Community projects
-        for community in Community.objects.all():
-            comm_count = ProjectCreator.objects.filter(community=community).count()
-            community_projects += comm_count
-        
-        # Institution projects
-        for institution in Institution.objects.all():
-            inst_count = ProjectCreator.objects.filter(institution=institution).count()
-            institution_projects += inst_count
-
-        # Researcher projects
-        for researcher in Researcher.objects.all():
-            res_count = ProjectCreator.objects.filter(researcher=researcher).count()
-            researcher_projects += res_count
-
-        projects_count = community_projects + institution_projects + researcher_projects
-
-        # Labels
-        bclabels_count = BCLabel.objects.count()
-        tklabels_count = TKLabel.objects.count()
-        total_labels = bclabels_count + tklabels_count
+    # Labels
+    bclabels_count = BCLabel.objects.count()
+    tklabels_count = TKLabel.objects.count()
+    total_labels = bclabels_count + tklabels_count
 
 
     context = {
@@ -476,7 +458,6 @@ def hub_counter(request):
         'bclabels_count': bclabels_count,
         'tklabels_count': tklabels_count, 
         'total_labels': total_labels,
-        'current_datetime': current_datetime,
 
         'otc_notices': otc_notices,
     }

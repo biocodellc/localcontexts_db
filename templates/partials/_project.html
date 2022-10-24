@@ -1,44 +1,40 @@
 {% load static %}
 
 <div class="content-card-v2 content-card-space">
-
     <div class="flex-this w-100">
         <div class="flex-this w-50">
             {% if request.user.is_authenticated %}
                 <div><a class="primary-btn green-btn margin-top-2" onClick="window.history.back();return false;"><i class="fa fa-arrow-left"></i> Back</a></div>
             {% endif %}
         </div>
-
         <div class="flex-this flex-end w-50">
             <div class="margin-left-8"><a class="primary-btn white-btn margin-top-2" href="{% url 'download-project-zip' project.unique_id %}">Download <i class="fa fa-download" aria-hidden="true"></i></a></div>
         </div>
-
     </div>
-
-
-    <div class="flex-this space-between w-100">
-        <div class="flex-this column">
-            <div class="margin-top-1">
-                <p class="p-24 bold">Project View</p>
-                <p>Listed below is the information that is associated with this Project.<br>
-                    If you would like to edit this Project, you can do so until a community has applied a Label to this Project. </p>
-            </div>
-        </div>
+    <div class="w-100">
+        <h3 class="no-bottom-margin">Project View</h3>
+        <p>Listed below is the information that is associated with this Project.<br>
+            If you would like to edit this Project, you can do so until a community has applied a Label to this Project. </p>
     </div>
-
 </div>
 
 <div class="content-card-v2 content-card-space">
     
-    <div class="flex-this margin-right-1 margin-left-1">
+    <div class="flex-this margin-left-16">
         <div class="flex-this column w-60">
-            <div><p class="p-28 bold">{{ project.title }}</p></div>
-            <div><p class="bold">{{ project.date_added|date:'d F Y' }} | {{ project.project_type }} | {{ project.project_privacy }}</p></div>
+            <div><p class="p-28 bold no-bottom-margin">{{ project.title }}</p></div>
+            <div><p>{{ project.date_added|date:'d F Y' }} | {% if project.project_type == 'Other' %} {{ project.other_type }} {% else %} {{ project.project_type }} {% endif %}| 
+                {{ project.project_privacy }}</p></div>
 
             <div>
                 <p class="p-24 bold no-top-margin">Project Information</p>
                 <span class="bold">Project Description</span><br>
                 <p>{{ project.description|linebreaks }}</p>
+            </div>
+
+            <div>
+                <p class="bold">Project Link</p>
+                {{ project.url }}
             </div>
 
             <div>
@@ -75,12 +71,7 @@
                                             </a>
                                         {% endif %}
 
-                                        {% if researcher.user.get_full_name %}
-                                            {{ researcher.user.get_full_name }}
-                                        {% else %}
-                                            {{ researcher.user.username }}
-                                        {% endif %}
-                                         | Researcher
+                                        {% firstof researcher.user.get_full_name researcher.user.username %} | Researcher
                                         <div class="researcher-hover-info">
                                             <p>
                                                 <strong>Primary Institution Affiliation:</strong> {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% else %} None specified {% endif %}<br>
@@ -151,52 +142,47 @@
     </div>
 
     <div class="margin-right-1 margin-left-1">
-        {% if project.project_notice.all %}
-            <div><p class="p-24 bold">Project Notice</p></div>
-
-
-                {% for notice in project.project_notice.all %}
-                {% if notice.archived %} {% else %}
-                    {% if notice.notice_type == 'biocultural' %}
-                        <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                            <div class="w-15 pad-top-1"><img loading="lazy" src="{{ notice.img_url }}" width="78" height="78" alt="black square with white letters BC in the middle"></div>
-                            <div class="w-80 pad-top-1">
-                                <h3 class="no-top-margin">Biocultural Notice</h3>
-                                <p>{{ notice.default_text}}</p>
-                            </div>
+        {% if notices %}
+            <div><p class="p-24 bold">Project Notices</p></div>
+            {% for notice in notices %}
+                {% if notice.notice_type == 'biocultural' %}
+                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
+                        <div class="w-15 pad-top-1"><img loading="lazy" src="{{ notice.img_url }}" width="78" height="78" alt="black square with white letters BC in the middle"></div>
+                        <div class="w-80 pad-top-1">
+                            <h3 class="no-top-margin">Biocultural Notice</h3>
+                            <p>{{ notice.default_text}}</p>
                         </div>
-                    {% endif %}
-
-                    {% if notice.notice_type == 'traditional_knowledge' %}
-                        <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                            <div class="w-15 pad-top-1"><img loading="lazy" src="{{ notice.img_url }}" width="78" height="78" alt="black square with white letters TK in the middle"></div>
-                            <div class="w-80 pad-top-1">
-                                <h3 class="no-top-margin">Traditional Knowledge Notice</h3>
-                                <p>{{ notice.default_text}}</p>
-                            </div>
-                        </div>
-                    {% endif %}
-
-                    {% if notice.notice_type == 'attribution_incomplete' %}
-                        <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                            <div class="w-15 pad-top-1"><img loading="lazy" src="{{ notice.img_url }}" width="78" height="78"></div>
-                            <div class="w-80 pad-top-1">
-                                <h3 class="no-top-margin">Attribution Incomplete Notice</h3>
-                                <p>{{ notice.default_text}}</p>
-                            </div>
-                        </div>
-                    {% endif %}
+                    </div>
                 {% endif %}
-                    
-                {% endfor %}
+
+                {% if notice.notice_type == 'traditional_knowledge' %}
+                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
+                        <div class="w-15 pad-top-1"><img loading="lazy" src="{{ notice.img_url }}" width="78" height="78" alt="black square with white letters TK in the middle"></div>
+                        <div class="w-80 pad-top-1">
+                            <h3 class="no-top-margin">Traditional Knowledge Notice</h3>
+                            <p>{{ notice.default_text}}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if notice.notice_type == 'attribution_incomplete' %}
+                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
+                        <div class="w-15 pad-top-1"><img loading="lazy" src="{{ notice.img_url }}" width="78" height="78"></div>
+                        <div class="w-80 pad-top-1">
+                            <h3 class="no-top-margin">Attribution Incomplete Notice</h3>
+                            <p>{{ notice.default_text}}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
         {% endif %}
     </div>
 
-    {% if project.bc_labels.all or project.tk_labels.all %}
+    {% if project.has_bclabels or project.has_tklabels %}
         <div class="margin-right-1 margin-left-1">
             <div><p class="p-24 bold">Project Labels</p></div>
 
-        {% if project.bc_labels.all %}
+        {% if project.has_bclabels %}
             {% for bclabel in project.bc_labels.all %}
                 <div>
                     <div class="flex-this">
@@ -217,7 +203,7 @@
             {% endfor %}
         {% endif %}
 
-        {% if project.tk_labels.all %}
+        {% if project.has_tklabels %}
             {% for tklabel in project.tk_labels.all %}
                 <div>
                     <div class="flex-this">
