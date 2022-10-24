@@ -904,27 +904,24 @@ def connections(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
-        # TODO: figure out if this is needed
-        # institution_ids = list(chain(
-        #     institution.contributing_institutions.exclude(institutions__id=None).values_list('institutions__id', flat=True),
-        # ))
+        institutions = Institution.objects.none()
 
-        # researcher_ids = list(chain(
-        #     institution.contributing_institutions.exclude(researchers__id=None).values_list('researchers__id', flat=True),
-        # ))
+        researcher_ids = institution.contributing_institutions.exclude(researchers__id=None).values_list('researchers__id', flat=True)
+        community_ids = institution.contributing_institutions.exclude(communities__id=None).values_list('communities__id', flat=True)
 
-        community_ids = list(chain(
-            institution.contributing_institutions.exclude(communities__id=None).values_list('communities__id', flat=True),
-        ))
-        communities = Community.objects.select_related('community_creator').filter(id__in=community_ids)
-        # institutions = Institution.objects.select_related('institution_creator').filter(id__in=institution_ids)
-        # researchers = Researcher.objects.select_related('user').filter(id__in=researcher_ids)
-            
+        communities = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').filter(id__in=community_ids)
+        researchers = Researcher.objects.select_related('user').filter(id__in=researcher_ids)
+        
+        project_ids = institution.contributing_institutions.values_list('project__unique_id', flat=True)
+        contributors = ProjectContributors.objects.filter(project__unique_id__in=project_ids)
+        for c in contributors:
+            institutions = c.institutions.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').exclude(id=institution.id)
+
         context = {
             'member_role': member_role,
             'institution': institution,
             'communities': communities,
-            # 'researchers': researchers,
-            # 'institutions': institutions
+            'researchers': researchers,
+            'institutions': institutions,
         }
         return render(request, 'institutions/connections.html', context)
