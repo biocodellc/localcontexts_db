@@ -28,19 +28,15 @@
         <!-- ORCiD Widget -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/orcid-widget.css' %}">
         
-        <title>Local Contexts {% block title %} {% endblock %}</title>
+        <title>Local Contexts | {% block title %} {% endblock %}</title>
     </head>
 
     <body>
 
         {% block content %} {% endblock %}
         {% include 'partials/banners/_cookie-banner.html' %}
-        <script src='https://www.google.com/recaptcha/api.js' type="text/javascript" defer></script>
         <script src="{% static 'javascript/main.js' %}" type="text/javascript" defer></script>
         <script src="{% static 'javascript/xhr.js' %}" type="text/javascript" defer></script>
-        <script src="{% static 'javascript/ror.js' %}" type="text/javascript" defer></script>
-        <!-- ORCiD Widget -->
-        <script src="{% static 'javascript/orcid-widget.js' %}" type="text/javascript" defer></script>
 
         <!-- Zammad support form-->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

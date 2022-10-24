@@ -1,4 +1,4 @@
-{% extends 'sub-base.html' %} {% block title %} | Apply Labels {% endblock %}{% load static %} {% load custom_project_tags %} {% block community_content %}
+{% extends 'account-base.html' %} {% block title %} Apply Labels {% endblock %}{% load static %} {% load custom_project_tags %} {% block community_content %}
 
 <div class="content-card-v2 content-card-space">
     <div class="padding-bottom-2"><small><a href="{% url 'community-projects' community.id %}"><span class="darkteal-text">Projects</span></a> >> Apply Labels</small></div>
@@ -15,12 +15,10 @@
             <div><p>{{ project.date_added|date:'M d, Y' }} | 
                 {% if project.project_type == 'Other' %} {{ project.other_type }} {% else %} {{ project.project_type }} {% endif %}| 
                 {{ project.project_privacy }}<br>
-                Created: {% if project.project_creator.get_full_name %}{{ project.project_creator.get_full_name }} {% else %} project.project_creator.username {% endif %}
-
+                Created: 
+                {% firstof project.project_creator.get_full_name project.project_creator.username %}
                 {% which_account_created_project project as project_creator %}
-                {% if project_creator.community %} at {{ project_creator.community }} | Community {% endif %}
-                {% if project_creator.institution %} at {{ project_creator.institution }} | Institution {% endif %}
-                {% if project_creator.researcher %} {{ project_creator.researcher}} | Researcher {% endif %}
+                {{ project_creator }}
                 </p>
             </div>
             
@@ -52,7 +50,7 @@
                     {% if project.tk_labels.all %}
                         {% for tklabel in project.tk_labels.all %}
                             <div class="margin-left-8">
-                                {% include 'tklabels/mini-labels.html' %}
+                                {% include 'tklabels/tiny-labels.html' %}
                             </div>
                         {% endfor %}
                     {% endif %}
@@ -60,7 +58,7 @@
                     {% if project.bc_labels.all %}
                         {% for bclabel in project.bc_labels.all %}
                             <div class="margin-left-8">
-                                {% include 'bclabels/mini-labels.html' %}
+                                {% include 'bclabels/tiny-labels.html' %}
                             </div>
                         {% endfor %}
                     {% endif %}
@@ -70,13 +68,13 @@
                             {% for notice in project.project_notice.all %}
                                 {% if not notice.archived %}
                                     {% if notice.notice_type == 'biocultural' %}
-                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" height="72px" width="72px"></div>
+                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="62px"></div>
                                     {% endif %}
                                     {% if notice.notice_type == 'traditional_knowledge' %}
-                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" height="72px" width="72px"></div>
+                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="62px"></div>
                                     {% endif %}
                                     {% if notice.notice_type == 'attribution_incomplete' %}
-                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" height="72px" width="72px"></div>
+                                        <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="62px"></div>
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}
@@ -106,7 +104,7 @@
 
             {% include 'partials/_alerts.html' %}
         </p>
-        <form method="POST" action="">
+        <form id="applyLabelsForm" method="POST" action="">
             {% csrf_token %}
 
             <div class="flex-this">
@@ -228,7 +226,7 @@
 
                 {% if notes %}
                     <div class="border-top-grey margin-top-16">
-                        <h2>Note</h2>
+                        <h2>Community Notes</h2>
                         {% for note in notes %}
                             <div class="margin-top-16 flex-this w-80 project-comment">
                                 <div class="project-comment-teal"></div>
@@ -246,9 +244,15 @@
 
                 {% if bclabels or tklabels %}
                     <div class="w-40 margin-top-16">
-                        <div>{{ form }}</div>
+                        {{ form.note.label }}
+                        <div class="tooltip"><strong>i</strong>
+                            <span class="tooltiptext">
+                                Document internal community information about how the Labels are being used on this Project and why. This will only be visible to members of your community.
+                            </span>
+                        </div>
+                        {{ form.note }}
                     </div>
-                    <div><button class="primary-btn action-btn margin-top-2">Apply Labels to Project <i class="fa fa-check" aria-hidden="true"></i></button></div>
+                    <div><button id="applyLabelsBtn" class="primary-btn action-btn margin-top-2">Apply Labels to Project <i class="fa fa-check" aria-hidden="true"></i></button></div>
                 {% endif %}
             </form>
 

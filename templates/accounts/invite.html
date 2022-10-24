@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% load static %} {% block content %} {% include 'partials/headers/_auth-header.html' %}
+{% extends 'auth-base.html' %} {% load static %} {% block main %}
 
     <div class="content-card content-card-space white-bg">  
         <h3>Invite New User</h3> 
@@ -16,6 +16,4 @@
         </form>
     </div>
 
-
-{% include 'partials/footers/_auth-footer.html' %}
 {% endblock %}

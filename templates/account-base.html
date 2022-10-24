@@ -1,0 +1,21 @@
+{% extends 'auth-base.html' %} {% load static %} {% block main %}
+
+    {% if community %}
+        {% include 'partials/infocards/_community-dashcard.html' %}
+        {% include 'partials/_subnav.html' %}
+        {% block community_content %}{% endblock %}
+    {% endif %}
+
+    {% if institution %}
+        {% include 'partials/infocards/_institution-dashcard.html' %}
+        {% include 'partials/_subnav.html' %}
+        {% block institution_content %}{% endblock %}
+    {% endif %}
+
+    {% if researcher %}
+        {% include 'partials/infocards/_researcher-dashcard.html' %}
+        {% include 'partials/_subnav.html' %}
+        {% block researcher_content %}{% endblock %}
+    {% endif %}
+
+{% endblock %}

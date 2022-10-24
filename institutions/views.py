@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.contrib import messages
 from django.http import Http404
 from django.core.paginator import Paginator
+from itertools import chain
 
 from localcontexts.utils import dev_prod_or_local
 from projects.utils import add_to_contributors
@@ -12,7 +14,7 @@ from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson, ProjectCreator
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
-from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified, Connections, OpenToCollaborateNoticeURL
+from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified, OpenToCollaborateNoticeURL
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
@@ -95,9 +97,6 @@ def create_institution(request):
                         # Add to user affiliations
                         affiliation.institutions.add(data)
                         affiliation.save()
-
-                        # Create a Connections instance
-                        Connections.objects.create(institution=data)
                         return redirect('dashboard')
                     else:
                         data.save()
@@ -105,9 +104,6 @@ def create_institution(request):
                         # Add to user affiliations
                         affiliation.institutions.add(data)
                         affiliation.save()
-
-                        # Create a Connections instance
-                        Connections.objects.create(institution=data)
                         return redirect('confirm-institution', data.id)
         elif 'create-institution-noror-btn' in request.POST:
             if noror_form.is_valid():
@@ -119,9 +115,6 @@ def create_institution(request):
                 # Add to user affiliations
                 affiliation.institutions.add(data)
                 affiliation.save()
-
-                #  Create a Connections instance
-                Connections.objects.create(institution=data)
                 return redirect('confirm-institution', data.id)
     return render(request, 'institutions/create-institution.html', {'form': form, 'noror_form': noror_form,})
 
@@ -150,15 +143,9 @@ def public_institution_view(request, pk):
         created_projects = ProjectCreator.objects.filter(institution=institution)
 
         # Do notices exist
-        bcnotice = False
-        tknotice = False
-        attrnotice = False
-        if Notice.objects.filter(institution=institution, notice_type='biocultural').exists():
-            bcnotice = True
-        if Notice.objects.filter(institution=institution, notice_type='traditional_knowledge').exists():
-            tknotice = True
-        if Notice.objects.filter(institution=institution, notice_type='attribution_incomplete').exists():
-            attrnotice = True
+        bcnotice = Notice.objects.filter(institution=institution, notice_type='biocultural').exists()
+        tknotice = Notice.objects.filter(institution=institution, notice_type='traditional_knowledge').exists()
+        attrnotice = Notice.objects.filter(institution=institution, notice_type='attribution_incomplete').exists()
 
         projects = []
 
@@ -176,16 +163,20 @@ def public_institution_view(request, pk):
                 if 'contact_btn' in request.POST:
                     # contact institution
                     if form.is_valid():
-                        to_email = ''
                         from_name = form.cleaned_data['name']
                         from_email = form.cleaned_data['email']
                         message = form.cleaned_data['message']
                         to_email = institution.institution_creator.email
                         
                         send_contact_email(to_email, from_name, from_email, message)
-                        messages.add_message(request, messages.SUCCESS, 'Sent!')
+                        messages.add_message(request, messages.SUCCESS, 'Message sent!')
                         return redirect('public-institution', institution.id)
-                else:
+                    else:
+                        if not form.data['message']:
+                            messages.add_message(request, messages.ERROR, 'Unable to send an empty message.')
+                            return redirect('public-institution', institution.id)
+
+                elif 'join_request' in request.POST:
                     if JoinRequest.objects.filter(user_from=request.user, institution=institution).exists():
                         messages.add_message(request, messages.ERROR, "You have already sent a request to this institution")
                         return redirect('public-institution', institution.id)
@@ -196,26 +187,28 @@ def public_institution_view(request, pk):
 
                         # Send email to institution creator
                         send_join_request_email_admin(request, join_request, institution)
+                        messages.add_message(request, messages.SUCCESS, 'Request sent!')
+                        return redirect('public-institution', institution.id)
+                else:
+                    messages.add_message(request, messages.ERROR, 'Something went wrong')
+                    return redirect('public-institution', institution.id)
 
-                        messages.add_message(request, messages.SUCCESS, 'Sent!')
-                return redirect('public-institution', institution.id)
-
-            else:
-                context = { 
-                    'institution': institution,
-                    'projects' : projects,
-                    'form': form, 
-                    'user_institutions': user_institutions,
-                    'bcnotice': bcnotice,
-                    'tknotice': tknotice,
-                    'attrnotice': attrnotice,
-                    'otc_notices': otc_notices,
-                }
-                return render(request, 'public.html', context)
+        else:
+            context = { 
+                'institution': institution,
+                'projects' : projects,
+                'bcnotice': bcnotice,
+                'tknotice': tknotice,
+                'attrnotice': attrnotice,
+                'otc_notices': otc_notices,
+            }
+            return render(request, 'public.html', context)
 
         context = { 
             'institution': institution,
             'projects' : projects,
+            'form': form, 
+            'user_institutions': user_institutions,
             'bcnotice': bcnotice,
             'tknotice': tknotice,
             'attrnotice': attrnotice,
@@ -261,7 +254,7 @@ def institution_notices(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('public-institution', institution.id)
     else:
-        urls = OpenToCollaborateNoticeURL.objects.filter(institution=institution)
+        urls = OpenToCollaborateNoticeURL.objects.filter(institution=institution).values_list('url', 'name')
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
 
         if request.method == 'POST':
@@ -287,8 +280,18 @@ def institution_members(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
+        # Get list of users, NOT in this institution, alphabetized by name
+        members = list(chain(
+            institution.admins.all().values_list('id', flat=True), 
+            institution.editors.all().values_list('id', flat=True), 
+            institution.viewers.all().values_list('id', flat=True),
+        ))
+        members.append(institution.institution_creator.id) # include institution creator
+        users = User.objects.exclude(id__in=members).order_by('username')
+
         join_requests_count = JoinRequest.objects.filter(institution=institution).count()
         form = InviteMemberForm(request.POST or None)
+
         if request.method == 'POST':
             if 'change_member_role_btn' in request.POST:
                 current_role = request.POST.get('current_role')
@@ -297,35 +300,52 @@ def institution_members(request, pk):
                 member = User.objects.get(id=user_id)
                 change_member_role(institution, member, current_role, new_role)
                 return redirect('institution-members', institution.id)
-            else:
-                receiver = request.POST.get('receiver')
-                user_in_institution = is_organization_in_user_affiliation(receiver, institution)
 
-                if not user_in_institution: # If user is not an institution member
-                    invitation_exists = InviteMember.objects.filter(receiver=receiver, institution=institution).exists() # Check to see if invitation already exists
-                    join_request_exists = JoinRequest.objects.filter(user_from=receiver, institution=institution).exists() # Check to see if join request already exists
+            elif 'send_invite_btn' in request.POST:
+                selected_user = User.objects.none()
+                if form.is_valid():
+                    data = form.save(commit=False)
 
-                    if not invitation_exists and not join_request_exists: # If invitation and join request does not exist, save form
-                        if form.is_valid():
-                            data = form.save(commit=False)
+                    # Get target User
+                    selected_username = request.POST.get('userList')
+                    username_to_check = ''
+
+                    if ' ' in selected_username: #if username includes spaces means it has a first and last name (last name,first name)
+                        x = selected_username.split(' ')
+                        username_to_check = x[0]
+                    else:
+                        username_to_check = selected_username
+
+                    if not username_to_check in users.values_list('username', flat=True):
+                        messages.add_message(request, messages.INFO, 'Invalid user selection. Please select user from the list.')
+                    else:
+                        selected_user = User.objects.get(username=username_to_check)
+    
+                        # Check to see if an invite or join request aleady exists
+                        invitation_exists = InviteMember.objects.filter(receiver=selected_user, institution=institution).exists() # Check to see if invitation already exists
+                        join_request_exists = JoinRequest.objects.filter(user_from=selected_user, institution=institution).exists() # Check to see if join request already exists
+
+                        if not invitation_exists and not join_request_exists: # If invitation and join request does not exist, save form
+                            data.receiver = selected_user
                             data.sender = request.user
                             data.status = 'sent'
                             data.institution = institution
                             data.save()
-                            # Send email to target user
-                            send_institution_invite_email(request, data, institution)
-                            messages.add_message(request, messages.INFO, 'Invitation Sent!')
+                            
+                            send_institution_invite_email(request, data, institution) # Send email to target user
+                            messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
                             return redirect('institution-members', institution.id)
-                    else: 
-                        messages.add_message(request, messages.INFO, 'The user you are trying to add has already been invited to this institution.')
+                        else: 
+                            messages.add_message(request, messages.INFO, f'The user you are trying to add already has an invitation pending to join {institution.institution_name}.')
                 else:
-                    messages.add_message(request, messages.ERROR, 'The user you are trying to add is already a member of this institution.')
+                    messages.add_message(request, messages.INFO, 'Something went wrong')
 
         context = { 
             'institution': institution,
             'form': form,
             'member_role': member_role,
             'join_requests_count': join_requests_count,
+            'users': users,
         }    
         return render(request, 'institutions/members.html', context)
 
@@ -392,46 +412,36 @@ def remove_member(request, pk, member_id):
 # Projects: all 
 @login_required(login_url='login')
 def institution_projects(request, pk):
-    try:
-        institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
 
-        member_role = check_member_role(request.user, institution)
-        if member_role == False: # If user is not a member / does not have a role.
-            return redirect('restricted')
-        else:
-            # init list for:
-            # 1. institution projects + 
-            # 2. projects institution has been notified of 
-            # 3. projects where institution is contributor
-            projects_list = []
+    member_role = check_member_role(request.user, institution)
+    if member_role == False: # If user is not a member / does not have a role.
+        return redirect('restricted')
+    else:
+        # 1. institution projects + 
+        # 2. projects institution has been notified of 
+        # 3. projects where institution is contributor
 
-            institution_projects = ProjectCreator.objects.filter(institution=institution) # projects created by institution
+        projects_list = list(chain(
+            institution.institution_created_project.all().values_list('project__id', flat=True), 
+            institution.institutions_notified.all().values_list('project__id', flat=True), 
+            institution.contributing_institutions.all().values_list('project__id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids).order_by('-date_added')
 
-            for p in institution_projects:
-                projects_list.append(p.project)
+        p = Paginator(projects, 10)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+        
+        form = ProjectCommentForm(request.POST or None)
 
-            institution_notified = EntitiesNotified.objects.select_related('project').prefetch_related('communities', 'researchers').filter(institutions=institution)
-            for n in institution_notified:
-                projects_list.append(n.project)
-            
-            contribs = ProjectContributors.objects.select_related('project').filter(institutions=institution)
-            for c in contribs:
-                projects_list.append(c.project)
+        if request.method == 'POST':
+            project_uuid = request.POST.get('project-uuid')
+            community_id = request.POST.get('community-id')
+            community = Community.objects.get(id=community_id)
 
-            projects = list(set(projects_list))
-
-            p = Paginator(projects, 5)
-            page_num = request.GET.get('page', 1)
-            page = p.page(page_num)
-            
-            form = ProjectCommentForm(request.POST or None)
-    
-            if request.method == 'POST':
-                project_uuid = request.POST.get('project-uuid')
-
-                community_id = request.POST.get('community-id')
-                community = Community.objects.get(id=community_id)
-
+            if request.POST.get('message'):
                 if form.is_valid():
                     data = form.save(commit=False)
 
@@ -443,59 +453,62 @@ def institution_projects(request, pk):
                     data.community = community
                     data.save()
                     return redirect('institution-projects', institution.id)
+            else:
+                return redirect('institution-projects', institution.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
-            context = {
-                'projects': projects,
-                'institution': institution,
-                'form': form,
-                'member_role': member_role,
-                'items': page,
-            }
-            return render(request, 'institutions/projects.html', context)
-    except:
-        raise Http404()
+        context = {
+            'projects': projects,
+            'institution': institution,
+            'form': form,
+            'member_role': member_role,
+            'items': page,
+            'results': results,
+        }
+        return render(request, 'institutions/projects.html', context)
 
 @login_required(login_url='login')
 def projects_with_labels(request, pk):
-    try:
-        institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
 
-        member_role = check_member_role(request.user, institution)
-        if member_role == False: # If user is not a member / does not have a role.
-            return redirect('restricted')
-        else:
-            # init list for:
-            # 1. institution projects + 
-            # 2. projects institution has been notified of 
-            # 3. projects where institution is contributor
-            projects_list = []
+    member_role = check_member_role(request.user, institution)
+    if member_role == False: # If user is not a member / does not have a role.
+        return redirect('restricted')
+    else:
+        # init list for:
+        # 1. institution projects + 
+        # 2. projects institution has been notified of 
+        # 3. projects where institution is contributor
+        projects_list = list(chain(
+            institution.institution_created_project.all().values_list('project__id', flat=True), 
+            institution.institutions_notified.all().values_list('project__id', flat=True), 
+            institution.contributing_institutions.all().values_list('project__id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
 
-            for p in ProjectCreator.objects.select_related('project').filter(institution=institution): # projects created by institution
-                if p.project.has_labels():
-                    projects_list.append(p.project)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids
+            ).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids
+            ).exclude(tk_labels=None).order_by('-date_added')
 
-            for n in EntitiesNotified.objects.select_related('project').filter(institutions=institution):
-                if n.project.has_labels():
-                    projects_list.append(n.project)
-            
-            for c in ProjectContributors.objects.select_related('project').filter(institutions=institution):
-                if c.project.has_labels():
-                    projects_list.append(c.project)
+        p = Paginator(projects, 10)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+        
+        form = ProjectCommentForm(request.POST or None)
 
-            projects = list(set(projects_list))
+        if request.method == 'POST':
+            project_uuid = request.POST.get('project-uuid')
+            community_id = request.POST.get('community-id')
+            community = Community.objects.get(id=community_id)
 
-            p = Paginator(projects, 5)
-            page_num = request.GET.get('page', 1)
-            page = p.page(page_num)
-            
-            form = ProjectCommentForm(request.POST or None)
-    
-            if request.method == 'POST':
-                project_uuid = request.POST.get('project-uuid')
-
-                community_id = request.POST.get('community-id')
-                community = Community.objects.get(id=community_id)
-
+            if request.POST.get('message'):
                 if form.is_valid():
                     data = form.save(commit=False)
 
@@ -507,59 +520,60 @@ def projects_with_labels(request, pk):
                     data.community = community
                     data.save()
                     return redirect('institution-projects-labels', institution.id)
+            else:
+                return redirect('institution-projects-labels', institution.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
-            context = {
-                'projects': projects,
-                'institution': institution,
-                'form': form,
-                'member_role': member_role,
-                'items': page,
-            }
-            return render(request, 'institutions/projects.html', context)
-    except:
-        raise Http404()
+        context = {
+            'projects': projects,
+            'institution': institution,
+            'form': form,
+            'member_role': member_role,
+            'items': page,
+            'results': results,
+        }
+        return render(request, 'institutions/projects.html', context)
+
 
 @login_required(login_url='login')
 def projects_with_notices(request, pk):
-    try:
-        institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
 
-        member_role = check_member_role(request.user, institution)
-        if member_role == False: # If user is not a member / does not have a role.
-            return redirect('restricted')
-        else:
-            # init list for:
-            # 1. institution projects + 
-            # 2. projects institution has been notified of 
-            # 3. projects where institution is contributor
-            projects_list = []
+    member_role = check_member_role(request.user, institution)
+    if member_role == False: # If user is not a member / does not have a role.
+        return redirect('restricted')
+    else:
+        # init list for:
+        # 1. institution projects + 
+        # 2. projects institution has been notified of 
+        # 3. projects where institution is contributor
+        projects_list = list(chain(
+            institution.institution_created_project.all().values_list('project__id', flat=True), 
+            institution.institutions_notified.all().values_list('project__id', flat=True), 
+            institution.contributing_institutions.all().values_list('project__id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids, tk_labels=None, bc_labels=None).order_by('-date_added')
 
-            for p in ProjectCreator.objects.select_related('project').filter(institution=institution): # projects created by institution
-                if not p.project.has_labels():
-                    projects_list.append(p.project)
+        p = Paginator(projects, 10)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+        
+        form = ProjectCommentForm(request.POST or None)
 
-            for n in EntitiesNotified.objects.select_related('project').filter(institutions=institution):
-                if not n.project.has_labels():
-                    projects_list.append(n.project)
-            
-            for c in ProjectContributors.objects.select_related('project').filter(institutions=institution):
-                if not c.project.has_labels():
-                    projects_list.append(c.project)
+        if request.method == 'POST':
+            project_uuid = request.POST.get('project-uuid')
+            community_id = request.POST.get('community-id')
+            community = Community.objects.get(id=community_id)
 
-            projects = list(set(projects_list))
-
-            p = Paginator(projects, 5)
-            page_num = request.GET.get('page', 1)
-            page = p.page(page_num)
-            
-            form = ProjectCommentForm(request.POST or None)
-    
-            if request.method == 'POST':
-                project_uuid = request.POST.get('project-uuid')
-
-                community_id = request.POST.get('community-id')
-                community = Community.objects.get(id=community_id)
-
+            if request.POST.get('message'):
                 if form.is_valid():
                     data = form.save(commit=False)
 
@@ -571,46 +585,50 @@ def projects_with_notices(request, pk):
                     data.community = community
                     data.save()
                     return redirect('institution-projects-notices', institution.id)
+            else:
+                return redirect('institution-projects-notices', institution.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
-            context = {
-                'projects': projects,
-                'institution': institution,
-                'form': form,
-                'member_role': member_role,
-                'items': page,
-            }
-            return render(request, 'institutions/projects.html', context)
-    except:
-        raise Http404()
+        context = {
+            'projects': projects,
+            'institution': institution,
+            'form': form,
+            'member_role': member_role,
+            'items': page,
+            'results': results,
+        }
+        return render(request, 'institutions/projects.html', context)
 
 @login_required(login_url='login')
 def projects_creator(request, pk):
-    try:
-        institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
 
-        member_role = check_member_role(request.user, institution)
-        if member_role == False: # If user is not a member / does not have a role.
-            return redirect('restricted')
-        else:
-            projects_list = []
-            
-            for p in ProjectCreator.objects.select_related('project').filter(institution=institution): # projects created by institution
-                projects_list.append(p.project)
-            
-            projects = list(set(projects_list))
-            
-            p = Paginator(projects, 5)
-            page_num = request.GET.get('page', 1)
-            page = p.page(page_num)
+    member_role = check_member_role(request.user, institution)
+    if member_role == False: # If user is not a member / does not have a role.
+        return redirect('restricted')
+    else:
+        created_projects = institution.institution_created_project.all().values_list('project__id', flat=True)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=created_projects).order_by('-date_added')
+        
+        p = Paginator(projects, 10)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
 
-            form = ProjectCommentForm(request.POST or None)
-    
-            if request.method == 'POST':
-                project_uuid = request.POST.get('project-uuid')
+        form = ProjectCommentForm(request.POST or None)
 
-                community_id = request.POST.get('community-id')
-                community = Community.objects.get(id=community_id)
+        if request.method == 'POST':
+            project_uuid = request.POST.get('project-uuid')
+            community_id = request.POST.get('community-id')
+            community = Community.objects.get(id=community_id)
 
+            if request.POST.get('message'):
                 if form.is_valid():
                     data = form.save(commit=False)
 
@@ -622,56 +640,54 @@ def projects_creator(request, pk):
                     data.community = community
                     data.save()
                     return redirect('institution-projects-creator', institution.id)
+            else:
+                return redirect('institution-projects-creator', institution.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
-            context = {
-                'projects': projects,
-                'institution': institution,
-                'form': form,
-                'member_role': member_role,
-                'items': page,
-            }
-            return render(request, 'institutions/projects.html', context)
-    except:
-        raise Http404()
+        context = {
+            'projects': projects,
+            'institution': institution,
+            'form': form,
+            'member_role': member_role,
+            'items': page,
+            'results': results,
+        }
+        return render(request, 'institutions/projects.html', context)
+
 
 @login_required(login_url='login')
 def projects_contributor(request, pk):
-    try:
-        institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
 
-        member_role = check_member_role(request.user, institution)
-        if member_role == False: # If user is not a member / does not have a role.
-            return redirect('restricted')
-        else:
-            # init list for projects where institution is contributor but not creator
-            projects_list = []
-            created_projects = []
+    member_role = check_member_role(request.user, institution)
+    if member_role == False: # If user is not a member / does not have a role.
+        return redirect('restricted')
+    else:
+        # Get IDs of projects created by institution and IDs of projects contributed, then exclude the created ones in the project call
+        created_projects = institution.institution_created_project.all().values_list('project__id', flat=True)
+        contrib = institution.contributing_institutions.all().values_list('project__id', flat=True)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=contrib).exclude(id__in=created_projects).order_by('-date_added')
 
-            for x in ProjectContributors.objects.select_related('project').filter(institutions=institution):
-                projects_list.append(x.project)
+        p = Paginator(projects, 10)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+        
+        form = ProjectCommentForm(request.POST or None)
 
-            for c in ProjectCreator.objects.select_related('project').filter(institution=institution):
-                created_projects.append(c.project)
+        if request.method == 'POST':
+            project_uuid = request.POST.get('project-uuid')
 
-            # remove projects that were created by the institution
-            for p in created_projects:
-                if p in projects_list:
-                    projects_list.remove(p)
+            community_id = request.POST.get('community-id')
+            community = Community.objects.get(id=community_id)
 
-            projects = list(set(projects_list))
-
-            p = Paginator(projects, 5)
-            page_num = request.GET.get('page', 1)
-            page = p.page(page_num)
-            
-            form = ProjectCommentForm(request.POST or None)
-    
-            if request.method == 'POST':
-                project_uuid = request.POST.get('project-uuid')
-
-                community_id = request.POST.get('community-id')
-                community = Community.objects.get(id=community_id)
-
+            if request.POST.get('message'):
                 if form.is_valid():
                     data = form.save(commit=False)
 
@@ -683,22 +699,31 @@ def projects_contributor(request, pk):
                     data.community = community
                     data.save()
                     return redirect('institution-projects-contributor', institution.id)
+            else:
+                return redirect('institution-projects-contributor', institution.id)
+        elif request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
 
-            context = {
-                'projects': projects,
-                'institution': institution,
-                'form': form,
-                'member_role': member_role,
-                'items': page,
-            }
-            return render(request, 'institutions/projects.html', context)
-    except:
-        raise Http404()
+        context = {
+            'projects': projects,
+            'institution': institution,
+            'form': form,
+            'member_role': member_role,
+            'items': page,
+            'results': results,
+        }
+        return render(request, 'institutions/projects.html', context)
 
 # Create Project
 @login_required(login_url='login')
 def create_project(request, pk):
-    institution = Institution.objects.get(id=pk)
+    institution = Institution.objects.select_related('institution_creator').get(id=pk)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
@@ -724,10 +749,9 @@ def create_project(request, pk):
                 data.save()
                 
                 # Add project to institution projects
-                ProjectCreator.objects.create(institution=institution, project=data)
-
-                #Create EntitiesNotified instance for the project
-                EntitiesNotified.objects.create(project=data)
+                creator = ProjectCreator.objects.select_related('institution').get(project=data)
+                creator.institution = institution
+                creator.save()
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
@@ -737,9 +761,10 @@ def create_project(request, pk):
                 institutions_selected = request.POST.getlist('selected_institutions')
                 researchers_selected = request.POST.getlist('selected_researchers')
 
-                # Get project contributors instance and add institution
-                contributors = ProjectContributors.objects.get(project=data)
+                 # Get a project contributor object and add institution to it.
+                contributors = ProjectContributors.objects.prefetch_related('institutions').get(project=data)
                 contributors.institutions.add(institution)
+                
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
 
@@ -873,16 +898,30 @@ def notify_others(request, pk, proj_id):
 
 @login_required(login_url='login')
 def connections(request, pk):
-    institution = Institution.objects.get(id=pk)
+    institution = Institution.objects.select_related('institution_creator').get(id=pk)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
-        connections = Connections.objects.get(institution=institution)
+        institutions = Institution.objects.none()
+
+        researcher_ids = institution.contributing_institutions.exclude(researchers__id=None).values_list('researchers__id', flat=True)
+        community_ids = institution.contributing_institutions.exclude(communities__id=None).values_list('communities__id', flat=True)
+
+        communities = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').filter(id__in=community_ids)
+        researchers = Researcher.objects.select_related('user').filter(id__in=researcher_ids)
+        
+        project_ids = institution.contributing_institutions.values_list('project__unique_id', flat=True)
+        contributors = ProjectContributors.objects.filter(project__unique_id__in=project_ids)
+        for c in contributors:
+            institutions = c.institutions.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').exclude(id=institution.id)
+
         context = {
             'member_role': member_role,
             'institution': institution,
-            'connections': connections,
+            'communities': communities,
+            'researchers': researchers,
+            'institutions': institutions,
         }
         return render(request, 'institutions/connections.html', context)

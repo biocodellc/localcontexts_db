@@ -39,43 +39,36 @@ class Project(models.Model):
     project_data_guid = models.CharField(max_length=200, blank=True, null=True)
     providers_id = models.CharField(max_length=200, blank=True, null=True)
     project_boundary_geojson = models.JSONField(blank=True, null=True)
-    recommended_citation = models.TextField(null=True, blank=True)
-    geome_project_id = models.IntegerField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
-    publication_date = models.DateField(null=True, blank=True)
-    publication_date_ongoing = models.BooleanField(default=False, blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     date_modified = models.DateTimeField(auto_now=True, null=True)
     bc_labels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_bclabels", db_index=True)
     tk_labels = models.ManyToManyField("tklabels.TKLabel", verbose_name="TK Labels", blank=True, related_name="project_tklabels", db_index=True)
 
     def has_labels(self):
-        bc_labels = self.bc_labels.count()
-        tk_labels = self.tk_labels.count()
-        if bc_labels + tk_labels > 0:
+        if self.bc_labels.exists() or self.tk_labels.exists():
             return True
         else:
             return False
     
     def has_bclabels(self):
-        if self.bc_labels.count() > 0:
+        if self.bc_labels.exists():
             return True
         else:
             return False
     
     def has_tklabels(self):
-        if self.tk_labels.count() > 0:
+        if self.tk_labels.exists():
             return True
         else:
             return False
 
     def has_notice(self):
-        if self.project_notice.all().exists():
-            for notice in self.project_notice.all():
-                if notice.archived:
-                    return False
-                else:
-                    return True
+        if self.project_notice.exists():
+            if self.project_notice.filter(archived=True).exists():
+                return False
+            elif self.project_notice.filter(archived=False).exists():
+                return True
         else:
             return False
 
@@ -83,6 +76,7 @@ class Project(models.Model):
         return self.title
     
     class Meta:
+        indexes = [models.Index(fields=['unique_id', 'project_creator'])]
         ordering = ('-date_added',)
 
 class ProjectContributors(models.Model):
@@ -95,6 +89,7 @@ class ProjectContributors(models.Model):
         return str(self.project)
 
     class Meta:
+        indexes = [models.Index(fields=['project'])]
         verbose_name = 'Project Contributors'
         verbose_name_plural = 'Project Contributors'
 
@@ -107,6 +102,7 @@ class ProjectPerson(models.Model):
         return str(self.project)
     
     class Meta:
+        indexes = [models.Index(fields=['project'])]
         verbose_name = 'Additional Contributor'
         verbose_name_plural = 'Additional Contributors'
 
@@ -120,18 +116,20 @@ class ProjectCreator(models.Model):
         return str(self.project)
     
     class Meta:
+        indexes = [models.Index(fields=['project', 'community', 'institution', 'researcher'])]
         verbose_name = 'Project Creator'
         verbose_name_plural = 'Project Creator'
 
 class ProjectNote(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_note', null=True, blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community_note', null=True, blank=True)
-    note = models.TextField(null=True, blank=True)
+    note = models.TextField('Community Note', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
         return str(self.project)
     
     class Meta:
+        indexes = [models.Index(fields=['project', 'community'])]
         verbose_name = 'Project Note'
         verbose_name_plural = 'Project Notes'

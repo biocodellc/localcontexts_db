@@ -13,6 +13,41 @@ if (passwordField) {
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
+if (window.location.href.includes('anth-ja77-lc-dev-42d5')) {
+    let regHeader = document.getElementById('reg-header')
+    let authHeader = document.getElementById('auth-header')
+    let svgHeader = document.getElementById('svg-header')
+
+    if(regHeader) { regHeader.style.marginTop = '50px' }
+
+    if (authHeader){
+        svgHeader.style.marginTop = '32px'
+        authHeader.style.top = '50px'
+    }
+}
+
+if (window.location.href.includes('create-community') || window.location.href.includes('create-institution') || window.location.href.includes('connect-researcher') ) {
+    let textArea = document.getElementById('id_description')
+    let characterCounter = document.getElementById('charCount')
+    const maxNumOfChars = 200
+
+    const countCharacters = () => {
+        let numOfEnteredChars = textArea.value.length
+        let counter = maxNumOfChars - numOfEnteredChars
+        characterCounter.textContent = counter + '/200'
+
+        if (counter < 0) {
+            characterCounter.style.color = 'red'
+        } else if (counter < 50) {
+            characterCounter.style.color = '#EF6C00'
+        } else {
+            characterCounter.style.color = 'black'
+        }
+    }
+
+    textArea.addEventListener('input', countCharacters)
+}
+
 // Get languages from the IANA directory
 function fetchLanguages() {
     const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
@@ -265,24 +300,18 @@ function checkLabelExists(label, selectedLabelCode, labelType) {
             if (values.includes(label.labelType)) {
                 if (label.labelCategory == 'provenance') {
                     btnProv.setAttribute("disabled","disabled")
-                    btnProv.classList.replace('action-btn', 'disabled-btn')
                 } else if (label.labelCategory == 'protocol') {
                     btnProt.setAttribute("disabled","disabled")
-                    btnProt.classList.replace('action-btn', 'disabled-btn')
                 } else if (label.labelCategory == 'permission') {
                     btnPerms.setAttribute("disabled","disabled")
-                    btnPerms.classList.replace('action-btn', 'disabled-btn')
                 }
             }  else {
                 if (label.labelCategory == 'provenance') {
                     btnProv.removeAttribute("disabled")
-                    btnProv.classList.replace('disabled-btn', 'action-btn')
                 } else if (label.labelCategory == 'protocol') {
                     btnProt.removeAttribute("disabled")
-                    btnProt.classList.replace('disabled-btn', 'action-btn')
                 } else if (label.labelCategory == 'permission') {
                     btnPerms.removeAttribute("disabled")
-                    btnPerms.classList.replace('disabled-btn', 'action-btn')
                 }
             }
         }        
@@ -378,6 +407,20 @@ if (window.location.href.includes('/labels/customize') || window.location.href.i
     }
 
     fetchLanguages()
+
+    const saveLabelBtn = document.getElementById('saveLabelBtn')
+    saveLabelBtn.addEventListener('click', function() {    
+        document.getElementById('saveLabelForm').submit()
+
+        let oldValue = 'Save Label'
+        saveLabelBtn.setAttribute('disabled', true)
+        saveLabelBtn.innerText = 'Saving...'
+        
+        window.addEventListener('load', function() {
+            saveLabelBtn.innerText = oldValue;
+            saveLabelBtn.removeAttribute('disabled');
+        })
+    })
 }
 
 // Approve Label: show note div
@@ -436,7 +479,22 @@ function displayDefaultText(elem) {
         targetDiv.style.height = '0'
         labelName.classList.replace('darkteal-text', 'grey-text')
     }
+}
 
+if (window.location.href.includes('/labels/apply-labels/')) {
+    const applyLabelsBtn = document.getElementById('applyLabelsBtn')
+    applyLabelsBtn.addEventListener('click', function() {    
+        document.getElementById('applyLabelsForm').submit()
+
+        let oldValue = '<i class="fa fa-check" aria-hidden="true"></i>'
+        applyLabelsBtn.setAttribute('disabled', true)
+        applyLabelsBtn.innerText = 'Applying Labels...'
+        
+        window.addEventListener('load', function() {
+            applyLabelsBtn.innerText = oldValue;
+            applyLabelsBtn.removeAttribute('disabled');
+        })
+    })
 }
 
 
@@ -726,15 +784,12 @@ function cloneForm(el) {
 }
 
 // Communities: Projects: Notify status
-function setProjectUUID(elem) {
+function setProjectStatus(elem) {
     let elementId = elem.id
     let projectID = elementId.slice(7)
     let statusSelect = document.getElementById(elementId)
-    let projectIdInput = document.getElementById(`project-id-input-${projectID}`)
     let statusSelectedInput = document.getElementById(`status-selection-input-${projectID}`)
 
-    // Set first hidden value to project UUID
-    projectIdInput.value = projectID
     // Set second hidden value to value of option selected
     statusSelectedInput.value = statusSelect.options[statusSelect.selectedIndex].value
 }
@@ -797,14 +852,12 @@ function validateProjectDisableSubmitBtn() {
 
         let oldValue = 'Save Project'
         submitProjectBtn.setAttribute('disabled', true)
-        submitProjectBtn.classList.replace('action-btn', 'disabled-btn')
         submitProjectBtn.innerText = 'Saving Project...'
         
-        setTimeout(function(){
+        window.addEventListener('load', function() {
             submitProjectBtn.innerText = oldValue;
-            submitProjectBtn.classList.replace('disabled-btn', 'action-btn')
             submitProjectBtn.removeAttribute('disabled');
-        }, 5000)
+        })
     }      
 
 }
@@ -925,6 +978,7 @@ function modalToggle(openBtnClasses, modalPartialId, closeBtnPartialId) {
 if (window.location.href.includes('members')) {
     modalToggle('.changeRoleBtn', 'changeRoleModal', 'closeRoleChangeModal')
     modalToggle('.removeMemberBtn', 'removeMemberModal', 'closeRemoveMemberModal')
+    document.getElementById('userListInput').addEventListener('input', disableBtnDuringInput)
 } 
 
 // Leave account
@@ -932,6 +986,11 @@ if (window.location.href.includes('manage')) {
     modalToggle('.leaveCommunityBtn', 'leaveCommAccountModal', 'closeLeaveCommModal')
     modalToggle('.leaveInstitutionBtn', 'leaveInstAccountModal', 'closeLeaveInstModal')
 } 
+
+function disableBtnDuringInput() {
+    const currentValue = document.getElementById('userListInput').value;
+    document.getElementById('sendMemberInviteBtn').disabled = currentValue.length === 0 || document.querySelector('option[value="' + currentValue + '"]') === null;
+}
 
 // Create institution: non-ROR modal
 if (window.location.href.includes('create-institution')) {
@@ -965,75 +1024,49 @@ if (deactivateAccountBtn) {
 // REGISTRY FILTERING AND JOIN REQUESTS / CONTACT MODAL
 if (window.location.href.includes('communities/view/') || window.location.href.includes('institutions/view/') || window.location.href.includes('researchers/view/') ) {
 
-    // Send request to join institution or community
-    const registryModal = document.getElementById('registryModal')
-    const submitJoinRequestFormBtn = document.getElementById('submitRegistryForm')
+    // Join request modal and form
+    const openRequestToJoinModalBtn = document.getElementById('openRequestToJoinModalBtn') 
+    const requestToJoinModal = document.getElementById('requestToJoinModal') 
 
-    const closeRegistryModalBtn = document.getElementById('closeRegistryModal')
-    closeRegistryModalBtn.addEventListener('click', function(e) { registryModal.classList.replace('show', 'hide') })
+    const requestToJoinForm = document.getElementById('requestToJoinForm') 
+    const sendRequestToJoinBtn = document.getElementById('sendRequestToJoinBtn') 
 
-    document.addEventListener('click', function(e) {
+    const openContactModalBtn = document.getElementById('openContactModalBtn') 
+    const contactModal = document.getElementById('contactModal') 
+    const sendMsgForm = document.getElementById('sendMsgForm') 
+    const sendMsgBtn = document.getElementById('sendMsgBtn') 
 
-        if (e.target.tagName == 'A') {
-            // get Id and btn type, based on which organization it is, submit
-            if (e.target.id.includes('communityRequest')) {
-                // show modal
-                registryModal.classList.replace('hide', 'show')
-                let targetId = e.target.id.split('-').pop()
-                submitJoinRequestFormBtn.addEventListener('click', function(e) { 
-                    disableSendBtn(submitJoinRequestFormBtn)
-                    document.getElementById(`communityRegistryForm${targetId}`).submit() 
-                })    
-            } else if (e.target.id.includes('institutionRequest')) {
-                // show modal
-                registryModal.classList.replace('hide', 'show')
-                let targetId = e.target.id.split('-').pop()
-                submitJoinRequestFormBtn.addEventListener('click', function(e) { 
-                    disableSendBtn(submitJoinRequestFormBtn)
-                    document.getElementById(`institutionRegistryForm${targetId}`).submit() 
-                })  
+    // Open either modal
+    if (openRequestToJoinModalBtn) {
+        openRequestToJoinModalBtn.addEventListener('click', function() { requestToJoinModal.classList.replace('hide', 'show') })
+    }
+    openContactModalBtn.addEventListener('click', function() { contactModal.classList.replace('hide', 'show') })
 
-                // open contact form modal
-            } else if (e.target.id.includes('communityContact')) {
-                let targetId = e.target.id.split('-').pop()
-                let modal = document.getElementById(`contactModalComm${targetId}`)
-                modal.classList.replace('hide', 'show')
-                closeModal(modal)
+    // Contact modal
+    sendMsgBtn.addEventListener('click', function() { 
+        let btnContent = `Send message <i class="fa fa-envelope" aria-hidden="true"></i>`
+        disableSendBtn(sendMsgBtn, btnContent, sendMsgForm) 
+    })
 
-            } else if (e.target.id.includes('institutionContact')) {
-                let targetId = e.target.id.split('-').pop()
-                let modal = document.getElementById(`contactModalInst${targetId}`)
-                modal.classList.replace('hide', 'show')
-                closeModal(modal)
-                
-            } else if (e.target.id.includes('researcherContact')) {
-                let targetId = e.target.id.split('-').pop()
-                let modal = document.getElementById(`contactModalResearcher${targetId}`)
-                modal.classList.replace('hide', 'show')
-                closeModal(modal)
-            }
-        } else {
-            // TODO: set this up to disable contact btn
-            // const sendMsgBtn = document.getElementById('sendMsgBtn')
-            // sendMsgBtn.addEventListener('click', function() {
-            //     disableSendBtn(sendMsgBtn)
-            //     document.getElementById('sendMsgForm').submit() 
-            // })
-        }
-    })  
+    sendRequestToJoinBtn.addEventListener('click', function() {
+        let btnContent = `Send request`
+        disableSendBtn(sendRequestToJoinBtn, btnContent, requestToJoinForm) 
+    })
+
+    closeModal(requestToJoinModal)
+    closeModal(contactModal)
 
     // Temporarily disable the submit button to prevent multiple form submission
-    function disableSendBtn(btn) {
-        let oldValue = 'Send'
+    function disableSendBtn(btn, btnContent, formToSubmit) {
+        formToSubmit.submit() 
+
         btn.setAttribute('disabled', true)
-        btn.classList.replace('action-btn', 'disabled-btn')
-        btn.innerText = 'Sending'
-    
-        setTimeout(function(){
-            btn.innerText = oldValue;
-            btn.classList.replace('disabled-btn', 'action-btn')
-            btn.removeAttribute('disabled');
-        }, 9000)
+        btn.innerText = 'Sending...'
+
+        window.addEventListener('load', function() {
+            btn.innerText = btnContent;
+            btn.removeAttribute('disabled')
+        })
     }
 
     function closeModal(modal) {  

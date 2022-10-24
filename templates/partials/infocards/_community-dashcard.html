@@ -1,0 +1,162 @@
+{% extends 'base.html' %} {% load static %} {% block content %} {% load custom_tags %}
+{% community_notifications community as notifications %}
+{% unread_notifications community as unread_exist %}
+
+    <div class="dashcard">
+
+        <!-- Top Nav -->
+        <div class="flex-this w-100 space-between">
+            <div class="loc grey-text bold">
+                <small>
+                    <a href="{% url 'dashboard' %}" class="bold darkteal-text underline-hover">
+                        {% firstof request.user.get_full_name request.user %}
+                    </a> 
+                    >> {{ community.community_name }}                    
+                </small>
+            </div>
+
+            <!-- Notifications -->
+            <div class="flex-this w-30 flex-end">
+                <div class="dropdown">
+                    <a onclick="toggleNotifications()" class="primary-btn white-btn dropbtn"> 
+                        Notifications 
+                        <i 
+                        class="fa {% if unread_exist %} fa-bell orange-text {% else %} fa-bell-o {% endif %}" 
+                        aria-hidden="true"
+                        ></i>
+                    </a>
+                    <div id="notification-v2" class="notification-dropdown-content">
+                        <div class="border-bottom-solid-teal center-text">
+                            <span class="orange-text">{{community.community_name}} Notifications</span>
+                        </div>
+                        {% if notifications %}
+                            {% for n in notifications %}
+
+                                <div class="border-bottom-solid-teal">
+                                    <a
+                                        id="{{ community.id }}_{{ n.id }}" 
+                                        onclick="markAsRead(this); return true;"
+
+                                        {% if n.notification_type == 'Labels' %}
+                                            href="{% url 'select-label' community.id %}"
+                                        {% endif %}
+                                        {% if n.notification_type == 'Members' %}
+                                            {% if n.reference_id %}
+                                                href="{% url 'member-requests' community.id %}"
+                                            {% else %}
+                                                href="{% url 'members' community.id %}"
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if n.notification_type == 'Projects' %}
+                                            {% if n.reference_id %}
+                                                href="{% anchor 'community-projects' n.reference_id community.id %}"
+                                            {% else %}
+                                                href="{% url 'community-projects' community.id %}"
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if n.notification_type == 'Connections' %}
+                                            href="{% url 'community-connections' community.id %}"
+                                        {% endif %}
+                                    >
+                                    
+                                        <div class="flex-this space-between margin-top-1">
+                                            <div>
+                                                <span id="notification-label-tag-{{ n.id }}" 
+                                                    class="notification-type-tag white-text font-size-12 {% if n.viewed %} grey {% else %} orange-bg {% endif %}"
+                                                >
+                                                {% if n.notification_type == 'Labels' %} Labels {% endif %}
+                                                {% if n.notification_type == 'Activity' %} Activity {% endif %}
+                                                {% if n.notification_type == 'Projects' %} Projects {% endif %}
+                                                {% if n.notification_type == 'Connections' %} Connections {% endif %}
+                                                {% if n.notification_type == 'Members' %} Members {% endif %}
+                                                </span>
+                                            </div>
+                                            <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
+                                        </div>
+        
+                                        <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
+                                    </a>
+
+                                </div>
+
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                </div>
+
+                <!-- Settings -->
+                {% if request.user == community.community_creator %}
+                    <div class="margin-left-8">
+                        <a href="{% url 'update-community' community.id %}" class="darkteal-text primary-btn white-btn"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
+                    </div>
+                {% endif %}
+            </div>
+            
+        </div>
+            <!-- Image, headers, description -->
+        <div class="flex-this">
+
+                <div class="dashcard-img-container">
+                    <img loading="lazy" 
+                        class="profile-img" 
+                        src="{% if community.image %} {{ community.image.url }} {% else %} {% static 'images/placeholders/community-place.jpg' %}{% endif %}" 
+                        alt="{{ community.community_name }} image"
+                    >
+                </div>
+                <div class="flex-this column dashcard-text-container">
+                    <div><h3 class="dashcard-h3 darkteal-text">{{ community.community_name }}</h3></div>
+                    <div>
+                        <p class="primary-black-text dashcard-subheader">Community | 
+                            {% if member_role == 'admin' %} Administrator {% endif %}
+                            {% if member_role == 'editor' %} Editor {% endif %}
+                            {% if member_role == 'viewer' %} Viewer {% endif %} |
+                            Location: {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}</p>
+                    </div>
+                    <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }} {% else %} No description provided. {% endif %}</p></div>
+                </div>
+
+                <!-- Count cards -->
+                <div class="flex-this column stats-card-container">
+
+                    <div class="stats-card flex-this space-between">
+                        <div>
+                            <p>
+                                <!-- How many Labels has the community applied to projects -->
+                                {% get_label_count community as label_count %}
+                                {% if label_count < 10 %}0{{ label_count }}{% else %}{{ label_count }}{% endif %}
+                            </p>
+                        </div>
+                        <div><span>Labels</span></div>
+                    </div>
+    
+                    <div class="stats-card flex-this space-between">
+                        <div>
+                            <p>
+                                <!-- Notices that a community has been notified about -->
+                                {% community_notified_count community as notice_count %}
+                                {% if notice_count < 10 %}0{{ notice_count }}{% else %}{{ notice_count }}{% endif %}
+                            </p>
+                        </div>
+                        <div><span>Notices</span></div>
+                    </div>
+    
+                    <div class="stats-card flex-this space-between">
+                        <div>
+                            <p>
+                                {% connections_count community as connect_count %}
+                                {% if connect_count < 10 %}0{{ connect_count }}{% else %}{{ connect_count }}{% endif %}
+                            </p>
+                        </div>
+                        <div><span>Connections</span></div>
+                    </div>
+                </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}

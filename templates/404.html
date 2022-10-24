@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% block title %} | 404 Not Found {% endblock %}{% load static %}{% block content %} {% include 'partials/headers/_auth-header.html' %}
+{% extends 'auth-base.html' %}{% block title %}404 Not Found {% endblock %}{% load static %}{% block main %}
 
     <div class="white-bg page-not-found-card content-card flex-this align-center justify-center">
         <div class="flex-this row align-center w-90">
@@ -10,7 +10,5 @@
             </div>
         </div>
     </div>
-    
-{% include 'partials/footers/_auth-footer.html' %}
 
 {% endblock %}

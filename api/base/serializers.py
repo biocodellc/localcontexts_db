@@ -101,3 +101,9 @@ class ProjectNoNoticeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ('unique_id', 'providers_id', 'project_page', 'title', 'project_privacy', 'date_added', 'date_modified', 'created_by', 'bc_labels', 'tk_labels', 'project_boundary_geojson')
+
+class CommunityNativeLandSlugSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Community
+        fields = ('id', 'community_name', 'native_land_slug',)
