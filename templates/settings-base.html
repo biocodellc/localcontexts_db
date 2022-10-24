@@ -9,7 +9,7 @@
 
         <div class="flex-this w-100">
 
-            <div class="flex-this column set-nav margin-right-1 margin-bottom-2" style="min-height: 350px;">
+            <div class="flex-this column set-nav margin-right-1 margin-bottom-2" style="min-height: 450px;">
 
                 <a href="{% url 'update-profile' %}">
                     {% if 'update-profile' in request.path %} 
@@ -59,6 +59,19 @@
                         <div class="w-20 margin-right-8"><i class="fa fa-power-off fa-3x" aria-hidden="true"></i></div>
                         <div class="w-80">
                             <p class="no-top-margin"><strong>Deactivate</strong><br>Deactivate your profile</p>
+                        </div>  
+                    </div>
+                </a>
+
+                <a href="{% url 'api-key' %}">
+                    {% if 'apikey' in request.path %} 
+                    <div class="flex-this side-nav-item selected">
+                    {% else %}
+                    <div class="flex-this side-nav-item grey-text">
+                    {% endif %}
+                        <div class="w-20 margin-right-8"><i class="fa fa-power-off fa-3x" aria-hidden="true"></i></div>
+                        <div class="w-80">
+                            <p class="no-top-margin"><strong>API Key</strong><br>Manage API Key</p>
                         </div>  
                     </div>
                 </a>

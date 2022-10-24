@@ -6,8 +6,6 @@ from . import serializers as v2_serializers
 from rest_framework.viewsets import ViewSet
 from rest_framework_api_key.permissions import HasAPIKey
 
-from rest_framework_api_key.models import APIKey
-from .models import *
 class APIOverview(APIView):
     def get(self, request, format=None):
         api_urls = {
@@ -115,15 +113,6 @@ class ProjectsByIdViewSet(ViewSet):
                 raise PermissionDenied({"message":"You don't have permission to view this project", "providers_id": providers_id})
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
-class APIKeyView(ViewSet):
-    queryset = test = APIKey.objects.all()
-
-
-    def api_key_list(self, request):
-        test = APIKey.objects.get_usable_keys()
-        serializer = v2_serializers.APIKeySerializer(test, many=True)
-        return Response(serializer.data)
 
 
 # >>> from rest_framework_api_key.models import APIKey

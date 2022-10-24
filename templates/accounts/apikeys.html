@@ -1,107 +1,65 @@
-{% extends 'base.html' %} {% block title %} | API Keys Request {% endblock %}{% load static %} {% block content %} {% include 'partials/headers/_auth-header.html' %}
+{% extends 'settings-base.html' %}{% load static %}
 
-    <div class="content-card-v2 content-card-space">
- 
-        <!-- <div class="center-text">
-            <h1 class="no-top-margin">API Keys Request</h1>
-            <p>
-                Today: {{ current_datetime }} UTC<br>
-            </p>                
-        </div>
+{% block settings %}
+<form id="apiKeyGeneratorForm" method="POST">
 
-        <div id="colorPicker" class="flex-this space-between center-text justify-center">
-            <div class="stats-count-div">
-                <h2>Registered</h2>
-                <p>
-                    Communities - {{ community_count }} <br>
-                    Institutions - {{ institution_count}} <br>
-                    Researchers - {{ researcher_count }} <br>
-                    <br>
-                    <strong>TOTAL: {{ reg_total }} </strong>
-                </p>
-            </div>        
-            <div class="stats-count-div">
-                <h2>Notices</h2>
-                <p>
-                    TK - {{ tk_notice_count }} <br>
-                    BC - {{ bc_notice_count }} <br>
-                    Attribution Incomplete - {{ attr_notice_count }} <br><br>
-                    <strong>TOTAL: {{ notices_total }} </strong>
-                </p>
-            </div>
-            <div class="stats-count-div">
-                <h2>Projects</h2>
-                <p>
-                    Communities - {{ community_projects }} <br>
-                    Institutions - {{ institution_projects }} <br>
-                    Researchers - {{ researcher_projects }}<br><br>
-                    <strong>TOTAL: {{ projects_count }} </strong>
-                </p>
-            </div>
-            <div class="stats-count-div">
-                <h2>Labels</h2>
-                <p>
-                    TK - {{ tklabels_count }} <br>
-                    BC - {{ bclabels_count }} <br><br>
-                    <strong>TOTAL: {{ total_labels }} </strong>
-                </p>
-            </div>           
-        </div> -->
+    <div class="flex-this column w-80 border-left margin-right-1">
+        <div><h3>API Key Manager</h3></div>
 
-        <div>
-            <form method="POST" action="">
+        <div class="w-70 margin-bottom-2">
+            <p class="no-top-margin">Please note that you will not be able to sign-in after deactivation. Your profile and its associated data will be deleted 30 days after deactivation.</p>
                 {% csrf_token %}
-                <button class="primary-btn action-btn margin-top-2">Generate API Key <i class="fa fa-arrow-right"></i></button>
-            </form>
+                <button id="submitDeactivation" class="primary-btn white-btn">Deactivate Profile</button>
         </div>
-        <p>
-            username: {{ request.user.username }} <br>
-            Key: {{ api_key }}<br>
-            
-            <!-- when button clicked, href to new view, then redirect back to this page with updated information -->
-        </p>
+    </div>
 
-    </div>    
+    <div id="deactivationModal" class="modal hide">
 
-    <!-- <div class="content-card-v2 content-card-space">
-        <h3>Open to Collaborate Notice URLs (Total: {{ otc_notices.count }})</h3>
-        <div>
-            {% if otc_notices %}
-                <ol>
-                    {% for notice in otc_notices %}
-                        <li>
-                            <a href="{{ notice.url }}" class="darkteal-text underline-hover">
-                                {% if notice.name %}
-                                    {{ notice.name }}
-                                {% else %}
-                                    {{ notice.url }}
-                                {% endif %}
-                            </a> |
-                            {% if notice.institution %}
-                                <a href="{% url 'public-institution' notice.institution.id %}" class="darkteal-text underline-hover">{{ notice.institution }}</a>
-                            {% else %}
-                                <a href="{% url 'public-researcher' notice.researcher.id %}" class="darkteal-text underline-hover">{{ notice.researcher }}</a>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ol>
-            {% endif %}
+        <div class="modal-defaults deactivate-modal flex-this column w-100">
+            <div class="modal-content-padding w-100">
+    
+                <div>
+                    <h2 class="primary-black-text">Are you sure?</h2>  
+                    <p>Are you sure you want to deactivate your profile? <br><br>
+                        This cannot be undone and you will be automatically logged out. <br></p>  
+                </div>
+                <div class="flex-this w-100 text-align-center">
+                    <div id="continueDeactivationBtn" class="primary-btn white-btn margin-right-1">Yes, deactivate my profile</div>    
+                    <div id="closeDeactivationModal" class="margin-left-1 primary-btn action-btn">Cancel</div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- <form id="apiKeyRequest" method="POST">
+
+    <div class="flex-this column w-80 border-left margin-right-1">
+        <div><h3>Request an API Key</h3></div>
+
+        <div class="w-70 margin-bottom-2">
+            <p class="no-top-margin">Please note that you will not be able to sign-in after deactivation. Your profile and its associated data will be deleted 30 days after deactivation.</p>
+                {% csrf_token %}
+                <button id="requestKey" class="primary-btn white-btn">Generate API Key</button>
         </div>
     </div> -->
 
-<style>
-    .stats-count-div {
-        border-radius: 10px;
-        width: 30%;
-        margin: 5px;
-        color: #fff;
-    }
+<!-- </form> -->
 
-    #colorPicker > div:nth-of-type(1) {background-color: #007385;}
-    #colorPicker > div:nth-of-type(2) {background-color: #EF6C00;}
-    #colorPicker > div:nth-of-type(3) {background-color: #3876aa;}
-    #colorPicker > div:nth-of-type(4) { background-color: #108670;}
-</style>
+<!-- <div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <button class="primary-btn action-btn margin-top-2">Generate API Key <i class="fa fa-arrow-right"></i></button>
+    </form>
+</div>
+<p>
+    username: {{ request.user.username }} <br>
+    Key: {{ api_key }}<br>
+    
+    when button clicked, href to new view, then redirect back to this page with updated information
+</p>
 
-{% include 'partials/footers/_auth-footer.html' %}
+</div>   -->
+
 {% endblock %}
