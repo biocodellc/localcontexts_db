@@ -746,8 +746,16 @@ def create_project(request, pk):
                     data.project_page = f'http://{domain}/projects/{data.unique_id}'
                 else:
                     data.project_page = f'https://{domain}/projects/{data.unique_id}'
-                data.save()
                 
+                urls_field = request.POST.get('project_urls')
+                if ',' in urls_field:
+                    urls_list = urls_field.replace(' ', '').split(',')
+                    data.urls = urls_list
+                else:
+                    data.urls = [urls_field]
+
+                data.save()
+
                 # Add project to institution projects
                 creator = ProjectCreator.objects.select_related('institution').get(project=data)
                 creator.institution = institution
