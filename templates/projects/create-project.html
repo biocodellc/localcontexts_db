@@ -311,21 +311,16 @@
             </div>
 
             <div class="padding-bottom-1 w-50">
-                <label>Project Link (if applicable)</label>
+                <label>Project Links (if applicable), separated by commas</label>
                 <div class="tooltip"><strong>?</strong>
                     <span class="tooltiptext">
-                        A relevant link to the object entry, catalog, collection or database with more information about the project, or where 
+                        Relevant link(s) to the object entry, catalog, collection or database with more information about the project, or where 
                         {% if community %} Labels {% endif %}
                         {% if researcher or institution %} Notices {% endif %}
                         may be added.
                     </span>
                 </div>
                 <br>
-                {{ form.url }} <br>
-                {% if form.url.errors %}
-                    <div class="msg-red w-50"><small>{{ form.url.errors.as_text }}</small></div>
-                {% endif %}
-
                 <div class="margin-top-8">
                     <textarea class="w-100" name="project_urls"></textarea>
                 </div>

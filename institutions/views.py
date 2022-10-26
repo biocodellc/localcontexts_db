@@ -747,6 +747,7 @@ def create_project(request, pk):
                 else:
                     data.project_page = f'https://{domain}/projects/{data.unique_id}'
                 
+                # Handle multiple urls, save as array
                 urls_field = request.POST.get('project_urls')
                 if ',' in urls_field:
                     urls_list = urls_field.replace(' ', '').split(',')
