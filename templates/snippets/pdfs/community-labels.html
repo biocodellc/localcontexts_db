@@ -2,9 +2,24 @@
 {% load static %}
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta charset="utf-8">
         <title>{{ community.community_name }} Labels PDF</title>
         <style>
+            @font-face {
+                font-family: "BCSans";
+                src: url(localcontexts/static/fonts/BC-Sans-Font-woff/ttf/BCSans-Regular.ttf);
+            }
+
+            @font-face {
+                font-family: "BCSans";
+                src: url(localcontexts/static/fonts/BC-Sans-Font-woff/ttf/BCSans-Bold.ttf);
+                font-weight: bold;
+            }
+            
+            body {
+                font-family: "BCSans", sans-serif;
+            }
             h1 {
                 font-size: 18px;
             }
@@ -39,7 +54,6 @@
         </style>
     </head>
     <body>
-        <img loading="lazy" src="/static/images/logos/email_header.png" width="400px">
         <h2>{{ community.community_name }}'s Customized Labels</h2>
         <table>
             {% for bclabel in bclabels %}
