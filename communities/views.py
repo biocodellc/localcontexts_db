@@ -1,4 +1,3 @@
-import re
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
@@ -1274,8 +1273,8 @@ def labels_pdf(request, pk):
     html = template.render(context)
 
     # create a pdf
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    # if error then show some funy view
+    pisa_status = pisa.CreatePDF(html, dest=response, encoding='UTF-8')
+    # if error then show view
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
