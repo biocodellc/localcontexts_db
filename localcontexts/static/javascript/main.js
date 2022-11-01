@@ -783,6 +783,44 @@ function cloneForm(el) {
     }
 }
 
+if (window.location.href.includes('/projects/edit-project') || window.location.href.includes('/projects/create-project') ) {
+    // PROJECT LINKS
+    const addProjectLinkBtn = document.getElementById('addProjectUrlBtn')
+    addProjectLinkBtn.onclick = function() {
+        const ul = document.getElementById('projectLinksUl')
+        const input = document.getElementById('projectLinksInput')
+        const items = input.value.split(',')
+
+        for (const item of items) {
+            console.log(`${item}: `+isValidHttpUrl(item))
+      
+            if (isValidHttpUrl(item.trim())) {
+                const li = document.createElement('li')
+                li.id = item.trim()
+                li.classList.add('margin-bottom-8')
+                li.classList.add('show')
+                li.innerHTML = `
+                <div class="grey-chip flex-this row space-between">
+                    <div><p class="center-name">${item}</p></div>
+                    <div class="pointer">&times;</div>
+                </div>
+                <input type="hidden" value="${item.trim()}" name="project_urls">`
+    
+                ul.appendChild(li)
+            } else {
+                alert('Please include full URL (with http or https) for project links.')
+            }
+        }
+        input.value = ''
+    }
+
+    function isValidHttpUrl(string) {
+        let url;
+        try { url = new URL(string) } catch (_) { return false }
+        return url.protocol === "http:" || url.protocol === "https:"
+      }
+}
+
 // Communities: Projects: Notify status
 function setProjectStatus(elem) {
     let elementId = elem.id

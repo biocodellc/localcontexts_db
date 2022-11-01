@@ -311,7 +311,7 @@
             </div>
 
             <div class="padding-bottom-1 w-50">
-                <label>Project Links (if applicable), separated by commas</label>
+                <label>Project Links <small>(if applicable)</small></label>
                 <div class="tooltip"><strong>?</strong>
                     <span class="tooltiptext">
                         Relevant link(s) to the object entry, catalog, collection or database with more information about the project, or where 
@@ -321,9 +321,29 @@
                     </span>
                 </div>
                 <br>
-                <div class="margin-top-8">
-                    <textarea class="w-100" name="project_urls"></textarea>
+
+                <div class="flex-this margin-top-8 margin-bottom-16">
+                    <textarea id="projectLinksInput" class="w-100 block" rows="1"></textarea>
+                    <div id="addProjectUrlBtn" class="add-square-btn pointer">
+                        <span>+</span>
+                    </div>
                 </div>
+
+                <ul id="projectLinksUl" class="ul-no-bullets">
+                    {% if urls %}
+                        {% for url in urls %}
+                            <li id="{{ url }}" class="margin-bottom-8 show">
+                                <div class="grey-chip flex-this row space-between">
+                                    <div><p class="center-name">{{ url }}</p></div>
+                                    <div id="projectUrl" class="pointer">&times;</div>
+                                </div>
+                                <input type="hidden" value="{{ url }}" name="project_urls">                        
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+
+
             </div>
         </div>
 

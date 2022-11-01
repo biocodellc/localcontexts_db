@@ -795,7 +795,7 @@ button[disabled],
     background-color: #f3f4f6;
     color: #4b5563;
     padding: 8px 16px;
-    height: 40px;
+    /* height: 40px; */
     border-radius: 24px;
     font-size: 14px;
 }

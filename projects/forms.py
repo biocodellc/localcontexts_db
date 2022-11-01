@@ -75,7 +75,7 @@ class EditProjectForm(forms.ModelForm):
         ('Exhibition', 'Exhibition'),
         ('Other', 'Other'),
     )
-    project_privacy = forms.ChoiceField(label=_('Who can view this project?'), choices=PRIVACY, widget=forms.RadioSelect())
+    project_privacy = forms.ChoiceField(label=_('Who can view this project?'), choices=PRIVACY, widget=forms.RadioSelect(attrs={'class': 'ul-no-bullets'}))
     project_type = forms.ChoiceField(label=_('What is your project type? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
 
     class Meta:

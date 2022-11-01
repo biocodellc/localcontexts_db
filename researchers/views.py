@@ -529,12 +529,8 @@ def create_project(request, pk):
                     data.project_page = f'https://{domain}/projects/{data.unique_id}'
                 
                 # Handle multiple urls, save as array
-                urls_field = request.POST.get('project_urls')
-                if ',' in urls_field:
-                    urls_list = urls_field.replace(' ', '').split(',')
-                    data.urls = urls_list
-                else:
-                    data.urls = [urls_field]
+                project_links = request.POST.getlist('project_urls')
+                data.urls = project_links
                     
                 data.save()
 
@@ -592,6 +588,7 @@ def edit_project(request, researcher_id, project_uuid):
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
         notices = Notice.objects.none()
+        urls = project.urls
 
         # Check to see if notice exists for this project and pass to template
         if Notice.objects.filter(project=project).exists():
@@ -600,6 +597,8 @@ def edit_project(request, researcher_id, project_uuid):
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
+                project_links = request.POST.getlist('project_urls')
+                data.urls = project_links
                 data.save()
 
                 instances = formset.save(commit=False)
@@ -628,6 +627,7 @@ def edit_project(request, researcher_id, project_uuid):
             'formset': formset,
             'contributors': contributors,
             'user_can_view': user_can_view,
+            'urls': urls,
         }
         return render(request, 'researchers/edit-project.html', context)
 

@@ -1032,12 +1032,8 @@ def create_project(request, pk):
                     data.project_page = f'https://{domain}/projects/{data.unique_id}'
                 
                 # Handle multiple urls, save as array
-                urls_field = request.POST.get('project_urls')
-                if ',' in urls_field:
-                    urls_list = urls_field.replace(' ', '').split(',')
-                    data.urls = urls_list
-                else:
-                    data.urls = [urls_field]
+                project_links = request.POST.getlist('project_urls')
+                data.urls = project_links
                     
                 data.save()
 
@@ -1095,10 +1091,13 @@ def edit_project(request, community_id, project_uuid):
         form = EditProjectForm(request.POST or None, instance=project)
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.prefetch_related('institutions', 'researchers', 'communities').get(project=project)
+        urls = project.urls
 
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
+                project_links = request.POST.getlist('project_urls')
+                data.urls = project_links
                 data.save()
 
                 instances = formset.save(commit=False)
@@ -1121,6 +1120,7 @@ def edit_project(request, community_id, project_uuid):
             'form': form,
             'formset': formset,
             'contributors': contributors,
+            'urls': urls,
         }
         return render(request, 'communities/edit-project.html', context)
 
