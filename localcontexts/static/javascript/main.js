@@ -814,12 +814,26 @@ if (window.location.href.includes('/projects/edit-project') || window.location.h
         input.value = ''
     }
 
-    function isValidHttpUrl(string) {
-        let url;
-        try { url = new URL(string) } catch (_) { return false }
-        return url.protocol === "http:" || url.protocol === "https:"
-      }
+    const removeProjectUrlBtns = document.querySelectorAll('.removeProjectUrlBtn')
+    if (removeProjectUrlBtns != null) {
+        removeProjectUrlBtns.forEach(btn => {
+            let btnID = btn.id.trim()
+            let arr = btnID.split('btn-')
+            let divID = arr[1]
+    
+            btn.addEventListener('click', function() {
+                document.getElementById(divID).remove()
+            })
+        }) 
+    }
+
 }
+
+function isValidHttpUrl(string) {
+    let url;
+    try { url = new URL(string) } catch (_) { return false }
+    return url.protocol === "http:" || url.protocol === "https:"
+  }
 
 // Communities: Projects: Notify status
 function setProjectStatus(elem) {

@@ -330,13 +330,13 @@
                     </div>
                 </div>
 
-                <ul id="projectLinksUl" class="ul-no-bullets">
+                <ul id="projectLinksUl" class="ul-no-bullets ul-no-padding">
                     {% if urls %}
                         {% for url in urls %}
                             <li id="{{ url }}" class="margin-bottom-8 show">
                                 <div class="grey-chip flex-this row space-between">
                                     <div><p class="center-name">{{ url }}</p></div>
-                                    <div id="projectUrl" class="pointer">&times;</div>
+                                    <div id="btn-{{ url }}" class="removeProjectUrlBtn pointer">&times;</div>
                                 </div>
                                 <input type="hidden" value="{{ url }}" name="project_urls">                        
                             </li>
