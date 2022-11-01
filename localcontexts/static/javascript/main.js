@@ -792,7 +792,7 @@ if (window.location.href.includes('/projects/edit-project') || window.location.h
         const items = input.value.split(',')
 
         for (const item of items) {
-            console.log(`${item}: `+isValidHttpUrl(item))
+            // console.log(`${item}: `+isValidHttpUrl(item))
       
             if (isValidHttpUrl(item.trim())) {
                 const li = document.createElement('li')
@@ -802,7 +802,7 @@ if (window.location.href.includes('/projects/edit-project') || window.location.h
                 li.innerHTML = `
                 <div class="grey-chip flex-this row space-between">
                     <div><p class="center-name">${item}</p></div>
-                    <div class="pointer">&times;</div>
+                    <div id="btn-${item.trim()}" class="removeProjectUrlBtn pointer">&times;</div>
                 </div>
                 <input type="hidden" value="${item.trim()}" name="project_urls">`
     
@@ -812,19 +812,25 @@ if (window.location.href.includes('/projects/edit-project') || window.location.h
             }
         }
         input.value = ''
+        // for create-project
+        removeTargetDiv()
     }
+    // For edit-project
+    removeTargetDiv()
 
-    const removeProjectUrlBtns = document.querySelectorAll('.removeProjectUrlBtn')
-    if (removeProjectUrlBtns != null) {
-        removeProjectUrlBtns.forEach(btn => {
-            let btnID = btn.id.trim()
-            let arr = btnID.split('btn-')
-            let divID = arr[1]
+    function removeTargetDiv() {
+        const removeProjectUrlBtns = document.querySelectorAll('.removeProjectUrlBtn')
+        if (removeProjectUrlBtns != null) {
+            removeProjectUrlBtns.forEach(btn => {
+                let btnID = btn.id.trim()
+                let arr = btnID.split('btn-')
+                let divID = arr[1]
     
-            btn.addEventListener('click', function() {
-                document.getElementById(divID).remove()
-            })
-        }) 
+                btn.onclick = function() {
+                    document.getElementById(divID).remove()
+                }
+            }) 
+        }
     }
 
 }
