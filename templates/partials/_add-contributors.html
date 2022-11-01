@@ -17,26 +17,29 @@
             </span>
         </div>
         <br>
-        <input id="contributor-input" list="contributors" name="contributors" placeholder="Select a contributor from the hub">
-        <datalist id="contributors">
-            {% if all_researchers %}
-                {% for researcher in all_researchers %}
-                    <option 
-                        value="{% firstof researcher.user.get_full_name researcher.user.username %} (Researcher)" 
-                        data-resid="{{ researcher.id }}"
-                    >
-                {% endfor %}
-            {% endif %}
-            {% if all_institutions %}
-                {% for institution in all_institutions %}
-                    <option value="{{ institution.institution_name }} (Institution)" data-instid="{{ institution.id }}">
-                {% endfor %}
-            {% endif %}
-        </datalist>    
+        <div class="flex-this">
+            <input id="contributor-input" list="contributors" name="contributors" placeholder="Select a contributor from the hub">
+            <datalist id="contributors">
+                {% if all_researchers %}
+                    {% for researcher in all_researchers %}
+                        <option 
+                            value="{% firstof researcher.user.get_full_name researcher.user.username %} (Researcher)" 
+                            data-resid="{{ researcher.id }}"
+                        >
+                    {% endfor %}
+                {% endif %}
+                {% if all_institutions %}
+                    {% for institution in all_institutions %}
+                        <option value="{{ institution.institution_name }} (Institution)" data-instid="{{ institution.id }}">
+                    {% endfor %}
+                {% endif %}
+            </datalist>
+            <div id="add-contributor-btn" class="add-square-btn pointer margin-left-8">
+                <span>+</span>
+            </div>              
+        </div>
     </div>
-    <div id="add-contributor-btn" class="add-square-btn pointer">
-        <span>+</span>
-    </div>
+
 </div>
 
 {% include 'partials/_add-projectperson.html'%}

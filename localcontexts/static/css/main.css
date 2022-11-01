@@ -369,23 +369,23 @@ button[disabled],
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin: 25px 7px 7px 7px;
+    /* margin: 25px 7px 7px 7px; */
     padding: 8px 16px;
-    width: 52px;
+    width: 44px;
     height: 40px;
     border-radius: 5px;
-    background-color: #5AA497;
+    background-color: #007385;
     transition: 0.3s;
 }
 
 .add-square-btn:hover {
-    background-color: #4b9789; 
+    background-color: #0194aa; 
 }
 
 .add-square-btn span {
     color: #fff;
-    font-size: 25px;
-    font-weight: bold;
+    font-size: 50px;
+    margin-top: -3px;
 }
 
 /* Customize label */
