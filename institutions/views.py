@@ -746,8 +746,13 @@ def create_project(request, pk):
                     data.project_page = f'http://{domain}/projects/{data.unique_id}'
                 else:
                     data.project_page = f'https://{domain}/projects/{data.unique_id}'
-                data.save()
                 
+                # Handle multiple urls, save as array
+                project_links = request.POST.getlist('project_urls')
+                data.urls = project_links
+
+                data.save()
+
                 # Add project to institution projects
                 creator = ProjectCreator.objects.select_related('institution').get(project=data)
                 creator.institution = institution
@@ -805,6 +810,7 @@ def edit_project(request, institution_id, project_uuid):
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
         notices = Notice.objects.none()
+        urls = project.urls
 
         # Check to see if notice exists for this project and pass to template
         if Notice.objects.filter(project=project).exists():
@@ -813,6 +819,8 @@ def edit_project(request, institution_id, project_uuid):
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
+                project_links = request.POST.getlist('project_urls')
+                data.urls = project_links
                 data.save()
 
                 instances = formset.save(commit=False)
@@ -842,6 +850,7 @@ def edit_project(request, institution_id, project_uuid):
             'form': form,
             'formset': formset,
             'contributors': contributors,
+            'urls': urls,
         }
         return render(request, 'institutions/edit-project.html', context)
 

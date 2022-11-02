@@ -10,7 +10,7 @@
             {{ hidden }}
         {% endfor %}
         <div class="flex-this">
-            <div id="person-form-0" class="flex-this row margin-right-8">
+            <div id="person-form-0" class="flex-this row margin-right-16 margin-bottom-8">
                 <div class="margin-right-1">
                     <label>{{ f.name.label }}</label>
                     <div class="tooltip"><strong>?</strong>
@@ -27,7 +27,7 @@
                     {{ f.email }}
                 </div>
             </div>
-            <div onclick="cloneForm(this)" class="clone-form-btn add-square-btn pointer margin-top-8">
+            <div onclick="cloneForm(this)" class="clone-form-btn add-square-btn pointer" style="margin-top:24px;">
                 <span>+</span>
             </div>
         </div>

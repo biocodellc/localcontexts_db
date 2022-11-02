@@ -40,6 +40,7 @@ class Project(models.Model):
     providers_id = models.CharField(max_length=200, blank=True, null=True)
     project_boundary_geojson = models.JSONField(blank=True, null=True)
     url = models.URLField(blank=True, null=True)
+    urls = models.JSONField(blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     date_modified = models.DateTimeField(auto_now=True, null=True)
     bc_labels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_bclabels", db_index=True)
