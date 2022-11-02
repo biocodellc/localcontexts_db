@@ -117,21 +117,32 @@
             <p>{{ project.description|linebreaks }}</p>
         </div>
 
-        {% if project.urls %}
-            <div class="border-top-solid-teal">
-                <div class="margin-bottom-16 w-70">
-                    <h3 class="no-bottom-margin">Project Links</h3>
-                    {% if project.urls %}
-                        <ul>
-                            {% for url in project.urls %}
-                                <li>
-                                    <a href="{{ url }}" class="darkteal-text underline-hover">{{ url }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
-                                </li>
-                            {% endfor %}
-                        </ul>
+        {% if project.publication_doi %}
+            <div class="margin-bottom-16">
+                <div><h3 class="no-top-margin">Project DOI</h3></div>
+                
+                <a 
+                    class="darkteal-text underline-hover"
+                    {% if not 'https://' in project.publication_doi %}
+                        href="https://doi.org/{{ project.publication_doi }}"
+                    {% else %}
+                        href="{{ project.publication_doi }}"
                     {% endif %}
-                </div>
-            </div>
+                >
+                {{ project.publication_doi }} <i class="fa fa-external-link" aria-hidden="true"></i>
+                </a>
+            </div> 
+        {% endif %}
+
+        {% if project.urls %}
+            <div class="margin-bottom-16">
+                <div><h3 class="no-top-margin">Project Links</h3></div>
+                    <ul>
+                        {% for url in project.urls %}
+                            <li><a href="{{ url }}" class="darkteal-text underline-hover">{{ url }} <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
+                        {% endfor %}
+                    </ul>
+            </div> 
         {% endif %}
 
         {% if researcher or institution %}
