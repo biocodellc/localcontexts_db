@@ -311,20 +311,40 @@
             </div>
 
             <div class="padding-bottom-1 w-50">
-                <label>Project Link (if applicable)</label>
+                <label>Project Links <small>(if applicable)</small></label>
                 <div class="tooltip"><strong>?</strong>
                     <span class="tooltiptext">
-                        A relevant link to the object entry, catalog, collection or database with more information about the project, or where 
+                        Relevant link(s) to the object entry, catalog, collection or database with more information about the project, or where 
                         {% if community %} Labels {% endif %}
                         {% if researcher or institution %} Notices {% endif %}
-                        may be added.
+                        may be added.<br><br>
+                        Links can be added one by one, or separated by commas. Please make sure the links are valid and complete URLs (ex: starting with http or https).
                     </span>
                 </div>
                 <br>
-                {{ form.url }} <br>
-                {% if form.url.errors %}
-                    <div class="msg-red w-50"><small>{{ form.url.errors.as_text }}</small></div>
-                {% endif %}
+
+                <div class="flex-this margin-top-8 margin-bottom-16">
+                    <textarea id="projectLinksInput" class="w-100 block margin-right-8" rows="1"></textarea>
+                    <div id="addProjectUrlBtn" class="add-square-btn pointer">
+                        <span>+</span>
+                    </div>
+                </div>
+
+                <ul id="projectLinksUl" class="ul-no-bullets ul-no-padding">
+                    {% if urls %}
+                        {% for url in urls %}
+                            <li id="{{ url }}" class="margin-bottom-8 show">
+                                <div class="grey-chip flex-this row space-between">
+                                    <div><p class="center-name">{{ url }}</p></div>
+                                    <div id="btn-{{ url }}" class="removeProjectUrlBtn pointer">&times;</div>
+                                </div>
+                                <input type="hidden" value="{{ url }}" name="project_urls">                        
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+
+
             </div>
         </div>
 
