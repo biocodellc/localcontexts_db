@@ -7,19 +7,19 @@ from django.http import HttpResponse, Http404
 import requests
 
 def view_project(request, unique_id):
-    try:
-        project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
-        notices = Notice.objects.filter(project=project, archived=False)
+    # try:
+    project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
+    notices = Notice.objects.filter(project=project, archived=False)
 
-        if project.project_privacy == 'Private':
-            if request.user.is_authenticated:
-                return render(request, 'projects/view-project.html', {'project': project, 'notices': notices})
-            else:
-                return redirect('login')
-        else:
+    if project.project_privacy == 'Private':
+        if request.user.is_authenticated:
             return render(request, 'projects/view-project.html', {'project': project, 'notices': notices})
-    except:
-        raise Http404()
+        else:
+            return redirect('login')
+    else:
+        return render(request, 'projects/view-project.html', {'project': project, 'notices': notices})
+    # except:
+    #     raise Http404()
 
 
 def download_project_zip(request, unique_id):
