@@ -1,7 +1,7 @@
 {% load static %}{% load custom_project_tags %}
-{% get_all_researchers as all_researchers %}
-{% get_all_institutions as all_institutions %}
-{% get_all_communities as all_communities %}
+{% get_all_researchers researcher as all_researchers %}
+{% get_all_institutions institution as all_institutions %}
+{% get_all_communities community as all_communities %}
 
 <div class="padding-bottom-1 flex-this row">
     <div>
@@ -13,7 +13,7 @@
         </div>
         <br>
         <div class="flex-this">
-            <input id="contributor-input" list="contributors" name="contributors" placeholder="Select a contributor from the hub">
+            <input id="contributor-input" list="contributors" name="contributors" placeholder="Select a contributor from the hub" autocomplete="off">
             <datalist id="contributors">
                 {% if all_communities %}
                     {% for community in all_communities %}
