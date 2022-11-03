@@ -761,17 +761,9 @@ def create_project(request, pk):
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
                 create_notices(notices_selected, institution, data, None)
-
-                # Get lists of contributors entered in form
-                institutions_selected = request.POST.getlist('selected_institutions')
-                researchers_selected = request.POST.getlist('selected_researchers')
-
-                 # Get a project contributor object and add institution to it.
-                contributors = ProjectContributors.objects.prefetch_related('institutions').get(project=data)
-                contributors.institutions.add(institution)
                 
                 # Add selected contributors to the ProjectContributors object
-                add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
+                add_to_contributors(request, institution, data)
 
                 # Project person formset
                 instances = formset.save(commit=False)
@@ -828,12 +820,8 @@ def edit_project(request, institution_id, project_uuid):
                     instance.project = data
                     instance.save()
 
-                # Get lists of contributors entered in form
-                institutions_selected = request.POST.getlist('selected_institutions')
-                researchers_selected = request.POST.getlist('selected_researchers')
-
                 # Add selected contributors to the ProjectContributors object
-                add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
+                add_to_contributors(request, institution, data)
 
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
