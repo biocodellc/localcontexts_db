@@ -681,40 +681,6 @@ function cancelCommunitySelection(elem) {
     inputDivToRemove.innerHTML = ``
 }
 
-// CREATE PROJECT : add contributors
-function selectContributors() {
-    let contribInput = document.getElementById('contributor-input')
-    let contribOptionsArray = Array.from(document.getElementById('contributors').options)
-
-    contribOptionsArray.forEach(option => {
-        // compare input value to option value
-        if (option.value == contribInput.value) {
-
-            // push id to researcherArray or institutionArray
-            if (contribInput.value.includes('Researcher')) {
-                contribInput.value = ''
-
-                let selectedResearcherDiv = document.getElementById(`selected-researcher-${option.dataset.resid}`)
-                let div = document.getElementById(`res-id-input-${option.dataset.resid}`)
-        
-                selectedResearcherDiv.classList.replace('hide', 'show')
-                div.innerHTML = `<input type="hidden" value="${option.dataset.resid}" name="selected_researchers">`
-            } else {
-                contribInput.value = ''
-
-                let selectedInstitutionDiv = document.getElementById(`selected-institution-${option.dataset.instid}`)
-                let div = document.getElementById(`inst-id-input-${option.dataset.instid}`)
-
-                selectedInstitutionDiv.classList.replace('hide', 'show')
-                div.innerHTML = `<input type="hidden" value="${option.dataset.instid}" name="selected_institutions">`
-            }
-        }
-    })
-}
-
-var addContributorBtn = document.getElementById('add-contributor-btn')
-if(addContributorBtn) { addContributorBtn.addEventListener('click', selectContributors) }
-
 
 // Add project people on institution create-project
 // h/t: https://medium.com/all-about-django/adding-forms-dynamically-to-a-django-formset-375f1090c2b0
@@ -833,6 +799,88 @@ if (window.location.href.includes('/projects/edit-project') || window.location.h
         }
     }
 
+    // ADD / REMOVE CONTRIBUTORS
+    const addContributorBtn = document.getElementById('add-contributor-btn')
+    addContributorBtn.addEventListener('click', selectContributors)
+
+    removeSelectedContributors()
+
+    function selectContributors() {
+        let contribInput = document.getElementById('contributor-input')
+        let contribOptionsArray = Array.from(document.getElementById('contributors').options)
+
+        contribOptionsArray.forEach(option => {
+            // compare input value to option value
+            if (option.value == contribInput.value) {
+
+                // push id to researcherArray or institutionArray
+                if (contribInput.value.includes('Researcher')) {
+                    contribInput.value = ''
+
+                    let selectedResearcherDiv = document.getElementById(`selected-researcher-${option.dataset.resid}`)
+                    selectedResearcherDiv.classList.replace('hide', 'show')
+
+                    let input = document.createElement('input')
+                    input.setAttribute('id', `hiddenRes-${option.dataset.resid}` )
+                    input.setAttribute('type', 'hidden')
+                    input.setAttribute('name', 'selected_researchers')
+                    input.setAttribute('value', option.dataset.resid)
+
+                    selectedResearcherDiv.appendChild(input)
+                } else if (contribInput.value.includes('Institution')) {
+                    contribInput.value = ''
+
+                    let selectedInstitutionDiv = document.getElementById(`selected-institution-${option.dataset.instid}`)
+                    selectedInstitutionDiv.classList.replace('hide', 'show')
+
+                    let input = document.createElement('input')
+                    input.setAttribute('id', `hiddenInst-${option.dataset.instid}` )
+                    input.setAttribute('type', 'hidden')
+                    input.setAttribute('name', 'selected_institutions')
+                    input.setAttribute('value', option.dataset.instid)
+
+                    selectedInstitutionDiv.appendChild(input)
+                } else {
+                    contribInput.value = ''
+
+                    let selectedCommunityDiv = document.getElementById(`selected-community-${option.dataset.commid}`)
+                    selectedCommunityDiv.classList.replace('hide', 'show')
+
+                    let input = document.createElement('input')
+                    input.setAttribute('id', `hiddenComm-${option.dataset.commid}` )
+                    input.setAttribute('type', 'hidden')
+                    input.setAttribute('name', 'selected_communities')
+                    input.setAttribute('value', option.dataset.commid)
+                    selectedCommunityDiv.appendChild(input)
+                }
+            }
+        })
+    }
+
+    function removeSelectedContributors() {
+        const removeResearcherBtns = document.querySelectorAll('.removeSelectedResearcherBtn')
+        const removeInstitutionBtns = document.querySelectorAll('.removeSelectedInstitutionBtn')
+        const removeCommunityBtns = document.querySelectorAll('.removeSelectedCommunityBtn')
+
+        function remove(btnGroup, btnIDStrToSplit, elemIDToHide, inputIDStrToRemove) {
+            btnGroup.forEach(btn => {
+                let btnID = btn.id.trim()
+                let arr = btnID.split(btnIDStrToSplit)
+                let targetID = arr[1]
+
+                btn.onclick = function() { 
+                    // hide chip, remove the hidden input only
+                    let divToHide = document.getElementById(`${elemIDToHide}${targetID}`)
+                    divToHide.classList.replace('show', 'hide')
+                    document.getElementById(`${inputIDStrToRemove}${targetID}`).remove()
+                }
+            })
+        }
+
+        remove(removeResearcherBtns, 'closeRes-', 'selected-researcher-', 'hiddenRes-')
+        remove(removeInstitutionBtns, 'closeInst-', 'selected-institution-', 'hiddenInst-')
+        remove(removeCommunityBtns, 'closeComm-', 'selected-community-', 'hiddenComm-')
+    }
 }
 
 function isValidHttpUrl(string) {

@@ -48,6 +48,10 @@ def get_all_institutions():
     return Institution.approved.all()
 
 @register.simple_tag
+def get_all_communities():
+    return Community.approved.all()
+
+@register.simple_tag
 def define(val=None):
     # To use: {% define 'oldVariable' as newVariable %}
   return val

@@ -1,25 +1,28 @@
 {% load static %}{% load custom_project_tags %}
 {% get_all_researchers as all_researchers %}
 {% get_all_institutions as all_institutions %}
+{% get_all_communities as all_communities %}
 
 <div class="padding-bottom-1 flex-this row">
     <div>
         <label for="contributors">Project Contributors</label>
         <div class="tooltip"><strong>?</strong>
             <span class="tooltiptext">
-                {% if institution or researcher %}
-                    Key institutional or researcher contributors involved in the project. 
-                    This can include other institutions or researchers.    
-                {% endif %}       
-                {% if community %}
-                    Any institutional or researcher contributors involved in the project who are registered in the Hub.
-                {% endif %}
+                Any institutional, community, or researcher contributors involved in the Project who are registered in the Hub.
             </span>
         </div>
         <br>
         <div class="flex-this">
             <input id="contributor-input" list="contributors" name="contributors" placeholder="Select a contributor from the hub">
             <datalist id="contributors">
+                {% if all_communities %}
+                    {% for community in all_communities %}
+                        <option 
+                            value="{{ community.community_name }} (Community)" 
+                            data-commid="{{ community.id }}"
+                        >
+                    {% endfor %}
+                {% endif %}
                 {% if all_researchers %}
                     {% for researcher in all_researchers %}
                         <option 
@@ -30,7 +33,10 @@
                 {% endif %}
                 {% if all_institutions %}
                     {% for institution in all_institutions %}
-                        <option value="{{ institution.institution_name }} (Institution)" data-instid="{{ institution.id }}">
+                        <option 
+                            value="{{ institution.institution_name }} (Institution)" 
+                            data-instid="{{ institution.id }}"
+                        >
                     {% endfor %}
                 {% endif %}
             </datalist>
@@ -39,60 +45,74 @@
             </div>              
         </div>
     </div>
-
 </div>
 
 {% include 'partials/_add-projectperson.html'%}
 
 <p>Selected Contributors</p>
 
-<!-- If edit project -->
-{% if contributors %}
+<div class="w-50">
+    <ul class="ul-no-bullets ul-no-padding">
 
-    {% for researcher in contributors.researchers.all %}
-        <div id="selected-researcher-{{ researcher.id }}" class="hide">
-            <div class="grey-chip flex-this row space-between">
-                <div><p class="center-name">{% firstof researcher.user.get_full_name researcher.user.username %}</p></div>
-                <div id="close-res-{{ researcher.id }}" class="close-x pointer" onclick="cancelResearcherSelection(this)"><div>&times;</div></div>
-            </div>
-        </div>
-        <div id="res-id-input-{{ researcher.id }}" style="display: none;">
-            <input type="hidden" value="{{ researcher.id }}" name="selected_researchers">
-        </div>
-    {% endfor %}
+        <!-- If edit project -->
+        {% if contributors %}
+            {% for community in contributors.communities.all %}
+                <li id="selected-community-{{ community.id }}" class="margin-bottom-8 show">
+                    <div class="grey-chip flex-this row space-between">
+                        <div><p class="center-name">{{ community.community_name }} (Community)</p></div>
+                        <div id="closeComm-{{ community.id }}" class="removeSelectedCommunityBtn pointer">&times;</div>
+                    </div>
+                    <input id="hiddenComm-{{ community.id }}" type="hidden" name="selected_communities" value="{{ community.id }}">
+                </li>
+            {% endfor %}  
 
-    {% for institution in contributors.institutions.all %}
-        <div id="selected-institution-{{ institution.id }}" class="hide">
-            <div class="grey-chip flex-this row space-between">
-                <div><p class="center-name">{{ institution.institution_name }}</p></div>
-                <div id="close-inst-{{ institution.id }}" class="close-x pointer" onclick="cancelInstitutionSelection(this)"><div>&times;</div></div>
-            </div>
-        </div>
-        <div id="inst-id-input-{{ institution.id }}" style="display: none;">
-            <input type="hidden" value="{{ institution.id }}" name="selected_institutions">
-        </div>
-    {% endfor %}
-{% endif %}
+            {% for researcher in contributors.researchers.all %}
+                <li id="selected-researcher-{{ researcher.id }}" class="margin-bottom-8 show">
+                    <div class="grey-chip flex-this row space-between">
+                        <div><p class="center-name">{% firstof researcher.user.get_full_name researcher.user.username %} (Researcher)</p></div>
+                        <div id="closeRes-{{ researcher.id }}" class="removeSelectedResearcherBtn pointer">&times;</div>
+                    </div>
+                    <input id="hiddenRes-{{ researcher.id }}" type="hidden" name="selected_researchers" value="{{ researcher.id }}">
+                </li>
+            {% endfor %}
 
-<!-- If create project -->
-<div class="flex-this">
-    {% for researcher in all_researchers %}
-        <div id="selected-researcher-{{ researcher.id }}" class="hide">
-            <div class="grey-chip flex-this row space-between">
-                <div><p class="center-name">{% firstof researcher.user.get_full_name researcher.user.username %}</p></div>
-                <div id="close-res-{{ researcher.id }}" class="close-x pointer" onclick="cancelResearcherSelection(this)"><div>&times;</div></div>
-            </div>
-        </div>
-        <div id="res-id-input-{{ researcher.id }}" style="display: none;"></div>
-    {% endfor %}
+            {% for institution in contributors.institutions.all %}
+                <li id="selected-institution-{{ institution.id }}" class="margin-bottom-8 show">
+                    <div class="grey-chip flex-this row space-between">
+                        <div><p class="center-name">{{ institution.institution_name }} (Institution)</p></div>
+                        <div id="closeInst-{{ institution.id }}" class="removeSelectedInstitutionBtn pointer">&times;</div>
+                    </div>
+                    <input id="hiddenInst-{{ institution.id }}" type="hidden" name="selected_institutions" value="{{ institution.id }}">
+                </li>
+            {% endfor %}
+        {% endif %}
 
-    {% for institution in all_institutions %}
-        <div id="selected-institution-{{ institution.id }}" class="hide">
-            <div class="grey-chip flex-this row space-between">
-                <div><p class="center-name">{{ institution.institution_name }}</p></div>
-                <div id="close-inst-{{ institution.id }}" class="close-x pointer" onclick="cancelInstitutionSelection(this)"><div>&times;</div></div>
-            </div>
-        </div>
-        <div id="inst-id-input-{{ institution.id }}" style="display: none;"></div>
-    {% endfor %}
+        <!-- If create project and new selections-->
+        {% for community in all_communities %}
+            <li id="selected-community-{{ community.id }}" class="margin-bottom-8 hide">
+                <div class="grey-chip flex-this row space-between">
+                    <div><p class="center-name">{{ community.community_name }} (Community)</p></div>
+                    <div id="closeComm-{{ community.id }}" class="removeSelectedCommunityBtn pointer">&times;</div>
+                </div>
+            </li>
+        {% endfor %}  
+
+        {% for researcher in all_researchers %}
+            <li id="selected-researcher-{{ researcher.id }}" class="margin-bottom-8 hide">
+                <div class="grey-chip flex-this row space-between">
+                    <div><p class="center-name">{% firstof researcher.user.get_full_name researcher.user.username %} (Researcher)</p></div>
+                    <div id="closeRes-{{ researcher.id }}" class="removeSelectedResearcherBtn pointer">&times;</div>
+                </div>
+            </li>
+        {% endfor %}
+
+        {% for institution in all_institutions %}
+            <li id="selected-institution-{{ institution.id }}" class="margin-bottom-8 hide">
+                <div class="grey-chip flex-this row space-between">
+                    <div><p class="center-name">{{ institution.institution_name }} (Institution)</p></div>
+                    <div id="closeInst-{{ institution.id }}" class="removeSelectedInstitutionBtn pointer">&times;</div>
+                </div>
+            </li>
+        {% endfor %}        
+    </ul>
 </div>

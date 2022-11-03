@@ -1042,16 +1042,8 @@ def create_project(request, pk):
                 creator.community = community
                 creator.save()
 
-                # Get lists of contributors entered in form
-                institutions_selected = request.POST.getlist('selected_institutions')
-                researchers_selected = request.POST.getlist('selected_researchers')
-
-                # Get a project contributor object and add community to it.
-                contributors = ProjectContributors.objects.prefetch_related('communities').get(project=data)
-                contributors.communities.add(community)
-
                 # Add selected contributors to the ProjectContributors object
-                add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
+                add_to_contributors(request, community, data)
                 
                 # Project person formset
                 instances = formset.save(commit=False)
@@ -1105,12 +1097,8 @@ def edit_project(request, community_id, project_uuid):
                     instance.project = data
                     instance.save()
 
-                # Get lists of contributors entered in form
-                institutions_selected = request.POST.getlist('selected_institutions')
-                researchers_selected = request.POST.getlist('selected_researchers')
-
                 # Add selected contributors to the ProjectContributors object
-                add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
+                add_to_contributors(request, community, data)
                 return redirect('community-projects', community.id)
 
         context = {
