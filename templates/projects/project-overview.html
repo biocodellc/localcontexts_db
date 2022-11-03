@@ -20,21 +20,6 @@
                 </p>
             </div>
             
-            <div class="margin-bottom-16">
-                <div class="flex-this">
-                    {% if project.publication_doi %}
-                        <div class="margin-right-1">
-                            {% if not 'https://' in project.publication_doi %}
-                                <a href="https://doi.org/{{ project.publication_doi }}" class="primary-btn green-btn">{{ project.publication_doi }} <i class="fa fa-external-link" aria-hidden="true"></i></a></div>
-                            {% else %}
-                                <a href="{{ project.publication_doi }}" class="primary-btn green-btn">{{ project.publication_doi }} <i class="fa fa-external-link" aria-hidden="true"></i></a></div>
-                            {% endif %}
-                    {% endif %}
-                    {% if project.url %}
-                        <div><a href="{{ project.url }}" class="primary-btn green-btn">Project Link <i class="fa fa-external-link" aria-hidden="true"></i></a></div>
-                    {% endif %}
-                </div>
-            </div>
         </div>
 
         <div class="w-40 flex-this column align-right">
@@ -131,6 +116,34 @@
             <h3>Project Description</h3>
             <p>{{ project.description|linebreaks }}</p>
         </div>
+
+        {% if project.publication_doi %}
+            <div class="margin-bottom-16">
+                <div><h3 class="no-top-margin">Project DOI</h3></div>
+                
+                <a 
+                    class="darkteal-text underline-hover"
+                    {% if not 'https://' in project.publication_doi %}
+                        href="https://doi.org/{{ project.publication_doi }}"
+                    {% else %}
+                        href="{{ project.publication_doi }}"
+                    {% endif %}
+                >
+                {{ project.publication_doi }} <i class="fa fa-external-link" aria-hidden="true"></i>
+                </a>
+            </div> 
+        {% endif %}
+
+        {% if project.urls %}
+            <div class="margin-bottom-16">
+                <div><h3 class="no-top-margin">Project Links</h3></div>
+                    <ul>
+                        {% for url in project.urls %}
+                            <li><a href="{{ url }}" class="darkteal-text underline-hover">{{ url }} <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
+                        {% endfor %}
+                    </ul>
+            </div> 
+        {% endif %}
 
         {% if researcher or institution %}
             <div class="flex-this space-between border-top-solid-teal">
