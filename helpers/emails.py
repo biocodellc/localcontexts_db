@@ -269,7 +269,10 @@ def send_contributor_email(request, org, proj_id):
 
     if '/create-project/' in request.path:
         template = render_to_string('snippets/emails/contributor.html', { 'domain': current_site.domain, 'project': project, 'create': True })
-
+        
+        if isinstance(org, Community):
+            to_email = org.community_creator.email
+            subject = "Your community has been added as a contributor on a Project"
         if isinstance(org, Institution):
             to_email = org.institution_creator.email
             subject = "Your institution has been added as a contributor on a Project"
@@ -280,7 +283,9 @@ def send_contributor_email(request, org, proj_id):
     elif '/edit-project/' in request.path:
         template = render_to_string('snippets/emails/contributor.html', { 'domain': current_site.domain, 'project': project, 'edit': True })
         subject = "Changes have been made to a Project you're contributing to"
-
+        
+        if isinstance(org, Community):
+            to_email = org.community_creator.email
         if isinstance(org, Institution):
             to_email = org.institution_creator.email
         if isinstance(org, Researcher):

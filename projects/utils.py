@@ -1,6 +1,7 @@
 from researchers.models import Researcher
 from institutions.models import Institution
-from notifications.models import ActionNotification
+from communities.models import Community
+from projects.models import ProjectContributors
 from helpers.emails import send_contributor_email
 from notifications.utils import send_simple_action_notification
 from helpers.models import ProjectStatus
@@ -54,7 +55,24 @@ def project_status_seen_at_comment(user, community, creator, project):
             send_simple_action_notification(user, creator.researcher, title, 'Projects', reference_id)
 
 
-def add_to_contributors(request, contributors, institutions_list, researchers_list, project_id):
+def add_to_contributors(request, account, project):
+    contributors = ProjectContributors.objects.get(project=project)
+    # Clear all contributors first
+    contributors.communities.clear()
+    contributors.institutions.clear()
+    contributors.researchers.clear()
+
+    if isinstance(account, Community):
+        contributors.communities.add(account)
+    if isinstance(account, Institution):
+        contributors.institutions.add(account)
+    if isinstance(account, Researcher):
+        contributors.researchers.add(account)
+    
+    institutions_list = request.POST.getlist('selected_institutions')
+    researchers_list = request.POST.getlist('selected_researchers')
+    communities_list = request.POST.getlist('selected_communities')
+
     # Add each institution and researcher to contributors
     if institutions_list:
         for institution_id in institutions_list:
@@ -62,12 +80,12 @@ def add_to_contributors(request, contributors, institutions_list, researchers_li
             contributors.institutions.add(institution)
 
             if '/edit-project/' in request.path:
-                send_simple_action_notification(None, institution, 'Edits have been made to a Project', 'Projects', project_id)
+                send_simple_action_notification(None, institution, 'Edits have been made to a Project', 'Projects', project.unique_id)
             elif '/create-project/' in request.path:
                 # create notification
-                send_simple_action_notification(None, institution, 'Your institution has been added as a contributor on a Project', 'Projects', project_id)
+                send_simple_action_notification(None, institution, 'Your institution has been added as a contributor on a Project', 'Projects', project.unique_id)
                 # create email
-            send_contributor_email(request, institution, project_id)
+            send_contributor_email(request, institution, project.unique_id)
 
     if researchers_list:
         for researcher_id in researchers_list:
@@ -75,9 +93,22 @@ def add_to_contributors(request, contributors, institutions_list, researchers_li
             contributors.researchers.add(researcher)
 
             if '/edit-project/' in request.path:
-                send_simple_action_notification(None, researcher, 'Edits have been made to a Project', 'Projects', project_id)
+                send_simple_action_notification(None, researcher, 'Edits have been made to a Project', 'Projects', project.unique_id)
             elif '/create-project/' in request.path:
                 # create notification
-                send_simple_action_notification(None, researcher, 'You have been added as a contributor on a Project', 'Projects', project_id)
+                send_simple_action_notification(None, researcher, 'You have been added as a contributor on a Project', 'Projects', project.unique_id)
                 # create email
-            send_contributor_email(request, researcher, project_id)
+            send_contributor_email(request, researcher, project.unique_id)
+    
+    if communities_list:
+        for community_id in communities_list:
+            community = Community.objects.select_related('community_creator').get(id=community_id)
+            contributors.communities.add(community)
+
+            if '/edit-project/' in request.path:
+                send_simple_action_notification(None, community, 'Edits have been made to a Project', 'Projects', project.unique_id)
+            elif '/create-project/' in request.path:
+                # create notification
+                send_simple_action_notification(None, community, 'Your community has been added as a contributor on a Project', 'Projects', project.unique_id)
+                # create email
+            send_contributor_email(request, community, project.unique_id)
