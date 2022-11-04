@@ -40,12 +40,25 @@ def project_status(project):
     return ProjectStatus.objects.select_related('community', 'project').filter(project=project)
 
 @register.simple_tag
-def get_all_researchers():
-    return Researcher.objects.select_related('user').all()
+def get_all_researchers(researcher_to_exclude):
+    if researcher_to_exclude:
+        return Researcher.objects.select_related('user').exclude(id=researcher_to_exclude.id)
+    else:
+        return Researcher.objects.select_related('user').all()
 
 @register.simple_tag
-def get_all_institutions():
-    return Institution.approved.all()
+def get_all_institutions(institution_to_exclude):
+    if institution_to_exclude:
+        return Institution.approved.exclude(id=institution_to_exclude.id)
+    else:
+        return Institution.approved.all()
+
+@register.simple_tag
+def get_all_communities(community_to_exclude):
+    if community_to_exclude:
+        return Community.approved.exclude(id=community_to_exclude.id)
+    else:
+        return Community.approved.all()
 
 @register.simple_tag
 def define(val=None):
