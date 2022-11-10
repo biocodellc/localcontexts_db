@@ -768,8 +768,9 @@ def create_project(request, pk):
                 # Project person formset
                 instances = formset.save(commit=False)
                 for instance in instances:
-                    instance.project = data
-                    instance.save()
+                    if instance.name or instance.email:
+                        instance.project = data
+                        instance.save()
                     
                     # Send email to added person
                     send_project_person_email(request, instance.email, data.unique_id)
@@ -817,8 +818,11 @@ def edit_project(request, institution_id, project_uuid):
 
                 instances = formset.save(commit=False)
                 for instance in instances:
-                    instance.project = data
-                    instance.save()
+                    if not instance.name or not instance.email:
+                        instance.delete()
+                    else:
+                        instance.project = data
+                        instance.save()
 
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, institution, data)
