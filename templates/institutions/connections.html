@@ -34,6 +34,9 @@
             </div>
 
             <div class="dashcard-btn-container">
+                <div class="margin-right-8">
+                    <a class="primary-btn action-btn" href="{% url 'public-institution' inst.id %}">View public page</a>
+                </div>
                 <div>
                     <span id="{{ inst.institution_name }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
                 </div>
@@ -91,6 +94,9 @@
                 <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p></div>
             </div>
             <div class="dashcard-btn-container">
+                <div class="margin-right-8">
+                    <a class="primary-btn action-btn" href="{% url 'public-researcher' researcher.id %}">View public page</a>
+                </div>
                 <div>
                     <span id="{{ researcher.id }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
                 </div>
@@ -151,6 +157,9 @@
             </div>
 
             <div class="dashcard-btn-container">
+                <div class="margin-right-8">
+                    <a class="primary-btn action-btn" href="{% url 'public-community' community.id %}">View public page</a>
+                </div>
                 <div>
                     <span id="{{ community.community_name }}" class="primary-btn white-btn" onclick="showMore(this)">Show More <i class="fa fa-angle-down" aria-hidden="true"></i></span>
                 </div>
