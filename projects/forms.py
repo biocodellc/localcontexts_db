@@ -57,6 +57,7 @@ ProjectPersonFormsetInline = inlineformset_factory(
         'name': forms.TextInput(attrs={'size': 35, 'placeholder': 'Contributor name'}),
         'email': forms.EmailInput(attrs={'size': 35, 'placeholder': 'Contributor email'}),
     },
+    can_delete=True,
 )
 
 class EditProjectForm(forms.ModelForm):
