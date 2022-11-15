@@ -10,14 +10,21 @@ def view_project(request, unique_id):
     try:
         project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
         notices = Notice.objects.filter(project=project, archived=False)
+        creator = ProjectCreator.objects.get(project=project)
+
+        context = {
+            'project': project, 
+            'notices': notices,
+            'creator': creator,
+        }
 
         if project.project_privacy == 'Private':
             if request.user.is_authenticated:
-                return render(request, 'projects/view-project.html', {'project': project, 'notices': notices})
+                return render(request, 'projects/view-project.html', context)
             else:
                 return redirect('login')
         else:
-            return render(request, 'projects/view-project.html', {'project': project, 'notices': notices})
+            return render(request, 'projects/view-project.html', context)
     except:
         raise Http404()
 

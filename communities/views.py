@@ -1121,17 +1121,19 @@ def project_actions(request, pk, project_uuid):
     community = Community.objects.get(id=pk)
 
     member_role = check_member_role(request.user, community)
-    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+    if member_role == False or not request.user.is_authenticated:
         return redirect('view-project', project_uuid)    
     else:
-        project = Project.objects.get(unique_id=project_uuid)
+        project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
         notices = Notice.objects.filter(project=project, archived=False)
+        creator = ProjectCreator.objects.get(project=project)
 
         context = {
             'member_role': member_role,
             'community': community,
             'project': project,
             'notices': notices,
+            'creator': creator,
         }
         return render(request, 'communities/project-actions.html', context)
 

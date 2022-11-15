@@ -623,16 +623,37 @@ def edit_project(request, researcher_id, project_uuid):
         }
         return render(request, 'researchers/edit-project.html', context)
 
+# @login_required(login_url='login')
+def project_actions(request, pk, project_uuid):
+    researcher = Researcher.objects.get(id=pk)
+
+    # member_role = check_member_role(request.user, researcher)
+    # if member_role == False or not request.user.is_authenticated:
+    #     return redirect('view-project', project_uuid)    
+    # else:
+    project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
+    notices = Notice.objects.filter(project=project, archived=False)
+    creator = ProjectCreator.objects.get(project=project)
+
+    context = {
+        # 'member_role': member_role,
+        'researcher': researcher,
+        'project': project,
+        'notices': notices,
+        'creator': creator,
+    }
+    return render(request, 'researchers/project-actions.html', context)
+
 # Notify Communities of Project
 @login_required(login_url='login')
-def notify_others(request, pk, proj_id):
+def notify_others(request, pk, project_uuid):
     researcher = Researcher.objects.select_related('user').get(id=pk)
 
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')
     else:
-        project = Project.objects.prefetch_related('bc_labels', 'tk_labels', 'project_status').get(id=proj_id)
+        project = Project.objects.prefetch_related('bc_labels', 'tk_labels', 'project_status').get(unique_id=project_uuid)
         entities_notified = EntitiesNotified.objects.prefetch_related('communities').get(project=project)
         communities = Community.approved.all()
 

@@ -24,46 +24,59 @@
 
         <div class="w-40 flex-this column align-right">
             <div class="flex-this margin-bottom-8 w-100 flex-end">
-                
-                {% if community %}
-                    {% if member_role == 'admin' or member_role == 'editor' %}
-                        <div class="margin-right-1">
-                            <a href="{% url 'apply-labels' community.id project.unique_id %}" class="primary-btn action-btn">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
-                        </div>
-                    {% endif %}
-                {% endif%}
 
                 <div class="margin-right-1">
-                    <a href="{% url 'view-project' project.unique_id %}" class="primary-btn white-btn">View <i class="fa fa-arrow-right"></i></a>
-                </div>
-
-                <div class="margin-right-1">
-                    <a href="{% url 'community-project-actions' community.id project.unique_id %}" class="primary-btn white-btn">Actions <i class="fa fa-arrow-right"></i></a>
-                </div>
-
-                {% if request.user == project.project_creator %}
-                    <div class="margin-right-1">
-                        <a
-                            class="primary-btn white-btn"
-                            {% if community %}
-                                href="{% url 'edit-project' community.id project.unique_id %}"
-                            {% endif %}
-                            {% if institution %}
-                                href="{% url 'inst-edit-project' institution.id project.unique_id %}"
-                            {% endif %}                        
-                            {% if researcher %}
-                                href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
-                            {% endif %}   
-                        >
-                            Edit <i class="fa fa-edit" aria-hidden="true"></i>
-                        </a>                     
-                    </div>
-                {% endif %}   
+                    <a 
+                        {% if community %}
+                            href="{% url 'community-project-actions' community.id project.unique_id %}" 
+                        {% endif %}
+                        {% if institution %}
+                            href="{% url 'institution-project-actions' institution.id project.unique_id %}" 
+                        {% endif %}
+                        {% if researcher %}
+                            href="{% url 'researcher-project-actions' researcher.id project.unique_id %}" 
+                        {% endif %}
+                        class="primary-btn white-btn">Actions <i class="fa fa-arrow-right"></i></a>
+                </div> 
 
                 <div class="text-align-right">
                     <a id="{{ project.unique_id }}" class="primary-btn white-btn" onclick='showMore(this)'>
                         Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
                     </a>
+                </div>
+
+                <div class="dropdown">
+                    <a onclick="toggleKebabMenu(this)" id="kebab-{{ project.unique_id }}" class="kebab"><i class="fa-solid fa-ellipsis-vertical" style="font-size: 24px;"></i></a>
+                    <div id="kebab-content-{{ project.unique_id }}" class="kebab-dropdown-content show"> 
+
+                        {% if request.user == project.project_creator %}
+                            <span>
+                                <div class="margin-right-1">
+                                    <a
+                                        class="darkteal-text"
+
+                                        {% if community %}
+                                            href="{% url 'edit-project' community.id project.unique_id %}"
+                                        {% endif %}
+                                        {% if institution %}
+                                            href="{% url 'inst-edit-project' institution.id project.unique_id %}"
+                                        {% endif %}                        
+                                        {% if researcher %}
+                                            href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
+                                        {% endif %}   
+                                    >
+                                        Edit Project <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                                    </a>                   
+                                </div>                                        
+                            </span>
+                        {% endif %}   
+                        
+                        <span>
+                            <a class="darkteal-text" href="{% url 'download-project-zip' project.unique_id %}">
+                                Download <i class="fa fa-download" aria-hidden="true"></i>
+                            </a>                                          
+                        </span>
+                    </div>
                 </div>
 
             </div>
@@ -116,38 +129,6 @@
 
     <div id="expand-div-{{ project.unique_id }}" class="hide">
 
-        <div class="w-70">
-            <h3>Project Description</h3>
-            <p>{{ project.description|linebreaks }}</p>
-        </div>
-
-        {% if project.publication_doi %}
-            <div class="margin-bottom-16">
-                <div><h3 class="no-top-margin">Project DOI</h3></div>
-                
-                <a 
-                    class="darkteal-text underline-hover"
-                    {% if not 'https://' in project.publication_doi %}
-                        href="https://doi.org/{{ project.publication_doi }}"
-                    {% else %}
-                        href="{{ project.publication_doi }}"
-                    {% endif %}
-                >
-                {{ project.publication_doi }} <i class="fa fa-external-link" aria-hidden="true"></i>
-                </a>
-            </div> 
-        {% endif %}
-
-        {% if project.urls %}
-            <div class="margin-bottom-16">
-                <div><h3 class="no-top-margin">Project Links</h3></div>
-                    <ul>
-                        {% for url in project.urls %}
-                            <li><a href="{{ url }}" class="darkteal-text underline-hover">{{ url }} <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
-                        {% endfor %}
-                    </ul>
-            </div> 
-        {% endif %}
 
         {% if researcher or institution %}
             <div class="flex-this space-between border-top-solid-teal">
@@ -173,7 +154,7 @@
                                 {% if creator.institution %}
                                     {% if member_role == 'admin' or member_role == 'editor' %}
                                         <div class="margin-right-1">
-                                            <a href="{% url 'institution-notify-others' institution.id project.id %}" class="primary-btn action-btn">
+                                            <a href="{% url 'institution-notify-others' institution.id project.unique_id %}" class="primary-btn action-btn">
                                                 Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
                                             </a>
                                         </div>
@@ -187,7 +168,7 @@
                         {% for creator in project.project_creator_project.all %}
                             {% if creator.researcher %}
                                 <div class="margin-right-1">
-                                    <a href="{% url 'researcher-notify-others' researcher.id project.id %}" class="primary-btn action-btn">
+                                    <a href="{% url 'researcher-notify-others' researcher.id project.unique_id %}" class="primary-btn action-btn">
                                         Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
                                     </a>
                                 </div>

@@ -770,9 +770,14 @@ button[disabled],
 
 /* Customize TK Label page */
 
-.img-sizedown-151-116 {
+.label-large {
     width: 151px;
     height: 116px;
+}
+
+.label-medium {
+    width: 96px;
+    height: 74px;
 }
 
 /* Small Labels  */
@@ -980,7 +985,8 @@ button[disabled],
 }
 
 .project-left-sidebar {
-    min-width: 272px;
+    min-width: 260px;
+    margin-right: 10px;
 }
 
 .actions-card a {
