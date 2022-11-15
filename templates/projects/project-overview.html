@@ -9,12 +9,14 @@
             <div>
                 <p>
                     {{ project.date_added|date:'M d, Y' }} | 
-                    {% if project.project_type == 'Other' %} {{ project.other_type }} {% else %} {{ project.project_type }} {% endif %}| 
-                    {{ project.project_privacy }}<br>
+                    {% if project.project_type == 'Other' %} 
+                        <span class="bold">{{ project.other_type }} </span>
+                    {% else %} 
+                        {{ project.project_type }} 
+                    {% endif %}| 
+                    {{ project.project_privacy }}<br><br>
 
-                    Created: 
-                    {% firstof project.project_creator.get_full_name project.project_creator.username %}
-
+                    Created by: 
                     {% which_account_created_project project as project_creator %}
                     {{ project_creator }}
                 </p>
@@ -45,9 +47,11 @@
                     </a>
                 </div>
 
+                <!-- TODO: set this up properly -->
+
                 <div class="dropdown">
-                    <a onclick="toggleKebabMenu(this)" id="kebab-{{ project.unique_id }}" class="kebab"><i class="fa-solid fa-ellipsis-vertical" style="font-size: 24px;"></i></a>
-                    <div id="kebab-content-{{ project.unique_id }}" class="kebab-dropdown-content show"> 
+                    <a onclick="toggleKebabMenu(this)" id="kebab-{{ project.unique_id }}" class="kebab"><i class="fa-solid fa-ellipsis-vertical primary-black-text" style="font-size: 20px;"></i></a>
+                    <div id="kebab-content-{{ project.unique_id }}" class="kebab-dropdown-content hide"> 
 
                         {% if request.user == project.project_creator %}
                             <span>
@@ -65,7 +69,7 @@
                                             href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
                                         {% endif %}   
                                     >
-                                        Edit Project <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
+                                        Edit Project 
                                     </a>                   
                                 </div>                                        
                             </span>
@@ -73,54 +77,11 @@
                         
                         <span>
                             <a class="darkteal-text" href="{% url 'download-project-zip' project.unique_id %}">
-                                Download <i class="fa fa-download" aria-hidden="true"></i>
+                                Download
                             </a>                                          
                         </span>
                     </div>
                 </div>
-
-            </div>
-
-            <div class="flex-this row margin-top-8 w-50 flex-end">
-
-                {% with tklabels=project.tk_labels.all bclabels=project.bc_labels.all %}
-                    {% if tklabels or bclabels %}
-                        <input id="label-{{ project.unique_id }}" class="projectLabelsFilter" type="hidden" value="label_true">
-                    
-                        {% if tklabels %}
-                            {% for tklabel in tklabels %}
-                                <div class="margin-left-8">
-                                    {% include 'tklabels/tiny-labels.html' %}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-
-                        {% if bclabels %}
-                            {% for bclabel in bclabels %}
-                                <div class="margin-left-8">
-                                    {% include 'bclabels/tiny-labels.html' %}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% endif %}
-                {% endwith %}
-
-                {% show_project_notices project as notices %}
-                {% for notice in notices %}
-                    {% if not notice.archived %}
-                        <div class="flex-this flex-end">
-                            {% if notice.notice_type == 'biocultural' %}
-                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="62px"></div>
-                            {% endif %}
-                            {% if notice.notice_type == 'traditional_knowledge' %}
-                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="62px"></div>
-                            {% endif %}
-                            {% if notice.notice_type == 'attribution_incomplete' %}
-                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="62px"></div>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
 
             </div>
         </div>
