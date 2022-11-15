@@ -1116,15 +1116,24 @@ def edit_project(request, community_id, project_uuid):
         }
         return render(request, 'communities/edit-project.html', context)
     
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def project_actions(request, pk, project_uuid):
     community = Community.objects.get(id=pk)
-    project = Project.objects.get(unique_id=project_uuid)
-    context = {
-        'community': community,
-        'project': project,
-    }
-    return render(request, 'communities/project-actions.html', context)
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+        return redirect('view-project', project_uuid)    
+    else:
+        project = Project.objects.get(unique_id=project_uuid)
+        notices = Notice.objects.filter(project=project, archived=False)
+
+        context = {
+            'member_role': member_role,
+            'community': community,
+            'project': project,
+            'notices': notices,
+        }
+        return render(request, 'communities/project-actions.html', context)
 
 
 @login_required(login_url='login')

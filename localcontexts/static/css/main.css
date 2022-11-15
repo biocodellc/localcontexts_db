@@ -970,17 +970,27 @@ button[disabled],
 }
 
 .project-card {
-    max-width: 874px;
-    min-width: 874px;
+    max-width: 880px;
+    min-width: 880px;
 }
 
 .actions-card {
-    max-width: 373px;
-    min-width: 373px;
+    max-width: 360px;
+    min-width: 360px;
 }
 
 .project-left-sidebar {
     min-width: 272px;
+}
+
+.actions-card a {
+    color: #64748B;
+    margin: 8px 16px;
+    padding: 8px 16px;
+}
+
+.actions-card i {
+    margin-right: 10px;
 }
 
 /* Language Searchbar */
