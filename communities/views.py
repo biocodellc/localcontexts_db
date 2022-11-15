@@ -1115,6 +1115,17 @@ def edit_project(request, community_id, project_uuid):
             'urls': urls,
         }
         return render(request, 'communities/edit-project.html', context)
+    
+@login_required(login_url='login')
+def project_actions(request, pk, project_uuid):
+    community = Community.objects.get(id=pk)
+    project = Project.objects.get(unique_id=project_uuid)
+    context = {
+        'community': community,
+        'project': project,
+    }
+    return render(request, 'communities/project-actions.html', context)
+
 
 @login_required(login_url='login')
 def apply_labels(request, pk, project_uuid):

@@ -1,0 +1,174 @@
+{% extends 'auth-base.html' %} {% block title %} View Project {% endblock %} {% load static %} {% load custom_project_tags %} {% block main %}
+
+<div class="flex-this auto-margin" style="max-width: 1271px;">
+
+    <!-- PROJECT -->
+    <div class="project-card content-card-space">
+        <h2>{{ project.title }}</h2>
+        <div>
+            <div class="flex-this">
+                <div class="project-left-sidebar"><p class="bold">Date created</p></div>
+                <div><p>{{ project.date_added|date:'d M Y' }}</p></div>
+            </div>
+            <div class="flex-this">
+                <div class="project-left-sidebar"><p class="bold">Project type</p></div>
+                <div><p>{{ project.project_type }}</p></div>
+            </div>
+            <div class="flex-this">
+                <div class="project-left-sidebar"><p class="bold">Project Visibility</p></div>
+                <div><p>{{ project.project_privacy }}</p></div>
+            </div>
+            <div class="flex-this">
+                <div class="project-left-sidebar"><p class="bold">Creator</p></div>
+                <div><p>{CREATOR}</p></div>
+            </div>
+            <div class="flex-this">
+                <div class="project-left-sidebar"><p class="bold">Status</p></div>
+                <div><p>Active</p></div>
+            </div>
+        </div>
+
+        <div>
+            <div class="border-top-solid-teal border-bottom-solid-teal">
+                <h3>Project details</h3>
+            </div>
+            <div>
+                <div class="flex-this">
+                    <div class="project-left-sidebar"><p class="bold">Description</p></div>
+                    <div><p>{{ project.description|linebreaks }}</p></div>
+                </div>
+                <div class="flex-this">
+                    <div class="project-left-sidebar"><p class="bold">Contact</p></div>
+                    <div><p>{{ project.project_contact }}<br>{{ project.project_contact_email }}</p></div>
+                </div>
+                <div class="flex-this">
+                    <div class="project-left-sidebar"><p class="bold">Links</p></div>
+                    <div> 
+                        {% if project.urls %}
+                            <ul>
+                                {% for url in project.urls %}
+                                    <li>
+                                        <a href="{{ url }}" class="darkteal-text underline-hover">{{ url }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>No links added</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="flex-this">
+                    <div class="project-left-sidebar"><p class="bold">Contributors</p></div>
+                    <div>                    
+                        <ul>
+                            {% if project.project_contributors.communities %}
+                                {% for community in project.project_contributors.communities.all %}
+                                    <li>{{ community.community_name }} | Community</li>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if project.project_contributors.institutions %}
+                                {% for institution in project.project_contributors.institutions.all %}
+                                    <li>{{ institution.institution_name }} | Institution <br></li>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if project.project_contributors.researchers %}
+                                {% for researcher in project.project_contributors.researchers.all %}
+                                    <li>
+                                        <div class="researcher-hover">
+                                            {% if researcher.orcid %}
+                                                <a class="darkteal-text" itemprop="sameAs" content="{{ researcher.orcid }}" href="{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
+                                                    <img loading="lazy" src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="margin-top:2.5px;" alt="ORCID iD icon">
+                                                </a>
+                                            {% endif %}
+
+                                            {% firstof researcher.user.get_full_name researcher.user.username %} | Researcher
+                                            <div class="researcher-hover-info">
+                                                <p>
+                                                    <strong>Primary Institution Affiliation:</strong> {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% else %} None specified {% endif %}<br>
+                                                    <strong>About:</strong> {% if researcher.description %} {{ researcher.description }} {% else %} No description available{% endif %}
+                                                </p>
+                                                
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+                            {% if project.additional_contributors %}
+                                {% for contributor in project.additional_contributors.all %}
+                                    <li>{{ contributor.name }} | Contributor </li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="flex-this">
+                    <div class="project-left-sidebar"><p class="bold">Identifiers</p></div>
+                    <div>
+                        <p>
+                            <span class="bold">Local Contexts Project ID</span><br>
+                            {{ project.unique_id }}<br><br>
+
+                            <span class="bold">Providers ID</span><br>
+                            {{ project.providers_id }}<br><br>
+
+                            <span class="bold">Publication DOI</span><br>
+                            {{ project.publication_doi }}<br><br>
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-top-solid-teal border-bottom-solid-teal">
+                <h3>Project Labels</h3>
+            </div>
+            <div>
+                {% for tklabel in project.tk_labels.all %}
+                    <div class="flex-this">
+                        <div class="project-left-sidebar"><p class="bold">{{ tklabel.name }}</p></div>
+                        <div>
+                            <div class="flex-this margin-top-16">
+                                <div>
+                                    {% include 'tklabels/which-label.html' %} 
+                                </div>
+                                <div class="margin-left-16">
+                                    <p class="no-top-margin bold">Label applied by {{ tklabel.community.community_name }}</p><br>
+                                </div>
+                            </div>
+
+                            <h3>{{ tklabel.language }}</h3>
+                            <p>
+                                {{ tklabel.label_text }} <br>
+                            </p>
+                            {% for translation in tklabel.tklabel_translation.all %}
+                                <h3>{{ translation.language }}</h3>
+                                <p>
+                                    {{ translation.translated_text }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- ACTIONS  -->
+    <div class="margin-left-16">
+        <div class="actions-card content-card-space flex-this column">
+            <h3 class="no-top-margin">Actions</h3>
+            <a class="grey-text block" href="#">Apply Labels</a>
+            <a class="grey-text block" href="#">Edit Project</a>
+            <a class="grey-text block" href="#">Notify Communities</a>
+            <a class="grey-text block" href="#">Archive</a>
+            <hr>
+            <a class="grey-text block" href="#">Share</a>
+            <a class="grey-text block" href="#">Download</a>
+        </div>        
+    </div>
+
+</div>
+
+{% endblock %}

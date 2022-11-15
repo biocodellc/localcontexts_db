@@ -37,6 +37,10 @@
                     <a href="{% url 'view-project' project.unique_id %}" class="primary-btn white-btn">View <i class="fa fa-arrow-right"></i></a>
                 </div>
 
+                <div class="margin-right-1">
+                    <a href="{% url 'community-project-actions' community.id project.unique_id %}" class="primary-btn white-btn">Actions <i class="fa fa-arrow-right"></i></a>
+                </div>
+
                 {% if request.user == project.project_creator %}
                     <div class="margin-right-1">
                         <a
