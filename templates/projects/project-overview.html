@@ -1,11 +1,24 @@
 {% extends 'base.html' %} {% block title %} Projects {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
 
-<div id="full-div-card-{{ project.unique_id }}" class="content-card-v2 content-card-space show filterProjects">
+<div id="full-div-card-{{ project.unique_id }}" class="content-card-v2 content-card-space show">
     <div id="project-unique-{{ project.unique_id }}" class="flex-this space-between">
 
         <div class="w-60 flex-this column">
-            <!-- title -->
-            <div><h2 class="no-bottom-margin no-top-margin">{{ project.title }}</h2></div>
+            <div>
+                <a class="primary-black-text underline-hover"
+                    {% if community %}
+                        href="{% url 'community-project-actions' community.id project.unique_id %}" 
+                    {% endif %}
+                    {% if institution %}
+                        href="{% url 'institution-project-actions' institution.id project.unique_id %}" 
+                    {% endif %}
+                    {% if researcher %}
+                        href="{% url 'researcher-project-actions' researcher.id project.unique_id %}" 
+                    {% endif %}
+                >
+                    <h2 class="no-bottom-margin no-top-margin">{{ project.title }}</h2>
+                </a>
+            </div>
             <div>
                 <p>
                     {{ project.date_added|date:'M d, Y' }} | 
@@ -14,11 +27,38 @@
                     {% else %} 
                         {{ project.project_type }} 
                     {% endif %}| 
-                    {{ project.project_privacy }}<br><br>
+                    {{ project.project_privacy }}<br>
 
-                    Created by: 
-                    {% which_account_created_project project as project_creator %}
-                    {{ project_creator }}
+                    {% for creator in project.project_creator_project.all %}
+
+                        {% if community %}
+                            {% if community == creator.community %}
+                                <span class="bold">Created by</span>
+                            {% else %}
+                                <span class="bold">Shared by</span>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if institution %}
+                            {% if institution == creator.institution %}
+                                <span class="bold">Created by</span>
+                            {% else %}
+                                <span class="bold">Shared by</span>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if researcher %}
+                            {% if researcher == creator.researcher %}
+                                <span class="bold">Created by</span>
+                            {% else %}
+                                <span class="bold">Shared by</span>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if creator.community %}{{ creator.community }}{% endif %}
+                        {% if creator.institution %}{{ creator.institution }}{% endif %}
+                        {% if creator.researcher %}{{ creator.researcher }}{% endif %}
+                    {% endfor %}
                 </p>
             </div>
             
@@ -26,20 +66,6 @@
 
         <div class="w-40 flex-this column align-right">
             <div class="flex-this margin-bottom-8 w-100 flex-end">
-
-                <div class="margin-right-1">
-                    <a 
-                        {% if community %}
-                            href="{% url 'community-project-actions' community.id project.unique_id %}" 
-                        {% endif %}
-                        {% if institution %}
-                            href="{% url 'institution-project-actions' institution.id project.unique_id %}" 
-                        {% endif %}
-                        {% if researcher %}
-                            href="{% url 'researcher-project-actions' researcher.id project.unique_id %}" 
-                        {% endif %}
-                        class="primary-btn white-btn">Actions <i class="fa fa-arrow-right"></i></a>
-                </div> 
 
                 <div class="text-align-right">
                     <a id="{{ project.unique_id }}" class="primary-btn white-btn" onclick='showMore(this)'>
@@ -170,8 +196,6 @@
         </div>
     
     </div>
-
-
 </div>
 
-{% endblock%}
+{% endblock %}
