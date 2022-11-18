@@ -2,7 +2,7 @@
 
     <!-- PROJECT -->
     <div class="project-card content-card-space">
-        <h2>{{ project.title }}</h2>
+        <h1>{{ project.title }}</h1>
         <div>
             <div class="flex-this">
                 <div class="project-left-sidebar"><p class="bold">Date created</p></div>
@@ -32,7 +32,7 @@
 
         <div>
             <div class="border-top-solid-teal border-bottom-solid-teal">
-                <h3>Project details</h3>
+                <h2>Project details</h2>
             </div>
             <div>
                 <div class="flex-this">
@@ -127,7 +127,7 @@
 
             {% if notices %}
                 <div class="border-top-solid-teal border-bottom-solid-teal">
-                    <h3>Project Notices</h3>
+                    <h2>Project Notices</h2>
                 </div>
                 <div>
                     {% for notice in notices %}
@@ -160,7 +160,7 @@
 
             {% if project.has_bclabels or project.has_tklabels %}
                 <div class="border-top-solid-teal border-bottom-solid-teal">
-                    <h3>Project Labels</h3>
+                    <h2>Project Labels</h2>
                 </div>
                 <div>
                     {% for tklabel in project.tk_labels.all %}
@@ -191,6 +191,43 @@
                     {% endfor %}
                 </div>
             {% endif %}
+
+            <div class="border-top-solid-teal border-bottom-solid-teal">
+                <h2>Project messages</h2>
+            </div>
+            <div>
+                <div class="border-top-grey">
+                    <p style="font-size: 19px;">Messages with <span class="bold">Community</span></p>
+                </div>
+                <div class="border-top-grey">
+                    <p>
+                        <span class="bold">Community Name</span> <span class="grey-text">Date</span><br><br>
+
+                        This is where the message will go
+                    </p>
+                </div>   
+                <div class="border-top-grey">
+                    <p>
+                        <span class="bold">Researcher Name</span> <span class="grey-text">Date</span><br><br>
+
+                        This is where the message will go
+                    </p>
+                </div>              
+            </div>
+
+            <div>
+                <div class="border-top-grey border-bottom-grey">
+                    <p style="font-size: 19px;">Messages with <span class="bold">Community</span></p>
+                </div>
+                <div style="border-bottom: 1px #C4C4C4 solid;">
+                    <p>
+                        <span class="bold">Community Name</span> <span class="grey-text">Date</span><br><br>
+
+                        This is where the message will go
+                    </p>
+                </div>                
+            </div>
+
 
         </div>
     </div>

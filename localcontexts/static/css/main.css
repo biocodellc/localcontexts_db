@@ -164,6 +164,7 @@ input:focus {
 .p-24 { font-size: 24px; }
 .font-size-14 { font-size: 14px; }
 .font-size-12 { font-size: 12px; }
+.font-size-19 { font-size: 19px; }
 
 /* Underline text on hover */
 .underline-hover:hover { text-decoration: underline; }
@@ -993,6 +994,10 @@ button[disabled],
     color: #64748B;
     margin: 8px 16px;
     padding: 8px 16px;
+}
+
+.actions-card a:hover {
+    background-color: #CCE3E7;
 }
 
 .actions-card i {
