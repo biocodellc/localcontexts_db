@@ -48,10 +48,6 @@ def define(val=None):
   return val
 
 @register.simple_tag
-def which_communities_notified(project):
-    return ProjectStatus.objects.select_related('community').filter(project=project)
-
-@register.simple_tag
 def connections_collaborative_projects(target_account, collaborating_account):
     projects = Project.objects.none()
     projects_list = []

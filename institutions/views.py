@@ -433,29 +433,8 @@ def institution_projects(request, pk):
         p = Paginator(projects, 10)
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
-        
-        form = ProjectCommentForm(request.POST or None)
 
-        if request.method == 'POST':
-            project_uuid = request.POST.get('project-uuid')
-            community_id = request.POST.get('community-id')
-            community = Community.objects.get(id=community_id)
-
-            if request.POST.get('message'):
-                if form.is_valid():
-                    data = form.save(commit=False)
-
-                    if project_uuid:
-                        project = Project.objects.get(unique_id=project_uuid)
-                        data.project = project
-
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-                    return redirect('institution-projects', institution.id)
-            else:
-                return redirect('institution-projects', institution.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -467,7 +446,6 @@ def institution_projects(request, pk):
         context = {
             'projects': projects,
             'institution': institution,
-            'form': form,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -501,28 +479,7 @@ def projects_with_labels(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == 'POST':
-            project_uuid = request.POST.get('project-uuid')
-            community_id = request.POST.get('community-id')
-            community = Community.objects.get(id=community_id)
-
-            if request.POST.get('message'):
-                if form.is_valid():
-                    data = form.save(commit=False)
-
-                    if project_uuid:
-                        project = Project.objects.get(unique_id=project_uuid)
-                        data.project = project
-
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-                    return redirect('institution-projects-labels', institution.id)
-            else:
-                return redirect('institution-projects-labels', institution.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -534,7 +491,6 @@ def projects_with_labels(request, pk):
         context = {
             'projects': projects,
             'institution': institution,
-            'form': form,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -566,28 +522,7 @@ def projects_with_notices(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == 'POST':
-            project_uuid = request.POST.get('project-uuid')
-            community_id = request.POST.get('community-id')
-            community = Community.objects.get(id=community_id)
-
-            if request.POST.get('message'):
-                if form.is_valid():
-                    data = form.save(commit=False)
-
-                    if project_uuid:
-                        project = Project.objects.get(unique_id=project_uuid)
-                        data.project = project
-
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-                    return redirect('institution-projects-notices', institution.id)
-            else:
-                return redirect('institution-projects-notices', institution.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -599,7 +534,6 @@ def projects_with_notices(request, pk):
         context = {
             'projects': projects,
             'institution': institution,
-            'form': form,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -621,28 +555,7 @@ def projects_creator(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
 
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == 'POST':
-            project_uuid = request.POST.get('project-uuid')
-            community_id = request.POST.get('community-id')
-            community = Community.objects.get(id=community_id)
-
-            if request.POST.get('message'):
-                if form.is_valid():
-                    data = form.save(commit=False)
-
-                    if project_uuid:
-                        project = Project.objects.get(unique_id=project_uuid)
-                        data.project = project
-
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-                    return redirect('institution-projects-creator', institution.id)
-            else:
-                return redirect('institution-projects-creator', institution.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -654,7 +567,6 @@ def projects_creator(request, pk):
         context = {
             'projects': projects,
             'institution': institution,
-            'form': form,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -679,29 +591,7 @@ def projects_contributor(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == 'POST':
-            project_uuid = request.POST.get('project-uuid')
-
-            community_id = request.POST.get('community-id')
-            community = Community.objects.get(id=community_id)
-
-            if request.POST.get('message'):
-                if form.is_valid():
-                    data = form.save(commit=False)
-
-                    if project_uuid:
-                        project = Project.objects.get(unique_id=project_uuid)
-                        data.project = project
-
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-                    return redirect('institution-projects-contributor', institution.id)
-            else:
-                return redirect('institution-projects-contributor', institution.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -713,7 +603,6 @@ def projects_contributor(request, pk):
         context = {
             'projects': projects,
             'institution': institution,
-            'form': form,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -857,6 +746,20 @@ def project_actions(request, pk, project_uuid):
         project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
         notices = Notice.objects.filter(project=project, archived=False)
         creator = ProjectCreator.objects.get(project=project)
+        form = ProjectCommentForm(request.POST or None)
+
+        if request.method == 'POST':
+            community_id = request.POST.get('community-id')
+            community = Community.objects.get(id=community_id)
+
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.project = project
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('institution-project-actions', institution.id, project.unique_id)
 
         context = {
             'member_role': member_role,
@@ -864,6 +767,7 @@ def project_actions(request, pk, project_uuid):
             'project': project,
             'notices': notices,
             'creator': creator,
+            'form': form,
         }
         return render(request, 'institutions/project-actions.html', context)
 
