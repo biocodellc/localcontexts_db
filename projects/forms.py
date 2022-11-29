@@ -18,12 +18,12 @@ class CreateProjectForm(forms.ModelForm):
         ('Exhibition', 'Exhibition'),
         ('Other', 'Other'),
     )
-    project_privacy = forms.ChoiceField(label=_('Who can view this project?'), choices=PRIVACY, initial='Public', widget=forms.RadioSelect(attrs={'class': 'ul-no-bullets'}))
+    project_privacy = forms.ChoiceField(label=_('Who can view this project?'), choices=PRIVACY, initial='Public', widget=forms.RadioSelect(attrs={'class': 'ul-no-bullets ul-no-padding'}))
     project_type = forms.ChoiceField(label=_('What is your project type? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
 
     class Meta:
         model = Project
-        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'providers_id', 'publication_doi', 'project_data_guid']
+        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'project_contact', 'project_contact_email', 'providers_id', 'publication_doi', 'project_data_guid']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-100'}),
             'other_type': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Specify other Project type'}),
@@ -33,7 +33,6 @@ class CreateProjectForm(forms.ModelForm):
             'publication_doi': forms.TextInput(attrs={'class': 'w-100'}),
             'project_data_guid': forms.TextInput(attrs={'class': 'w-100'}),
             'providers_id': forms.TextInput(attrs={'class': 'w-100'}),
-            'url': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
 # Create Project Person
@@ -58,6 +57,7 @@ ProjectPersonFormsetInline = inlineformset_factory(
         'name': forms.TextInput(attrs={'size': 35, 'placeholder': 'Contributor name'}),
         'email': forms.EmailInput(attrs={'size': 35, 'placeholder': 'Contributor email'}),
     },
+    can_delete=True,
 )
 
 class EditProjectForm(forms.ModelForm):
@@ -75,12 +75,12 @@ class EditProjectForm(forms.ModelForm):
         ('Exhibition', 'Exhibition'),
         ('Other', 'Other'),
     )
-    project_privacy = forms.ChoiceField(label=_('Who can view this project?'), choices=PRIVACY, widget=forms.RadioSelect())
+    project_privacy = forms.ChoiceField(label=_('Who can view this project?'), choices=PRIVACY, widget=forms.RadioSelect(attrs={'class': 'ul-no-bullets ul-no-padding'}))
     project_type = forms.ChoiceField(label=_('What is your project type? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
 
     class Meta:
         model = Project
-        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'url', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'providers_id']
+        fields = ['title', 'project_type', 'other_type', 'project_privacy', 'description', 'project_contact', 'project_contact_email', 'publication_doi', 'project_data_guid', 'providers_id']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'w-100'}),
             'other_type': forms.TextInput(attrs={'class': 'w-100', 'placeholder': 'Specify other Project type'}),
@@ -90,7 +90,6 @@ class EditProjectForm(forms.ModelForm):
             'publication_doi': forms.TextInput(attrs={'class': 'w-100'}),
             'project_data_guid': forms.TextInput(attrs={'class': 'w-100'}),
             'providers_id': forms.TextInput(attrs={'class': 'w-100'}),
-            'url': forms.TextInput(attrs={'class': 'w-100'}),
         }
 
 class CreateProjectNoteForm(forms.ModelForm):

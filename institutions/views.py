@@ -746,8 +746,13 @@ def create_project(request, pk):
                     data.project_page = f'http://{domain}/projects/{data.unique_id}'
                 else:
                     data.project_page = f'https://{domain}/projects/{data.unique_id}'
-                data.save()
                 
+                # Handle multiple urls, save as array
+                project_links = request.POST.getlist('project_urls')
+                data.urls = project_links
+
+                data.save()
+
                 # Add project to institution projects
                 creator = ProjectCreator.objects.select_related('institution').get(project=data)
                 creator.institution = institution
@@ -756,23 +761,16 @@ def create_project(request, pk):
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
                 create_notices(notices_selected, institution, data, None)
-
-                # Get lists of contributors entered in form
-                institutions_selected = request.POST.getlist('selected_institutions')
-                researchers_selected = request.POST.getlist('selected_researchers')
-
-                 # Get a project contributor object and add institution to it.
-                contributors = ProjectContributors.objects.prefetch_related('institutions').get(project=data)
-                contributors.institutions.add(institution)
                 
                 # Add selected contributors to the ProjectContributors object
-                add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
+                add_to_contributors(request, institution, data)
 
                 # Project person formset
                 instances = formset.save(commit=False)
                 for instance in instances:
-                    instance.project = data
-                    instance.save()
+                    if instance.name or instance.email:
+                        instance.project = data
+                        instance.save()
                     
                     # Send email to added person
                     send_project_person_email(request, instance.email, data.unique_id)
@@ -805,6 +803,7 @@ def edit_project(request, institution_id, project_uuid):
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
         notices = Notice.objects.none()
+        urls = project.urls
 
         # Check to see if notice exists for this project and pass to template
         if Notice.objects.filter(project=project).exists():
@@ -813,19 +812,20 @@ def edit_project(request, institution_id, project_uuid):
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
+                project_links = request.POST.getlist('project_urls')
+                data.urls = project_links
                 data.save()
 
                 instances = formset.save(commit=False)
                 for instance in instances:
-                    instance.project = data
-                    instance.save()
-
-                # Get lists of contributors entered in form
-                institutions_selected = request.POST.getlist('selected_institutions')
-                researchers_selected = request.POST.getlist('selected_researchers')
+                    if not instance.name or not instance.email:
+                        instance.delete()
+                    else:
+                        instance.project = data
+                        instance.save()
 
                 # Add selected contributors to the ProjectContributors object
-                add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
+                add_to_contributors(request, institution, data)
 
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
@@ -842,6 +842,7 @@ def edit_project(request, institution_id, project_uuid):
             'form': form,
             'formset': formset,
             'contributors': contributors,
+            'urls': urls,
         }
         return render(request, 'institutions/edit-project.html', context)
 
@@ -904,27 +905,24 @@ def connections(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
-        # TODO: figure out if this is needed
-        # institution_ids = list(chain(
-        #     institution.contributing_institutions.exclude(institutions__id=None).values_list('institutions__id', flat=True),
-        # ))
+        institutions = Institution.objects.none()
 
-        # researcher_ids = list(chain(
-        #     institution.contributing_institutions.exclude(researchers__id=None).values_list('researchers__id', flat=True),
-        # ))
+        researcher_ids = institution.contributing_institutions.exclude(researchers__id=None).values_list('researchers__id', flat=True)
+        community_ids = institution.contributing_institutions.exclude(communities__id=None).values_list('communities__id', flat=True)
 
-        community_ids = list(chain(
-            institution.contributing_institutions.exclude(communities__id=None).values_list('communities__id', flat=True),
-        ))
-        communities = Community.objects.select_related('community_creator').filter(id__in=community_ids)
-        # institutions = Institution.objects.select_related('institution_creator').filter(id__in=institution_ids)
-        # researchers = Researcher.objects.select_related('user').filter(id__in=researcher_ids)
-            
+        communities = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').filter(id__in=community_ids)
+        researchers = Researcher.objects.select_related('user').filter(id__in=researcher_ids)
+        
+        project_ids = institution.contributing_institutions.values_list('project__unique_id', flat=True)
+        contributors = ProjectContributors.objects.filter(project__unique_id__in=project_ids)
+        for c in contributors:
+            institutions = c.institutions.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').exclude(id=institution.id)
+
         context = {
             'member_role': member_role,
             'institution': institution,
             'communities': communities,
-            # 'researchers': researchers,
-            # 'institutions': institutions
+            'researchers': researchers,
+            'institutions': institutions,
         }
         return render(request, 'institutions/connections.html', context)

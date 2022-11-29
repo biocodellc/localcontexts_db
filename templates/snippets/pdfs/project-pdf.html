@@ -6,6 +6,21 @@
         <title>Project PDF</title>
         <style>
 
+            @font-face {
+                font-family: "BCSans";
+                src: url(localcontexts/static/fonts/BC-Sans-Font-woff/ttf/BCSans-Regular.ttf);
+            }
+
+            @font-face {
+                font-family: "BCSans";
+                src: url(localcontexts/static/fonts/BC-Sans-Font-woff/ttf/BCSans-Bold.ttf);
+                font-weight: bold;
+            }
+            
+            body {
+                font-family: "BCSans", sans-serif;
+            }
+
             h1 { font-size: 18px; }
 
             p {
@@ -90,9 +105,13 @@
                     {{ project.project_page }} <br>
                 {% endif %}
 
-                {% if project.url %}
-                    <strong>Project Link</strong><br>
-                    {{ project.url }}<br>
+                {% if project.urls %}
+                    <strong>Project Links</strong><br>
+                    <ul>
+                        {% for url in project.urls %}
+                            <li><a href="{{ url }}" class="darkteal-text underline-hover">{{ url }} <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
+                        {% endfor %}
+                    </ul>
                 {% endif %}
 
                 {% if project.description %}<br><strong>Project Description:</strong> {{ project.description|linebreaks }}<br>{% endif %}

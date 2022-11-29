@@ -39,7 +39,5 @@ def institution_contributing_projects(institution):
 
 @register.simple_tag
 def connections_count(institution):
-    contributor_ids = list(chain(
-        institution.contributing_institutions.exclude(communities__id=None).values_list('communities__id', flat=True),
-    ))
+    contributor_ids = institution.contributing_institutions.exclude(communities__id=None).values_list('communities__id', flat=True)
     return len(contributor_ids)

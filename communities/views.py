@@ -1,4 +1,3 @@
-import re
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
@@ -1031,6 +1030,11 @@ def create_project(request, pk):
                     data.project_page = f'http://{domain}/projects/{data.unique_id}'
                 else:
                     data.project_page = f'https://{domain}/projects/{data.unique_id}'
+                
+                # Handle multiple urls, save as array
+                project_links = request.POST.getlist('project_urls')
+                data.urls = project_links
+                    
                 data.save()
 
                 # Add project to community projects
@@ -1038,22 +1042,15 @@ def create_project(request, pk):
                 creator.community = community
                 creator.save()
 
-                # Get lists of contributors entered in form
-                institutions_selected = request.POST.getlist('selected_institutions')
-                researchers_selected = request.POST.getlist('selected_researchers')
-
-                # Get a project contributor object and add community to it.
-                contributors = ProjectContributors.objects.prefetch_related('communities').get(project=data)
-                contributors.communities.add(community)
-
                 # Add selected contributors to the ProjectContributors object
-                add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
+                add_to_contributors(request, community, data)
                 
                 # Project person formset
                 instances = formset.save(commit=False)
                 for instance in instances:
-                    instance.project = data
-                    instance.save()
+                    if instance.name or instance.email:
+                        instance.project = data
+                        instance.save()
                     # Send email to added person
                     send_project_person_email(request, instance.email, data.unique_id)
 
@@ -1087,23 +1084,25 @@ def edit_project(request, community_id, project_uuid):
         form = EditProjectForm(request.POST or None, instance=project)
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.prefetch_related('institutions', 'researchers', 'communities').get(project=project)
+        urls = project.urls
 
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
+                project_links = request.POST.getlist('project_urls')
+                data.urls = project_links
                 data.save()
 
                 instances = formset.save(commit=False)
                 for instance in instances:
-                    instance.project = data
-                    instance.save()
-
-                # Get lists of contributors entered in form
-                institutions_selected = request.POST.getlist('selected_institutions')
-                researchers_selected = request.POST.getlist('selected_researchers')
+                    if not instance.name or not instance.email:
+                        instance.delete()
+                    else:
+                        instance.project = data
+                        instance.save()
 
                 # Add selected contributors to the ProjectContributors object
-                add_to_contributors(request, contributors, institutions_selected, researchers_selected, data.unique_id)
+                add_to_contributors(request, community, data)
                 return redirect('community-projects', community.id)
 
         context = {
@@ -1113,6 +1112,7 @@ def edit_project(request, community_id, project_uuid):
             'form': form,
             'formset': formset,
             'contributors': contributors,
+            'urls': urls,
         }
         return render(request, 'communities/edit-project.html', context)
 
@@ -1217,22 +1217,26 @@ def connections(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        institution_ids = list(chain(
-            community.contributing_communities.exclude(institutions__id=None).values_list('institutions__id', flat=True),
-        ))
 
-        researcher_ids = list(chain(
-            community.contributing_communities.exclude(researchers__id=None).values_list('researchers__id', flat=True),
-        ))
+        communities = Community.objects.none()
 
-        institutions = Institution.objects.select_related('institution_creator').filter(id__in=institution_ids)
+        institution_ids = community.contributing_communities.exclude(institutions__id=None).values_list('institutions__id', flat=True)
+        researcher_ids = community.contributing_communities.exclude(researchers__id=None).values_list('researchers__id', flat=True)
+
+        institutions = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').filter(id__in=institution_ids)
         researchers = Researcher.objects.select_related('user').filter(id__in=researcher_ids)
+
+        project_ids = community.contributing_communities.values_list('project__unique_id', flat=True)
+        contributors = ProjectContributors.objects.filter(project__unique_id__in=project_ids)
+        for c in contributors:
+            communities = c.communities.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').exclude(id=community.id)
 
         context = {
             'member_role': member_role,
             'community': community,
             'researchers': researchers,
-            'institutions': institutions
+            'institutions': institutions,
+            'communities': communities,
         }
         return render(request, 'communities/connections.html', context)
         
@@ -1261,8 +1265,8 @@ def labels_pdf(request, pk):
     html = template.render(context)
 
     # create a pdf
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    # if error then show some funy view
+    pisa_status = pisa.CreatePDF(html, dest=response, encoding='UTF-8')
+    # if error then show view
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response

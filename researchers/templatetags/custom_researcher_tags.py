@@ -37,7 +37,5 @@ def researcher_contributing_projects(researcher):
 
 @register.simple_tag
 def connections_count(researcher):
-    contributor_ids = list(chain(
-        researcher.contributing_researchers.exclude(communities__id=None).values_list('communities__id', flat=True),
-    ))
+    contributor_ids = researcher.contributing_researchers.exclude(communities__id=None).values_list('communities__id', flat=True)
     return len(contributor_ids)

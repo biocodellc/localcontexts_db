@@ -14,6 +14,7 @@ class Profile(models.Model):
     position = models.CharField(verbose_name='position', max_length=80, blank=True, null=True)
     affiliation = models.CharField(verbose_name='affiliation', max_length=250, blank=True, null=True)
     preferred_language = models.CharField(verbose_name='preferred language', max_length=80, blank=True, null=True)
+    api_key = models.CharField(max_length=80, blank=True, null=True)
     languages_spoken = models.CharField(verbose_name='languages spoken', max_length=150, blank=True, null=True)    
     is_researcher = models.BooleanField(default=False, null=True)
     onboarding_on = models.BooleanField(default=True, null=True, blank=True)

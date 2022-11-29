@@ -139,7 +139,15 @@
     {% else %}
         {% for project in items %}
             {% include 'projects/project-overview.html' %}
-        {% endfor %}    
+        {% endfor %}  
+    {% endif %}
+
+    {% if not results and not items %}
+        <div class="w-100 center-text margin-top-16 margin-bottom-16" style="margin-top: 100px;">
+            <h2>There are no Projects yet</h2>
+            <h3>Let's create a Project!</h3>
+            <p>Click the button above to start.</p>
+        </div>  
     {% endif %}
 
     {% include 'snippets/pagination.html' %}
