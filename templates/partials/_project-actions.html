@@ -270,15 +270,23 @@
         {% project_status project as statuses %}
         {% if statuses %}
             <div class="actions-card content-card-space flex-this column">
-                <h3 class="no-top-margin no-bottom-margin">Communities Notified</h3>
+                <div class="flex-this">
+                    <h3 class="no-top-margin no-bottom-margin">Communities Notified</h3>
+                    <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                        <span class="tooltiptext">
+                            Listed below are the communities that have been notified about this Project. After the name of the notified community is the status of their decision about the Project.<br><br>
+                            <i class="bold">Seen</i><br> The community has acknowledged the Project but has not made a decision about applying Labels.<br>
+                            <i class="bold">No Labels Pending</i><br> The community will not apply Labels to the Project.<br>
+                            <i class="bold">Labels Pending</i><br> The community is deciding which Label(s) to apply to the Project.<br>
+                            <i class="bold">Labels Applied</i><br> The community has applied Labels to the Project.
+                        </span>
+                    </div>                     
+                </div>
 
                 <div class="border-bottom-grey">
                     <p>
-                        Listed below are the communities that have been notified about this Project. After the name of the notified community is the status of their decision about the Project.<br><br>
-                        <i class="bold">Seen</i><br> The community has acknowledged the Project but has not made a decision about applying Labels.<br>
-                        <i class="bold">No Labels Pending</i><br> The community will not apply Labels to the Project.<br>
-                        <i class="bold">Labels Pending</i><br> The community is deciding which Label(s) to apply to the Project.<br>
-                        <i class="bold">Labels Applied</i><br> The community has applied Labels to the Project.
+                        Listed below are the communities that have been notified about this Project 
+                        including the status of their decision about the Project.
                     </p>
                 </div>
 

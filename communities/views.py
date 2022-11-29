@@ -945,6 +945,7 @@ def edit_project(request, community_id, project_uuid):
         contributors = ProjectContributors.objects.prefetch_related('institutions', 'researchers', 'communities').get(project=project)
         urls = project.urls
 
+        # FIXME: notices being set back to archived=False on edit after labels have been applied to project
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
