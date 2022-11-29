@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from . import serializers as v2_serializers
 from rest_framework.viewsets import ViewSet
+from rest_framework_api_key.permissions import HasAPIKey
 
 class APIOverview(APIView):
     def get(self, request, format=None):
@@ -34,7 +35,32 @@ class OpenToCollaborateNotice(APIView):
         }
         return Response(api_urls)
 
+class ProjectList(generics.ListAPIView):
+    permission_classes = [HasAPIKey]
+    queryset = Project.objects.exclude(project_privacy='Private')
+    serializer_class = ProjectOverviewSerializer
+
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['^providers_id', '=unique_id', '$title']
+
+    # '^' starts-with search
+    # '=' exact matches
+    # '$' regex search
+
+class ProjectDetail(generics.RetrieveAPIView):
+    permission_classes = [HasAPIKey]
+    lookup_field = 'unique_id'
+    queryset = Project.objects.exclude(project_privacy='Private')
+
+    def get_serializer_class(self):
+        project = self.get_object()
+        if Notice.objects.filter(project=project, archived=False).exists():
+            return ProjectSerializer
+        else:
+            return ProjectNoNoticeSerializer
+
 class ProjectsByIdViewSet(ViewSet):
+    permission_classes = [HasAPIKey]
     def projects_by_user(self, request, pk):
         try:
             user = User.objects.get(id=pk)
@@ -86,3 +112,9 @@ class ProjectsByIdViewSet(ViewSet):
                 raise PermissionDenied({"message":"You don't have permission to view this project", "providers_id": providers_id})
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+# >>> api_key, key = APIKey.objects.create_key(name="testingcode")
+# >>> api_key
+# <APIKey: testingcode>
+# >>> key
+# 'vtegH08H.QLj4TGwtzzjxxzACHVyeynpVGSD2xdla'

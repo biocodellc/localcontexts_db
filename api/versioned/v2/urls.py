@@ -26,5 +26,5 @@ urlpatterns = [
     path('projects/institutions/<str:institution_id>/', projects_by_institution, name="api-projects-institution"),
     path('projects/researchers/<str:researcher_id>/', projects_by_researcher, name="api-projects-researcher"),
 
-    path('projects/multi/<unique_id>/', multisearch, name="api-projects-multi")
+    path('projects/multi/<unique_id>/', multisearch, name="api-projects-multi"),
 ]
