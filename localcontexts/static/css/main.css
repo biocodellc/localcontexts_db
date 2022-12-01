@@ -167,6 +167,8 @@ input:focus {
 
 /* Underline text on hover */
 .underline-hover:hover { text-decoration: underline; }
+/* Break up long text */
+.word-break { word-break: break-all; }
 
 /* TEXT COLORS */
 
