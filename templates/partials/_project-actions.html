@@ -1,5 +1,13 @@
 {% load custom_project_tags %}
 
+{% if request.user.is_authenticated %}
+    <div class="auto-margin" style="max-width: 1271px;">
+        <a class="pointer underline-hover margin-top-2 margin-left-8" onClick="window.history.back();return false;">
+            <i class="fa fa-arrow-left darkteal-text margin-right-8"></i> Go back
+        </a>
+    </div>
+{% endif %}
+
 <div class="flex-this auto-margin" style="max-width: 1271px;">
 
     <!-- PROJECT -->
