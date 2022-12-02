@@ -61,7 +61,7 @@
                             <li>
                                 <a 
                                     class="darkteal-text underline-hover"
-                                    href="{% anchor 'community-projects' project.unique_id community.id %}" 
+                                    href="{% url 'community-project-actions' community.id project.unique_id %}" 
                                 >{{ project.title }}</a>
                             </li>
                         {% endfor %}
@@ -121,7 +121,7 @@
                                 <li>
                                     <a 
                                         class="darkteal-text underline-hover"
-                                        href="{% anchor 'community-projects' project.unique_id community.id %}" 
+                                        href="{% url 'community-project-actions' community.id project.unique_id %}" 
                                     >{{ project.title }}</a>
                                 </li>
                             {% endfor %}                                
@@ -184,7 +184,7 @@
                             <li>
                                 <a
                                     class="darkteal-text underline-hover"
-                                    href="{% anchor 'community-projects' project.unique_id community.id %}" 
+                                    href="{% url 'community-project-actions' community.id project.unique_id %}" 
                                 >
                                     {{ project.title }}
                                 </a>

@@ -60,7 +60,7 @@
                         <li>
                             <a 
                                 class="darkteal-text underline-hover"
-                                href="{% anchor 'institution-projects' project.unique_id institution.id %}"
+                                href="{% url 'institution-project-actions' institution.id project.unique_id %}"
                             >{{ project.title }}</a>
                         </li>
                     {% endfor %}
@@ -119,7 +119,7 @@
                             <li>
                                 <a 
                                     class="darkteal-text underline-hover"
-                                    href="{% anchor 'institution-projects' project.unique_id institution.id %}"
+                                    href="{% url 'institution-project-actions' institution.id project.unique_id %}"
                                 >{{ project.title }}</a>
                             </li>
                         {% endfor %}                                
@@ -181,7 +181,7 @@
                         <li>
                             <a
                                 class="darkteal-text underline-hover"
-                                href="{% anchor 'institution-projects' project.unique_id institution.id %}"
+                                href="{% url 'institution-project-actions' institution.id project.unique_id %}"
                             >
                                 {{ project.title }}
                             </a>

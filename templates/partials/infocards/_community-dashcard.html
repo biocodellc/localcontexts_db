@@ -49,7 +49,7 @@
                                         {% endif %}
                                         {% if n.notification_type == 'Projects' %}
                                             {% if n.reference_id %}
-                                                href="{% anchor 'community-projects' n.reference_id community.id %}"
+                                                href="{% url 'community-project-actions' community.id n.reference_id %}"
                                             {% else %}
                                                 href="{% url 'community-projects' community.id %}"
                                             {% endif %}
