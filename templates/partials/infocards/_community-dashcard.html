@@ -86,7 +86,7 @@
                 </div>
 
                 <!-- Settings -->
-                {% if request.user == community.community_creator %}
+                {% if request.user == community.community_creator or member_role == 'admin' %}
                     <div class="margin-left-8">
                         <a href="{% url 'update-community' community.id %}" class="darkteal-text primary-btn white-btn"> Settings <i class="fa fa-cog" aria-hidden="true"></i></a>
                     </div>
