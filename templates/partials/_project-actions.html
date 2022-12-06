@@ -202,12 +202,14 @@
                 </div>
             {% endif %}
 
-            <div class="border-top-solid-teal border-bottom-solid-teal">
-                <h2>Project messages</h2>
-            </div>
-            <div>
-                {% include 'projects/project-comment.html'%}
-            </div>
+            {% if request.user.is_authenticated %}
+                <div class="border-top-solid-teal border-bottom-solid-teal">
+                    <h2>Project messages</h2>
+                </div>
+                <div>
+                    {% include 'projects/project-comment.html'%}
+                </div>
+            {% endif %}
 
         </div>
     </div>
@@ -259,11 +261,16 @@
                     ><i class="fa-solid fa-user-group"></i> Notify Communities</a>
                 {% endif %}
 
-                <a class="block" href="#"><i class="fa-solid fa-box-archive"></i> Archive</a>
+                <!-- TODO: implement this -->
+                <!-- <a class="block" href="#"><i class="fa-solid fa-box-archive"></i> Archive</a> -->
                 <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
             {% endif %}
-            <a class="block" href="#"><i class="fa-solid fa-share-nodes"></i> Share</a>
-            <a class="block" href="{% url 'download-project-zip' project.unique_id %}"><i class="fa-solid fa-download"></i> Download</a>
+            {% if project.project_privacy == 'Public' %}
+                <a class="block pointer" onclick="copyProjectUrl('projectPageUrl')"><i class="fa-solid fa-share-nodes"></i> Share</a>
+                <input type="text" value="{{ project.project_page}}" id="projectPageUrl" class="hide">
+
+                <a class="block" href="{% url 'download-project-zip' project.unique_id %}"><i class="fa-solid fa-download"></i> Download</a>
+            {% endif %}
         </div>  
 
         <!-- Community: set project status -->
@@ -318,3 +325,15 @@
     </div>
 
 </div>
+
+<script>
+    function copyProjectUrl(projectPageUrl) {
+        let target = document.getElementById(projectPageUrl)
+        if (target.value) {
+            target.select()
+            target.setSelectionRange(0, 99999)
+            navigator.clipboard.writeText(target.value)
+            alert('Project Link copied to clipboard!')
+        }
+    }
+</script>

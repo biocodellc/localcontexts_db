@@ -6,7 +6,6 @@
     {% project_status project as statuses %}
 
     {% if institution %}
-
         {% if statuses %}
             {% for status in statuses %}
 
@@ -15,9 +14,9 @@
                         {% for comment in comments %}
                             {% if comment.community.community_name in status.community.community_name %}
 
-                                <div class="border-top-grey">
-                                    <p style="font-size: 19px;">Messages with <span class="bold">{{ comment.community }}</span></p>
-                                </div>
+                                <!-- <div class="border-top-grey">
+                                    <p style="font-size: 19px;">Messages with <span class="bold"> {# {{ comment.community }} #} </span></p>
+                                </div> -->
                                 <div class="border-top-grey">
                                     <p>
                                         <span class="bold">{% firstof comment.sender.get_full_name comment.sender.username %}</span> <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br><br>
@@ -36,8 +35,8 @@
                             {% include 'snippets/comment-box.html' %}
                         {% endif %}
                     {% endif %}
-            {% endfor %}
 
+            {% endfor %}
         {% endif %}
     {% endif %}
 
@@ -50,9 +49,9 @@
                 {% for comment in comments %}
                     {% if comment.community.community_name in status.community.community_name %}
 
-                        <div class="border-top-grey">
-                            <p style="font-size: 19px;">Messages with <span class="bold">{{ comment.community }}</span></p>
-                        </div>
+                        <!-- <div class="border-top-grey">
+                            <p style="font-size: 19px;">Messages with <span class="bold"> {# {{ comment.community }} #} </span></p>
+                        </div> -->
                         <div class="border-top-grey">
                             <p>
                                 <span class="bold">{% firstof comment.sender.get_full_name comment.sender.username %}</span> <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br><br>
@@ -74,14 +73,13 @@
 
     <!-- COMMUNITY  -->
     {% if community %}
-
         {% project_comments project community as comments %}
 
         {% if comments %}
             {% for comment in comments %}
-                <div class="border-top-grey">
-                    <p style="font-size: 19px;">Messages with <span class="bold">{{ comment.community }}</span></p>
-                </div>
+                <!-- <div class="border-top-grey">
+                    <p style="font-size: 19px;">Messages with <span class="bold"> {# {{ comment.community }} #} </span></p>
+                </div> -->
                 <div class="border-top-grey">
                     <p>
                         <span class="bold">{% firstof comment.sender.get_full_name comment.sender.username %}</span> <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br><br>

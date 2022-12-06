@@ -26,18 +26,19 @@
                     {% csrf_token %}
                     <input id="status-selection-input-{{ project.unique_id }}" type="hidden" value="placeholder" name="project-status">
 
-                    <div class="border-top-solid-teal">
-                        <p>
-                            <i class="bold">Acknowledge Notice</i> <br> You have seen the Project but have not made a decision about applying Labels.<br>
-                            <i class="bold">Labels Pending</i> <br>  You are deciding which Label(s) to apply to the Project.<br>
-                            <i class="bold">No Labels Pending</i> <br> You will not apply Labels to the Project.<br>
-                            <i class="bold">Labels Applied</i> <br> This will automatically be your status if you have applied Labels to the Project.
-                        </p>                            
-                    </div>
-
                     <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
 
-                    <div><span>Project Status</span></div>
+                    <div>
+                        <span>Project Status</span>
+                        <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                            <span class="tooltiptext">
+                                <i class="bold">Acknowledge Notice</i> <br> You have seen the Project but have not made a decision about applying Labels.<br>
+                                <i class="bold">Labels Pending</i> <br>  You are deciding which Label(s) to apply to the Project.<br>
+                                <i class="bold">No Labels Pending</i> <br> You will not apply Labels to the Project.<br>
+                                <i class="bold">Labels Applied</i> <br> This will automatically be your status if you have applied Labels to the Project.
+                            </span>
+                        </div> 
+                    </div>
                     <div class="flex-this w-100">
                         <div class="w-100">
                             <select id="select-{{ project.unique_id }}" onchange="setProjectStatus(this)" class="w-100">
