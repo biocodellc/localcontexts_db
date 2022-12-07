@@ -39,17 +39,6 @@
                     </a>
                 </div> 
             {% endif %}
-
-            {% if project.urls %}
-                <div class="margin-bottom-16">
-                    <div><h3 class="no-top-margin">Project Links</h3></div>
-                        <ul>
-                            {% for url in project.urls %}
-                                <li><a href="{{ url }}" class="darkteal-text underline-hover" target="_blank" rel="noopener">{{ url }} <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
-                            {% endfor %}
-                        </ul>
-                </div> 
-            {% endif %}
             
         </div>
         <div class="flex-this flex-end">

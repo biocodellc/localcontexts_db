@@ -266,7 +266,7 @@
                 <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
             {% endif %}
             {% if project.project_privacy == 'Public' %}
-                <a class="block pointer" onclick="copyProjectUrl('projectPageUrl')"><i class="fa-solid fa-share-nodes"></i> Share</a>
+                <a id="shareBtn" class="block pointer" onclick="copyProjectUrl('projectPageUrl', 'shareBtn')"><i class="fa-solid fa-share-nodes"></i> Share</a>
                 <input type="text" value="{{ project.project_page}}" id="projectPageUrl" class="hide">
 
                 <a class="block" href="{% url 'download-project-zip' project.unique_id %}"><i class="fa-solid fa-download"></i> Download</a>
@@ -327,13 +327,19 @@
 </div>
 
 <script>
-    function copyProjectUrl(projectPageUrl) {
+    function copyProjectUrl(projectPageUrl, elemID) {
         let target = document.getElementById(projectPageUrl)
+        let copyBtn = document.getElementById(elemID)
+        let initialHTML = copyBtn.innerHTML
+        
         if (target.value) {
             target.select()
             target.setSelectionRange(0, 99999)
             navigator.clipboard.writeText(target.value)
-            alert('Project Link copied to clipboard!')
+            copyBtn.innerHTML = 'Project link copied!'
+            setTimeout(() => {
+                copyBtn.innerHTML = initialHTML
+            }, 1500)
         }
     }
 </script>
