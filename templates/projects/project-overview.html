@@ -21,13 +21,16 @@
             </div>
             <div>
                 <p>
-                    {{ project.date_added|date:'M d, Y' }} | 
-                    {% if project.project_type == 'Other' %} 
-                        <span class="bold">{{ project.other_type }} </span>
-                    {% else %} 
-                        {{ project.project_type }} 
-                    {% endif %}| 
-                    {{ project.project_privacy }}<br>
+                    <span class="bold block margin-bottom-8">     
+                        {{ project.date_added|date:'M d, Y' }} | 
+                        {% if project.project_type == 'Other' %} 
+                            {{ project.other_type }}
+                        {% else %} 
+                            {{ project.project_type }} 
+                        {% endif %}| 
+                        {{ project.project_privacy }}
+                    </span>
+
 
                     {% for creator in project.project_creator_project.all %}
 
