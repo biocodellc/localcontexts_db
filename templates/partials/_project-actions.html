@@ -202,14 +202,7 @@
                 </div>
             {% endif %}
 
-            {% if request.user.is_authenticated %}
-                <div class="border-top-solid-teal border-bottom-solid-teal">
-                    <h2>Project messages</h2>
-                </div>
-                <div>
-                    {% include 'projects/project-comment.html'%}
-                </div>
-            {% endif %}
+            {% include 'projects/project-comment.html'%}
 
         </div>
     </div>

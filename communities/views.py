@@ -996,7 +996,7 @@ def project_actions(request, pk, project_uuid):
                         data = form.save(commit=False)
                         data.project = project
                         data.sender = request.user
-                        data.community = community
+                        data.sender_affiliation = community.community_name
                         data.save()
                         project_status_seen_at_comment(request.user, community, creator, project)
                         return redirect('community-project-actions', community.id, project.unique_id)

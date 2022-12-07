@@ -1,103 +1,32 @@
 {% load static %} {% load custom_project_tags %}
-<div>
-
-    <!-- RESEARCHER AND INSTITUTION -->
-
-    {% project_status project as statuses %}
-
-    {% if institution %}
-        {% if statuses %}
-            {% for status in statuses %}
-
-                {% project_comments project status.community as comments %}
-                    {% if comments %}
-                        {% for comment in comments %}
-                            {% if comment.community.community_name in status.community.community_name %}
-
-                                <!-- <div class="border-top-grey">
-                                    <p style="font-size: 19px;">Messages with <span class="bold"> {# {{ comment.community }} #} </span></p>
-                                </div> -->
-                                <div class="border-top-grey">
-                                    <p>
-                                        <span class="bold">{% firstof comment.sender.get_full_name comment.sender.username %}</span> <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br><br>
-                                        {{ comment.message }}
-                                    </p>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                        {% if member_role == 'admin' or member_role == 'editor' %}
-                            {% include 'snippets/comment-box.html' %}
-                        {% endif %} 
-                    {% else %}
-                        <p class="center-text">No messages yet</p>
-
-                        {% if member_role == 'admin' or member_role == 'editor' %}
-                            {% include 'snippets/comment-box.html' %}
-                        {% endif %}
-                    {% endif %}
-
-            {% endfor %}
-        {% endif %}
-    {% endif %}
-
-{% if researcher %}
-    {% if statuses %}
-        {% for status in statuses %}
-
-            {% project_comments project status.community as comments %}
-            {% if comments %}
-                {% for comment in comments %}
-                    {% if comment.community.community_name in status.community.community_name %}
-
-                        <!-- <div class="border-top-grey">
-                            <p style="font-size: 19px;">Messages with <span class="bold"> {# {{ comment.community }} #} </span></p>
-                        </div> -->
-                        <div class="border-top-grey">
-                            <p>
-                                <span class="bold">{% firstof comment.sender.get_full_name comment.sender.username %}</span> <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br><br>
-                                {{ comment.message }}
-                            </p>
-                        </div>
-                    {% endif %}
+{% if request.user.is_authenticated %}
+    {% if 'projects/actions/' in request.path %}
+        <div class="border-top-solid-teal border-bottom-solid-teal">
+            <h2>Project messages</h2>
+        </div>
+        <div>
+            <div>
+                {% for comment in project.project_comment.all %}
+                    <div class="border-top-grey">
+                        <p>
+                            <span class="bold">{% firstof comment.sender.get_full_name comment.sender.username %} | {{ comment.sender_affiliation }}</span> <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br><br>
+                            {{ comment.message }}
+                        </p>
+                    </div>
+                {% empty %}
+                    <p class="center-text">No messages yet</p>
                 {% endfor %}
-                {% include 'snippets/comment-box.html' %}
-            {% else %}
-                <p class="center-text">No messages yet</p>
-                {% include 'snippets/comment-box.html' %}
-            {% endif %}
 
-        {% endfor %}
+                {% if institution or community %}
+                    {% if member_role == 'admin' or member_role == 'editor' %}
+                        {% include 'snippets/comment-box.html' %}
+                    {% endif %} 
+                {% endif %}
+
+                {% if researcher %}
+                    {% include 'snippets/comment-box.html' %}
+                {% endif %}
+            </div>
+        </div>
     {% endif %}
 {% endif %}
-
-
-    <!-- COMMUNITY  -->
-    {% if community %}
-        {% project_comments project community as comments %}
-
-        {% if comments %}
-            {% for comment in comments %}
-                <!-- <div class="border-top-grey">
-                    <p style="font-size: 19px;">Messages with <span class="bold"> {# {{ comment.community }} #} </span></p>
-                </div> -->
-                <div class="border-top-grey">
-                    <p>
-                        <span class="bold">{% firstof comment.sender.get_full_name comment.sender.username %}</span> <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br><br>
-                        {{ comment.message }}
-                    </p>
-                </div>
-            {% endfor %}
-            {% if member_role == 'admin' or member_role == 'editor' %}
-                {% include 'snippets/comment-box.html' %}
-            {% endif %} 
-        {% else %}
-            <p class="center-text">No messages yet</p>
-
-            {% if member_role == 'admin' or member_role == 'editor' %}
-                {% include 'snippets/comment-box.html' %}
-            {% endif %} 
-        {% endif %}
-
-    {% endif %}
-
-</div>

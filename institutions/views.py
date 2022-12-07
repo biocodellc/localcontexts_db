@@ -749,15 +749,12 @@ def project_actions(request, pk, project_uuid):
         form = ProjectCommentForm(request.POST or None)
 
         if request.method == 'POST':
-            community_id = request.POST.get('community-id')
-            community = Community.objects.get(id=community_id)
-
             if request.POST.get('message'):
                 if form.is_valid():
                     data = form.save(commit=False)
                     data.project = project
                     data.sender = request.user
-                    data.community = community
+                    data.sender_affiliation = institution.institution_name
                     data.save()
                     return redirect('institution-project-actions', institution.id, project.unique_id)
 
