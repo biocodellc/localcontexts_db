@@ -1017,7 +1017,7 @@ if (window.location.href.includes('connect-community') || window.location.href.i
     })
 }   
 
-function toggleKebabMenu(btn) {
+function toggleEllipsisMenu(btn) {
     let id = btn.id.split('ellipsis-')[1]
     let dropdown = document.getElementById(`ellipsis-content-${id}`)
     dropdown.classList.toggle('hide')

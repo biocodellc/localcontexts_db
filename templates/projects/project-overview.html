@@ -62,7 +62,7 @@
         <div class="w-40 flex-this column align-right">
             <div class="flex-this w-100 flex-end">
                 <div class="dropdown">
-                    <a onclick="toggleKebabMenu(this)" id="ellipsis-{{ project.unique_id }}" class="kebab pointer"><i class="fa-solid fa-ellipsis fa-xl primary-black-text"></i></a>
+                    <a onclick="toggleEllipsisMenu(this)" id="ellipsis-{{ project.unique_id }}" class="kebab pointer"><i class="fa-solid fa-ellipsis fa-xl primary-black-text"></i></a>
                     <div id="ellipsis-content-{{ project.unique_id }}" class="ellipsis-dropdown-content hide"> 
 
                         {% if request.user == project.project_creator %}
