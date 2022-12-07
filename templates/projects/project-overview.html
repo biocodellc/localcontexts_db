@@ -55,44 +55,36 @@
             </div>
         </div>
 
+        <!-- Ellipsis dropdown -->
         <div class="w-40 flex-this column align-right">
             <div class="flex-this w-100 flex-end">
-
-                <!-- TODO: set this up properly -->
                 <div class="dropdown">
-                    <a onclick="toggleKebabMenu(this)" id="kebab-{{ project.unique_id }}" class="kebab"><i class="fa-solid fa-ellipsis-vertical primary-black-text" style="font-size: 20px;"></i></a>
-                    <div id="kebab-content-{{ project.unique_id }}" class="kebab-dropdown-content hide"> 
+                    <a onclick="toggleKebabMenu(this)" id="ellipsis-{{ project.unique_id }}" class="kebab pointer"><i class="fa-solid fa-ellipsis fa-xl primary-black-text"></i></a>
+                    <div id="ellipsis-content-{{ project.unique_id }}" class="ellipsis-dropdown-content hide"> 
 
                         {% if request.user == project.project_creator %}
-                            <span>
-                                <div class="margin-right-1">
-                                    <a
-                                        class="darkteal-text"
+                            <a
+                                class="primary-black-text block"
 
-                                        {% if community %}
-                                            href="{% url 'edit-project' community.id project.unique_id %}"
-                                        {% endif %}
-                                        {% if institution %}
-                                            href="{% url 'inst-edit-project' institution.id project.unique_id %}"
-                                        {% endif %}                        
-                                        {% if researcher %}
-                                            href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
-                                        {% endif %}   
-                                    >
-                                        Edit Project 
-                                    </a>                   
-                                </div>                                        
-                            </span>
+                                {% if community %}
+                                    href="{% url 'edit-project' community.id project.unique_id %}"
+                                {% endif %}
+                                {% if institution %}
+                                    href="{% url 'inst-edit-project' institution.id project.unique_id %}"
+                                {% endif %}                        
+                                {% if researcher %}
+                                    href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
+                                {% endif %}   
+                            >
+                                Edit Project 
+                            </a>                                                         
                         {% endif %}   
                         
-                        <span>
-                            <a class="darkteal-text" href="{% url 'download-project-zip' project.unique_id %}">
-                                Download
-                            </a>                                          
-                        </span>
+                        <a class="primary-black-text block" href="{% url 'download-project-zip' project.unique_id %}">
+                            Download
+                        </a>                                          
                     </div>
                 </div>
-
             </div>
         </div>
 
