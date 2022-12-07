@@ -961,6 +961,14 @@ button[disabled],
     opacity: 1;
   }
 
+/* Tooltip on project action page */
+.actions-card .tooltiptext {
+    width: 250px;
+    margin-left: -60px;
+}
+
+.actions-card .tooltip .tooltiptext::after { left: 78%; }
+
 /* View Project: Researcher hover */
 .researcher-hover {
     cursor: pointer;
