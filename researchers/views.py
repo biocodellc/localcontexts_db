@@ -515,40 +515,40 @@ def edit_project(request, researcher_id, project_uuid):
 # @login_required(login_url='login')
 def project_actions(request, pk, project_uuid):
     researcher = Researcher.objects.get(id=pk)
-
-    # member_role = check_member_role(request.user, researcher)
-    # if member_role == False or not request.user.is_authenticated:
-    #     return redirect('view-project', project_uuid)    
-    # else:
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-    notices = Notice.objects.filter(project=project, archived=False)
-    creator = ProjectCreator.objects.get(project=project)
-    
-    form = ProjectCommentForm(request.POST or None)
 
-    if request.method == 'POST':
-        community_id = request.POST.get('community-id')
-        community = Community.objects.get(id=community_id)
+    user_can_view = checkif_user_researcher(researcher, request.user)
+    if user_can_view == False:
+        return redirect('view-project', project.unique_id)
+    else:
+        project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
+        notices = Notice.objects.filter(project=project, archived=False)
+        creator = ProjectCreator.objects.get(project=project)
+        
+        form = ProjectCommentForm(request.POST or None)
 
-        if request.POST.get('message'):
-            if form.is_valid():
-                data = form.save(commit=False)
-                data.project = project
-                data.sender = request.user
-                data.community = community
-                data.save()
-                return redirect('researcher-project-actions', researcher.id, project.unique_id)
+        if request.method == 'POST':
+            community_id = request.POST.get('community-id')
+            community = Community.objects.get(id=community_id)
 
+            if request.POST.get('message'):
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.project = project
+                    data.sender = request.user
+                    data.community = community
+                    data.save()
+                    return redirect('researcher-project-actions', researcher.id, project.unique_id)
 
-    context = {
-        # 'member_role': member_role,
-        'researcher': researcher,
-        'project': project,
-        'notices': notices,
-        'creator': creator,
-        'form': form,
-    }
-    return render(request, 'researchers/project-actions.html', context)
+        context = {
+            'user_can_view': user_can_view,
+            'researcher': researcher,
+            'project': project,
+            'notices': notices,
+            'creator': creator,
+            'form': form,
+        }
+        return render(request, 'researchers/project-actions.html', context)
 
 # Notify Communities of Project
 @login_required(login_url='login')
