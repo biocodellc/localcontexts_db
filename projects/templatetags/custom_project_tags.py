@@ -12,10 +12,6 @@ def show_project_notices(project):
     return Notice.objects.filter(project=project).values('archived', 'notice_type')
 
 @register.simple_tag
-def project_status(project):
-    return ProjectStatus.objects.select_related('community', 'project').filter(project=project)
-
-@register.simple_tag
 def get_all_researchers(researcher_to_exclude):
     if researcher_to_exclude:
         return Researcher.objects.select_related('user').exclude(id=researcher_to_exclude.id)

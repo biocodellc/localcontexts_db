@@ -738,15 +738,36 @@ def edit_project(request, institution_id, project_uuid):
 # @login_required(login_url='login')
 def project_actions(request, pk, project_uuid):
     institution = Institution.objects.get(id=pk)
+    project = Project.objects.prefetch_related(
+            'bc_labels', 
+            'tk_labels', 
+            'bc_labels__community', 
+            'tk_labels__community',
+            'bc_labels__bclabel_translation', 
+            'tk_labels__tklabel_translation',
+            ).get(unique_id=project_uuid)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or not request.user.is_authenticated:
         return redirect('view-project', project_uuid)    
     else:
-        project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
         notices = Notice.objects.filter(project=project, archived=False)
         creator = ProjectCreator.objects.get(project=project)
+        statuses = ProjectStatus.objects.select_related('community').filter(project=project)
+        comments = ProjectComment.objects.select_related('sender').filter(project=project)
+        entities_notified = EntitiesNotified.objects.get(project=project)
+        communities = Community.approved.all()
         form = ProjectCommentForm(request.POST or None)
+
+        communities_list = list(chain(
+            project.project_status.all().values_list('community__id', flat=True),
+        ))
+
+        if creator.community:
+            communities_list.append(creator.community.id)
+
+        communities_ids = list(set(communities_list)) # remove duplicate ids
+        communities = Community.approved.exclude(id__in=communities_ids)
 
         if request.method == 'POST':
             if request.POST.get('message'):
@@ -757,6 +778,34 @@ def project_actions(request, pk, project_uuid):
                     data.sender_affiliation = institution.institution_name
                     data.save()
                     return redirect('institution-project-actions', institution.id, project.unique_id)
+            
+            elif 'notify_btn' in request.POST: 
+                # Set private project to discoverable
+                if project.project_privacy == 'Private':
+                    project.project_privacy = 'Discoverable'
+                    project.save()
+
+                communities_selected = request.POST.getlist('selected_communities')
+                message = request.POST.get('notice_message')
+
+                # Reference ID and title for notification
+                title =  str(institution.institution_name) + ' has notified you of a Project.'
+
+                for community_id in communities_selected:
+                    # Add communities that were notified to entities_notified instance
+                    community = Community.objects.get(id=community_id)
+                    entities_notified.communities.add(community)
+
+                    # Create project status, first comment and  notification
+                    ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
+                    if message:
+                        ProjectComment.objects.create(project=project, community=community, sender=request.user, sender_affiliation=institution.institution_name, message=message)
+                    ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=str(project.unique_id), sender=request.user, title=title)
+                    entities_notified.save()
+
+                    # Create email 
+                    send_email_notice_placed(project, community, institution)
+                    return redirect('institution-project-actions', institution.id, project.unique_id)
 
         context = {
             'member_role': member_role,
@@ -765,59 +814,12 @@ def project_actions(request, pk, project_uuid):
             'notices': notices,
             'creator': creator,
             'form': form,
+            'communities': communities,
+            'statuses': statuses,
+            'comments': comments,
         }
         return render(request, 'institutions/project-actions.html', context)
 
-# Notify Communities of Project
-@login_required(login_url='login')
-def notify_others(request, pk, project_uuid):
-    institution = Institution.objects.select_related('institution_creator').get(id=pk)
-
-    member_role = check_member_role(request.user, institution)
-    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
-        return redirect('restricted')
-    else:
-        project = Project.objects.prefetch_related('bc_labels', 'tk_labels', 'project_status').get(unique_id=project_uuid)
-        entities_notified = EntitiesNotified.objects.get(project=project)
-        communities = Community.approved.all()
-        
-        if request.method == "POST":
-            # Set private project to discoverable
-            if project.project_privacy == 'Private':
-                project.project_privacy = 'Discoverable'
-                project.save()
-
-            communities_selected = request.POST.getlist('selected_communities')
-            message = request.POST.get('notice_message')
-
-            # Reference ID and title for notification
-            reference_id = str(project.unique_id)
-            title =  str(institution.institution_name) + ' has notified you of a Project.'
-
-            for community_id in communities_selected:
-                # Add communities that were notified to entities_notified instance
-                community = Community.objects.get(id=community_id)
-                entities_notified.communities.add(community)
-
-                # Create project status, first comment and  notification
-                ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
-                if message:
-                    ProjectComment.objects.create(project=project, community=community, sender=request.user, message=message)
-                ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
-                entities_notified.save()
-
-                # Create email 
-                send_email_notice_placed(project, community, institution)
-            
-            return redirect('institution-projects', institution.id)
-
-        context = {
-            'institution': institution,
-            'project': project,
-            'communities': communities,
-            'member_role': member_role,
-        }
-        return render(request, 'institutions/notify.html', context)
 
 @login_required(login_url='login')
 def connections(request, pk):

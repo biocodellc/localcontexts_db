@@ -1,7 +1,6 @@
 {% load static %} {% load custom_project_tags %}
 
-{% for creator in project.project_creator_project.all %}
-    {% if not creator.community %}
+{% if not creator.community %}
     <div class="actions-card content-card-space flex-this column">
 
         <div class="flex-this">
@@ -42,7 +41,6 @@
                     <div class="flex-this w-100">
                         <div class="w-100">
                             <select id="select-{{ project.unique_id }}" onchange="setProjectStatus(this)" class="w-100">
-                                {% project_status project as statuses %}
 
                                 {% if statuses %}
                                     {% for status in statuses %}
@@ -103,5 +101,5 @@
         </div>
 
     </div>
-    {% endif %}
-{% endfor %}
+{% endif %}
+
