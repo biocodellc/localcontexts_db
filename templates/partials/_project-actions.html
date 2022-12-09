@@ -2,8 +2,19 @@
 
 {% if request.user.is_authenticated %}
     <div class="auto-margin" style="max-width: 1271px;">
-        <a class="pointer underline-hover margin-top-2 margin-left-8" onClick="window.history.back();return false;">
-            <i class="fa fa-arrow-left darkteal-text margin-right-8"></i> Go back
+        <a 
+            class="pointer underline-hover margin-top-2 margin-left-8"
+            {% if community %}
+                href="{% url 'community-projects' community.id %}"
+            {% endif %}
+            {% if institution %}
+                href="{% url 'institution-projects' institution.id %}"
+            {% endif %}
+            {% if researcher %}
+                href="{% url 'researcher-projects' researcher.id %}"
+            {% endif %}
+        >
+            <i class="fa fa-arrow-left darkteal-text margin-right-8"></i><span class="primary-black-text">Back to Projects</span>
         </a>
     </div>
 {% endif %}

@@ -987,6 +987,8 @@ def project_actions(request, pk, project_uuid):
         project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
         notices = Notice.objects.filter(project=project, archived=False)
         creator = ProjectCreator.objects.get(project=project)
+        current_status = ProjectStatus.objects.filter(project=project, community=community).first()
+        statuses = ProjectStatus.objects.filter(project=project)
         form = ProjectCommentForm(request.POST or None)
 
         if request.method == "POST":
@@ -1015,6 +1017,8 @@ def project_actions(request, pk, project_uuid):
             'notices': notices,
             'creator': creator,
             'form': form,
+            'current_status': current_status,
+            'statuses': statuses,
         }
         return render(request, 'communities/project-actions.html', context)
 

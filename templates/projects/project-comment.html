@@ -9,7 +9,10 @@
                 {% for comment in comments %}
                     <div class="border-top-grey">
                         <p>
-                            <span class="bold">{% firstof comment.sender.get_full_name comment.sender.username %} | {{ comment.sender_affiliation }}</span> <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br><br>
+                            <span class="bold">
+                                {% firstof comment.sender.get_full_name comment.sender.username %} 
+                                {% if comment.sender_affiliation %} | {{ comment.sender_affiliation }} {% endif %}
+                            </span> <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br><br>
                             {{ comment.message }}
                         </p>
                     </div>
