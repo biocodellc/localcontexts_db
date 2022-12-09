@@ -3,13 +3,13 @@
 
     {% if project.project_privacy == 'Public' %}
 
-        {% include 'partials/_project.html' %}
+        {% include 'partials/_project-actions.html' %}
 
     {% elif project.project_privacy == 'Discoverable' %}
         <!-- Logged in user -->
         {% if request.user.is_authenticated %}
             {% if user_can_view %}
-                {% include 'partials/_project.html' %}
+                {% include 'partials/_project-actions.html' %}
             {% else %}
                 {% include 'partials/_project-discoverable.html' %}
             {% endif %}
@@ -21,7 +21,7 @@
 
         <!-- If project is private and project creator is accessing it -->
         {% if project.project_creator == request.user %}
-            {% include 'partials/_project.html' %}
+            {% include 'partials/_project-actions.html' %}
         {% else %}
             <div class="content-card-v2 content-card-space">
                 <h3>This Project is private and cannot be viewed.</h3>

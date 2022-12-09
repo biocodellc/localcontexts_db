@@ -1017,6 +1017,12 @@ if (window.location.href.includes('connect-community') || window.location.href.i
     })
 }   
 
+function toggleEllipsisMenu(btn) {
+    let id = btn.id.split('ellipsis-')[1]
+    let dropdown = document.getElementById(`ellipsis-content-${id}`)
+    dropdown.classList.toggle('hide')
+}
+
 // Copy text to clipboard
 function copyToClipboard(elemID) {
     let span = document.getElementById(elemID)
@@ -1269,4 +1275,29 @@ if (window.location.href.includes('labels/view/')) {
             }
         }
     }
+}
+
+// PROJECT ACTION PAGE
+function copyProjectUrl(projectPageUrl, elemID) {
+    let target = document.getElementById(projectPageUrl)
+    let copyBtn = document.getElementById(elemID)
+    let initialHTML = copyBtn.innerHTML
+    
+    if (target.value) {
+        target.select()
+        target.setSelectionRange(0, 99999)
+        navigator.clipboard.writeText(target.value)
+        copyBtn.innerHTML = `<i class="fa-solid fa-share-nodes"></i> Project link copied!`
+        setTimeout(() => {
+            copyBtn.innerHTML = initialHTML
+        }, 1500)
+    }
+}
+
+function openNotifyCommunitiesModal(elem) {
+    const modal = document.getElementById('notifyCommunitiesModal')
+    modal.classList.replace('hide', 'show')
+
+    const closeModalBtn = document.querySelector('.close-modal-btn')
+    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
 }

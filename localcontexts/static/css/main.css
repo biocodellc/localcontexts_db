@@ -164,6 +164,7 @@ input:focus {
 .p-24 { font-size: 24px; }
 .font-size-14 { font-size: 14px; }
 .font-size-12 { font-size: 12px; }
+.font-size-19 { font-size: 19px; }
 
 /* Underline text on hover */
 .underline-hover:hover { text-decoration: underline; }
@@ -772,9 +773,14 @@ button[disabled],
 
 /* Customize TK Label page */
 
-.img-sizedown-151-116 {
+.label-large {
     width: 151px;
     height: 116px;
+}
+
+.label-medium {
+    width: 96px;
+    height: 74px;
 }
 
 /* Small Labels  */
@@ -858,12 +864,28 @@ button[disabled],
     border-radius: 2px;
 }
 
-.show {
-    display: block;
+.show { display: block; }
+.hide { display: none; }
+
+/* Project overview: ellipsis menu */
+.ellipsis-dropdown-content {
+    position: absolute;
+    width: 189px;
+    height: auto;
+    z-index: 1;
+    background-color: #fff;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+    margin-left: -100px;
+    border-radius: 4px;
 }
 
-.hide {
-    display: none;
+.ellipsis-dropdown-content > a {
+    width: 100%;
+    padding: 10px 16px;
+}
+
+.ellipsis-dropdown-content > a:hover {
+    background-color: #cce3e7;
 }
 
 /* Textbox message add-members */
@@ -939,6 +961,14 @@ button[disabled],
     opacity: 1;
   }
 
+/* Tooltip on project action page */
+.actions-card .tooltiptext {
+    width: 250px;
+    margin-left: -60px;
+}
+
+.actions-card .tooltip .tooltiptext::after { left: 78%; }
+
 /* View Project: Researcher hover */
 .researcher-hover {
     cursor: pointer;
@@ -960,6 +990,47 @@ button[disabled],
 .researcher-hover:hover .researcher-hover-info {
     visibility: visible;
     opacity: 1;
+}
+
+/* View Project / Project Actions */
+.project-card, .actions-card {
+    background-color: #fff;
+    margin: 10px auto;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.project-card {
+    max-width: 880px;
+    min-width: 880px;
+}
+
+.actions-card {
+    max-width: 360px;
+    min-width: 360px;
+}
+
+.project-left-sidebar {
+    min-width: 260px;
+    margin-right: 10px;
+}
+
+.actions-card a {
+    color: #64748B;
+    margin: 8px 16px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.actions-card a:hover {
+    background-color: #CCE3E7;
+    border-radius: 4px;
+}
+
+.actions-card i {
+    margin-right: 10px;
 }
 
 /* Language Searchbar */
@@ -1009,3 +1080,4 @@ button[disabled],
     width: 110px;
     height: auto;
   }
+

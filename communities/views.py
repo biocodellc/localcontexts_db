@@ -690,35 +690,7 @@ def projects(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        # Form: Notify project contributor if project was seen
-        if request.method == "POST":
-            project_uuid = request.POST.get('project-uuid')
-            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-            creator = ProjectCreator.objects.get(project=project) # get project creator
-
-            if "notify-btn" in request.POST:
-                if project_uuid != None and project_uuid != 'placeholder':
-                    project_status = request.POST.get('project-status')
-                    set_project_status(request.user, project, community, creator, project_status)                            
-                    return redirect('community-projects', community.id)
-
-            # Form: Add comment to notice
-            elif "add-comment-btn" in request.POST:
-                if form.is_valid():
-                    if request.POST.get('message'):
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
-
-                        project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects', community.id)
-                    else:
-                        return redirect('community-projects', community.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -731,7 +703,6 @@ def projects(request, pk):
             'member_role': member_role,
             'projects': projects,
             'community': community,
-            'form': form,
             'items': page,
             'results': results,
         }
@@ -763,34 +734,7 @@ def projects_with_labels(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == "POST":
-            project_uuid = request.POST.get('project-uuid')
-            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-            creator = ProjectCreator.objects.get(project=project) # get project creator
-
-            if "notify-btn" in request.POST:
-                if project_uuid != None and project_uuid != 'placeholder':
-                    project_status = request.POST.get('project-status')
-                    set_project_status(request.user, project, community, creator, project_status)                                                        
-                    return redirect('community-projects-labels', community.id)
-
-            # Form: Add comment to notice
-            elif "add-comment-btn" in request.POST:
-                if form.is_valid():
-                    if request.POST.get('message'):
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
-
-                        project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects-labels', community.id)
-                    else:
-                        return redirect('community-projects-labels', community.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -802,7 +746,6 @@ def projects_with_labels(request, pk):
         context = {
             'projects': projects,
             'community': community,
-            'form': form,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -832,34 +775,7 @@ def projects_with_notices(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == "POST":
-            project_uuid = request.POST.get('project-uuid')
-            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-            creator = ProjectCreator.objects.get(project=project) # get project creator
-
-            if "notify-btn" in request.POST:
-                if project_uuid != None and project_uuid != 'placeholder':
-                    project_status = request.POST.get('project-status')
-                    set_project_status(request.user, project, community, creator, project_status)                            
-                    return redirect('community-projects-notices', community.id)
-
-            # Form: Add comment to notice
-            elif "add-comment-btn" in request.POST:
-                if form.is_valid():
-                    if request.POST.get('message'):
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
-
-                        project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects-notices', community.id)
-                    else:
-                        return redirect('community-projects-notices', community.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -871,7 +787,6 @@ def projects_with_notices(request, pk):
         context = {
             'projects': projects,
             'community': community,
-            'form': form,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -892,34 +807,7 @@ def projects_creator(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
 
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == "POST":
-            project_uuid = request.POST.get('project-uuid')
-            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-            creator = ProjectCreator.objects.select_related('researcher', 'institution').get(project=project) # get project creator
-
-            if "notify-btn" in request.POST:
-                if project_uuid != None and project_uuid != 'placeholder':
-                    project_status = request.POST.get('project-status')
-                    set_project_status(request.user, project, community, creator, project_status)                                                        
-                    return redirect('community-projects-creator', community.id)
-
-            # Form: Add comment to notice
-            elif "add-comment-btn" in request.POST:
-                if form.is_valid():
-                    if request.POST.get('message'):
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
-
-                        project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects-creator', community.id)
-                    else:
-                        return redirect('community-projects-creator', community.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -931,7 +819,6 @@ def projects_creator(request, pk):
         context = {
             'projects': projects,
             'community': community,
-            'form': form,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -954,34 +841,7 @@ def projects_contributor(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == "POST":
-            project_uuid = request.POST.get('project-uuid')
-            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-            creator = ProjectCreator.objects.get(project=project) # get project creator
-
-            if "notify-btn" in request.POST:
-                if project_uuid != None and project_uuid != 'placeholder':
-                    project_status = request.POST.get('project-status')
-                    set_project_status(request.user, project, community, creator, project_status)                            
-                    return redirect('community-projects-contributor', community.id)
-
-            # Form: Add comment to notice
-            elif "add-comment-btn" in request.POST:
-                if form.is_valid():
-                    if request.POST.get('message'):
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
-
-                        project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects-contributor', community.id)
-                    else:
-                        return redirect('community-projects-contributor', community.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -993,7 +853,6 @@ def projects_contributor(request, pk):
         context = {
             'projects': projects,
             'community': community,
-            'form': form,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -1086,6 +945,7 @@ def edit_project(request, community_id, project_uuid):
         contributors = ProjectContributors.objects.prefetch_related('institutions', 'researchers', 'communities').get(project=project)
         urls = project.urls
 
+        # FIXME: notices being set back to archived=False on edit after labels have been applied to project
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
@@ -1115,12 +975,59 @@ def edit_project(request, community_id, project_uuid):
             'urls': urls,
         }
         return render(request, 'communities/edit-project.html', context)
+    
+# @login_required(login_url='login')
+def project_actions(request, pk, project_uuid):
+    community = Community.objects.get(id=pk)
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False or not request.user.is_authenticated:
+        return redirect('view-project', project_uuid)    
+    else:
+        project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
+        notices = Notice.objects.filter(project=project, archived=False)
+        creator = ProjectCreator.objects.get(project=project)
+        current_status = ProjectStatus.objects.filter(project=project, community=community).first()
+        statuses = ProjectStatus.objects.filter(project=project)
+        form = ProjectCommentForm(request.POST or None)
+
+        if request.method == "POST":
+            if 'add-comment-btn' in request.POST:
+                if form.is_valid():
+                    if request.POST.get('message'):
+                        data = form.save(commit=False)
+                        data.project = project
+                        data.sender = request.user
+                        data.sender_affiliation = community.community_name
+                        data.save()
+                        project_status_seen_at_comment(request.user, community, creator, project)
+                        return redirect('community-project-actions', community.id, project.unique_id)
+                    else:
+                        return redirect('community-project-actions', community.id, project.unique_id)
+            elif "notify-btn" in request.POST:
+                project_status = request.POST.get('project-status')
+                set_project_status(request.user, project, community, creator, project_status)                            
+                return redirect('community-project-actions', community.id, project.unique_id)
+
+
+        context = {
+            'member_role': member_role,
+            'community': community,
+            'project': project,
+            'notices': notices,
+            'creator': creator,
+            'form': form,
+            'current_status': current_status,
+            'statuses': statuses,
+        }
+        return render(request, 'communities/project-actions.html', context)
+
 
 @login_required(login_url='login')
 def apply_labels(request, pk, project_uuid):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-    project_creator = ProjectCreator.objects.get(project=project)
+    creator = ProjectCreator.objects.get(project=project)
     bclabels = BCLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community, is_approved=True)
     notices = project.project_notice.all()
@@ -1201,7 +1108,7 @@ def apply_labels(request, pk, project_uuid):
         'member_role': member_role,
         'community': community,
         'project': project,
-        'project_creator': project_creator,
+        'creator': creator,
         'bclabels': bclabels,
         'tklabels': tklabels,
         'notes': notes,

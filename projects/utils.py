@@ -36,23 +36,24 @@ def set_project_status(user, project, community, creator, project_status):
                 send_simple_action_notification(user, creator.researcher, title, 'Projects', reference_id)
 
 def project_status_seen_at_comment(user, community, creator, project):
-    status = ProjectStatus.objects.get(project=project, community=community)
+    if ProjectStatus.objects.filter(project=project, community=community).exists():
+        status = ProjectStatus.objects.get(project=project, community=community)
 
-    truncated_project_title = str(project.title)[0:30]
-    reference_id = project.unique_id
+        truncated_project_title = str(project.title)[0:30]
+        reference_id = project.unique_id
 
-    # If message is sent, set notice status to 'Seen'
-    if status.seen == False:
-        status.seen = True
-        status.save()
+        # If message is sent, set notice status to 'Seen'
+        if status.seen == False:
+            status.seen = True
+            status.save()
 
-        title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
+            title = f'{community.community_name} has added a comment to your Project: {truncated_project_title}'
 
-        # Send Notification
-        if creator.institution:
-            send_simple_action_notification(user, creator.institution, title, 'Projects', reference_id)
-        if creator.researcher:
-            send_simple_action_notification(user, creator.researcher, title, 'Projects', reference_id)
+            # Send Notification
+            if creator.institution:
+                send_simple_action_notification(user, creator.institution, title, 'Projects', reference_id)
+            if creator.researcher:
+                send_simple_action_notification(user, creator.researcher, title, 'Projects', reference_id)
 
 
 def add_to_contributors(request, account, project):
