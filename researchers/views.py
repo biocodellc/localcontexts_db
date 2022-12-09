@@ -543,7 +543,7 @@ def project_actions(request, pk, project_uuid):
             communities_list.append(creator.community.id)
 
         communities_ids = list(set(communities_list)) # remove duplicate ids
-        communities = Community.approved.exclude(id__in=communities_ids)
+        communities = Community.approved.exclude(id__in=communities_ids).order_by('community_name')
 
         if request.method == 'POST':
             if request.POST.get('message'):
