@@ -224,15 +224,6 @@
             <h3 class="no-top-margin">Actions</h3>
 
             {% if request.user.is_authenticated %}
-                {% if community %}
-                    {% if community.is_approved %}
-                        {% if member_role == 'admin' or member_role == 'editor' %}
-                            <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
-                        {% endif %}
-                    {% else %}
-                        <a class="block" href="#"> <i class="fa-solid fa-tag"></i> Can't apply Labels yet</a>
-                    {% endif %}
-                {% endif %}
 
                 {% if request.user == project.project_creator %}
                     <a 
@@ -249,6 +240,23 @@
                     ><i class="fa-solid fa-pen-to-square"></i> Edit Project</a>
                 {% endif %}
 
+                {% if community %}
+                    {% if community.is_approved %}
+                        {% if member_role == 'admin' or member_role == 'editor' %}
+                            <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
+                        {% endif %}
+                    {% else %}
+                        <a class="block a-disabled"> 
+                            <i class="fa-solid fa-tag"></i> Apply Labels
+                            <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                                <span class="tooltiptext">
+                                    Your account needs to be confirmed before you can apply Labels. Please contact us if you have questions.
+                                </span>
+                            </div> 
+                        </a>
+                    {% endif %}
+                {% endif %}
+
                 {% if institution %}
                     {% if institution.is_approved %}
                         {% if member_role == 'admin' or member_role == 'editor' %}
@@ -257,6 +265,15 @@
                                 onclick="openNotifyCommunitiesModal(this)"
                             ><i class="fa-solid fa-user-group"></i> Notify Communities</a>
                         {% endif %}
+                    {% else %}
+                        <a class="block a-disabled"> 
+                            <i class="fa-solid fa-user-group"></i> Notify Communities
+                            <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                                <span class="tooltiptext">
+                                    Your account needs to be confirmed before you can notify communities. Please contact us if you have questions.
+                                </span>
+                            </div> 
+                        </a>
                     {% endif %}
                 {% endif %}
 

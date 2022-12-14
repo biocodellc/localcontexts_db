@@ -1038,7 +1038,7 @@ def apply_labels(request, pk, project_uuid):
     truncated_project_title = str(project.title)[0:30]
 
     member_role = check_member_role(request.user, community)
-    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+    if member_role == False or member_role == 'viewer' or community.is_approved == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
         form = CreateProjectNoteForm(request.POST or None)
