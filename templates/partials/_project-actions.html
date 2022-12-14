@@ -224,11 +224,6 @@
             <h3 class="no-top-margin">Actions</h3>
 
             {% if request.user.is_authenticated %}
-                {% if community %}
-                    {% if member_role == 'admin' or member_role == 'editor' %}
-                        <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
-                    {% endif %}
-                {% endif %}
 
                 {% if request.user == project.project_creator %}
                     <a 
@@ -245,6 +240,23 @@
                     ><i class="fa-solid fa-pen-to-square"></i> Edit Project</a>
                 {% endif %}
 
+                {% if community %}
+                    {% if community.is_approved %}
+                        {% if member_role == 'admin' or member_role == 'editor' %}
+                            <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
+                        {% endif %}
+                    {% else %}
+                        <a class="block a-disabled"> 
+                            <i class="fa-solid fa-tag"></i> Apply Labels
+                            <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                                <span class="tooltiptext">
+                                    Your account needs to be confirmed before you can apply Labels. Please contact us if you have questions.
+                                </span>
+                            </div> 
+                        </a>
+                    {% endif %}
+                {% endif %}
+
                 {% if institution %}
                     {% if institution.is_approved %}
                         {% if member_role == 'admin' or member_role == 'editor' %}
@@ -253,6 +265,15 @@
                                 onclick="openNotifyCommunitiesModal(this)"
                             ><i class="fa-solid fa-user-group"></i> Notify Communities</a>
                         {% endif %}
+                    {% else %}
+                        <a class="block a-disabled"> 
+                            <i class="fa-solid fa-user-group"></i> Notify Communities
+                            <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                                <span class="tooltiptext">
+                                    Your account needs to be confirmed before you can notify communities. Please contact us if you have questions.
+                                </span>
+                            </div> 
+                        </a>
                     {% endif %}
                 {% endif %}
 
@@ -263,8 +284,6 @@
                     ><i class="fa-solid fa-user-group"></i> Notify Communities</a>
                 {% endif %}
 
-                <!-- TODO: implement this -->
-                <!-- <a class="block" href="#"><i class="fa-solid fa-box-archive"></i> Archive</a> -->
                 <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
             {% endif %}
             {% if project.project_privacy == 'Public' %}
@@ -273,6 +292,13 @@
 
                 <a class="block" href="{% url 'download-project-zip' project.unique_id %}"><i class="fa-solid fa-download"></i> Download</a>
             {% endif %}
+
+            <!-- TODO: implement this -->
+            <!-- <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div> -->
+
+            <!-- <a class="block" href="#"><i class="fa-solid fa-box-archive"></i> Archive</a> -->
+            <!-- <a class="block" href="#"><i class="fa-solid fa-trash"></i> Delete Project</a> -->
+
         </div>  
 
         <!-- Community: set project status -->
@@ -323,63 +349,65 @@
 
 </div>
 
-<div id="notifyCommunitiesModal" class="modal hide">
+{% if institution.is_approved %}
+    <div id="notifyCommunitiesModal" class="modal hide">
 
-    <div class="modal-defaults notice-modal flex-this column w-100">
-        <div class="modal-content-padding w-100">
-            <form method="POST" autocomplete="off">
-                {% csrf_token %}
+        <div class="modal-defaults notice-modal flex-this column w-100">
+            <div class="modal-content-padding w-100">
+                <form method="POST" autocomplete="off">
+                    {% csrf_token %}
 
-                <div class="flex-this space-between">
-                    <div><h2 class="primary-black-text">Send Requests</h2></div>
+                    <div class="flex-this space-between">
+                        <div><h2 class="primary-black-text">Send Requests</h2></div>
+                        <div>
+                            <div class="primary-btn white-btn close-modal-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
+                        </div>            
+                    </div>
+
                     <div>
-                        <div class="primary-btn white-btn close-modal-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
-                    </div>            
-                </div>
+                        <p>
+                            By notifying relevant communities, they are able to see what this Project is and decide whether or not they would like to add their Labels to this Project. After your organization has entered the communities you would like to to send these requests to, you can monitor and communicate with them in the requests section.
+                        </p>  
+                    </div>
 
-                <div>
-                    <p>
-                        By notifying relevant communities, they are able to see what this Project is and decide whether or not they would like to add their Labels to this Project. After your organization has entered the communities you would like to to send these requests to, you can monitor and communicate with them in the requests section.
-                    </p>  
-                </div>
-
-                {% if communities %}
-                    <label>Search the Local Contexts Hub registry</label><br>
-        
-                    <div class="w-100">
-                        <select id="communities-select" class="w-100" onchange="selectCommunities()">
-                            <option>Select a Community</option>
+                    {% if communities %}
+                        <label>Search the Local Contexts Hub registry</label><br>
+            
+                        <div class="w-100">
+                            <select id="communities-select" class="w-100" onchange="selectCommunities()">
+                                <option>Select a Community</option>
+                                {% for community in communities %}
+                                    <option id="{{ community.id }}">{{ community.community_name }}</option>
+                                {% endfor %}
+                            </select>                    
+                        </div>
+            
+                        <div class="flex-this margin-top-16">
                             {% for community in communities %}
-                                <option id="{{ community.id }}">{{ community.community_name }}</option>
-                            {% endfor %}
-                        </select>                    
-                    </div>
-        
-                    <div class="flex-this margin-top-16">
-                        {% for community in communities %}
-                            <div id="selected-community-{{ community.id }}" class="hide">
-                                <div class="grey-chip flex-this row space-between">
-                                    <div><p class="center-name">{{community.community_name}}</p></div>
-                                    <div id="close-{{ community.id }}" class="close-x pointer" onclick="cancelCommunitySelection(this)"><div>&times;</div></div>
+                                <div id="selected-community-{{ community.id }}" class="hide">
+                                    <div class="grey-chip flex-this row space-between">
+                                        <div><p class="center-name">{{community.community_name}}</p></div>
+                                        <div id="close-{{ community.id }}" class="close-x pointer" onclick="cancelCommunitySelection(this)"><div>&times;</div></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div id="comm-id-input-{{ community.id }}" style="display: none;"></div>
-                        {% endfor %}
-                    </div>
-                    
-                    <div>
-                        <label>Send a message with this request</label><br>
-                        <textarea name="notice_message" class="w-100" style="height:100px;"></textarea>
-                    </div>
-                    <div class="flex-this flex-end w-100 margin-top-16">
-                        <button class="primary-btn action-btn" name="notify_btn">Send Notification <i class="fa fa-users" aria-hidden="true"></i></button>    
-                    </div>
+                                <div id="comm-id-input-{{ community.id }}" style="display: none;"></div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div>
+                            <label>Send a message with this request</label><br>
+                            <textarea name="notice_message" class="w-100" style="height:100px;"></textarea>
+                        </div>
+                        <div class="flex-this flex-end w-100 margin-top-16">
+                            <button class="primary-btn action-btn" name="notify_btn">Send Notification <i class="fa fa-users" aria-hidden="true"></i></button>    
+                        </div>
 
-                {% else %}
-                    <small class="bold">No communities are currently available to be notified</small>
-                {% endif %}
-            </form>
+                    {% else %}
+                        <small class="bold">No communities are currently available to be notified</small>
+                    {% endif %}
+                </form>
+            </div>
         </div>
-    </div>
 
-</div>
+    </div>
+{% endif %}
