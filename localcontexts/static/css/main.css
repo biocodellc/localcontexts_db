@@ -167,7 +167,10 @@ input:focus {
 .font-size-19 { font-size: 19px; }
 
 /* Underline text on hover */
-.underline-hover:hover { text-decoration: underline; }
+.underline-hover:hover { 
+    text-decoration: underline; 
+    color: #007385;
+}
 /* Break up long text */
 .word-break { word-break: break-all; }
 
