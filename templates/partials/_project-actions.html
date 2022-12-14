@@ -225,8 +225,12 @@
 
             {% if request.user.is_authenticated %}
                 {% if community %}
-                    {% if member_role == 'admin' or member_role == 'editor' %}
-                        <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
+                    {% if community.is_approved %}
+                        {% if member_role == 'admin' or member_role == 'editor' %}
+                            <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
+                        {% endif %}
+                    {% else %}
+                        <a class="block" href="#"> <i class="fa-solid fa-tag"></i> Can't apply Labels yet</a>
                     {% endif %}
                 {% endif %}
 
@@ -263,8 +267,6 @@
                     ><i class="fa-solid fa-user-group"></i> Notify Communities</a>
                 {% endif %}
 
-                <!-- TODO: implement this -->
-                <!-- <a class="block" href="#"><i class="fa-solid fa-box-archive"></i> Archive</a> -->
                 <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
             {% endif %}
             {% if project.project_privacy == 'Public' %}
@@ -273,6 +275,13 @@
 
                 <a class="block" href="{% url 'download-project-zip' project.unique_id %}"><i class="fa-solid fa-download"></i> Download</a>
             {% endif %}
+
+            <!-- TODO: implement this -->
+            <!-- <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div> -->
+
+            <!-- <a class="block" href="#"><i class="fa-solid fa-box-archive"></i> Archive</a> -->
+            <!-- <a class="block" href="#"><i class="fa-solid fa-trash"></i> Delete Project</a> -->
+
         </div>  
 
         <!-- Community: set project status -->

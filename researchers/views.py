@@ -514,88 +514,92 @@ def edit_project(request, researcher_id, project_uuid):
 
 # @login_required(login_url='login')
 def project_actions(request, pk, project_uuid):
-    researcher = Researcher.objects.get(id=pk)
     project = Project.objects.prefetch_related(
-            'bc_labels', 
-            'tk_labels', 
-            'bc_labels__community', 
-            'tk_labels__community',
-            'bc_labels__bclabel_translation', 
-            'tk_labels__tklabel_translation',
-            ).get(unique_id=project_uuid)
+                'bc_labels', 
+                'tk_labels', 
+                'bc_labels__community', 
+                'tk_labels__community',
+                'bc_labels__bclabel_translation', 
+                'tk_labels__tklabel_translation',
+                ).get(unique_id=project_uuid)
 
-    user_can_view = checkif_user_researcher(researcher, request.user)
-    if user_can_view == False:
-        return redirect('view-project', project.unique_id)
+    if request.user.is_authenticated:
+        researcher = Researcher.objects.get(id=pk)
+
+        user_can_view = checkif_user_researcher(researcher, request.user)
+        if user_can_view == False:
+            return redirect('view-project', project.unique_id)
+        else:
+            notices = Notice.objects.filter(project=project, archived=False)
+            creator = ProjectCreator.objects.get(project=project)
+            statuses = ProjectStatus.objects.select_related('community').filter(project=project)
+            comments = ProjectComment.objects.select_related('sender').filter(project=project)
+            entities_notified = EntitiesNotified.objects.get(project=project)
+            form = ProjectCommentForm(request.POST or None)
+
+            communities_list = list(chain(
+                project.project_status.all().values_list('community__id', flat=True),
+            ))
+
+            if creator.community:
+                communities_list.append(creator.community.id)
+
+            communities_ids = list(set(communities_list)) # remove duplicate ids
+            communities = Community.approved.exclude(id__in=communities_ids).order_by('community_name')
+
+            if request.method == 'POST':
+                if request.POST.get('message'):
+                    if form.is_valid():
+                        data = form.save(commit=False)
+                        data.project = project
+                        data.sender = request.user
+                        data.sender_affiliation = 'Researcher'
+                        data.save()
+                        return redirect('researcher-project-actions', researcher.id, project.unique_id)
+
+                elif 'notify_btn' in request.POST: 
+                    # Set private project to discoverable
+                    if project.project_privacy == 'Private':
+                        project.project_privacy = 'Discoverable'
+                        project.save()
+
+                    communities_selected = request.POST.getlist('selected_communities')
+                    message = request.POST.get('notice_message')
+
+                    name = get_users_name(researcher.user)
+                    title =  f'{name} has notified you of a Project.'
+
+                    for community_id in communities_selected:
+                        # Add communities that were notified to entities_notified instance
+                        community = Community.objects.get(id=community_id)
+                        entities_notified.communities.add(community)
+
+                        # Create project status, first comment and  notification
+                        ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
+                        if message:
+                            ProjectComment.objects.create(project=project, community=community, sender=request.user, sender_affiliation='Researcher', message=message)
+                        ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=str(project.unique_id), sender=request.user, title=title)
+                        entities_notified.save()
+
+                        # Create email 
+                        send_email_notice_placed(project, community, researcher)
+                        return redirect('researcher-projects', researcher.id)
+
+
+            context = {
+                'user_can_view': user_can_view,
+                'researcher': researcher,
+                'project': project,
+                'notices': notices,
+                'creator': creator,
+                'form': form,
+                'communities': communities,
+                'statuses': statuses,
+                'comments': comments,
+            }
+            return render(request, 'researchers/project-actions.html', context)
     else:
-        notices = Notice.objects.filter(project=project, archived=False)
-        creator = ProjectCreator.objects.get(project=project)
-        statuses = ProjectStatus.objects.select_related('community').filter(project=project)
-        comments = ProjectComment.objects.select_related('sender').filter(project=project)
-        entities_notified = EntitiesNotified.objects.get(project=project)
-        form = ProjectCommentForm(request.POST or None)
-
-        communities_list = list(chain(
-            project.project_status.all().values_list('community__id', flat=True),
-        ))
-
-        if creator.community:
-            communities_list.append(creator.community.id)
-
-        communities_ids = list(set(communities_list)) # remove duplicate ids
-        communities = Community.approved.exclude(id__in=communities_ids).order_by('community_name')
-
-        if request.method == 'POST':
-            if request.POST.get('message'):
-                if form.is_valid():
-                    data = form.save(commit=False)
-                    data.project = project
-                    data.sender = request.user
-                    data.sender_affiliation = 'Researcher'
-                    data.save()
-                    return redirect('researcher-project-actions', researcher.id, project.unique_id)
-
-            elif 'notify_btn' in request.POST: 
-                # Set private project to discoverable
-                if project.project_privacy == 'Private':
-                    project.project_privacy = 'Discoverable'
-                    project.save()
-
-                communities_selected = request.POST.getlist('selected_communities')
-                message = request.POST.get('notice_message')
-
-                name = get_users_name(researcher.user)
-                title =  f'{name} has notified you of a Project.'
-
-                for community_id in communities_selected:
-                    # Add communities that were notified to entities_notified instance
-                    community = Community.objects.get(id=community_id)
-                    entities_notified.communities.add(community)
-
-                    # Create project status, first comment and  notification
-                    ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
-                    if message:
-                        ProjectComment.objects.create(project=project, community=community, sender=request.user, sender_affiliation='Researcher', message=message)
-                    ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=str(project.unique_id), sender=request.user, title=title)
-                    entities_notified.save()
-
-                    # Create email 
-                    send_email_notice_placed(project, community, researcher)
-                    return redirect('researcher-projects', researcher.id)
-
-
-        context = {
-            'user_can_view': user_can_view,
-            'researcher': researcher,
-            'project': project,
-            'notices': notices,
-            'creator': creator,
-            'form': form,
-            'communities': communities,
-            'statuses': statuses,
-            'comments': comments,
-        }
-        return render(request, 'researchers/project-actions.html', context)
+        return redirect('view-project', project.unique_id)
 
         
 @login_required(login_url='login')
