@@ -1127,6 +1127,36 @@ if (deactivateAccountBtn) {
     })
 }
 
+// delete api key popup in user settings
+// var deleteKeyBtn = document.getElementById('submitKeyDeletion')
+// if (deleteKeyBtn) {
+//     deleteKeyBtn.addEventListener('click', function(event) {
+//         event.preventDefault()
+//         let deactivationModal = document.getElementById('deactivationModal')
+//         deactivationModal.classList.replace('hide', 'show')
+
+//         let cancelBtn = document.getElementById('closeDeactivationModal')
+//         cancelBtn.addEventListener('click', function(event) { deactivationModal.classList.replace('show', 'hide')})
+
+//         let continueDeactivationBtn = document.getElementById('continueDeactivationBtn')
+//         continueDeactivationBtn.addEventListener('click', function(){ document.getElementById('deactivateUserForm').submit() })
+//     })
+// }
+function deleteKey() {
+    let deleteKeyModal = document.getElementById('deleteKeyModal')
+    deleteKeyModal.classList.replace('hide', 'show')
+
+    let cancelBtn = document.getElementById('closeModal')
+    cancelBtn.addEventListener('click', function(event) { deleteKeyModal.classList.replace('show', 'hide')})
+
+}
+
+function copyKey() {
+    let keyText = document.getElementById('keyText')
+    window.getSelection().selectAllChildren(keyText)
+    document.execCommand("Copy")
+}
+
 // REGISTRY FILTERING AND JOIN REQUESTS / CONTACT MODAL
 if (window.location.href.includes('communities/view/') || window.location.href.includes('institutions/view/') || window.location.href.includes('researchers/view/') ) {
 
