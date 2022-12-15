@@ -1,231 +1,97 @@
 {% extends 'base.html' %} {% block title %} Projects {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
 
-<div id="full-div-card-{{ project.unique_id }}" class="content-card-v2 content-card-space show filterProjects">
+<div id="full-div-card-{{ project.unique_id }}" class="content-card-v2 content-card-space show">
     <div id="project-unique-{{ project.unique_id }}" class="flex-this space-between">
 
         <div class="w-60 flex-this column">
-            <!-- title -->
-            <div><h2 class="no-bottom-margin no-top-margin">{{ project.title }}</h2></div>
             <div>
-                <p>
-                    {{ project.date_added|date:'M d, Y' }} | 
-                    {% if project.project_type == 'Other' %} {{ project.other_type }} {% else %} {{ project.project_type }} {% endif %}| 
-                    {{ project.project_privacy }}<br>
-
-                    Created: 
-                    {% firstof project.project_creator.get_full_name project.project_creator.username %}
-
-                    {% which_account_created_project project as project_creator %}
-                    {{ project_creator }}
-                </p>
-            </div>
-            
-        </div>
-
-        <div class="w-40 flex-this column align-right">
-            <div class="flex-this margin-bottom-8 w-100 flex-end">
-                
-                {% if community %}
-                    {% if member_role == 'admin' or member_role == 'editor' %}
-                        <div class="margin-right-1">
-                            <a href="{% url 'apply-labels' community.id project.unique_id %}" class="primary-btn action-btn">Apply Labels <i class="fa fa-plus" aria-hidden="true"></i> </a>
-                        </div>
+                <a class="primary-black-text underline-hover"
+                    {% if community %}
+                        href="{% url 'community-project-actions' community.id project.unique_id %}" 
                     {% endif %}
-                {% endif%}
-
-                <div class="margin-right-1">
-                    <a href="{% url 'view-project' project.unique_id %}" class="primary-btn white-btn">View <i class="fa fa-arrow-right"></i></a>
-                </div>
-
-                {% if request.user == project.project_creator %}
-                    <div class="margin-right-1">
-                        <a
-                            class="primary-btn white-btn"
-                            {% if community %}
-                                href="{% url 'edit-project' community.id project.unique_id %}"
-                            {% endif %}
-                            {% if institution %}
-                                href="{% url 'inst-edit-project' institution.id project.unique_id %}"
-                            {% endif %}                        
-                            {% if researcher %}
-                                href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
-                            {% endif %}   
-                        >
-                            Edit <i class="fa fa-edit" aria-hidden="true"></i>
-                        </a>                     
-                    </div>
-                {% endif %}   
-
-                <div class="text-align-right">
-                    <a id="{{ project.unique_id }}" class="primary-btn white-btn" onclick='showMore(this)'>
-                        Show More <i class="fa fa-angle-down" aria-hidden="true"></i>
-                    </a>
-                </div>
-
-            </div>
-
-            <div class="flex-this row margin-top-8 w-50 flex-end">
-
-                {% with tklabels=project.tk_labels.all bclabels=project.bc_labels.all %}
-                    {% if tklabels or bclabels %}
-                        <input id="label-{{ project.unique_id }}" class="projectLabelsFilter" type="hidden" value="label_true">
-                    
-                        {% if tklabels %}
-                            {% for tklabel in tklabels %}
-                                <div class="margin-left-8">
-                                    {% include 'tklabels/tiny-labels.html' %}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-
-                        {% if bclabels %}
-                            {% for bclabel in bclabels %}
-                                <div class="margin-left-8">
-                                    {% include 'bclabels/tiny-labels.html' %}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+                    {% if institution %}
+                        href="{% url 'institution-project-actions' institution.id project.unique_id %}" 
                     {% endif %}
-                {% endwith %}
-
-                {% show_project_notices project as notices %}
-                {% for notice in notices %}
-                    {% if not notice.archived %}
-                        <div class="flex-this flex-end">
-                            {% if notice.notice_type == 'biocultural' %}
-                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="62px"></div>
-                            {% endif %}
-                            {% if notice.notice_type == 'traditional_knowledge' %}
-                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="62px"></div>
-                            {% endif %}
-                            {% if notice.notice_type == 'attribution_incomplete' %}
-                                <div class="margin-left-8"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="62px"></div>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-
-            </div>
-        </div>
-
-    </div>
-
-    <div id="expand-div-{{ project.unique_id }}" class="hide">
-
-        <div class="w-70">
-            <h3>Project Description</h3>
-            <p>{{ project.description|linebreaks }}</p>
-        </div>
-
-        {% if project.publication_doi %}
-            <div class="margin-bottom-16">
-                <div><h3 class="no-top-margin">Project DOI</h3></div>
-                
-                <a 
-                    class="darkteal-text underline-hover"
-                    {% if not 'https://' in project.publication_doi %}
-                        href="https://doi.org/{{ project.publication_doi }}"
-                    {% else %}
-                        href="{{ project.publication_doi }}"
+                    {% if researcher %}
+                        href="{% url 'researcher-project-actions' researcher.id project.unique_id %}" 
                     {% endif %}
                 >
-                {{ project.publication_doi }} <i class="fa fa-external-link" aria-hidden="true"></i>
+                    <h2 class="no-bottom-margin no-top-margin">{{ project.title }}</h2>
                 </a>
-            </div> 
-        {% endif %}
-
-        {% if project.urls %}
-            <div class="margin-bottom-16">
-                <div><h3 class="no-top-margin">Project Links</h3></div>
-                    <ul>
-                        {% for url in project.urls %}
-                            <li><a href="{{ url }}" class="darkteal-text underline-hover">{{ url }} <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
-                        {% endfor %}
-                    </ul>
-            </div> 
-        {% endif %}
-
-        {% if researcher or institution %}
-            <div class="flex-this space-between border-top-solid-teal">
-
-                <div class="w-70 margin-top-16">
-                    <h3 class="no-bottom-margin no-top-margin">Notify Communities</h3>
-                    <p>
-                        Listed below are the communities you have notified about this project. After the name of the notified community is the status of their decision about the Project.<br><br>
-                        The status options are:<br>
-                        <i>Seen:</i> The community has acknowledged the Project but has not made a decision about applying Labels.
-                        <i>No Labels Pending:</i> The community will not apply Labels to the Project.<br>
-                        <i>Labels Pending:</i> The community is deciding which Label(s) to apply to the Project.<br>
-                        <i>Labels Applied:</i> The community has applied Labels to the Project.
-                    </p>
-                </div>
-
-                <div class="flex-this flex-end w-40 margin-top-16">
-                    {% if institution %}
-                        {% if institution.is_approved == False %}
-                            <small class="margin-right-1 w-50 no-top-margin">In order to notify communities of your Project, your institution must be confirmed first.</small>
-                        {% else %}
-                            {% for creator in project.project_creator_project.all %}
-                                {% if creator.institution %}
-                                    {% if member_role == 'admin' or member_role == 'editor' %}
-                                        <div class="margin-right-1">
-                                            <a href="{% url 'institution-notify-others' institution.id project.id %}" class="primary-btn action-btn">
-                                                Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
-                                            </a>
-                                        </div>
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    {% endif %}
-
-                    {% if researcher %}
-                        {% for creator in project.project_creator_project.all %}
-                            {% if creator.researcher %}
-                                <div class="margin-right-1">
-                                    <a href="{% url 'researcher-notify-others' researcher.id project.id %}" class="primary-btn action-btn">
-                                        Notify Communities <i class="fa fa-users" aria-hidden="true"></i>
-                                    </a>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>            
             </div>
-        {% endif %}
+            <div>
+                <p>
+                    <span class="bold block margin-bottom-8">     
+                        {{ project.date_added|date:'M d, Y' }} | 
+                        {% if project.project_type == 'Other' %} 
+                            {{ project.other_type }}
+                        {% else %} 
+                            {{ project.project_type }} 
+                        {% endif %}| 
+                        {{ project.project_privacy }}
+                    </span>
 
-        <div class="flex-this column">
 
-            {% which_communities_notified project as statuses %}
-            {% if statuses %}
-                <div>
-                    <p>
-                        <span class="bold">Notified Communities and Label Status</span><br>
-                        {% for status in statuses %}
-                            {{ status.community.community_name }} -- 
-                            {% if not status.seen and status.status == None %} Sent <br>{% endif %}
-                            {% if status.seen and status.status == None %} Seen <br>{% endif %}                            
-                            {% if status.seen and status.status == 'pending' %} Labels Pending <br>{% endif %}
-                            {% if status.seen and status.status == 'not_pending' %} No Labels Pending <br>{% endif %}
-                            {% if status.seen and status.status == 'labels_applied' %} Labels Applied <br>{% endif %}
-                        {% endfor %}
-                    </p>
-                </div>
-            {% endif %}
+                    {% for creator in project.project_creator_project.all %}
 
-            {% if community %}
-                {% if not project_creator.community %}
-                    {% include 'projects/project-status.html'%}
-                {% endif %}
-            {% endif %}
+                        {% if community %}
+                            <span class="bold">
+                                {% if community == creator.community %} Created {% else %} Shared {% endif %} by
+                            </span>
+                        {% endif %}
 
-            {% include 'projects/project-comment.html'%}
+                        {% if institution %}
+                            <span class="bold">
+                                {% if institution == creator.institution %} Created {% else %} Shared {% endif %} by
+                            </span>
+                        {% endif %}
 
+                        {% if researcher %}
+                            <span class="bold">
+                                {% if researcher == creator.researcher %} Created {% else %} Shared {% endif %} by
+                            </span>
+                        {% endif %}
+
+                        {% firstof creator.community creator.institution creator.researcher %}
+                    {% endfor %}
+                </p>
+            </div>
         </div>
-    
+
+        <!-- Ellipsis dropdown -->
+        <div class="w-40 flex-this column align-right">
+            <div class="flex-this w-100 flex-end">
+                <div class="dropdown">
+                    <a onclick="toggleEllipsisMenu(this)" id="ellipsis-{{ project.unique_id }}" class="kebab pointer"><i class="fa-solid fa-ellipsis fa-xl primary-black-text"></i></a>
+                    <div id="ellipsis-content-{{ project.unique_id }}" class="ellipsis-dropdown-content hide"> 
+
+                        {% if request.user == project.project_creator %}
+                            <a
+                                class="primary-black-text block"
+
+                                {% if community %}
+                                    href="{% url 'edit-project' community.id project.unique_id %}"
+                                {% endif %}
+                                {% if institution %}
+                                    href="{% url 'inst-edit-project' institution.id project.unique_id %}"
+                                {% endif %}                        
+                                {% if researcher %}
+                                    href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
+                                {% endif %}   
+                            >
+                                Edit Project 
+                            </a>                                                         
+                        {% endif %}   
+                        
+                        <a class="primary-black-text block" href="{% url 'download-project-zip' project.unique_id %}">
+                            Download
+                        </a>                                          
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-
-
 </div>
 
-{% endblock%}
+{% endblock %}

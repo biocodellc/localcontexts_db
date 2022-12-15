@@ -24,7 +24,7 @@ class LabelTranslationVersionAdmin(admin.ModelAdmin):
     readonly_fields = ('version_instance', 'translated_name', 'language', 'language_tag', 'translated_text', 'created',)
 
 class ProjectCommentAdmin(admin.ModelAdmin):
-    list_display = ('project', 'sender', 'community', 'message', 'created')
+    list_display = ('project', 'sender', 'community', 'sender_affiliation', 'message', 'created')
     search_fields = ('project',)
 
 class ProjectStatusAdmin(admin.ModelAdmin):

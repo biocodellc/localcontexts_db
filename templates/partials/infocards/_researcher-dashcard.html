@@ -43,7 +43,7 @@
                                             onclick="markAsRead(this); return true;"
                                             {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
                                                 {% if n.reference_id %}
-                                                    href="{% anchor 'researcher-projects' n.reference_id researcher.id %}"
+                                                    href="{% url 'researcher-project-actions' researcher.id n.reference_id %}"
                                                 {% else %}
                                                     href="{% url 'researcher-projects' researcher.id %}"
                                                 {% endif %}

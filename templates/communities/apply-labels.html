@@ -10,41 +10,36 @@
                 <p>Please choose from your customized Labels below. Select a Label to see description.</p>
             </div>
 
-            <!-- title -->
-            <div><h2 class="no-bottom-margin no-top-margin">{{ project.title }}</h2></div>
+            <div>
+                <h2 class="no-bottom-margin no-top-margin">
+                    <a href="{% url 'community-project-actions' community.id project.unique_id %}" class="primary-black-text underline-hover">
+                        {{ project.title }}
+                    </a>
+                </h2>
+            </div>
             <div><p>{{ project.date_added|date:'M d, Y' }} | 
                 {% if project.project_type == 'Other' %} {{ project.other_type }} {% else %} {{ project.project_type }} {% endif %}| 
                 {{ project.project_privacy }}<br>
-                Created: 
-                {% firstof project.project_creator.get_full_name project.project_creator.username %}
-                {% which_account_created_project project as project_creator %}
-                {{ project_creator }}
+
+                {% for creator in project.project_creator_project.all %}
+                    {% if community == creator.community %}
+                        <span class="bold">Created by</span>
+                    {% else %}
+                        <span class="bold">Shared by</span>
+                    {% endif %}
+
+                    {% firstof creator.community creator.institution creator.researcher %}
+                {% endfor %}
+
                 </p>
             </div>
-
-            {% if project.publication_doi %}
-                <div class="margin-bottom-16">
-                    <div><h3 class="no-top-margin">Project DOI</h3></div>
-                    
-                    <a 
-                        class="darkteal-text underline-hover"
-                        {% if not 'https://' in project.publication_doi %}
-                            href="https://doi.org/{{ project.publication_doi }}"
-                        {% else %}
-                            href="{{ project.publication_doi }}"
-                        {% endif %}
-                    >
-                    {{ project.publication_doi }} <i class="fa fa-external-link" aria-hidden="true"></i>
-                    </a>
-                </div> 
-            {% endif %}
 
             {% if project.urls %}
                 <div class="margin-bottom-16">
                     <div><h3 class="no-top-margin">Project Links</h3></div>
                         <ul>
                             {% for url in project.urls %}
-                                <li><a href="{{ url }}" class="darkteal-text underline-hover">{{ url }} <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
+                                <li><a href="{{ url }}" class="darkteal-text underline-hover" target="_blank" rel="noopener">{{ url }} <i class="fa fa-external-link" aria-hidden="true"></i></a></li>
                             {% endfor %}
                         </ul>
                 </div> 
@@ -52,10 +47,6 @@
         </div>
 
         <div class="w-40 flex-this column align-right margin-top-16">
-
-            <div class="flex-this margin-bottom-16 w-100 flex-end">
-                <div><a href="{% url 'view-project' project.unique_id %}" class="primary-btn white-btn">View Project <i class="fa fa-arrow-right"></i></a></div>
-            </div>
 
             <div class="flex-this row margin-top-8 w-50 flex-end">
                 {% if project.tk_labels.all or project.bc_labels.all %}

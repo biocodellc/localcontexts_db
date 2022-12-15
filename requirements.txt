@@ -24,6 +24,7 @@ django-storages==1.11.1
 django-widget-tweaks==1.4.8
 djangorestframework==3.12.2
 djangorestframework-api-key==2.2.0
+djangorestframework-api-key==2.2.0
 filelock==3.0.12
 future==0.18.2
 google-api-core==1.31.3

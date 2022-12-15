@@ -217,29 +217,7 @@ def researcher_projects(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
-        form = ProjectCommentForm(request.POST or None)
-        
-        if request.method == 'POST':
-            project_uuid = request.POST.get('project-uuid')
-            community_id = request.POST.get('community-id')
-            community = Community.objects.get(id=community_id)
-
-            if request.POST.get('message'):
-                if form.is_valid():
-                    data = form.save(commit=False)
-
-                    if project_uuid:
-                        project = Project.objects.get(unique_id=project_uuid)
-                        data.project = project
-
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-                    
-                    return redirect('researcher-projects', researcher.id)
-            else:
-                return redirect('researcher-projects', researcher.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -251,7 +229,6 @@ def researcher_projects(request, pk):
         context = {
             'projects': projects,
             'researcher': researcher,
-            'form': form,
             'user_can_view': user_can_view,
             'items': page,
             'results': results,
@@ -284,28 +261,7 @@ def projects_with_labels(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == 'POST':
-            project_uuid = request.POST.get('project-uuid')
-            community_id = request.POST.get('community-id')
-            community = Community.objects.get(id=community_id)
-
-            if request.POST.get('message'):
-                if form.is_valid():
-                    data = form.save(commit=False)
-
-                    if project_uuid:
-                        project = Project.objects.get(unique_id=project_uuid)
-                        data.project = project
-
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-                    return redirect('researcher-projects-labels', researcher.id)
-            else:
-                return redirect('researcher-projects-labels', researcher.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -317,7 +273,6 @@ def projects_with_labels(request, pk):
         context = {
             'projects': projects,
             'researcher': researcher,
-            'form': form,
             'user_can_view': user_can_view,
             'items': page,
             'results': results,
@@ -347,28 +302,7 @@ def projects_with_notices(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == 'POST':
-            project_uuid = request.POST.get('project-uuid')
-            community_id = request.POST.get('community-id')
-            community = Community.objects.get(id=community_id)
-
-            if request.POST.get('message'):
-                if form.is_valid():
-                    data = form.save(commit=False)
-
-                    if project_uuid:
-                        project = Project.objects.get(unique_id=project_uuid)
-                        data.project = project
-
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-                    return redirect('researcher-projects-notices', researcher.id)
-            else:
-                return redirect('researcher-projects-notices', researcher.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -380,7 +314,6 @@ def projects_with_notices(request, pk):
         context = {
             'projects': projects,
             'researcher': researcher,
-            'form': form,
             'user_can_view': user_can_view,
             'items': page,
             'results': results,
@@ -403,28 +336,7 @@ def projects_creator(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
 
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == 'POST':
-            project_uuid = request.POST.get('project-uuid')
-            community_id = request.POST.get('community-id')
-            community = Community.objects.get(id=community_id)
-
-            if request.POST.get('message'):
-                if form.is_valid():
-                    data = form.save(commit=False)
-
-                    if project_uuid:
-                        project = Project.objects.get(unique_id=project_uuid)
-                        data.project = project
-
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-                    return redirect('researcher-projects-creator', researcher.id)
-            else:
-                return redirect('researcher-projects-creator', researcher.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -436,7 +348,6 @@ def projects_creator(request, pk):
         context = {
             'projects': projects,
             'researcher': researcher,
-            'form': form,
             'user_can_view': user_can_view,
             'items': page,
             'results': results,
@@ -461,28 +372,7 @@ def projects_contributor(request, pk):
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == 'POST':
-            project_uuid = request.POST.get('project-uuid')
-            community_id = request.POST.get('community-id')
-            community = Community.objects.get(id=community_id)
-
-            if request.POST.get('message'):
-                if form.is_valid():
-                    data = form.save(commit=False)
-
-                    if project_uuid:
-                        project = Project.objects.get(unique_id=project_uuid)
-                        data.project = project
-
-                    data.sender = request.user
-                    data.community = community
-                    data.save()
-                    return redirect('researcher-projects-contributor', researcher.id)
-            else:
-                return redirect('researcher-projects-contributor', researcher.id)
-        elif request.method == 'GET':
+        if request.method == 'GET':
             q = request.GET.get('q')
             if q:
                 vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
@@ -494,7 +384,6 @@ def projects_contributor(request, pk):
         context = {
             'projects': projects,
             'researcher': researcher,
-            'form': form,
             'user_can_view': user_can_view,
             'items': page,
             'results': results,
@@ -623,58 +512,95 @@ def edit_project(request, researcher_id, project_uuid):
         }
         return render(request, 'researchers/edit-project.html', context)
 
-# Notify Communities of Project
-@login_required(login_url='login')
-def notify_others(request, pk, proj_id):
-    researcher = Researcher.objects.select_related('user').get(id=pk)
+# @login_required(login_url='login')
+def project_actions(request, pk, project_uuid):
+    project = Project.objects.prefetch_related(
+                'bc_labels', 
+                'tk_labels', 
+                'bc_labels__community', 
+                'tk_labels__community',
+                'bc_labels__bclabel_translation', 
+                'tk_labels__tklabel_translation',
+                ).get(unique_id=project_uuid)
 
-    user_can_view = checkif_user_researcher(researcher, request.user)
-    if user_can_view == False:
-        return redirect('restricted')
+    if request.user.is_authenticated:
+        researcher = Researcher.objects.get(id=pk)
+
+        user_can_view = checkif_user_researcher(researcher, request.user)
+        if user_can_view == False:
+            return redirect('view-project', project.unique_id)
+        else:
+            notices = Notice.objects.filter(project=project, archived=False)
+            creator = ProjectCreator.objects.get(project=project)
+            statuses = ProjectStatus.objects.select_related('community').filter(project=project)
+            comments = ProjectComment.objects.select_related('sender').filter(project=project)
+            entities_notified = EntitiesNotified.objects.get(project=project)
+            form = ProjectCommentForm(request.POST or None)
+
+            communities_list = list(chain(
+                project.project_status.all().values_list('community__id', flat=True),
+            ))
+
+            if creator.community:
+                communities_list.append(creator.community.id)
+
+            communities_ids = list(set(communities_list)) # remove duplicate ids
+            communities = Community.approved.exclude(id__in=communities_ids).order_by('community_name')
+
+            if request.method == 'POST':
+                if request.POST.get('message'):
+                    if form.is_valid():
+                        data = form.save(commit=False)
+                        data.project = project
+                        data.sender = request.user
+                        data.sender_affiliation = 'Researcher'
+                        data.save()
+                        return redirect('researcher-project-actions', researcher.id, project.unique_id)
+
+                elif 'notify_btn' in request.POST: 
+                    # Set private project to discoverable
+                    if project.project_privacy == 'Private':
+                        project.project_privacy = 'Discoverable'
+                        project.save()
+
+                    communities_selected = request.POST.getlist('selected_communities')
+                    message = request.POST.get('notice_message')
+
+                    name = get_users_name(researcher.user)
+                    title =  f'{name} has notified you of a Project.'
+
+                    for community_id in communities_selected:
+                        # Add communities that were notified to entities_notified instance
+                        community = Community.objects.get(id=community_id)
+                        entities_notified.communities.add(community)
+
+                        # Create project status, first comment and  notification
+                        ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
+                        if message:
+                            ProjectComment.objects.create(project=project, community=community, sender=request.user, sender_affiliation='Researcher', message=message)
+                        ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=str(project.unique_id), sender=request.user, title=title)
+                        entities_notified.save()
+
+                        # Create email 
+                        send_email_notice_placed(project, community, researcher)
+                        return redirect('researcher-projects', researcher.id)
+
+
+            context = {
+                'user_can_view': user_can_view,
+                'researcher': researcher,
+                'project': project,
+                'notices': notices,
+                'creator': creator,
+                'form': form,
+                'communities': communities,
+                'statuses': statuses,
+                'comments': comments,
+            }
+            return render(request, 'researchers/project-actions.html', context)
     else:
-        project = Project.objects.prefetch_related('bc_labels', 'tk_labels', 'project_status').get(id=proj_id)
-        entities_notified = EntitiesNotified.objects.prefetch_related('communities').get(project=project)
-        communities = Community.approved.all()
+        return redirect('view-project', project.unique_id)
 
-        if request.method == "POST":
-            # Set private project to discoverable
-            if project.project_privacy == 'Private':
-                project.project_privacy = 'Discoverable'
-                project.save()
-
-            communities_selected = request.POST.getlist('selected_communities')
-
-            message = request.POST.get('notice_message')
-
-            # Reference ID and title for notification
-            reference_id = str(project.unique_id)
-            name = get_users_name(researcher.user)
-            title =  f'{name} has notified you of a Project.'
-
-            for community_id in communities_selected:
-                # Add each selected community to notify entities instance
-                community = Community.objects.get(id=community_id)
-                entities_notified.communities.add(community)
-
-                # Create project status, first comment and  notification
-                ProjectStatus.objects.create(project=project, community=community, seen=False)
-                if message:
-                    ProjectComment.objects.create(project=project, community=community, sender=request.user, message=message)
-                ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=reference_id, sender=request.user, title=title)
-                entities_notified.save()
-                
-                # Create email
-                send_email_notice_placed(project, community, researcher)
-            
-            return redirect('researcher-projects', researcher.id)
-
-        context = {
-            'researcher': researcher,
-            'project': project,
-            'communities': communities,
-            'user_can_view': user_can_view,
-        }
-        return render(request, 'researchers/notify.html', context)
         
 @login_required(login_url='login')
 def connections(request, pk):
