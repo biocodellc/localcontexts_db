@@ -13,6 +13,7 @@ urlpatterns = [
     path('update/<str:pk>/', views.update_institution, name="update-institution"),
 
     path('notices/<str:pk>/', views.institution_notices, name="institution-notices"),
+    path('notices/otc/delete/<str:institution_id>/<str:notice_id>/', views.delete_otc_notice, name="institution-delete-otc"),
 
     path('members/<str:pk>/', views.institution_members, name="institution-members"),
     path('members/requests/<str:pk>/', views.member_requests, name="institution-member-requests"),

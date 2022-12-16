@@ -14,7 +14,6 @@ urlpatterns = [
     path('notices/<str:pk>', views.researcher_notices, name="researcher-notices"),
     path('notices/otc/delete/<str:researcher_id>/<str:notice_id>/', views.delete_otc_notice, name="researcher-delete-otc"),
 
-
     path('projects/<str:pk>', views.researcher_projects, name="researcher-projects"),
     path('projects-notices/<str:pk>/', views.projects_with_notices, name="researcher-projects-notices"),
     path('projects-labels/<str:pk>/', views.projects_with_labels, name="researcher-projects-labels"),
