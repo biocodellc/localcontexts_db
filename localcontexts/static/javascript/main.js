@@ -1301,3 +1301,11 @@ function openNotifyCommunitiesModal(elem) {
     const closeModalBtn = document.querySelector('.close-modal-btn')
     closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
 }
+
+function openDeleteProjectModal(elem) {
+    const modal = document.getElementById('deleteProjectModal')
+    modal.classList.replace('hide', 'show')
+
+    const closeModalBtn = document.getElementById('closeProjectDeletionModal')
+    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+}

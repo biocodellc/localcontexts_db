@@ -22,6 +22,7 @@ urlpatterns = [
     path('projects/create-project/<str:pk>', views.create_project, name="researcher-create-project"),
     path('projects/edit-project/<str:researcher_id>/<str:project_uuid>', views.edit_project, name="researcher-edit-project"),
     path('projects/actions/<str:pk>/<uuid:project_uuid>/', views.project_actions, name="researcher-project-actions"),
+    path('projects/delete-project/<str:researcher_id>/<str:project_uuid>', views.delete_project, name="researcher-delete-project"),
 
     path('connections/<str:pk>/', views.connections, name="researcher-connections"),
 ]
