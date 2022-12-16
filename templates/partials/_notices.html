@@ -63,11 +63,11 @@
                                     <div class="flex-this w-70 space-between">
                                         <a class="darkteal-text underline-hover block" href="{{ url.0 }}" target="_blank" rel="noopener">{{ url.1 }} <i class="fa fa-external-link fa-xs" aria-hidden="true"></i></a>
                                         {% if researcher %}
-                                            <a class="darkteal-text underline-hover block" href="{% url 'researcher-delete-otc' researcher.id url.2 %}"> <i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+                                            <a class="darkteal-text underline-hover block" href="{% url 'researcher-delete-otc' researcher.id url.2 %}"> <i class="fa fa-trash" aria-hidden="true"></i></a>
                                         {% endif %}     
                                         {% if institution %}
                                             {% if member_role == 'admin' or member_role == 'editor' %}
-                                                <a class="darkteal-text underline-hover block" href="{% url 'institution-delete-otc' institution.id url.2 %}"> <i class="fa fa-trash fa-lg" aria-hidden="true"></i></a>
+                                                <a class="darkteal-text underline-hover block" href="{% url 'institution-delete-otc' institution.id url.2 %}"> <i class="fa fa-trash" aria-hidden="true"></i></a>
                                             {% endif %}
                                         {% endif %}                                   
                                     </div>
