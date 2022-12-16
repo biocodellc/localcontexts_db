@@ -318,19 +318,17 @@
                 
                                 <div>
                                     <h2 class="primary-black-text">Are you sure?</h2>  
-                                    <p>Are you sure you want to delete your Project? <br><br>
-                                        This cannot be undone. <br>
-                                        You will be redirected to the Projects page. <br>
+                                    <p>Are you sure you want to delete your Project? <br>
+                                        This will delete the Project for everyone and cannot be undone. <br><br>
+                                        <small>You will be redirected to the Projects page.</small> <br>
                                     </p>  
                                 </div>
                                 <div class="flex-this w-100 text-align-center">
                                     <form id="deleteProjectForm" method="POST">
                                         {% csrf_token %}
-                                        <div class="w-80">
-                                            <button id="continueProjectDeletionBtn" class="primary-btn white-btn margin-right-1 w-100" name="delete_project">Yes, delete this Project</button>    
-                                        </div>
+                                        <button id="continueProjectDeletionBtn" class="primary-btn white-btn w-100" name="delete_project">Yes, delete this Project</button>    
                                     </form>
-                                    <div id="closeProjectDeletionModal" class="margin-left-1 primary-btn action-btn">Cancel</div>
+                                    <div id="closeProjectDeletionModal" class="primary-btn action-btn margin-left-8">Cancel</div>
                                 </div>
                 
                             </div>
