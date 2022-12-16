@@ -175,7 +175,7 @@ def researcher_notices(request, pk):
     if user_can_view == False:
         return redirect('public-researcher', researcher.id)
     else:
-        urls = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher).values_list('url', 'name')
+        urls = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher).values_list('url', 'name', 'id')
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
 
         if request.method == 'POST':
@@ -192,6 +192,13 @@ def researcher_notices(request, pk):
             'urls': urls,
         }
         return render(request, 'researchers/notices.html', context)
+
+@login_required(login_url='login')
+def delete_otc_notice(request, researcher_id, notice_id):
+    if OpenToCollaborateNoticeURL.objects.filter(id=notice_id).exists():
+        otc = OpenToCollaborateNoticeURL.objects.get(id=notice_id)
+        otc.delete()
+    return redirect('researcher-notices', researcher_id)
 
 
 @login_required(login_url='login')
