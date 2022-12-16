@@ -294,10 +294,48 @@
             {% endif %}
 
             <!-- TODO: implement this -->
-            <!-- <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div> -->
+            <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
 
-            <!-- <a class="block" href="#"><i class="fa-solid fa-box-archive"></i> Archive</a> -->
-            <!-- <a class="block" href="#"><i class="fa-solid fa-trash"></i> Delete Project</a> -->
+            <a class="block" href="#"><i class="fa-solid fa-box-archive"></i> Archive</a>
+            {% if request.user.is_authenticated and request.user == project.project_creator and not project.has_labels %}
+                <a 
+                    class="block pointer" 
+                    onclick="openDeleteProjectModal(this)"
+                ><i class="fa-solid fa-trash"></i> Delete Project
+
+                <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                    <span class="tooltiptext">
+                        You will not be able to delete this Project once Labels have been applied.
+                    </span>
+                </div> 
+            
+                </a>
+
+                <div id="deleteProjectModal" class="modal hide">
+                    <div class="modal-defaults deactivate-modal flex-this column w-100">
+                        <div class="modal-content-padding w-100">
+            
+                            <div>
+                                <h2 class="primary-black-text">Are you sure?</h2>  
+                                <p>Are you sure you want to delete your Project? <br><br>
+                                    This cannot be undone. <br>
+                                    You will be redirected to the Projects page. <br>
+                                </p>  
+                            </div>
+                            <div class="flex-this w-100 text-align-center">
+                                <form id="deleteProjectForm" method="POST">
+                                    {% csrf_token %}
+                                    <div class="w-80">
+                                        <button id="continueProjectDeletionBtn" class="primary-btn white-btn margin-right-1 w-100" name="delete_project">Yes, delete this Project</button>    
+                                    </div>
+                                </form>
+                                <div id="closeProjectDeletionModal" class="margin-left-1 primary-btn action-btn">Cancel</div>
+                            </div>
+            
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
 
         </div>  
 

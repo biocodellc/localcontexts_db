@@ -36,6 +36,8 @@ urlpatterns = [
     path('projects/create-project/<str:pk>/', views.create_project, name="create-project"),
     path('projects/edit-project/<str:community_id>/<str:project_uuid>/', views.edit_project, name="edit-project"),
     path('projects/actions/<str:pk>/<uuid:project_uuid>/', views.project_actions, name="community-project-actions"),
+    path('projects/delete-project/<str:community_id>/<str:project_uuid>', views.delete_project, name="community-delete-project"),
+
 
     path('connections/<str:pk>/', views.connections, name="community-connections"),
     
