@@ -254,7 +254,7 @@ def institution_notices(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('public-institution', institution.id)
     else:
-        urls = OpenToCollaborateNoticeURL.objects.filter(institution=institution).values_list('url', 'name')
+        urls = OpenToCollaborateNoticeURL.objects.filter(institution=institution).values_list('url', 'name', 'id')
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
 
         if request.method == 'POST':
@@ -271,6 +271,13 @@ def institution_notices(request, pk):
             'urls': urls,
         }
         return render(request, 'institutions/notices.html', context)
+
+@login_required(login_url='login')
+def delete_otc_notice(request, institution_id, notice_id):
+    if OpenToCollaborateNoticeURL.objects.filter(id=notice_id).exists():
+        otc = OpenToCollaborateNoticeURL.objects.get(id=notice_id)
+        otc.delete()
+    return redirect('institution-notices', institution_id)
 
 # Members
 @login_required(login_url='login')
