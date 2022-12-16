@@ -302,11 +302,11 @@
                     <a 
                         class="block pointer" 
                         onclick="openDeleteProjectModal(this)"
-                    ><i class="fa-solid fa-trash"></i> Delete Project
+                    ><i class="fa-solid fa-trash"></i> Delete
 
                     <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
                         <span class="tooltiptext">
-                            You will not be able to delete this Project once Labels have been applied.
+                            Permanently remove this project. Projects with Labels cannot be deleted.
                         </span>
                     </div> 
                 
@@ -336,6 +336,15 @@
                             </div>
                         </div>
                     </div>
+                {% else %}
+                    <a class="block a-disabled"> 
+                        <i class="fa-solid fa-trash"></i> Delete
+                        <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                            <span class="tooltiptext">
+                                Projects with Labels cannot be deleted.
+                            </span>
+                        </div> 
+                    </a>
                 {% endif %}
             {% endif %}
 
