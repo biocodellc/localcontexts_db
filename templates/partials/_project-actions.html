@@ -210,6 +210,32 @@
                             </div>
                         </div>
                     {% endfor %}
+                    {% for bclabel in project.bc_labels.all %}
+                        <div class="flex-this">
+                            <div class="project-left-sidebar"><p class="bold">{{ bclabel.name }}</p></div>
+                            <div>
+                                <div class="flex-this margin-top-16">
+                                    <div>
+                                        {% include 'bclabels/which-label.html' %} 
+                                    </div>
+                                    <div class="margin-left-16">
+                                        <p class="no-top-margin bold">Label applied by {{ bclabel.community.community_name }}</p><br>
+                                    </div>
+                                </div>
+
+                                <h3>{{ bclabel.language }}</h3>
+                                <p>
+                                    {{ bclabel.label_text }} <br>
+                                </p>
+                                {% for translation in bclabel.bclabel_translation.all %}
+                                    <h3>{{ translation.language }}</h3>
+                                    <p>
+                                        {{ translation.translated_text }}
+                                    </p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             {% endif %}
 
