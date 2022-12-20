@@ -138,6 +138,7 @@ def public_community_view(request, pk):
         if request.user.is_authenticated:
             user_communities = UserAffiliation.objects.prefetch_related('communities').get(user=request.user).communities.all()
             form = ContactOrganizationForm(request.POST or None)
+            join_form = JoinRequestForm(request.POST or None)
 
             if request.method == 'POST':
                 if 'contact_btn' in request.POST:
@@ -157,18 +158,23 @@ def public_community_view(request, pk):
                             return redirect('public-community', community.id)
 
                 elif 'join_request' in request.POST:
-                    # Request To Join community
-                    if JoinRequest.objects.filter(user_from=request.user, community=community).exists():
-                        messages.add_message(request, messages.ERROR, "You have already sent a request to this community")
-                        return redirect('public-community', community.id)
-                    else:
-                        join_request = JoinRequest.objects.create(user_from=request.user, community=community, user_to=community.community_creator)
-                        join_request.save()
+                    if join_form.is_valid():
+                        data = join_form.save(commit=False)
 
-                        # Send email to community creator
-                        send_join_request_email_admin(request, join_request, community)
-                        messages.add_message(request, messages.SUCCESS, 'Request sent!')
-                        return redirect('public-community', community.id)
+                        # Request To Join community
+                        if JoinRequest.objects.filter(user_from=request.user, community=community).exists():
+                            messages.add_message(request, messages.ERROR, "You have already sent a request to this community")
+                            return redirect('public-community', community.id)
+                        else:
+                            data.user_from = request.user
+                            data.community = community
+                            data.user_to = community.community_creator
+                            data.save()
+
+                            # Send email to community creator
+                            send_join_request_email_admin(request, data, community)
+                            messages.add_message(request, messages.SUCCESS, 'Request sent!')
+                            return redirect('public-community', community.id)
                 else:
                     messages.add_message(request, messages.ERROR, 'Something went wrong')
                     return redirect('public-community', community.id)
@@ -187,6 +193,7 @@ def public_community_view(request, pk):
             'tklabels' : tklabels,
             'projects' : projects,
             'form': form, 
+            'join_form': join_form,
             'user_communities': user_communities,
         }
         return render(request, 'public.html', context)
@@ -945,7 +952,6 @@ def edit_project(request, community_id, project_uuid):
         contributors = ProjectContributors.objects.prefetch_related('institutions', 'researchers', 'communities').get(project=project)
         urls = project.urls
 
-        # FIXME: notices being set back to archived=False on edit after labels have been applied to project
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
                 data = form.save(commit=False)
@@ -984,7 +990,15 @@ def project_actions(request, pk, project_uuid):
     if member_role == False or not request.user.is_authenticated:
         return redirect('view-project', project_uuid)    
     else:
-        project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
+        project = Project.objects.prefetch_related(
+                    'bc_labels', 
+                    'tk_labels', 
+                    'bc_labels__community', 
+                    'tk_labels__community',
+                    'bc_labels__bclabel_translation', 
+                    'tk_labels__tklabel_translation',
+                    ).get(unique_id=project_uuid)
+
         notices = Notice.objects.filter(project=project, archived=False)
         creator = ProjectCreator.objects.get(project=project)
         current_status = ProjectStatus.objects.filter(project=project, community=community).first()
@@ -1001,6 +1015,7 @@ def project_actions(request, pk, project_uuid):
                         data.sender_affiliation = community.community_name
                         data.save()
                         project_status_seen_at_comment(request.user, community, creator, project)
+                        # send email notification to contributors
                         return redirect('community-project-actions', community.id, project.unique_id)
                     else:
                         return redirect('community-project-actions', community.id, project.unique_id)

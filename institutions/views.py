@@ -158,6 +158,7 @@ def public_institution_view(request, pk):
         if request.user.is_authenticated:
             user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()
             form = ContactOrganizationForm(request.POST or None)
+            join_form = JoinRequestForm(request.POST or None)
 
             if request.method == 'POST':
                 if 'contact_btn' in request.POST:
@@ -177,18 +178,21 @@ def public_institution_view(request, pk):
                             return redirect('public-institution', institution.id)
 
                 elif 'join_request' in request.POST:
-                    if JoinRequest.objects.filter(user_from=request.user, institution=institution).exists():
-                        messages.add_message(request, messages.ERROR, "You have already sent a request to this institution")
-                        return redirect('public-institution', institution.id)
-                    else:
-                        # Request To Join institution
-                        join_request = JoinRequest.objects.create(user_from=request.user, institution=institution, user_to=institution.institution_creator)
-                        join_request.save()
+                    if join_form.is_valid():
+                        data = join_form.save(commit=False)
+                        if JoinRequest.objects.filter(user_from=request.user, institution=institution).exists():
+                            messages.add_message(request, messages.ERROR, "You have already sent a request to this institution")
+                            return redirect('public-institution', institution.id)
+                        else:
+                            data.user_from = request.user
+                            data.institution = institution
+                            data.user_to = institution.institution_creator
+                            data.save()
 
-                        # Send email to institution creator
-                        send_join_request_email_admin(request, join_request, institution)
-                        messages.add_message(request, messages.SUCCESS, 'Request sent!')
-                        return redirect('public-institution', institution.id)
+                            # Send email to institution creator
+                            send_join_request_email_admin(request, data, institution)
+                            messages.add_message(request, messages.SUCCESS, 'Request sent!')
+                            return redirect('public-institution', institution.id)
                 else:
                     messages.add_message(request, messages.ERROR, 'Something went wrong')
                     return redirect('public-institution', institution.id)
@@ -208,6 +212,7 @@ def public_institution_view(request, pk):
             'institution': institution,
             'projects' : projects,
             'form': form, 
+            'join_form': join_form,
             'user_institutions': user_institutions,
             'bcnotice': bcnotice,
             'tknotice': tknotice,
