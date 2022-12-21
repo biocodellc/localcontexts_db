@@ -13,6 +13,22 @@ if (passwordField) {
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
+var registerUserBtn = document.getElementById('registerUserBtn')
+if (registerUserBtn) { registerUserBtn.addEventListener('click', () => disableSubmitRegistrationBtn()) }
+
+function disableSubmitRegistrationBtn() {
+    document.getElementById('registerUserForm').submit()
+
+    let oldValue = 'Continue <i class="fa fa-arrow-right"></i>'
+    registerUserBtn.setAttribute('disabled', true)
+    registerUserBtn.innerText = 'Submitting...'
+    
+    window.addEventListener('load', function() {
+        registerUserBtn.innerText = oldValue;
+        registerUserBtn.removeAttribute('disabled');
+    })
+} 
+
 if (window.location.href.includes('anth-ja77-lc-dev-42d5')) {
     let regHeader = document.getElementById('reg-header')
     let authHeader = document.getElementById('auth-header')
