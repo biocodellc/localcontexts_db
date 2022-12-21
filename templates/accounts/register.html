@@ -7,14 +7,14 @@
 </div>
 
 <div class="form-container flex-this column w-90">
-    <form action="{% url 'register' %}" method="POST" class="flex-this column w-100">
+    <form id="registerUserForm" action="{% url 'register' %}" method="POST" class="flex-this column w-100">
         {% csrf_token %}
 
         <div class="pad-top-1-5">
             <label for="username">Username</label><br>
             {{ form.username }}
             {% if form.username.errors %}
-                <div class="msg-red w-50"><small>{{ form.username.errors.as_text }}</small></div> 
+                <div class="msg-red w-100"><small>{{ form.username.errors.as_text }}</small></div> 
             {% endif %}
         </div>
 
@@ -23,7 +23,7 @@
             {{ form.email }}
         </div>
         {% if form.email.errors %}
-            <div class="msg-red w-50"><small>{{ form.email.errors.as_text }}</small></div> 
+            <div class="msg-red w-100"><small>{{ form.email.errors.as_text }}</small></div> 
         {% endif %}
 
         <div class="flex-this w-100 pad-top-1-5">
@@ -69,7 +69,7 @@
         <br>
 
         <div class="flex-this flex-end">
-            <button class="primary-btn action-btn margin-top-2">Continue <i class="fa fa-arrow-right"></i></button>
+            <button id="registerUserBtn" class="primary-btn action-btn">Continue <i class="fa fa-arrow-right"></i></button>
         </div>
 
         <!-- Alerts -->
