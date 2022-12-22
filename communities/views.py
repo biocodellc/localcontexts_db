@@ -905,7 +905,7 @@ def create_project(request, pk):
 
                 # Create Activity
                 creator_name = get_users_name(request.user)
-                ProjectActivity.objects.create(project=data, activity=f'Project created by {creator_name} | {community.community_name}')
+                ProjectActivity.objects.create(project=data, activity=f'Project was created by {creator_name} | {community.community_name}')
 
                 # Add project to community projects
                 creator = ProjectCreator.objects.select_related('community').get(project=data)
@@ -964,7 +964,7 @@ def edit_project(request, community_id, project_uuid):
                 data.save()
 
                 editor_name = get_users_name(request.user)
-                ProjectActivity.objects.create(project=data, activity=f'Edits made to Project by {editor_name}')
+                ProjectActivity.objects.create(project=data, activity=f'Edits to Project were made by {editor_name}')
 
                 instances = formset.save(commit=False)
                 for instance in instances:
@@ -1101,25 +1101,25 @@ def apply_labels(request, pk, project_uuid):
             if project.bc_labels.filter(community=community).exists():
                 for bclabel in project.bc_labels.filter(community=community):
                     project.bc_labels.remove(bclabel)
-                    ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label has been removed by {community.community_name}')
+                    ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label was removed by {community.community_name}')
 
             if project.tk_labels.filter(community=community).exists():
                 for tklabel in project.tk_labels.filter(community=community):
                     project.tk_labels.remove(tklabel)
-                    ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label has been removed by {community.community_name}')
+                    ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label was removed by {community.community_name}')
 
             # apply all selected labels
             for bclabel_uuid in bclabels_selected:
                 bclabel = BCLabel.objects.get(unique_id=bclabel_uuid)
                 if not bclabel in project.bc_labels.all():
                     project.bc_labels.add(bclabel)
-                    ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label has been applied by {community.community_name}')
+                    ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label was applied by {community.community_name}')
 
             for tklabel_uuid in tklabels_selected:
                 tklabel = TKLabel.objects.get(unique_id=tklabel_uuid)
                 if not tklabel in project.tk_labels.all():
                     project.tk_labels.add(tklabel)
-                    ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label has been applied by {community.community_name}')
+                    ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label was applied by {community.community_name}')
 
             project.save()
             

@@ -656,7 +656,7 @@ def create_project(request, pk):
 
                 # Create activity
                 name = get_users_name(data.project_creator)
-                ProjectActivity.objects.create(project=data, activity=f'Project created by {name} | {institution.institution_name}')
+                ProjectActivity.objects.create(project=data, activity=f'Project was created by {name} | {institution.institution_name}')
 
                 # Add project to institution projects
                 creator = ProjectCreator.objects.select_related('institution').get(project=data)
@@ -721,7 +721,7 @@ def edit_project(request, institution_id, project_uuid):
                 data.save()
 
                 editor_name = get_users_name(request.user)
-                ProjectActivity.objects.create(project=data, activity=f'Edits made to Project by {editor_name}')
+                ProjectActivity.objects.create(project=data, activity=f'Edits to Project were made by {editor_name}')
 
                 instances = formset.save(commit=False)
                 for instance in instances:
@@ -816,7 +816,7 @@ def project_actions(request, pk, project_uuid):
                     entities_notified.communities.add(community)
 
                     # Add activity
-                    ProjectActivity.objects.create(project=project, activity=f'{community.community_name} has been notified')
+                    ProjectActivity.objects.create(project=project, activity=f'{community.community_name} was notified')
 
                     # Create project status, first comment and  notification
                     ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community

@@ -164,7 +164,7 @@ def create_notices(selected_notices, organization, project, existing_notices):
     if existing_notices:
         for notice in existing_notices:
             notice.delete()
-            ProjectActivity.objects.create(project=project, activity=f'{notice.name} has been removed from the Project')
+            ProjectActivity.objects.create(project=project, activity=f'{notice.name} was removed from the Project')
 
     for selected in selected_notices:
         notice_type = ''
@@ -177,11 +177,11 @@ def create_notices(selected_notices, organization, project, existing_notices):
 
         if isinstance(organization, Institution):
             new_notice = Notice.objects.create(notice_type=notice_type, institution=organization, project=project)
-            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} has been applied to the Project')
+            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project')
 
         if isinstance(organization, Researcher):
             new_notice = Notice.objects.create(notice_type=notice_type, researcher=organization, project=project)
-            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} has been applied to the Project')
+            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project')
 
 
 def handle_label_versions(label):
