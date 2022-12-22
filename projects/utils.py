@@ -1,7 +1,7 @@
 from researchers.models import Researcher
 from institutions.models import Institution
 from communities.models import Community
-from projects.models import ProjectContributors
+from projects.models import ProjectContributors, ProjectActivity
 from helpers.emails import send_contributor_email
 from notifications.utils import send_simple_action_notification
 from helpers.models import ProjectStatus

@@ -6,6 +6,16 @@
         </div>
         <div>
             <div>
+                {% if institution or community %}
+                    {% if member_role == 'admin' or member_role == 'editor' %}
+                        {% include 'snippets/comment-box.html' %}
+                    {% endif %} 
+                {% endif %}
+
+                {% if researcher %}
+                    {% include 'snippets/comment-box.html' %}
+                {% endif %}
+
                 {% for comment in comments %}
                     <div class="border-top-grey">
                         <p>
@@ -19,16 +29,6 @@
                 {% empty %}
                     <p class="center-text">No messages yet</p>
                 {% endfor %}
-
-                {% if institution or community %}
-                    {% if member_role == 'admin' or member_role == 'editor' %}
-                        {% include 'snippets/comment-box.html' %}
-                    {% endif %} 
-                {% endif %}
-
-                {% if researcher %}
-                    {% include 'snippets/comment-box.html' %}
-                {% endif %}
             </div>
         </div>
     {% endif %}

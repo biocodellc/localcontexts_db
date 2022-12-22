@@ -6,6 +6,7 @@ from accounts.models import UserAffiliation
 from tklabels.models import TKLabel
 from bclabels.models import BCLabel
 from helpers.models import LabelTranslation, LabelVersion, LabelTranslationVersion
+from projects.models import ProjectActivity
 from xhtml2pdf import pisa
 
 from communities.models import Community, JoinRequest, InviteMember
@@ -163,6 +164,7 @@ def create_notices(selected_notices, organization, project, existing_notices):
     if existing_notices:
         for notice in existing_notices:
             notice.delete()
+            ProjectActivity.objects.create(project=project, activity=f'{notice.name} has been removed from the Project')
 
     for selected in selected_notices:
         notice_type = ''
@@ -174,10 +176,12 @@ def create_notices(selected_notices, organization, project, existing_notices):
             notice_type='attribution_incomplete'
 
         if isinstance(organization, Institution):
-            Notice.objects.create(notice_type=notice_type, institution=organization, project=project)
+            new_notice = Notice.objects.create(notice_type=notice_type, institution=organization, project=project)
+            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} has been applied to the Project')
 
         if isinstance(organization, Researcher):
-            Notice.objects.create(notice_type=notice_type, researcher=organization, project=project)
+            new_notice = Notice.objects.create(notice_type=notice_type, researcher=organization, project=project)
+            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} has been applied to the Project')
 
 
 def handle_label_versions(label):
