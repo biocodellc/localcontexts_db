@@ -442,7 +442,7 @@ def create_project(request, pk):
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                create_notices(notices_selected, researcher, data, None)
+                crud_notices(notices_selected, researcher, data, None)
             
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, researcher, data)
@@ -511,7 +511,7 @@ def edit_project(request, researcher_id, project_uuid):
             
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
-                create_notices(notices_selected, researcher, data, notices)
+                crud_notices(notices_selected, researcher, data, notices)
 
             return redirect('researcher-projects', researcher.id)    
 
