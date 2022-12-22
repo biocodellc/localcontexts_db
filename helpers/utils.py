@@ -6,6 +6,7 @@ from accounts.models import UserAffiliation
 from tklabels.models import TKLabel
 from bclabels.models import BCLabel
 from helpers.models import LabelTranslation, LabelVersion, LabelTranslationVersion
+from projects.models import ProjectActivity
 from xhtml2pdf import pisa
 
 from communities.models import Community, JoinRequest, InviteMember
@@ -156,28 +157,41 @@ def get_labels_json():
     data = json.load(json_data) #deserialize
     return data
 
-# Create/Update Notices
-def create_notices(selected_notices, organization, project, existing_notices):
+# Create/Update/Delete Notices
+def crud_notices(selected_notices, organization, project, existing_notices):
     # organization: either instance of institution or researcher
     # selected_notices would be a list: # attribution_incomplete # bcnotice # tknotice
-    if existing_notices:
-        for notice in existing_notices:
-            notice.delete()
+    # existing_notices: a queryset of notices that exist for this project already
 
-    for selected in selected_notices:
-        notice_type = ''
-        if selected == 'bcnotice':
-            notice_type = 'biocultural'
-        elif selected == 'tknotice':
-            notice_type='traditional_knowledge'
-        elif selected == 'attribution_incomplete':
-            notice_type='attribution_incomplete'
-
+    def create(notice_type):
         if isinstance(organization, Institution):
-            Notice.objects.create(notice_type=notice_type, institution=organization, project=project)
+            new_notice = Notice.objects.create(notice_type=notice_type, institution=organization, project=project)
+            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project')
 
         if isinstance(organization, Researcher):
-            Notice.objects.create(notice_type=notice_type, researcher=organization, project=project)
+            new_notice = Notice.objects.create(notice_type=notice_type, researcher=organization, project=project)
+            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project')
+
+    def create_notices(existing_notice_types):          
+        for notice_type in selected_notices:
+            if notice_type:
+                if existing_notice_types:
+                    if not notice_type in existing_notice_types:  
+                        create(notice_type)
+                else:
+                    create(notice_type)
+    
+    if existing_notices:
+        existing_notice_types = []
+        for notice in existing_notices:
+            existing_notice_types.append(notice.notice_type)
+            if not notice.notice_type in selected_notices: # if existing notice not in selected notices, delete notice
+                notice.delete()
+                ProjectActivity.objects.create(project=project, activity=f'{notice.name} was removed from the Project')
+        create_notices(existing_notice_types)
+
+    else:
+        create_notices(None)
 
 
 def handle_label_versions(label):

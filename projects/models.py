@@ -85,7 +85,6 @@ class ProjectContributors(models.Model):
 
     class Meta:
         indexes = [models.Index(fields=['project'])]
-        verbose_name = 'Project Contributors'
         verbose_name_plural = 'Project Contributors'
 
 class ProjectPerson(models.Model):
@@ -112,7 +111,6 @@ class ProjectCreator(models.Model):
     
     class Meta:
         indexes = [models.Index(fields=['project', 'community', 'institution', 'researcher'])]
-        verbose_name = 'Project Creator'
         verbose_name_plural = 'Project Creator'
 
 class ProjectNote(models.Model):
@@ -126,5 +124,16 @@ class ProjectNote(models.Model):
     
     class Meta:
         indexes = [models.Index(fields=['project', 'community'])]
-        verbose_name = 'Project Note'
         verbose_name_plural = 'Project Notes'
+
+class ProjectActivity(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_activity', null=True, blank=True)
+    date = models.DateTimeField(auto_now=True)
+    activity = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.project)
+    
+    class Meta:
+        indexes = [models.Index(fields=['project'])]
+        verbose_name_plural = 'Project Activity'

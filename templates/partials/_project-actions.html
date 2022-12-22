@@ -241,6 +241,29 @@
 
             {% include 'projects/project-comment.html'%}
 
+            {% if activities %}
+                <div class="border-top-solid-teal border-bottom-solid-teal margin-top-16">
+                    <h2>Project activity</h2>
+                </div>
+                <div>
+                    {% for activity in activities %}
+                        <ul>
+                            <li>
+                                <div class="flex-this space-between w-100">
+                                    <div>
+                                        {{ activity.activity }}
+                                    </div>
+                                    <div>
+                                        {{ activity.date|date:'d M Y' }}
+                                    </div>                                
+                                </div>
+
+                            </li>
+                        </ul>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
         </div>
     </div>
 
@@ -422,7 +445,7 @@
 
 </div>
 
-{% if institution.is_approved %}
+{% if institution.is_approved or researcher %}
     <div id="notifyCommunitiesModal" class="modal hide">
 
         <div class="modal-defaults notice-modal flex-this column w-100">

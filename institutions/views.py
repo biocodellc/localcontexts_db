@@ -654,6 +654,10 @@ def create_project(request, pk):
 
                 data.save()
 
+                # Create activity
+                name = get_users_name(data.project_creator)
+                ProjectActivity.objects.create(project=data, activity=f'Project was created by {name} | {institution.institution_name}')
+
                 # Add project to institution projects
                 creator = ProjectCreator.objects.select_related('institution').get(project=data)
                 creator.institution = institution
@@ -661,7 +665,7 @@ def create_project(request, pk):
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                create_notices(notices_selected, institution, data, None)
+                crud_notices(notices_selected, institution, data, None)
                 
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, institution, data)
@@ -678,7 +682,6 @@ def create_project(request, pk):
 
                 # Format and send notification about the created project
                 truncated_project_title = str(data.title)[0:30]
-                name = get_users_name(data.project_creator)
                 title = f'A new project was created by {name}: {truncated_project_title} ...'
                 ActionNotification.objects.create(title=title, notification_type='Projects', sender=data.project_creator, reference_id=data.unique_id, institution=institution)
                 return redirect('institution-projects', institution.id)
@@ -717,6 +720,9 @@ def edit_project(request, institution_id, project_uuid):
                 data.urls = project_links
                 data.save()
 
+                editor_name = get_users_name(request.user)
+                ProjectActivity.objects.create(project=data, activity=f'Edits to Project were made by {editor_name}')
+
                 instances = formset.save(commit=False)
                 for instance in instances:
                     if not instance.name or not instance.email:
@@ -731,7 +737,7 @@ def edit_project(request, institution_id, project_uuid):
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
                 # Pass any existing notices as well as newly selected ones
-                create_notices(notices_selected, institution, data, notices)
+                crud_notices(notices_selected, institution, data, notices)
 
             return redirect('institution-projects', institution.id)
 
@@ -769,6 +775,7 @@ def project_actions(request, pk, project_uuid):
         comments = ProjectComment.objects.select_related('sender').filter(project=project)
         entities_notified = EntitiesNotified.objects.get(project=project)
         communities = Community.approved.all()
+        activities = ProjectActivity.objects.filter(project=project).order_by('-date')
         form = ProjectCommentForm(request.POST or None)
 
         communities_list = list(chain(
@@ -808,6 +815,9 @@ def project_actions(request, pk, project_uuid):
                     community = Community.objects.get(id=community_id)
                     entities_notified.communities.add(community)
 
+                    # Add activity
+                    ProjectActivity.objects.create(project=project, activity=f'{community.community_name} was notified')
+
                     # Create project status, first comment and  notification
                     ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
                     if message:
@@ -832,6 +842,7 @@ def project_actions(request, pk, project_uuid):
             'communities': communities,
             'statuses': statuses,
             'comments': comments,
+            'activities': activities,
         }
         return render(request, 'institutions/project-actions.html', context)
 

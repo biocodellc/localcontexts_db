@@ -903,6 +903,10 @@ def create_project(request, pk):
                     
                 data.save()
 
+                # Create Activity
+                creator_name = get_users_name(request.user)
+                ProjectActivity.objects.create(project=data, activity=f'Project was created by {creator_name} | {community.community_name}')
+
                 # Add project to community projects
                 creator = ProjectCreator.objects.select_related('community').get(project=data)
                 creator.community = community
@@ -959,6 +963,9 @@ def edit_project(request, community_id, project_uuid):
                 data.urls = project_links
                 data.save()
 
+                editor_name = get_users_name(request.user)
+                ProjectActivity.objects.create(project=data, activity=f'Edits to Project were made by {editor_name}')
+
                 instances = formset.save(commit=False)
                 for instance in instances:
                     if not instance.name or not instance.email:
@@ -1003,6 +1010,7 @@ def project_actions(request, pk, project_uuid):
         creator = ProjectCreator.objects.get(project=project)
         current_status = ProjectStatus.objects.filter(project=project, community=community).first()
         statuses = ProjectStatus.objects.filter(project=project)
+        activities = ProjectActivity.objects.filter(project=project).order_by('-date')
         form = ProjectCommentForm(request.POST or None)
 
         if request.method == "POST":
@@ -1035,6 +1043,7 @@ def project_actions(request, pk, project_uuid):
             'form': form,
             'current_status': current_status,
             'statuses': statuses,
+            'activities': activities,
         }
         return render(request, 'communities/project-actions.html', context)
 
@@ -1092,37 +1101,49 @@ def apply_labels(request, pk, project_uuid):
             if project.bc_labels.filter(community=community).exists():
                 for bclabel in project.bc_labels.filter(community=community):
                     project.bc_labels.remove(bclabel)
+                    ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label was removed by {community.community_name}')
+
             if project.tk_labels.filter(community=community).exists():
                 for tklabel in project.tk_labels.filter(community=community):
                     project.tk_labels.remove(tklabel)
+                    ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label was removed by {community.community_name}')
 
             # apply all selected labels
             for bclabel_uuid in bclabels_selected:
                 bclabel = BCLabel.objects.get(unique_id=bclabel_uuid)
-                project.bc_labels.add(bclabel)
+                if not bclabel in project.bc_labels.all():
+                    project.bc_labels.add(bclabel)
+                    ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label was applied by {community.community_name}')
 
             for tklabel_uuid in tklabels_selected:
                 tklabel = TKLabel.objects.get(unique_id=tklabel_uuid)
-                project.tk_labels.add(tklabel)
-            
+                if not tklabel in project.tk_labels.all():
+                    project.tk_labels.add(tklabel)
+                    ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label was applied by {community.community_name}')
+
             project.save()
             
             if notices:
-                # add community to project contributors
-                contributors = ProjectContributors.objects.get(project=project)
-                contributors.communities.add(community)
-                contributors.save()
+                if not project.has_labels():
+                    for notice in notices:
+                        notice.archived = False
+                        notice.save()
+                else:
+                    # add community to project contributors
+                    contributors = ProjectContributors.objects.get(project=project)
+                    contributors.communities.add(community)
+                    contributors.save()
 
-                # Archive Notices
-                for notice in notices:
-                    notice.archived = True
-                    notice.save()
-                
-                #reset status
-                status = ProjectStatus.objects.get(project=project, community=community)
-                status.seen = True
-                status.status = 'labels_applied'
-                status.save()
+                    # Archive Notices
+                    for notice in notices:
+                        notice.archived = True
+                        notice.save()
+                    
+                    #reset status
+                    status = ProjectStatus.objects.get(project=project, community=community)
+                    status.seen = True
+                    status.status = 'labels_applied'
+                    status.save()
             else:
                 comm_title = 'Labels have been applied to the project ' + truncated_project_title + ' ...'
                 ActionNotification.objects.create(title=comm_title, notification_type='Projects', community=community, reference_id=reference_id)
