@@ -18,14 +18,17 @@ def set_project_status(user, project, community, creator, project_status):
 
             if project_status == 'seen':
                 title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
+                ProjectActivity.objects.create(project=project, activity=f'{community.community_name} set the Project status to Seen')
 
             if project_status == 'pending':
                 status.status = 'pending'
                 title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
+                ProjectActivity.objects.create(project=project, activity=f'{community.community_name} set the Project status to Labels Pending')
 
             if project_status == 'not_pending':
                 status.status = 'not_pending'
                 title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
+                ProjectActivity.objects.create(project=project, activity=f'{community.community_name} set the Project status to No Labels Pending')
 
             status.save()
 
