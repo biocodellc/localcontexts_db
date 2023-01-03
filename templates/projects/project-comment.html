@@ -1,10 +1,11 @@
 {% load static %} {% load custom_project_tags %}
 {% if request.user.is_authenticated %}
     {% if 'projects/actions/' in request.path %}
-        <div class="border-top-solid-teal border-bottom-solid-teal">
+        <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
             <h2>Project messages</h2>
+            <h2 class="margin-right-8 pointer" onclick="toggleProjectInfo(this, 'projectMessageDiv')"><i class="fa-solid fa-minus fa-xl darkteal-text"></i></h2>
         </div>
-        <div>
+        <div id="projectMessageDiv" style="height: auto; overflow: hidden;">
             <div>
                 {% if institution or community %}
                     {% if member_role == 'admin' or member_role == 'editor' %}
