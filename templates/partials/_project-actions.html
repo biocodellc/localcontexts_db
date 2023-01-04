@@ -47,7 +47,7 @@
             </div>
             <div class="flex-this">
                 <div class="project-left-sidebar"><p class="bold">Status</p></div>
-                <div><p>Active</p></div>
+                <div><p>{% if project_archived %} Archived {% else %} Active {% endif %}</p></div>
             </div>
         </div>
 
@@ -349,7 +349,18 @@
             {% if request.user.is_authenticated and request.user == project.project_creator %}
                 <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
 
-                <!-- <a class="block" href="#"><i class="fa-solid fa-box-archive"></i> Archive</a> -->
+                <a 
+                    class="block" 
+                    {% if community %}
+                        href="{% url 'community-archive-project' community.id project.unique_id %}"
+                    {% endif %}
+                    {% if institution %}
+                        href="{% url 'institution-archive-project' institution.id project.unique_id %}"
+                    {% endif %}
+                    {% if researcher %}
+                        href="{% url 'researcher-archive-project' researcher.id project.unique_id %}"
+                    {% endif %}
+                ><i class="fa-solid fa-box-archive"></i> {% if project_archived %} Unarchive {% else %} Archive {% endif %}</a>
 
                 {% if not project.has_labels %}
                     <a 

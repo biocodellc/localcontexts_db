@@ -1011,6 +1011,12 @@ def project_actions(request, pk, project_uuid):
         current_status = ProjectStatus.objects.filter(project=project, community=community).first()
         statuses = ProjectStatus.objects.filter(project=project)
         activities = ProjectActivity.objects.filter(project=project).order_by('-date')
+
+        project_archived = False
+        if ProjectArchived.objects.filter(project_uuid=project.unique_id, community_id=community.id).exists():
+            x = ProjectArchived.objects.get(project_uuid=project.unique_id, community_id=community.id)
+            project_archived = x.archived
+
         form = ProjectCommentForm(request.POST or None)
 
         if request.method == "POST":
@@ -1044,8 +1050,22 @@ def project_actions(request, pk, project_uuid):
             'current_status': current_status,
             'statuses': statuses,
             'activities': activities,
+            'project_archived': project_archived,
         }
         return render(request, 'communities/project-actions.html', context)
+
+@login_required(login_url='login')
+def archive_project(request, community_id, project_uuid):
+    if not ProjectArchived.objects.filter(community_id=community_id, project_uuid=project_uuid).exists():
+        ProjectArchived.objects.create(community_id=community_id, project_uuid=project_uuid, archived=True)
+    else:
+        archived_project = ProjectArchived.objects.get(community_id=community_id, project_uuid=project_uuid)
+        if archived_project.archived:
+            archived_project.archived = False
+        else:
+            archived_project.archived = True
+        archived_project.save()
+    return redirect('community-project-actions', community_id, project_uuid)
 
 @login_required(login_url='login')
 def delete_project(request, community_id, project_uuid):

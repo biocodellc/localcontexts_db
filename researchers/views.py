@@ -13,7 +13,7 @@ from accounts.utils import get_users_name
 
 from communities.models import Community
 from notifications.models import ActionNotification
-from helpers.models import OpenToCollaborateNoticeURL, ProjectStatus, ProjectComment, Notice, EntitiesNotified
+from helpers.models import *
 from projects.models import ProjectContributors, Project, ProjectPerson, ProjectCreator
 
 from projects.forms import *
@@ -622,6 +622,20 @@ def project_actions(request, pk, project_uuid):
             return render(request, 'researchers/project-actions.html', context)
     else:
         return redirect('view-project', project.unique_id)
+
+@login_required(login_url='login')
+def archive_project(request, researcher_id, project_uuid):
+    if not ProjectArchived.objects.filter(researcher_id=researcher_id, project_uuid=project_uuid).exists():
+        ProjectArchived.objects.create(researcher_id=researcher_id, project_uuid=project_uuid, archived=True)
+    else:
+        archived_project = ProjectArchived.objects.get(researcher_id=researcher_id, project_uuid=project_uuid)
+        if archived_project.archived:
+            archived_project.archived = False
+        else:
+            archived_project.archived = True
+        archived_project.save()
+    return redirect('researcher-project-actions', researcher_id, project_uuid)
+
 
 @login_required(login_url='login')
 def delete_project(request, researcher_id, project_uuid):

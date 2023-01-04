@@ -14,7 +14,7 @@ from .models import *
 from projects.models import Project, ProjectContributors, ProjectPerson, ProjectCreator
 from communities.models import Community, JoinRequest
 from notifications.models import ActionNotification
-from helpers.models import ProjectComment, ProjectStatus, Notice, EntitiesNotified, OpenToCollaborateNoticeURL
+from helpers.models import *
 
 from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
@@ -776,6 +776,11 @@ def project_actions(request, pk, project_uuid):
         entities_notified = EntitiesNotified.objects.get(project=project)
         communities = Community.approved.all()
         activities = ProjectActivity.objects.filter(project=project).order_by('-date')
+
+        project_archived = False
+        if ProjectArchived.objects.filter(project_uuid=project.unique_id, institution_id=institution.id).exists():
+            x = ProjectArchived.objects.get(project_uuid=project.unique_id, institution_id=institution.id)
+            project_archived = x.archived
         form = ProjectCommentForm(request.POST or None)
 
         communities_list = list(chain(
@@ -843,8 +848,22 @@ def project_actions(request, pk, project_uuid):
             'statuses': statuses,
             'comments': comments,
             'activities': activities,
+            'project_archived': project_archived,
         }
         return render(request, 'institutions/project-actions.html', context)
+
+@login_required(login_url='login')
+def archive_project(request, institution_id, project_uuid):
+    if not ProjectArchived.objects.filter(institution_id=institution_id, project_uuid=project_uuid).exists():
+        ProjectArchived.objects.create(institution_id=institution_id, project_uuid=project_uuid, archived=True)
+    else:
+        archived_project = ProjectArchived.objects.get(institution_id=institution_id, project_uuid=project_uuid)
+        if archived_project.archived:
+            archived_project.archived = False
+        else:
+            archived_project.archived = True
+        archived_project.save()
+    return redirect('institution-project-actions', institution_id, project_uuid)
 
 @login_required(login_url='login')
 def delete_project(request, institution_id, project_uuid):
