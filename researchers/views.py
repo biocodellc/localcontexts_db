@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 from itertools import chain
 
 from localcontexts.utils import dev_prod_or_local
-from projects.utils import add_to_contributors
+from projects.utils import *
 from helpers.utils import *
 from accounts.utils import get_users_name
 
@@ -220,18 +220,10 @@ def researcher_projects(request, pk):
         project_ids = list(set(projects_list)) # remove duplicate ids
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids).order_by('-date_added')
         
-        p = Paginator(projects, 10)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
+        page = paginate(request, projects, 10)
         
         if request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
-                query = SearchQuery(q)
-                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
+            results = return_project_search_results(request, projects)
 
         context = {
             'projects': projects,
@@ -264,18 +256,10 @@ def projects_with_labels(request, pk):
             ).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids
             ).exclude(tk_labels=None).order_by('-date_added')
 
-        p = Paginator(projects, 10)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
+        page = paginate(request, projects, 10)
         
         if request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
-                query = SearchQuery(q)
-                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
+            results = return_project_search_results(request, projects)
 
         context = {
             'projects': projects,
@@ -305,18 +289,10 @@ def projects_with_notices(request, pk):
         project_ids = list(set(projects_list)) # remove duplicate ids
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids, tk_labels=None, bc_labels=None).order_by('-date_added')
 
-        p = Paginator(projects, 10)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
+        page = paginate(request, projects, 10)
         
         if request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
-                query = SearchQuery(q)
-                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
+            results = return_project_search_results(request, projects)
 
         context = {
             'projects': projects,
@@ -339,18 +315,10 @@ def projects_creator(request, pk):
         created_projects = researcher.researcher_created_project.all().values_list('project__id', flat=True)
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=created_projects).order_by('-date_added')
 
-        p = Paginator(projects, 10)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
-
+        page = paginate(request, projects, 10)
+        
         if request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
-                query = SearchQuery(q)
-                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
+            results = return_project_search_results(request, projects)
 
         context = {
             'projects': projects,
@@ -374,19 +342,10 @@ def projects_contributor(request, pk):
         contrib = researcher.contributing_researchers.all().values_list('project__id', flat=True)
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=contrib).exclude(id__in=created_projects).order_by('-date_added')
 
-
-        p = Paginator(projects, 10)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
+        page = paginate(request, projects, 10)
         
         if request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
-                query = SearchQuery(q)
-                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
+            results = return_project_search_results(request, projects)
 
         context = {
             'projects': projects,
@@ -407,18 +366,10 @@ def projects_archived(request, pk):
         archived_projects = ProjectArchived.objects.filter(researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True)
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
 
-        p = Paginator(projects, 10)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
+        page = paginate(request, projects, 10)
         
         if request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
-                query = SearchQuery(q)
-                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
+            results = return_project_search_results(request, projects)
 
         context = {
             'projects': projects,

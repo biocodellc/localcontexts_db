@@ -5,6 +5,8 @@ from projects.models import ProjectContributors, ProjectActivity
 from helpers.emails import send_contributor_email
 from notifications.utils import send_simple_action_notification
 from helpers.models import ProjectStatus
+from django.core.paginator import Paginator
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 
 def set_project_status(user, project, community, creator, project_status):
         truncated_project_title = str(project.title)[0:30]
@@ -116,3 +118,20 @@ def add_to_contributors(request, account, project):
                 send_simple_action_notification(None, community, 'Your community has been added as a contributor on a Project', 'Projects', project.unique_id)
                 # create email
             send_contributor_email(request, community, project.unique_id)
+
+
+def paginate(request, queryset, num_of_pages):
+    p = Paginator(queryset, num_of_pages)
+    page_num = request.GET.get('page', 1)
+    page = p.page(page_num)
+    return page
+
+def return_project_search_results(request, queryset):
+    q = request.GET.get('q')
+    if q:
+        vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+        query = SearchQuery(q)
+        results = queryset.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+    else:
+        results = None
+    return results
