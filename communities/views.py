@@ -866,6 +866,38 @@ def projects_contributor(request, pk):
         }
         return render(request, 'communities/projects.html', context)
 
+@login_required(login_url='login')
+def projects_archived(request, pk):
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return redirect('restricted')    
+    else:
+        archived_projects = ProjectArchived.objects.filter(community_id=community.id, archived=True).values_list('project_uuid', flat=True)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
+
+        p = Paginator(projects, 10)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+        
+        if request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
+
+        context = {
+            'projects': projects,
+            'community': community,
+            'member_role': member_role,
+            'items': page,
+            'results': results,
+        }
+        return render(request, 'communities/projects.html', context)
+
 
 # Create Project
 @login_required(login_url='login')

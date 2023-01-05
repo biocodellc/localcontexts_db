@@ -397,6 +397,38 @@ def projects_contributor(request, pk):
         }
         return render(request, 'researchers/projects.html', context)
 
+@login_required(login_url='login')
+def projects_archived(request, pk):
+    researcher = Researcher.objects.select_related('user').get(id=pk)
+    user_can_view = checkif_user_researcher(researcher, request.user)
+    if user_can_view == False:
+        return redirect('restricted')
+    else:
+        archived_projects = ProjectArchived.objects.filter(researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
+
+        p = Paginator(projects, 10)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+        
+        if request.method == 'GET':
+            q = request.GET.get('q')
+            if q:
+                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
+                query = SearchQuery(q)
+                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
+            else:
+                results = None
+
+        context = {
+            'projects': projects,
+            'researcher': researcher,
+            'items': page,
+            'results': results,
+            'user_can_view': user_can_view,
+        }
+        return render(request, 'researchers/projects.html', context)
+
 
 # Create Project
 @login_required(login_url='login')
@@ -551,6 +583,11 @@ def project_actions(request, pk, project_uuid):
             comments = ProjectComment.objects.select_related('sender').filter(project=project)
             entities_notified = EntitiesNotified.objects.get(project=project)
             activities = ProjectActivity.objects.filter(project=project).order_by('-date')
+
+            project_archived = False
+            if ProjectArchived.objects.filter(project_uuid=project.unique_id, researcher_id=researcher.id).exists():
+                x = ProjectArchived.objects.get(project_uuid=project.unique_id, researcher_id=researcher.id)
+                project_archived = x.archived
             form = ProjectCommentForm(request.POST or None)
 
             communities_list = list(chain(
@@ -618,6 +655,7 @@ def project_actions(request, pk, project_uuid):
                 'statuses': statuses,
                 'comments': comments,
                 'activities': activities,
+                'project_archived': project_archived,
             }
             return render(request, 'researchers/project-actions.html', context)
     else:

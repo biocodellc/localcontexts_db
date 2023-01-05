@@ -20,6 +20,7 @@ urlpatterns = [
 
     path('projects-created/<str:pk>/', views.projects_creator, name="researcher-projects-creator"),
     path('projects-contributing/<str:pk>/', views.projects_contributor, name="researcher-projects-contributor"),
+    path('projects-archived/<str:pk>/', views.projects_archived, name="researcher-projects-archived"),
 
     path('projects/create-project/<str:pk>', views.create_project, name="researcher-create-project"),
     path('projects/edit-project/<str:researcher_id>/<str:project_uuid>/', views.edit_project, name="researcher-edit-project"),
