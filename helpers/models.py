@@ -141,6 +141,16 @@ class ProjectStatus(models.Model):
         verbose_name = 'Project Status'
         verbose_name_plural = 'Project Statuses'
 
+class ProjectArchived(models.Model):
+    project_uuid = models.UUIDField(null=True, blank=True, db_index=True)
+    community_id = models.IntegerField(null=True, blank=True)
+    institution_id = models.IntegerField(null=True, blank=True)
+    researcher_id = models.IntegerField(null=True, blank=True)
+    archived = models.BooleanField()
+
+    class Meta:
+        verbose_name_plural = 'Project Archived'
+
 class LabelNote(models.Model):
     bclabel = models.ForeignKey(BCLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="bclabel_note")
     tklabel = models.ForeignKey(TKLabel, null=True, blank=True, on_delete=models.CASCADE, related_name="tklabel_note")
