@@ -807,6 +807,9 @@ def project_actions(request, pk, project_uuid):
                     send_email_notice_placed(project, community, institution)
                     return redirect('institution-project-actions', institution.id, project.unique_id)
 
+            elif 'delete_project' in request.POST:
+                return redirect('inst-delete-project', institution.id, project.unique_id)
+
         context = {
             'member_role': member_role,
             'institution': institution,
@@ -820,6 +823,17 @@ def project_actions(request, pk, project_uuid):
         }
         return render(request, 'institutions/project-actions.html', context)
 
+@login_required(login_url='login')
+def delete_project(request, institution_id, project_uuid):
+    institution = Institution.objects.get(id=institution_id)
+    project = Project.objects.get(unique_id=project_uuid)
+
+    if ActionNotification.objects.filter(reference_id=project.unique_id).exists():
+        for notification in ActionNotification.objects.filter(reference_id=project.unique_id):
+            notification.delete()
+    
+    project.delete()
+    return redirect('institution-projects', institution.id)
 
 @login_required(login_url='login')
 def connections(request, pk):

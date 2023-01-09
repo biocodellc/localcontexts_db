@@ -1008,7 +1008,8 @@ def project_actions(request, pk, project_uuid):
                 project_status = request.POST.get('project-status')
                 set_project_status(request.user, project, community, creator, project_status)                            
                 return redirect('community-project-actions', community.id, project.unique_id)
-
+            elif 'delete_project' in request.POST:
+                return redirect('community-delete-project', community.id, project.unique_id)
 
         context = {
             'member_role': member_role,
@@ -1021,6 +1022,18 @@ def project_actions(request, pk, project_uuid):
             'statuses': statuses,
         }
         return render(request, 'communities/project-actions.html', context)
+
+@login_required(login_url='login')
+def delete_project(request, community_id, project_uuid):
+    community = Community.objects.get(id=community_id)
+    project = Project.objects.get(unique_id=project_uuid)
+
+    if ActionNotification.objects.filter(reference_id=project.unique_id).exists():
+        for notification in ActionNotification.objects.filter(reference_id=project.unique_id):
+            notification.delete()
+    
+    project.delete()
+    return redirect('community-projects', community.id)
 
 
 @login_required(login_url='login')

@@ -585,6 +585,8 @@ def project_actions(request, pk, project_uuid):
                         send_email_notice_placed(project, community, researcher)
                         return redirect('researcher-projects', researcher.id)
 
+                elif 'delete_project' in request.POST:
+                    return redirect('researcher-delete-project', researcher.id, project.unique_id)
 
             context = {
                 'user_can_view': user_can_view,
@@ -600,6 +602,18 @@ def project_actions(request, pk, project_uuid):
             return render(request, 'researchers/project-actions.html', context)
     else:
         return redirect('view-project', project.unique_id)
+
+@login_required(login_url='login')
+def delete_project(request, researcher_id, project_uuid):
+    researcher = Researcher.objects.get(id=researcher_id)
+    project = Project.objects.get(unique_id=project_uuid)
+
+    if ActionNotification.objects.filter(reference_id=project.unique_id).exists():
+        for notification in ActionNotification.objects.filter(reference_id=project.unique_id):
+            notification.delete()
+    
+    project.delete()
+    return redirect('researcher-projects', researcher.id)
 
         
 @login_required(login_url='login')
