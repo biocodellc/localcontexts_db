@@ -128,12 +128,16 @@ def public_community_view(request, pk):
         community = Community.objects.get(id=pk)
         bclabels = BCLabel.objects.filter(community=community, is_approved=True)
         tklabels = TKLabel.objects.filter(community=community, is_approved=True)
-        created_projects = ProjectCreator.objects.filter(community=community)
-        projects = []
+                
+        projects_list = list(chain(
+            community.community_created_project.all().values_list('project__unique_id', flat=True), # community created project ids
+            community.tklabel_community.all().values_list('project_tklabels__unique_id', flat=True), # projects where tk labels have been applied
+            community.bclabel_community.all().values_list('project_bclabels__unique_id', flat=True), # projects where bclabels have been applied
 
-        for p in created_projects:
-            if p.project.project_privacy == 'Public':
-                projects.append(p.project)
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        projects = Project.objects.select_related('project_creator').filter(unique_id__in=project_ids, project_privacy='Public').exclude(unique_id__in=archived).order_by('-date_added')
 
         if request.user.is_authenticated:
             user_communities = UserAffiliation.objects.prefetch_related('communities').get(user=request.user).communities.all()
