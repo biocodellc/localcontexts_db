@@ -5,6 +5,16 @@ from institutions.models import Institution
 from communities.models import Community
 from researchers.models import Researcher
 
+class ProjectArchived(models.Model):
+    project_uuid = models.UUIDField(null=True, blank=True, db_index=True)
+    community_id = models.IntegerField(null=True, blank=True)
+    institution_id = models.IntegerField(null=True, blank=True)
+    researcher_id = models.IntegerField(null=True, blank=True)
+    archived = models.BooleanField()
+
+    class Meta:
+        verbose_name_plural = 'Project Archived'
+
 class Project(models.Model):
     TYPES = (
         ('Item', 'Item'),
