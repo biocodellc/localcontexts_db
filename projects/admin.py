@@ -18,8 +18,12 @@ class ProjectActivityAdmin(admin.ModelAdmin):
     list_display = ('project', 'date', 'activity')    
     readonly_fields = ('project', 'date', 'activity')
 
+class ProjectArchivedAdmin(admin.ModelAdmin):
+    list_display = ('project_uuid', 'archived', 'community_id', 'institution_id', 'researcher_id')
+
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectContributors, ProjectContributorsAdmin)
 admin.site.register(ProjectPerson, ProjectPersonAdmin)
 admin.site.register(ProjectCreator, ProjectCreatorAdmin)
 admin.site.register(ProjectActivity, ProjectActivityAdmin)
+admin.site.register(ProjectArchived, ProjectArchivedAdmin)

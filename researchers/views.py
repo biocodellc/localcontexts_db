@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.contrib import messages
 from django.http import Http404
-from django.core.paginator import Paginator
 from itertools import chain
 
 from localcontexts.utils import dev_prod_or_local
@@ -14,7 +12,7 @@ from accounts.utils import get_users_name
 from communities.models import Community
 from notifications.models import ActionNotification
 from helpers.models import *
-from projects.models import ProjectContributors, Project, ProjectPerson, ProjectCreator
+from projects.models import *
 
 from projects.forms import *
 from helpers.forms import ProjectCommentForm, OpenToCollaborateNoticeURLForm

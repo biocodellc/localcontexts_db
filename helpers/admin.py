@@ -31,9 +31,6 @@ class ProjectStatusAdmin(admin.ModelAdmin):
     list_display = ('project', 'community', 'seen', 'status')
     search_fields = ('project',)
 
-class ProjectArchivedAdmin(admin.ModelAdmin):
-    list_display = ('project_uuid', 'archived', 'community_id', 'institution_id', 'researcher_id')
-
 # class LabelNoteAdmin(admin.ModelAdmin):
 #     list_display = ('bclabel', 'tklabel', 'sender',)
 
@@ -46,4 +43,3 @@ admin.site.register(LabelTranslationVersion, LabelTranslationVersionAdmin)
 admin.site.register(LabelTranslation, LabelTranslationAdmin)
 admin.site.register(EntitiesNotified, EntitiesNotifiedAdmin)
 admin.site.register(OpenToCollaborateNoticeURL, OpenToCollaborateNoticeURLAdmin)
-admin.site.register(ProjectArchived, ProjectArchivedAdmin)
