@@ -55,8 +55,22 @@
                             </div>
                         </div>
                     </div>
-
+                {% else %}
+                    <div class="loc grey-text bold margin-bottom-16">
+                        <small>
+                            You are a member of this community
+                        </small>
+                    </div>
                 {% endif %}
+            {% else %}
+                <div class="loc grey-text bold margin-bottom-16">
+                    <small>
+                        <a href="{% url 'login' %}" class="bold darkteal-text underline-hover">
+                            Login
+                        </a> 
+                        to contact
+                    </small>
+                </div>
             {% endif %}                
         </div>
 
@@ -166,7 +180,22 @@
                             </div>
                         </div>
                     </div>
+                {% else %}
+                    <div class="loc grey-text bold margin-bottom-16">
+                        <small>
+                            You are a member of this institution
+                        </small>
+                    </div>
                 {% endif %}
+            {% else %}
+                <div class="loc grey-text bold margin-bottom-16">
+                    <small>
+                        <a href="{% url 'login' %}" class="bold darkteal-text underline-hover">
+                            Login
+                        </a> 
+                        to contact
+                    </small>
+                </div>
             {% endif %}                
         </div>
 
