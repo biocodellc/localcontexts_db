@@ -198,7 +198,7 @@
                                         {% include 'tklabels/which-label.html' %} 
                                     </div>
                                     <div class="margin-left-16">
-                                        <p class="no-top-margin bold">Label applied by {{ tklabel.community.community_name }}</p><br>
+                                        <p class="no-top-margin bold">Label applied by <a class="darkteal-text underline-hover" href="{% url 'public-community' tklabel.community.id %}">{{ tklabel.community.community_name }}</a></p><br>
                                     </div>
                                 </div>
 
@@ -224,7 +224,7 @@
                                         {% include 'bclabels/which-label.html' %} 
                                     </div>
                                     <div class="margin-left-16">
-                                        <p class="no-top-margin bold">Label applied by {{ bclabel.community.community_name }}</p><br>
+                                        <p class="no-top-margin bold">Label applied by <a class="darkteal-text underline-hover" href="{% url 'public-community' bclabel.community.id %}">{{ bclabel.community.community_name }}</a></p><br>
                                     </div>
                                 </div>
 

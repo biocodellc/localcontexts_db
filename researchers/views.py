@@ -8,6 +8,7 @@ from localcontexts.utils import dev_prod_or_local
 from projects.utils import *
 from helpers.utils import *
 from accounts.utils import get_users_name
+from notifications.utils import send_action_notification_to_project_contribs
 
 from communities.models import Community
 from notifications.models import ActionNotification
@@ -553,6 +554,7 @@ def project_actions(request, pk, project_uuid):
                         data.sender = request.user
                         data.sender_affiliation = 'Researcher'
                         data.save()
+                        send_action_notification_to_project_contribs(project)
                         return redirect('researcher-project-actions', researcher.id, project.unique_id)
 
                 elif 'notify_btn' in request.POST: 
