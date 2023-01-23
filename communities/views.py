@@ -990,6 +990,7 @@ def project_actions(request, pk, project_uuid):
         creator = ProjectCreator.objects.get(project=project)
         current_status = ProjectStatus.objects.filter(project=project, community=community).first()
         statuses = ProjectStatus.objects.filter(project=project)
+        comments = ProjectComment.objects.select_related('sender').filter(project=project)
         activities = ProjectActivity.objects.filter(project=project).order_by('-date')
 
         project_archived = False
@@ -1009,7 +1010,9 @@ def project_actions(request, pk, project_uuid):
                         data.sender_affiliation = community.community_name
                         data.save()
                         project_status_seen_at_comment(request.user, community, creator, project)
-                        # send email notification to contributors
+                        # send notification to contributors
+
+                        send_action_notification_to_project_contribs(project)
                         return redirect('community-project-actions', community.id, project.unique_id)
                     else:
                         return redirect('community-project-actions', community.id, project.unique_id)
@@ -1029,6 +1032,7 @@ def project_actions(request, pk, project_uuid):
             'form': form,
             'current_status': current_status,
             'statuses': statuses,
+            'comments': comments,
             'activities': activities,
             'project_archived': project_archived,
         }

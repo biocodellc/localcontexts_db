@@ -7,6 +7,7 @@ from itertools import chain
 from localcontexts.utils import dev_prod_or_local
 from projects.utils import *
 from helpers.utils import *
+from notifications.utils import send_action_notification_to_project_contribs
 
 from .models import *
 from projects.models import *
@@ -790,6 +791,7 @@ def project_actions(request, pk, project_uuid):
                     data.sender = request.user
                     data.sender_affiliation = institution.institution_name
                     data.save()
+                    send_action_notification_to_project_contribs(project)
                     return redirect('institution-project-actions', institution.id, project.unique_id)
             
             elif 'notify_btn' in request.POST: 
