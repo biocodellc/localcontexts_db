@@ -43,7 +43,9 @@
                 <div class="project-left-sidebar"><p class="bold">Creator</p></div>
                 <div>
                     <p>
-                        {% firstof creator.community creator.institution creator.researcher %}
+                        {% firstof project.project_creator.get_full_name project.project_creator.username %} | 
+                        {% firstof creator.community creator.institution %}
+                        {% if creator.researcher %} Researcher {% endif %}
                     </p>
                 </div>
             </div>
