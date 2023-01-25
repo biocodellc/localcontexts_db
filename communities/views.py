@@ -1090,6 +1090,7 @@ def apply_labels(request, pk, project_uuid):
                     data = form.save(commit=False)
                     data.community = community
                     data.project = project
+                    data.sender = request.user
                     data.save()
 
             # Set private project to discoverable
@@ -1097,35 +1098,7 @@ def apply_labels(request, pk, project_uuid):
                 project.project_privacy = 'Discoverable'
                 project.save()
 
-            # Get uuids of each label that was checked and add them to the project
-            bclabels_selected = request.POST.getlist('selected_bclabels')
-            tklabels_selected = request.POST.getlist('selected_tklabels')
-
-            # find target community labels and clear those only!
-            if project.bc_labels.filter(community=community).exists():
-                for bclabel in project.bc_labels.filter(community=community):
-                    project.bc_labels.remove(bclabel)
-                    ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label was removed by {community.community_name}')
-
-            if project.tk_labels.filter(community=community).exists():
-                for tklabel in project.tk_labels.filter(community=community):
-                    project.tk_labels.remove(tklabel)
-                    ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label was removed by {community.community_name}')
-
-            # apply all selected labels
-            for bclabel_uuid in bclabels_selected:
-                bclabel = BCLabel.objects.get(unique_id=bclabel_uuid)
-                if not bclabel in project.bc_labels.all():
-                    project.bc_labels.add(bclabel)
-                    ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label was applied by {community.community_name}')
-
-            for tklabel_uuid in tklabels_selected:
-                tklabel = TKLabel.objects.get(unique_id=tklabel_uuid)
-                if not tklabel in project.tk_labels.all():
-                    project.tk_labels.add(tklabel)
-                    ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label was applied by {community.community_name}')
-
-            project.save()
+            add_remove_labels(request, project, community)
             
             if notices:
                 if not project.has_labels():

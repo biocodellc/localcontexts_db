@@ -1,6 +1,6 @@
 {% if member_role == 'admin' or member_role == 'editor' or researcher %}
-    <div class="margin-top-16">
-        <form method="POST" action="">
+    <div>
+        <form method="POST" action="" class="margin-top-16">
             {% csrf_token %}
             <div class="flex-this row">
                 <div class="w-90"> {{ form.message }} </div>

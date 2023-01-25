@@ -15,6 +15,7 @@ from researchers.models import Researcher
 from .models import Notice
 from notifications.models import *
 
+from accounts.utils import get_users_name
 from helpers.emails import send_membership_email
 
 def check_member_role(user, organization):
@@ -192,6 +193,40 @@ def crud_notices(selected_notices, organization, project, existing_notices):
 
     else:
         create_notices(None)
+
+def add_remove_labels(request, project, community):
+    # Get uuids of each label that was checked and add them to the project
+    bclabels_selected = request.POST.getlist('selected_bclabels')
+    tklabels_selected = request.POST.getlist('selected_tklabels')
+
+    bclabels = BCLabel.objects.filter(unique_id__in=bclabels_selected)
+    tklabels = TKLabel.objects.filter(unique_id__in=tklabels_selected)
+
+    user = get_users_name(request.user)
+
+    # find target community labels and clear those only!
+    if project.bc_labels.filter(community=community).exists():
+
+        for bclabel in project.bc_labels.filter(community=community).exclude(unique_id__in=bclabels_selected): # does project have labels from this community that aren't the selected ones?
+            project.bc_labels.remove(bclabel) 
+            ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label was removed by {user} at {community.community_name}')
+
+    if project.tk_labels.filter(community=community).exists():
+        for tklabel in project.tk_labels.filter(community=community).exclude(unique_id__in=tklabels_selected):
+            project.tk_labels.remove(tklabel)
+            ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label was removed by {user} at {community.community_name}')
+
+    for bclabel in bclabels:
+        if not bclabel in project.bc_labels.all(): # if label not in project labels, apply it
+            project.bc_labels.add(bclabel)
+            ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label was applied by {user} at {community.community_name}')
+
+    for tklabel in tklabels:
+        if not tklabel in project.tk_labels.all():
+            project.tk_labels.add(tklabel)
+            ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label was applied by {user} at {community.community_name}')
+    
+    project.save()
 
 
 def handle_label_versions(label):
