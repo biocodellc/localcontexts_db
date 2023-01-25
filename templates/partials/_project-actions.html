@@ -249,7 +249,7 @@
             {% include 'projects/project-comment.html'%}
 
             {% if activities %}
-                <div class="border-top-solid-teal border-bottom-solid-teal margin-top-16 flex-this space-between">
+                <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
                     <h2>Project activity</h2>
                     <h2 class="margin-right-8 pointer" onclick="toggleProjectInfo(this, 'projectActivityDiv')"><i class="fa-solid fa-plus fa-xl darkteal-text"></i></h2>
                 </div>
@@ -258,12 +258,8 @@
                         <ul>
                             <li>
                                 <div class="flex-this space-between w-100">
-                                    <div>
-                                        {{ activity.activity }}
-                                    </div>
-                                    <div>
-                                        {{ activity.date|date:'d M Y' }}
-                                    </div>                                
+                                    <div class="w-80">{{ activity.activity }}</div>
+                                    <div class="w-20 right-text">{{ activity.date|date:'d M Y' }}</div>                                
                                 </div>
 
                             </li>
