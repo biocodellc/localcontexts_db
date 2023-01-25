@@ -367,7 +367,15 @@
                         {% if researcher %}
                             href="{% url 'researcher-archive-project' researcher.id project.unique_id %}"
                         {% endif %}
-                    ><i class="fa-solid fa-box-archive"></i> {% if project_archived %} Unarchive {% else %} Archive {% endif %}</a>
+                    ><i class="fa-solid fa-box-archive"></i> {% if project_archived %} Unarchive {% else %} Archive {% endif %}
+
+                        <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                            <span class="tooltiptext">
+                                Projects that are archived will only appear in your archived project list. Projects can be unarchived at any time.
+                            </span>
+                        </div> 
+
+                    </a>
 
                     {% if not project.has_labels %}
                         <a 

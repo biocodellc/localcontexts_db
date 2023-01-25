@@ -126,6 +126,7 @@ class ProjectCreator(models.Model):
 class ProjectNote(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_note', null=True, blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community_note', null=True, blank=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="project_note_sender", blank=True)
     note = models.TextField('Community Note', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
 

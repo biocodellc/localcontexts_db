@@ -1090,6 +1090,7 @@ def apply_labels(request, pk, project_uuid):
                     data = form.save(commit=False)
                     data.community = community
                     data.project = project
+                    data.sender = request.user
                     data.save()
 
             # Set private project to discoverable
