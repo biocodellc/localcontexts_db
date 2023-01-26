@@ -420,7 +420,7 @@ def create_project(request, pk):
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                crud_notices(notices_selected, researcher, data, None)
+                crud_notices(request, notices_selected, researcher, data, None)
             
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, researcher, data)
@@ -489,7 +489,7 @@ def edit_project(request, researcher_id, project_uuid):
             
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
-                crud_notices(notices_selected, researcher, data, notices)
+                crud_notices(request, notices_selected, researcher, data, notices)
 
             return redirect('researcher-projects', researcher.id)    
 
@@ -573,9 +573,10 @@ def project_actions(request, pk, project_uuid):
                         # Add communities that were notified to entities_notified instance
                         community = Community.objects.get(id=community_id)
                         entities_notified.communities.add(community)
-
+                        name = get_users_name(request.user)
+                        
                         # Add activity
-                        ProjectActivity.objects.create(project=project, activity=f'{community.community_name} was notified')
+                        ProjectActivity.objects.create(project=project, activity=f'{community.community_name} was notified by {name}')
 
                         # Create project status, first comment and  notification
                         ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
