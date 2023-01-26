@@ -7,10 +7,12 @@ from notifications.utils import send_simple_action_notification
 from helpers.models import ProjectStatus
 from django.core.paginator import Paginator
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
+from accounts.utils import get_users_name
 
 def set_project_status(user, project, community, creator, project_status):
         truncated_project_title = str(project.title)[0:30]
         reference_id = project.unique_id
+        name = get_users_name(user)
 
         statuses = ProjectStatus.objects.filter(project=project, community=community)
 
@@ -20,17 +22,17 @@ def set_project_status(user, project, community, creator, project_status):
 
             if project_status == 'seen':
                 title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
-                ProjectActivity.objects.create(project=project, activity=f'{community.community_name} set the Project status to Seen')
+                ProjectActivity.objects.create(project=project, activity=f'{name} from {community.community_name} set the Project status to Seen')
 
             if project_status == 'pending':
                 status.status = 'pending'
                 title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
-                ProjectActivity.objects.create(project=project, activity=f'{community.community_name} set the Project status to Labels Pending')
+                ProjectActivity.objects.create(project=project, activity=f'{name} from {community.community_name} set the Project status to Labels Pending')
 
             if project_status == 'not_pending':
                 status.status = 'not_pending'
                 title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
-                ProjectActivity.objects.create(project=project, activity=f'{community.community_name} set the Project status to No Labels Pending')
+                ProjectActivity.objects.create(project=project, activity=f'{name} from {community.community_name} set the Project status to No Labels Pending')
 
             status.save()
 

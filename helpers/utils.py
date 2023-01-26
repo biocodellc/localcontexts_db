@@ -159,19 +159,20 @@ def get_labels_json():
     return data
 
 # Create/Update/Delete Notices
-def crud_notices(selected_notices, organization, project, existing_notices):
+def crud_notices(request, selected_notices, organization, project, existing_notices):
     # organization: either instance of institution or researcher
     # selected_notices would be a list: # attribution_incomplete # bcnotice # tknotice
     # existing_notices: a queryset of notices that exist for this project already
+    name = get_users_name(request.user)
 
     def create(notice_type):
         if isinstance(organization, Institution):
             new_notice = Notice.objects.create(notice_type=notice_type, institution=organization, project=project)
-            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project')
+            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project by {name}')
 
         if isinstance(organization, Researcher):
             new_notice = Notice.objects.create(notice_type=notice_type, researcher=organization, project=project)
-            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project')
+            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project by {name}')
 
     def create_notices(existing_notice_types):          
         for notice_type in selected_notices:
@@ -188,7 +189,7 @@ def crud_notices(selected_notices, organization, project, existing_notices):
             existing_notice_types.append(notice.notice_type)
             if not notice.notice_type in selected_notices: # if existing notice not in selected notices, delete notice
                 notice.delete()
-                ProjectActivity.objects.create(project=project, activity=f'{notice.name} was removed from the Project')
+                ProjectActivity.objects.create(project=project, activity=f'{notice.name} was removed from the Project by {name}')
         create_notices(existing_notice_types)
 
     else:
@@ -209,22 +210,22 @@ def add_remove_labels(request, project, community):
 
         for bclabel in project.bc_labels.filter(community=community).exclude(unique_id__in=bclabels_selected): # does project have labels from this community that aren't the selected ones?
             project.bc_labels.remove(bclabel) 
-            ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label was removed by {user} at {community.community_name}')
+            ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label was removed by {user} | {community.community_name}')
 
     if project.tk_labels.filter(community=community).exists():
         for tklabel in project.tk_labels.filter(community=community).exclude(unique_id__in=tklabels_selected):
             project.tk_labels.remove(tklabel)
-            ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label was removed by {user} at {community.community_name}')
+            ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label was removed by {user} | {community.community_name}')
 
     for bclabel in bclabels:
         if not bclabel in project.bc_labels.all(): # if label not in project labels, apply it
             project.bc_labels.add(bclabel)
-            ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label was applied by {user} at {community.community_name}')
+            ProjectActivity.objects.create(project=project, activity=f'{bclabel.name} Label was applied by {user} | {community.community_name}')
 
     for tklabel in tklabels:
         if not tklabel in project.tk_labels.all():
             project.tk_labels.add(tklabel)
-            ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label was applied by {user} at {community.community_name}')
+            ProjectActivity.objects.create(project=project, activity=f'{tklabel.name} Label was applied by {user} | {community.community_name}')
     
     project.save()
 
