@@ -5,16 +5,16 @@
 
         {% include 'partials/_project-actions.html' %}
 
-    {% elif project.project_privacy == 'Discoverable' %}
+    {% elif project.project_privacy == 'Contributor' %}
         <!-- Logged in user -->
         {% if request.user.is_authenticated %}
             {% if user_can_view %}
                 {% include 'partials/_project-actions.html' %}
             {% else %}
-                {% include 'partials/_project-discoverable.html' %}
+                {% include 'partials/_project-contributor-view.html' %}
             {% endif %}
         {% else %}
-            {% include 'partials/_project-discoverable.html' %}
+            {% include 'partials/_project-contributor-view.html' %}
         {% endif %}
 
     {% elif project.project_privacy == 'Private' %}
