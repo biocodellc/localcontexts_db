@@ -964,12 +964,12 @@ button[disabled],
   }
 
 /* Tooltip on project action page */
-.actions-card .tooltiptext {
+.actions-card .tooltiptext, .actions-card-notifified .tooltiptext {
     width: 250px;
     margin-left: -60px;
 }
 
-.actions-card .tooltip .tooltiptext::after { left: 78%; }
+.actions-card .tooltip .tooltiptext::after, .actions-card-notifified .tooltip .tooltiptext::after { left: 78%; }
 
 /* View Project / Project Actions */
 .project-card, .actions-card, .actions-card-notifified {
