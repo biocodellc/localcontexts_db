@@ -91,34 +91,26 @@
                         <ul>
                             {% if project.project_contributors.communities %}
                                 {% for community in project.project_contributors.communities.all %}
-                                    <li>{{ community.community_name }} | Community</li>
+                                    <li><a href="{% url 'public-community' community.id %}" class="darkteal-text underline-hover">{{ community.community_name }}</a> | Community</li>
                                 {% endfor %}
                             {% endif %}
 
                             {% if project.project_contributors.institutions %}
                                 {% for institution in project.project_contributors.institutions.all %}
-                                    <li>{{ institution.institution_name }} | Institution <br></li>
+                                    <li><a href="{% url 'public-institution' institution.id %}" class="darkteal-text underline-hover">{{ institution.institution_name }}</a> | Institution <br></li>
                                 {% endfor %}
                             {% endif %}
 
                             {% if project.project_contributors.researchers %}
                                 {% for researcher in project.project_contributors.researchers.all %}
                                     <li>
-                                        <div class="researcher-hover">
+                                        <div>
                                             {% if researcher.orcid %}
                                                 <a class="darkteal-text" itemprop="sameAs" content="{{ researcher.orcid }}" href="{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
                                                     <img loading="lazy" src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="margin-top:2.5px;" alt="ORCID iD icon">
                                                 </a>
                                             {% endif %}
-
-                                            {% firstof researcher.user.get_full_name researcher.user.username %} | Researcher
-                                            <div class="researcher-hover-info">
-                                                <p>
-                                                    <strong>Primary Institution Affiliation:</strong> {% if researcher.primary_institution %}{{ researcher.primary_institution }}{% else %} None specified {% endif %}<br>
-                                                    <strong>About:</strong> {% if researcher.description %} {{ researcher.description }} {% else %} No description available{% endif %}
-                                                </p>
-                                                
-                                            </div>
+                                            <a href="{% url 'public-researcher' researcher.id %}" class="darkteal-text underline-hover">{% firstof researcher.user.get_full_name researcher.user.username %}</a> | Researcher
                                         </div>
                                     </li>
                                 {% endfor %}
@@ -432,7 +424,7 @@
 
         <!-- List of communities notified -->
         {% if statuses %}
-            <div class="actions-card content-card-space flex-this column">
+            <div class="actions-card-notifified content-card-space flex-this column">
                 <div class="flex-this">
                     <h3 class="no-top-margin no-bottom-margin">Communities Notified</h3>
                     <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
@@ -455,7 +447,7 @@
 
                 {% for status in statuses %}
                     <div class="border-bottom-grey">
-                        <div><p><span class="bold">{{ status.community }}</span></p></div>
+                        <div><p><span class="bold"><a href="{% url 'public-community' status.community.id %}" class="darkteal-text underline-hover">{{ status.community }}</a> </span></p></div>
                         <div>
                             <p><em> Project status: </em>
                                 {% if status.seen and status.status == None %} Seen

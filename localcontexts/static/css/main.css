@@ -971,31 +971,8 @@ button[disabled],
 
 .actions-card .tooltip .tooltiptext::after { left: 78%; }
 
-/* View Project: Researcher hover */
-.researcher-hover {
-    cursor: pointer;
-    position: relative;
-}
-
-.researcher-hover-info {
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.3s;
-    border: 1px solid #eeecec;
-    position: absolute;
-    background-color: #eeecec;
-    color: #333333;
-    border-radius: 5px;
-    padding: 5px 10px;
-}
-
-.researcher-hover:hover .researcher-hover-info {
-    visibility: visible;
-    opacity: 1;
-}
-
 /* View Project / Project Actions */
-.project-card, .actions-card {
+.project-card, .actions-card, .actions-card-notifified {
     background-color: #fff;
     margin: 10px auto;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
@@ -1008,7 +985,7 @@ button[disabled],
     min-width: 880px;
 }
 
-.actions-card {
+.actions-card, .actions-card-notifified {
     max-width: 360px;
     min-width: 360px;
 }
