@@ -69,7 +69,7 @@
                             {% include 'bclabels/which-label.html' %}
                         </div>
                         <div class="pad-left-2">
-                            <p class="darkteal-text">Label shared by {{ bclabel.community.community_name }} </p>
+                            <p>Label shared by <a href="{% url 'public-community' bclabel.community.id %}" class="darkteal-text underline-hover">{{ bclabel.community.community_name }}</a> </p>
                             <p class="bold"> {{ bclabel.name }} </p>
                             {% if bclabel.audiofile %} <div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
                             <p>{{ bclabel.label_text}}</p>
@@ -90,7 +90,7 @@
                             {% include 'tklabels/which-label.html' %}
                         </div>
                         <div class="pad-left-2">
-                            <p class="darkteal-text">Label shared by {{ tklabel.community.community_name }} </p>
+                            <p>Label shared by <a href="{% url 'public-community' tklabel.community.id %}" class="darkteal-text underline-hover">{{ tklabel.community.community_name }}</a> </p>
                             <p class="bold"> {{ tklabel.name }} </p>
                             {% if tklabel.audiofile %} <div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
                             <p>{{ tklabel.label_text}}</p>
