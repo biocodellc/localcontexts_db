@@ -1093,9 +1093,9 @@ def apply_labels(request, pk, project_uuid):
                     data.sender = request.user
                     data.save()
 
-            # Set private project to discoverable
+            # Set private project to contributor view
             if project.project_privacy == 'Private':
-                project.project_privacy = 'Discoverable'
+                project.project_privacy = 'Contributor'
                 project.save()
 
             add_remove_labels(request, project, community)

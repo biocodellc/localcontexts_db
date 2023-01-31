@@ -27,7 +27,7 @@ class Project(models.Model):
     )
     PRIVACY_LEVEL = {
         ('Public', 'Public'),
-        ('Discoverable', 'Discoverable'),
+        ('Contributor', 'Contributor'),
         ('Private', 'Private'),
     }
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, db_index=True)

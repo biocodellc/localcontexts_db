@@ -795,9 +795,9 @@ def project_actions(request, pk, project_uuid):
                     return redirect('institution-project-actions', institution.id, project.unique_id)
             
             elif 'notify_btn' in request.POST: 
-                # Set private project to discoverable
+                # Set private project to contributor view
                 if project.project_privacy == 'Private':
-                    project.project_privacy = 'Discoverable'
+                    project.project_privacy = 'Contributor'
                     project.save()
 
                 communities_selected = request.POST.getlist('selected_communities')

@@ -68,7 +68,7 @@ class ProjectDetail(generics.RetrieveAPIView):
 def project_detail_providers(request, providers_id):
     try:
         project = Project.objects.get(providers_id=providers_id)
-        if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable':
+        if project.project_privacy == 'Public' or project.project_privacy == 'Contributor':
             if project.has_notice():
                 serializer = ProjectSerializer(project, many=False)
             else:

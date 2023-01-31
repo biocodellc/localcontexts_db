@@ -332,10 +332,10 @@
 
                 <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
             {% endif %}
-            {% if project.project_privacy == 'Public' %}
-                <a id="shareBtn" class="block pointer" onclick="copyProjectUrl('projectPageUrl', 'shareBtn')"><i class="fa-solid fa-share-nodes"></i> Share</a>
-                <input type="text" value="{{ project.project_page}}" id="projectPageUrl" class="hide">
+            <a id="shareBtn" class="block pointer" onclick="copyProjectUrl('projectPageUrl', 'shareBtn')"><i class="fa-solid fa-share-nodes"></i> Share</a>
+            <input type="text" value="{{ project.project_page}}" id="projectPageUrl" class="hide">
 
+            {% if project.project_privacy == 'Public' or project.project_privacy == 'Contributor' %}
                 <a class="block" href="{% url 'download-project-zip' project.unique_id %}"><i class="fa-solid fa-download"></i> Download</a>
             {% endif %}
 
