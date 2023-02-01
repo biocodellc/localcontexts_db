@@ -474,7 +474,7 @@
                     {% csrf_token %}
 
                     <div class="flex-this space-between">
-                        <div><h2 class="primary-black-text">Send Requests</h2></div>
+                        <div><h2 class="primary-black-text">Notify Communities</h2></div>
                         <div>
                             <div class="primary-btn white-btn close-modal-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
                         </div>            
@@ -482,12 +482,14 @@
 
                     <div>
                         <p>
-                            By notifying relevant communities, they are able to see what this Project is and decide whether or not they would like to add their Labels to this Project. After your organization has entered the communities you would like to to send these requests to, you can monitor and communicate with them in the requests section.
+                            By notifying relevant communities, they will be able to see this Project and decide whether or not they would 
+                            like to add their Labels. After your organization has entered the communities you would like to to send 
+                            these notifications to, you can monitor their statuses in the Communities Notified section that will appear under Project Actions.
                         </p>  
                     </div>
 
                     {% if communities %}
-                        <label>Search the Local Contexts Hub registry</label><br>
+                        <label>Select a community/communities you'd like to notify of this Project*</label><br>
             
                         <div class="w-100">
                             <select id="communities-select" class="w-100" onchange="selectCommunities()">
@@ -511,7 +513,7 @@
                         </div>
                         
                         <div>
-                            <label>Send a message with this request</label><br>
+                            <label>Add a Project comment</label><br>
                             <textarea name="notice_message" class="w-100" style="height:100px;"></textarea>
                         </div>
                         <div class="flex-this flex-end w-100 margin-top-16">
