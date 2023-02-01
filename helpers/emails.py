@@ -48,6 +48,22 @@ def send_email_with_attachment(file, to_email, subject, template):
               "subject": subject,
               "html": template})
 
+def send_group_email(to_email, subject, template):
+    # Example: send_simple_email('someone@domain.com', 'Hello', 'This is a test email')
+    return requests.post(
+		settings.MAILGUN_BASE_URL,
+		auth=("api", settings.MAILGUN_API_KEY),
+		data={"from": "Local Contexts Hub <no-reply@localcontextshub.org>",
+            "to": 'support@localcontexts.org', # TEST THIS BEFORE USING
+			"bcc": [to_email],
+			"subject": subject,
+            "html": template}
+    )
+
+def send_temp_email(emails):
+    template = render_to_string('snippets/emails/hub-updates.html')
+    send_group_email(emails, 'Local Contexts Hub Updates', template)
+
 # Send all Institution and community applications to support or the site admin
 def send_hub_admins_application_email(request, organization, data):
     template = ''
