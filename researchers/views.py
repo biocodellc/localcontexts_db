@@ -464,7 +464,7 @@ def edit_project(request, researcher_id, project_uuid):
 
         # Check to see if notice exists for this project and pass to template
         if Notice.objects.filter(project=project).exists():
-            notices = Notice.objects.filter(project=project)
+            notices = Notice.objects.filter(project=project, archived=False)
 
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
