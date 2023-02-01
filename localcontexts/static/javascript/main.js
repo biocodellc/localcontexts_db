@@ -13,6 +13,22 @@ if (passwordField) {
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
+var registerUserBtn = document.getElementById('registerUserBtn')
+if (registerUserBtn) { registerUserBtn.addEventListener('click', () => disableSubmitRegistrationBtn()) }
+
+function disableSubmitRegistrationBtn() {
+    document.getElementById('registerUserForm').submit()
+
+    let oldValue = 'Continue <i class="fa fa-arrow-right"></i>'
+    registerUserBtn.setAttribute('disabled', true)
+    registerUserBtn.innerText = 'Submitting...'
+    
+    window.addEventListener('load', function() {
+        registerUserBtn.innerText = oldValue;
+        registerUserBtn.removeAttribute('disabled');
+    })
+} 
+
 if (window.location.href.includes('anth-ja77-lc-dev-42d5')) {
     let regHeader = document.getElementById('reg-header')
     let authHeader = document.getElementById('auth-header')
@@ -1017,6 +1033,12 @@ if (window.location.href.includes('connect-community') || window.location.href.i
     })
 }   
 
+function toggleEllipsisMenu(btn) {
+    let id = btn.id.split('ellipsis-')[1]
+    let dropdown = document.getElementById(`ellipsis-content-${id}`)
+    dropdown.classList.toggle('hide')
+}
+
 // Copy text to clipboard
 function copyToClipboard(elemID) {
     let span = document.getElementById(elemID)
@@ -1268,5 +1290,51 @@ if (window.location.href.includes('labels/view/')) {
                 btn.innerHTML = `View Label History <i class="fa fa-angle-down" aria-hidden="true"></i>`
             }
         }
+    }
+}
+
+// PROJECT ACTION PAGE
+function copyProjectUrl(projectPageUrl, elemID) {
+    let target = document.getElementById(projectPageUrl)
+    let copyBtn = document.getElementById(elemID)
+    let initialHTML = copyBtn.innerHTML
+    
+    if (target.value) {
+        target.select()
+        target.setSelectionRange(0, 99999)
+        navigator.clipboard.writeText(target.value)
+        copyBtn.innerHTML = `<i class="fa-solid fa-share-nodes"></i> Project link copied!`
+        setTimeout(() => {
+            copyBtn.innerHTML = initialHTML
+        }, 1500)
+    }
+}
+
+function openNotifyCommunitiesModal(elem) {
+    const modal = document.getElementById('notifyCommunitiesModal')
+    modal.classList.replace('hide', 'show')
+
+    const closeModalBtn = document.querySelector('.close-modal-btn')
+    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+}
+
+function openDeleteProjectModal(elem) {
+    const modal = document.getElementById('deleteProjectModal')
+    modal.classList.replace('hide', 'show')
+
+    const closeModalBtn = document.getElementById('closeProjectDeletionModal')
+    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+}
+
+function toggleProjectInfo(self, idToToggle) {
+    let div = document.getElementById(idToToggle)
+
+    if (div.style.height == "0px") {
+        console.log('hello')
+        self.innerHTML = '<i class="fa-solid fa-minus fa-xl darkteal-text"></i>'
+        div.style.height = 'auto'
+    } else {
+        div.style.height = '0px'
+        self.innerHTML = '<i class="fa-solid fa-plus fa-xl darkteal-text"></i>'
     }
 }

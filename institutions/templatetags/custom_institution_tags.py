@@ -16,9 +16,9 @@ def institution_notifications(institution):
 def unread_notifications(institution):
     return ActionNotification.objects.filter(institution=institution, viewed=False).exists()
 
-@register.simple_tag
-def anchor(url_name, section_id, institution_id):
-    return reverse(url_name, kwargs={'pk': institution_id}) + f"#project-unique-{str(section_id)}"
+# @register.simple_tag
+# def anchor(url_name, section_id, institution_id):
+#     return reverse(url_name, kwargs={'pk': institution_id}) + f"#project-unique-{str(section_id)}"
 
 @register.simple_tag
 def get_notices_count(institution):

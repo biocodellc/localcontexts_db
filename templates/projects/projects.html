@@ -124,7 +124,20 @@
                                 href="{% url 'community-projects-contributor' community.id %}"
                             {% endif %}
                         >
-                        Contributed</a>           
+                        Contributed</a> |
+                        <a 
+                            class="darkteal-text pointer underline-hover {% if 'projects-archived' in request.path %} bold {% endif %}" 
+                            {% if institution %}
+                                href="{% url 'institution-projects-archived' institution.id %}"
+                            {% endif %}
+                            {% if researcher %}
+                                href="{% url 'researcher-projects-archived' researcher.id %}"
+                            {% endif %}
+                            {% if community %}
+                                href="{% url 'community-projects-archived' community.id %}"
+                            {% endif %}
+                        >
+                        Archived</a>            
                 </div>
 
             </div>

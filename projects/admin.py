@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, ProjectContributors, ProjectPerson, ProjectCreator
+from .models import *
 
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('title', 'project_creator', 'project_contact', 'project_contact_email', 'project_privacy', 'project_page', 'date_added', 'unique_id')
@@ -14,7 +14,20 @@ class ProjectPersonAdmin(admin.ModelAdmin):
 class ProjectCreatorAdmin(admin.ModelAdmin):
     list_display = ('project', 'community', 'institution', 'researcher')
 
+class ProjectActivityAdmin(admin.ModelAdmin):
+    list_display = ('project', 'date', 'activity')    
+    readonly_fields = ('project', 'date', 'activity')
+
+class ProjectArchivedAdmin(admin.ModelAdmin):
+    list_display = ('project_uuid', 'archived', 'community_id', 'institution_id', 'researcher_id')
+
+class ProjectNoteAdmin(admin.ModelAdmin):
+    list_display = ('project', 'community')
+
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(ProjectContributors, ProjectContributorsAdmin)
 admin.site.register(ProjectPerson, ProjectPersonAdmin)
 admin.site.register(ProjectCreator, ProjectCreatorAdmin)
+admin.site.register(ProjectActivity, ProjectActivityAdmin)
+admin.site.register(ProjectArchived, ProjectArchivedAdmin)
+admin.site.register(ProjectNote, ProjectNoteAdmin)

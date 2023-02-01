@@ -61,16 +61,21 @@ def register(request):
 
             if result['success']:
                 user = form.save(commit=False)
-                user.is_active = False
-                user.save()
 
-                # If SignupInvite instances exist, delete them
-                if SignUpInvitation.objects.filter(email=user.email).exists():
-                    for invite in SignUpInvitation.objects.filter(email=user.email):
-                        invite.delete()
+                if User.objects.filter(email=user.email).exists():
+                    messages.error(request, 'A user with this email already exists')
+                    return redirect('register')
+                else:
+                    user.is_active = False
+                    user.save()
 
-                send_activation_email(request, user)
-                return redirect('verify')
+                    # If SignupInvite instances exist, delete them
+                    if SignUpInvitation.objects.filter(email=user.email).exists():
+                        for invite in SignUpInvitation.objects.filter(email=user.email):
+                            invite.delete()
+
+                    send_activation_email(request, user)
+                    return redirect('verify')
             else:
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
             
@@ -128,7 +133,7 @@ def login(request):
             if not user.last_login:
                 auth.login(request, user)
                 # Welcome email
-                send_welcome_email(user)
+                send_welcome_email(request, user)
                 return redirect('create-profile')
             else:
                 auth.login(request, user)

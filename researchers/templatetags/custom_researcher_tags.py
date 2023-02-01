@@ -11,9 +11,9 @@ register = template.Library()
 def researcher_notifications(researcher):
     return ActionNotification.objects.filter(researcher=researcher)
 
-@register.simple_tag
-def anchor(url_name, section_id, researcher_id):
-    return reverse(url_name, kwargs={'pk': researcher_id}) + "#project-unique-" + str(section_id)
+# @register.simple_tag
+# def anchor(url_name, section_id, researcher_id):
+#     return reverse(url_name, kwargs={'pk': researcher_id}) + "#project-unique-" + str(section_id)
 
 @register.simple_tag
 def get_notices_count(researcher):

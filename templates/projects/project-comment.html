@@ -1,133 +1,36 @@
 {% load static %} {% load custom_project_tags %}
-<div class="border-top-solid-teal">
+{% if request.user.is_authenticated %}
+    {% if 'projects/actions/' in request.path %}
+        <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
+            <h2>Project comments</h2>
+            <h2 class="margin-right-8 pointer" onclick="toggleProjectInfo(this, 'projectMessageDiv')"><i class="fa-solid fa-minus fa-xl darkteal-text"></i></h2>
+        </div>
+        <div id="projectMessageDiv" style="height: auto; overflow: hidden;">
+            <div>
+                {% if institution or community %}
+                    {% if member_role == 'admin' or member_role == 'editor' %}
+                        {% include 'snippets/comment-box.html' %}
+                    {% endif %} 
+                {% endif %}
 
-    <!-- RESEARCHER AND INSTITUTION -->
-    {% if institution %}
-        {% project_status project as statuses %}
+                {% if researcher %}
+                    {% include 'snippets/comment-box.html' %}
+                {% endif %}
 
-        {% if statuses %}
-            <h3 class="no-bottom-margin">Project Comments</h3>
-            {% for status in statuses %}
-            
-                <div class="flex-this space-between w-100 margin-top-16">
-                    <div><p><span class="bold">{{ status.community }}</span></p></div>
-                    <div>
-                        <p class="grey-text"><em>Status: 
-                            {% if status.seen and status.status == None %} Seen
-                            {% elif status.seen and status.status == 'pending' %} Labels Pending
-                            {% elif status.seen and status.status == 'not_pending' %} No Labels Pending
-                            {% elif status.seen and status.status == 'labels_applied' %} Labels Applied
-                            {% else %} Sent {% endif %}</em>
-                        </p>
-                    </div>    
-                </div>
-
-                {% project_comments project status.community as comments %}
-                    {% if comments %}
-                        {% for comment in comments %}
-                            {% if comment.community.community_name in status.community.community_name %}
-                                <div class="flex-this w-80 project-comment">
-                                    <div class="project-comment-teal"></div>
-                                    <div class="project-comment-text">
-                                        <span class="bold">
-                                            {% firstof comment.sender.get_full_name comment.sender.username %}
-                                        </span>
-                                        <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-                                        <p>{{ comment.message }}</p>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                        {% if member_role == 'admin' or member_role == 'editor' %}
-                            {% include 'snippets/comment-box.html' %}
-                        {% endif %} 
-                    {% else %}
-                        No comments yet
-
-                        {% if member_role == 'admin' or member_role == 'editor' %}
-                            {% include 'snippets/comment-box.html' %}
-                        {% endif %}
-                    {% endif %}
-            {% endfor %}
-
-        {% endif %}
-    {% endif %}
-
-{% if researcher %}
-    {% if statuses %}
-        <h3 class="no-bottom-margin">Project Comments</h3>
-        {% for status in statuses %}
-
-            <div class="flex-this space-between w-100 margin-top-16">
-                <div><p><span class="bold">{{ status.community }}</span></p></div>
-                <div>
-                    <p class="grey-text"><em>Status: 
-                        {% if status.seen and status.status == None %} Seen
-                        {% elif status.seen and status.status == 'pending' %} Labels Pending
-                        {% elif status.seen and status.status == 'not_pending' %} No Labels Pending
-                        {% elif status.seen and status.status == 'labels_applied' %} Labels Applied
-                        {% else %} Sent {% endif %}</em>
-                    </p>
-                </div>    
-            </div>
-
-            {% project_comments project status.community as comments %}
-            {% if comments %}
                 {% for comment in comments %}
-                    {% if comment.community.community_name in status.community.community_name %}
-                        <div class="flex-this w-80 project-comment">
-                            <div class="project-comment-teal"></div>
-                            <div class="project-comment-text">
-                                <span class="bold">
-                                    {% firstof comment.sender.get_full_name comment.sender.username %}
-                                </span>
-                                <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-                                <p>{{ comment.message }}</p>
-                            </div>
-                        </div>
-                    {% endif %}
+                    <div class="border-top-grey">
+                        <p>
+                            <span class="bold">
+                                {% firstof comment.sender.get_full_name comment.sender.username %} 
+                                {% if comment.sender_affiliation %} | {{ comment.sender_affiliation }} {% endif %}
+                            </span> <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br><br>
+                            {{ comment.message }}
+                        </p>
+                    </div>
+                {% empty %}
+                    <p class="center-text"><small>No comments yet</small></p>
                 {% endfor %}
-                {% include 'snippets/comment-box.html' %}
-            {% else %}
-                No comments yet
-                {% include 'snippets/comment-box.html' %}
-            {% endif %}
-
-        {% endfor %}
+            </div>
+        </div>
     {% endif %}
 {% endif %}
-
-
-    <!-- COMMUNITY  -->
-    {% if community %}
-
-        {% project_comments project community as comments %}
-        <h3>Project Comments</h3>
-
-        {% if comments %}
-            {% for comment in comments %}
-                <div class="flex-this w-80 project-comment">
-                    <div class="project-comment-teal"></div>
-                    <div class="project-comment-text">
-                        <span class="bold">
-                            {% firstof comment.sender.get_full_name comment.sender.username %}
-                        </span>
-                        <span class="grey-text">{{ comment.created|date:'m/d/Y' }}</span><br>
-                        <p>{{ comment.message }}</p>
-                    </div>
-                </div>
-            {% endfor %}
-            {% if member_role == 'admin' or member_role == 'editor' %}
-                {% include 'snippets/comment-box.html' %}
-            {% endif %} 
-        {% else %}
-            No comments yet
-
-            {% if member_role == 'admin' or member_role == 'editor' %}
-                {% include 'snippets/comment-box.html' %}
-            {% endif %} 
-        {% endif %}
-
-    {% endif %}
-
-</div>

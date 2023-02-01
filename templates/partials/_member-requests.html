@@ -129,6 +129,14 @@
                     </div>
                 {% endif %}
 
+                {% if member_role == 'admin' %}
+                    <div>
+                        <p>
+                            <span class="bold">Email:</span><i> {{ join_request.user_from.email }}</i>
+                        </p>                    
+                    </div>
+                {% endif %}
+
                 {% if join_request.role %}
                     <div>
                         <span class="bold">Their proposed responsibility is:</span>
@@ -211,6 +219,14 @@
                     </div>
                 {% endif %}
 
+                {% if member_role == 'admin' %}
+                    <div>
+                        <p>
+                            <span class="bold">Email:</span><i> {{ invite.receiver.email }}</i>
+                        </p>                    
+                    </div>
+                {% endif %}
+
                 {% if invite.sender %}
                     <div>
                         <span class="bold">Invited by:</span>
@@ -220,12 +236,14 @@
 
                 {% if invite.role %}
                     <div>
-                        <span class="bold">Their proposed responsibility is:</span>
-                        <i>
-                            {% if invite.role == 'admin' %} Administrator {% endif %}
-                            {% if invite.role == 'editor' %} Editor {% endif %}
-                            {% if invite.role == 'viewer' %} Viewer {% endif %}
-                        </i>                    
+                        <p>
+                            <span class="bold">Their proposed responsibility is:</span>
+                            <i>
+                                {% if invite.role == 'admin' %} Administrator {% endif %}
+                                {% if invite.role == 'editor' %} Editor {% endif %}
+                                {% if invite.role == 'viewer' %} Viewer {% endif %}
+                            </i>  
+                        </p>
                     </div>
                 {% endif %}
 

@@ -8,36 +8,8 @@ from helpers.models import ProjectStatus, ProjectComment, Notice
 register = template.Library()
 
 @register.simple_tag
-def which_account_created_project(project):
-    created = ProjectCreator.objects.filter(project=project).values(
-            'community__community_name',
-            'institution__institution_name',
-            'researcher__user__username',           
-        )
-        
-    string = ''
-    for x in created:
-        if x['community__community_name']:
-            string = f'at {x["community__community_name"]} | Community'
-        if x['institution__institution_name']:
-            string = f'at {x["institution__institution_name"]} | Institution'
-        if x['researcher__user__username']:
-            string = f' | Researcher'
-    return string
-
-@register.simple_tag
 def show_project_notices(project):
     return Notice.objects.filter(project=project).values('archived', 'notice_type')
-
-@register.simple_tag
-def project_comments(project, community):
-    # pass instance of project and instance of community
-    if isinstance(community, Community):
-        return ProjectComment.objects.select_related('community', 'sender', 'project').filter(project=project, community=community)
-
-@register.simple_tag
-def project_status(project):
-    return ProjectStatus.objects.select_related('community', 'project').filter(project=project)
 
 @register.simple_tag
 def get_all_researchers(researcher_to_exclude):
@@ -64,10 +36,6 @@ def get_all_communities(community_to_exclude):
 def define(val=None):
     # To use: {% define 'oldVariable' as newVariable %}
   return val
-
-@register.simple_tag
-def which_communities_notified(project):
-    return ProjectStatus.objects.select_related('community').filter(project=project)
 
 @register.simple_tag
 def connections_collaborative_projects(target_account, collaborating_account):

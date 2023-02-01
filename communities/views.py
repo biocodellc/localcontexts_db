@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.contrib import messages
-from django.core.paginator import Paginator
 from itertools import chain
 
 from django.contrib.auth.models import User
@@ -128,16 +126,21 @@ def public_community_view(request, pk):
         community = Community.objects.get(id=pk)
         bclabels = BCLabel.objects.filter(community=community, is_approved=True)
         tklabels = TKLabel.objects.filter(community=community, is_approved=True)
-        created_projects = ProjectCreator.objects.filter(community=community)
-        projects = []
+                
+        projects_list = list(chain(
+            community.community_created_project.all().values_list('project__unique_id', flat=True), # community created project ids
+            community.tklabel_community.all().values_list('project_tklabels__unique_id', flat=True), # projects where tk labels have been applied
+            community.bclabel_community.all().values_list('project_bclabels__unique_id', flat=True), # projects where bclabels have been applied
 
-        for p in created_projects:
-            if p.project.project_privacy == 'Public':
-                projects.append(p.project)
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        projects = Project.objects.select_related('project_creator').filter(unique_id__in=project_ids, project_privacy='Public').exclude(unique_id__in=archived).order_by('-date_added')
 
         if request.user.is_authenticated:
             user_communities = UserAffiliation.objects.prefetch_related('communities').get(user=request.user).communities.all()
             form = ContactOrganizationForm(request.POST or None)
+            join_form = JoinRequestForm(request.POST or None)
 
             if request.method == 'POST':
                 if 'contact_btn' in request.POST:
@@ -157,18 +160,23 @@ def public_community_view(request, pk):
                             return redirect('public-community', community.id)
 
                 elif 'join_request' in request.POST:
-                    # Request To Join community
-                    if JoinRequest.objects.filter(user_from=request.user, community=community).exists():
-                        messages.add_message(request, messages.ERROR, "You have already sent a request to this community")
-                        return redirect('public-community', community.id)
-                    else:
-                        join_request = JoinRequest.objects.create(user_from=request.user, community=community, user_to=community.community_creator)
-                        join_request.save()
+                    if join_form.is_valid():
+                        data = join_form.save(commit=False)
 
-                        # Send email to community creator
-                        send_join_request_email_admin(request, join_request, community)
-                        messages.add_message(request, messages.SUCCESS, 'Request sent!')
-                        return redirect('public-community', community.id)
+                        # Request To Join community
+                        if JoinRequest.objects.filter(user_from=request.user, community=community).exists():
+                            messages.add_message(request, messages.ERROR, "You have already sent a request to this community")
+                            return redirect('public-community', community.id)
+                        else:
+                            data.user_from = request.user
+                            data.community = community
+                            data.user_to = community.community_creator
+                            data.save()
+
+                            # Send email to community creator
+                            send_join_request_email_admin(request, data, community)
+                            messages.add_message(request, messages.SUCCESS, 'Request sent!')
+                            return redirect('public-community', community.id)
                 else:
                     messages.add_message(request, messages.ERROR, 'Something went wrong')
                     return redirect('public-community', community.id)
@@ -187,6 +195,7 @@ def public_community_view(request, pk):
             'tklabels' : tklabels,
             'projects' : projects,
             'form': form, 
+            'join_form': join_form,
             'user_communities': user_communities,
         }
         return render(request, 'public.html', context)
@@ -674,64 +683,24 @@ def projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        # 1. community projects + 
-        # 2. projects community has been notified of 
-        # 3. projects where community is contributor
-
         projects_list = list(chain(
-            community.community_created_project.all().values_list('project__id', flat=True), 
-            community.communities_notified.all().values_list('project__id', flat=True), 
-            community.contributing_communities.all().values_list('project__id', flat=True),
+            community.community_created_project.all().values_list('project__unique_id', flat=True), # community created project ids
+            community.communities_notified.all().values_list('project__unique_id', flat=True), # projects community has been notified of
+            community.contributing_communities.all().values_list('project__unique_id', flat=True), # projects where community is contributor
         ))
         project_ids = list(set(projects_list)) # remove duplicate ids
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids).order_by('-date_added')
+        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        projects = Project.objects.select_related('project_creator').filter(unique_id__in=project_ids).exclude(unique_id__in=archived).order_by('-date_added')
 
-        p = Paginator(projects, 10)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
+        page = paginate(request, projects, 10)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        # Form: Notify project contributor if project was seen
-        if request.method == "POST":
-            project_uuid = request.POST.get('project-uuid')
-            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-            creator = ProjectCreator.objects.get(project=project) # get project creator
-
-            if "notify-btn" in request.POST:
-                if project_uuid != None and project_uuid != 'placeholder':
-                    project_status = request.POST.get('project-status')
-                    set_project_status(request.user, project, community, creator, project_status)                            
-                    return redirect('community-projects', community.id)
-
-            # Form: Add comment to notice
-            elif "add-comment-btn" in request.POST:
-                if form.is_valid():
-                    if request.POST.get('message'):
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
-
-                        project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects', community.id)
-                    else:
-                        return redirect('community-projects', community.id)
-        elif request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
-                query = SearchQuery(q)
-                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
+        if request.method == 'GET':
+            results = return_project_search_results(request, projects)
 
         context = {
             'member_role': member_role,
             'projects': projects,
             'community': community,
-            'form': form,
             'items': page,
             'results': results,
         }
@@ -744,65 +713,25 @@ def projects_with_labels(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        # init list for:
-        # 1. community projects + 
-        # 2. projects community has been notified of 
-        # 3. projects where community is contributor
         projects_list = list(chain(
-            community.community_created_project.all().values_list('project__id', flat=True), 
-            community.communities_notified.all().values_list('project__id', flat=True), 
-            community.contributing_communities.all().values_list('project__id', flat=True),
+            community.community_created_project.all().values_list('project__unique_id', flat=True), # community projects
+            community.communities_notified.all().values_list('project__unique_id', flat=True), # projects community has been notified of
+            community.contributing_communities.all().values_list('project__unique_id', flat=True), # projects where community is contributor
         ))
         project_ids = list(set(projects_list)) # remove duplicate ids
+        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
+            ).exclude(unique_id__in=archived).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
+            ).exclude(unique_id__in=archived).exclude(tk_labels=None).order_by('-date_added')
 
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids
-            ).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids
-            ).exclude(tk_labels=None).order_by('-date_added')
-
-        p = Paginator(projects, 10)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
+        page = paginate(request, projects, 10)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == "POST":
-            project_uuid = request.POST.get('project-uuid')
-            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-            creator = ProjectCreator.objects.get(project=project) # get project creator
-
-            if "notify-btn" in request.POST:
-                if project_uuid != None and project_uuid != 'placeholder':
-                    project_status = request.POST.get('project-status')
-                    set_project_status(request.user, project, community, creator, project_status)                                                        
-                    return redirect('community-projects-labels', community.id)
-
-            # Form: Add comment to notice
-            elif "add-comment-btn" in request.POST:
-                if form.is_valid():
-                    if request.POST.get('message'):
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
-
-                        project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects-labels', community.id)
-                    else:
-                        return redirect('community-projects-labels', community.id)
-        elif request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
-                query = SearchQuery(q)
-                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
+        if request.method == 'GET':
+            results = return_project_search_results(request, projects)
 
         context = {
             'projects': projects,
             'community': community,
-            'form': form,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -816,62 +745,23 @@ def projects_with_notices(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        # init list for:
-        # 1. community projects + 
-        # 2. projects community has been notified of 
-        # 3. projects where community is contributor
         projects_list = list(chain(
-            community.community_created_project.all().values_list('project__id', flat=True), 
-            community.communities_notified.all().values_list('project__id', flat=True), 
-            community.contributing_communities.all().values_list('project__id', flat=True),
+            community.community_created_project.all().values_list('project__unique_id', flat=True), # community projects
+            community.communities_notified.all().values_list('project__unique_id', flat=True), # projects community has been notified of 
+            community.contributing_communities.all().values_list('project__unique_id', flat=True), # projects where community is contributor
         ))
         project_ids = list(set(projects_list)) # remove duplicate ids
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=project_ids, tk_labels=None, bc_labels=None).order_by('-date_added')
+        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids, tk_labels=None, bc_labels=None).exclude(unique_id__in=archived).order_by('-date_added')
 
-        p = Paginator(projects, 10)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
+        page = paginate(request, projects, 10)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == "POST":
-            project_uuid = request.POST.get('project-uuid')
-            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-            creator = ProjectCreator.objects.get(project=project) # get project creator
-
-            if "notify-btn" in request.POST:
-                if project_uuid != None and project_uuid != 'placeholder':
-                    project_status = request.POST.get('project-status')
-                    set_project_status(request.user, project, community, creator, project_status)                            
-                    return redirect('community-projects-notices', community.id)
-
-            # Form: Add comment to notice
-            elif "add-comment-btn" in request.POST:
-                if form.is_valid():
-                    if request.POST.get('message'):
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
-
-                        project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects-notices', community.id)
-                    else:
-                        return redirect('community-projects-notices', community.id)
-        elif request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
-                query = SearchQuery(q)
-                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
+        if request.method == 'GET':
+            results = return_project_search_results(request, projects)
 
         context = {
             'projects': projects,
             'community': community,
-            'form': form,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -885,53 +775,18 @@ def projects_creator(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        created_projects = community.community_created_project.all().values_list('project__id', flat=True)
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=created_projects).order_by('-date_added')
+        created_projects = community.community_created_project.all().values_list('project__unique_id', flat=True)
+        archived = ProjectArchived.objects.filter(project_uuid__in=created_projects, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=created_projects).exclude(unique_id__in=archived).order_by('-date_added')
 
-        p = Paginator(projects, 10)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
-
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == "POST":
-            project_uuid = request.POST.get('project-uuid')
-            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-            creator = ProjectCreator.objects.select_related('researcher', 'institution').get(project=project) # get project creator
-
-            if "notify-btn" in request.POST:
-                if project_uuid != None and project_uuid != 'placeholder':
-                    project_status = request.POST.get('project-status')
-                    set_project_status(request.user, project, community, creator, project_status)                                                        
-                    return redirect('community-projects-creator', community.id)
-
-            # Form: Add comment to notice
-            elif "add-comment-btn" in request.POST:
-                if form.is_valid():
-                    if request.POST.get('message'):
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
-
-                        project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects-creator', community.id)
-                    else:
-                        return redirect('community-projects-creator', community.id)
-        elif request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
-                query = SearchQuery(q)
-                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
+        page = paginate(request, projects, 10)
+        
+        if request.method == 'GET':
+            results = return_project_search_results(request, projects)
 
         context = {
             'projects': projects,
             'community': community,
-            'form': form,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -945,55 +800,46 @@ def projects_contributor(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
-        # Get IDs of projects created by community and IDs of projects contributed, then exclude the created ones in the project call
-        created_projects = community.community_created_project.all().values_list('project__id', flat=True)
-        contrib = community.contributing_communities.all().values_list('project__id', flat=True)
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(id__in=contrib).exclude(id__in=created_projects).order_by('-date_added')
+        contrib = community.contributing_communities.all().values_list('project__unique_id', flat=True) # get uuids of contributed projects
+        projects_list = list(chain(
+            community.community_created_project.all().values_list('project__unique_id', flat=True), # check community created projects
+            ProjectArchived.objects.filter(project_uuid__in=contrib, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=contrib).exclude(unique_id__in=project_ids).order_by('-date_added')
 
-        p = Paginator(projects, 10)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
+        page = paginate(request, projects, 10)
         
-        form = ProjectCommentForm(request.POST or None)
-
-        if request.method == "POST":
-            project_uuid = request.POST.get('project-uuid')
-            project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-            creator = ProjectCreator.objects.get(project=project) # get project creator
-
-            if "notify-btn" in request.POST:
-                if project_uuid != None and project_uuid != 'placeholder':
-                    project_status = request.POST.get('project-status')
-                    set_project_status(request.user, project, community, creator, project_status)                            
-                    return redirect('community-projects-contributor', community.id)
-
-            # Form: Add comment to notice
-            elif "add-comment-btn" in request.POST:
-                if form.is_valid():
-                    if request.POST.get('message'):
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.community = community
-                        data.save()
-
-                        project_status_seen_at_comment(request.user, community, creator, project)
-                        return redirect('community-projects-contributor', community.id)
-                    else:
-                        return redirect('community-projects-contributor', community.id)
-        elif request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('title', 'description', 'unique_id', 'providers_id')
-                query = SearchQuery(q)
-                results = projects.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
+        if request.method == 'GET':
+            results = return_project_search_results(request, projects)
 
         context = {
             'projects': projects,
             'community': community,
-            'form': form,
+            'member_role': member_role,
+            'items': page,
+            'results': results,
+        }
+        return render(request, 'communities/projects.html', context)
+
+@login_required(login_url='login')
+def projects_archived(request, pk):
+    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
+    member_role = check_member_role(request.user, community)
+    if member_role == False: # If user is not a member / does not have a role.
+        return redirect('restricted')    
+    else:
+        archived_projects = ProjectArchived.objects.filter(community_id=community.id, archived=True).values_list('project_uuid', flat=True)
+        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
+        
+        page = paginate(request, projects, 10)
+        
+        if request.method == 'GET':
+            results = return_project_search_results(request, projects)
+
+        context = {
+            'projects': projects,
+            'community': community,
             'member_role': member_role,
             'items': page,
             'results': results,
@@ -1036,6 +882,10 @@ def create_project(request, pk):
                 data.urls = project_links
                     
                 data.save()
+
+                # Create Activity
+                creator_name = get_users_name(request.user)
+                ProjectActivity.objects.create(project=data, activity=f'Project was created by {creator_name} | {community.community_name}')
 
                 # Add project to community projects
                 creator = ProjectCreator.objects.select_related('community').get(project=data)
@@ -1093,6 +943,9 @@ def edit_project(request, community_id, project_uuid):
                 data.urls = project_links
                 data.save()
 
+                editor_name = get_users_name(request.user)
+                ProjectActivity.objects.create(project=data, activity=f'Edits to Project were made by {editor_name}')
+
                 instances = formset.save(commit=False)
                 for instance in instances:
                     if not instance.name or not instance.email:
@@ -1115,12 +968,107 @@ def edit_project(request, community_id, project_uuid):
             'urls': urls,
         }
         return render(request, 'communities/edit-project.html', context)
+    
+# @login_required(login_url='login')
+def project_actions(request, pk, project_uuid):
+    community = Community.objects.get(id=pk)
+
+    member_role = check_member_role(request.user, community)
+    if member_role == False or not request.user.is_authenticated:
+        return redirect('view-project', project_uuid)    
+    else:
+        project = Project.objects.prefetch_related(
+                    'bc_labels', 
+                    'tk_labels', 
+                    'bc_labels__community', 
+                    'tk_labels__community',
+                    'bc_labels__bclabel_translation', 
+                    'tk_labels__tklabel_translation',
+                    ).get(unique_id=project_uuid)
+
+        notices = Notice.objects.filter(project=project, archived=False)
+        creator = ProjectCreator.objects.get(project=project)
+        current_status = ProjectStatus.objects.filter(project=project, community=community).first()
+        statuses = ProjectStatus.objects.filter(project=project)
+        comments = ProjectComment.objects.select_related('sender').filter(project=project)
+        activities = ProjectActivity.objects.filter(project=project).order_by('-date')
+
+        project_archived = False
+        if ProjectArchived.objects.filter(project_uuid=project.unique_id, community_id=community.id).exists():
+            x = ProjectArchived.objects.get(project_uuid=project.unique_id, community_id=community.id)
+            project_archived = x.archived
+
+        form = ProjectCommentForm(request.POST or None)
+
+        if request.method == "POST":
+            if 'add-comment-btn' in request.POST:
+                if form.is_valid():
+                    if request.POST.get('message'):
+                        data = form.save(commit=False)
+                        data.project = project
+                        data.sender = request.user
+                        data.sender_affiliation = community.community_name
+                        data.save()
+                        project_status_seen_at_comment(request.user, community, creator, project)
+                        # send notification to contributors
+
+                        send_action_notification_to_project_contribs(project)
+                        return redirect('community-project-actions', community.id, project.unique_id)
+                    else:
+                        return redirect('community-project-actions', community.id, project.unique_id)
+            elif "notify-btn" in request.POST:
+                project_status = request.POST.get('project-status')
+                set_project_status(request.user, project, community, creator, project_status)                            
+                return redirect('community-project-actions', community.id, project.unique_id)
+            elif 'delete_project' in request.POST:
+                return redirect('community-delete-project', community.id, project.unique_id)
+
+        context = {
+            'member_role': member_role,
+            'community': community,
+            'project': project,
+            'notices': notices,
+            'creator': creator,
+            'form': form,
+            'current_status': current_status,
+            'statuses': statuses,
+            'comments': comments,
+            'activities': activities,
+            'project_archived': project_archived,
+        }
+        return render(request, 'communities/project-actions.html', context)
+
+@login_required(login_url='login')
+def archive_project(request, community_id, project_uuid):
+    if not ProjectArchived.objects.filter(community_id=community_id, project_uuid=project_uuid).exists():
+        ProjectArchived.objects.create(community_id=community_id, project_uuid=project_uuid, archived=True)
+    else:
+        archived_project = ProjectArchived.objects.get(community_id=community_id, project_uuid=project_uuid)
+        if archived_project.archived:
+            archived_project.archived = False
+        else:
+            archived_project.archived = True
+        archived_project.save()
+    return redirect('community-project-actions', community_id, project_uuid)
+
+@login_required(login_url='login')
+def delete_project(request, community_id, project_uuid):
+    community = Community.objects.get(id=community_id)
+    project = Project.objects.get(unique_id=project_uuid)
+
+    if ActionNotification.objects.filter(reference_id=project.unique_id).exists():
+        for notification in ActionNotification.objects.filter(reference_id=project.unique_id):
+            notification.delete()
+    
+    project.delete()
+    return redirect('community-projects', community.id)
+
 
 @login_required(login_url='login')
 def apply_labels(request, pk, project_uuid):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
-    project_creator = ProjectCreator.objects.get(project=project)
+    creator = ProjectCreator.objects.get(project=project)
     bclabels = BCLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('bclabel_translation', 'bclabel_note').filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.select_related('community', 'created_by', 'approved_by').prefetch_related('tklabel_translation', 'tklabel_note').filter(community=community, is_approved=True)
     notices = project.project_notice.all()
@@ -1131,7 +1079,7 @@ def apply_labels(request, pk, project_uuid):
     truncated_project_title = str(project.title)[0:30]
 
     member_role = check_member_role(request.user, community)
-    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+    if member_role == False or member_role == 'viewer' or community.is_approved == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
         form = CreateProjectNoteForm(request.POST or None)
@@ -1142,52 +1090,37 @@ def apply_labels(request, pk, project_uuid):
                     data = form.save(commit=False)
                     data.community = community
                     data.project = project
+                    data.sender = request.user
                     data.save()
 
-            # Set private project to discoverable
+            # Set private project to contributor view
             if project.project_privacy == 'Private':
-                project.project_privacy = 'Discoverable'
+                project.project_privacy = 'Contributor'
                 project.save()
 
-            # Get uuids of each label that was checked and add them to the project
-            bclabels_selected = request.POST.getlist('selected_bclabels')
-            tklabels_selected = request.POST.getlist('selected_tklabels')
-
-            # find target community labels and clear those only!
-            if project.bc_labels.filter(community=community).exists():
-                for bclabel in project.bc_labels.filter(community=community):
-                    project.bc_labels.remove(bclabel)
-            if project.tk_labels.filter(community=community).exists():
-                for tklabel in project.tk_labels.filter(community=community):
-                    project.tk_labels.remove(tklabel)
-
-            # apply all selected labels
-            for bclabel_uuid in bclabels_selected:
-                bclabel = BCLabel.objects.get(unique_id=bclabel_uuid)
-                project.bc_labels.add(bclabel)
-
-            for tklabel_uuid in tklabels_selected:
-                tklabel = TKLabel.objects.get(unique_id=tklabel_uuid)
-                project.tk_labels.add(tklabel)
-            
-            project.save()
+            add_remove_labels(request, project, community)
             
             if notices:
-                # add community to project contributors
-                contributors = ProjectContributors.objects.get(project=project)
-                contributors.communities.add(community)
-                contributors.save()
+                if not project.has_labels():
+                    for notice in notices:
+                        notice.archived = False
+                        notice.save()
+                else:
+                    # add community to project contributors
+                    contributors = ProjectContributors.objects.get(project=project)
+                    contributors.communities.add(community)
+                    contributors.save()
 
-                # Archive Notices
-                for notice in notices:
-                    notice.archived = True
-                    notice.save()
-                
-                #reset status
-                status = ProjectStatus.objects.get(project=project, community=community)
-                status.seen = True
-                status.status = 'labels_applied'
-                status.save()
+                    # Archive Notices
+                    for notice in notices:
+                        notice.archived = True
+                        notice.save()
+                    
+                    #reset status
+                    status = ProjectStatus.objects.get(project=project, community=community)
+                    status.seen = True
+                    status.status = 'labels_applied'
+                    status.save()
             else:
                 comm_title = 'Labels have been applied to the project ' + truncated_project_title + ' ...'
                 ActionNotification.objects.create(title=comm_title, notification_type='Projects', community=community, reference_id=reference_id)
@@ -1201,7 +1134,7 @@ def apply_labels(request, pk, project_uuid):
         'member_role': member_role,
         'community': community,
         'project': project,
-        'project_creator': project_creator,
+        'creator': creator,
         'bclabels': bclabels,
         'tklabels': tklabels,
         'notes': notes,

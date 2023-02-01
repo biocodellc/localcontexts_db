@@ -55,8 +55,22 @@
                             </div>
                         </div>
                     </div>
-
+                {% else %}
+                    <div class="loc grey-text bold margin-bottom-16">
+                        <small>
+                            You are a member of this community
+                        </small>
+                    </div>
                 {% endif %}
+            {% else %}
+                <div class="loc grey-text bold margin-bottom-16">
+                    <small>
+                        <a href="{% url 'login' %}" class="bold darkteal-text underline-hover">
+                            Login
+                        </a> 
+                        to contact
+                    </small>
+                </div>
             {% endif %}                
         </div>
 
@@ -166,7 +180,22 @@
                             </div>
                         </div>
                     </div>
+                {% else %}
+                    <div class="loc grey-text bold margin-bottom-16">
+                        <small>
+                            You are a member of this institution
+                        </small>
+                    </div>
                 {% endif %}
+            {% else %}
+                <div class="loc grey-text bold margin-bottom-16">
+                    <small>
+                        <a href="{% url 'login' %}" class="bold darkteal-text underline-hover">
+                            Login
+                        </a> 
+                        to contact
+                    </small>
+                </div>
             {% endif %}                
         </div>
 
@@ -361,26 +390,61 @@
 
     {% if request.user.is_authenticated %}
         <div id="requestToJoinModal" class="modal hide">
-            <div class="modal-defaults registry-modal flex-this column w-100">
+            <div class="modal-defaults join-modal flex-this column w-100">
                 <div class="modal-content-padding w-100">
                     <div>
-                        <h2 class="primary-black-text">Just checking...</h2>  
-                        <p>
-                            Are you sure you want to send a request to join this account? <strong>You should request to join community and institution accounts you are already affiliated with. </strong> <br><br>
-                            If you wish to collaborate with a community or institution you are not affiliated with, you will connect with them through Projects. You do not need to join their account.
+                        <div class="flex-this space-between">
+                            <div class="flex-this">
+                                <h2 class="primary-black-text">Request to join</h2>  
+                                <div class="tooltip" style="margin-top: 30px; margin-left: 5px;"><strong>i</strong>
+                                    <span class="tooltiptext">
+                                        <strong>You should request to join community and institution accounts you are already affiliated with. </strong> <br><br>
+                                        If you wish to collaborate with a community or institution you are not affiliated with, you will connect with them through Projects. You do not need to join their account.
+                                    </span>
+                                </div>                            
+                            </div>
+                            <div>
+                                <div class="primary-btn white-btn close-modal-btn margin-right-8">Close <i class="fa fa-times" aria-hidden="true"></i></div>
+                            </div>
+                        </div>
+
+
+                        <p class="no-top-margin">Every account has various responsibilities within the community.<br>
+                            <strong>Administrator:</strong> responsible for adding, editing and removing members<br>
+                            <strong>Editor:</strong> responsible for customizing Labels and Projects<br>
+                            <strong>Viewer:</strong> can view activity happening on the hub
                         </p>  
                     </div>
 
-                    <div class="flex-this justify-center center-text w-100">
-                        <a class="primary-btn white-btn close-modal-btn w-50 margin-right-8">Cancel</a>
                         <div class="margin-left-8">
                             <form id="requestToJoinForm" method="POST" action="">
                                 {% csrf_token %}
-                                <input type="hidden" name="join_request">
-                                <button id="sendRequestToJoinBtn" class="primary-btn action-btn">Send Request</button>  
+
+                                <div class="flex-this column w-100">
+                                    <div class="margin-top-8">
+                                        <label>Requested Responsibility</label><br>
+                                        {{ join_form.role }}
+                                        {% if join_form.role.errors %}
+                                            <div class="msg-red w-50"><small>{{ join_form.role.errors.as_text }}</small></div> 
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="margin-top-8">
+                                        <label>Add a Project comment with this request</label><br>
+                                        {{ join_form.message }}
+                                        {% if join_form.message.errors %}
+                                            <div class="msg-red w-50"><small>{{ join_form.message.errors.as_text }}</small></div> 
+                                        {% endif %}
+                                    </div>
+                                </div>
+                
+                                <div class="flex-this flex-end margin-top-8">
+                                    <input type="hidden" name="join_request">
+                                    <button id="sendRequestToJoinBtn" class="primary-btn action-btn">Send Request</button> 
+                                </div>
+
                             </form> 
                         </div>
-                    </div>
 
                 </div>
             </div>

@@ -21,7 +21,7 @@
                 <div><p>You currently have {{ bclabels.count }} BC Labels and {{ tklabels.count }} TK Labels customized</p></div>   
                 <div class="flex-this flex-end">
                     <div class="margin-right-8">
-                        <a class="white-btn primary-btn" href="{% url 'labels-pdf' community.id %}" target="_blank" rel="noopener">View in PDF <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                        <a class="white-btn primary-btn" href="{% url 'labels-pdf' community.id %}" target="_blank" rel="noopener">View in PDF <i class="fa fa-external-link fa-xs" aria-hidden="true"></i></a>
                     </div>
                     <div>
                         <a class="white-btn primary-btn" href="{% url 'download-labels' community.id %}">Download <i class="fa fa-download" aria-hidden="true"></i></a>
@@ -107,7 +107,7 @@
     {% for bclabel in bclabels %}
         <div id="open-div-{{ bclabel.unique_id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
             <div class="full-label-card flex-this">
-                <div class="margin-right-16"><img src="{{bclabel.img_url}}" class="img-sizedown-151-116"></div>
+                <div class="margin-right-16"><img src="{{bclabel.img_url}}" class="label-large"></div>
                 <div>
                     <div class="flex-this space-between">
                         <div><h3 class="no-top-margin">{{ bclabel.name }}</h3></div>
@@ -155,7 +155,7 @@
         <div id="open-div-{{ tklabel.unique_id }}" style="height: 0px; overflow: hidden;" class="div-toggle">
             <div class="full-label-card flex-this">
                 <div class="margin-right-16">
-                    <img src="{{ tklabel.img_url }}" class="img-sizedown-151-116">
+                    <img src="{{ tklabel.img_url }}" class="label-large">
                 </div>
                 <div>
                     <div class="flex-this space-between">
