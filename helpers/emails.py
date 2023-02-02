@@ -17,6 +17,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 import requests
 import re
+import json
 
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
@@ -32,6 +33,30 @@ def is_valid_email(email):
         return True
     else:
         return False
+
+def add_template():
+    template = render_to_string('snippets/emails/welcome.html')
+    return requests.post(
+        settings.MAILGUN_TEMPLATE_URL,
+        auth=("api", settings.MAILGUN_API_KEY),
+        data={'template': template,
+              'name': 'Welcome',
+              'description': 'Welcome template'})
+
+def send_simple_message():
+    fname = 'Diana'
+    lname = 'Lovette'
+    variables = {"fname": fname, "lname": lname}
+    return requests.post(
+        settings.MAILGUN_BASE_URL,
+        auth=("api", settings.MAILGUN_API_KEY),
+        data={
+            "from": "Mailgun Sandbox <postmaster@localcontextshub.org>",
+            "to": "Diana Lovette <dianalovette90@gmail.com>",
+            "subject": "Test email",
+            "template": "test_template",
+            "t:variables": json.dumps(variables)
+            })
 
 # Send simple email no attachments
 def send_simple_email(to_emails, subject, template):
@@ -74,6 +99,8 @@ def send_email_with_attachment(file, to_email, subject, template):
             #   "bcc": "bar@example.com",
               "subject": subject,
               "html": template})
+
+
 
 def send_update_email(email):
     template = render_to_string('snippets/emails/hub-updates.html')
