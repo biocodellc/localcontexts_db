@@ -26,6 +26,31 @@ class TokenGenerator(PasswordResetTokenGenerator):
 
 generate_token=TokenGenerator()
 
+# MAILGUN TEMPLATES
+# def add_template():
+#     template = render_to_string('snippets/emails/welcome.html')
+#     return requests.post(
+#         settings.MAILGUN_TEMPLATE_URL,
+#         auth=("api", settings.MAILGUN_API_KEY),
+#         data={'template': template,
+#               'name': 'Welcome',
+#               'description': 'Welcome template'})
+
+# def send_simple_message(name, email, subject, data):
+#     # fname = 'First Name'
+#     # lname = 'Last Name'
+#     # data = {"fname": fname, "lname": lname}
+#     return requests.post(
+#         settings.MAILGUN_BASE_URL,
+#         auth=("api", settings.MAILGUN_API_KEY),
+#         data={
+#             "from": "Local Contexts Hub <no-reply@localcontextshub.org>",
+#             "to": f"{name} <{email}>",
+#             "subject": subject,
+#             "template": "test_template",
+#             "t:variables": json.dumps(data)
+#             })
+
 def is_valid_email(email):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
@@ -34,35 +59,9 @@ def is_valid_email(email):
     else:
         return False
 
-def add_template():
-    template = render_to_string('snippets/emails/welcome.html')
-    return requests.post(
-        settings.MAILGUN_TEMPLATE_URL,
-        auth=("api", settings.MAILGUN_API_KEY),
-        data={'template': template,
-              'name': 'Welcome',
-              'description': 'Welcome template'})
-
-def send_simple_message():
-    fname = 'Diana'
-    lname = 'Lovette'
-    variables = {"fname": fname, "lname": lname}
-    return requests.post(
-        settings.MAILGUN_BASE_URL,
-        auth=("api", settings.MAILGUN_API_KEY),
-        data={
-            "from": "Mailgun Sandbox <postmaster@localcontextshub.org>",
-            "to": "Diana Lovette <dianalovette90@gmail.com>",
-            "subject": "Test email",
-            "template": "test_template",
-            "t:variables": json.dumps(variables)
-            })
-
 # Send simple email no attachments
 def send_simple_email(to_emails, subject, template):
-    # Example: send_simple_email('someone@domain.com', 'Hello', 'This is a test email')
-    # Example2: send_simple_email(list_of_emails, 'Hello', 'This is a test email')
-
+    # to_emails can be a string or list of emails
     def send(email):
         return requests.post(
             settings.MAILGUN_BASE_URL,
@@ -76,18 +75,13 @@ def send_simple_email(to_emails, subject, template):
     if isinstance(to_emails, str):
         if is_valid_email(to_emails):
             send(to_emails)
-        else:
-            raise Exception('Invalid email')
     elif isinstance(to_emails, list):
         for address in to_emails:
-            if is_valid_email(to_emails):
+            if is_valid_email(address):
                     send(address)
-            else:
-                raise Exception('Invalid email')
     else:
-        raise TypeError
+        pass
 
-# ONE EMAIL PER FUNCT, IF LIST -- DO A FOR LOOP!
 # Send email with attachment
 def send_email_with_attachment(file, to_email, subject, template):
     return requests.post(
@@ -99,8 +93,6 @@ def send_email_with_attachment(file, to_email, subject, template):
             #   "bcc": "bar@example.com",
               "subject": subject,
               "html": template})
-
-
 
 def send_update_email(email):
     template = render_to_string('snippets/emails/hub-updates.html')
