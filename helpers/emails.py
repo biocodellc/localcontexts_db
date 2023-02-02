@@ -16,6 +16,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 import requests
+import re
 
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
@@ -24,22 +25,46 @@ class TokenGenerator(PasswordResetTokenGenerator):
 
 generate_token=TokenGenerator()
 
-# Send simple email no attachments
-def send_simple_email(to_email, subject, template):
-    # Example: send_simple_email('someone@domain.com', 'Hello', 'This is a test email')
-    # ONE EMAIL PER FUNCT, IF LIST -- DO A FOR LOOP!
-    return requests.post(
-		settings.MAILGUN_BASE_URL,
-		auth=("api", settings.MAILGUN_API_KEY),
-		data={"from": "Local Contexts Hub <no-reply@localcontextshub.org>",
-			"to": [to_email],
-			"subject": subject,
-            "html": template}
-    )
+def is_valid_email(email):
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
+    if(re.fullmatch(regex, email)):
+        return True
+    else:
+        return False
+
+# Send simple email no attachments
+def send_simple_email(to_emails, subject, template):
+    # Example: send_simple_email('someone@domain.com', 'Hello', 'This is a test email')
+    # Example2: send_simple_email(list_of_emails, 'Hello', 'This is a test email')
+
+    def send(email):
+        return requests.post(
+            settings.MAILGUN_BASE_URL,
+            auth=("api", settings.MAILGUN_API_KEY),
+            data={"from": "Local Contexts Hub <no-reply@localcontextshub.org>",
+                "to": [email],
+                "subject": subject,
+                "html": template}
+        )
+    
+    if isinstance(to_emails, str):
+        if is_valid_email(to_emails):
+            send(to_emails)
+        else:
+            raise Exception('Invalid email')
+    elif isinstance(to_emails, list):
+        for address in to_emails:
+            if is_valid_email(to_emails):
+                    send(address)
+            else:
+                raise Exception('Invalid email')
+    else:
+        raise TypeError
+
+# ONE EMAIL PER FUNCT, IF LIST -- DO A FOR LOOP!
 # Send email with attachment
 def send_email_with_attachment(file, to_email, subject, template):
-    # ONE EMAIL PER FUNCT, IF LIST -- DO A FOR LOOP!
     return requests.post(
         settings.MAILGUN_BASE_URL,
         auth=("api", settings.MAILGUN_API_KEY),
@@ -50,9 +75,9 @@ def send_email_with_attachment(file, to_email, subject, template):
               "subject": subject,
               "html": template})
 
-def send_temp_email(emails):
+def send_update_email(email):
     template = render_to_string('snippets/emails/hub-updates.html')
-    send_simple_email(emails, 'Local Contexts Hub Updates', template)
+    send_simple_email(email, 'Local Contexts Hub Updates', template)
 
 # Send all Institution and community applications to support or the site admin
 def send_hub_admins_application_email(request, organization, data):
