@@ -27,14 +27,14 @@ class TokenGenerator(PasswordResetTokenGenerator):
 generate_token=TokenGenerator()
 
 # MAILGUN TEMPLATES
-# def add_template():
-#     template = render_to_string('snippets/emails/welcome.html')
-#     return requests.post(
-#         settings.MAILGUN_TEMPLATE_URL,
-#         auth=("api", settings.MAILGUN_API_KEY),
-#         data={'template': template,
-#               'name': 'Welcome',
-#               'description': 'Welcome template'})
+def add_template(filename, temp_name, description):
+    template = render_to_string(f'snippets/emails/{filename}.html')
+    return requests.post(
+        settings.MAILGUN_TEMPLATE_URL,
+        auth=("api", settings.MAILGUN_API_KEY),
+        data={'template': template,
+              'name': temp_name,
+              'description': description})
 
 def send_mailgun_template_email(email, subject, template_name, data):
 
@@ -174,11 +174,25 @@ def send_welcome_email(request, user):
     # template = render_to_string('snippets/emails/welcome.html', {'domain': current_site.domain})
     # send_simple_email(user.email, subject, template)
 
+# TEST THIS
 # Email to invite user to join the hub
 def send_invite_user_email(request, data):
     current_site=get_current_site(request)
-    template = render_to_string('snippets/emails/invite-new-user.html', { 'data': data, 'domain': current_site.domain, })
-    send_simple_email(data.email, 'You have been invited to join the Local Contexts Hub', template)
+    subject = 'You have been invited to join the Local Contexts Hub'
+    name = get_users_name(data.sender)
+    domain = current_site.domain
+
+    if 'localhost' in domain:
+        url = f'http://{domain}/register'
+    else:
+        url = f'https://{domain}/register'
+
+    variables = {"register_url": url, "name": name, "message": data.message}
+    send_mailgun_template_email(data.email, subject, 'invite_new_user', variables)
+    # Keep for now until templates have been tested!
+    # template = render_to_string('snippets/emails/invite-new-user.html', { 'data': data, 'domain': current_site.domain, })
+    # send_simple_email(data.email, 'You have been invited to join the Local Contexts Hub', template)
+
 
 # Anywhere JoinRequest instance is created, 
 # will email community or institution creator that someone wants to join the organization
@@ -268,15 +282,6 @@ def send_email_label_approved(label):
         send_simple_email(label.created_by.email, 'Your Label has been approved', template)
     else:
         send_simple_email(label.created_by.email, 'Your Label has not been approved', template)
-
-# TODO: figure out who gets this email
-#  Email for when a comment is added to a project
-# def send_email_project_comment(sender, user, project):
-#     template = render_to_string('snippets/emails/project-comment.html', { 'project': project, 'sender': sender, 'user': user, })
-#     title = 'A comment has been added to a Project'
-    # who gets these emails?
-    # project creator and anyone that has commented?
-    # send_simple_email(project.project_creator.email, title, template)
 
 # You are now a member of institution/community email
 def send_membership_email(request, organization, receiver, role):
