@@ -36,20 +36,18 @@ generate_token=TokenGenerator()
 #               'name': 'Welcome',
 #               'description': 'Welcome template'})
 
-# def send_simple_message(name, email, subject, data):
-#     # fname = 'First Name'
-#     # lname = 'Last Name'
-#     # data = {"fname": fname, "lname": lname}
-#     return requests.post(
-#         settings.MAILGUN_BASE_URL,
-#         auth=("api", settings.MAILGUN_API_KEY),
-#         data={
-#             "from": "Local Contexts Hub <no-reply@localcontextshub.org>",
-#             "to": f"{name} <{email}>",
-#             "subject": subject,
-#             "template": "test_template",
-#             "t:variables": json.dumps(data)
-#             })
+def send_mailgun_template_email(email, subject, template_name, data):
+
+    return requests.post(
+        settings.MAILGUN_BASE_URL,
+        auth=("api", settings.MAILGUN_API_KEY),
+        data={
+            "from": "Local Contexts Hub <no-reply@localcontextshub.org>",
+            "to": email,
+            "subject": subject,
+            "template": template_name,
+            "t:variables": json.dumps(data)
+            })
 
 def is_valid_email(email):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -164,8 +162,17 @@ def resend_activation_email(request, active_users):
 def send_welcome_email(request, user):   
     current_site=get_current_site(request)
     subject = 'Welcome to Local Contexts Hub!'
-    template = render_to_string('snippets/emails/welcome.html', {'domain': current_site.domain})
-    send_simple_email(user.email, subject, template)
+    domain = current_site.domain
+
+    if 'localhost' in domain:
+        url = f'http://{domain}/login'
+    else:
+        url = f'https://{domain}/login'
+
+    send_mailgun_template_email(user.email, subject, 'welcome', {"login_url": url})
+    # Keep for now until templates have been tested!
+    # template = render_to_string('snippets/emails/welcome.html', {'domain': current_site.domain})
+    # send_simple_email(user.email, subject, template)
 
 # Email to invite user to join the hub
 def send_invite_user_email(request, data):

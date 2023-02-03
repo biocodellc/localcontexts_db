@@ -7,7 +7,10 @@
         <br><br>
 
         <strong>Next steps?</strong><br>
-        Now that your profile has been activated, you can <a href="{% if 'localhost' in domain %}http{% else %}https{% endif %}://{{domain}}{% url 'login' %}" target="_blank" rel="noopener">login</a> and start looking around!
+        Now that your profile has been activated, you can 
+
+        <a href="{% if 'localhost' in domain %}http{% else %}https{% endif %}://{{domain}}{% url 'login' %}" 
+        target="_blank" rel="noopener">login</a> and start looking around!
 
         {% include 'snippets/emails/_footer-snippet.html' %}
 
