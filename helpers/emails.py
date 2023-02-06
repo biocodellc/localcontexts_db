@@ -137,26 +137,37 @@ def send_hub_admins_application_email(request, organization, data):
 def send_activation_email(request, user):
     # Remember the current location
     current_site=get_current_site(request)
-    template = render_to_string('snippets/emails/activate.html', 
-    {
-        'user': user,
-        'domain':current_site.domain,
-        'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-        'token': generate_token.make_token(user)
-    })
-    send_simple_email(user.email, 'Activate Your Local Contexts Hub Profile', template)
+    domain = current_site.domain
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = generate_token.make_token(user)
+
+    if 'localhost' in domain:
+        activation_url = f'http://{domain}/activate/{uid}/{token}'
+    else:
+        activation_url = f'https://{domain}/activate/{uid}/{token}'
+
+    data = {'user': user.username, 'activation_url': activation_url}
+    subject = 'Activate Your Local Contexts Hub Profile'
+    send_mailgun_template_email(user.email, subject, 'activate_profile', data)
 
 #  Resend Activation Email
 def resend_activation_email(request, active_users):
     to_email= active_users[0].email
-    current_site = get_current_site(request)
-    message = render_to_string('snippets/emails/activate.html', {
-        'user': active_users[0],
-        'domain': current_site.domain,
-        'uid': urlsafe_base64_encode(force_bytes(active_users[0].pk)),
-        'token': generate_token.make_token(active_users[0]),
-    })
-    send_simple_email(to_email, 'Activate Your Local Contexts Hub Profile', message)
+    current_site=get_current_site(request)
+    domain = current_site.domain
+    uid = urlsafe_base64_encode(force_bytes(active_users[0].pk))
+    token = generate_token.make_token(active_users[0])
+    user = active_users[0].username
+
+    if 'localhost' in domain:
+        activation_url = f'http://{domain}/activate/{uid}/{token}'
+    else:
+        activation_url = f'https://{domain}/activate/{uid}/{token}'
+
+    data = {'user': user, 'activation_url': activation_url}
+    subject = 'Activate Your Local Contexts Hub Profile'
+    send_mailgun_template_email(to_email, subject, 'activate_profile', data)
+
 
 # User has activated account and has logged in: Welcome email
 def send_welcome_email(request, user):   
@@ -170,9 +181,6 @@ def send_welcome_email(request, user):
         url = f'https://{domain}/login'
 
     send_mailgun_template_email(user.email, subject, 'welcome', {"login_url": url})
-    # Keep for now until templates have been tested!
-    # template = render_to_string('snippets/emails/welcome.html', {'domain': current_site.domain})
-    # send_simple_email(user.email, subject, template)
 
 # TEST THIS
 # Email to invite user to join the hub
@@ -189,10 +197,6 @@ def send_invite_user_email(request, data):
 
     variables = {"register_url": url, "name": name, "message": data.message}
     send_mailgun_template_email(data.email, subject, 'invite_new_user', variables)
-    # Keep for now until templates have been tested!
-    # template = render_to_string('snippets/emails/invite-new-user.html', { 'data': data, 'domain': current_site.domain, })
-    # send_simple_email(data.email, 'You have been invited to join the Local Contexts Hub', template)
-
 
 # Anywhere JoinRequest instance is created, 
 # will email community or institution creator that someone wants to join the organization
