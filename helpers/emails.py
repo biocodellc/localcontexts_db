@@ -96,6 +96,9 @@ def send_update_email(email):
     template = render_to_string('snippets/emails/hub-updates.html')
     send_simple_email(email, 'Local Contexts Hub Updates', template)
 
+"""
+    INTERNAL EMAILS
+"""
 # Send all Institution and community applications to support or the site admin
 def send_hub_admins_application_email(request, organization, data):
     template = ''
@@ -103,15 +106,14 @@ def send_hub_admins_application_email(request, organization, data):
 
     if isinstance(organization, Community):
         subject = f'New Community Application: {data.community_name}'
-        template = render_to_string('snippets/emails/community-application.html', { 'data' : data })
+        template = render_to_string('snippets/emails/internal/community-application.html', { 'data' : data })
     else: 
         if data.is_ror:
             subject = f'New Institution Application: {data.institution_name}'
         else:
             subject = f'New Institution Application (non-ROR): {data.institution_name}'
 
-        template = render_to_string('snippets/emails/institution-application.html', { 'data' : data })
-
+        template = render_to_string('snippets/emails/internal/institution-application.html', { 'data' : data })
 
     # if admin group exists:
     if dev_prod_or_local(request.get_host()) == 'PROD':
@@ -128,6 +130,13 @@ def send_hub_admins_application_email(request, organization, data):
             send_email_with_attachment(data.support_document, settings.SITE_ADMIN_EMAIL, subject, template)
         else:
             send_simple_email(settings.SITE_ADMIN_EMAIL, subject, template)
+
+# Send email to support when a Researcher connects to the Hub in PRODUCTION
+def send_email_to_support(researcher):
+    template = render_to_string('snippets/emails/internal/researcher-account-connection.html', { 'researcher': researcher })
+    name = get_users_name(researcher.user)
+    title = f'{name} has created a Researcher Account'
+    send_simple_email('support@localcontexts.org', title, template)  
 
 """
     EMAILS FOR ACCOUNTS APP
@@ -308,14 +317,6 @@ def send_membership_email(request, organization, receiver, role):
         title = f'You are now a member of {organization.institution_name}'
 
     send_simple_email(receiver.email, title, template)
-
-# Send email to support when a Researcher connects to the Hub in PRODUCTION
-def send_email_to_support(researcher):
-    template = render_to_string('snippets/emails/researcher-account-connection.html', { 'researcher': researcher })
-    name = get_users_name(researcher.user)
-    title = f'{name} has created a Researcher Account'
-    send_simple_email('support@localcontexts.org', title, template)  
-
 
 # REGISTRY Contact organization email
 def send_contact_email(to_email, from_name, from_email, message):
