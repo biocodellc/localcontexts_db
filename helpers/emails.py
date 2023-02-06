@@ -202,28 +202,33 @@ def send_invite_user_email(request, data):
 # will email community or institution creator that someone wants to join the organization
 def send_join_request_email_admin(request, join_request, organization):
     current_site=get_current_site(request)
-    template = render_to_string('snippets/emails/join-request.html', 
-                                { 
-                                    'user': request.user, 
-                                    'domain': current_site.domain, 
-                                    'organization': organization, 
-                                    'message': join_request.message,
-                                    'role': join_request.role,
-                                })
-    title = ''
-    send_to_email = ''
     name = get_users_name(request.user)
+    domain = current_site.domain
+
+    if 'localhost' in domain:
+        login_url = f'http://{domain}/login'
+    else:
+        login_url = f'https://{domain}/login'
 
     # Check if organization instance is community model
     if isinstance(organization, Community):
-        title = f'{name} has requested to join {organization.community_name}'
+        subject = f'{name} has requested to join {organization.community_name}'
         send_to_email = organization.community_creator.email
+        org_name = organization.community_name
     if isinstance(organization, Institution):
-        title = f'{name} has requested to join {organization.institution_name}'
+        subject = f'{name} has requested to join {organization.institution_name}'
         send_to_email = organization.institution_creator.email
-    
-    send_simple_email(send_to_email, title, template)
+        org_name = organization.institution_name
 
+    data = { 
+            'user': name, 
+            'org_name': org_name,
+            'message': join_request.message,
+            'role': join_request.role,
+            'login_url': login_url
+        }
+    
+    send_mailgun_template_email(send_to_email, subject, 'join_request', data)
 
 """
     EMAILS FOR INSTITUTION APP
