@@ -291,7 +291,7 @@ def community_members(request, pk):
                             data.community = community
                             data.save()
                             
-                            send_community_invite_email(request, data, community) # Send email to target user
+                            send_member_invite_email(request, data, community) # Send email to target user
                             messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
                             return redirect('members', community.id)
                         else: 

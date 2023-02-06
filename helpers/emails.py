@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 
 from localcontexts.utils import dev_prod_or_local
 from accounts.utils import get_users_name
+from localcontexts.utils import return_login_url_str, return_register_url_str
 
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -180,44 +181,24 @@ def resend_activation_email(request, active_users):
 
 # User has activated account and has logged in: Welcome email
 def send_welcome_email(request, user):   
-    current_site=get_current_site(request)
     subject = 'Welcome to Local Contexts Hub!'
-    domain = current_site.domain
-
-    if 'localhost' in domain:
-        url = f'http://{domain}/login'
-    else:
-        url = f'https://{domain}/login'
-
+    url = return_login_url_str(request)
     send_mailgun_template_email(user.email, subject, 'welcome', {"login_url": url})
 
 # TEST THIS
 # Email to invite user to join the hub
 def send_invite_user_email(request, data):
-    current_site=get_current_site(request)
     subject = 'You have been invited to join the Local Contexts Hub'
     name = get_users_name(data.sender)
-    domain = current_site.domain
-
-    if 'localhost' in domain:
-        url = f'http://{domain}/register'
-    else:
-        url = f'https://{domain}/register'
-
+    url = return_register_url_str(request)
     variables = {"register_url": url, "name": name, "message": data.message}
     send_mailgun_template_email(data.email, subject, 'invite_new_user', variables)
 
 # Anywhere JoinRequest instance is created, 
 # will email community or institution creator that someone wants to join the organization
 def send_join_request_email_admin(request, join_request, organization):
-    current_site=get_current_site(request)
     name = get_users_name(request.user)
-    domain = current_site.domain
-
-    if 'localhost' in domain:
-        login_url = f'http://{domain}/login'
-    else:
-        login_url = f'https://{domain}/login'
+    login_url = return_login_url_str(request)
 
     # Check if organization instance is community model
     if isinstance(organization, Community):
@@ -236,22 +217,60 @@ def send_join_request_email_admin(request, join_request, organization):
             'role': join_request.role,
             'login_url': login_url
         }
-    
     send_mailgun_template_email(send_to_email, subject, 'join_request', data)
 
+# REGISTRY Contact organization email
+def send_contact_email(to_email, from_name, from_email, message):
+    subject = f"{from_name} has sent you a message via Local Contexts Hub"
+    from_string = f"{from_name} <{from_email}>"
+    data = { "from_name": from_name, "message": message }
+
+    return requests.post(
+        settings.MAILGUN_BASE_URL,
+        auth=("api", settings.MAILGUN_API_KEY),
+        data={
+            "from": from_string,
+            "to": to_email,
+            "subject": subject,
+            "template": "registry_contact",
+            "t:variables": json.dumps(data)
+            })
+
 """
-    EMAILS FOR INSTITUTION APP
+    MEMBER INVITE EMAILS
 """
 
-def send_institution_invite_email(request, data, institution):
-    current_site=get_current_site(request)
-    template = render_to_string('snippets/emails/member-invite.html', { 
-        'domain':current_site.domain,
-        'data': data, 
-        'institution': institution 
-    })
-    title = f'You have been invited to join {institution.institution_name}'
-    send_simple_email(data.receiver.email, title, template)
+def send_member_invite_email(request, data, account):
+    name = get_users_name(data.sender)
+    login_url = return_login_url_str(request)
+
+    if isinstance(account, Institution):
+        org_name = account.institution_name
+    if isinstance(account, Community):
+        org_name = account.community_name
+    
+    if data.role == 'admin':
+        role = 'an Administrator'
+    elif data.role == 'editor':
+        role = 'an Editor'
+    elif data.role == 'viewer':
+        role = 'a Viewer'
+
+    data = {
+        'name': name,
+        'username': data.sender.username,
+        'role': role,
+        'message': data.message,
+        'org_name': org_name,
+        'login_url':login_url
+    }
+    subject = f'You have been invited to join {org_name}'
+    send_mailgun_template_email(data.receiver.email, subject, 'member_invite', data)
+
+
+"""
+    NOTICE HAS BEEN PLACED ON A PROJECT
+"""
 
 # A notice has been applied by researcher or institution
 def send_email_notice_placed(project, community, sender):
@@ -265,21 +284,10 @@ def send_email_notice_placed(project, community, sender):
         title = f'{name} has placed a Notice'
     
     send_simple_email(community.community_creator.email, title, template)
-    
 
 """
     EMAILS FOR COMMUNITY APP
 """
-
-# Inviting a user to join community
-def send_community_invite_email(request, data, community):
-    current_site=get_current_site(request)
-    template = render_to_string('snippets/emails/member-invite.html', { 
-        'domain':current_site.domain,
-        'data': data, 
-        'community': community 
-    })
-    send_simple_email(data.receiver.email, 'You have been invited to join a community', template)
 
 # When Labels have been applied to a Project
 def send_email_labels_applied(project, community):
@@ -317,22 +325,6 @@ def send_membership_email(request, organization, receiver, role):
         title = f'You are now a member of {organization.institution_name}'
 
     send_simple_email(receiver.email, title, template)
-
-# REGISTRY Contact organization email
-def send_contact_email(to_email, from_name, from_email, message):
-    subject = f"{from_name} has sent you a message from the Local Contexts Hub"
-    from_string = f"{from_name} <{from_email}>"
-    template = render_to_string('snippets/emails/registry-contact.html', { 'from_name': from_name, 'message': message, })
-
-    return requests.post(
-		settings.MAILGUN_BASE_URL,
-		auth=("api", settings.MAILGUN_API_KEY),
-		data={"from": from_string,
-			"to": [to_email],
-			# "bcc": [to_email],
-			"subject": subject,
-            "html": template}
-    )
 
 def send_contributor_email(request, org, proj_id):
     current_site=get_current_site(request)

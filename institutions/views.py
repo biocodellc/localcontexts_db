@@ -343,7 +343,7 @@ def institution_members(request, pk):
                             data.institution = institution
                             data.save()
                             
-                            send_institution_invite_email(request, data, institution) # Send email to target user
+                            send_member_invite_email(request, data, institution) # Send email to target user
                             messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
                             return redirect('institution-members', institution.id)
                         else: 
