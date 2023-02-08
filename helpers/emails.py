@@ -27,18 +27,7 @@ class TokenGenerator(PasswordResetTokenGenerator):
 
 generate_token=TokenGenerator()
 
-# MAILGUN TEMPLATES
-def add_template(filename, temp_name, description):
-    template = render_to_string(f'snippets/emails/{filename}.html')
-    return requests.post(
-        settings.MAILGUN_TEMPLATE_URL,
-        auth=("api", settings.MAILGUN_API_KEY),
-        data={'template': template,
-              'name': temp_name,
-              'description': description})
-
 def send_mailgun_template_email(email, subject, template_name, data):
-
     return requests.post(
         settings.MAILGUN_BASE_URL,
         auth=("api", settings.MAILGUN_API_KEY),
@@ -58,28 +47,20 @@ def is_valid_email(email):
     else:
         return False
 
+"""
+    INTERNAL EMAILS
+"""
+
 # Send simple email no attachments
-def send_simple_email(to_emails, subject, template):
-    # to_emails can be a string or list of emails
-    def send(email):
-        return requests.post(
-            settings.MAILGUN_BASE_URL,
-            auth=("api", settings.MAILGUN_API_KEY),
-            data={"from": "Local Contexts Hub <no-reply@localcontextshub.org>",
-                "to": [email],
-                "subject": subject,
-                "html": template}
-        )
-    
-    if isinstance(to_emails, str):
-        if is_valid_email(to_emails):
-            send(to_emails)
-    elif isinstance(to_emails, list):
-        for address in to_emails:
-            if is_valid_email(address):
-                    send(address)
-    else:
-        pass
+def send_simple_email(email, subject, template):
+    return requests.post(
+        settings.MAILGUN_BASE_URL,
+        auth=("api", settings.MAILGUN_API_KEY),
+        data={"from": "Local Contexts Hub <no-reply@localcontextshub.org>",
+            "to": [email],
+            "subject": subject,
+            "html": template}
+    )
 
 # Send email with attachment
 def send_email_with_attachment(file, to_email, subject, template):
@@ -93,13 +74,6 @@ def send_email_with_attachment(file, to_email, subject, template):
               "subject": subject,
               "html": template})
 
-def send_update_email(email):
-    template = render_to_string('snippets/emails/hub-updates.html')
-    send_simple_email(email, 'Local Contexts Hub Updates', template)
-
-"""
-    INTERNAL EMAILS
-"""
 # Send all Institution and community applications to support or the site admin
 def send_hub_admins_application_email(request, organization, data):
     template = ''
@@ -118,13 +92,13 @@ def send_hub_admins_application_email(request, organization, data):
 
     # if admin group exists:
     if dev_prod_or_local(request.get_host()) == 'PROD':
-        emails = [settings.SITE_ADMIN_EMAIL, 'support@localcontexts.org']
+        email = 'support@localcontexts.org'
         
         # If file, send as attachment
         if data.support_document:
-            send_email_with_attachment(data.support_document, emails, subject, template)
+            send_email_with_attachment(data.support_document, email, subject, template)
         else:
-            send_simple_email(emails, subject, template)
+            send_simple_email(email, subject, template)
     else:
         # Send to site admin only (will be typically for testing)
         if data.support_document:
@@ -363,49 +337,87 @@ def send_membership_email(request, account, receiver, role):
     }
     send_mailgun_template_email(receiver.email, subject, 'member_info', data)
 
-def send_contributor_email(request, org, proj_id):
-    current_site=get_current_site(request)
-    to_email = ''
-    subject = ''
+def send_contributor_email(request, account, proj_id):
+    # to_email = ''
+    # subject = ''
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
+    create = False
+    edit = False
+
+    register_url = return_register_url_str(request)
+    project_creator = get_users_name(project.project_creator)
 
     if '/create-project/' in request.path:
-        template = render_to_string('snippets/emails/contributor.html', { 'domain': current_site.domain, 'project': project, 'create': True })
+        create = True
         
-        if isinstance(org, Community):
-            to_email = org.community_creator.email
+        if isinstance(account, Community):
+            to_email = account.community_creator.email
             subject = "Your community has been added as a contributor on a Project"
-        if isinstance(org, Institution):
-            to_email = org.institution_creator.email
+        if isinstance(account, Institution):
+            to_email = account.institution_creator.email
             subject = "Your institution has been added as a contributor on a Project"
-        if isinstance(org, Researcher):
-            to_email = org.user.email
+        if isinstance(account, Researcher):
+            to_email = account.user.email
             subject = "You have been added as a contributor on a Project"
 
     elif '/edit-project/' in request.path:
-        template = render_to_string('snippets/emails/contributor.html', { 'domain': current_site.domain, 'project': project, 'edit': True })
+        edit = True
         subject = "Changes have been made to a Project you're contributing to"
         
-        if isinstance(org, Community):
-            to_email = org.community_creator.email
-        if isinstance(org, Institution):
-            to_email = org.institution_creator.email
-        if isinstance(org, Researcher):
-            to_email = org.user.email
+        if isinstance(account, Community):
+            to_email = account.community_creator.email
+        if isinstance(account, Institution):
+            to_email = account.institution_creator.email
+        if isinstance(account, Researcher):
+            to_email = account.user.email
 
-    send_simple_email(to_email, subject, template)
+    data = {
+        'edit': edit,
+        'create': create,
+        'project_url': project.project_page,
+        'register_url': register_url,
+        'project_creator': project_creator, 
+        'project_title': project.title,
+    }
+    send_mailgun_template_email(to_email, subject, 'contributor', data)
+
 
 def send_project_person_email(request, to_email, proj_id):
-    current_site=get_current_site(request)
     registered = User.objects.filter(email=to_email).exists()
-
-    project_person = True
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
+
+    project_creator = get_users_name(project.project_creator)
+    register_url = return_register_url_str(request)
     subject = 'You have been added as a contributor on a Local Contexts Hub Project'
-    template = render_to_string('snippets/emails/contributor.html', { 
-        'domain':current_site.domain,
-        'project': project, 
-        'project_person': project_person, 
+
+    if '/create-project/' in request.path:
+        create = True
+
+    data = {
+        'register_url': register_url,
+        'project_person': True,
         'registered': registered,
-    })
-    send_simple_email(to_email, subject, template)
+        'project_url': project.project_page,
+        'register_url': register_url,
+        'project_creator': project_creator, 
+        'project_title': project.title,
+        'create': create,
+    }
+    send_mailgun_template_email(to_email, subject, 'contributor', data)
+
+"""
+    ADD MAILGUN TEMPLATE AND MAJOR UPDATES
+"""
+
+# def add_template(filename, temp_name, description):
+#     template = render_to_string(f'snippets/emails/{filename}.html')
+#     return requests.post(
+#         settings.MAILGUN_TEMPLATE_URL,
+#         auth=("api", settings.MAILGUN_API_KEY),
+#         data={'template': template,
+#               'name': temp_name,
+#               'description': description})
+
+# if list, loop over each email.
+# def send_update_email(email):
+#     send_mailgun_template_email(email, 'Local Contexts Hub Updates', 'hub_updates', None)
