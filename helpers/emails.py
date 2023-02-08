@@ -329,24 +329,39 @@ def send_email_label_approved(label):
         'label_name': label.name,
         'approved': approved
     }
-    send_mailgun_template_email(label.created_by.email, subject, 'labels_applied', data)
+    send_mailgun_template_email(label.created_by.email, subject, 'label_approved', data)
 
 # You are now a member of institution/community email
-def send_membership_email(request, organization, receiver, role):
-    current_site=get_current_site(request)
+def send_membership_email(request, account, receiver, role):
+    login_url = return_login_url_str(request)
+    
+    if role == 'admin':
+        role_str = 'an Administrator'
+    elif role == 'editor':
+        role_str = 'an Editor'
+    elif role == 'viewer':
+        role_str = 'a Viewer'
 
-    template = render_to_string('snippets/emails/membership-info.html', { 
-        'domain':current_site.domain,
-        'organization': organization, 
-        'role': role, 
-    })
-    title = ''
-    if isinstance(organization, Community):
-        title = f'You are now a member of {organization.community_name}'
-    if isinstance(organization, Institution):
-        title = f'You are now a member of {organization.institution_name}'
+    community = False
+    institution = False
 
-    send_simple_email(receiver.email, title, template)
+    if isinstance(account, Community):
+        subject = f'You are now a member of {account.community_name}'
+        account_name = account.community_name
+        community = True
+    if isinstance(account, Institution):
+        subject = f'You are now a member of {account.institution_name}'
+        account_name = account.institution_name
+        institution = False
+
+    data = {
+        'role_str': role_str,
+        'account_name': account_name,
+        'login_url': login_url,
+        'community': community,
+        'institution': institution
+    }
+    send_mailgun_template_email(receiver.email, subject, 'member_info', data)
 
 def send_contributor_email(request, org, proj_id):
     current_site=get_current_site(request)
