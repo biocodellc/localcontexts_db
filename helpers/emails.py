@@ -293,6 +293,7 @@ def send_email_notice_placed(project, community, account):
         'is_researcher': researcher,
         'is_institution': institution,
         'institution_name': institution_name, 
+        'name': name
     }
     
     send_mailgun_template_email(community.community_creator.email, subject, 'notice_placed', data)
@@ -304,23 +305,31 @@ def send_email_notice_placed(project, community, account):
 
 # When Labels have been applied to a Project
 def send_email_labels_applied(project, community):
-    template = render_to_string('snippets/emails/labels-applied.html', { 'project': project, 'community': community, })
-    send_simple_email(project.project_creator.email, 'A community has applied Labels to your Project', template)
+    subject = 'A community has applied Labels to your Project'
+    data = {
+        'community_name': community.community_name,
+        'project_title': project.title
+    }
+    send_mailgun_template_email(project.project_creator.email, subject, 'labels_applied', data)
+
 
 # Label has been approved or not
 def send_email_label_approved(label):
-    label_notes = LabelNote.objects.none()
-    if isinstance(label, BCLabel):
-        label_notes = LabelNote.objects.filter(bclabel=label)
-    if isinstance(label, TKLabel):
-        label_notes = LabelNote.objects.filter(tklabel=label)
-
-    template = render_to_string('snippets/emails/label-approved.html', { 'label': label, 'label_notes': label_notes })
+    approver_name = get_users_name(label.approved_by)
 
     if label.is_approved:
-        send_simple_email(label.created_by.email, 'Your Label has been approved', template)
+        subject = 'Your Label has been approved'
+        approved = True
     else:
-        send_simple_email(label.created_by.email, 'Your Label has not been approved', template)
+        subject = 'Your Label has not been approved'
+        approved = False
+
+    data = {
+        'approver_name': approver_name,
+        'label_name': label.name,
+        'approved': approved
+    }
+    send_mailgun_template_email(label.created_by.email, subject, 'labels_applied', data)
 
 # You are now a member of institution/community email
 def send_membership_email(request, organization, receiver, role):
