@@ -273,17 +273,30 @@ def send_member_invite_email(request, data, account):
 """
 
 # A notice has been applied by researcher or institution
-def send_email_notice_placed(project, community, sender):
-    # Can pass instance of institution or researcher as sender
-    template = render_to_string('snippets/emails/notice-placed.html', { 'project': project, 'sender': sender, })
-    title = ''
-    if isinstance(sender, Institution):
-        title = f'{sender.institution_name} has placed a Notice'
-    if isinstance(sender, Researcher):
-        name = get_users_name(sender.user)
-        title = f'{name} has placed a Notice'
+def send_email_notice_placed(project, community, account):
+    # Can pass instance of institution or researcher as account
+    institution = False
+    researcher = False
+    institution_name = None
+
+    if isinstance(account, Institution):
+        subject = f'{account.institution_name} has placed a Notice'
+        institution = True
+        institution_name = account.institution_name
+    if isinstance(account, Researcher):
+        name = get_users_name(account.user)
+        subject = f'{name} has placed a Notice'
+        researcher = True
+
+    data = {
+        'project_title': project.title,
+        'is_researcher': researcher,
+        'is_institution': institution,
+        'institution_name': institution_name, 
+    }
     
-    send_simple_email(community.community_creator.email, title, template)
+    send_mailgun_template_email(community.community_creator.email, subject, 'notice_placed', data)
+
 
 """
     EMAILS FOR COMMUNITY APP
