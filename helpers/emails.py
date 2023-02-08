@@ -1,9 +1,6 @@
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
-from .models import LabelNote
-from bclabels.models import BCLabel
-from tklabels.models import TKLabel
 from projects.models import Project
 from django.contrib.auth.models import User
 
@@ -195,7 +192,7 @@ def send_join_request_email_admin(request, join_request, organization):
 
 # REGISTRY Contact organization email
 def send_contact_email(to_email, from_name, from_email, message):
-    subject = f"{from_name} has sent you a message via Local Contexts Hub"
+    subject = f"{from_name} has sent you a message from the Local Contexts Hub Registry"
     from_string = f"{from_name} <{from_email}>"
     data = { "from_name": from_name, "message": message }
 
@@ -230,7 +227,7 @@ def send_member_invite_email(request, data, account):
     elif data.role == 'viewer':
         role = 'a Viewer'
 
-    data = {
+    variables = {
         'name': name,
         'username': data.sender.username,
         'role': role,
@@ -239,7 +236,7 @@ def send_member_invite_email(request, data, account):
         'login_url':login_url
     }
     subject = f'You have been invited to join {org_name}'
-    send_mailgun_template_email(data.receiver.email, subject, 'member_invite', data)
+    send_mailgun_template_email(data.receiver.email, subject, 'member_invite', variables)
 
 
 """
