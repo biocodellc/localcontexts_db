@@ -192,7 +192,7 @@ def send_join_request_email_admin(request, join_request, organization):
 
 # REGISTRY Contact organization email
 def send_contact_email(to_email, from_name, from_email, message):
-    subject = f"{from_name} has sent you a message from the Local Contexts Hub Registry"
+    subject = f"{from_name} has sent you a message via Local Contexts Hub"
     from_string = f"{from_name} <{from_email}>"
     data = { "from_name": from_name, "message": message }
 
