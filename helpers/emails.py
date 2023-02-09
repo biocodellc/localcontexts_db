@@ -36,14 +36,6 @@ def send_mailgun_template_email(email, subject, template_name, data):
             "t:variables": json.dumps(data)
             })
 
-def is_valid_email(email):
-    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
-
-    if(re.fullmatch(regex, email)):
-        return True
-    else:
-        return False
-
 """
     INTERNAL EMAILS
 """
@@ -246,27 +238,15 @@ def send_member_invite_email(request, data, account):
 # A notice has been applied by researcher or institution
 def send_email_notice_placed(project, community, account):
     # Can pass instance of institution or researcher as account
-    institution = False
-    researcher = False
-    institution_name = None
 
     if isinstance(account, Institution):
         subject = f'{account.institution_name} has placed a Notice'
-        institution = True
-        institution_name = account.institution_name
+        placed_by = account.institution_name
     if isinstance(account, Researcher):
-        name = get_users_name(account.user)
-        subject = f'{name} has placed a Notice'
-        researcher = True
+        placed_by = get_users_name(account.user)
+        subject = f'{placed_by} has placed a Notice'
 
-    data = {
-        'project_title': project.title,
-        'is_researcher': researcher,
-        'is_institution': institution,
-        'institution_name': institution_name, 
-        'name': name
-    }
-    
+    data = {'project_title': project.title, 'placed_by': placed_by}
     send_mailgun_template_email(community.community_creator.email, subject, 'notice_placed', data)
 
 
@@ -323,7 +303,7 @@ def send_membership_email(request, account, receiver, role):
     if isinstance(account, Institution):
         subject = f'You are now a member of {account.institution_name}'
         account_name = account.institution_name
-        institution = False
+        institution = True
 
     data = {
         'role_str': role_str,
