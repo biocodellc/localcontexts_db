@@ -168,7 +168,7 @@ def public_institution_view(request, pk):
                         message = form.cleaned_data['message']
                         to_email = institution.institution_creator.email
                         
-                        send_contact_email(to_email, from_name, from_email, message)
+                        send_contact_email(to_email, from_name, from_email, message, institution)
                         messages.add_message(request, messages.SUCCESS, 'Message sent!')
                         return redirect('public-institution', institution.id)
                     else:

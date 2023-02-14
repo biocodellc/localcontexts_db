@@ -86,7 +86,7 @@ def public_researcher_view(request, pk):
                         message = form.cleaned_data['message']
                         to_email = researcher.contact_email
 
-                        send_contact_email(to_email, from_name, from_email, message)
+                        send_contact_email(to_email, from_name, from_email, message, researcher)
                         messages.add_message(request, messages.SUCCESS, 'Message sent!')
                         return redirect('public-researcher', researcher.id)
                     else:

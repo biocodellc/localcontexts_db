@@ -184,10 +184,18 @@ def send_join_request_email_admin(request, join_request, organization):
     send_mailgun_template_email(send_to_email, subject, 'join_request', data)
 
 # REGISTRY Contact organization email
-def send_contact_email(to_email, from_name, from_email, message):
+def send_contact_email(to_email, from_name, from_email, message, account):
     subject = f"{from_name} has sent you a message via Local Contexts Hub"
     from_string = f"{from_name} <{from_email}>"
-    data = { "from_name": from_name, "message": message }
+
+    if isinstance(account, Institution):
+        account_name = account.institution_name
+    if isinstance(account, Community):
+        account_name = account.community_name
+    if isinstance(account, Community):
+        account_name = 'your researcher account'
+
+    data = { "from_name": from_name, "message": message, "account_name": account_name }
 
     return requests.post(
         settings.MAILGUN_BASE_URL,

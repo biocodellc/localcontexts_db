@@ -151,7 +151,7 @@ def public_community_view(request, pk):
                         message = form.cleaned_data['message']
                         to_email = community.community_creator.email
 
-                        send_contact_email(to_email, from_name, from_email, message)
+                        send_contact_email(to_email, from_name, from_email, message, community)
                         messages.add_message(request, messages.SUCCESS, 'Message sent!')
                         return redirect('public-community', community.id)
                     else:
