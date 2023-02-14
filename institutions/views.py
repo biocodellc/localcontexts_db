@@ -668,7 +668,7 @@ def create_project(request, pk):
                         instance.save()
                     
                     # Send email to added person
-                    send_project_person_email(request, instance.email, data.unique_id)
+                    send_project_person_email(request, instance.email, data.unique_id, institution)
 
                 # Format and send notification about the created project
                 truncated_project_title = str(data.title)[0:30]

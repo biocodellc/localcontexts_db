@@ -902,7 +902,7 @@ def create_project(request, pk):
                         instance.project = data
                         instance.save()
                     # Send email to added person
-                    send_project_person_email(request, instance.email, data.unique_id)
+                    send_project_person_email(request, instance.email, data.unique_id, community)
 
                 # Send notification
                 truncated_project_title = str(data.title)[0:30]

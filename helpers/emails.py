@@ -323,6 +323,7 @@ def send_contributor_email(request, account, proj_id):
 
     register_url = return_register_url_str(request)
     project_creator = get_users_name(project.project_creator)
+    login_url = return_login_url_str(request)
 
     if '/create-project/' in request.path:
         create = True
@@ -330,12 +331,15 @@ def send_contributor_email(request, account, proj_id):
         if isinstance(account, Community):
             to_email = account.community_creator.email
             subject = "Your community has been added as a contributor on a Project"
+            account_name = account.community_name
         if isinstance(account, Institution):
             to_email = account.institution_creator.email
             subject = "Your institution has been added as a contributor on a Project"
+            account_name = account.institution_name
         if isinstance(account, Researcher):
             to_email = account.user.email
-            subject = "You have been added as a contributor on a Project"
+            subject = "Your researcher account has been added as a contributor on a Project"
+            account_name = get_users_name(account.user)
 
     elif '/edit-project/' in request.path:
         edit = True
@@ -353,13 +357,15 @@ def send_contributor_email(request, account, proj_id):
         'create': create,
         'project_url': project.project_page,
         'register_url': register_url,
+        'login_url': login_url,
         'project_creator': project_creator, 
         'project_title': project.title,
+        'account_name': account_name
     }
     send_mailgun_template_email(to_email, subject, 'contributor', data)
 
 
-def send_project_person_email(request, to_email, proj_id):
+def send_project_person_email(request, to_email, proj_id, account):
     registered = User.objects.filter(email=to_email).exists()
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
 
@@ -367,20 +373,25 @@ def send_project_person_email(request, to_email, proj_id):
     register_url = return_register_url_str(request)
     subject = 'You have been added as a contributor on a Local Contexts Hub Project'
 
-    if '/create-project/' in request.path:
-        create = True
+    if isinstance(account, Community):
+        account_name = account.community_name
+    if isinstance(account, Institution):
+        account_name = account.institution_name
+    if isinstance(account, Researcher):
+        account_name = 'Researcher'
 
-    data = {
-        'register_url': register_url,
-        'project_person': True,
-        'registered': registered,
-        'project_url': project.project_page,
-        'register_url': register_url,
-        'project_creator': project_creator, 
-        'project_title': project.title,
-        'create': create,
-    }
-    send_mailgun_template_email(to_email, subject, 'contributor', data)
+    if '/create-project/' in request.path:
+
+        data = {
+            'project_person': True,
+            'registered': registered,
+            'project_url': project.project_page,
+            'register_url': register_url,
+            'project_creator': project_creator, 
+            'project_title': project.title,
+            'account_name': account_name
+        }
+        send_mailgun_template_email(to_email, subject, 'contributor_project_person', data)
 
 """
     ADD MAILGUN TEMPLATE AND MAJOR UPDATES
