@@ -495,14 +495,14 @@ def approve_label(request, pk, label_id):
                         bclabel.is_approved = False
                         bclabel.approved_by = request.user
                         bclabel.save()
-                        send_email_label_approved(bclabel)
+                        send_email_label_approved(request, bclabel, data.id)
                     if tklabel:
                         data.tklabel = tklabel
                         data.save()
                         tklabel.is_approved = False
                         tklabel.approved_by = request.user
                         tklabel.save()
-                        send_email_label_approved(tklabel)
+                        send_email_label_approved(request, tklabel, data.id)
                     return redirect('select-label', community.id)
 
             # If approved, save Label
@@ -512,7 +512,7 @@ def approve_label(request, pk, label_id):
                     bclabel.is_approved = True
                     bclabel.approved_by = request.user
                     bclabel.save()
-                    send_email_label_approved(bclabel)
+                    send_email_label_approved(request, bclabel, None)
 
                     # handle label versions and translation versions
                     handle_label_versions(bclabel)
@@ -522,7 +522,7 @@ def approve_label(request, pk, label_id):
                     tklabel.is_approved = True
                     tklabel.approved_by = request.user
                     tklabel.save()
-                    send_email_label_approved(tklabel)
+                    send_email_label_approved(request, tklabel, None)
 
                     # handle Label versions and translation versions
                     handle_label_versions(tklabel)

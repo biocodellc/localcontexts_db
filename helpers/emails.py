@@ -2,6 +2,7 @@ from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
 from projects.models import Project
+from helpers.models import LabelNote
 from django.contrib.auth.models import User
 
 from localcontexts.utils import dev_prod_or_local
@@ -14,7 +15,6 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib.sites.shortcuts import get_current_site
 import requests
-import re
 import json
 
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -178,6 +178,7 @@ def send_join_request_email_admin(request, join_request, organization):
             'org_name': org_name,
             'message': join_request.message,
             'role': join_request.role,
+            'requester_email': request.user.email,
             'login_url': login_url
         }
     send_mailgun_template_email(send_to_email, subject, 'join_request', data)
@@ -265,20 +266,28 @@ def send_email_labels_applied(project, community):
 
 
 # Label has been approved or not
-def send_email_label_approved(label):
+def send_email_label_approved(request, label, note_id):
     approver_name = get_users_name(label.approved_by)
+    login_url = return_login_url_str(request)
 
     if label.is_approved:
         subject = 'Your Label has been approved'
         approved = True
+        note = False
     else:
         subject = 'Your Label has not been approved'
         approved = False
+        note = True
+        label_note = LabelNote.objects.get(id=note_id).note
 
     data = {
         'approver_name': approver_name,
         'label_name': label.name,
-        'approved': approved
+        'approved': approved,
+        'community_name': label.community.community_name,
+        'note': note,
+        'label_note': label_note,
+        'login_url': login_url
     }
     send_mailgun_template_email(label.created_by.email, subject, 'label_approved', data)
 
