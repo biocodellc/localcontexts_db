@@ -1126,7 +1126,7 @@ def apply_labels(request, pk, project_uuid):
                 ActionNotification.objects.create(title=comm_title, notification_type='Projects', community=community, reference_id=reference_id)
 
             # send email to project creator
-            send_email_labels_applied(project, community)
+            send_email_labels_applied(request, project, community)
             messages.add_message(request, messages.SUCCESS, "Labels applied!")
             return redirect('apply-labels', community.id, project.unique_id)
 

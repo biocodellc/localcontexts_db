@@ -222,11 +222,11 @@ def send_member_invite_email(request, data, account):
         org_name = account.community_name
     
     if data.role == 'admin':
-        role = 'an Administrator'
+        role = 'Administrator'
     elif data.role == 'editor':
-        role = 'an Editor'
+        role = 'Editor'
     elif data.role == 'viewer':
-        role = 'a Viewer'
+        role = 'Viewer'
 
     variables = {
         'name': name,
@@ -264,11 +264,13 @@ def send_email_notice_placed(project, community, account):
 """
 
 # When Labels have been applied to a Project
-def send_email_labels_applied(project, community):
+def send_email_labels_applied(request, project, community):
+    login_url = return_login_url_str(request)
     subject = 'A community has applied Labels to your Project'
     data = {
         'community_name': community.community_name,
-        'project_title': project.title
+        'project_title': project.title,
+        'login_url': login_url
     }
     send_mailgun_template_email(project.project_creator.email, subject, 'labels_applied', data)
 
@@ -304,11 +306,11 @@ def send_membership_email(request, account, receiver, role):
     login_url = return_login_url_str(request)
     
     if role == 'admin':
-        role_str = 'an Administrator'
+        role_str = 'Administrator'
     elif role == 'editor':
-        role_str = 'an Editor'
+        role_str = 'Editor'
     elif role == 'viewer':
-        role_str = 'a Viewer'
+        role_str = 'Viewer'
 
     community = False
     institution = False
