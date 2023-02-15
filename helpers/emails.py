@@ -192,7 +192,7 @@ def send_contact_email(to_email, from_name, from_email, message, account):
         account_name = account.institution_name
     if isinstance(account, Community):
         account_name = account.community_name
-    if isinstance(account, Community):
+    if isinstance(account, Researcher):
         account_name = 'your researcher account'
 
     data = { "from_name": from_name, "message": message, "account_name": account_name }
