@@ -586,7 +586,7 @@ def project_actions(request, pk, project_uuid):
                         entities_notified.save()
 
                         # Create email 
-                        send_email_notice_placed(project, community, researcher)
+                        send_email_notice_placed(request, project, community, researcher)
                         return redirect('researcher-project-actions', researcher.id, project.unique_id)
 
                 elif 'delete_project' in request.POST:

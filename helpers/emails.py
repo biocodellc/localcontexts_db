@@ -245,17 +245,24 @@ def send_member_invite_email(request, data, account):
 """
 
 # A notice has been applied by researcher or institution
-def send_email_notice_placed(project, community, account):
+def send_email_notice_placed(request, project, community, account):
     # Can pass instance of institution or researcher as account
+    login_url = return_login_url_str(request)
 
     if isinstance(account, Institution):
-        subject = f'{account.institution_name} has placed a Notice'
+        subject = f'{account.institution_name} has notified you about a Project'
         placed_by = account.institution_name
     if isinstance(account, Researcher):
         placed_by = get_users_name(account.user)
-        subject = f'{placed_by} has placed a Notice'
+        subject = f'{placed_by} has notified you about a Project'
 
-    data = {'project_title': project.title, 'placed_by': placed_by}
+    data = {
+        'project_title': project.title, 
+        'project_description': project.description, 
+        'placed_by': placed_by,
+        'community_name': community.community_name,
+        'login_url': login_url
+    }
     send_mailgun_template_email(community.community_creator.email, subject, 'notice_placed', data)
 
 

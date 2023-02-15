@@ -823,7 +823,7 @@ def project_actions(request, pk, project_uuid):
                     entities_notified.save()
 
                     # Create email 
-                    send_email_notice_placed(project, community, institution)
+                    send_email_notice_placed(request, project, community, institution)
                     return redirect('institution-project-actions', institution.id, project.unique_id)
 
             elif 'delete_project' in request.POST:
