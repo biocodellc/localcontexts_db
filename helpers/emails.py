@@ -253,7 +253,7 @@ def send_email_notice_placed(request, project, community, account):
         subject = f'{account.institution_name} has notified you about a Project'
         placed_by = account.institution_name
     if isinstance(account, Researcher):
-        placed_by = get_users_name(account.user)
+        placed_by = get_users_name(account.user) + '(Researcher)'
         subject = f'{placed_by} has notified you about a Project'
 
     data = {
