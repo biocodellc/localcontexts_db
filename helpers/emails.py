@@ -283,7 +283,7 @@ def send_email_label_approved(request, label, note_id):
         approved = True
         note = False
     else:
-        subject = 'Your Label has not been approved'
+        subject = 'Your Label has suggested edits'
         approved = False
         note = True
         label_note = LabelNote.objects.get(id=note_id).note
