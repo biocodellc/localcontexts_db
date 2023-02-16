@@ -241,7 +241,7 @@ def send_member_invite_email(request, data, account):
 
 
 """
-    NOTICE HAS BEEN PLACED ON A PROJECT
+    NOTICE HAS BEEN PLACED ON A PROJECT AND COMMUNITY HAS BEEN NOTIFIED
 """
 
 # A notice has been applied by researcher or institution
