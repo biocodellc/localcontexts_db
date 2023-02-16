@@ -106,7 +106,7 @@ class ProjectsByIdViewSet(ViewSet):
     def project_detail_providers(self, request, providers_id):
         try:
             project = Project.objects.get(providers_id=providers_id)
-            if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable':
+            if project.project_privacy == 'Public' or project.project_privacy == 'Contributor':
                 if project.has_notice():
                     serializer = ProjectSerializer(project, many=False)
                 else:
@@ -117,9 +117,3 @@ class ProjectsByIdViewSet(ViewSet):
                 raise PermissionDenied({"message":"You don't have permission to view this project", "providers_id": providers_id})
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
-# >>> api_key, key = APIKey.objects.create_key(name="testingcode")
-# >>> api_key
-# <APIKey: testingcode>
-# >>> key
-# 'vtegH08H.QLj4TGwtzzjxxzACHVyeynpVGSD2xdla'

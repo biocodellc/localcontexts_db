@@ -144,9 +144,10 @@ def resend_activation_email(request, active_users):
     send_simple_email(to_email, 'Activate Your Local Contexts Hub Profile', message)
 
 # User has activated account and has logged in: Welcome email
-def send_welcome_email(user):   
+def send_welcome_email(request, user):   
+    current_site=get_current_site(request)
     subject = 'Welcome to Local Contexts Hub!'
-    template = render_to_string('snippets/emails/welcome.html')
+    template = render_to_string('snippets/emails/welcome.html', {'domain': current_site.domain})
     send_simple_email(user.email, subject, template)
 
 # Email to invite user to join the hub

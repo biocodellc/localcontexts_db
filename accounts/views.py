@@ -133,7 +133,7 @@ def login(request):
             if not user.last_login:
                 auth.login(request, user)
                 # Welcome email
-                send_welcome_email(user)
+                send_welcome_email(request, user)
                 return redirect('create-profile')
             else:
                 auth.login(request, user)

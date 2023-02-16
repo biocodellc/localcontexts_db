@@ -13,7 +13,7 @@
     </h3>
 
     <p>
-        {% if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable' %}
+        {% if project.project_privacy == 'Public' or project.project_privacy == 'Contributor' %}
             You can view the Project <a href="{% if 'localhost' in domain %}http{% else %}https{% endif %}://{{domain}}{% url 'view-project' project.unique_id %}">here</a>.<br>
         {% endif %}
 

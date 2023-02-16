@@ -13,6 +13,22 @@ if (passwordField) {
     passwordField.addEventListener('focusout', (event) => { helpTextDiv.style.display = 'none' })
 }
 
+var registerUserBtn = document.getElementById('registerUserBtn')
+if (registerUserBtn) { registerUserBtn.addEventListener('click', () => disableSubmitRegistrationBtn()) }
+
+function disableSubmitRegistrationBtn() {
+    document.getElementById('registerUserForm').submit()
+
+    let oldValue = 'Continue <i class="fa fa-arrow-right"></i>'
+    registerUserBtn.setAttribute('disabled', true)
+    registerUserBtn.innerText = 'Submitting...'
+    
+    window.addEventListener('load', function() {
+        registerUserBtn.innerText = oldValue;
+        registerUserBtn.removeAttribute('disabled');
+    })
+} 
+
 if (window.location.href.includes('anth-ja77-lc-dev-42d5')) {
     let regHeader = document.getElementById('reg-header')
     let authHeader = document.getElementById('auth-header')
@@ -1308,4 +1324,17 @@ function openDeleteProjectModal(elem) {
 
     const closeModalBtn = document.getElementById('closeProjectDeletionModal')
     closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+}
+
+function toggleProjectInfo(self, idToToggle) {
+    let div = document.getElementById(idToToggle)
+
+    if (div.style.height == "0px") {
+        console.log('hello')
+        self.innerHTML = '<i class="fa-solid fa-minus fa-xl darkteal-text"></i>'
+        div.style.height = 'auto'
+    } else {
+        div.style.height = '0px'
+        self.innerHTML = '<i class="fa-solid fa-plus fa-xl darkteal-text"></i>'
+    }
 }

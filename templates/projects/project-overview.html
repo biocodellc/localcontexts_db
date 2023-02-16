@@ -5,7 +5,7 @@
 
         <div class="w-60 flex-this column">
             <div>
-                <a class="primary-black-text underline-hover"
+                <a class="darkteal-text underline-hover"
                     {% if community %}
                         href="{% url 'community-project-actions' community.id project.unique_id %}" 
                     {% endif %}
@@ -52,7 +52,10 @@
                             </span>
                         {% endif %}
 
-                        {% firstof creator.community creator.institution creator.researcher %}
+                        {% if creator.community %} {{ creator.community }} {% endif %}
+                        {% if creator.institution %} {{ creator.institution }} {% endif %}
+                        {% if creator.researcher %} {% firstof creator.researcher.user.get_full_name creator.researcher.user.username %} {% endif %}
+
                     {% endfor %}
                 </p>
             </div>

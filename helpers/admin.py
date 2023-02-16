@@ -43,4 +43,3 @@ admin.site.register(LabelTranslationVersion, LabelTranslationVersionAdmin)
 admin.site.register(LabelTranslation, LabelTranslationAdmin)
 admin.site.register(EntitiesNotified, EntitiesNotifiedAdmin)
 admin.site.register(OpenToCollaborateNoticeURL, OpenToCollaborateNoticeURLAdmin)
-

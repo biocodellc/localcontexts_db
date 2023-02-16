@@ -1,11 +1,22 @@
 {% load static %} {% load custom_project_tags %}
 {% if request.user.is_authenticated %}
     {% if 'projects/actions/' in request.path %}
-        <div class="border-top-solid-teal border-bottom-solid-teal">
-            <h2>Project messages</h2>
+        <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
+            <h2>Project comments</h2>
+            <h2 class="margin-right-8 pointer" onclick="toggleProjectInfo(this, 'projectMessageDiv')"><i class="fa-solid fa-minus fa-xl darkteal-text"></i></h2>
         </div>
-        <div>
+        <div id="projectMessageDiv" style="height: auto; overflow: hidden;">
             <div>
+                {% if institution or community %}
+                    {% if member_role == 'admin' or member_role == 'editor' %}
+                        {% include 'snippets/comment-box.html' %}
+                    {% endif %} 
+                {% endif %}
+
+                {% if researcher %}
+                    {% include 'snippets/comment-box.html' %}
+                {% endif %}
+
                 {% for comment in comments %}
                     <div class="border-top-grey">
                         <p>
@@ -17,18 +28,8 @@
                         </p>
                     </div>
                 {% empty %}
-                    <p class="center-text">No messages yet</p>
+                    <p class="center-text"><small>No comments yet</small></p>
                 {% endfor %}
-
-                {% if institution or community %}
-                    {% if member_role == 'admin' or member_role == 'editor' %}
-                        {% include 'snippets/comment-box.html' %}
-                    {% endif %} 
-                {% endif %}
-
-                {% if researcher %}
-                    {% include 'snippets/comment-box.html' %}
-                {% endif %}
             </div>
         </div>
     {% endif %}
