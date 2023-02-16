@@ -291,6 +291,7 @@ def send_email_label_approved(request, label, note_id):
         subject = 'Your Label has been approved'
         approved = True
         note = False
+        label_note = False
     else:
         subject = 'Your Label has suggested edits'
         approved = False

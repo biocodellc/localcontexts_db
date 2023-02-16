@@ -1116,11 +1116,16 @@ def apply_labels(request, pk, project_uuid):
                         notice.archived = True
                         notice.save()
                     
+                    # TODO: THIS WILL NEED TO CHANGE??
+                    # If community is added as a contrib but not notified, they can apply labels and this will create a status for them.
                     #reset status
-                    status = ProjectStatus.objects.get(project=project, community=community)
-                    status.seen = True
-                    status.status = 'labels_applied'
-                    status.save()
+                    if ProjectStatus.objects.filter(project=project, community=community).exists():
+                        status = ProjectStatus.objects.get(project=project, community=community)
+                        status.seen = True
+                        status.status = 'labels_applied'
+                        status.save()
+                    else:
+                        ProjectStatus.objects.create(project=project, community=community, seen=True, status='labels_applied')
             else:
                 comm_title = 'Labels have been applied to the project ' + truncated_project_title + ' ...'
                 ActionNotification.objects.create(title=comm_title, notification_type='Projects', community=community, reference_id=reference_id)
