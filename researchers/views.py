@@ -86,7 +86,7 @@ def public_researcher_view(request, pk):
                         message = form.cleaned_data['message']
                         to_email = researcher.contact_email
 
-                        send_contact_email(to_email, from_name, from_email, message)
+                        send_contact_email(to_email, from_name, from_email, message, researcher)
                         messages.add_message(request, messages.SUCCESS, 'Message sent!')
                         return redirect('public-researcher', researcher.id)
                     else:
@@ -432,7 +432,7 @@ def create_project(request, pk):
                         instance.project = data
                         instance.save()
                     # Send email to added person
-                    send_project_person_email(request, instance.email, data.unique_id)
+                    send_project_person_email(request, instance.email, data.unique_id, researcher)
                 
                 # Send notification
                 title = 'Your project has been created, remember to notify a community of your project.'
@@ -586,7 +586,7 @@ def project_actions(request, pk, project_uuid):
                         entities_notified.save()
 
                         # Create email 
-                        send_email_notice_placed(project, community, researcher)
+                        send_email_notice_placed(request, project, community, researcher)
                         return redirect('researcher-project-actions', researcher.id, project.unique_id)
 
                 elif 'delete_project' in request.POST:

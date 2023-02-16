@@ -151,7 +151,7 @@ def public_community_view(request, pk):
                         message = form.cleaned_data['message']
                         to_email = community.community_creator.email
 
-                        send_contact_email(to_email, from_name, from_email, message)
+                        send_contact_email(to_email, from_name, from_email, message, community)
                         messages.add_message(request, messages.SUCCESS, 'Message sent!')
                         return redirect('public-community', community.id)
                     else:
@@ -291,7 +291,7 @@ def community_members(request, pk):
                             data.community = community
                             data.save()
                             
-                            send_community_invite_email(request, data, community) # Send email to target user
+                            send_member_invite_email(request, data, community) # Send email to target user
                             messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
                             return redirect('members', community.id)
                         else: 
@@ -495,14 +495,14 @@ def approve_label(request, pk, label_id):
                         bclabel.is_approved = False
                         bclabel.approved_by = request.user
                         bclabel.save()
-                        send_email_label_approved(bclabel)
+                        send_email_label_approved(request, bclabel, data.id)
                     if tklabel:
                         data.tklabel = tklabel
                         data.save()
                         tklabel.is_approved = False
                         tklabel.approved_by = request.user
                         tklabel.save()
-                        send_email_label_approved(tklabel)
+                        send_email_label_approved(request, tklabel, data.id)
                     return redirect('select-label', community.id)
 
             # If approved, save Label
@@ -512,7 +512,7 @@ def approve_label(request, pk, label_id):
                     bclabel.is_approved = True
                     bclabel.approved_by = request.user
                     bclabel.save()
-                    send_email_label_approved(bclabel)
+                    send_email_label_approved(request, bclabel, None)
 
                     # handle label versions and translation versions
                     handle_label_versions(bclabel)
@@ -522,7 +522,7 @@ def approve_label(request, pk, label_id):
                     tklabel.is_approved = True
                     tklabel.approved_by = request.user
                     tklabel.save()
-                    send_email_label_approved(tklabel)
+                    send_email_label_approved(request, tklabel, None)
 
                     # handle Label versions and translation versions
                     handle_label_versions(tklabel)
@@ -902,7 +902,7 @@ def create_project(request, pk):
                         instance.project = data
                         instance.save()
                     # Send email to added person
-                    send_project_person_email(request, instance.email, data.unique_id)
+                    send_project_person_email(request, instance.email, data.unique_id, community)
 
                 # Send notification
                 truncated_project_title = str(data.title)[0:30]
@@ -1116,17 +1116,22 @@ def apply_labels(request, pk, project_uuid):
                         notice.archived = True
                         notice.save()
                     
+                    # TODO: THIS WILL NEED TO CHANGE??
+                    # If community is added as a contrib but not notified, they can apply labels and this will create a status for them.
                     #reset status
-                    status = ProjectStatus.objects.get(project=project, community=community)
-                    status.seen = True
-                    status.status = 'labels_applied'
-                    status.save()
+                    if ProjectStatus.objects.filter(project=project, community=community).exists():
+                        status = ProjectStatus.objects.get(project=project, community=community)
+                        status.seen = True
+                        status.status = 'labels_applied'
+                        status.save()
+                    else:
+                        ProjectStatus.objects.create(project=project, community=community, seen=True, status='labels_applied')
             else:
                 comm_title = 'Labels have been applied to the project ' + truncated_project_title + ' ...'
                 ActionNotification.objects.create(title=comm_title, notification_type='Projects', community=community, reference_id=reference_id)
 
             # send email to project creator
-            send_email_labels_applied(project, community)
+            send_email_labels_applied(request, project, community)
             messages.add_message(request, messages.SUCCESS, "Labels applied!")
             return redirect('apply-labels', community.id, project.unique_id)
 
