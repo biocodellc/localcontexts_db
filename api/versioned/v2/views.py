@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from . import serializers as v2_serializers
 from rest_framework.viewsets import ViewSet
 from rest_framework_api_key.permissions import HasAPIKey
+from rest_framework.permissions import IsAuthenticated
 
 class APIOverview(APIView):
     def get(self, request, format=None):
@@ -36,7 +37,7 @@ class OpenToCollaborateNotice(APIView):
         return Response(api_urls)
 
 class ProjectList(generics.ListAPIView):
-    permission_classes = [HasAPIKey]
+    # permission_classes = [HasAPIKey]
     queryset = Project.objects.exclude(project_privacy='Private')
     serializer_class = ProjectOverviewSerializer
 
@@ -48,7 +49,7 @@ class ProjectList(generics.ListAPIView):
     # '$' regex search
 
 class ProjectDetail(generics.RetrieveAPIView):
-    permission_classes = [HasAPIKey]
+    # permission_classes = [HasAPIKey]
     lookup_field = 'unique_id'
     queryset = Project.objects.exclude(project_privacy='Private')
 
@@ -60,13 +61,14 @@ class ProjectDetail(generics.RetrieveAPIView):
             return ProjectNoNoticeSerializer
 
 class ProjectsByIdViewSet(ViewSet):
-    permission_classes = [HasAPIKey]
+    # permission_classes = [HasAPIKey | IsAuthenticated]
     def projects_by_user(self, request, pk):
         try:
-            user = User.objects.get(id=pk)
-            projects = Project.objects.filter(project_creator=user).exclude(project_privacy='Private')
+            useracct = User.objects.get(id=pk)
+            projects = Project.objects.filter(project_creator=useracct).exclude(project_privacy='Private')
             serializer = ProjectOverviewSerializer(projects, many=True)
             return Response(serializer.data)
+            
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
     
@@ -74,12 +76,15 @@ class ProjectsByIdViewSet(ViewSet):
         try:
             institution = Institution.objects.get(id=institution_id)
 
+            # print(request.search)
+
             projects = []
             creators = ProjectCreator.objects.filter(institution=institution)
             for x in creators:
                 projects.append(x.project)
 
             serializer = ProjectOverviewSerializer(projects, many=True)
+
             return Response(serializer.data)
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
