@@ -801,7 +801,6 @@ def project_actions(request, pk, project_uuid):
                     project.save()
 
                 communities_selected = request.POST.getlist('selected_communities')
-                message = request.POST.get('notice_message')
 
                 # Reference ID and title for notification
                 title =  str(institution.institution_name) + ' has notified you of a Project.'
@@ -817,8 +816,6 @@ def project_actions(request, pk, project_uuid):
 
                     # Create project status, first comment and  notification
                     ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
-                    if message:
-                        ProjectComment.objects.create(project=project, community=community, sender=request.user, sender_affiliation=institution.institution_name, message=message)
                     ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=str(project.unique_id), sender=request.user, title=title)
                     entities_notified.save()
 

@@ -482,14 +482,14 @@
 
                     <div>
                         <p>
-                            By notifying relevant communities, they will be able to see this Project and decide whether or not they would 
-                            like to add their Labels. After your organization has entered the communities you would like to to send 
-                            these notifications to, you can monitor their statuses in the Communities Notified section that will appear under Project Actions.
+                            Notify relevant communities about this Project to add them as a potential contributor. 
+                            Notified communities can decide if they would like to add their Labels to the Project. 
+                            Notified communities will also be able to see and edit Project details, see and add Project comments, and see Project activity.
                         </p>  
                     </div>
 
                     {% if communities %}
-                        <label>Select a community/communities you'd like to notify of this Project*</label><br>
+                        <label>Select community/communities to notify about this Project</label><br>
             
                         <div class="w-100">
                             <select id="communities-select" class="w-100" onchange="selectCommunities()">
@@ -500,9 +500,9 @@
                             </select>                    
                         </div>
             
-                        <div class="flex-this margin-top-16">
+                        <div class="flex-this margin-top-16 wrap">
                             {% for community in communities %}
-                                <div id="selected-community-{{ community.id }}" class="hide">
+                                <div id="selected-community-{{ community.id }}" class="hide margin-top-8">
                                     <div class="grey-chip flex-this row space-between">
                                         <div><p class="center-name">{{community.community_name}}</p></div>
                                         <div id="close-{{ community.id }}" class="close-x pointer" onclick="cancelCommunitySelection(this)"><div>&times;</div></div>
@@ -512,10 +512,6 @@
                             {% endfor %}
                         </div>
                         
-                        <div>
-                            <label>Add a Project comment</label><br>
-                            <textarea name="notice_message" class="w-100" style="height:100px;"></textarea>
-                        </div>
                         <div class="flex-this flex-end w-100 margin-top-16">
                             <button class="primary-btn action-btn" name="notify_btn">Send Notification <i class="fa fa-users" aria-hidden="true"></i></button>    
                         </div>

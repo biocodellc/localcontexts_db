@@ -564,7 +564,6 @@ def project_actions(request, pk, project_uuid):
                         project.save()
 
                     communities_selected = request.POST.getlist('selected_communities')
-                    message = request.POST.get('notice_message')
 
                     name = get_users_name(researcher.user)
                     title =  f'{name} has notified you of a Project.'
@@ -578,10 +577,8 @@ def project_actions(request, pk, project_uuid):
                         # Add activity
                         ProjectActivity.objects.create(project=project, activity=f'{community.community_name} was notified by {name}')
 
-                        # Create project status, first comment and  notification
+                        # Create project status and  notification
                         ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
-                        if message:
-                            ProjectComment.objects.create(project=project, community=community, sender=request.user, sender_affiliation='Researcher', message=message)
                         ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=str(project.unique_id), sender=request.user, title=title)
                         entities_notified.save()
 
