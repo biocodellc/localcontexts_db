@@ -154,7 +154,7 @@
 #auth-footer {
     background: linear-gradient(179.93deg, #045887 -12.22%, #058F73 156.81%);
     padding: 1%;
-    margin-top: 3rem;
+    margin-top: auto;
 }
 
 .footer-content {

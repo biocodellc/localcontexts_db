@@ -2,9 +2,9 @@
 
 {% if 'projects/actions/' in request.path %}
     {% if request.user.is_authenticated %}
-        <div class="auto-margin" style="max-width: 1271px;">
+        <div class="back-to-projects">
             <a 
-                class="pointer underline-hover margin-top-2 margin-left-8"
+                class="pointer margin-top-2 margin-left-8"
                 {% if community %}
                     href="{% url 'community-projects' community.id %}"
                 {% endif %}
