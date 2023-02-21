@@ -992,6 +992,13 @@ def project_actions(request, pk, project_uuid):
         statuses = ProjectStatus.objects.filter(project=project)
         comments = ProjectComment.objects.select_related('sender').filter(project=project)
         activities = ProjectActivity.objects.filter(project=project).order_by('-date')
+        is_community_notified = EntitiesNotified.objects.none()
+
+        if not creator.community:
+        # 1. is community creator of project?
+        # 2. if no, has community been notified?
+            is_community_notified = EntitiesNotified.objects.filter(communities=community, project=project).exists()
+
 
         project_archived = False
         if ProjectArchived.objects.filter(project_uuid=project.unique_id, community_id=community.id).exists():
@@ -1035,6 +1042,7 @@ def project_actions(request, pk, project_uuid):
             'comments': comments,
             'activities': activities,
             'project_archived': project_archived,
+            'is_community_notified': is_community_notified,
         }
         return render(request, 'communities/project-actions.html', context)
 
@@ -1116,7 +1124,6 @@ def apply_labels(request, pk, project_uuid):
                         notice.archived = True
                         notice.save()
                     
-                    # TODO: THIS WILL NEED TO CHANGE??
                     # If community is added as a contrib but not notified, they can apply labels and this will create a status for them.
                     #reset status
                     if ProjectStatus.objects.filter(project=project, community=community).exists():
@@ -1124,8 +1131,6 @@ def apply_labels(request, pk, project_uuid):
                         status.seen = True
                         status.status = 'labels_applied'
                         status.save()
-                    else:
-                        ProjectStatus.objects.create(project=project, community=community, seen=True, status='labels_applied')
             else:
                 comm_title = 'Labels have been applied to the project ' + truncated_project_title + ' ...'
                 ActionNotification.objects.create(title=comm_title, notification_type='Projects', community=community, reference_id=reference_id)
