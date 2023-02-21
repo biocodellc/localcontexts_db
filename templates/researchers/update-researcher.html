@@ -7,7 +7,7 @@
 
         <div class="flex-this w-100">
 
-            <div class="flex-this column set-nav margin-right-1 margin-bottom-2" style="min-height: 350px;">
+            <div class="side-nav-container">
                 
                 <a href="{% url 'update-researcher' researcher.id %}">
                     {% if 'update' in request.path %} 
@@ -24,7 +24,7 @@
 
             </div>
     
-            <div class="flex-this column w-80 border-left">
+            <div class="flex-this column w-80">
 
                     <div class="flex-this space-between w-70">
                         <div><h3 class="no-top-margin">Contact Information</h3></div>
@@ -170,9 +170,16 @@
 
                             {% include 'partials/_alerts.html' %}
 
-                            <div class="margin-top-16">
-                                <button class="primary-btn action-btn margin-top-2  default-btn-width">Save</button>
+                            <div class="flex-this space-between w-100">
+                                <div class="margin-top-16 w-40">
+                                    <button class="primary-btn action-btn margin-top-2  default-btn-width">Save</button>
+                                </div>
+                                <p>
+                                    <small class="grey-text">Providing your personal information is optional.
+                                        By providing it, you consent for it to be shown to other Hub users.</small>
+                                </p>  
                             </div>
+                            
                         </form>
                     </div>
     

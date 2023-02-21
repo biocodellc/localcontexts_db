@@ -168,7 +168,7 @@ def public_institution_view(request, pk):
                         message = form.cleaned_data['message']
                         to_email = institution.institution_creator.email
                         
-                        send_contact_email(to_email, from_name, from_email, message)
+                        send_contact_email(to_email, from_name, from_email, message, institution)
                         messages.add_message(request, messages.SUCCESS, 'Message sent!')
                         return redirect('public-institution', institution.id)
                     else:
@@ -343,7 +343,7 @@ def institution_members(request, pk):
                             data.institution = institution
                             data.save()
                             
-                            send_institution_invite_email(request, data, institution) # Send email to target user
+                            send_member_invite_email(request, data, institution) # Send email to target user
                             messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
                             return redirect('institution-members', institution.id)
                         else: 
@@ -668,7 +668,7 @@ def create_project(request, pk):
                         instance.save()
                     
                     # Send email to added person
-                    send_project_person_email(request, instance.email, data.unique_id)
+                    send_project_person_email(request, instance.email, data.unique_id, institution)
 
                 # Format and send notification about the created project
                 truncated_project_title = str(data.title)[0:30]
@@ -801,7 +801,6 @@ def project_actions(request, pk, project_uuid):
                     project.save()
 
                 communities_selected = request.POST.getlist('selected_communities')
-                message = request.POST.get('notice_message')
 
                 # Reference ID and title for notification
                 title =  str(institution.institution_name) + ' has notified you of a Project.'
@@ -817,13 +816,11 @@ def project_actions(request, pk, project_uuid):
 
                     # Create project status, first comment and  notification
                     ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
-                    if message:
-                        ProjectComment.objects.create(project=project, community=community, sender=request.user, sender_affiliation=institution.institution_name, message=message)
                     ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=str(project.unique_id), sender=request.user, title=title)
                     entities_notified.save()
 
                     # Create email 
-                    send_email_notice_placed(project, community, institution)
+                    send_email_notice_placed(request, project, community, institution)
                     return redirect('institution-project-actions', institution.id, project.unique_id)
 
             elif 'delete_project' in request.POST:
