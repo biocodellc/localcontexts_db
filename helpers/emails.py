@@ -347,6 +347,7 @@ def send_contributor_email(request, account, proj_id):
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
     create = False
     edit = False
+    account_name = ''
 
     register_url = return_register_url_str(request)
     project_creator = get_users_name(project.project_creator)

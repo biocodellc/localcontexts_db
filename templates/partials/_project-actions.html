@@ -287,19 +287,32 @@
                 {% endif %}
 
                 {% if community %}
-                    {% if community.is_approved %}
-                        {% if member_role == 'admin' or member_role == 'editor' %}
-                            <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
+                    {% if member_role == 'admin' or member_role == 'editor' %}
+
+                        {% if community.is_approved %}
+                            {% if is_community_notified %}
+                                    <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
+                            {% else %}
+                                <a class="block a-disabled"> 
+                                    <i class="fa-solid fa-tag"></i> Apply Labels
+                                    <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                                        <span class="tooltiptext">
+                                            It looks like your community was added to this Project as a contributor. In order to be able to apply Labels, the Project creator has to notify your community. Please contact us if you have questions.
+                                        </span>
+                                    </div> 
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a class="block a-disabled"> 
+                                <i class="fa-solid fa-tag"></i> Apply Labels
+                                <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                                    <span class="tooltiptext">
+                                        Your account needs to be confirmed before you can apply Labels. Please contact us if you have questions.
+                                    </span>
+                                </div> 
+                            </a>
                         {% endif %}
-                    {% else %}
-                        <a class="block a-disabled"> 
-                            <i class="fa-solid fa-tag"></i> Apply Labels
-                            <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
-                                <span class="tooltiptext">
-                                    Your account needs to be confirmed before you can apply Labels. Please contact us if you have questions.
-                                </span>
-                            </div> 
-                        </a>
+
                     {% endif %}
                 {% endif %}
 
