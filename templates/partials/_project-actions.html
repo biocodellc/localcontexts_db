@@ -354,11 +354,6 @@
 
             {% if 'projects/actions/' in request.path %}
 
-                    <a 
-                        class="block" 
-                        href="{% url 'view-project' project.unique_id %}"
-                    ><i class="fa-solid fa-eye"></i> Public View</a>
-
                 {% if request.user.is_authenticated and request.user == project.project_creator %}
                     <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
 
@@ -449,21 +444,35 @@
 
                     {% for community in communities %}
                         <a class="block" href="{% url 'community-project-actions' community.id project.unique_id %}"> 
-                            <i class="fa-solid fa-circle-user"></i> {{ community.community_name }}
+                            <i class="fa-solid fa-address-card"></i> {{ community.community_name }}
                         </a>
                     {% endfor %}
                     {% for institution in institutions %}
                         <a class="block" href="{% url 'institution-project-actions' institution.id project.unique_id %}"> 
-                            <i class="fa-solid fa-circle-user"></i> {{ institution.institution_name }}
+                            <i class="fa-solid fa-address-card"></i> {{ institution.institution_name }}
                         </a>
                     {% endfor %}
                     {% if user_researcher %}
                         <a class="block" href="{% url 'researcher-project-actions' user_researcher.id project.unique_id %}"> 
-                            <i class="fa-solid fa-circle-user"></i> {{ user_researcher.user }} (Researcher)
+                            <i class="fa-solid fa-address-card"></i> {{ user_researcher.user }} (Researcher)
                         </a>
                     {% endif %}
                 </div> 
             {% endif %}
+        {% else %}
+            <div class="actions-card content-card-space flex-this column">
+                <h3 class="no-top-margin">View As 
+                    <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                        <span class="tooltiptext">
+                            You are looking at the action page view for this Project which can only be seen by contributors. You can view the public page for this Project as it would appear to non-contributors.
+                        </span>
+                    </div> 
+                </h3>
+                <a 
+                    class="block" 
+                    href="{% url 'view-project' project.unique_id %}"
+                ><i class="fa-solid fa-eye"></i> Public View</a>
+            </div> 
         {% endif %}
 
         <!-- Community: set project status -->
