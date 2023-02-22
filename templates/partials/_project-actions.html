@@ -354,6 +354,11 @@
 
             {% if 'projects/actions/' in request.path %}
 
+                    <a 
+                        class="block" 
+                        href="{% url 'view-project' project.unique_id %}"
+                    ><i class="fa-solid fa-eye"></i> Public View</a>
+
                 {% if request.user.is_authenticated and request.user == project.project_creator %}
                     <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
 
