@@ -430,50 +430,83 @@
 
         </div>  
 
+        <!-- View As card: in view-projects: If user is logged in AND belongs to account of a contributor of Project, display affiliations -->
+        {% if not '/actions/' in request.path %}
+            {% if communities or institutions or user_researcher %}
+                <div class="actions-card content-card-space flex-this column">
+                    <h3 class="no-top-margin">View As 
+                        <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                            <span class="tooltiptext">
+                                You are looking at the public view for this Project. To view all actions and comments, select account you'd like to view this Project as.
+                            </span>
+                        </div> 
+                    </h3>
+
+                    {% for community in communities %}
+                        <a class="block" href="{% url 'community-project-actions' community.id project.unique_id %}"> 
+                            <i class="fa-solid fa-circle-user"></i> {{ community.community_name }}
+                        </a>
+                    {% endfor %}
+                    {% for institution in institutions %}
+                        <a class="block" href="{% url 'institution-project-actions' institution.id project.unique_id %}"> 
+                            <i class="fa-solid fa-circle-user"></i> {{ institution.institution_name }}
+                        </a>
+                    {% endfor %}
+                    {% if user_researcher %}
+                        <a class="block" href="{% url 'researcher-project-actions' user_researcher.id project.unique_id %}"> 
+                            <i class="fa-solid fa-circle-user"></i> {{ user_researcher.user }} (Researcher)
+                        </a>
+                    {% endif %}
+                </div> 
+            {% endif %}
+        {% endif %}
+
         <!-- Community: set project status -->
         {% if community %}
             {% include 'projects/project-status.html' %}
         {% endif %}
 
         <!-- List of communities notified -->
-        <div class="actions-card-notifified content-card-space flex-this column">
-            <div class="flex-this">
-                <h3 class="no-top-margin no-bottom-margin">Communities Notified</h3>
-                <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
-                    <span class="tooltiptext">
-                        <i class="bold">Seen</i><br> The community has acknowledged the Project but has not made a decision about applying Labels.<br>
-                        <i class="bold">No Labels Pending</i><br> The community will not apply Labels to the Project.<br>
-                        <i class="bold">Labels Pending</i><br> The community is deciding which Label(s) to apply to the Project.<br>
-                        <i class="bold">Labels Applied</i><br> The community has applied Labels to the Project.
-                    </span>
-                </div>                     
-            </div>
+        {% if community or researcher or institution %}
+            <div class="actions-card-notifified content-card-space flex-this column">
+                <div class="flex-this">
+                    <h3 class="no-top-margin no-bottom-margin">Communities Notified</h3>
+                    <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                        <span class="tooltiptext">
+                            <i class="bold">Seen</i><br> The community has acknowledged the Project but has not made a decision about applying Labels.<br>
+                            <i class="bold">No Labels Pending</i><br> The community will not apply Labels to the Project.<br>
+                            <i class="bold">Labels Pending</i><br> The community is deciding which Label(s) to apply to the Project.<br>
+                            <i class="bold">Labels Applied</i><br> The community has applied Labels to the Project.
+                        </span>
+                    </div>                     
+                </div>
 
-            <div class="border-bottom-grey">
-                <p>
-                    Listed below are the communities that have been notified about this Project 
-                    including the status of their decision about the Project.
-                </p>
+                <div class="border-bottom-grey">
+                    <p>
+                        Listed below are the communities that have been notified about this Project 
+                        including the status of their decision about the Project.
+                    </p>
+                </div>
+                {% if statuses %}
+                    {% for status in statuses %}
+                        <div class="border-bottom-grey">
+                            <div><p><span class="bold"><a href="{% url 'public-community' status.community.id %}" class="darkteal-text underline-hover">{{ status.community }}</a> </span></p></div>
+                            <div>
+                                <p><em> Project status: </em>
+                                    {% if status.seen and status.status == None %} Seen
+                                    {% elif status.seen and status.status == 'pending' %} Labels Pending
+                                    {% elif status.seen and status.status == 'not_pending' %} No Labels Pending
+                                    {% elif status.seen and status.status == 'labels_applied' %} Labels Applied
+                                    {% else %} Sent {% endif %}
+                                </p>
+                            </div>    
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p><em>No communities notified yet</em></p>
+                {% endif %}
             </div>
-            {% if statuses %}
-                {% for status in statuses %}
-                    <div class="border-bottom-grey">
-                        <div><p><span class="bold"><a href="{% url 'public-community' status.community.id %}" class="darkteal-text underline-hover">{{ status.community }}</a> </span></p></div>
-                        <div>
-                            <p><em> Project status: </em>
-                                {% if status.seen and status.status == None %} Seen
-                                {% elif status.seen and status.status == 'pending' %} Labels Pending
-                                {% elif status.seen and status.status == 'not_pending' %} No Labels Pending
-                                {% elif status.seen and status.status == 'labels_applied' %} Labels Applied
-                                {% else %} Sent {% endif %}
-                            </p>
-                        </div>    
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p><em>No communities notified yet</em></p>
-            {% endif %}
-        </div>
+        {% endif %}
     </div>
 
 </div>
