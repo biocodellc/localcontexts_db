@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages, auth
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
@@ -470,16 +470,142 @@ def hub_counter(request):
     
     return render(request, 'accounts/totals-count.html', context)
 
-# apikeys request
+def manage_mailing_list(request, first_name):
+    selections = request.POST.getlist('topic')
+    tech = 'no'
+    news = 'no'
+    events = 'no'
+    notices = 'no'
+    labels = 'no'
+    for item in selections:
+        if item == 'tech':
+            tech = 'yes'
+        if item == 'news':
+            news = 'yes'
+        if item == 'events':
+            events = 'yes'
+        if item == 'notices':
+            notices = 'yes'
+        if item == 'labels':
+            labels = 'yes'
+    variables= '{"first_name":"%s", "tech": "%s", "news": "%s", "events": "%s","notices": "%s","labels": "%s"}'%(first_name, tech, news, events, notices, labels)
+    return(variables)
+
+def subscription_form(request):
+    if request.method == 'POST':
+        if 'topic' not in request.POST:
+            messages.add_message(request, messages.ERROR, 'Please select at least one topic.')
+            return redirect('subscription-form')
+        else:
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            name= str(first_name) + str(' ') + str(last_name)
+            email = request.POST['email']
+            variables = manage_mailing_list(request, first_name)
+            add_to_mailing_list(str(email), str(name), str(variables))
+            messages.add_message(request, messages.SUCCESS, 'You have been subscribed.')
+            return redirect('unsubscribe-form')
+    return render(request, 'accounts/subscription-form.html')
+
+def unsubscribe_form(request):
+    response = get_member_info('ashley.rojas95@gmail.com')
+    data=response.json()
+    member_info = data["member"]
+    email = member_info["address"]
+    name = member_info["name"]
+    variables = member_info["vars"]
+    subscribed = member_info["subscribed"]
+    if subscribed == True:
+        for item in variables:
+            if item == 'tech':
+                tech = variables[item]
+            if item == 'news':
+                news = variables[item]
+            if item == 'events':
+                events = variables[item]
+            if item == 'notices':
+                notices = variables[item]
+                print(notices)
+            if item == 'labels':
+                labels = variables[item]
+            if item == 'first_name':
+                first_name = variables[item]
+    
+        context={
+            'email':email,
+            'tech': tech,
+            'news': news,
+            'events': events,
+            'notices': notices,
+            'labels': labels,
+            'subscribed':subscribed
+        }
+    else:
+        context={'subscribed':subscribed}
+
+    if request.method == 'POST':
+        if 'updatebtn' in request.POST:
+            if 'topic' not in request.POST:
+                messages.add_message(request, messages.ERROR, 'Please select at least one topic.')
+                return redirect('unsubscribe-form')
+            else:
+                variables = manage_mailing_list(request, first_name)
+                add_to_mailing_list(str(email), str(name), str(variables))
+                messages.add_message(request, messages.SUCCESS, 'Your preferences have been updated.')
+                return redirect('unsubscribe-form')
+
+        if 'unsubscribebtn' in request.POST:
+            if 'unsubscribe' not in request.POST:
+                messages.add_message(request, messages.ERROR, 'Please check the box below to unsubscribe.')
+                return redirect('unsubscribe-form')
+            else:
+                unsubscribe_from_mailing_list(str(email), str(name))
+                return redirect('unsubscribe-form')
+    return render(request, 'accounts/unsubscribe-form.html', context)
+
 @login_required(login_url='login')
 def api_keys(request):
-    key = APIKey.objects.none()
+    profile = Profile.objects.get(user=request.user)
 
-    if request.POST:
-        api_key, key = APIKey.objects.create_key(name=request.user.username)
+    if request.method == 'POST':
+        if 'generatebtn' in request.POST:
+            api_key, key = APIKey.objects.create_key(name=request.user.username)
+            profile.api_key = key
+            profile.save()
+            messages.add_message(request, messages.SUCCESS, 'API Key Generated!')
+            page_key = profile.api_key
+            return redirect('api-key')
 
-        context ={"api_key": key}
+        elif 'hidebtn' in request.POST:
+            return redirect('api-key')
 
-        return render(request, 'accounts/apikeys.html', context)
+        elif 'continueKeyDeleteBtn' in request.POST:
+            api_key = APIKey.objects.get(name=request.user.username)
+            api_key.delete()
+            profile.api_key = None
+            profile.save()
+            messages.add_message(request, messages.SUCCESS, 'API Key Deleted!')
+            return redirect('api-key')
 
-    return render(request, 'accounts/apikey.html')
+        elif 'copybtn' in request.POST:
+            messages.add_message(request, messages.SUCCESS, 'Copied!')
+            return redirect('api-key')
+
+        elif 'showbtn' in request.POST:
+            page_key = profile.api_key
+            context = { 'api_key': page_key, 'has_key': True}
+            request.session['keyvisible'] = True
+            return redirect('api-key')
+
+    keyvisible = request.session.pop('keyvisible',False)
+
+    if request.method == 'GET':
+        if profile.api_key is None:
+            context = {'has_key': False}
+            return render(request, 'accounts/apikey.html', context)
+        elif profile.api_key is not None and keyvisible is not False:
+            context = {'has_key': True, 'keyvisible': keyvisible, 'api_key': profile.api_key}
+            return render(request, 'accounts/apikey.html', context)
+        else:
+            context = {'api_key': '**********************************', 'has_key': True}
+            return render(request, 'accounts/apikey.html', context)

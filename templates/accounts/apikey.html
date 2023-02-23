@@ -1,62 +1,129 @@
 {% extends 'settings-base.html' %}{% load static %}
 
 {% block settings %}
-<form id="apiKeyGeneratorForm" method="POST">
-
-    <div class="flex-this column w-80 margin-right-1">
-        <div><h3>API Key Manager</h3></div>
-
-        <div class="w-70 margin-bottom-2">
-            <p class="no-top-margin">Please note that you will not be able to sign-in after deactivation. Your profile and its associated data will be deleted 30 days after deactivation.</p>
-                {% csrf_token %}
-                <button id="submitDeactivation" class="primary-btn white-btn">Deactivate Profile</button>
-        </div>
+<div class="flex-this column w-80 border-left margin-right-1">
+    <div class="flex-this space-between">
+        <div><h3 class="no-top-margin">API Key Manager</h3></div>
     </div>
 
-    <div id="deactivationModal" class="modal hide">
+    {% if has_key %}
+        <div class="w-70 margin-bottom-2">
+            <p class="no-top-margin">Your API key enables access to the Local Contexts Hub data via the API and must be kept secret. For more informaiton see our <a href="https://localcontexts.org/api-guide/" target="_blank">API Guide</a>.
+            <p class="no-top-margin">Your API key is listed below.</p>
+        </div>
 
-        <div class="modal-defaults deactivate-modal flex-this column w-100">
-            <div class="modal-content-padding w-100">
-
-                <div>
-                    <h2 class="primary-black-text">Are you sure?</h2>  
-                    <p>Are you sure you want to deactivate your profile? <br><br>
-                        This cannot be undone and you will be automatically logged out. <br></p>  
+        <div class="w-100 margin-top-8">
+            <div class="flex-this">
+                <div style="width:55%;">
+                    <label for="api_key">API Key</label><br>                                           
+                    <div id="keyText" class="key">{{ api_key }}</div>
+                    {% if keyvisible %}
+                        <form id="apiKeyGeneratorForm" method="POST">
+                            {% csrf_token %}
+                                <button class="primary-btn green-btn copied-display" id="copybtn" name="copybtn" onclick="copyKey()">
+                                    <i class="fa fa-copy"></i>
+                                </button>
+                        </form>
+                    {% else %}
+                    <button class="primary-btn green-btn copied-display" id="copybtn" name="copybtn" disabled>
+                        <i class="fa fa-copy"></i>
+                    </button>
+                    {% endif %}
+                    
                 </div>
-                <div class="flex-this w-100 text-align-center">
-                    <div id="continueDeactivationBtn" class="primary-btn white-btn margin-right-1">Yes, deactivate my profile</div>    
-                    <div id="closeDeactivationModal" class="margin-left-1 primary-btn action-btn">Cancel</div>
-                </div>
-
+            </div>
+            <div style="width:55%;">
+                <form id="apiKeyGeneratorForm" method="POST">
+                    {% csrf_token %}
+                    {% if keyvisible %}
+                        <button type="submit" class="primary-btn action-btn margin-top-2" id="showHideBtn" name="hidebtn">Hide Key</button>
+                    {% else %}
+                        <button type="submit" class="primary-btn action-btn margin-top-2" id="showHideBtn" name="showbtn">Show Key</button>
+                        <div class="messageFloat">{% include 'partials/_alerts.html' %}</div>
+                    {% endif %}
+                </form>
             </div>
         </div>
-    </div>
-</form>
 
-<!-- <form id="apiKeyRequest" method="POST">
-    <div class="flex-this column w-80   margin-right-1">
-        <div><h3>Request an API Key</h3></div>
-        <div class="w-70 margin-bottom-2">
-            <p class="no-top-margin">Please note that you will not be able to sign-in after deactivation. Your profile and its associated data will be deleted 30 days after deactivation.</p>
-                {% csrf_token %}
-                <button id="requestKey" class="primary-btn white-btn">Generate API Key</button>
-        </div>
-    </div> -->
-
-<!-- </form> -->
-
-<!-- <div>
-    <form method="POST" action="">
-        {% csrf_token %}
-        <button class="primary-btn action-btn margin-top-2">Generate API Key <i class="fa fa-arrow-right"></i></button>
-    </form>
-</div>
-<p>
-    username: {{ request.user.username }} <br>
-    Key: {{ api_key }}<br>
+        <div class="flex-this column w-100 margin-right-1">
+            <div><h4 class="margin-top-16">Delete API Key</h4></div>
     
-    when button clicked, href to new view, then redirect back to this page with updated information
-</p>
-</div>   -->
+            <div class="w-70 margin-bottom-2">
+                <p class="no-top-margin">You can only have one API key at a time. If you need to generate a new one, you must delete this one first. To delete your current key, click the button below.</p>
+                    <button id="submitKeyDeletion" class="primary-btn white-btn" onclick="deleteKey()">Delete API Key</button>
+            </div>
+        </div>
+    
+        <div id="deleteKeyModal" class="modal hide">
+    
+            <div class="modal-defaults deactivate-modal flex-this column w-100">
+                <div class="modal-content-padding w-100">
+        
+                    <div>
+                        <h2 class="primary-black-text">Are you sure?</h2>  
+                        <p>Are you sure you want to delete your API key? <br><br>
+                            This cannot be undone and any projects connected to this key will be disconnected. <br></p>  
+                    </div>
+                    <div class="flex-this w-100 text-align-center">
+                        <form id="apiDeleteKeyForm" method="POST">
+                            {% csrf_token %}
+                            <button name="continueKeyDeleteBtn" class="primary-btn white-btn">Yes, delete this key</button>    
+                        </form>
+                        <div id="closeModal" class="margin-left-1 primary-btn action-btn">Cancel</div>
+                    </div>
+        
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div>
+            <form id="apiKeyGeneratorForm" method="POST">
+                {% csrf_token %}
+
+                <div class="w-70 margin-bottom-2">
+                    <p class="no-top-margin">Your API key enables access to the Local Contexts Hub data via the API and must be kept secret. For more informaiton see our <a href="https://localcontexts.org/api-guide/" target="_blank">API Guide</a>.</p>
+                    <p class="no-top-margin">You do not have an API key. Click the button below to generate one.</p>
+                    <button type="submit" class="primary-btn action-btn margin-top-2" name="generatebtn">Generate API Key <i class="fa fa-arrow-right"></i></button>
+                </div>
+            </form>
+        </div>
+        {% include 'partials/_alerts.html' %}
+    {% endif %}
+
+</div>
+
+<style>
+    .key{
+        max-height: 40px;
+        min-height: 40px;
+        max-width: 463px;
+        min-width: 463px;
+        float:left;
+        background-color: #fff;
+        border: 1px solid #1F2937;
+        border-radius: 4px 0px 0px 4px;
+        padding:8px;
+        opacity: 0.6;
+    }
+
+    #copybtn{
+        float: left;
+        border-radius: 0px 4px 4px 0px;
+        border-left: 0px;
+        max-height: 40px;
+        min-height: 40px;
+    }
+
+    #copybtn:disabled,
+    #copybtn[disabled] {
+        border: 1px solid #787E86;
+        border-left: 0px;
+        pointer-events: none;
+    }
+
+    #showHideBtn{
+        float: right;
+    }
+</style>
 
 {% endblock %}
