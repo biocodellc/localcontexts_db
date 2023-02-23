@@ -102,6 +102,19 @@
                 </div>
             {% endif %}
 
+
+            {% if member_role == 'admin' %}
+                <div class="flex-this">
+                    <div class="dash-icons-big">
+                        <i class="fa-solid fa-envelope fa-2x orange-text"></i>
+                    </div>
+                    <div>
+                        <small class="orange-text">Email</small>
+                        <p class="no-top-margin">{{ community.community_creator.email }}</p>
+                    </div>
+                </div>
+            {% endif %}
+
         </div>
 
     </section>
@@ -165,6 +178,18 @@
                         <div>
                             <small class="orange-text">Affiliations</small>
                             <p class="no-top-margin">{{ admin.user_profile.affiliation }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if member_role == 'admin' %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa-solid fa-envelope fa-2x orange-text"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Email</small>
+                            <p class="no-top-margin">{{ admin.email }}</p>
                         </div>
                     </div>
                 {% endif %}
@@ -237,6 +262,18 @@
                     </div>
                 {% endif %}
 
+                {% if member_role == 'admin' %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa-solid fa-envelope fa-2x orange-text"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Email</small>
+                            <p class="no-top-margin">{{ editor.email }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
             </div>
 
         </section>
@@ -305,6 +342,18 @@
                     </div>
                 {% endif %}
 
+                {% if member_role == 'admin' %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa-solid fa-envelope fa-2x orange-text"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Email</small>
+                            <p class="no-top-margin">{{ viewer.email }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
             </div>
 
         </section>
@@ -356,6 +405,18 @@
                     <div>
                         <small class="orange-text">Affiliations</small>
                         <p class="no-top-margin">{{ institution.institution_creator.user_profile.affiliation }}</p>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if member_role == 'admin' %}
+                <div class="flex-this">
+                    <div class="dash-icons-big">
+                        <i class="fa-solid fa-envelope fa-2x orange-text"></i>
+                    </div>
+                    <div>
+                        <small class="orange-text">Email</small>
+                        <p class="no-top-margin">{{ institution.institution_creator.email }}</p>
                     </div>
                 </div>
             {% endif %}
@@ -423,6 +484,18 @@
                         <div>
                             <small class="orange-text">Affiliations</small>
                             <p class="no-top-margin">{{ admin.user_profile.affiliation }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if member_role == 'admin' %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa-solid fa-envelope fa-2x orange-text"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Email</small>
+                            <p class="no-top-margin">{{ admin.email }}</p>
                         </div>
                     </div>
                 {% endif %}
@@ -495,6 +568,18 @@
                     </div>
                 {% endif %}
 
+                {% if member_role == 'admin' %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa-solid fa-envelope fa-2x orange-text"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Email</small>
+                            <p class="no-top-margin">{{ editor.email }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
             </div>
 
         </section>
@@ -559,6 +644,18 @@
                         <div>
                             <small class="orange-text">Affiliations</small>
                             <p class="no-top-margin">{{ viewer.user_profile.affiliation }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if member_role == 'admin' %}
+                    <div class="flex-this">
+                        <div class="dash-icons-big">
+                            <i class="fa-solid fa-envelope fa-2x orange-text"></i>
+                        </div>
+                        <div>
+                            <small class="orange-text">Email</small>
+                            <p class="no-top-margin">{{ viewer.email }}</p>
                         </div>
                     </div>
                 {% endif %}

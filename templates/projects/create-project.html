@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} Create Project {% endblock %} {% load static %} {% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 
         <div class="content-card-v2 content-card-space">
             <div>
@@ -9,30 +9,48 @@
                         {% if researcher %} href="{% url 'researcher-projects' researcher.id %}" {% endif %}
                     >Projects
                     </a> 
-                    <span class="grey-text"> >> Create New Project</span>
+                    {% if '/edit-project/' in request.path %}
+                        <span class="grey-text"> >> </span>
+                        <a class="darkteal-text" 
+                            {% if community %} href="{% url 'community-project-actions' community.id project.unique_id %}" {% endif %}
+                            {% if institution %} href="{% url 'institution-project-actions' institution.id project.unique_id %}" {% endif %}
+                            {% if researcher %} href="{% url 'researcher-project-actions' researcher.id project.unique_id %}" {% endif %}
+                        > {{ project.title|truncatechars:15 }}
+                        </a> 
+                        <span class="grey-text"> >> Edit Project </span>
+                    {% else %}
+                        <span class="grey-text"> >> Create New Project</span>
+                    {% endif %}
                 </small>
             </div>
-            <h2 class="no-bottom-margin">Create a Local Contexts Project</h2>
-            <p class="w-90">
-                {% if researcher or institution %}
-                    The first step for institutions and researchers to generate Notices is to create a Project within the Local Contexts Hub. 
-                    A project describes the context where a Notice is being applied. For example, a project could include: a website, a university syllabus, 
-                    a dissertation, a research publication, a dataset, a museum exhibition, an archival record, an item in a collection, a library database, 
-                    a photography collection, a voucher specimen, and/or metadata about a record. <br><br>
+            {% if '/edit-project/' in request.path %}
+                <h2 class="no-bottom-margin">Edit a Local Contexts Project</h2>
+                <p class="w-90">
+                    A project describes the context where a Notice or Label is being applied. Project creators can edit a Local Contexts Project. Project contributors will receive a notification that the Project has been edited.
+                </p>
+            {% else %}
+                <h2 class="no-bottom-margin">Create a Local Contexts Project</h2>
+                <p class="w-90">
+                    {% if researcher or institution %}
+                        The first step for institutions and researchers to generate Notices is to create a Project within the Local Contexts Hub. 
+                        A project describes the context where a Notice is being applied. For example, a project could include: a website, a university syllabus, 
+                        a dissertation, a research publication, a dataset, a museum exhibition, an archival record, an item in a collection, a library database, 
+                        a photography collection, a voucher specimen, and/or metadata about a record. <br><br>
 
-                    To create a Local Contexts Project, you will be asked for project details and contacts, and have the option to add metadata.<br><br>
+                        To create a Local Contexts Project, you will be asked for project details and contacts, and have the option to add metadata.<br><br>
 
-                    Remember that the audience for the project is the communities that you wish to engage with and who have rights, responsibilities, 
-                    and interests in the material, information, and data.
-                {% endif %}
-                {% if community %}
-                    You can apply your Traditional Knowledge and Biocultural Labels to projects. A project describes the context where a Label is being applied. 
-                    For example, a project could include: a website, a university syllabus, a dissertation, a research publication, a dataset, a museum exhibition, 
-                    an archival record, an item in a collection, a library database, a photography collection, a voucher specimen, and/or metadata about a record. <br><br>
+                        Remember that the audience for the project is the communities that you wish to engage with and who have rights, responsibilities, 
+                        and interests in the material, information, and data.
+                    {% endif %}
+                    {% if community %}
+                        You can apply your Traditional Knowledge and Biocultural Labels to projects. A project describes the context where a Label is being applied. 
+                        For example, a project could include: a website, a university syllabus, a dissertation, a research publication, a dataset, a museum exhibition, 
+                        an archival record, an item in a collection, a library database, a photography collection, a voucher specimen, and/or metadata about a record. <br><br>
 
-                    When you create a Local Contexts Project, you will be asked for project details and contacts, and have the option to add metadata.
-                {% endif %}
-            </p>
+                        When you create a Local Contexts Project, you will be asked for project details and contacts, and have the option to add metadata.
+                    {% endif %}
+                </p>
+            {% endif %}
 
         </div>
 
@@ -42,187 +60,17 @@
         <!-- Project Notices -->
         {% if institution or researcher %}
             <div class="content-card-v2 content-card-space">   
-
                 <h3>Project Notice</h3>
-                <p>
-                    Select which Local Contexts Notice(s) apply to this Project. To use the Open to Collaborate Notice, 
-                    <a 
-                        {% if institution %}
-                            href="{% url 'institution-notices' institution.id %}"
-                        {% endif %}
-                        {% if researcher %}
-                            href="{% url 'researcher-notices' researcher.id %}"
-                        {% endif %}
-                        class="darkteal-text underline-hover"
-                    >go to the Notices page</a>.
-                </p><br>
 
-                <div class="flex-this w-40 space-between margin-left-16">     
-                    <div class="flex-this column center-text">
-                        <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="73px" alt="black square with white letters TK in the middle"></div>
-                        <div><p id="title-tk-notice" class="grey-text">Traditional<br> Knowledge Notice</p></div>
-                        <div class="notice-checkbox-container">
-
-                            <input 
-                                id="tk-notice" 
-                                value="tknotice" 
-                                type="checkbox" 
-                                name="checkbox-notice" 
-                                {% if notices %}
-                                    {% for notice in notices %}
-                                        {% if notice.notice_type == 'traditional_knowledge' %}
-                                            checked
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            > 
-                        <span class="margin-left-8">Select</span></div>
-                    </div>
-            
-                    <div class="flex-this column center-text margin-left-16">
-                        <div><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="73px" alt="black square with white letters BC in the middle"></div>
-                        <div><p id="title-bc-notice" class="grey-text">Biocultural<br> Notice</p></div>
-                        <div class="notice-checkbox-container">
-
-                            <input 
-                                id="bc-notice" 
-                                value="bcnotice" 
-                                type="checkbox" 
-                                name="checkbox-notice" 
-                                {% if notices %}
-                                    {% for notice in notices %}
-                                        {% if notice.notice_type == 'biocultural' %}
-                                            checked
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            >
-
-                        <span class="margin-left-8">Select</span></div>
-                    </div>
-
-
-                    <div class="flex-this column center-text margin-left-16 align-center">
-                        <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="73px"></div>
-                        <div><p id="title-attr-notice" class="grey-text">Attribution Incomplete <br> Notice</p></div>
-                        <div class="notice-checkbox-container">
-
-                            <input 
-                                id="attr-notice" 
-                                value="attribution_incomplete" 
-                                type="checkbox" 
-                                name="checkbox-notice"
-                                {% if notices %}
-                                    {% for notice in notices %} 
-                                        {% if notice.notice_type == 'attribution_incomplete'%} 
-                                            checked 
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                            >
-                            <span class="margin-left-8">Select</span>
-                        </div>
-                    </div>
-
-                </div>
-
-                <h3>Notice Text</h3>
-                {% if notices %}
-                    {% for notice in notices %}
-
-                        {% if notice.notice_type == 'traditional_knowledge' %}
-                            <div 
-                                id="show-description-tk-notice"
-                                class="show"
-                            >
-                                <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                                    <div class="w-15 pad-top-1"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle"></div>
-                                    <div class="w-80 pad-top-1">
-                                        <h3 class="no-top-margin">Traditional Knowledge Notice</h3>
-                                        <p>The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated. <br> For more information about the TK Notices click <a href="https://localcontexts.org/notice/tk-notice/" target="_blank" rel="noopener"><span class="darkteal-text">here</span></a>.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        {% if notice.notice_type == 'biocultural' %}
-                            <div   
-                                id="show-description-bc-notice" 
-                                class="show"
-                            >
-                                <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                                    <div class="w-15 pad-top-1"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle"></div>
-                                    <div class="w-80 pad-top-1">
-                                        <h3 class="no-top-margin">Biocultural Notice</h3>
-                                        <p>The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated. <br> For more information about the BC Notices click <a href="https://localcontexts.org/notice/bc-notice/" target="_blank" rel="noopener"><span class="darkteal-text">here</span></a>.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        {% if notice.notice_type == 'attribution_incomplete' %} 
-                            <div 
-                                id="show-description-attr-notice" 
-                                class="show"
-                            >
-                                <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                                    <div class="w-15 pad-top-1"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="119px" alt="black square with white letters BC in the middle"></div>
-                                    <div class="w-80 pad-top-1">
-                                        <h3 class="no-top-margin">Attribution Incomplete Notice</h3>
-                                        <p>
-                                            Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution. <br> 
-                                            For more information about the Attribution Incomplete Notice click <a href="https://localcontexts.org/notice/attribution-incomplete/" target="_blank" rel="noopener"><span class="darkteal-text">here</span></a>.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-
-                    {% endfor %}
+                {% if project %}
+                    {% if project.has_labels %}
+                        Since Labels have been applied to this project, Notices can no longer be added or removed.
+                    {% else %}
+                        {% include 'snippets/project_notices.html' %}
+                    {% endif %}
+                {% else %}
+                    {% include 'snippets/project_notices.html' %}
                 {% endif %}
-
-                <div 
-                    id="show-description-tk-notice"
-                    class="hide"
-                >
-                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                        <div class="w-15 pad-top-1"><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" alt="black square with white letters TK in the middle"></div>
-                        <div class="w-80 pad-top-1">
-                            <h3 class="no-top-margin">Traditional Knowledge Notice</h3>
-                            <p>The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated. <br> For more information about the TK Notices click <a href="https://localcontexts.org/notice/tk-notice/" target="_blank" rel="noopener"><span class="darkteal-text">here</span></a>.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div   
-                    id="show-description-bc-notice" 
-                    class="hide"
-                >
-                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                        <div class="w-15 pad-top-1"><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" alt="black square with white letters BC in the middle"></div>
-                        <div class="w-80 pad-top-1">
-                            <h3 class="no-top-margin">Biocultural Notice</h3>
-                            <p>The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated. <br> For more information about the BC Notices click <a href="https://localcontexts.org/notice/bc-notice/" target="_blank" rel="noopener"><span class="darkteal-text">here</span></a>.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div 
-                    id="show-description-attr-notice" 
-                    class="hide"
-                >
-                    <div class="flex-this border-top-solid-teal border-bottom-solid-teal">
-                        <div class="w-15 pad-top-1"><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="119px" alt="black square with white letters BC in the middle"></div>
-                        <div class="w-80 pad-top-1">
-                            <h3 class="no-top-margin">Attribution Incomplete Notice</h3>
-                            <p>
-                                Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution. <br> 
-                                For more information about the Attribution Incomplete Notice click <a href="https://localcontexts.org/notice/attribution-incomplete/" target="_blank" rel="noopener"><span class="darkteal-text">here</span></a>.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
             </div> <!-- end of Notices card-->
         {% endif %}
 
@@ -335,8 +183,8 @@
                         {% for url in urls %}
                             <li id="{{ url }}" class="margin-bottom-8 show">
                                 <div class="grey-chip flex-this row space-between">
-                                    <div><p class="center-name">{{ url }}</p></div>
-                                    <div id="btn-{{ url }}" class="removeProjectUrlBtn pointer">&times;</div>
+                                    <div><p class="center-name word-break">{{ url }}</p></div>
+                                    <div id="btn-{{ url }}" class="removeProjectUrlBtn pointer margin-left-8">&times;</div>
                                 </div>
                                 <input type="hidden" value="{{ url }}" name="project_urls">                        
                             </li>
@@ -449,7 +297,7 @@
                         <ul>
                             <li><span class="bold">Public:</span> Contributors and notified communities will be able to interact with the project. Limited project details (title, unique ID, attached Notices or Labels) can be accessed through the Hub API.</li><br>
                             <li><span class="bold">Contributor View:</span>  Contributors and notified communities will be able to interact with the project. Limited project details (title, unique ID) can be accessed through the Hub API.</li><br>
-                            <li><span class="bold">Private:</span>  If contributors are added, communities are notified, or Labels applied, then the private project will be changed to discoverable. Private projects cannot be accessed with the Hub API. </li>
+                            <li><span class="bold">Private:</span>  If contributors are added, communities are notified, or Labels applied, then the private project will be changed to contributor view. Private projects cannot be accessed with the Hub API. </li>
                         </ul>                  
                     </span>
                 </div>

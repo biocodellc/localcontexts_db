@@ -59,8 +59,18 @@
                     {% if urls %}
                         <ul>
                             {% for url in urls %}
-                                <li>
-                                    <a class="darkteal-text underline-hover" href="{{ url.0 }}" target="_blank" rel="noopener">{{ url.1 }} <i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                <li class="margin-bottom-8">
+                                    <div class="flex-this w-70 space-between">
+                                        <a class="darkteal-text underline-hover block" href="{{ url.0 }}" target="_blank" rel="noopener">{{ url.1 }} <i class="fa fa-external-link fa-xs" aria-hidden="true"></i></a>
+                                        {% if researcher %}
+                                            <a class="darkteal-text underline-hover block" href="{% url 'researcher-delete-otc' researcher.id url.2 %}"> <i class="fa fa-trash" aria-hidden="true"></i></a>
+                                        {% endif %}     
+                                        {% if institution %}
+                                            {% if member_role == 'admin' or member_role == 'editor' %}
+                                                <a class="darkteal-text underline-hover block" href="{% url 'institution-delete-otc' institution.id url.2 %}"> <i class="fa fa-trash" aria-hidden="true"></i></a>
+                                            {% endif %}
+                                        {% endif %}                                   
+                                    </div>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -100,7 +110,7 @@
                     {{ form.name }}<br>
                     {{ form.url.label }}
                     <div class="tooltip"><strong>i</strong>
-                        <span class="tooltiptext">The web address or link where the Notice is displayed.</span>
+                        <span class="tooltiptext">The web address or link or URL where the Notice is displayed. Must be unique, duplicated links will not be added.</span>
                     </div>
                     <br>
                     {{ form.url }}

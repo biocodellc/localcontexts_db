@@ -13,6 +13,7 @@ urlpatterns = [
     path('update/<str:pk>/', views.update_institution, name="update-institution"),
 
     path('notices/<str:pk>/', views.institution_notices, name="institution-notices"),
+    path('notices/otc/delete/<str:institution_id>/<str:notice_id>/', views.delete_otc_notice, name="institution-delete-otc"),
 
     path('members/<str:pk>/', views.institution_members, name="institution-members"),
     path('members/requests/<str:pk>/', views.member_requests, name="institution-member-requests"),
@@ -25,11 +26,14 @@ urlpatterns = [
     path('projects-notices/<str:pk>/', views.projects_with_notices, name="institution-projects-notices"),
     path('projects-created/<str:pk>/', views.projects_creator, name="institution-projects-creator"),
     path('projects-contributing/<str:pk>/', views.projects_contributor, name="institution-projects-contributor"),
-
+    path('projects-archived/<str:pk>/', views.projects_archived, name="institution-projects-archived"),
 
     path('projects/create-project/<str:pk>/', views.create_project, name="inst-create-project"),
     path('projects/edit-project/<str:institution_id>/<str:project_uuid>', views.edit_project, name="inst-edit-project"),
-    path('projects/notify/<str:pk>/<str:proj_id>/', views.notify_others, name="institution-notify-others"),
+    path('projects/actions/<str:pk>/<uuid:project_uuid>/', views.project_actions, name="institution-project-actions"),
+    path('projects/delete-project/<str:institution_id>/<str:project_uuid>', views.delete_project, name="inst-delete-project"),
+    path('projects/archive-project/<str:institution_id>/<str:project_uuid>', views.archive_project, name="institution-archive-project"),
+
 
     path('connections/<str:pk>/', views.connections, name="institution-connections"),
 ]

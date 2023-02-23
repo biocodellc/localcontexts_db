@@ -5,6 +5,16 @@ from institutions.models import Institution
 from communities.models import Community
 from researchers.models import Researcher
 
+class ProjectArchived(models.Model):
+    project_uuid = models.UUIDField(null=True, blank=True, db_index=True)
+    community_id = models.IntegerField(null=True, blank=True)
+    institution_id = models.IntegerField(null=True, blank=True)
+    researcher_id = models.IntegerField(null=True, blank=True)
+    archived = models.BooleanField()
+
+    class Meta:
+        verbose_name_plural = 'Project Archived'
+
 class Project(models.Model):
     TYPES = (
         ('Item', 'Item'),
@@ -17,7 +27,7 @@ class Project(models.Model):
     )
     PRIVACY_LEVEL = {
         ('Public', 'Public'),
-        ('Discoverable', 'Discoverable'),
+        ('Contributor', 'Contributor'),
         ('Private', 'Private'),
     }
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, db_index=True)
@@ -30,11 +40,6 @@ class Project(models.Model):
     description = models.TextField(null=True)
     project_contact = models.CharField(max_length=100, null=True)
     project_contact_email = models.EmailField(max_length=100, null=True)
-    project_image = models.ImageField(upload_to='users/project-images', blank=True, null=True)
-    project_image2 = models.ImageField(upload_to='users/project-images', blank=True, null=True)
-    project_image3 = models.ImageField(upload_to='users/project-images', blank=True, null=True)
-    project_image4 = models.ImageField(upload_to='users/project-images', blank=True, null=True)
-    project_image5 = models.ImageField(upload_to='users/project-images', blank=True, null=True)
     publication_doi = models.CharField(max_length=200, blank=True, null=True)
     project_data_guid = models.CharField(max_length=200, blank=True, null=True)
     providers_id = models.CharField(max_length=200, blank=True, null=True)
@@ -90,7 +95,6 @@ class ProjectContributors(models.Model):
 
     class Meta:
         indexes = [models.Index(fields=['project'])]
-        verbose_name = 'Project Contributors'
         verbose_name_plural = 'Project Contributors'
 
 class ProjectPerson(models.Model):
@@ -117,12 +121,12 @@ class ProjectCreator(models.Model):
     
     class Meta:
         indexes = [models.Index(fields=['project', 'community', 'institution', 'researcher'])]
-        verbose_name = 'Project Creator'
         verbose_name_plural = 'Project Creator'
 
 class ProjectNote(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_note', null=True, blank=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='community_note', null=True, blank=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="project_note_sender", blank=True)
     note = models.TextField('Community Note', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, null=True)
 
@@ -131,5 +135,16 @@ class ProjectNote(models.Model):
     
     class Meta:
         indexes = [models.Index(fields=['project', 'community'])]
-        verbose_name = 'Project Note'
         verbose_name_plural = 'Project Notes'
+
+class ProjectActivity(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project_activity', null=True, blank=True)
+    date = models.DateTimeField(auto_now=True)
+    activity = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.project)
+    
+    class Meta:
+        indexes = [models.Index(fields=['project'])]
+        verbose_name_plural = 'Project Activity'

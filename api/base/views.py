@@ -68,7 +68,7 @@ class ProjectDetail(generics.RetrieveAPIView):
 def project_detail_providers(request, providers_id):
     try:
         project = Project.objects.get(providers_id=providers_id)
-        if project.project_privacy == 'Public' or project.project_privacy == 'Discoverable':
+        if project.project_privacy == 'Public' or project.project_privacy == 'Contributor':
             if project.has_notice():
                 serializer = ProjectSerializer(project, many=False)
             else:
@@ -133,7 +133,7 @@ class MultiProjectListDetail(ViewSet):
                     q = Q(unique_id=x)
                     query |= q  
                 project=project.filter(query).exclude(project_privacy='Private')
-            notices = project.filter(Q(project_notice__isnull=False) & (Q(bc_labels__isnull=True) & Q(tk_labels__isnull=True))).distinct()
+            notices = project.filter(Q(project_notice__isnull=False) & (Q(bc_labels__isnull=True) & Q(tk_labels__isnull=True))) 
             labels = project.filter(Q(bc_labels__isnull=False) | Q(tk_labels__isnull=False)).distinct()
             no_notice_labels = project.filter(Q(project_notice__isnull=True) & (Q(bc_labels__isnull=True) & Q(tk_labels__isnull=True))).distinct()
 

@@ -54,7 +54,7 @@ class OpenToCollaborateNoticeURL(models.Model):
     institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
     researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
     name = models.CharField('Name of Website', max_length=250, null=True, blank=True)
-    url = models.URLField('Link', null=True)
+    url = models.URLField('Link', null=True, unique=True)
     added = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
@@ -109,6 +109,7 @@ class ProjectComment(models.Model):
     project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_comment", db_index=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="comment_community", blank=True)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="comment_sender", blank=True)
+    sender_affiliation = models.CharField(max_length=350, blank=True)
     message = models.TextField(max_length=1500, null=True, blank=True) #250 word limit on message
     created = models.DateTimeField(auto_now_add=True, null=True)
 

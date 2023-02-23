@@ -43,7 +43,7 @@
 
 /* REQUEST TO JOIN COMMUNITY OR INSTUTION IN REGISTRATION PROCESS */
 .join-modal {
-    width: 600px;
+    width: 650px;
 }
 
 /* CREATE INSTITUTION NO ROR */
@@ -57,10 +57,6 @@
 }
 
 /* REGISTRY */
-.registry-modal {
-    width: 445px;
-}
-
 .contact-modal {
     width: 714px;
     min-height: 440px;

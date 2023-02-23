@@ -1,99 +1,99 @@
 {% load static %} {% load custom_project_tags %}
 
-{% for creator in project.project_creator_project.all %}
-    {% if not creator.community %}
-        <div class="border-top-solid-teal">
-            <h3>Project Request</h3>
-            <p class="w-70">
-                This project has been sent to your community because this account wants to know whether or not your community would like to apply Labels to this project. <br><br>
+{% if not creator.community %}
+    {% if current_status %}
+        <div class="actions-card content-card-space flex-this column">
 
-                You can read about the project by clicking ‘View Project’ and message them below. When your community has made a decision your community can do that by clicking the options in the drop down below.
+            <div class="flex-this">
+                <h3 class="no-top-margin no-bottom-margin">Project Status</h3>
+                <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                    <span class="tooltiptext">
+                        This project has been sent to your community because this account wants to know whether or not your community would like to apply Labels to this project. <br><br>
+                        You can message them below. When your community has made a decision your community can do that by clicking the options in the drop down below.
+                    </span>
+                </div>                    
+            </div>
+            
+            <p>
+                This Project was sent to you by another account so that your community could collaborate on this Project. <br><br>
+                Below you can define your community's decision on whether or not you would like to collaborate using the prompts below.  Or send them a message below the Project information.
             </p>
-        </div>
 
-        <div class="flex-this space-between margin-bottom-16">
-            <div class="w-100">
+            <div class="margin-bottom-16">
 
                 {% if member_role == 'admin' or member_role == 'editor' %}
-
                     <form method="POST" action="">
                         {% csrf_token %}
-                        <input type="hidden" value="{{ project.unique_id }}" name="project-uuid">
                         <input id="status-selection-input-{{ project.unique_id }}" type="hidden" value="placeholder" name="project-status">
 
-                        <div class="border-top-solid-teal">
-                            <h3>Project Decision</h3>
-                            <p>
-                                The three options your community can choose are:<br>
-                                <i>Acknowledge Notice</i> - You have seen the Project but have not made a decision about applying Labels.<br>
-                                <i>Labels Pending</i>  - You are deciding which Label(s) to apply to the Project.<br>
-                                <i>No Labels Pending</i> - You will not apply Labels to the Project.<br>
-                                <i>Labels Applied</i> - This will automatically be your status if you have applied Labels to the Project.
-                            </p>                            
+                        <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
+
+                        <div>
+                            <span>Project Status</span>
+                            <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                                <span class="tooltiptext">
+                                    <i class="bold">Acknowledge Notice</i> <br> You have seen the Project but have not made a decision about applying Labels.<br>
+                                    <i class="bold">Labels Pending</i> <br>  You are deciding which Label(s) to apply to the Project.<br>
+                                    <i class="bold">No Labels Pending</i> <br> You will not apply Labels to the Project.<br>
+                                    <i class="bold">Labels Applied</i> <br> This will automatically be your status if you have applied Labels to the Project.
+                                </span>
+                            </div> 
+                        </div>
+                        <div class="flex-this w-100">
+                            <div class="w-100">
+                                <select id="select-{{ project.unique_id }}" onchange="setProjectStatus(this)" class="w-100">
+                                    {% if current_status.community == community %}
+                                        {% if not current_status.seen and current_status.status == None %}
+                                            <option disabled selected="selected"> </option>
+                                            <option value="seen"> Acknowledge Notice </option>
+                                            <option value="pending"> Labels Pending </option>
+                                            <option value="not_pending"> No Labels Pending </option>
+                                            <option value="labels_applied" disabled> Labels Applied </option>
+                                        {% endif %} 
+
+                                        {% if current_status.seen and current_status.status == None %}
+                                            <option disabled> </option>
+                                            <option value="seen" selected="selected"> Acknowledge Notice </option>
+                                            <option value="pending"> Labels Pending </option>
+                                            <option value="not_pending"> No Labels Pending </option>
+                                            <option value="labels_applied" disabled> Labels Applied </option>
+                                        {% endif %} 
+
+                                        {% if current_status.seen and current_status.status == 'pending' %}
+                                            <option disabled> </option>
+                                            <option value="seen"> Acknowledge Notice </option>
+                                            <option value="pending" selected="selected"> Labels Pending </option>
+                                            <option value="not_pending"> No Labels Pending </option>
+                                            <option value="labels_applied" disabled> Labels Applied </option>
+                                        {% endif %}
+
+                                        {% if current_status.seen and current_status.status == 'not_pending' %}
+                                            <option disabled> </option>
+                                            <option value="seen"> Acknowledge Notice </option>
+                                            <option value="pending"> Labels Pending </option>
+                                            <option value="not_pending" selected="selected"> No Labels Pending </option>
+                                            <option value="labels_applied" disabled> Labels Applied </option>
+                                        {% endif %}
+
+                                        {% if current_status.seen and current_status.status == 'labels_applied' %}
+                                            <option disabled> </option>
+                                            <option value="seen"> Acknowledge Notice </option>
+                                            <option value="pending"> Labels Pending </option>
+                                            <option value="not_pending"> No Labels Pending </option>
+                                            <option value="labels_applied" selected="selected" disabled> Labels Applied </option>
+                                        {% endif %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="margin-left-8"><button class="primary-btn action-btn" name="notify-btn">Notify</button></div>
                         </div>
 
-
-                        <div><span>Project Decision </span></div>
-                        <div class="flex-this">
-                            <div class="margin-right-1"><select id="select-{{ project.unique_id }}" onchange="setProjectStatus(this)">
-                                {% project_status project as statuses %}
-
-                                {% if statuses %}
-                                    {% for status in statuses %}
-                                        {% if status.community == community %}
-
-                                            {% if not status.seen and status.status == None %}
-                                                <option disabled selected="selected"> ----------------- </option>
-                                                <option value="seen"> Acknowledge Notice </option>
-                                                <option value="pending"> Labels Pending </option>
-                                                <option value="not_pending"> No Labels Pending </option>
-                                                <option value="labels_applied" disabled> Labels Applied </option>
-                                            {% endif %} 
-
-                                            {% if status.seen and status.status == None %}
-                                                <option disabled> ----------------- </option>
-                                                <option value="seen" selected="selected"> Acknowledge Notice </option>
-                                                <option value="pending"> Labels Pending </option>
-                                                <option value="not_pending"> No Labels Pending </option>
-                                                <option value="labels_applied" disabled> Labels Applied </option>
-                                            {% endif %} 
-
-                                            {% if status.seen and status.status == 'pending' %}
-                                                <option disabled> ----------------- </option>
-                                                <option value="seen"> Acknowledge Notice </option>
-                                                <option value="pending" selected="selected"> Labels Pending </option>
-                                                <option value="not_pending"> No Labels Pending </option>
-                                                <option value="labels_applied" disabled> Labels Applied </option>
-                                            {% endif %}
-
-                                            {% if status.seen and status.status == 'not_pending' %}
-                                                <option disabled> ----------------- </option>
-                                                <option value="seen"> Acknowledge Notice </option>
-                                                <option value="pending"> Labels Pending </option>
-                                                <option value="not_pending" selected="selected"> No Labels Pending </option>
-                                                <option value="labels_applied" disabled> Labels Applied </option>
-                                            {% endif %}
-
-                                            {% if status.seen and status.status == 'labels_applied' %}
-                                                <option disabled> ----------------- </option>
-                                                <option value="seen"> Acknowledge Notice </option>
-                                                <option value="pending"> Labels Pending </option>
-                                                <option value="not_pending"> No Labels Pending </option>
-                                                <option value="labels_applied" selected="selected" disabled> Labels Applied </option>
-                                            {% endif %}
-
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                        </select></div>
-                        <div class="margin-left-1"><button class="primary-btn action-btn" name="notify-btn">Notify</button></div>
-                    </div>
-
                     </form>
-
                 {% endif %}
 
             </div>
+
         </div>
     {% endif %}
-{% endfor %}
+{% endif %}
+

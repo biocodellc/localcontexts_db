@@ -1,23 +1,55 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
 from .models import Project, ProjectContributors, ProjectCreator, ProjectPerson
 from helpers.models import Notice
 from helpers.utils import render_to_pdf, generate_zip
 from django.http import HttpResponse, Http404
 import requests
+from accounts.models import UserAffiliation
+from researchers.models import Researcher
+from researchers.utils import is_user_researcher
 
 def view_project(request, unique_id):
     try:
         project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
         notices = Notice.objects.filter(project=project, archived=False)
+        creator = ProjectCreator.objects.get(project=project)
+        communities = None
+        institutions = None
+        user_researcher = Researcher.objects.none()
+
+        #  If user is logged in AND belongs to account of a contributor
+        if request.user.is_authenticated:
+            affiliations = UserAffiliation.objects.get(user=request.user)
+
+            community_ids = ProjectContributors.objects.filter(project=project).values_list('communities__id', flat=True)
+            institution_ids = ProjectContributors.objects.filter(project=project).values_list('institutions__id', flat=True)
+            communities = affiliations.communities.filter(id__in=community_ids)
+            institutions = affiliations.institutions.filter(id__in=institution_ids)
+
+            researcher_ids = ProjectContributors.objects.filter(project=project).values_list('researchers__id', flat=True)
+
+            if Researcher.objects.filter(user=request.user).exists():
+                researcher = Researcher.objects.get(user=request.user)
+                researchers = Researcher.objects.filter(id__in=researcher_ids)
+                if researcher in researchers:
+                    user_researcher = Researcher.objects.get(id=researcher.id)
+                
+        context = {
+            'project': project, 
+            'notices': notices,
+            'creator': creator,
+            'communities': communities,
+            'institutions': institutions,
+            'user_researcher': user_researcher,
+        }
 
         if project.project_privacy == 'Private':
             if request.user.is_authenticated:
-                return render(request, 'projects/view-project.html', {'project': project, 'notices': notices})
+                return render(request, 'projects/view-project.html', context)
             else:
                 return redirect('login')
         else:
-            return render(request, 'projects/view-project.html', {'project': project, 'notices': notices})
+            return render(request, 'projects/view-project.html', context)
     except:
         raise Http404()
 
