@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages, auth
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
@@ -18,7 +18,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
 
 from django.contrib.auth.models import User
-from communities.models import Community, InviteMember, JoinRequest
+from communities.models import Community, InviteMember
 from institutions.models import Institution
 from researchers.models import Researcher
 from bclabels.models import BCLabel
@@ -34,7 +34,6 @@ from helpers.utils import accept_member_invite
 from helpers.emails import *
 from .models import *
 from .forms import *
-import datetime
 
 # Captcha validation imports
 import urllib
