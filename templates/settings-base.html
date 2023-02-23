@@ -4,47 +4,34 @@
 
     {% include 'partials/infocards/_user-dashcard.html' %}
 
-    <div class="content-card-v2 content-card-space flex-this column">
+    <div class="content-card-v2 content-card-space flex-this column settings-height">
         <h2 class="no-top-margin">User Settings</h2>
 
         <div class="flex-this w-100">
 
-            <div class="flex-this column set-nav margin-right-1 margin-bottom-2" style="min-height: 450px;">
-
-                <a href="{% url 'update-profile' %}">
-                    {% if 'update-profile' in request.path %} 
-                    <div class="flex-this side-nav-item selected">
-                    {% else %}
-                    <div class="flex-this side-nav-item grey-text">
-                    {% endif %}
-                        <div class="w-20 margin-right-8"><i class="fa fa-user fa-3x" aria-hidden="true"></i></div>
-                        <div class="w-80">
+            <div class="side-nav-container">
+                <a class="side-nav-a" href="{% url 'update-profile' %}">
+                    <div class="side-nav-item {% if 'update-profile' in request.path %} selected {% else %} grey-text {% endif %}">
+                        <div><i class="fa fa-user" aria-hidden="true"></i></div>
+                        <div>
                             <p class="no-top-margin"><strong>Profile</strong><br>Contact name, email, location</p>
                         </div>  
                     </div>   
                 </a>
 
-                <a href="{% url 'manage-orgs' %}">
-                    {% if 'manage' in request.path %} 
-                    <div class="flex-this side-nav-item selected">
-                    {% else %}
-                    <div class="flex-this side-nav-item grey-text">
-                    {% endif %}
-                        <div class="w-20 margin-right-8"><i class="fa fa-users fa-3x" aria-hidden="true"></i></div>
-                        <div class="w-80">
+                <a class="side-nav-a" href="{% url 'manage-orgs' %}">
+                    <div class="side-nav-item {% if 'manage' in request.path %} selected {% else %} grey-text {% endif %}">
+                        <div><i class="fa-solid fa-user-group"></i></div>
+                        <div>
                             <p class="no-top-margin"><strong>Accounts</strong><br>Manage your accounts</p>
                         </div>  
                     </div>
                 </a>
 
-                <a href="{% url 'change-password' %}">
-                    {% if 'change-password' in request.path %} 
-                    <div class="flex-this side-nav-item selected">
-                    {% else %}
-                    <div class="flex-this side-nav-item grey-text">
-                    {% endif %}
-                        <div class="w-20 margin-right-8"><i class="fa fa-key fa-3x" aria-hidden="true"></i></div>
-                        <div class="w-80">
+                <a class="side-nav-a" href="{% url 'change-password' %}">
+                    <div class="side-nav-item {% if 'change-password' in request.path %} selected {% else %} grey-text {% endif %}">
+                        <div><i class="fa fa-key" aria-hidden="true"></i></div>
+                        <div>
                             <p class="no-top-margin"><strong>Password</strong><br>Change your password</p>
                         </div>  
                     </div>

@@ -2,9 +2,9 @@
 
 {% if 'projects/actions/' in request.path %}
     {% if request.user.is_authenticated %}
-        <div class="auto-margin" style="max-width: 1271px;">
+        <div class="back-to-projects">
             <a 
-                class="pointer underline-hover margin-top-2 margin-left-8"
+                class="pointer margin-top-2 margin-left-8"
                 {% if community %}
                     href="{% url 'community-projects' community.id %}"
                 {% endif %}
@@ -287,19 +287,32 @@
                 {% endif %}
 
                 {% if community %}
-                    {% if community.is_approved %}
-                        {% if member_role == 'admin' or member_role == 'editor' %}
-                            <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
+                    {% if member_role == 'admin' or member_role == 'editor' %}
+
+                        {% if community.is_approved %}
+                            {% if is_community_notified %}
+                                    <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
+                            {% else %}
+                                <a class="block a-disabled"> 
+                                    <i class="fa-solid fa-tag"></i> Apply Labels
+                                    <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                                        <span class="tooltiptext">
+                                            Your community was added as a contributor to this Project. The Project creator needs to notify your community if you wish to apply Labels. Please contact us with any questions.
+                                        </span>
+                                    </div> 
+                                </a>
+                            {% endif %}
+                        {% else %}
+                            <a class="block a-disabled"> 
+                                <i class="fa-solid fa-tag"></i> Apply Labels
+                                <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                                    <span class="tooltiptext">
+                                        Your account needs to be confirmed before you can apply Labels. Please contact us if you have questions.
+                                    </span>
+                                </div> 
+                            </a>
                         {% endif %}
-                    {% else %}
-                        <a class="block a-disabled"> 
-                            <i class="fa-solid fa-tag"></i> Apply Labels
-                            <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
-                                <span class="tooltiptext">
-                                    Your account needs to be confirmed before you can apply Labels. Please contact us if you have questions.
-                                </span>
-                            </div> 
-                        </a>
+
                     {% endif %}
                 {% endif %}
 
@@ -417,19 +430,63 @@
 
         </div>  
 
+        <!-- View As card: in view-projects: If user is logged in AND belongs to account of a contributor of Project, display affiliations -->
+        {% if not '/actions/' in request.path %}
+            {% if communities or institutions or user_researcher %}
+                <div class="actions-card content-card-space flex-this column">
+                    <h3 class="no-top-margin">View As 
+                        <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                            <span class="tooltiptext">
+                                You are viewing what this Project looks like publicly. To access the action page as a contributor on this Project, select an account below.
+                            </span>
+                        </div> 
+                    </h3>
+
+                    {% for community in communities %}
+                        <a class="block" href="{% url 'community-project-actions' community.id project.unique_id %}"> 
+                            <i class="fa-solid fa-address-card"></i> {{ community.community_name }}
+                        </a>
+                    {% endfor %}
+                    {% for institution in institutions %}
+                        <a class="block" href="{% url 'institution-project-actions' institution.id project.unique_id %}"> 
+                            <i class="fa-solid fa-address-card"></i> {{ institution.institution_name }}
+                        </a>
+                    {% endfor %}
+                    {% if user_researcher %}
+                        <a class="block" href="{% url 'researcher-project-actions' user_researcher.id project.unique_id %}"> 
+                            <i class="fa-solid fa-address-card"></i> {{ user_researcher.user }} (Researcher)
+                        </a>
+                    {% endif %}
+                </div> 
+            {% endif %}
+        {% else %}
+            <div class="actions-card content-card-space flex-this column">
+                <h3 class="no-top-margin">View As 
+                    <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                        <span class="tooltiptext">
+                            You are viewing the action page of this Project, which is only accessible to contributors. Use this button to see what this Project looks like publicly.
+                        </span>
+                    </div> 
+                </h3>
+                <a 
+                    class="block" 
+                    href="{% url 'view-project' project.unique_id %}"
+                ><i class="fa-solid fa-eye"></i> Public View</a>
+            </div> 
+        {% endif %}
+
         <!-- Community: set project status -->
         {% if community %}
             {% include 'projects/project-status.html' %}
         {% endif %}
 
         <!-- List of communities notified -->
-        {% if statuses %}
+        {% if community or researcher or institution %}
             <div class="actions-card-notifified content-card-space flex-this column">
                 <div class="flex-this">
                     <h3 class="no-top-margin no-bottom-margin">Communities Notified</h3>
                     <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
                         <span class="tooltiptext">
-                            Listed below are the communities that have been notified about this Project. After the name of the notified community is the status of their decision about the Project.<br><br>
                             <i class="bold">Seen</i><br> The community has acknowledged the Project but has not made a decision about applying Labels.<br>
                             <i class="bold">No Labels Pending</i><br> The community will not apply Labels to the Project.<br>
                             <i class="bold">Labels Pending</i><br> The community is deciding which Label(s) to apply to the Project.<br>
@@ -444,21 +501,24 @@
                         including the status of their decision about the Project.
                     </p>
                 </div>
-
-                {% for status in statuses %}
-                    <div class="border-bottom-grey">
-                        <div><p><span class="bold"><a href="{% url 'public-community' status.community.id %}" class="darkteal-text underline-hover">{{ status.community }}</a> </span></p></div>
-                        <div>
-                            <p><em> Project status: </em>
-                                {% if status.seen and status.status == None %} Seen
-                                {% elif status.seen and status.status == 'pending' %} Labels Pending
-                                {% elif status.seen and status.status == 'not_pending' %} No Labels Pending
-                                {% elif status.seen and status.status == 'labels_applied' %} Labels Applied
-                                {% else %} Sent {% endif %}
-                            </p>
-                        </div>    
-                    </div>
-                {% endfor %}
+                {% if statuses %}
+                    {% for status in statuses %}
+                        <div class="border-bottom-grey">
+                            <div><p><span class="bold"><a href="{% url 'public-community' status.community.id %}" class="darkteal-text underline-hover">{{ status.community }}</a> </span></p></div>
+                            <div>
+                                <p><em> Project status: </em>
+                                    {% if status.seen and status.status == None %} Seen
+                                    {% elif status.seen and status.status == 'pending' %} Labels Pending
+                                    {% elif status.seen and status.status == 'not_pending' %} No Labels Pending
+                                    {% elif status.seen and status.status == 'labels_applied' %} Labels Applied
+                                    {% else %} Sent {% endif %}
+                                </p>
+                            </div>    
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p><em>No communities notified yet</em></p>
+                {% endif %}
             </div>
         {% endif %}
     </div>
@@ -482,14 +542,14 @@
 
                     <div>
                         <p>
-                            By notifying relevant communities, they will be able to see this Project and decide whether or not they would 
-                            like to add their Labels. After your organization has entered the communities you would like to to send 
-                            these notifications to, you can monitor their statuses in the Communities Notified section that will appear under Project Actions.
+                            Notify relevant communities about this Project to add them as a potential contributor. 
+                            Notified communities can decide if they would like to add their Labels to the Project. 
+                            Notified communities will also be able to see and edit Project details, see and add Project comments, and see Project activity.
                         </p>  
                     </div>
 
                     {% if communities %}
-                        <label>Select a community/communities you'd like to notify of this Project*</label><br>
+                        <label>Select community/communities to notify about this Project</label><br>
             
                         <div class="w-100">
                             <select id="communities-select" class="w-100" onchange="selectCommunities()">
@@ -500,9 +560,9 @@
                             </select>                    
                         </div>
             
-                        <div class="flex-this margin-top-16">
+                        <div class="flex-this margin-top-16 wrap">
                             {% for community in communities %}
-                                <div id="selected-community-{{ community.id }}" class="hide">
+                                <div id="selected-community-{{ community.id }}" class="hide margin-top-8">
                                     <div class="grey-chip flex-this row space-between">
                                         <div><p class="center-name">{{community.community_name}}</p></div>
                                         <div id="close-{{ community.id }}" class="close-x pointer" onclick="cancelCommunitySelection(this)"><div>&times;</div></div>
@@ -512,10 +572,6 @@
                             {% endfor %}
                         </div>
                         
-                        <div>
-                            <label>Add a Project comment</label><br>
-                            <textarea name="notice_message" class="w-100" style="height:100px;"></textarea>
-                        </div>
                         <div class="flex-this flex-end w-100 margin-top-16">
                             <button class="primary-btn action-btn" name="notify_btn">Send Notification <i class="fa fa-users" aria-hidden="true"></i></button>    
                         </div>
