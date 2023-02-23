@@ -492,19 +492,36 @@ def manage_mailing_list(request, first_name):
     return(variables)
 
 def subscription_form(request):
+    ''' Begin reCAPTCHA validation '''
+    recaptcha_response = request.POST.get('g-recaptcha-response')
+    url = 'https://www.google.com/recaptcha/api/siteverify'
+    values = {
+        'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+        'response': recaptcha_response
+    }
+    data = urllib.parse.urlencode(values).encode()
+    req =  urllib.request.Request(url, data=data)
+    response = urllib.request.urlopen(req)
+    result = json.loads(response.read().decode())
+    ''' End reCAPTCHA validation '''
+
     if request.method == 'POST':
         if 'topic' not in request.POST:
             messages.add_message(request, messages.ERROR, 'Please select at least one topic.')
             return redirect('subscription-form')
         else:
-            first_name = request.POST['first_name']
-            last_name = request.POST['last_name']
-            name= str(first_name) + str(' ') + str(last_name)
-            email = request.POST['email']
-            variables = manage_mailing_list(request, first_name)
-            add_to_mailing_list(str(email), str(name), str(variables))
-            messages.add_message(request, messages.SUCCESS, 'You have been subscribed.')
-            return redirect('unsubscribe-form')
+            if result['success']:
+                first_name = request.POST['first_name']
+                last_name = request.POST['last_name']
+                name= str(first_name) + str(' ') + str(last_name)
+                email = request.POST['email']
+                variables = manage_mailing_list(request, first_name)
+                add_to_mailing_list(str(email), str(name), str(variables))
+                messages.add_message(request, messages.SUCCESS, 'You have been subscribed.')
+                return redirect('unsubscribe-form')
+            else:
+                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+
     return render(request, 'accounts/subscription-form.html')
 
 def unsubscribe_form(request):
