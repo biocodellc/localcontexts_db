@@ -7,11 +7,7 @@
 
         <div class="side-nav-container">
             <a href="{% url 'update-community' community.id %}">
-                {% if 'update' in request.path %} 
-                <div class="flex-this side-nav-item selected">
-                {% else %}
-                <div class="flex-this side-nav-item grey-text">
-                {% endif %}
+                <div class="flex-this side-nav-item {% if 'update' in request.path %} selected {% else %} grey-text {% endif %}">
                     <div class="w-20 margin-right-8"><i class="fa fa-user fa-3x" aria-hidden="true"></i></div>
                     <div class="w-80">
                         <p class="no-top-margin"><strong>Community Account</strong><br>Contact name, email, location, description</p>
@@ -26,7 +22,7 @@
                 <div>Account ID: {{ community.id }}</div>
             </div>
 
-            <div class="w-60">
+            <div class="w-70">
                 <form method="POST" action="{% url 'update-community' community.id %}" enctype="multipart/form-data">
                     {% csrf_token %}
 
@@ -106,7 +102,7 @@
                         </div>
                         <p>
                             <small class="grey-text">Providing your personal information is optional.
-                                By providing it, you consent for it to be shown to other Hub users, see the <a href="https://localcontexts.org/privacy-policy/" class="darkteal underline-hover" target="_blank" rel="noopener">Privacy Policy <i class="fa fa-external-link fa-xs" aria-hidden="true"></i></a>.</small>
+                                By providing it, you consent for it to be shown to other Hub users, see the <a href="https://localcontexts.org/privacy-policy/" class="darkteal-text underline-hover" target="_blank" rel="noopener">Privacy Policy <i class="fa fa-external-link fa-xs" aria-hidden="true"></i></a>.</small>
                         </p> 
                     </div>
                 </form>

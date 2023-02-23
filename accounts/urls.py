@@ -41,7 +41,6 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="accounts/password-reset-confirm.html"), name="password_reset_confirm"),
     path('reset-password-complete/', auth_views.PasswordResetCompleteView.as_view(template_name="accounts/password-reset-done.html"), name="password_reset_complete"),
 
-    # Temporary disable until ready to use
-    # path('apikey/', views.api_keys, name='api-key'),
+    path('apikey/', views.api_keys, name='api-key'),
 
 ]
