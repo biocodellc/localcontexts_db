@@ -8,7 +8,7 @@
 
     {% if has_key %}
         <div class="w-70 margin-bottom-2">
-            <p class="no-top-margin">Your API key enables access to the Local Contexts Hub data via the API and must be kept secret. For more informaiton see our <a href="https://localcontexts.org/api-guide/" target="_blank">API Guide</a>.
+            <p class="no-top-margin">Your API key enables access to the Local Contexts Hub data via the API and must be kept secret. For more informaiton see our <a class="darkteal-text underline-hover" href="https://localcontexts.org/api-guide/" target="_blank">API Guide</a>.
             <p class="no-top-margin">Your API key is listed below.</p>
         </div>
 
@@ -20,14 +20,14 @@
                     {% if keyvisible %}
                         <form id="apiKeyGeneratorForm" method="POST">
                             {% csrf_token %}
-                                <button class="primary-btn green-btn copied-display" id="copybtn" name="copybtn" onclick="copyKey()">
-                                    <i class="fa fa-copy"></i>
-                                </button>
+                            <button class="primary-btn green-btn copied-display" id="copybtn" name="copybtn" onclick="copyKey()">
+                                <i class="fa fa-copy"></i>
+                            </button>
                         </form>
                     {% else %}
-                    <button class="primary-btn green-btn copied-display" id="copybtn" name="copybtn" disabled>
-                        <i class="fa fa-copy"></i>
-                    </button>
+                        <button class="primary-btn green-btn copied-display" id="copybtn" name="copybtn" disabled>
+                            <i class="fa fa-copy"></i>
+                        </button>
                     {% endif %}
                     
                 </div>
@@ -81,7 +81,7 @@
                 {% csrf_token %}
 
                 <div class="w-70 margin-bottom-2">
-                    <p class="no-top-margin">Your API key enables access to the Local Contexts Hub data via the API and must be kept secret. For more informaiton see our <a href="https://localcontexts.org/api-guide/" target="_blank">API Guide</a>.</p>
+                    <p class="no-top-margin">Your API key enables access to the Local Contexts Hub data via the API and must be kept secret. For more informaiton see our <a class="darkteal-text underline-hover" href="https://localcontexts.org/api-guide/" target="_blank">API Guide</a>.</p>
                     <p class="no-top-margin">You do not have an API key. Click the button below to generate one.</p>
                     <button type="submit" class="primary-btn action-btn margin-top-2" name="generatebtn">Generate API Key <i class="fa fa-arrow-right"></i></button>
                 </div>
