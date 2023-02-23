@@ -63,6 +63,39 @@ def send_email_with_attachment(file, to_email, subject, template):
               "subject": subject,
               "html": template})
 
+# Add members to newsletter mailing list (updates users already on the mailing list)
+def add_to_mailing_list(email, name, variables):
+    # Example: send_simple_email('someone@domain.com', 'Hello', 'This is a test email')
+    return requests.post(
+		"https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members",
+		auth=("api", settings.MAILGUN_API_KEY),
+		data={"subscribed": True,
+            "upsert": True,
+			"address": email,
+			"name": name,
+            "vars": variables}
+    )
+
+# Get member info from newsletter mailing list
+def get_member_info(email):
+    return requests.get(
+        ("https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members"
+         "/%s"%email),
+        auth=('api', settings.MAILGUN_API_KEY),
+        )
+
+# Unsubscribe members from newsletter mailing list (unsubscribe from all topics)
+def unsubscribe_from_mailing_list(email, name):
+    # Example: send_simple_email('someone@domain.com', 'Hello', 'This is a test email')
+    return requests.post(
+		"https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members",
+		auth=("api", settings.MAILGUN_API_KEY),
+		data={"subscribed": False,
+            "upsert": True,
+			"address": email,
+            "name": name}
+    )
+
 # Send all Institution and community applications to support or the site admin
 def send_hub_admins_application_email(request, organization, data):
     template = ''
