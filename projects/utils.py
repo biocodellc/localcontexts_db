@@ -62,93 +62,99 @@ def project_status_seen_at_comment(user, community, creator, project):
             if creator.researcher:
                 send_simple_action_notification(user, creator.researcher, title, 'Projects', reference_id)
 
-# TODO: FIX THIS
+
 def add_to_contributors(request, account, project):
     contributors = ProjectContributors.objects.get(project=project)
-    
-    incoming_institutions_list = request.POST.getlist('selected_institutions')
-    incoming_researchers_list = request.POST.getlist('selected_researchers')
-    incoming_communities_list = request.POST.getlist('selected_communities')
-    print(f'FIRST: {incoming_communities_list}, {incoming_institutions_list}, {incoming_researchers_list}')
+    # Ensure all lists are int
+    institutions_list = [eval(i) for i in request.POST.getlist('selected_institutions')]
+    researchers_list = [eval(i) for i in request.POST.getlist('selected_researchers')]
+    communities_list = [eval(i) for i in request.POST.getlist('selected_communities')]
 
-    # FIXME: on edit, removes all other contributors besides the ones added. check contents of incoming lists and ids_to_remove
     if '/edit-project/' in request.path:
-        # on edit projects: two things need to happen: 
-        # 1. added accounts need to be added & existing ones removed 
-        # 2. accounts that were not removed need to be informed of edits
 
-        # if isinstance(account, Community):
-        #     incoming_communities_list.remove(account.id)
-        # if isinstance(account, Researcher):
-        #     incoming_researchers_list.remove(account.id)
-        # if isinstance(account, Institution):
-        #     incoming_institutions_list.remove(account.id)
-        print(account, account.id)
-
-        print(f'SECOND: {incoming_communities_list}, {incoming_institutions_list}, {incoming_researchers_list}')
-
-        if incoming_institutions_list:
+        if institutions_list:
             current_ids = list(contributors.institutions.all().values_list('id', flat=True)) # current list of institutions
-            matching_ids = list(set(current_ids) & set(incoming_institutions_list)) # getting matching ids from the current list and the incoming list
-            unmatching_incoming_ids = [i for i in incoming_institutions_list if i not in current_ids] # getting unmatching ids from incoming list
-            ids_to_remove = [i for i in current_ids if i not in incoming_institutions_list] # getting ids that are in current ids but not in incoming ids
-            
-            if matching_ids:
+
+            if isinstance(account, Institution):
+                if account.id in current_ids:
+                    current_ids.remove(account.id) # Project creator account is removed from list of possible institutions
+                if account.id in institutions_list:
+                    institutions_list.remove(account.id)
+
+            matching_ids = list(set(current_ids) & set(institutions_list)) # getting matching ids from the current list and the incoming list
+            unmatching_incoming_ids = [i for i in institutions_list if i not in current_ids] # getting unmatching ids from incoming list
+            ids_to_remove = [i for i in current_ids if i not in institutions_list] # getting ids that are in current ids but not in incoming ids
+
+            if matching_ids: # if incoming ids match any current ones, leave them and send an "edit" notification
                 for institution in Institution.objects.filter(id__in=matching_ids):
                     send_simple_action_notification(None, institution, 'Edits have been made to a Project', 'Projects', project.unique_id)
-                    # send_contributor_email(request, institution, project.unique_id, False)
+                    send_contributor_email(request, institution, project.unique_id, False)
             
-            if unmatching_incoming_ids:
-                contributors.institutions.set(unmatching_incoming_ids)
+            if unmatching_incoming_ids: # if incoming ids don't match any current ones, add them to contributors 
                 for institution in Institution.objects.filter(id__in=unmatching_incoming_ids):
+                    contributors.institutions.add(institution)
                     send_simple_action_notification(None, institution, 'Your institution has been added as a contributor on a Project', 'Projects', project.unique_id)
-                    # send_contributor_email(request, institution, project.unique_id, True)
+                    send_contributor_email(request, institution, project.unique_id, True)
             
-            if ids_to_remove:
+            if ids_to_remove: # any current ids that are not found in the incoming list
                 for id in ids_to_remove:
                     contributors.institutions.remove(id)
     
-        if incoming_researchers_list:
+        if researchers_list:
             current_ids = list(contributors.researchers.all().values_list('id', flat=True)) # current list of researchers
-            matching_ids = list(set(current_ids) & set(incoming_researchers_list)) # getting matching ids from the current list and the incoming list
-            unmatching_incoming_ids = [i for i in incoming_researchers_list if i not in current_ids] # getting unmatching ids from incoming list
-            ids_to_remove = [i for i in current_ids if i not in incoming_researchers_list] # getting ids that are in current ids but not in incoming ids
+
+            if isinstance(account, Researcher):
+                if account.id in current_ids:
+                    current_ids.remove(account.id) # Project creator account is removed from list of possible researchers
+                if account.id in researchers_list:
+                    researchers_list.remove(account.id)
+
+            matching_ids = list(set(current_ids) & set(researchers_list)) # getting matching ids from the current list and the incoming list
+            unmatching_incoming_ids = [i for i in researchers_list if i not in current_ids] # getting unmatching ids from incoming list
+            ids_to_remove = [i for i in current_ids if i not in researchers_list] # getting ids that are in current ids but not in incoming ids
             
             if matching_ids:
                 for researcher in Researcher.objects.filter(id__in=matching_ids):
                     send_simple_action_notification(None, researcher, 'Edits have been made to a Project', 'Projects', project.unique_id)
-                    # send_contributor_email(request, researcher, project.unique_id, False)
+                    send_contributor_email(request, researcher, project.unique_id, False)
             
             if unmatching_incoming_ids:
-                contributors.researchers.set(unmatching_incoming_ids)
                 for researcher in Researcher.objects.filter(id__in=unmatching_incoming_ids):
+                    contributors.researchers.add(researcher)
                     send_simple_action_notification(None, researcher, 'You have been added as a contributor on a Project', 'Projects', project.unique_id)
-                    # send_contributor_email(request, researcher, project.unique_id, True)
+                    send_contributor_email(request, researcher, project.unique_id, True)
             
             if ids_to_remove:
                 for id in ids_to_remove:
                     contributors.researchers.remove(id)
         
-            if incoming_communities_list:
-                current_ids = list(contributors.communities.all().values_list('id', flat=True)) # current list of communities
-                matching_ids = list(set(current_ids) & set(incoming_communities_list)) # getting matching ids from the current list and the incoming list
-                unmatching_incoming_ids = [i for i in incoming_communities_list if i not in current_ids] # getting unmatching ids from incoming list
-                ids_to_remove = [i for i in current_ids if i not in incoming_communities_list] # getting ids that are in current ids but not in incoming ids
-                
-                if matching_ids:
-                    for community in Community.objects.filter(id__in=matching_ids):
-                        send_simple_action_notification(None, community, 'Edits have been made to a Project', 'Projects', project.unique_id)
-                        # send_contributor_email(request, community, project.unique_id, False)
-                
-                if unmatching_incoming_ids:
-                    contributors.communities.set(unmatching_incoming_ids)
-                    for community in Community.objects.filter(id__in=unmatching_incoming_ids):
-                        send_simple_action_notification(None, community, 'Your community has been as a contributor on a Project', 'Projects', project.unique_id)
-                        # send_contributor_email(request, community, project.unique_id, True)
-                
-                if ids_to_remove:
-                    for id in ids_to_remove:
-                        contributors.communities.remove(id)
+        if communities_list:
+            current_ids = list(contributors.communities.all().values_list('id', flat=True)) # current list of communities
+
+            if isinstance(account, Community):
+                if account.id in current_ids:
+                    current_ids.remove(account.id) # Project creator account is removed from list of possible communities
+                if account.id in communities_list:
+                    communities_list.remove(account.id)
+
+            matching_ids = list(set(current_ids) & set(communities_list)) # getting matching ids from the current list and the incoming list
+            unmatching_incoming_ids = [i for i in communities_list if i not in current_ids] # getting unmatching ids from incoming list
+            ids_to_remove = [i for i in current_ids if i not in communities_list] # getting ids that are in current ids but not in incoming ids
+            
+            if matching_ids:
+                for community in Community.objects.filter(id__in=matching_ids):
+                    send_simple_action_notification(None, community, 'Edits have been made to a Project', 'Projects', project.unique_id)
+                    send_contributor_email(request, community, project.unique_id, False)
+            
+            if unmatching_incoming_ids:
+                for community in Community.objects.filter(id__in=unmatching_incoming_ids):
+                    contributors.communities.add(community)
+                    send_simple_action_notification(None, community, 'Your community has been as a contributor on a Project', 'Projects', project.unique_id)
+                    send_contributor_email(request, community, project.unique_id, True)
+            
+            if ids_to_remove:
+                for id in ids_to_remove:
+                    contributors.communities.remove(id)
         
     elif '/create-project/' in request.path:
         # add creator as a contributor
@@ -159,26 +165,23 @@ def add_to_contributors(request, account, project):
         if isinstance(account, Institution):
             contributors.institutions.add(account)
 
-        contributors.institutions.set(incoming_institutions_list) # add selected contribs to contribs
-        selected = Institution.objects.filter(id__in=incoming_institutions_list)
+        selected = Institution.objects.filter(id__in=institutions_list)
         for institution in selected:
+            contributors.institutions.add(institution) # add selected contribs to contribs
             send_simple_action_notification(None, institution, 'Your institution has been added as a contributor on a Project', 'Projects', project.unique_id)
             send_contributor_email(request, institution, project.unique_id, True)
 
-        contributors.researchers.set(incoming_researchers_list) # add selected contribs to contribs
-        selected = Researcher.objects.filter(id__in=incoming_researchers_list)
+        selected = Researcher.objects.filter(id__in=researchers_list)
         for researcher in selected:
+            contributors.researchers.add(researcher) # add selected contribs to contribs
             send_simple_action_notification(None, researcher, 'You have been added as a contributor on a Project', 'Projects', project.unique_id)
             send_contributor_email(request, researcher, project.unique_id, True)
 
-        contributors.communities.set(incoming_communities_list) # add selected contribs to contribs
-        selected = Community.objects.filter(id__in=incoming_communities_list)
+        selected = Community.objects.filter(id__in=communities_list)
         for community in selected:
+            contributors.communities.add(community) # add selected contribs to contribs
             send_simple_action_notification(None, community, 'Your community has been as a contributor on a Project', 'Projects', project.unique_id)
             send_contributor_email(request, community, project.unique_id, True)
-
-
-
 
 
 def paginate(request, queryset, num_of_pages):
