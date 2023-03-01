@@ -415,9 +415,8 @@ def send_contributor_email(request, account, proj_id, is_adding):
         'project_title': project.title,
         'account_name': account_name
     }
-    # send_mailgun_template_email(to_email, subject, 'contributor', data)
-    send_mailgun_template_email(to_email, subject, 'testing_contributors', data)
-
+    send_mailgun_template_email(to_email, subject, 'contributor', data)
+    
 
 def send_project_person_email(request, to_email, proj_id, account):
     registered = User.objects.filter(email=to_email).exists()
