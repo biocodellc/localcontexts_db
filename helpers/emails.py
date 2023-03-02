@@ -378,7 +378,16 @@ def send_membership_email(request, account, receiver, role):
 
 def send_contributor_email(request, account, proj_id, is_adding):
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
+    creator_account = ''
     account_name = ''
+
+    created_by = project.project_creator_project.all()[0]
+    if created_by.institution:
+        creator_account = created_by.institution.institution_name
+    elif created_by.community:
+        creator_account = created_by.community.community_name
+    elif creator_account.researcher:
+        creator_account = 'Researcher'
 
     register_url = return_register_url_str(request)
     project_creator = get_users_name(project.project_creator)
@@ -415,7 +424,8 @@ def send_contributor_email(request, account, proj_id, is_adding):
         'login_url': login_url,
         'project_creator': project_creator, 
         'project_title': project.title,
-        'account_name': account_name
+        'account_name': account_name,
+        'creator_account': creator_account
     }
     send_mailgun_template_email(to_email, subject, 'contributor', data)
     
