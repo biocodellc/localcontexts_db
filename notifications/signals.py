@@ -55,9 +55,6 @@ def accept_community_invite(sender, instance, **kwargs):
             
             UserNotification.objects.create(to_user=receiver_, from_user=sender_, title=title, message=message, notification_type="Accept", community=community, reference_id=ref)
             
-            # Send email letting user know they are a member
-            # send_membership_email(community, receiver_, role)
-
             # Lets sender know their invitation was accepted
             title2 = f"{receiver_name} has accepted your invitation to join {community}!"
             message2 = f"{receiver_name} is now a member of {community}"

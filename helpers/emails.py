@@ -346,12 +346,14 @@ def send_email_label_approved(request, label, note_id):
 def send_membership_email(request, account, receiver, role):
     login_url = return_login_url_str(request)
     
-    if role == 'admin':
+    if role == 'admin' or role == 'Admin':
         role_str = 'Administrator'
     elif role == 'editor':
         role_str = 'Editor'
     elif role == 'viewer':
         role_str = 'Viewer'
+    else:
+        role_str = role
 
     community = False
     institution = False
