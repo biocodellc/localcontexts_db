@@ -96,7 +96,7 @@ def change_member_role(org, member, current_role, new_role):
         elif new_role == 'Viewer':
             org.viewers.add(member)
 
-def accepted_join_request(org, join_request_id, selected_role):
+def accepted_join_request(request, org, join_request_id, selected_role):
     # Passes instance of Community or Institution, a join_request pk, and a selected role
     if JoinRequest.objects.filter(id=join_request_id).exists():
         join_request = JoinRequest.objects.get(id=join_request_id)
@@ -128,6 +128,8 @@ def accepted_join_request(org, join_request_id, selected_role):
             sender = join_request.user_from
             title = f"You are now a member of {org}!"
             UserNotification.objects.create(to_user=sender, title=title, notification_type="Accept")
+
+            send_membership_email(request, org, sender, selected_role)
 
             # Delete join request
             join_request.delete()

@@ -175,7 +175,6 @@ def public_community_view(request, pk):
 
                             # Send email to community creator
                             send_join_request_email_admin(request, data, community)
-                            messages.add_message(request, messages.SUCCESS, 'Request sent!')
                             return redirect('public-community', community.id)
                 else:
                     messages.add_message(request, messages.ERROR, 'Something went wrong')
@@ -322,7 +321,7 @@ def member_requests(request, pk):
             selected_role = request.POST.get('selected_role')
             join_request_id = request.POST.get('join_request_id')
 
-            accepted_join_request(community, join_request_id, selected_role)
+            accepted_join_request(request, community, join_request_id, selected_role)
             messages.add_message(request, messages.SUCCESS, 'You have successfully added a new member!')
             return redirect('member-requests', community.id)
 
