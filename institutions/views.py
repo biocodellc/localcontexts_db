@@ -768,6 +768,7 @@ def project_actions(request, pk, project_uuid):
         entities_notified = EntitiesNotified.objects.get(project=project)
         communities = Community.approved.all()
         activities = ProjectActivity.objects.filter(project=project).order_by('-date')
+        sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', flat=True)
 
         project_archived = False
         if ProjectArchived.objects.filter(project_uuid=project.unique_id, institution_id=institution.id).exists():
@@ -840,6 +841,7 @@ def project_actions(request, pk, project_uuid):
             'comments': comments,
             'activities': activities,
             'project_archived': project_archived,
+            'sub_projects': sub_projects,
         }
         return render(request, 'institutions/project-actions.html', context)
 

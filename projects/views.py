@@ -11,6 +11,7 @@ from researchers.utils import is_user_researcher
 def view_project(request, unique_id):
     try:
         project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
+        sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', flat=True)
         notices = Notice.objects.filter(project=project, archived=False)
         creator = ProjectCreator.objects.get(project=project)
         communities = None
@@ -41,6 +42,7 @@ def view_project(request, unique_id):
             'communities': communities,
             'institutions': institutions,
             'user_researcher': user_researcher,
+            'sub_projects': sub_projects,
         }
 
         if project.project_privacy == 'Private':

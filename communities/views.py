@@ -995,6 +995,7 @@ def project_actions(request, pk, project_uuid):
         comments = ProjectComment.objects.select_related('sender').filter(project=project)
         activities = ProjectActivity.objects.filter(project=project).order_by('-date')
         is_community_notified = EntitiesNotified.objects.none()
+        sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', flat=True)
 
         if not creator.community:
         # 1. is community creator of project?
@@ -1045,6 +1046,7 @@ def project_actions(request, pk, project_uuid):
             'activities': activities,
             'project_archived': project_archived,
             'is_community_notified': is_community_notified,
+            'sub_projects': sub_projects,
         }
         return render(request, 'communities/project-actions.html', context)
 
