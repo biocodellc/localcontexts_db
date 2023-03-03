@@ -57,7 +57,23 @@
                 <div class="flex-this">
                     <div class="project-left-sidebar"><p class="bold">Source Project</p></div>
                     <div><p>
-                            <em><a class="darkteal-text underline-hover" href="{% url 'view-project' project.source_project_uuid  %}">{{ project.source_project_uuid }}</a></em>
+                            <em>
+                                <a 
+                                    class="darkteal-text underline-hover" 
+                                    {% if community %}
+                                        href="{% url 'community-project-actions' community.id project.source_project_uuid %}"
+                                    {% endif %}
+                                    {% if institution %}
+                                        href="{% url 'institution-project-actions' institution.id project.source_project_uuid %}"
+                                    {% endif %}
+                                    {% if researcher %}
+                                        href="{% url 'researcher-project-actions' researcher.id project.source_project_uuid %}"
+                                    {% endif %}
+                                    {% if not community and not institution and not researcher %}
+                                        href="{% url 'view-project' project.source_project_uuid  %}"
+                                    {% endif %}
+                                    
+                                >{{ project.source_project_uuid }}</a></em>
                     </p></div>
                 </div>
             {% endif %}
@@ -69,7 +85,22 @@
                             <ul>
                                 {% for uuid in sub_projects %}
                                     <li>
-                                        <em><a class="darkteal-text underline-hover" href="{% url 'view-project' uuid  %}">{{ uuid }}</a></em>
+                                        <em>
+                                            <a 
+                                                class="darkteal-text underline-hover" 
+                                                {% if community %}
+                                                    href="{% url 'community-project-actions' community.id uuid %}"
+                                                {% endif %}
+                                                {% if institution %}
+                                                    href="{% url 'institution-project-actions' institution.id uuid %}"
+                                                {% endif %}
+                                                {% if researcher %}
+                                                    href="{% url 'researcher-project-actions' researcher.id uuid %}"
+                                                {% endif %}
+                                                {% if not community and not institution and not researcher %}
+                                                    href="{% url 'view-project' uuid  %}"
+                                                {% endif %}
+                                                >{{ uuid }}</a></em>
                                     </li>   
                                 {% endfor %}                     
                             </ul>
