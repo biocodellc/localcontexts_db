@@ -283,6 +283,19 @@
                                 href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
                             {% endif %}
                         ><i class="fa-solid fa-pen-to-square"></i> Edit Project</a>
+                        <a 
+                            class="block" 
+                            {% if community %}
+                                href="{% url 'create-project' community.id project.unique_id %}"
+                            {% endif %}
+                            {% if institution %}
+                                href="{% url 'inst-create-project' institution.id project.unique_id %}"
+                            {% endif %}
+                            {% if researcher %}
+                                href="{% url 'researcher-create-project' researcher.id project.unique_id %}"
+                            {% endif %}
+
+                        ><i class="fa-solid fa-circle-plus"></i> Create Sub Project</a>
                     {% endif %}
                 {% endif %}
 

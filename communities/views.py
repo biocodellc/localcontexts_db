@@ -848,7 +848,7 @@ def projects_archived(request, pk):
 
 # Create Project
 @login_required(login_url='login')
-def create_project(request, pk):
+def create_project(request, pk, source_proj_uuid=None):
     community = Community.objects.select_related('community_creator').get(id=pk)
 
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
@@ -879,6 +879,9 @@ def create_project(request, pk):
                 # Handle multiple urls, save as array
                 project_links = request.POST.getlist('project_urls')
                 data.urls = project_links
+
+                if source_proj_uuid:
+                    data.source_project_uuid = source_proj_uuid
                     
                 data.save()
 

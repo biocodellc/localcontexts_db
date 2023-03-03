@@ -378,7 +378,7 @@ def projects_archived(request, pk):
 
 # Create Project
 @login_required(login_url='login')
-def create_project(request, pk):
+def create_project(request, pk, source_proj_uuid=None):
     researcher = Researcher.objects.select_related('user').get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
@@ -405,6 +405,9 @@ def create_project(request, pk):
                 # Handle multiple urls, save as array
                 project_links = request.POST.getlist('project_urls')
                 data.urls = project_links
+
+                if source_proj_uuid:
+                    data.source_project_uuid = source_proj_uuid
                     
                 data.save()
 
