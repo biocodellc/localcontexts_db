@@ -1149,6 +1149,9 @@ if (deactivateAccountBtn) {
     })
 }
 
+// ASHLEY TODO Uncheck all other checkboxes when user checks unsubscribe, add URL fot his page only, enable button
+
+
 // REGISTRY FILTERING AND JOIN REQUESTS / CONTACT MODAL
 if (window.location.href.includes('communities/view/') || window.location.href.includes('institutions/view/') || window.location.href.includes('researchers/view/') ) {
 

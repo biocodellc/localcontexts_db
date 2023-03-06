@@ -404,7 +404,7 @@
                                 </div>                            
                             </div>
                             <div>
-                                <div class="primary-btn white-btn close-modal-btn margin-right-8">Close <i class="fa fa-times" aria-hidden="true"></i></div>
+                                <div class="primary-btn white-btn close-modal-btn margin-right-8">Close <i class="fa-solid fa-xmark"></i></div>
                             </div>
                         </div>
 
@@ -437,10 +437,15 @@
                                         {% endif %}
                                     </div>
                                 </div>
-                
-                                <div class="flex-this flex-end margin-top-8">
-                                    <input type="hidden" name="join_request">
-                                    <button id="sendRequestToJoinBtn" class="primary-btn action-btn">Send Request</button> 
+
+                                <div class="flex-this space-between margin-top-8 w-100">
+                                    <p class="w-70 no-top-margin">
+                                        <small class="grey-text">By sending this request, you consent for your message and email address to be shared with account administrators.</small>
+                                    </p>
+                                    <div>
+                                        <input type="hidden" name="join_request">
+                                        <button id="sendRequestToJoinBtn" class="primary-btn action-btn">Send Request</button> 
+                                    </div>                                    
                                 </div>
 
                             </form> 
