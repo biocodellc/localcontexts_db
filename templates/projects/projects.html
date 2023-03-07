@@ -58,75 +58,86 @@
                 </form>
             </div>
             <div class="flex-this align-center">
-                <div>
-                    Sort:
-                        <a 
-                            class="darkteal-text pointer underline-hover{% if 'projects/' in request.path %} bold {% endif %}" 
+                <select class="project-sort" onchange="window.open(this.value,'_self')">
+                    <option
+                        
+                            class="darkteal-text pointer" 
                             {% if institution %}
-                                href="{% url 'institution-projects' institution.id %}"
+                                value="{% url 'institution-projects' institution.id %}"
                             {% endif %}
                             {% if researcher %}
-                                href="{% url 'researcher-projects' researcher.id %}"
+                                value="{% url 'researcher-projects' researcher.id %}"
                             {% endif %}
                             {% if community %}
-                                href="{% url 'community-projects' community.id %}"
+                                value="{% url 'community-projects' community.id %}"
                             {% endif %}
                         >
-                            All </a> |
-                        <a 
-                            class="darkteal-text pointer underline-hover {% if 'projects-labels' in request.path %} bold {% endif %}" 
+                        Sort: All
+                    </option>
+                    <option
+                        
+                            class="darkteal-text pointer" 
+                            {% if '/projects-labels/' in request.path %} selected {% endif %}
                             {% if institution %}
-                                href="{% url 'institution-projects-labels' institution.id %}"
+                                value="{% url 'institution-projects-labels' institution.id %}"
                             {% endif %}
                             {% if researcher %}
-                                href="{% url 'researcher-projects-labels' researcher.id %}"
+                                value="{% url 'researcher-projects-labels' researcher.id %}"
                             {% endif %}
                             {% if community %}
-                                href="{% url 'community-projects-labels' community.id %}"
+                                value="{% url 'community-projects-labels' community.id %}"
                             {% endif %}
                         >
-                        Labels</a> |
-                        <a 
-                            class="darkteal-text pointer underline-hover {% if 'projects-notices' in request.path %} bold {% endif %}" 
+                        Sort: Labels
+                    </option>
+                    <option
+                            class="darkteal-text pointer" 
+                            {% if '/projects-notices/' in request.path %} selected {% endif %}
                             {% if institution %}
-                                href="{% url 'institution-projects-notices' institution.id %}"
+                                value="{% url 'institution-projects-notices' institution.id %}"
                             {% endif %}
                             {% if researcher %}
-                                href="{% url 'researcher-projects-notices' researcher.id %}"
+                                value="{% url 'researcher-projects-notices' researcher.id %}"
                             {% endif %}
                             {% if community %}
-                                href="{% url 'community-projects-notices' community.id %}"
+                                value="{% url 'community-projects-notices' community.id %}"
                             {% endif %}
                         >
-                        Notices</a> |
-                        <a 
-                            class="darkteal-text pointer underline-hover {% if 'projects-created' in request.path %} bold {% endif %}" 
+                        Sort: Notices
+                    </option>
+                    <option
+                            class="darkteal-text pointer" 
+                            {% if '/projects-created/' in request.path %} selected {% endif %}
                             {% if institution %}
-                                href="{% url 'institution-projects-creator' institution.id %}"
+                                value="{% url 'institution-projects-creator' institution.id %}"
                             {% endif %}
                             {% if researcher %}
-                                href="{% url 'researcher-projects-creator' researcher.id %}"
+                                value="{% url 'researcher-projects-creator' researcher.id %}"
                             {% endif %}
                             {% if community %}
-                                href="{% url 'community-projects-creator' community.id %}"
+                                value="{% url 'community-projects-creator' community.id %}"
                             {% endif %}
                         >
-                        Created</a> |
-                        <a 
-                            class="darkteal-text pointer underline-hover {% if 'projects-contributing' in request.path %} bold {% endif %}" 
+                        Sort: Created
+                    </option>
+                    <option
+                            class="darkteal-text pointer" 
+                            {% if '/projects-contributing/' in request.path %} selected {% endif %}
                             {% if institution %}
-                                href="{% url 'institution-projects-contributor' institution.id %}"
+                                value="{% url 'institution-projects-contributor' institution.id %}"
                             {% endif %}
                             {% if researcher %}
-                                href="{% url 'researcher-projects-contributor' researcher.id %}"
+                                value="{% url 'researcher-projects-contributor' researcher.id %}"
                             {% endif %}
                             {% if community %}
-                                href="{% url 'community-projects-contributor' community.id %}"
+                                value="{% url 'community-projects-contributor' community.id %}"
                             {% endif %}
                         >
-                        Contributed</a> |
-                        <a 
-                            class="darkteal-text pointer underline-hover {% if 'projects-archived' in request.path %} bold {% endif %}" 
+                        Sort: Contributed
+                    </option>
+                    <option
+                            class="darkteal-text pointer" 
+                            {% if '/projects-archived/' in request.path %} selected {% endif %}
                             {% if institution %}
                                 href="{% url 'institution-projects-archived' institution.id %}"
                             {% endif %}
@@ -137,8 +148,9 @@
                                 href="{% url 'community-projects-archived' community.id %}"
                             {% endif %}
                         >
-                        Archived</a>            
-                </div>
+                        Sort: Archived
+                    </option>
+                </select>   
 
             </div>
         </div>
