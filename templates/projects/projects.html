@@ -139,13 +139,13 @@
                             class="darkteal-text pointer" 
                             {% if '/projects-archived/' in request.path %} selected {% endif %}
                             {% if institution %}
-                                href="{% url 'institution-projects-archived' institution.id %}"
+                                value="{% url 'institution-projects-archived' institution.id %}"
                             {% endif %}
                             {% if researcher %}
-                                href="{% url 'researcher-projects-archived' researcher.id %}"
+                                value="{% url 'researcher-projects-archived' researcher.id %}"
                             {% endif %}
                             {% if community %}
-                                href="{% url 'community-projects-archived' community.id %}"
+                                value="{% url 'community-projects-archived' community.id %}"
                             {% endif %}
                         >
                         Sort: Archived
