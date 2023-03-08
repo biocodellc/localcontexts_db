@@ -28,7 +28,9 @@ urlpatterns = [
     path('projects-contributing/<str:pk>/', views.projects_contributor, name="institution-projects-contributor"),
     path('projects-archived/<str:pk>/', views.projects_archived, name="institution-projects-archived"),
 
+    path('projects/create-project/<str:pk>/<uuid:source_proj_uuid>/', views.create_project, name="inst-create-project"),
     path('projects/create-project/<str:pk>/', views.create_project, name="inst-create-project"),
+
     path('projects/edit-project/<str:institution_id>/<str:project_uuid>', views.edit_project, name="inst-edit-project"),
     path('projects/actions/<str:pk>/<uuid:project_uuid>/', views.project_actions, name="institution-project-actions"),
     path('projects/delete-project/<str:institution_id>/<str:project_uuid>', views.delete_project, name="inst-delete-project"),

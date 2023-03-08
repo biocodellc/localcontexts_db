@@ -378,7 +378,7 @@ def projects_archived(request, pk):
 
 # Create Project
 @login_required(login_url='login')
-def create_project(request, pk):
+def create_project(request, pk, source_proj_uuid=None):
     researcher = Researcher.objects.select_related('user').get(id=pk)
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
@@ -405,6 +405,9 @@ def create_project(request, pk):
                 # Handle multiple urls, save as array
                 project_links = request.POST.getlist('project_urls')
                 data.urls = project_links
+
+                if source_proj_uuid:
+                    data.source_project_uuid = source_proj_uuid
                     
                 data.save()
 
@@ -529,6 +532,7 @@ def project_actions(request, pk, project_uuid):
             comments = ProjectComment.objects.select_related('sender').filter(project=project)
             entities_notified = EntitiesNotified.objects.get(project=project)
             activities = ProjectActivity.objects.filter(project=project).order_by('-date')
+            sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', flat=True)
 
             project_archived = False
             if ProjectArchived.objects.filter(project_uuid=project.unique_id, researcher_id=researcher.id).exists():
@@ -601,6 +605,7 @@ def project_actions(request, pk, project_uuid):
                 'comments': comments,
                 'activities': activities,
                 'project_archived': project_archived,
+                'sub_projects': sub_projects,
             }
             return render(request, 'researchers/project-actions.html', context)
     else:

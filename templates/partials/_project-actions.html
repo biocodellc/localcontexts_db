@@ -53,6 +53,61 @@
                 <div class="project-left-sidebar"><p class="bold">Status</p></div>
                 <div><p>{% if project_archived %} Archived {% else %} Active {% endif %}</p></div>
             </div>
+            {% if project.source_project_uuid %}
+                <div class="flex-this">
+                    <div class="project-left-sidebar"><p class="bold">Source Project</p></div>
+                    <div><p>
+                            <em>
+                                <a 
+                                    class="darkteal-text underline-hover" 
+                                    {% if community %}
+                                        href="{% url 'community-project-actions' community.id project.source_project_uuid %}"
+                                    {% endif %}
+                                    {% if institution %}
+                                        href="{% url 'institution-project-actions' institution.id project.source_project_uuid %}"
+                                    {% endif %}
+                                    {% if researcher %}
+                                        href="{% url 'researcher-project-actions' researcher.id project.source_project_uuid %}"
+                                    {% endif %}
+                                    {% if not community and not institution and not researcher %}
+                                        href="{% url 'view-project' project.source_project_uuid  %}"
+                                    {% endif %}
+                                    
+                                >{{ project.source_project_uuid }}</a></em>
+                    </p></div>
+                </div>
+            {% endif %}
+            {% if sub_projects %}
+                <div class="flex-this">
+                    <div class="project-left-sidebar"><p class="bold">Sub Project(s)</p></div>
+                    <div>
+                        <p>
+                            <ul>
+                                {% for uuid in sub_projects %}
+                                    <li>
+                                        <em>
+                                            <a 
+                                                class="darkteal-text underline-hover" 
+                                                {% if community %}
+                                                    href="{% url 'community-project-actions' community.id uuid %}"
+                                                {% endif %}
+                                                {% if institution %}
+                                                    href="{% url 'institution-project-actions' institution.id uuid %}"
+                                                {% endif %}
+                                                {% if researcher %}
+                                                    href="{% url 'researcher-project-actions' researcher.id uuid %}"
+                                                {% endif %}
+                                                {% if not community and not institution and not researcher %}
+                                                    href="{% url 'view-project' uuid  %}"
+                                                {% endif %}
+                                                >{{ uuid }}</a></em>
+                                    </li>   
+                                {% endfor %}                     
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
         </div>
 
         <div>
@@ -271,6 +326,7 @@
             {% if request.user.is_authenticated %}
                 {% if 'projects/actions/' in request.path %}
                     {% if request.user == project.project_creator %}
+
                         <a 
                             class="block" 
                             {% if community %}
@@ -283,6 +339,32 @@
                                 href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
                             {% endif %}
                         ><i class="fa-solid fa-pen-to-square"></i> Edit Project</a>
+                        
+                        {% if not project.source_project_uuid %}
+                            <a 
+                                class="block" 
+                                {% if community %}
+                                    href="{% url 'create-project' community.id project.unique_id %}"
+                                {% endif %}
+                                {% if institution %}
+                                    href="{% url 'inst-create-project' institution.id project.unique_id %}"
+                                {% endif %}
+                                {% if researcher %}
+                                    href="{% url 'researcher-create-project' researcher.id project.unique_id %}"
+                                {% endif %}
+
+                            ><i class="fa-solid fa-circle-plus"></i> Create Sub Project</a>
+                        {% else %}
+                            <a class="block a-disabled">
+                                <i class="fa-solid fa-circle-plus"></i> Create Sub Project
+                                <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                                    <span class="tooltiptext">
+                                        The Project you are viewing is already a sub-project.
+                                    </span>
+                                </div> 
+                            </a>
+                        {% endif %}
+
                     {% endif %}
                 {% endif %}
 
