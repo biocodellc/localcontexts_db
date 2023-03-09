@@ -207,6 +207,12 @@ def researcher_projects(request, pk):
     if user_can_view == False:
         return redirect('restricted')
     else:
+        has_labels = False
+        has_notices = False
+        created = False
+        contributed = False
+        is_archived = False
+    
         projects_list = list(chain(
             researcher.researcher_created_project.all().values_list('project__unique_id', flat=True), # researcher projects
             researcher.researchers_notified.all().values_list('project__unique_id', flat=True), # projects researcher has been notified of
@@ -216,96 +222,60 @@ def researcher_projects(request, pk):
         archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids).exclude(unique_id__in=archived).order_by('-date_added')
         
-        page = paginate(request, projects, 10)
+        sort_by = request.GET.get('sort')
+
+        if sort_by == 'all':
+            return redirect('researcher-projects', researcher.id)
         
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
+        elif sort_by == 'has_labels':
+            projects_list = list(chain(
+                researcher.researcher_created_project.all().values_list('project__unique_id', flat=True), # researcher projects
+                researcher.researchers_notified.all().values_list('project__unique_id', flat=True), # projects researcher has been notified of 
+                researcher.contributing_researchers.all().values_list('project__unique_id', flat=True), # projects where researcher is contributor
+            ))
+            project_ids = list(set(projects_list)) # remove duplicate ids
+            archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
+                ).exclude(unique_id__in=archived).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
+                ).exclude(unique_id__in=archived).exclude(tk_labels=None).order_by('-date_added')
 
-        context = {
-            'projects': projects,
-            'researcher': researcher,
-            'user_can_view': user_can_view,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'researchers/projects.html', context)
-
-@login_required(login_url='login')
-def projects_with_labels(request, pk):
-    researcher = Researcher.objects.prefetch_related('user').get(id=pk)
-
-    user_can_view = checkif_user_researcher(researcher, request.user)
-    if user_can_view == False:
-        return redirect('restricted')
-    else:
-        projects_list = list(chain(
-            researcher.researcher_created_project.all().values_list('project__unique_id', flat=True), # researcher projects
-            researcher.researchers_notified.all().values_list('project__unique_id', flat=True), # projects researcher has been notified of 
-            researcher.contributing_researchers.all().values_list('project__unique_id', flat=True), # projects where researcher is contributor
-        ))
-        project_ids = list(set(projects_list)) # remove duplicate ids
-        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
-            ).exclude(unique_id__in=archived).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
-            ).exclude(unique_id__in=archived).exclude(tk_labels=None).order_by('-date_added')
-
-        page = paginate(request, projects, 10)
+            has_labels = True
         
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
+        elif sort_by == 'has_notices':
+            projects_list = list(chain(
+                researcher.researcher_created_project.all().values_list('project__unique_id', flat=True), # researcher projects
+                researcher.researchers_notified.all().values_list('project__unique_id', flat=True), # projects researcher has been notified of 
+                researcher.contributing_researchers.all().values_list('project__unique_id', flat=True), # projects where researcher is contributor
+            ))
+            project_ids = list(set(projects_list)) # remove duplicate ids
+            archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids, tk_labels=None, bc_labels=None).exclude(unique_id__in=archived).order_by('-date_added')
 
-        context = {
-            'projects': projects,
-            'researcher': researcher,
-            'user_can_view': user_can_view,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'researchers/projects.html', context)
+            has_notices = True
 
-@login_required(login_url='login')
-def projects_with_notices(request, pk):
-    researcher = Researcher.objects.prefetch_related('user').get(id=pk)
+        elif sort_by == 'created':
+            created_projects = researcher.researcher_created_project.all().values_list('project__unique_id', flat=True)
+            archived = ProjectArchived.objects.filter(project_uuid__in=created_projects, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=created_projects).exclude(unique_id__in=archived).order_by('-date_added')
 
-    user_can_view = checkif_user_researcher(researcher, request.user)
-    if user_can_view == False:
-        return redirect('restricted')
-    else:
-        projects_list = list(chain(
-            researcher.researcher_created_project.all().values_list('project__unique_id', flat=True), # researcher projects
-            researcher.researchers_notified.all().values_list('project__unique_id', flat=True), # projects researcher has been notified of 
-            researcher.contributing_researchers.all().values_list('project__unique_id', flat=True), # projects where researcher is contributor
-        ))
-        project_ids = list(set(projects_list)) # remove duplicate ids
-        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids, tk_labels=None, bc_labels=None).exclude(unique_id__in=archived).order_by('-date_added')
+            created = True
 
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
+        elif sort_by == 'contributed':
+            contrib = researcher.contributing_researchers.all().values_list('project__unique_id', flat=True)
+            projects_list = list(chain(
+                researcher.researcher_created_project.all().values_list('project__unique_id', flat=True), # check researcher created projects
+                ProjectArchived.objects.filter(project_uuid__in=contrib, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+            ))
+            project_ids = list(set(projects_list)) # remove duplicate ids
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=contrib).exclude(unique_id__in=project_ids).order_by('-date_added')
 
-        context = {
-            'projects': projects,
-            'researcher': researcher,
-            'user_can_view': user_can_view,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'researchers/projects.html', context)
+            contributed = True
 
+        elif sort_by == 'archived':
+            archived_projects = ProjectArchived.objects.filter(researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True)
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
 
-@login_required(login_url='login')
-def projects_creator(request, pk):
-    researcher = Researcher.objects.prefetch_related('user').get(id=pk)
-
-    user_can_view = checkif_user_researcher(researcher, request.user)
-    if user_can_view == False:
-        return redirect('restricted')
-    else:
-        created_projects = researcher.researcher_created_project.all().values_list('project__unique_id', flat=True)
-        archived = ProjectArchived.objects.filter(project_uuid__in=created_projects, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=created_projects).exclude(unique_id__in=archived).order_by('-date_added')
+            is_archived = True
 
         page = paginate(request, projects, 10)
         
@@ -318,60 +288,11 @@ def projects_creator(request, pk):
             'user_can_view': user_can_view,
             'items': page,
             'results': results,
-        }
-        return render(request, 'researchers/projects.html', context)
-
-@login_required(login_url='login')
-def projects_contributor(request, pk):
-    researcher = Researcher.objects.prefetch_related('user').get(id=pk)
-
-    user_can_view = checkif_user_researcher(researcher, request.user)
-    if user_can_view == False:
-        return redirect('restricted')
-    else:
-        contrib = researcher.contributing_researchers.all().values_list('project__unique_id', flat=True)
-        projects_list = list(chain(
-            researcher.researcher_created_project.all().values_list('project__unique_id', flat=True), # check researcher created projects
-            ProjectArchived.objects.filter(project_uuid__in=contrib, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        ))
-        project_ids = list(set(projects_list)) # remove duplicate ids
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=contrib).exclude(unique_id__in=project_ids).order_by('-date_added')
-
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
-
-        context = {
-            'projects': projects,
-            'researcher': researcher,
-            'user_can_view': user_can_view,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'researchers/projects.html', context)
-
-@login_required(login_url='login')
-def projects_archived(request, pk):
-    researcher = Researcher.objects.select_related('user').get(id=pk)
-    user_can_view = checkif_user_researcher(researcher, request.user)
-    if user_can_view == False:
-        return redirect('restricted')
-    else:
-        archived_projects = ProjectArchived.objects.filter(researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True)
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
-
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
-
-        context = {
-            'projects': projects,
-            'researcher': researcher,
-            'items': page,
-            'results': results,
-            'user_can_view': user_can_view,
+            'has_labels': has_labels,
+            'has_notices': has_notices,
+            'created': created,
+            'contributed': contributed,
+            'is_archived': is_archived,
         }
         return render(request, 'researchers/projects.html', context)
 

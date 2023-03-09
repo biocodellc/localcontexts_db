@@ -58,99 +58,53 @@
                 </form>
             </div>
             <div class="flex-this align-center">
-                <select class="project-sort" onchange="window.open(this.value,'_self')">
-                    <option
-                        
+                <form method="GET" action="" class="flex-this">
+                    <select name="sort" class="project-sort">
+                        <option
                             class="darkteal-text pointer" 
-                            {% if institution %}
-                                value="{% url 'institution-projects' institution.id %}"
-                            {% endif %}
-                            {% if researcher %}
-                                value="{% url 'researcher-projects' researcher.id %}"
-                            {% endif %}
-                            {% if community %}
-                                value="{% url 'community-projects' community.id %}"
-                            {% endif %}
+                            value="all"
                         >
-                        Sort: All
-                    </option>
-                    <option
-                        
+                            Sort: All
+                        </option>
+                        <option
                             class="darkteal-text pointer" 
-                            {% if '/projects-labels/' in request.path %} selected {% endif %}
-                            {% if institution %}
-                                value="{% url 'institution-projects-labels' institution.id %}"
-                            {% endif %}
-                            {% if researcher %}
-                                value="{% url 'researcher-projects-labels' researcher.id %}"
-                            {% endif %}
-                            {% if community %}
-                                value="{% url 'community-projects-labels' community.id %}"
-                            {% endif %}
+                            value="has_labels"
+                            {% if has_labels %} selected {% endif %}
                         >
-                        Sort: Labels
-                    </option>
-                    <option
+                            Sort: Labels
+                        </option>
+                        <option
                             class="darkteal-text pointer" 
-                            {% if '/projects-notices/' in request.path %} selected {% endif %}
-                            {% if institution %}
-                                value="{% url 'institution-projects-notices' institution.id %}"
-                            {% endif %}
-                            {% if researcher %}
-                                value="{% url 'researcher-projects-notices' researcher.id %}"
-                            {% endif %}
-                            {% if community %}
-                                value="{% url 'community-projects-notices' community.id %}"
-                            {% endif %}
+                            value="has_notices"
+                            {% if has_notices %} selected {% endif %}
                         >
-                        Sort: Notices
-                    </option>
-                    <option
+                            Sort: Notices
+                        </option>
+                        <option
                             class="darkteal-text pointer" 
-                            {% if '/projects-created/' in request.path %} selected {% endif %}
-                            {% if institution %}
-                                value="{% url 'institution-projects-creator' institution.id %}"
-                            {% endif %}
-                            {% if researcher %}
-                                value="{% url 'researcher-projects-creator' researcher.id %}"
-                            {% endif %}
-                            {% if community %}
-                                value="{% url 'community-projects-creator' community.id %}"
-                            {% endif %}
+                            value="created"
+                            {% if created %} selected {% endif %}
                         >
-                        Sort: Created
-                    </option>
-                    <option
+                            Sort: Created
+                        </option>
+                        <option
                             class="darkteal-text pointer" 
-                            {% if '/projects-contributing/' in request.path %} selected {% endif %}
-                            {% if institution %}
-                                value="{% url 'institution-projects-contributor' institution.id %}"
-                            {% endif %}
-                            {% if researcher %}
-                                value="{% url 'researcher-projects-contributor' researcher.id %}"
-                            {% endif %}
-                            {% if community %}
-                                value="{% url 'community-projects-contributor' community.id %}"
-                            {% endif %}
+                            value="contributed"
+                            {% if contributed %} selected {% endif %}
                         >
-                        Sort: Contributed
-                    </option>
-                    <option
+                            Sort: Contributed
+                        </option>
+                        <option
                             class="darkteal-text pointer" 
-                            {% if '/projects-archived/' in request.path %} selected {% endif %}
-                            {% if institution %}
-                                value="{% url 'institution-projects-archived' institution.id %}"
-                            {% endif %}
-                            {% if researcher %}
-                                value="{% url 'researcher-projects-archived' researcher.id %}"
-                            {% endif %}
-                            {% if community %}
-                                value="{% url 'community-projects-archived' community.id %}"
-                            {% endif %}
+                            value="archived"
+                            {% if is_archived %} selected {% endif %}
                         >
-                        Sort: Archived
-                    </option>
-                </select>   
+                            Sort: Archived
+                        </option>
+                    </select>  
+                    <input class="primary-btn action-btn margin-left-8" type="submit" value="Sort"> 
+                </form>
+
 
             </div>
         </div>
