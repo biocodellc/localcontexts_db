@@ -22,11 +22,6 @@ urlpatterns = [
     path('members/join-request/delete/<str:pk>/<str:join_id>', views.delete_join_request, name="institution-delete-join-request"),
 
     path('projects/<str:pk>/', views.institution_projects, name="institution-projects"),
-    path('projects-labels/<str:pk>/', views.projects_with_labels, name="institution-projects-labels"),
-    path('projects-notices/<str:pk>/', views.projects_with_notices, name="institution-projects-notices"),
-    path('projects-created/<str:pk>/', views.projects_creator, name="institution-projects-creator"),
-    path('projects-contributing/<str:pk>/', views.projects_contributor, name="institution-projects-contributor"),
-    path('projects-archived/<str:pk>/', views.projects_archived, name="institution-projects-archived"),
 
     path('projects/create-project/<str:pk>/<uuid:source_proj_uuid>/', views.create_project, name="inst-create-project"),
     path('projects/create-project/<str:pk>/', views.create_project, name="inst-create-project"),

@@ -682,6 +682,13 @@ def projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
+        has_labels = False
+        has_notices = False
+        created = False
+        contributed = False
+        is_archived = False
+        title_az = False
+
         projects_list = list(chain(
             community.community_created_project.all().values_list('project__unique_id', flat=True), # community created project ids
             community.communities_notified.all().values_list('project__unique_id', flat=True), # projects community has been notified of
@@ -691,8 +698,69 @@ def projects(request, pk):
         archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
         projects = Project.objects.select_related('project_creator').filter(unique_id__in=project_ids).exclude(unique_id__in=archived).order_by('-date_added')
 
-        page = paginate(request, projects, 10)
+        sort_by = request.GET.get('sort')
+
+        if sort_by == 'all':
+            return redirect('community-projects', community.id)
         
+        elif sort_by == 'has_labels':
+            projects_list = list(chain(
+                community.community_created_project.all().values_list('project__unique_id', flat=True), # community projects
+                community.communities_notified.all().values_list('project__unique_id', flat=True), # projects community has been notified of
+                community.contributing_communities.all().values_list('project__unique_id', flat=True), # projects where community is contributor
+            ))
+            project_ids = list(set(projects_list)) # remove duplicate ids
+            archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
+                ).exclude(unique_id__in=archived).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
+                ).exclude(unique_id__in=archived).exclude(tk_labels=None).order_by('-date_added')
+            
+            has_labels = True
+        
+        elif sort_by == 'has_notices':
+            # FIXME: This should exclude community created projects?
+            projects_list = list(chain(
+                community.community_created_project.all().values_list('project__unique_id', flat=True), # community projects
+                community.communities_notified.all().values_list('project__unique_id', flat=True), # projects community has been notified of 
+                community.contributing_communities.all().values_list('project__unique_id', flat=True), # projects where community is contributor
+            ))
+            project_ids = list(set(projects_list)) # remove duplicate ids
+            archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids, tk_labels=None, bc_labels=None).exclude(unique_id__in=archived).order_by('-date_added')
+
+            has_notices = True
+
+        elif sort_by == 'created':
+            created_projects = community.community_created_project.all().values_list('project__unique_id', flat=True)
+            archived = ProjectArchived.objects.filter(project_uuid__in=created_projects, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=created_projects).exclude(unique_id__in=archived).order_by('-date_added')
+            
+            created = True
+
+        elif sort_by == 'contributed':
+            contrib = community.contributing_communities.all().values_list('project__unique_id', flat=True) # get uuids of contributed projects
+            projects_list = list(chain(
+                community.community_created_project.all().values_list('project__unique_id', flat=True), # check community created projects
+                ProjectArchived.objects.filter(project_uuid__in=contrib, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+            ))
+            project_ids = list(set(projects_list)) # remove duplicate ids
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=contrib).exclude(unique_id__in=project_ids).order_by('-date_added')
+
+            contributed = True
+
+        elif sort_by == 'archived':
+            archived_projects = ProjectArchived.objects.filter(community_id=community.id, archived=True).values_list('project_uuid', flat=True)
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
+
+            is_archived = True
+
+        elif sort_by == 'title_az':
+            projects = projects.order_by('title')
+            
+            title_az = True
+
+        page = paginate(request, projects, 10)
+
         if request.method == 'GET':
             results = return_project_search_results(request, projects)
 
@@ -702,146 +770,13 @@ def projects(request, pk):
             'community': community,
             'items': page,
             'results': results,
-        }
-        return render(request, 'communities/projects.html', context)
+            'has_labels': has_labels,
+            'has_notices': has_notices,
+            'created': created,
+            'contributed': contributed,
+            'is_archived': is_archived,
+            'title_az': title_az,
 
-@login_required(login_url='login')
-def projects_with_labels(request, pk):
-    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    member_role = check_member_role(request.user, community)
-    if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')    
-    else:
-        projects_list = list(chain(
-            community.community_created_project.all().values_list('project__unique_id', flat=True), # community projects
-            community.communities_notified.all().values_list('project__unique_id', flat=True), # projects community has been notified of
-            community.contributing_communities.all().values_list('project__unique_id', flat=True), # projects where community is contributor
-        ))
-        project_ids = list(set(projects_list)) # remove duplicate ids
-        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
-            ).exclude(unique_id__in=archived).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
-            ).exclude(unique_id__in=archived).exclude(tk_labels=None).order_by('-date_added')
-
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
-
-        context = {
-            'projects': projects,
-            'community': community,
-            'member_role': member_role,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'communities/projects.html', context)
-
-@login_required(login_url='login')
-def projects_with_notices(request, pk):
-    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    member_role = check_member_role(request.user, community)
-    if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')    
-    else:
-        projects_list = list(chain(
-            community.community_created_project.all().values_list('project__unique_id', flat=True), # community projects
-            community.communities_notified.all().values_list('project__unique_id', flat=True), # projects community has been notified of 
-            community.contributing_communities.all().values_list('project__unique_id', flat=True), # projects where community is contributor
-        ))
-        project_ids = list(set(projects_list)) # remove duplicate ids
-        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids, tk_labels=None, bc_labels=None).exclude(unique_id__in=archived).order_by('-date_added')
-
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
-
-        context = {
-            'projects': projects,
-            'community': community,
-            'member_role': member_role,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'communities/projects.html', context)
-
-@login_required(login_url='login')
-def projects_creator(request, pk):
-    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    member_role = check_member_role(request.user, community)
-    if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')    
-    else:
-        created_projects = community.community_created_project.all().values_list('project__unique_id', flat=True)
-        archived = ProjectArchived.objects.filter(project_uuid__in=created_projects, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=created_projects).exclude(unique_id__in=archived).order_by('-date_added')
-
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
-
-        context = {
-            'projects': projects,
-            'community': community,
-            'member_role': member_role,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'communities/projects.html', context)
-
-@login_required(login_url='login')
-def projects_contributor(request, pk):
-    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    member_role = check_member_role(request.user, community)
-    if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')    
-    else:
-        contrib = community.contributing_communities.all().values_list('project__unique_id', flat=True) # get uuids of contributed projects
-        projects_list = list(chain(
-            community.community_created_project.all().values_list('project__unique_id', flat=True), # check community created projects
-            ProjectArchived.objects.filter(project_uuid__in=contrib, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        ))
-        project_ids = list(set(projects_list)) # remove duplicate ids
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=contrib).exclude(unique_id__in=project_ids).order_by('-date_added')
-
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
-
-        context = {
-            'projects': projects,
-            'community': community,
-            'member_role': member_role,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'communities/projects.html', context)
-
-@login_required(login_url='login')
-def projects_archived(request, pk):
-    community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    member_role = check_member_role(request.user, community)
-    if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')    
-    else:
-        archived_projects = ProjectArchived.objects.filter(community_id=community.id, archived=True).values_list('project_uuid', flat=True)
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
-        
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
-
-        context = {
-            'projects': projects,
-            'community': community,
-            'member_role': member_role,
-            'items': page,
-            'results': results,
         }
         return render(request, 'communities/projects.html', context)
 
