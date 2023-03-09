@@ -212,6 +212,7 @@ def researcher_projects(request, pk):
         created = False
         contributed = False
         is_archived = False
+        title_az = False
     
         projects_list = list(chain(
             researcher.researcher_created_project.all().values_list('project__unique_id', flat=True), # researcher projects
@@ -276,6 +277,11 @@ def researcher_projects(request, pk):
             projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
 
             is_archived = True
+        
+        elif sort_by == 'title_az':
+            projects = projects.order_by('title')
+            
+            title_az = True
 
         page = paginate(request, projects, 10)
         
@@ -293,6 +299,7 @@ def researcher_projects(request, pk):
             'created': created,
             'contributed': contributed,
             'is_archived': is_archived,
+            'title_az': title_az,
         }
         return render(request, 'researchers/projects.html', context)
 

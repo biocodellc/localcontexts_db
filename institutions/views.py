@@ -433,6 +433,7 @@ def institution_projects(request, pk):
         created = False
         contributed = False
         is_archived = False
+        title_az = False
 
         # 1. institution projects + 
         # 2. projects institution has been notified of 
@@ -501,6 +502,11 @@ def institution_projects(request, pk):
             projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
 
             is_archived = True
+        
+        elif sort_by == 'title_az':
+            projects = projects.order_by('title')
+            
+            title_az = True
     
         page = paginate(request, projects, 10)
         
@@ -518,6 +524,8 @@ def institution_projects(request, pk):
             'created': created,
             'contributed': contributed,
             'is_archived': is_archived,
+            'title_az': title_az,
+
         }
         return render(request, 'institutions/projects.html', context)
 
