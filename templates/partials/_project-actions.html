@@ -73,7 +73,10 @@
                                         href="{% url 'view-project' project.source_project_uuid  %}"
                                     {% endif %}
                                     
-                                >{{ project.source_project_uuid }}</a></em>
+                                >
+                                {% source_project_title project.source_project_uuid as title %}
+                                {{ title }}
+                            </a></em>
                     </p></div>
                 </div>
             {% endif %}
@@ -83,24 +86,24 @@
                     <div>
                         <p>
                             <ul>
-                                {% for uuid in sub_projects %}
+                                {% for field in sub_projects %}
                                     <li>
                                         <em>
                                             <a 
                                                 class="darkteal-text underline-hover" 
                                                 {% if community %}
-                                                    href="{% url 'community-project-actions' community.id uuid %}"
+                                                    href="{% url 'community-project-actions' community.id field.0 %}"
                                                 {% endif %}
                                                 {% if institution %}
-                                                    href="{% url 'institution-project-actions' institution.id uuid %}"
+                                                    href="{% url 'institution-project-actions' institution.id field.0 %}"
                                                 {% endif %}
                                                 {% if researcher %}
-                                                    href="{% url 'researcher-project-actions' researcher.id uuid %}"
+                                                    href="{% url 'researcher-project-actions' researcher.id field.0 %}"
                                                 {% endif %}
                                                 {% if not community and not institution and not researcher %}
-                                                    href="{% url 'view-project' uuid  %}"
+                                                    href="{% url 'view-project' field.0 %}"
                                                 {% endif %}
-                                                >{{ uuid }}</a></em>
+                                                >{{ field.1 }}</a></em>
                                     </li>   
                                 {% endfor %}                     
                             </ul>
@@ -208,15 +211,9 @@
                         <div class="flex-this">
                             <div class="project-left-sidebar">
                                 <p class="bold">
-                                    {% if notice.notice_type == 'biocultural' %}
-                                        Biocultural
-                                    {% endif %}
-                                    {% if notice.notice_type == 'traditional_knowledge' %}
-                                        Traditional Knowledge
-                                    {% endif %}
-                                    {% if notice.notice_type == 'attribution_incomplete' %}
-                                        Attribution Incomplete
-                                    {% endif %}
+                                    {% if notice.notice_type == 'biocultural' %} Biocultural {% endif %}
+                                    {% if notice.notice_type == 'traditional_knowledge' %} Traditional Knowledge {% endif %}
+                                    {% if notice.notice_type == 'attribution_incomplete' %} Attribution Incomplete {% endif %}
                                 </p>
                             </div>
                             <div>

@@ -8,8 +8,9 @@ from helpers.models import ProjectStatus, ProjectComment, Notice
 register = template.Library()
 
 @register.simple_tag
-def show_project_notices(project):
-    return Notice.objects.filter(project=project).values('archived', 'notice_type')
+def source_project_title(uuid):
+    project = Project.objects.filter(unique_id=uuid).values_list('title', flat=True)
+    return project[0]
 
 @register.simple_tag
 def get_all_researchers(researcher_to_exclude):
