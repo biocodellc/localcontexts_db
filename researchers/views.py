@@ -460,7 +460,7 @@ def project_actions(request, pk, project_uuid):
             comments = ProjectComment.objects.select_related('sender').filter(project=project)
             entities_notified = EntitiesNotified.objects.get(project=project)
             activities = ProjectActivity.objects.filter(project=project).order_by('-date')
-            sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', flat=True)
+            sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
 
             project_archived = False
             if ProjectArchived.objects.filter(project_uuid=project.unique_id, researcher_id=researcher.id).exists():
