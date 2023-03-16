@@ -336,7 +336,8 @@
                                 href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
                             {% endif %}
                         ><i class="fa-solid fa-pen-to-square"></i> Edit Project</a>
-                        
+                    {% endif %}
+                    {% if request.user == project.project_creator or member_role == 'admin' or member_role == 'editor' %}
                         {% if not project.source_project_uuid %}
                             <a 
                                 class="block" 
@@ -350,10 +351,10 @@
                                     href="{% url 'researcher-create-project' researcher.id project.unique_id %}"
                                 {% endif %}
 
-                            ><i class="fa-solid fa-circle-plus"></i> Create Sub Project</a>
+                            ><i class="fa-regular fa-diagram-subtask"></i> Create Sub Project</a>
                         {% else %}
                             <a class="block a-disabled">
-                                <i class="fa-solid fa-circle-plus"></i> Create Sub Project
+                                <i class="fa-regular fa-diagram-subtask"></i> Create Sub Project
                                 <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
                                     <span class="tooltiptext">
                                         The Project you are viewing is already a sub-project.
@@ -361,6 +362,11 @@
                                 </div> 
                             </a>
                         {% endif %}
+
+                        <a 
+                            class="block" 
+                            href="#"
+                        ><i class="fa-solid fa-square-plus"></i> Create Related Project</a>
 
                     {% endif %}
                 {% endif %}
