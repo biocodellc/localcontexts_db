@@ -532,7 +532,7 @@ def institution_projects(request, pk):
 
 # Create Project
 @login_required(login_url='login')
-def create_project(request, pk, source_proj_uuid=None):
+def create_project(request, pk, source_proj_uuid=None, related=None):
     institution = Institution.objects.select_related('institution_creator').get(id=pk)
 
     member_role = check_member_role(request.user, institution)
@@ -561,10 +561,18 @@ def create_project(request, pk, source_proj_uuid=None):
                 project_links = request.POST.getlist('project_urls')
                 data.urls = project_links
 
-                if source_proj_uuid:
-                    data.source_project_uuid = source_proj_uuid
-
                 data.save()
+
+                if source_proj_uuid and not related:
+                    data.source_project_uuid = source_proj_uuid
+                    data.save()
+
+                if source_proj_uuid and related:
+                    source = Project.objects.get(unique_id=source_proj_uuid)
+                    data.related_projects.add(source)
+                    source.related_projects.add(data)
+                    source.save()
+                    data.save()
 
                 # Create activity
                 name = get_users_name(data.project_creator)

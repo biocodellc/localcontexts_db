@@ -80,6 +80,42 @@
                     </p></div>
                 </div>
             {% endif %}
+
+            <div class="flex-this">
+                <div class="project-left-sidebar"><p class="bold">Related Projects</p></div>
+                <div>
+                    <p>
+                        {% if project.related_projects.all %}
+                        <ul>
+                            {% for p in project.related_projects.all %}
+                                <li>
+                                    <em>
+                                        <a 
+                                            class="darkteal-text underline-hover" 
+                                            {% if community %}
+                                                href="{% url 'community-project-actions' community.id p.unique_id %}"
+                                            {% endif %}
+                                            {% if institution %}
+                                                href="{% url 'institution-project-actions' institution.id p.unique_id %}"
+                                            {% endif %}
+                                            {% if researcher %}
+                                                href="{% url 'researcher-project-actions' researcher.id p.unique_id %}"
+                                            {% endif %}
+                                            {% if not community and not institution and not researcher %}
+                                                href="{% url 'view-project' p.unique_id %}"
+                                            {% endif %}
+                                        >{{ p.title }}</a>
+                                    </em>
+                                </li>   
+                            {% endfor %}                     
+                        </ul>
+                        {% else %}
+                            None
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
             {% if sub_projects %}
                 <div class="flex-this">
                     <div class="project-left-sidebar"><p class="bold">Sub Project(s)</p></div>
@@ -103,7 +139,8 @@
                                                 {% if not community and not institution and not researcher %}
                                                     href="{% url 'view-project' field.0 %}"
                                                 {% endif %}
-                                                >{{ field.1 }}</a></em>
+                                            >{{ field.1 }}</a>
+                                        </em>
                                     </li>   
                                 {% endfor %}                     
                             </ul>
@@ -365,7 +402,15 @@
 
                         <a 
                             class="block" 
-                            href="#"
+                            {% if community %}
+                                href="{% url 'create-project' community.id project.unique_id 'related' %}"
+                            {% endif %}
+                            {% if institution %}
+                                href="{% url 'inst-create-project' institution.id project.unique_id 'related' %}"
+                            {% endif %}
+                            {% if researcher %}
+                                href="{% url 'researcher-create-project' researcher.id project.unique_id 'related' %}"
+                            {% endif %}
                         ><i class="fa-solid fa-square-plus"></i> Create Related Project</a>
 
                     {% endif %}
