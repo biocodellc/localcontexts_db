@@ -87,20 +87,28 @@ class ProjectCreatorSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     created_by = ProjectCreatorSerializer(source="project_creator_project", many=True)
     notice = NoticeSerializer(source="project_notice", many=True)
+    related_projects = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'providers_id', 'project_page', 'title', 'project_privacy', 'date_added', 'date_modified', 'created_by', 'notice', 'project_boundary_geojson')
+        fields = ('unique_id', 'providers_id', 'project_page', 'title', 'project_privacy', 'date_added', 'date_modified', 'created_by', 'notice', 'related_projects', 'project_boundary_geojson')
+
+    def get_related_projects(self, obj):
+        return [project.unique_id for project in obj.related_projects.all()]
 
 # Labels only
 class ProjectNoNoticeSerializer(serializers.ModelSerializer):
     created_by = ProjectCreatorSerializer(source="project_creator_project", many=True)
     bc_labels = BCLabelSerializer(many=True)
     tk_labels = TKLabelSerializer(many=True)
+    related_projects = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'providers_id', 'project_page', 'title', 'project_privacy', 'date_added', 'date_modified', 'created_by', 'bc_labels', 'tk_labels', 'project_boundary_geojson')
+        fields = ('unique_id', 'providers_id', 'project_page', 'title', 'project_privacy', 'date_added', 'date_modified', 'created_by', 'bc_labels', 'tk_labels', 'related_projects', 'project_boundary_geojson')
+    
+    def get_related_projects(self, obj):
+        return [project.unique_id for project in obj.related_projects.all()]
 
 class CommunityNativeLandSlugSerializer(serializers.ModelSerializer):
     
