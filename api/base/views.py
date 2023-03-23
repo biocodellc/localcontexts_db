@@ -20,6 +20,7 @@ def apiOverview(request, format=None):
         'multi_project_detail':'/projects/multi/<PROJECT_UNIQUE_ID_1>,<PROJECT_UNIQUE_ID_2>/',
         'projects_by_user_id': '/projects/users/<USER_ID>/',
         'projects_by_institution_id': '/projects/institutions/<INSTITUTION_ID>/',
+        'institution_projects_by_providers_id': '/projects/institutions/<INSTITUTION_ID>/<PROVIDERS_ID>',
         'projects_by_researcher_id': '/projects/researchers/<RESEARCHER_ID>/',
         'open_to_collaborate_notice': reverse('api-open-to-collaborate', request=request, format=format),
         'api_documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
@@ -52,6 +53,7 @@ class ProjectList(generics.ListAPIView):
     # '=' exact matches
     # '$' regex search
 
+#ASHLEYTODO: Add option to pass Providers ID using Project Detail search
 class ProjectDetail(generics.RetrieveAPIView):
     lookup_field = 'unique_id'
     queryset = Project.objects.exclude(project_privacy='Private')
@@ -63,6 +65,7 @@ class ProjectDetail(generics.RetrieveAPIView):
         else:
             return ProjectNoNoticeSerializer
 
+# ASHLEYTODO
 # TODO: Make this a filter instead?
 @api_view(['GET'])
 def project_detail_providers(request, providers_id):
@@ -97,9 +100,14 @@ def projects_by_institution(request, institution_id, providers_id=None):
 
         projects = []
         creators = ProjectCreator.objects.filter(institution=institution)
-        for x in creators:
-            projects.append(x.project)
-
+        if providers_id != None:
+            for x in creators:
+                if x.project.providers_id == providers_id:
+                    projects.append(x.project)
+        else:
+            for x in creators:
+                projects.append(x.project)
+        
         serializer = ProjectOverviewSerializer(projects, many=True)
         return Response(serializer.data)
     except:

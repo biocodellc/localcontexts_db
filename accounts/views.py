@@ -517,17 +517,17 @@ def subscription_form(request):
                 variables = manage_mailing_list(request, first_name)
                 add_to_mailing_list(str(email), str(name), str(variables))
                 messages.add_message(request, messages.SUCCESS, 'You have been subscribed.')
-                return redirect('unsubscribe-form')
+                return redirect('subscription-form')
             else:
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
 
     return render(request, 'accounts/subscription-form.html')
 
-def unsubscribe_form(request):
-    response = get_member_info('ashley.rojas95@gmail.com')
+def unsubscribe_form(request, emailb64):
+    email=force_text(urlsafe_base64_decode(emailb64))
+    response = get_member_info(email)
     data=response.json()
     member_info = data["member"]
-    email = member_info["address"]
     name = member_info["name"]
     variables = member_info["vars"]
     subscribed = member_info["subscribed"]
@@ -541,7 +541,6 @@ def unsubscribe_form(request):
                 events = variables[item]
             if item == 'notices':
                 notices = variables[item]
-                print(notices)
             if item == 'labels':
                 labels = variables[item]
             if item == 'first_name':
