@@ -91,7 +91,7 @@ def projects_by_user(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-def projects_by_institution(request, institution_id):
+def projects_by_institution(request, institution_id, providers_id=None):
     try:
         institution = Institution.objects.get(id=institution_id)
 
