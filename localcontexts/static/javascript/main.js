@@ -1031,7 +1031,7 @@ if (window.location.href.includes('connect-community') || window.location.href.i
             })
         }
     })
-}   
+} 
 
 function toggleEllipsisMenu(btn) {
     let id = btn.id.split('ellipsis-')[1]
@@ -1311,6 +1311,18 @@ function copyProjectUrl(projectPageUrl, elemID) {
             copyBtn.innerHTML = initialHTML
         }, 1500)
     }
+}
+
+let copyBtn = document.getElementById('copyProjectIDBtn')
+if (copyBtn) {
+    copyBtn.addEventListener('click', function() {
+        copyToClipboard('projectIDToCopy')
+
+        copyBtn.innerHTML = `<i class="round-btn fa-solid fa-check fa-beat"></i>`
+        setTimeout(() => {
+            copyBtn.innerHTML = `<i class="round-btn fa-regular fa-clone fa-rotate-90"></i>`
+        }, 1000)
+    })
 }
 
 function openNotifyCommunitiesModal(elem) {
