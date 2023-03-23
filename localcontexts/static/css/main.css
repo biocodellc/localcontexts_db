@@ -319,6 +319,18 @@ input:focus {
     background-color: #f17c33;
 }
 
+.round-btn {
+    background-color: #108670;
+    color: #fff;
+    padding: 16px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.round-btn:hover {
+    background-color: #3c9f8d;
+}
+
 button:disabled,
 button[disabled],
 .disabled-btn {

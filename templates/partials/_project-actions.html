@@ -184,10 +184,21 @@
                 <div class="flex-this">
                     <div class="project-left-sidebar"><p class="bold">Identifiers</p></div>
                     <div>
-                        <p>
-                            <span class="bold">Local Contexts Project ID</span><br>
-                            {{ project.unique_id }}<br><br>
+                        <div class="flex-this">
+                            <div class="margin-right-16">
+                                <p>
+                                    <span class="bold">Local Contexts Project ID</span><br>
+                                    <span id="projectIDToCopy">{{ project.unique_id }}</span>
+                                </p>
+                            </div>
+                            <div>
+                                <p id="copyProjectIDBtn">
+                                    <i class="round-btn fa-regular fa-clone fa-rotate-90"></i>
+                                </p>
+                            </div>                            
+                        </div>
 
+                        <p class="no-top-margin">
                             <span class="bold">Providers ID</span><br>
                             {{ project.providers_id }}<br><br>
 
