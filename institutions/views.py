@@ -419,7 +419,7 @@ def remove_member(request, pk, member_id):
     else:
         return redirect('institution-members', institution.id)
 
-# Projects: all 
+# Projects page 
 @login_required(login_url='login')
 def institution_projects(request, pk):
     institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
@@ -428,6 +428,13 @@ def institution_projects(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
+        has_labels = False
+        has_notices = False
+        created = False
+        contributed = False
+        is_archived = False
+        title_az = False
+
         # 1. institution projects + 
         # 2. projects institution has been notified of 
         # 3. projects where institution is contributor
@@ -441,6 +448,66 @@ def institution_projects(request, pk):
         archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
         projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids).exclude(unique_id__in=archived).order_by('-date_added')
 
+        sort_by = request.GET.get('sort')
+        if sort_by == 'all':
+            return redirect('institution-projects', institution.id)
+        
+        elif sort_by == 'has_labels':
+            projects_list = list(chain(
+                institution.institution_created_project.all().values_list('project__unique_id', flat=True), 
+                institution.institutions_notified.all().values_list('project__unique_id', flat=True), 
+                institution.contributing_institutions.all().values_list('project__unique_id', flat=True),
+            ))
+            project_ids = list(set(projects_list)) # remove duplicate ids
+            archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
+                ).exclude(unique_id__in=archived).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
+                ).exclude(unique_id__in=archived).exclude(tk_labels=None).order_by('-date_added')
+
+            has_labels = True
+
+        elif sort_by == 'has_notices':
+            projects_list = list(chain(
+                institution.institution_created_project.all().values_list('project__unique_id', flat=True), 
+                institution.institutions_notified.all().values_list('project__unique_id', flat=True), 
+                institution.contributing_institutions.all().values_list('project__unique_id', flat=True),
+            ))
+            project_ids = list(set(projects_list)) # remove duplicate ids
+            archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids, tk_labels=None, bc_labels=None).exclude(unique_id__in=archived).order_by('-date_added')
+
+
+            has_notices = True
+    
+        elif sort_by == 'created':
+            created_projects = institution.institution_created_project.all().values_list('project__unique_id', flat=True)
+            archived = ProjectArchived.objects.filter(project_uuid__in=created_projects, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=created_projects).exclude(unique_id__in=archived).order_by('-date_added')
+
+            created = True
+    
+        elif sort_by == 'contributed':
+            contrib = institution.contributing_institutions.all().values_list('project__unique_id', flat=True)
+            projects_list = list(chain(
+                institution.institution_created_project.all().values_list('project__unique_id', flat=True), # check institution created projects
+                ProjectArchived.objects.filter(project_uuid__in=contrib, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+            ))
+            project_ids = list(set(projects_list)) # remove duplicate ids
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=contrib).exclude(unique_id__in=project_ids).order_by('-date_added')
+
+            contributed = True
+
+        elif sort_by == 'archived':
+            archived_projects = ProjectArchived.objects.filter(institution_id=institution.id, archived=True).values_list('project_uuid', flat=True)
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
+
+            is_archived = True
+        
+        elif sort_by == 'title_az':
+            projects = projects.order_by('title')
+            
+            title_az = True
+    
         page = paginate(request, projects, 10)
         
         if request.method == 'GET':
@@ -452,167 +519,20 @@ def institution_projects(request, pk):
             'member_role': member_role,
             'items': page,
             'results': results,
+            'has_labels': has_labels,
+            'has_notices': has_notices,
+            'created': created,
+            'contributed': contributed,
+            'is_archived': is_archived,
+            'title_az': title_az,
+
         }
         return render(request, 'institutions/projects.html', context)
 
-@login_required(login_url='login')
-def projects_with_labels(request, pk):
-    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-
-    member_role = check_member_role(request.user, institution)
-    if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')
-    else:
-        # init list for:
-        # 1. institution projects + 
-        # 2. projects institution has been notified of 
-        # 3. projects where institution is contributor
-        projects_list = list(chain(
-            institution.institution_created_project.all().values_list('project__unique_id', flat=True), 
-            institution.institutions_notified.all().values_list('project__unique_id', flat=True), 
-            institution.contributing_institutions.all().values_list('project__unique_id', flat=True),
-        ))
-        project_ids = list(set(projects_list)) # remove duplicate ids
-        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
-            ).exclude(unique_id__in=archived).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
-            ).exclude(unique_id__in=archived).exclude(tk_labels=None).order_by('-date_added')
-
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
-
-        context = {
-            'projects': projects,
-            'institution': institution,
-            'member_role': member_role,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'institutions/projects.html', context)
-
-
-@login_required(login_url='login')
-def projects_with_notices(request, pk):
-    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-
-    member_role = check_member_role(request.user, institution)
-    if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')
-    else:
-        # init list for:
-        # 1. institution projects + 
-        # 2. projects institution has been notified of 
-        # 3. projects where institution is contributor
-        projects_list = list(chain(
-            institution.institution_created_project.all().values_list('project__unique_id', flat=True), 
-            institution.institutions_notified.all().values_list('project__unique_id', flat=True), 
-            institution.contributing_institutions.all().values_list('project__unique_id', flat=True),
-        ))
-        project_ids = list(set(projects_list)) # remove duplicate ids
-        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids, tk_labels=None, bc_labels=None).exclude(unique_id__in=archived).order_by('-date_added')
-
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
-
-        context = {
-            'projects': projects,
-            'institution': institution,
-            'member_role': member_role,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'institutions/projects.html', context)
-
-@login_required(login_url='login')
-def projects_creator(request, pk):
-    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-
-    member_role = check_member_role(request.user, institution)
-    if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')
-    else:
-        created_projects = institution.institution_created_project.all().values_list('project__unique_id', flat=True)
-        archived = ProjectArchived.objects.filter(project_uuid__in=created_projects, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=created_projects).exclude(unique_id__in=archived).order_by('-date_added')
-
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
-
-        context = {
-            'projects': projects,
-            'institution': institution,
-            'member_role': member_role,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'institutions/projects.html', context)
-
-
-@login_required(login_url='login')
-def projects_contributor(request, pk):
-    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-
-    member_role = check_member_role(request.user, institution)
-    if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')
-    else:
-        contrib = institution.contributing_institutions.all().values_list('project__unique_id', flat=True)
-        projects_list = list(chain(
-            institution.institution_created_project.all().values_list('project__unique_id', flat=True), # check institution created projects
-            ProjectArchived.objects.filter(project_uuid__in=contrib, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        ))
-        project_ids = list(set(projects_list)) # remove duplicate ids
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=contrib).exclude(unique_id__in=project_ids).order_by('-date_added')
-
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
-
-        context = {
-            'projects': projects,
-            'institution': institution,
-            'member_role': member_role,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'institutions/projects.html', context)
-
-@login_required(login_url='login')
-def projects_archived(request, pk):
-    institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-
-    member_role = check_member_role(request.user, institution)
-    if member_role == False: # If user is not a member / does not have a role.
-        return redirect('restricted')    
-    else:
-        archived_projects = ProjectArchived.objects.filter(institution_id=institution.id, archived=True).values_list('project_uuid', flat=True)
-        projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
-
-        page = paginate(request, projects, 10)
-        
-        if request.method == 'GET':
-            results = return_project_search_results(request, projects)
-
-        context = {
-            'projects': projects,
-            'institution': institution,
-            'member_role': member_role,
-            'items': page,
-            'results': results,
-        }
-        return render(request, 'institutions/projects.html', context)
 
 # Create Project
 @login_required(login_url='login')
-def create_project(request, pk):
+def create_project(request, pk, source_proj_uuid=None):
     institution = Institution.objects.select_related('institution_creator').get(id=pk)
 
     member_role = check_member_role(request.user, institution)
@@ -640,6 +560,9 @@ def create_project(request, pk):
                 # Handle multiple urls, save as array
                 project_links = request.POST.getlist('project_urls')
                 data.urls = project_links
+
+                if source_proj_uuid:
+                    data.source_project_uuid = source_proj_uuid
 
                 data.save()
 
@@ -765,6 +688,7 @@ def project_actions(request, pk, project_uuid):
         entities_notified = EntitiesNotified.objects.get(project=project)
         communities = Community.approved.all()
         activities = ProjectActivity.objects.filter(project=project).order_by('-date')
+        sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
 
         project_archived = False
         if ProjectArchived.objects.filter(project_uuid=project.unique_id, institution_id=institution.id).exists():
@@ -837,6 +761,7 @@ def project_actions(request, pk, project_uuid):
             'comments': comments,
             'activities': activities,
             'project_archived': project_archived,
+            'sub_projects': sub_projects,
         }
         return render(request, 'institutions/project-actions.html', context)
 
