@@ -1045,6 +1045,15 @@ button[disabled],
     border-top: 1px solid #D8D8D8;
 }
 
+.unlink-related-project-btn {
+    padding: 8px;
+}
+
+.unlink-related-project-btn:hover {
+    background-color: #CCE3E7;
+    border-radius: 50%;
+}
+
 /* Language Searchbar */
 .autocomplete {
     /*the container must be positioned relative:*/

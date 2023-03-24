@@ -317,18 +317,22 @@
                             <strong>{{project.related_projects.count}}</strong> Related Projects linked
                         </p>
                     </div>
-                    <div>
-                        <a class="primary-btn green-btn" href="#">Link Projects <i class="margin-left-8 fa-solid fa-link-simple"></i></a>
-                    </div>
+                    {% if community or institution or researcher %}
+                        {% if member_role == 'admin' or member_role == 'editor' %}
+                            <div>
+                                <a class="primary-btn green-btn" href="#">Link Projects <i class="margin-left-8 fa-solid fa-link-simple"></i></a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
 
                 <div class="margin-bottom-16">
                     {% if project.related_projects.all %}
                         {% for p in project.related_projects.all %}
                             <div class="related-projects-div flex-this space-between">
-                                <div>
+                                <div class="w-80 margin-left-8">
                                     <a 
-                                        class="darkteal-text underline-hover margin-left-8" 
+                                        class="darkteal-text underline-hover" 
                                         {% if community %}
                                             href="{% url 'community-project-actions' community.id p.unique_id %}"
                                         {% endif %}
@@ -347,7 +351,7 @@
                                     {% if member_role == 'admin' or member_role == 'editor' %}
                                         <div class="margin-right-8">
                                             <a 
-                                                class="primary-black-text"
+                                                class="primary-black-text unlink-related-project-btn"
                                                 {% if community %}
                                                     href="{% url 'community-unlink-project' community.id project.unique_id p.unique_id %}"
                                                 {% endif %}
