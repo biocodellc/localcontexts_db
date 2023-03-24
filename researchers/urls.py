@@ -16,6 +16,7 @@ urlpatterns = [
 
     path('projects/<str:pk>', views.researcher_projects, name="researcher-projects"),
 
+    path('projects/create-project/<str:pk>/<uuid:source_proj_uuid>/<str:related>', views.create_project, name="researcher-create-project"),
     path('projects/create-project/<str:pk>/<uuid:source_proj_uuid>/', views.create_project, name="researcher-create-project"),
     path('projects/create-project/<str:pk>/', views.create_project, name="researcher-create-project"),
     
