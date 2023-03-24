@@ -32,6 +32,7 @@ urlpatterns = [
     path('projects/delete-project/<str:institution_id>/<str:project_uuid>', views.delete_project, name="inst-delete-project"),
     path('projects/archive-project/<str:institution_id>/<str:project_uuid>', views.archive_project, name="institution-archive-project"),
 
+    path('projects/unlink/<str:pk>/<uuid:target_proj_uuid>/<uuid:proj_to_remove_uuid>', views.unlink_project, name="institution-unlink-project"),
 
     path('connections/<str:pk>/', views.connections, name="institution-connections"),
 ]

@@ -11,7 +11,7 @@ from researchers.utils import is_user_researcher
 def view_project(request, unique_id):
     try:
         project = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
-        sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', flat=True)
+        sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
         notices = Notice.objects.filter(project=project, archived=False)
         creator = ProjectCreator.objects.get(project=project)
         communities = None

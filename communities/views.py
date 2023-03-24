@@ -1018,6 +1018,16 @@ def delete_project(request, community_id, project_uuid):
     project.delete()
     return redirect('community-projects', community.id)
 
+@login_required(login_url='login')
+def unlink_project(request, pk, target_proj_uuid, proj_to_remove_uuid):
+    community = Community.objects.get(id=pk)
+    target_project = Project.objects.get(unique_id=target_proj_uuid)
+    project_to_remove = Project.objects.get(unique_id=proj_to_remove_uuid)
+    target_project.related_projects.remove(project_to_remove)
+    project_to_remove.related_projects.remove(target_project)
+    target_project.save()
+    project_to_remove.save()
+    return redirect('community-project-actions', community.id, target_project.unique_id)
 
 @login_required(login_url='login')
 def apply_labels(request, pk, project_uuid):

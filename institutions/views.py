@@ -799,6 +799,17 @@ def delete_project(request, institution_id, project_uuid):
     return redirect('institution-projects', institution.id)
 
 @login_required(login_url='login')
+def unlink_project(request, pk, target_proj_uuid, proj_to_remove_uuid):
+    institution = Institution.objects.get(id=pk)
+    target_project = Project.objects.get(unique_id=target_proj_uuid)
+    project_to_remove = Project.objects.get(unique_id=proj_to_remove_uuid)
+    target_project.related_projects.remove(project_to_remove)
+    project_to_remove.related_projects.remove(target_project)
+    target_project.save()
+    project_to_remove.save()
+    return redirect('institution-project-actions', institution.id, target_project.unique_id)
+
+@login_required(login_url='login')
 def connections(request, pk):
     institution = Institution.objects.select_related('institution_creator').get(id=pk)
 

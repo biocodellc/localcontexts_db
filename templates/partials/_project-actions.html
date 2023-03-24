@@ -81,41 +81,6 @@
                 </div>
             {% endif %}
 
-            <div class="flex-this">
-                <div class="project-left-sidebar"><p class="bold">Related Projects</p></div>
-                <div>
-                    <p>
-                        {% if project.related_projects.all %}
-                        <ul>
-                            {% for p in project.related_projects.all %}
-                                <li>
-                                    <em>
-                                        <a 
-                                            class="darkteal-text underline-hover" 
-                                            {% if community %}
-                                                href="{% url 'community-project-actions' community.id p.unique_id %}"
-                                            {% endif %}
-                                            {% if institution %}
-                                                href="{% url 'institution-project-actions' institution.id p.unique_id %}"
-                                            {% endif %}
-                                            {% if researcher %}
-                                                href="{% url 'researcher-project-actions' researcher.id p.unique_id %}"
-                                            {% endif %}
-                                            {% if not community and not institution and not researcher %}
-                                                href="{% url 'view-project' p.unique_id %}"
-                                            {% endif %}
-                                        >{{ p.title }}</a>
-                                    </em>
-                                </li>   
-                            {% endfor %}                     
-                        </ul>
-                        {% else %}
-                            None
-                        {% endif %}
-                    </p>
-                </div>
-            </div>
-
             {% if sub_projects %}
                 <div class="flex-this">
                     <div class="project-left-sidebar"><p class="bold">Sub Projects</p></div>
@@ -339,6 +304,68 @@
             {% endif %}
 
             {% include 'projects/project-comment.html'%}
+
+            <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
+                <h2>Related Projects</h2>
+                <h2 class="margin-right-8 pointer" onclick="toggleProjectInfo(this, 'relatedProjectsDiv')"><i class="fa-solid fa-minus fa-xl darkteal-text"></i></h2>
+            </div>
+            <div id="relatedProjectsDiv" style="height: auto; overflow: hidden;">
+
+                <div class="flex-this space-between center-text margin-top-16">
+                    <div>
+                        <p>
+                            <strong>{{project.related_projects.count}}</strong> Related Projects linked
+                        </p>
+                    </div>
+                    <div>
+                        <a class="primary-btn green-btn" href="#">Link Projects <i class="margin-left-8 fa-solid fa-link-simple"></i></a>
+                    </div>
+                </div>
+
+                <div class="margin-bottom-16">
+                    {% if project.related_projects.all %}
+                        {% for p in project.related_projects.all %}
+                            <div class="related-projects-div flex-this space-between">
+                                <div>
+                                    <a 
+                                        class="darkteal-text underline-hover margin-left-8" 
+                                        {% if community %}
+                                            href="{% url 'community-project-actions' community.id p.unique_id %}"
+                                        {% endif %}
+                                        {% if institution %}
+                                            href="{% url 'institution-project-actions' institution.id p.unique_id %}"
+                                        {% endif %}
+                                        {% if researcher %}
+                                            href="{% url 'researcher-project-actions' researcher.id p.unique_id %}"
+                                        {% endif %}
+                                        {% if not community and not institution and not researcher %}
+                                            href="{% url 'view-project' p.unique_id %}"
+                                        {% endif %}
+                                    >{{ p.title }}</a>                                     
+                                </div>
+                                {% if community or institution or researcher %}
+                                    {% if member_role == 'admin' or member_role == 'editor' %}
+                                        <div class="margin-right-8">
+                                            <a 
+                                                class="primary-black-text"
+                                                {% if community %}
+                                                    href="{% url 'community-unlink-project' community.id project.unique_id p.unique_id %}"
+                                                {% endif %}
+                                                {% if institution %}
+                                                    href="{% url 'institution-unlink-project' institution.id project.unique_id p.unique_id %}"
+                                                {% endif %}
+                                                {% if researcher %}
+                                                    href="{% url 'researcher-unlink-project' researcher.id project.unique_id p.unique_id %}"
+                                                {% endif %}
+                                            ><i class="fa-solid fa-link-simple-slash"></i></a>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endfor %}                     
+                    {% endif %}
+                </div>
+            </div>
 
             {% if activities %}
                 <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">

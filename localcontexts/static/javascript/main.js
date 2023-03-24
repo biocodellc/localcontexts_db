@@ -1345,11 +1345,11 @@ function toggleProjectInfo(self, idToToggle) {
     let div = document.getElementById(idToToggle)
 
     if (div.style.height == "0px") {
-        console.log('hello')
         self.innerHTML = '<i class="fa-solid fa-minus fa-xl darkteal-text"></i>'
         div.style.height = 'auto'
     } else {
         div.style.height = '0px'
         self.innerHTML = '<i class="fa-solid fa-plus fa-xl darkteal-text"></i>'
+        div.previousSibling.classList.remove('')
     }
 }
