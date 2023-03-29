@@ -351,17 +351,56 @@
                                     {% if member_role == 'admin' or member_role == 'editor' %}
                                         <div class="margin-right-8">
                                             <a 
-                                                class="primary-black-text unlink-related-project-btn"
-                                                {% if community %}
-                                                    href="{% url 'community-unlink-project' community.id project.unique_id p.unique_id %}"
-                                                {% endif %}
-                                                {% if institution %}
-                                                    href="{% url 'institution-unlink-project' institution.id project.unique_id p.unique_id %}"
-                                                {% endif %}
-                                                {% if researcher %}
-                                                    href="{% url 'researcher-unlink-project' researcher.id project.unique_id p.unique_id %}"
-                                                {% endif %}
+                                                class="primary-black-text unlink-related-project-btn pointer"
+                                                onclick="openUnlinkProjectModal(`{{p.unique_id}}`)"
                                             ><i class="fa-solid fa-link-simple-slash"></i></a>
+                                        </div>
+
+                                        <div id="unlinkProjectModal-{{p.unique_id}}" class="modal hide">
+                                            <div class="modal-defaults project-unlink-modal flex-this column w-100">
+                                                <div class="w-100">
+
+                                                    <div class="flex-this space-between margin-bottom-16">
+                                                        <div class="w-80">
+                                                            <h2 class="primary-black-text no-top-margin">Unlink Project</h2>  
+                                                            <p>Are you sure you want to unlink this Project?</p>  
+                                                        </div>
+                                                        <div>
+                                                            <div id="close-modal-btn-{{p.unique_id}}" class="pointer"><i class="fa-regular fa-xmark fa-xl"></i></div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="flex-this">
+                                                        <div class="w-50 margin-right-8">
+                                                            <a 
+                                                                class="primary-btn action-btn center-text"
+                                                                {% if community %}
+                                                                    href="{% url 'community-unlink-project' community.id project.unique_id p.unique_id %}"
+                                                                {% endif %}
+                                                                {% if institution %}
+                                                                    href="{% url 'institution-unlink-project' institution.id project.unique_id p.unique_id %}"
+                                                                {% endif %}
+                                                                {% if researcher %}
+                                                                    href="{% url 'researcher-unlink-project' researcher.id project.unique_id p.unique_id %}"
+                                                                {% endif %}
+                                                            >
+                                                                Yes I want to unlink this Project
+                                                            </a>
+                                                        </div>
+
+                                                        <div class="w-50">
+                                                            <a 
+                                                                id="cancelBtn-{{p.unique_id}}"
+                                                                class="primary-btn white-btn center-text"
+                                                            >
+                                                                No, I'd like to keep this Project linked
+                                                            </a>
+                                                        </div>                                                        
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
                                         </div>
                                     {% endif %}
                                 {% endif %}
@@ -566,10 +605,10 @@
 
                         <div id="deleteProjectModal" class="modal hide">
                             <div class="modal-defaults deactivate-modal flex-this column w-100">
-                                <div class="modal-content-padding w-100">
+                                <div class="w-100">
                     
                                     <div>
-                                        <h2 class="primary-black-text">Are you sure?</h2>  
+                                        <h2 class="primary-black-text no-top-margin">Are you sure?</h2>  
                                         <p>Are you sure you want to delete your Project? <br>
                                             This will delete the Project for everyone and cannot be undone. <br><br>
                                             <small>You will be redirected to the Projects page.</small> <br>
@@ -701,14 +740,14 @@
     <div id="notifyCommunitiesModal" class="modal hide">
 
         <div class="modal-defaults notice-modal flex-this column w-100">
-            <div class="modal-content-padding w-100">
+            <div class="w-100">
                 <form method="POST" autocomplete="off">
                     {% csrf_token %}
 
                     <div class="flex-this space-between">
-                        <div><h2 class="primary-black-text">Notify Communities</h2></div>
+                        <div><h2 class="primary-black-text no-top-margin">Notify Communities</h2></div>
                         <div>
-                            <div class="primary-btn white-btn close-modal-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
+                            <div class="close-modal-btn pointer"><i class="fa-regular fa-xmark fa-xl"></i></div>
                         </div>            
                     </div>
 
@@ -744,7 +783,7 @@
                             {% endfor %}
                         </div>
                         
-                        <div class="flex-this flex-end w-100 margin-top-16">
+                        <div class="flex-this flex-end w-100 margin-top-8">
                             <button class="primary-btn action-btn" name="notify_btn">Send Notification <i class="fa fa-users" aria-hidden="true"></i></button>    
                         </div>
 

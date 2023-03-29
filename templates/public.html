@@ -1,5 +1,4 @@
 {% extends 'auth-base.html' %} {% block title %} View Account {% endblock %}{% load static %} {% load custom_acct_tags %} {% block main %}
-
 <div class="dashcard">
 
     {% if community %}
@@ -35,14 +34,14 @@
 
                     <div id="contactModal" class="modal hide">
                         <div class="modal-defaults contact-modal flex-this column w-100">
-                            <div class="modal-content-padding w-100">
+                            <div class="w-100">
                                 <div class="flex-this space-between">
                                     <div class="w-80">
-                                        <h2 class="primary-black-text">Contact form</h2>  
+                                        <h2 class="primary-black-text no-top-margin">Contact form</h2>  
                                         <p>This message will be sent to the administrator of {{ community.community_name }}.</p>  
                                     </div>
                                     <div>
-                                        <div class="primary-btn white-btn close-modal-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
+                                        <div class="close-modal-btn"><i class="fa-regular fa-xmark fa-xl"></i></div>
                                     </div>
                                 </div>
 
@@ -160,14 +159,14 @@
 
                     <div id="contactModal" class="modal hide">
                         <div class="modal-defaults contact-modal flex-this column w-100">
-                            <div class="modal-content-padding w-100">
+                            <div class="w-100">
                                 <div class="flex-this space-between">
                                     <div class="w-70">
-                                        <h2 class="primary-black-text">Contact form</h2>  
+                                        <h2 class="primary-black-text no-top-margin">Contact form</h2>  
                                         <p>This message will be sent to the administrator of {{ institution.institution_name }}.</p>  
                                     </div>
                                     <div>
-                                        <div class="primary-btn white-btn close-modal-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
+                                        <div class="close-modal-btn"><i class="fa-regular fa-xmark fa-xl"></i></div>
                                     </div>
                                 </div>
 
@@ -284,14 +283,14 @@
                 
                 <div id="contactModal" class="modal hide">
                     <div class="modal-defaults contact-modal flex-this column w-100">
-                        <div class="modal-content-padding w-100">
+                        <div class="w-100">
                             <div class="flex-this space-between">
                                 <div>
-                                    <h2 class="primary-black-text">Contact form</h2>  
+                                    <h2 class="primary-black-text no-top-margin">Contact form</h2>  
                                     <p>This message will be sent to {% firstof researcher.user.get_full_name researcher.user.username %}.</p>  
                                 </div>
                                 <div>
-                                    <div class="primary-btn white-btn close-modal-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
+                                    <div class="close-modal-btn"><i class="fa-regular fa-xmark fa-xl"></i></div>
                                 </div>
                             </div>
 
@@ -391,12 +390,12 @@
     {% if request.user.is_authenticated %}
         <div id="requestToJoinModal" class="modal hide">
             <div class="modal-defaults join-modal flex-this column w-100">
-                <div class="modal-content-padding w-100">
+                <div class="w-100">
                     <div>
                         <div class="flex-this space-between">
                             <div class="flex-this">
-                                <h2 class="primary-black-text">Request to join</h2>  
-                                <div class="tooltip" style="margin-top: 30px; margin-left: 5px;"><strong>i</strong>
+                                <h2 class="primary-black-text no-top-margin">Request to join</h2>  
+                                <div class="tooltip" style="margin-top: 10px; margin-left: 5px;"><strong>i</strong>
                                     <span class="tooltiptext">
                                         <strong>You should request to join community and institution accounts you are already affiliated with. </strong> <br><br>
                                         If you wish to collaborate with a community or institution you are not affiliated with, you will connect with them through Projects. You do not need to join their account.
@@ -404,7 +403,7 @@
                                 </div>                            
                             </div>
                             <div>
-                                <div class="primary-btn white-btn close-modal-btn margin-right-8">Close <i class="fa-solid fa-xmark"></i></div>
+                                <div class="close-modal-btn"><i class="fa-regular fa-xmark fa-xl"></i></div>
                             </div>
                         </div>
 

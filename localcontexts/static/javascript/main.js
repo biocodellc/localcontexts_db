@@ -1353,3 +1353,14 @@ function toggleProjectInfo(self, idToToggle) {
         div.previousSibling.classList.remove('')
     }
 }
+
+function openUnlinkProjectModal(id) {
+    const modal = document.getElementById(`unlinkProjectModal-${id}`)
+    modal.classList.replace('hide', 'show')
+
+    const cancelBtn = document.getElementById(`cancelBtn-${id}`)
+    cancelBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+
+    const closeModalBtn = document.getElementById(`close-modal-btn-${id}`)
+    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+}

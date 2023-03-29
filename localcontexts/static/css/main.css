@@ -178,7 +178,6 @@ input:focus {
 .word-break { word-break: break-all; }
 
 /* TEXT COLORS */
-
 .darkteal-text { color: #007585; }
 .white-text { color: #fff; }
 .primary-black-text { color: #333; }
@@ -187,7 +186,6 @@ input:focus {
 .red-text { color:#ff0000; }
 
 /* BACKGROUND COLORS */
-
 .orange-bg { background-color: #EF6C00; }
 .white-bg { background-color: #fff; }
 .grey { background-color: #A09D9D; }
@@ -228,19 +226,15 @@ input:focus {
 /* BORDERS */
 
 .border-bottom-dash-teal { border-bottom: 1px dashed #007385; }
-
 .border-top-solid-teal { border-top: 1px solid #007385; }
-
 .border-bottom-solid-teal { border-bottom: 1px solid #007385; }
+.border-bottom-grey { border-bottom: 1px solid #C4C4C4;}
+.border-top-grey { border-top: 1px solid #C4C4C4;}
 
 .border-top-bottom-grey {
     border-top: 1px solid #E6F1F3;
     border-bottom: 1px solid #E6F1F3;
 }
-
-.border-bottom-grey { border-bottom: 1px solid #C4C4C4;}
-
-.border-top-grey { border-top: 1px solid #C4C4C4;}
 
 /* FLEX */
 .flex-this { display: flex; }
@@ -273,7 +267,7 @@ input:focus {
 .primary-btn {
     display: block;
     padding: 8px 16px;
-    border-radius: 5px;
+    border-radius: 4px;
     font-size: 14px;
     font-weight: bold;
     line-height: 21px;
