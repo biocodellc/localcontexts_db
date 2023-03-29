@@ -698,6 +698,17 @@ def project_actions(request, pk, project_uuid):
         activities = ProjectActivity.objects.filter(project=project).order_by('-date')
         sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
 
+        # for related projects list
+        projects_list = list(chain(
+            institution.institution_created_project.all().values_list('project__unique_id', flat=True), 
+            institution.institutions_notified.all().values_list('project__unique_id', flat=True), 
+            institution.contributing_institutions.all().values_list('project__unique_id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        # TODO: also exclude current project and projects that are already related
+        projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id__in=archived).order_by('-date_added').values_list('unique_id', 'title')
+
         project_archived = False
         if ProjectArchived.objects.filter(project_uuid=project.unique_id, institution_id=institution.id).exists():
             x = ProjectArchived.objects.get(project_uuid=project.unique_id, institution_id=institution.id)
@@ -753,6 +764,16 @@ def project_actions(request, pk, project_uuid):
                     # Create email 
                     send_email_notice_placed(request, project, community, institution)
                     return redirect('institution-project-actions', institution.id, project.unique_id)
+            elif 'link_projects_btn' in request.POST:
+                selected_projects = request.POST.getlist('projects_to_link')
+
+                for uuid in selected_projects:
+                    project_to_add = Project.objects.get(unique_id=uuid)
+                    project.related_projects.add(project_to_add)
+                    project_to_add.related_projects.add(project)
+                    project_to_add.save()
+                
+                project.save()
 
             elif 'delete_project' in request.POST:
                 return redirect('inst-delete-project', institution.id, project.unique_id)
@@ -770,6 +791,7 @@ def project_actions(request, pk, project_uuid):
             'activities': activities,
             'project_archived': project_archived,
             'sub_projects': sub_projects,
+            'projects_to_link': projects_to_link
         }
         return render(request, 'institutions/project-actions.html', context)
 

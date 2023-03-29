@@ -318,9 +318,9 @@
                         </p>
                     </div>
                     {% if community or institution or researcher %}
-                        {% if member_role == 'admin' or member_role == 'editor' %}
+                        {% if member_role == 'admin' or member_role == 'editor' or researcher %}
                             <div>
-                                <a class="primary-btn green-btn" href="#">Link Projects <i class="margin-left-8 fa-solid fa-link-simple"></i></a>
+                                <a class="primary-btn green-btn" onclick="openLinkProjectModal()">Link Projects <i class="margin-left-8 fa-solid fa-link-simple"></i></a>
                             </div>
                         {% endif %}
                     {% endif %}
@@ -790,6 +790,47 @@
                     {% else %}
                         <small class="bold">No communities are currently available to be notified</small>
                     {% endif %}
+                </form>
+            </div>
+        </div>
+
+    </div>
+{% endif %}
+
+{% if member_role == "admin" or member_role == "editor" or researcher %}
+    <div id="linkProjectsModal" class="modal hide">
+
+        <div class="modal-defaults notice-modal flex-this column w-100">
+            <div class="w-100">
+                <form method="POST" autocomplete="off">
+                    {% csrf_token %}
+
+                    <div class="flex-this space-between">
+                        <div><h2 class="primary-black-text no-top-margin">Link related Projects</h2></div>
+                        <div>
+                            <div id="closeLinkProjectsModal" class="pointer"><i class="fa-regular fa-xmark fa-xl"></i></div>
+                        </div>            
+                    </div>
+
+                    <div>
+                        <p>
+                            Linking related Projects enables better access to other Projects that have similar data.
+                        </p>  
+                    </div>
+
+                    <div id="relatedProjectsList" class="dropdown-check-list" tabindex="100">
+                        <span class="anchor">Select from the list below...</span>
+                        <ul>
+                            {% for p in projects_to_link %}
+                                <li><input name="projects_to_link" value="{{p.0}}" type="checkbox" /><span>{{p.1}}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="margin-top-16 flex-this flex-end">
+                        <button class="primary-btn action-btn" name="link_projects_btn">Link Projects</button>
+                    </div>
+
                 </form>
             </div>
         </div>

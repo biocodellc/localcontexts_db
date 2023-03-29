@@ -940,6 +940,17 @@ def project_actions(request, pk, project_uuid):
         is_community_notified = EntitiesNotified.objects.none()
         sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
 
+        # for related projects list
+        projects_list = list(chain(
+            community.community_created_project.all().values_list('project__unique_id', flat=True), 
+            community.communities_notified.all().values_list('project__unique_id', flat=True), 
+            community.contributing_communities.all().values_list('project__unique_id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        # TODO: also exclude current project and projects that are already related
+        projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id__in=archived).order_by('-date_added').values_list('unique_id', 'title')
+
         if not creator.community:
         # 1. is community creator of project?
         # 2. if no, has community been notified?
@@ -969,10 +980,21 @@ def project_actions(request, pk, project_uuid):
                         return redirect('community-project-actions', community.id, project.unique_id)
                     else:
                         return redirect('community-project-actions', community.id, project.unique_id)
+                    
             elif "notify-btn" in request.POST:
                 project_status = request.POST.get('project-status')
                 set_project_status(request.user, project, community, creator, project_status)                            
                 return redirect('community-project-actions', community.id, project.unique_id)
+            
+            elif 'link_projects_btn' in request.POST:
+                selected_projects = request.POST.getlist('projects_to_link')
+                for uuid in selected_projects:
+                    project_to_add = Project.objects.get(unique_id=uuid)
+                    project.related_projects.add(project_to_add)
+                    project_to_add.related_projects.add(project)
+                    project_to_add.save()
+                project.save()
+
             elif 'delete_project' in request.POST:
                 return redirect('community-delete-project', community.id, project.unique_id)
 
@@ -990,6 +1012,8 @@ def project_actions(request, pk, project_uuid):
             'project_archived': project_archived,
             'is_community_notified': is_community_notified,
             'sub_projects': sub_projects,
+            'projects_to_link': projects_to_link
+
         }
         return render(request, 'communities/project-actions.html', context)
 

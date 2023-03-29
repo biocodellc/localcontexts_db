@@ -1313,14 +1313,14 @@ function copyProjectUrl(projectPageUrl, elemID) {
     }
 }
 
-let copyBtn = document.getElementById('copyProjectIDBtn')
-if (copyBtn) {
-    copyBtn.addEventListener('click', function() {
+var copyProjectIDBtn = document.getElementById('copyProjectIDBtn')
+if (copyProjectIDBtn) {
+    copyProjectIDBtn.addEventListener('click', function() {
         copyToClipboard('projectIDToCopy')
 
-        copyBtn.innerHTML = `<i class="round-btn fa-solid fa-check fa-beat"></i>`
+        copyProjectIDBtn.innerHTML = `<i class="round-btn fa-solid fa-check fa-beat"></i>`
         setTimeout(() => {
-            copyBtn.innerHTML = `<i class="round-btn fa-regular fa-clone fa-rotate-90"></i>`
+            copyProjectIDBtn.innerHTML = `<i class="round-btn fa-regular fa-clone fa-rotate-90"></i>`
         }, 1000)
     })
 }
@@ -1364,3 +1364,22 @@ function openUnlinkProjectModal(id) {
     const closeModalBtn = document.getElementById(`close-modal-btn-${id}`)
     closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
 }
+
+function openLinkProjectModal() {
+    const modal = document.getElementById(`linkProjectsModal`)
+    modal.classList.replace('hide', 'show')
+
+    const closeModalBtn = document.getElementById(`closeLinkProjectsModal`)
+    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+}
+
+var checkList = document.getElementById('relatedProjectsList');
+if (checkList) {
+    checkList.getElementsByClassName('anchor')[0].onclick = function(evt) {
+        if (checkList.classList.contains('visible'))
+          checkList.classList.remove('visible');
+        else
+          checkList.classList.add('visible');
+      }
+}
+
