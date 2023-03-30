@@ -53,6 +53,64 @@
                 <div class="project-left-sidebar"><p class="bold">Status</p></div>
                 <div><p>{% if project_archived %} Archived {% else %} Active {% endif %}</p></div>
             </div>
+            {% if project.source_project_uuid %}
+                <div class="flex-this">
+                    <div class="project-left-sidebar"><p class="bold">Source Project</p></div>
+                    <div><p>
+                            <em>
+                                <a 
+                                    class="darkteal-text underline-hover" 
+                                    {% if community %}
+                                        href="{% url 'community-project-actions' community.id project.source_project_uuid %}"
+                                    {% endif %}
+                                    {% if institution %}
+                                        href="{% url 'institution-project-actions' institution.id project.source_project_uuid %}"
+                                    {% endif %}
+                                    {% if researcher %}
+                                        href="{% url 'researcher-project-actions' researcher.id project.source_project_uuid %}"
+                                    {% endif %}
+                                    {% if not community and not institution and not researcher %}
+                                        href="{% url 'view-project' project.source_project_uuid  %}"
+                                    {% endif %}
+                                    
+                                >
+                                {% source_project_title project.source_project_uuid as title %}
+                                {{ title }}
+                            </a></em>
+                    </p></div>
+                </div>
+            {% endif %}
+            {% if sub_projects %}
+                <div class="flex-this">
+                    <div class="project-left-sidebar"><p class="bold">Sub Project(s)</p></div>
+                    <div>
+                        <p>
+                            <ul>
+                                {% for field in sub_projects %}
+                                    <li>
+                                        <em>
+                                            <a 
+                                                class="darkteal-text underline-hover" 
+                                                {% if community %}
+                                                    href="{% url 'community-project-actions' community.id field.0 %}"
+                                                {% endif %}
+                                                {% if institution %}
+                                                    href="{% url 'institution-project-actions' institution.id field.0 %}"
+                                                {% endif %}
+                                                {% if researcher %}
+                                                    href="{% url 'researcher-project-actions' researcher.id field.0 %}"
+                                                {% endif %}
+                                                {% if not community and not institution and not researcher %}
+                                                    href="{% url 'view-project' field.0 %}"
+                                                {% endif %}
+                                                >{{ field.1 }}</a></em>
+                                    </li>   
+                                {% endfor %}                     
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
         </div>
 
         <div>
@@ -126,10 +184,21 @@
                 <div class="flex-this">
                     <div class="project-left-sidebar"><p class="bold">Identifiers</p></div>
                     <div>
-                        <p>
-                            <span class="bold">Local Contexts Project ID</span><br>
-                            {{ project.unique_id }}<br><br>
+                        <div class="flex-this">
+                            <div class="margin-right-16">
+                                <p>
+                                    <span class="bold">Local Contexts Project ID</span><br>
+                                    <span id="projectIDToCopy">{{ project.unique_id }}</span>
+                                </p>
+                            </div>
+                            <div>
+                                <p id="copyProjectIDBtn">
+                                    <i class="round-btn fa-regular fa-clone fa-rotate-90"></i>
+                                </p>
+                            </div>                            
+                        </div>
 
+                        <p class="no-top-margin">
                             <span class="bold">Providers ID</span><br>
                             {{ project.providers_id }}<br><br>
 
@@ -153,15 +222,9 @@
                         <div class="flex-this">
                             <div class="project-left-sidebar">
                                 <p class="bold">
-                                    {% if notice.notice_type == 'biocultural' %}
-                                        Biocultural
-                                    {% endif %}
-                                    {% if notice.notice_type == 'traditional_knowledge' %}
-                                        Traditional Knowledge
-                                    {% endif %}
-                                    {% if notice.notice_type == 'attribution_incomplete' %}
-                                        Attribution Incomplete
-                                    {% endif %}
+                                    {% if notice.notice_type == 'biocultural' %} Biocultural {% endif %}
+                                    {% if notice.notice_type == 'traditional_knowledge' %} Traditional Knowledge {% endif %}
+                                    {% if notice.notice_type == 'attribution_incomplete' %} Attribution Incomplete {% endif %}
                                 </p>
                             </div>
                             <div>
@@ -271,6 +334,7 @@
             {% if request.user.is_authenticated %}
                 {% if 'projects/actions/' in request.path %}
                     {% if request.user == project.project_creator %}
+
                         <a 
                             class="block" 
                             {% if community %}
@@ -283,6 +347,32 @@
                                 href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
                             {% endif %}
                         ><i class="fa-solid fa-pen-to-square"></i> Edit Project</a>
+                        
+                        {% if not project.source_project_uuid %}
+                            <a 
+                                class="block" 
+                                {% if community %}
+                                    href="{% url 'create-project' community.id project.unique_id %}"
+                                {% endif %}
+                                {% if institution %}
+                                    href="{% url 'inst-create-project' institution.id project.unique_id %}"
+                                {% endif %}
+                                {% if researcher %}
+                                    href="{% url 'researcher-create-project' researcher.id project.unique_id %}"
+                                {% endif %}
+
+                            ><i class="fa-solid fa-circle-plus"></i> Create Sub Project</a>
+                        {% else %}
+                            <a class="block a-disabled">
+                                <i class="fa-solid fa-circle-plus"></i> Create Sub Project
+                                <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                                    <span class="tooltiptext">
+                                        The Project you are viewing is already a sub-project.
+                                    </span>
+                                </div> 
+                            </a>
+                        {% endif %}
+
                     {% endif %}
                 {% endif %}
 
@@ -290,8 +380,8 @@
                     {% if member_role == 'admin' or member_role == 'editor' %}
 
                         {% if community.is_approved %}
-                            {% if is_community_notified %}
-                                    <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
+                            {% if is_community_notified or creator.community == community %}
+                                <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
                             {% else %}
                                 <a class="block a-disabled"> 
                                     <i class="fa-solid fa-tag"></i> Apply Labels

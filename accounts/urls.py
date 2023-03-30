@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from django.contrib.auth import views as auth_views
 from . import views
 
@@ -33,7 +33,7 @@ urlpatterns = [
     path('registry/researchers/', views.registry_researchers, name='researcher-registry'),
     path('counter/', views.hub_counter, name='hub-counter'),
     path('subscribe/', views.subscription_form, name='subscription-form'),
-    path('newsletter-preferences/', views.unsubscribe_form, name='unsubscribe-form'),
+    path('newsletter-preferences/<emailb64>', views.unsubscribe_form, name='unsubscribe-form'),
 
 
     path('reset-password/', auth_views.PasswordResetView.as_view(template_name="accounts/password-reset.html"), name="reset_password"),
@@ -41,7 +41,6 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="accounts/password-reset-confirm.html"), name="password_reset_confirm"),
     path('reset-password-complete/', auth_views.PasswordResetCompleteView.as_view(template_name="accounts/password-reset-done.html"), name="password_reset_complete"),
 
-    # Temporary disable until ready to use
-    # path('apikey/', views.api_keys, name='api-key'),
+    path('apikey/', views.api_keys, name='api-key'),
 
 ]

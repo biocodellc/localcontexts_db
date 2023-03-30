@@ -7,10 +7,12 @@ class CommunityAdmin(admin.ModelAdmin):
     readonly_fields = ('native_land_slug',)
 
 class JoinRequestAdmin(admin.ModelAdmin):
-    list_display = ( 'community', 'institution', 'user_from', 'user_to', 'status', 'date_sent')
+    list_display = ('community', 'institution', 'user_from', 'user_to', 'status', 'date_sent')
+    search_fields = ('community__community_name', 'institution__institution_name', 'user_from__username',)
 
 class InviteMemberAdmin(admin.ModelAdmin):
     list_display = ('community', 'institution', 'sender', 'receiver', 'role', 'status', 'created')
+    search_fields = ('community__community_name', 'institution__institution_name', 'sender__username', 'receiver__username',)
 
 admin.site.register(Community, CommunityAdmin)
 admin.site.register(InviteMember, InviteMemberAdmin)

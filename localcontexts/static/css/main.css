@@ -100,9 +100,10 @@ input[name=q], .search-btn {
 .project-sort {
     display: block;
     padding: 8px 16px;
-    height: 42px;
+    height: 44px;
     border: 1px solid #007385;
     border-radius: 4px;
+    width: 377px;
 }
 
 input[name=q]::placeholder, .project-sort {
@@ -316,6 +317,18 @@ input:focus {
 
 .orange-btn:hover:not([disabled]) {
     background-color: #f17c33;
+}
+
+.round-btn {
+    background-color: #108670;
+    color: #fff;
+    padding: 16px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.round-btn:hover {
+    background-color: #3c9f8d;
 }
 
 button:disabled,

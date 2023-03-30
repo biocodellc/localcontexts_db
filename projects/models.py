@@ -31,6 +31,7 @@ class Project(models.Model):
         ('Private', 'Private'),
     }
     unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, db_index=True)
+    source_project_uuid = models.UUIDField(null=True, blank=True, db_index=True)
     project_creator = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="project_creator")
     project_page = models.URLField(blank=True, null=True)
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
@@ -74,6 +75,13 @@ class Project(models.Model):
                 return False
             elif self.project_notice.filter(archived=False).exists():
                 return True
+        else:
+            return False
+    
+    @property
+    def is_sub_project(self):
+        if self.source_project_uuid is not None:
+            return True
         else:
             return False
 

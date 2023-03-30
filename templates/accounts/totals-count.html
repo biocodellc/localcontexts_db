@@ -67,7 +67,7 @@
                             {% if notice.institution %}
                                 <a href="{% url 'public-institution' notice.institution.id %}" class="darkteal-text underline-hover">{{ notice.institution }}</a>
                             {% else %}
-                                <a href="{% url 'public-researcher' notice.researcher.id %}" class="darkteal-text underline-hover">{{ notice.researcher }}</a>
+                                <a href="{% url 'public-researcher' notice.researcher.id %}" class="darkteal-text underline-hover">{% firstof notice.researcher.user.get_full_name notice.researcher %}</a>
                             {% endif %}
                         </li>
                     {% endfor %}

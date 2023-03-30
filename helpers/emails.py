@@ -96,6 +96,22 @@ def unsubscribe_from_mailing_list(email, name):
             "name": name}
     )
 
+def send_newsletter():
+    response = requests.get(
+        ("https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members"),
+        auth=('api', settings.MAILGUN_API_KEY),
+        )
+    info=response.json()
+    for item in info["items"]:
+        if item["subscribed"] == True:
+            email = item["address"]
+            emailb64 = urlsafe_base64_encode(force_bytes(email))
+            preferences_url = f'http://127.0.0.1:8000/newsletter-preferences/{emailb64}'
+            
+            data = {'email': email, 'preferences_url': preferences_url }
+            subject = 'Local Contexts Newsletter'
+            send_mailgun_template_email(email, subject, 'newsletter_template', data)
+
 # Send all Institution and community applications to support or the site admin
 def send_hub_admins_application_email(request, organization, data):
     template = ''
@@ -155,6 +171,8 @@ def send_activation_email(request, user):
     data = {'user': user.username, 'activation_url': activation_url}
     subject = 'Activate Your Local Contexts Hub Profile'
     send_mailgun_template_email(user.email, subject, 'activate_profile', data)
+# ASHLEYTODO For email in list
+
 
 #  Resend Activation Email
 def resend_activation_email(request, active_users):
@@ -346,12 +364,14 @@ def send_email_label_approved(request, label, note_id):
 def send_membership_email(request, account, receiver, role):
     login_url = return_login_url_str(request)
     
-    if role == 'admin':
+    if role == 'admin' or role == 'Admin':
         role_str = 'Administrator'
     elif role == 'editor':
         role_str = 'Editor'
     elif role == 'viewer':
         role_str = 'Viewer'
+    else:
+        role_str = role
 
     community = False
     institution = False
@@ -374,21 +394,24 @@ def send_membership_email(request, account, receiver, role):
     }
     send_mailgun_template_email(receiver.email, subject, 'member_info', data)
 
-def send_contributor_email(request, account, proj_id):
-    # to_email = ''
-    # subject = ''
+def send_contributor_email(request, account, proj_id, is_adding):
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
-    create = False
-    edit = False
+    creator_account = ''
     account_name = ''
+
+    created_by = project.project_creator_project.all()[0]
+    if created_by.institution:
+        creator_account = created_by.institution.institution_name
+    elif created_by.community:
+        creator_account = created_by.community.community_name
+    elif creator_account.researcher:
+        creator_account = 'Researcher'
 
     register_url = return_register_url_str(request)
     project_creator = get_users_name(project.project_creator)
     login_url = return_login_url_str(request)
 
-    if '/create-project/' in request.path:
-        create = True
-        
+    if is_adding:        
         if isinstance(account, Community):
             to_email = account.community_creator.email
             subject = "Your community has been added as a contributor on a Project"
@@ -402,8 +425,7 @@ def send_contributor_email(request, account, proj_id):
             subject = "Your researcher account has been added as a contributor on a Project"
             account_name = get_users_name(account.user)
 
-    elif '/edit-project/' in request.path:
-        edit = True
+    else:
         subject = "Changes have been made to a Project you're contributing to"
         
         if isinstance(account, Community):
@@ -414,17 +436,17 @@ def send_contributor_email(request, account, proj_id):
             to_email = account.user.email
 
     data = {
-        'edit': edit,
-        'create': create,
+        'is_adding': is_adding,
         'project_url': project.project_page,
         'register_url': register_url,
         'login_url': login_url,
         'project_creator': project_creator, 
         'project_title': project.title,
-        'account_name': account_name
+        'account_name': account_name,
+        'creator_account': creator_account
     }
     send_mailgun_template_email(to_email, subject, 'contributor', data)
-
+    
 
 def send_project_person_email(request, to_email, proj_id, account):
     registered = User.objects.filter(email=to_email).exists()
