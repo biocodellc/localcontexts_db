@@ -184,10 +184,21 @@
                 <div class="flex-this">
                     <div class="project-left-sidebar"><p class="bold">Identifiers</p></div>
                     <div>
-                        <p>
-                            <span class="bold">Local Contexts Project ID</span><br>
-                            {{ project.unique_id }}<br><br>
+                        <div class="flex-this">
+                            <div class="margin-right-16">
+                                <p>
+                                    <span class="bold">Local Contexts Project ID</span><br>
+                                    <span id="projectIDToCopy">{{ project.unique_id }}</span>
+                                </p>
+                            </div>
+                            <div>
+                                <p id="copyProjectIDBtn">
+                                    <i class="round-btn fa-regular fa-clone fa-rotate-90"></i>
+                                </p>
+                            </div>                            
+                        </div>
 
+                        <p class="no-top-margin">
                             <span class="bold">Providers ID</span><br>
                             {{ project.providers_id }}<br><br>
 
@@ -369,8 +380,8 @@
                     {% if member_role == 'admin' or member_role == 'editor' %}
 
                         {% if community.is_approved %}
-                            {% if is_community_notified %}
-                                    <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
+                            {% if is_community_notified or creator.community == community %}
+                                <a class="block" href="{% url 'apply-labels' community.id project.unique_id %}"> <i class="fa-solid fa-tag"></i> Apply Labels</a>
                             {% else %}
                                 <a class="block a-disabled"> 
                                     <i class="fa-solid fa-tag"></i> Apply Labels
