@@ -303,8 +303,6 @@
                 </div>
             {% endif %}
 
-            {% include 'projects/project-comment.html'%}
-
             <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
                 <h2>Related Projects</h2>
                 <h2 class="margin-right-8 pointer" onclick="toggleProjectInfo(this, 'relatedProjectsDiv')"><i class="fa-solid fa-minus fa-xl darkteal-text"></i></h2>
@@ -318,10 +316,27 @@
                         </p>
                     </div>
                     {% if community or institution or researcher %}
-                        {% if member_role == 'admin' or member_role == 'editor' or researcher %}
-                            <div>
-                                <a class="primary-btn green-btn" onclick="openLinkProjectModal()">Link Projects <i class="margin-left-8 fa-solid fa-link-simple"></i></a>
-                            </div>
+                        {% if member_role == 'admin' or member_role == 'editor' or request.user == project.project_creator %}
+                            <div class="flex-this">
+                                <div class="margin-right-8">
+                                    <a 
+                                        class="primary-btn white-btn" 
+                                        {% if community %}
+                                            href="{% url 'create-project' community.id project.unique_id 'related' %}"
+                                        {% endif %}
+                                        {% if institution %}
+                                            href="{% url 'inst-create-project' institution.id project.unique_id 'related' %}"
+                                        {% endif %}
+                                        {% if researcher %}
+                                            href="{% url 'researcher-create-project' researcher.id project.unique_id 'related' %}"
+                                        {% endif %}
+                                    > Create Related Project <i class="margin-left-8 fa-solid fa-square-plus"></i></a>                            
+                                </div>
+
+                                <div>
+                                    <a class="primary-btn green-btn" onclick="openLinkProjectModal()">Link Projects <i class="margin-left-8 fa-solid fa-link-simple"></i></a>
+                                </div>
+                            </div>    
                         {% endif %}
                     {% endif %}
                 </div>
@@ -398,7 +413,6 @@
                                                         </div>                                                        
                                                     </div>
 
-
                                                 </div>
                                             </div>
                                         </div>
@@ -409,6 +423,8 @@
                     {% endif %}
                 </div>
             </div>
+
+            {% include 'projects/project-comment.html'%}
 
             {% if activities %}
                 <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
@@ -480,19 +496,6 @@
                                 </div> 
                             </a>
                         {% endif %}
-
-                        <a 
-                            class="block" 
-                            {% if community %}
-                                href="{% url 'create-project' community.id project.unique_id 'related' %}"
-                            {% endif %}
-                            {% if institution %}
-                                href="{% url 'inst-create-project' institution.id project.unique_id 'related' %}"
-                            {% endif %}
-                            {% if researcher %}
-                                href="{% url 'researcher-create-project' researcher.id project.unique_id 'related' %}"
-                            {% endif %}
-                        ><i class="fa-solid fa-square-plus"></i> Create Related Project</a>
 
                     {% endif %}
                 {% endif %}
@@ -797,7 +800,7 @@
     </div>
 {% endif %}
 
-{% if member_role == "admin" or member_role == "editor" or researcher %}
+{% if member_role == "admin" or member_role == "editor" or request.user == project.project_creator %}
     <div id="linkProjectsModal" class="modal hide">
 
         <div class="modal-defaults notice-modal flex-this column w-100">
