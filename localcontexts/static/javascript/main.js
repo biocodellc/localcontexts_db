@@ -1149,7 +1149,7 @@ if (deactivateAccountBtn) {
     })
 }
 
-if (window.location.href.includes('newsletter-preferences/') ) {
+if (window.location.href.includes('newsletter/preferences/') ) {
     const unsubscribeChkbox = document.getElementById('unsubscribe');
     const unsubscribeBtn = document.getElementById('unsubscribebtn');
     const updatePreferencesBtn = document.getElementById('updatebtn');
