@@ -469,6 +469,7 @@ def project_actions(request, pk, project_uuid):
             entities_notified = EntitiesNotified.objects.get(project=project)
             activities = ProjectActivity.objects.filter(project=project).order_by('-date')
             sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
+            name = get_users_name(request.user)
 
             # for related projects list
             projects_list = list(chain(
@@ -517,14 +518,13 @@ def project_actions(request, pk, project_uuid):
 
                     communities_selected = request.POST.getlist('selected_communities')
 
-                    name = get_users_name(researcher.user)
-                    title =  f'{name} has notified you of a Project.'
+                    researcher_name = get_users_name(researcher.user)
+                    title =  f'{researcher_name} has notified you of a Project.'
 
                     for community_id in communities_selected:
                         # Add communities that were notified to entities_notified instance
                         community = Community.objects.get(id=community_id)
                         entities_notified.communities.add(community)
-                        name = get_users_name(request.user)
                         
                         # Add activity
                         ProjectActivity.objects.create(project=project, activity=f'{community.community_name} was notified by {name}')
@@ -545,6 +545,9 @@ def project_actions(request, pk, project_uuid):
                         project.related_projects.add(project_to_add)
                         project_to_add.related_projects.add(project)
                         project_to_add.save()
+
+                        ProjectActivity.objects.create(project=project_to_add, activity=f'Project "{project_to_add}" was linked to Project "{project}" by {name}')
+                        ProjectActivity.objects.create(project=project, activity=f'Project "{project}" was linked to Project "{project_to_add}" by {name}')
                     
                     project.save()
 
@@ -606,6 +609,9 @@ def unlink_project(request, pk, target_proj_uuid, proj_to_remove_uuid):
     project_to_remove.related_projects.remove(target_project)
     target_project.save()
     project_to_remove.save()
+    name = get_users_name(request.user)
+    ProjectActivity.objects.create(project=project_to_remove, activity=f'Project "{project_to_remove}" was unlinked from Project "{target_project}" by {name}')
+    ProjectActivity.objects.create(project=target_project, activity=f'Project "{target_project}" was unlinked from Project "{project_to_remove}" by {name}')
     return redirect('researcher-project-actions', researcher.id, target_project.unique_id)
 
         
