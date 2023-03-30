@@ -1149,8 +1149,31 @@ if (deactivateAccountBtn) {
     })
 }
 
-// ASHLEY TODO Uncheck all other checkboxes when user checks unsubscribe, add URL fot his page only, enable button
+if (window.location.href.includes('newsletter-preferences/') ) {
+    const unsubscribeChkbox = document.getElementById('unsubscribe');
+    const unsubscribeBtn = document.getElementById('unsubscribebtn');
+    const updatePreferencesBtn = document.getElementById('updatebtn');
+    var topicChkbox = document.getElementsByName('topic');
+    
+    function unsubscribeDeselect() {
+        if (unsubscribeChkbox.checked == true) {
+            for (var i = 0; i < topicChkbox.length; i++){
+                topicChkbox[i].checked=false;
+                topicChkbox[i].disabled=true;
+            }
+            updatePreferencesBtn.disabled=true;
+            unsubscribeBtn.disabled=false;
+        }
 
+        if (unsubscribeChkbox.checked == false) {
+            for (var i = 0; i < topicChkbox.length; i++){
+                topicChkbox[i].disabled=false;
+            }
+            updatePreferencesBtn.disabled=false;
+            unsubscribeBtn.disabled=true;
+        }
+    }
+}
 
 // REGISTRY FILTERING AND JOIN REQUESTS / CONTACT MODAL
 if (window.location.href.includes('communities/view/') || window.location.href.includes('institutions/view/') || window.location.href.includes('researchers/view/') ) {
