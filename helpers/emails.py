@@ -106,7 +106,7 @@ def send_newsletter():
         if item["subscribed"] == True:
             email = item["address"]
             emailb64 = urlsafe_base64_encode(force_bytes(email))
-            preferences_url = f'http://127.0.0.1:8000/newsletter-preferences/{emailb64}'
+            preferences_url = f'http://localcontextshub.org/newsletter-preferences/{emailb64}'
             
             data = {'email': email, 'preferences_url': preferences_url }
             subject = 'Local Contexts Newsletter'

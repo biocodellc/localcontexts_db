@@ -34,6 +34,7 @@ from helpers.utils import accept_member_invite
 from helpers.emails import *
 from .models import *
 from .forms import *
+from .utils import *
 
 # Captcha validation imports
 import urllib
@@ -469,114 +470,104 @@ def hub_counter(request):
     
     return render(request, 'accounts/totals-count.html', context)
 
-def manage_mailing_list(request, first_name):
-    selections = request.POST.getlist('topic')
-    tech = 'no'
-    news = 'no'
-    events = 'no'
-    notices = 'no'
-    labels = 'no'
-    for item in selections:
-        if item == 'tech':
-            tech = 'yes'
-        if item == 'news':
-            news = 'yes'
-        if item == 'events':
-            events = 'yes'
-        if item == 'notices':
-            notices = 'yes'
-        if item == 'labels':
-            labels = 'yes'
-    variables= '{"first_name":"%s", "tech": "%s", "news": "%s", "events": "%s","notices": "%s","labels": "%s"}'%(first_name, tech, news, events, notices, labels)
-    return(variables)
 
-def subscription_form(request):
-    ''' Begin reCAPTCHA validation '''
-    recaptcha_response = request.POST.get('g-recaptcha-response')
-    url = 'https://www.google.com/recaptcha/api/siteverify'
-    values = {
-        'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
-        'response': recaptcha_response
-    }
-    data = urllib.parse.urlencode(values).encode()
-    req =  urllib.request.Request(url, data=data)
-    response = urllib.request.urlopen(req)
-    result = json.loads(response.read().decode())
-    ''' End reCAPTCHA validation '''
+def newsletter_subscription(request):
+    environment = dev_prod_or_local(request.get_host())
 
-    if request.method == 'POST':
-        if 'topic' not in request.POST:
-            messages.add_message(request, messages.ERROR, 'Please select at least one topic.')
-            return redirect('subscription-form')
-        else:
-            if result['success']:
-                first_name = request.POST['first_name']
-                last_name = request.POST['last_name']
-                name= str(first_name) + str(' ') + str(last_name)
-                email = request.POST['email']
-                variables = manage_mailing_list(request, first_name)
-                add_to_mailing_list(str(email), str(name), str(variables))
-                messages.add_message(request, messages.SUCCESS, 'You have been subscribed.')
-                return redirect('subscription-form')
-            else:
-                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
-
-    return render(request, 'accounts/subscription-form.html')
-
-def unsubscribe_form(request, emailb64):
-    email=force_text(urlsafe_base64_decode(emailb64))
-    response = get_member_info(email)
-    data=response.json()
-    member_info = data["member"]
-    name = member_info["name"]
-    variables = member_info["vars"]
-    subscribed = member_info["subscribed"]
-    if subscribed == True:
-        for item in variables:
-            if item == 'tech':
-                tech = variables[item]
-            if item == 'news':
-                news = variables[item]
-            if item == 'events':
-                events = variables[item]
-            if item == 'notices':
-                notices = variables[item]
-            if item == 'labels':
-                labels = variables[item]
-            if item == 'first_name':
-                first_name = variables[item]
-    
-        context={
-            'email':email,
-            'tech': tech,
-            'news': news,
-            'events': events,
-            'notices': notices,
-            'labels': labels,
-            'subscribed':subscribed
+    if environment == 'PROD' or 'localhost' in request.get_host():
+        ''' Begin reCAPTCHA validation '''
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        url = 'https://www.google.com/recaptcha/api/siteverify'
+        values = {
+            'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
         }
-    else:
-        context={'subscribed':subscribed}
+        data = urllib.parse.urlencode(values).encode()
+        req =  urllib.request.Request(url, data=data)
+        response = urllib.request.urlopen(req)
+        result = json.loads(response.read().decode())
+        ''' End reCAPTCHA validation '''
 
-    if request.method == 'POST':
-        if 'updatebtn' in request.POST:
+        if request.method == 'POST':
             if 'topic' not in request.POST:
                 messages.add_message(request, messages.ERROR, 'Please select at least one topic.')
-                return redirect('unsubscribe-form')
+                return redirect('newsletter-subscription')
             else:
-                variables = manage_mailing_list(request, first_name)
-                add_to_mailing_list(str(email), str(name), str(variables))
-                messages.add_message(request, messages.SUCCESS, 'Your preferences have been updated.')
-                return redirect('unsubscribe-form')
+                if result['success']:
+                    first_name = request.POST['first_name']
+                    last_name = request.POST['last_name']
+                    name= str(first_name) + str(' ') + str(last_name)
+                    email = request.POST['email']
+                    variables = manage_mailing_list(request, first_name)
+                    add_to_mailing_list(str(email), str(name), str(variables))
+                    messages.add_message(request, messages.SUCCESS, 'You have been subscribed.')
+                    return redirect('newsletter-subscription')
+                else:
+                    messages.error(request, 'Invalid reCAPTCHA. Please try again.')
 
-        if 'unsubscribebtn' in request.POST:
-            if 'unsubscribe' not in request.POST:
-                messages.add_message(request, messages.ERROR, 'Please check the box below to unsubscribe.')
-                return redirect('unsubscribe-form')
-            else:
-                unsubscribe_from_mailing_list(str(email), str(name))
-                return redirect('unsubscribe-form')
-    return render(request, 'accounts/unsubscribe-form.html', context)
+        return render(request, 'accounts/newsletter-subscription.html')
+    else:
+        return redirect('login')
+
+def newsletter_unsubscription(request, emailb64):
+    environment = dev_prod_or_local(request.get_host())
+
+    if environment == 'PROD' or 'localhost' in request.get_host():
+        email=force_text(urlsafe_base64_decode(emailb64))
+        response = get_member_info(email)
+        data=response.json()
+        member_info = data["member"]
+        name = member_info["name"]
+        variables = member_info["vars"]
+        subscribed = member_info["subscribed"]
+        if subscribed == True:
+            for item in variables:
+                if item == 'tech':
+                    tech = variables[item]
+                if item == 'news':
+                    news = variables[item]
+                if item == 'events':
+                    events = variables[item]
+                if item == 'notices':
+                    notices = variables[item]
+                if item == 'labels':
+                    labels = variables[item]
+                if item == 'first_name':
+                    first_name = variables[item]
+        
+            context={
+                'email':email,
+                'tech': tech,
+                'news': news,
+                'events': events,
+                'notices': notices,
+                'labels': labels,
+                'subscribed':subscribed
+            }
+        else:
+            context={'subscribed':subscribed}
+
+        if request.method == 'POST':
+            if 'updatebtn' in request.POST:
+                if 'topic' not in request.POST:
+                    messages.add_message(request, messages.ERROR, 'Please select at least one topic.')
+                    return redirect('newsletter-unsubscription')
+                else:
+                    variables = manage_mailing_list(request, first_name)
+                    add_to_mailing_list(str(email), str(name), str(variables))
+                    messages.add_message(request, messages.SUCCESS, 'Your preferences have been updated.')
+                    return redirect('newsletter-unsubscription')
+
+            if 'unsubscribebtn' in request.POST:
+                if 'unsubscribe' not in request.POST:
+                    messages.add_message(request, messages.ERROR, 'Please check the box below to unsubscribe.')
+                    return redirect('newsletter-unsubscription')
+                else:
+                    unsubscribe_from_mailing_list(str(email), str(name))
+                    return redirect('newsletter-unsubscription')
+        return render(request, 'accounts/newsletter-unsubscription.html', context)
+    else:
+        return redirect('login')
 
 @login_required(login_url='login')
 def api_keys(request):
