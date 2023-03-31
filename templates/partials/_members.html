@@ -671,74 +671,74 @@
 
 <div id="memberModal" class="modal hide">
     <div class="modal-defaults add-member-modal flex-this column w-100">
-    
-        <div class="flex-this flex-end">
-            <div class="margin-right-8 primary-btn white-btn close-modal-btn">Close <i class="fa fa-times" aria-hidden="true"></i></div>
+
+        <div class="flex-this space-between">
+            <div>
+                <h2 class="no-top-margin">Add a new member</h2>  
+                <p class="no-top-margin">To invite a new member, please select a user and their proposed responsibility below</p>  
+            </div>
+
+            <div>
+                <div class="close-modal-btn"><i class="fa-regular fa-xmark fa-xl"></i></div>
+            </div>
         </div>
-        <div class="modal-content-padding w-100">
 
-            <h2 class="no-top-margin primary-black-text">Add a new member</h2>  
-            <p>
-                To invite a new member, please select a user and their proposed responsibility below
-            </p>
-
-            <div class="w-100 flex-this column">
-                <form id="addMemberForm" method="POST" action="">
-                    {% csrf_token %}
-        
-                        <div class="flex-this column"> 
-                            <div>
-                                <div> 
-                                    <label>Name</label> <br>
-                                    <input 
-                                        id="userListInput" 
-                                        list="userList" 
-                                        name="userList" 
-                                        class="w-100" 
-                                        placeholder="Start typing name or username"
-                                    >
-                                    <datalist id="userList">
-                                        {% for user in users %}
-                                            <option 
-                                                {% if user.first_name and user.last_name %}
-                                                    value="{{ user.username }} ({{ user.first_name }} {{ user.last_name }})"
-                                                {% else %}
-                                                    value="{{ user.username }}"
-                                                {% endif %}
-                                            >
-                                        {% endfor %}
-                                    </datalist>
-
-                                </div>
-                                <div class="margin-top-8">
-                                    <label>Proposed Responsibility</label><br>
-                                    {{ form.role }} 
-                                </div>
-                            </div>
+        <div class="w-100 flex-this column">
+            <form id="addMemberForm" method="POST" action="">
+                {% csrf_token %}
     
+                    <div class="flex-this column"> 
+                        <div>
+                            <div> 
+                                <label>Name</label> <br>
+                                <input 
+                                    id="userListInput" 
+                                    list="userList" 
+                                    name="userList" 
+                                    class="w-100" 
+                                    placeholder="Start typing name or username"
+                                >
+                                <datalist id="userList">
+                                    {% for user in users %}
+                                        <option 
+                                            {% if user.first_name and user.last_name %}
+                                                value="{{ user.username }} ({{ user.first_name }} {{ user.last_name }})"
+                                            {% else %}
+                                                value="{{ user.username }}"
+                                            {% endif %}
+                                        >
+                                    {% endfor %}
+                                </datalist>
+
+                            </div>
                             <div class="margin-top-8">
-                                <label>Optional Message</label><br>
-                                {{ form.message }}
-                            </div>
-                        </div>    
-                    
-                        <div class="flex-this w-100 margin-bottom-16">
-                            <div class="w-50 margin-top-2">
-                                <button 
-                                    id="sendMemberInviteBtn" 
-                                    class="primary-btn action-btn" 
-                                    name="send_invite_btn" 
-                                    disabled
-                                >Send Invitation </button>
-                            </div>
-    
-                            <div class="w-50 margin-top-2 right-text">
-                                <small>Looking for someone who isn't on this list? <br><a class="darkteal-text" href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.</small>
+                                <label>Proposed Responsibility</label><br>
+                                {{ form.role }} 
                             </div>
                         </div>
-    
-                </form>
-            </div>
+
+                        <div class="margin-top-8">
+                            <label>Optional Message</label><br>
+                            {{ form.message }}
+                        </div>
+                    </div>    
+                
+                    <div class="flex-this w-100 margin-bottom-16">
+                        <div class="w-50 margin-top-2">
+                            <button 
+                                id="sendMemberInviteBtn" 
+                                class="primary-btn action-btn" 
+                                name="send_invite_btn" 
+                                disabled
+                            >Send Invitation </button>
+                        </div>
+
+                        <div class="w-50 margin-top-2 right-text">
+                            <small>Looking for someone who isn't on this list? <br><a class="darkteal-text" href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.</small>
+                        </div>
+                    </div>
+
+            </form>
         </div>
 
     </div>

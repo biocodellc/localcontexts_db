@@ -783,7 +783,7 @@ def projects(request, pk):
 
 # Create Project
 @login_required(login_url='login')
-def create_project(request, pk, source_proj_uuid=None):
+def create_project(request, pk, source_proj_uuid=None, related=None):
     community = Community.objects.select_related('community_creator').get(id=pk)
 
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
@@ -815,10 +815,18 @@ def create_project(request, pk, source_proj_uuid=None):
                 project_links = request.POST.getlist('project_urls')
                 data.urls = project_links
 
-                if source_proj_uuid:
-                    data.source_project_uuid = source_proj_uuid
-                    
                 data.save()
+
+                if source_proj_uuid and not related:
+                    data.source_project_uuid = source_proj_uuid
+                    data.save()
+
+                if source_proj_uuid and related:
+                    source = Project.objects.get(unique_id=source_proj_uuid)
+                    data.related_projects.add(source)
+                    source.related_projects.add(data)
+                    source.save()
+                    data.save()
 
                 # Create Activity
                 creator_name = get_users_name(request.user)
@@ -931,6 +939,18 @@ def project_actions(request, pk, project_uuid):
         activities = ProjectActivity.objects.filter(project=project).order_by('-date')
         is_community_notified = EntitiesNotified.objects.none()
         sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
+        name = get_users_name(request.user)
+
+        # for related projects list
+        projects_list = list(chain(
+            community.community_created_project.all().values_list('project__unique_id', flat=True), 
+            community.communities_notified.all().values_list('project__unique_id', flat=True), 
+            community.contributing_communities.all().values_list('project__unique_id', flat=True),
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        # TODO: also exclude current project and projects that are already related
+        projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id__in=archived).order_by('-date_added').values_list('unique_id', 'title')
 
         if not creator.community:
         # 1. is community creator of project?
@@ -961,10 +981,26 @@ def project_actions(request, pk, project_uuid):
                         return redirect('community-project-actions', community.id, project.unique_id)
                     else:
                         return redirect('community-project-actions', community.id, project.unique_id)
+                    
             elif "notify-btn" in request.POST:
                 project_status = request.POST.get('project-status')
                 set_project_status(request.user, project, community, creator, project_status)                            
                 return redirect('community-project-actions', community.id, project.unique_id)
+            
+            elif 'link_projects_btn' in request.POST:
+                selected_projects = request.POST.getlist('projects_to_link')
+
+                for uuid in selected_projects:
+                    project_to_add = Project.objects.get(unique_id=uuid)
+                    project.related_projects.add(project_to_add)
+                    project_to_add.related_projects.add(project)
+                    project_to_add.save()
+
+                    ProjectActivity.objects.create(project=project_to_add, activity=f'Project "{project_to_add}" was linked to Project "{project}" by {name}')
+                    ProjectActivity.objects.create(project=project, activity=f'Project "{project}" was linked to Project "{project_to_add}" by {name}')
+
+                project.save()
+
             elif 'delete_project' in request.POST:
                 return redirect('community-delete-project', community.id, project.unique_id)
 
@@ -982,6 +1018,8 @@ def project_actions(request, pk, project_uuid):
             'project_archived': project_archived,
             'is_community_notified': is_community_notified,
             'sub_projects': sub_projects,
+            'projects_to_link': projects_to_link
+
         }
         return render(request, 'communities/project-actions.html', context)
 
@@ -1010,6 +1048,19 @@ def delete_project(request, community_id, project_uuid):
     project.delete()
     return redirect('community-projects', community.id)
 
+@login_required(login_url='login')
+def unlink_project(request, pk, target_proj_uuid, proj_to_remove_uuid):
+    community = Community.objects.get(id=pk)
+    target_project = Project.objects.get(unique_id=target_proj_uuid)
+    project_to_remove = Project.objects.get(unique_id=proj_to_remove_uuid)
+    target_project.related_projects.remove(project_to_remove)
+    project_to_remove.related_projects.remove(target_project)
+    target_project.save()
+    project_to_remove.save()
+    name = get_users_name(request.user)
+    ProjectActivity.objects.create(project=project_to_remove, activity=f'Project "{project_to_remove}" was unlinked from Project "{target_project}" by {name}')
+    ProjectActivity.objects.create(project=target_project, activity=f'Project "{target_project}" was unlinked from Project "{project_to_remove}" by {name}')
+    return redirect('community-project-actions', community.id, target_project.unique_id)
 
 @login_required(login_url='login')
 def apply_labels(request, pk, project_uuid):

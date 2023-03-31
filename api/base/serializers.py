@@ -87,23 +87,38 @@ class ProjectCreatorSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     created_by = ProjectCreatorSerializer(source="project_creator_project", many=True)
     notice = NoticeSerializer(source="project_notice", many=True)
+    related_projects = serializers.SerializerMethodField()
+    sub_projects = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'providers_id', 'project_page', 'title', 'project_privacy', 'date_added', 'date_modified', 'created_by', 'notice', 'project_boundary_geojson')
+        fields = ('unique_id', 'providers_id', 'source_project_uuid', 'project_page', 'title', 'project_privacy', 'date_added', 'date_modified', 'created_by', 'notice', 'sub_projects', 'related_projects', 'project_boundary_geojson')
+
+    def get_related_projects(self, obj):
+        return [project.unique_id for project in obj.related_projects.all()]
+    
+    def get_sub_projects(self, obj):
+        return [p.unique_id for p in Project.objects.filter(source_project_uuid=obj.unique_id)]
 
 # Labels only
 class ProjectNoNoticeSerializer(serializers.ModelSerializer):
     created_by = ProjectCreatorSerializer(source="project_creator_project", many=True)
     bc_labels = BCLabelSerializer(many=True)
     tk_labels = TKLabelSerializer(many=True)
+    related_projects = serializers.SerializerMethodField()
+    sub_projects = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
-        fields = ('unique_id', 'providers_id', 'project_page', 'title', 'project_privacy', 'date_added', 'date_modified', 'created_by', 'bc_labels', 'tk_labels', 'project_boundary_geojson')
+        fields = ('unique_id', 'providers_id', 'source_project_uuid', 'project_page', 'title', 'project_privacy', 'date_added', 'date_modified', 'created_by', 'bc_labels', 'tk_labels', 'sub_projects', 'related_projects', 'project_boundary_geojson')
+    
+    def get_related_projects(self, obj):
+        return [project.unique_id for project in obj.related_projects.all()]
+    
+    def get_sub_projects(self, obj):
+        return [p.unique_id for p in Project.objects.filter(source_project_uuid=obj.unique_id)]
 
 class CommunityNativeLandSlugSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Community
         fields = ('id', 'community_name', 'native_land_slug',)

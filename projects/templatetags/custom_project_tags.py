@@ -3,7 +3,6 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from communities.models import Community
 from projects.models import Project, ProjectContributors, ProjectCreator
-from helpers.models import ProjectStatus, ProjectComment, Notice
 
 register = template.Library()
 

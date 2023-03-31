@@ -16,6 +16,7 @@ urlpatterns = [
 
     path('projects/<str:pk>', views.researcher_projects, name="researcher-projects"),
 
+    path('projects/create-project/<str:pk>/<uuid:source_proj_uuid>/<str:related>', views.create_project, name="researcher-create-project"),
     path('projects/create-project/<str:pk>/<uuid:source_proj_uuid>/', views.create_project, name="researcher-create-project"),
     path('projects/create-project/<str:pk>/', views.create_project, name="researcher-create-project"),
     
@@ -23,6 +24,8 @@ urlpatterns = [
     path('projects/actions/<str:pk>/<uuid:project_uuid>/', views.project_actions, name="researcher-project-actions"),
     path('projects/delete-project/<str:researcher_id>/<uuid:project_uuid>/', views.delete_project, name="researcher-delete-project"),
     path('projects/archive-project/<str:researcher_id>/<uuid:project_uuid>', views.archive_project, name="researcher-archive-project"),
+
+    path('projects/unlink/<str:pk>/<uuid:target_proj_uuid>/<uuid:proj_to_remove_uuid>', views.unlink_project, name="researcher-unlink-project"),
 
     path('connections/<str:pk>/', views.connections, name="researcher-connections"),
 ]
