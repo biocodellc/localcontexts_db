@@ -116,7 +116,7 @@
         </div>
 
         <div>
-            <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
+            <div class="project-header-div border-top-solid-teal border-bottom-solid-teal flex-this space-between">
                 <h2>Project details</h2>
                 <h2 class="margin-right-8 pointer" onclick="toggleProjectInfo(this, 'projectDetailsDiv')"><i class="fa-solid fa-minus fa-xl darkteal-text"></i></h2>
             </div>
@@ -215,7 +215,7 @@
             </div>
 
             {% if notices %}
-                <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
+                <div class="project-header-div border-top-solid-teal border-bottom-solid-teal flex-this space-between">
                     <h2>Project Notices</h2>
                     <h2 class="margin-right-8 pointer" onclick="toggleProjectInfo(this, 'projectNoticesDiv')"><i class="fa-solid fa-minus fa-xl darkteal-text"></i></h2>
                 </div>
@@ -243,7 +243,7 @@
             {% endif %}
 
             {% if project.has_bclabels or project.has_tklabels %}
-                <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
+                <div class="project-header-div border-top-solid-teal border-bottom-solid-teal flex-this space-between">
                     <h2>Project Labels</h2>
                     <h2 class="margin-right-8 pointer" onclick="toggleProjectInfo(this, 'projectLabelsDiv')"><i class="fa-solid fa-minus fa-xl darkteal-text"></i></h2>
                 </div>
@@ -303,7 +303,7 @@
                 </div>
             {% endif %}
 
-            <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
+            <div class="project-header-div border-top-solid-teal border-bottom-solid-teal flex-this space-between">
                 <h2>Related Projects</h2>
                 <h2 class="margin-right-8 pointer" onclick="toggleProjectInfo(this, 'relatedProjectsDiv')"><i class="fa-solid fa-minus fa-xl darkteal-text"></i></h2>
             </div>
@@ -427,7 +427,7 @@
             {% include 'projects/project-comment.html'%}
 
             {% if activities %}
-                <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
+                <div class="project-header-div border-top-solid-teal border-bottom-solid-teal flex-this space-between">
                     <h2>Project activity</h2>
                     <h2 class="margin-right-8 pointer" onclick="toggleProjectInfo(this, 'projectActivityDiv')"><i class="fa-solid fa-plus fa-xl darkteal-text"></i></h2>
                 </div>

@@ -1366,14 +1366,25 @@ function openDeleteProjectModal(elem) {
 
 function toggleProjectInfo(self, idToToggle) {
     let div = document.getElementById(idToToggle)
+    let allDivs = document.querySelectorAll('.project-header-div')
+    let lastDiv = allDivs[allDivs.length - 1]
 
     if (div.style.height == "0px") {
         self.innerHTML = '<i class="fa-solid fa-minus fa-xl darkteal-text"></i>'
         div.style.height = 'auto'
+        self.parentElement.classList.add('border-bottom-solid-teal')
+
+        if (self.parentElement != lastDiv) {
+            lastDiv.classList.add('border-bottom-solid-teal');
+        }
     } else {
         div.style.height = '0px'
         self.innerHTML = '<i class="fa-solid fa-plus fa-xl darkteal-text"></i>'
-        div.previousSibling.classList.remove('')
+        self.parentElement.classList.remove('border-bottom-solid-teal')
+
+        if (self.parentElement == lastDiv) {
+            lastDiv.classList.add('border-bottom-solid-teal');
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 {% load static %} {% load custom_project_tags %}
 {% if request.user.is_authenticated %}
     {% if 'projects/actions/' in request.path %}
-        <div class="border-top-solid-teal border-bottom-solid-teal flex-this space-between">
+        <div class="project-header-div border-top-solid-teal flex-this space-between">
             <h2>Project comments
                 <div class="tooltip" style="margin-left: 5px;"><strong>i</strong>
                     <span class="tooltiptext">
