@@ -187,18 +187,33 @@
                     <div class="project-left-sidebar"><p class="bold">Identifiers</p></div>
                     <div>
                         <div class="flex-this">
-                            <div class="margin-right-16">
-                                <p>
-                                    <span class="bold">Local Contexts Project ID</span><br>
-                                    <span id="projectIDToCopy">{{ project.unique_id }}</span>
-                                </p>
-                            </div>
                             <div>
                                 <p id="copyProjectIDBtn">
                                     <i class="round-btn fa-regular fa-clone fa-rotate-90"></i>
                                 </p>
-                            </div>                            
+                            </div>  
+                            <div class="margin-left-16">
+                                <p>
+                                    <span class="bold">Local Contexts Project ID</span><br>
+                                    <span id="projectIDToCopy">{{ project.unique_id }}</span>
+                                </p>
+                            </div>                          
                         </div>
+
+                        <div class="flex-this">
+                            <div>
+                                <p id="copyProjectURLBtn">
+                                    <i class="round-btn fa-regular fa-clone fa-rotate-90"></i>
+                                </p>
+                            </div>  
+                            <div class="margin-left-16">
+                                <p>
+                                    <span class="bold">Project URL</span><br>
+                                    <span id="projectURLToCopy">{{ project.project_page }}</span>
+                                </p>
+                            </div>                          
+                        </div>
+                        
 
                         <p class="no-top-margin">
                             <span class="bold">Providers ID</span><br>
