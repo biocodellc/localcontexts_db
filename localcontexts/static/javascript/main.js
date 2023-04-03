@@ -1336,14 +1336,20 @@ function copyProjectUrl(projectPageUrl, elemID) {
     }
 }
 
+var copyProjectURLBtn = document.getElementById('copyProjectURLBtn')
 var copyProjectIDBtn = document.getElementById('copyProjectIDBtn')
-if (copyProjectIDBtn) {
-    copyProjectIDBtn.addEventListener('click', function() {
-        copyToClipboard('projectIDToCopy')
+if (copyProjectIDBtn && copyProjectURLBtn) {
+    greenCopyBtn(copyProjectIDBtn, 'projectIDToCopy')
+    greenCopyBtn(copyProjectURLBtn, 'projectURLToCopy')
+}
 
-        copyProjectIDBtn.innerHTML = `<i class="round-btn fa-solid fa-check fa-beat"></i>`
+function greenCopyBtn(btnElem, spanIDToCopy) {
+    btnElem.addEventListener('click', function() {
+        copyToClipboard(spanIDToCopy)
+
+        btnElem.innerHTML = `<i class="round-btn fa-solid fa-check fa-beat"></i>`
         setTimeout(() => {
-            copyProjectIDBtn.innerHTML = `<i class="round-btn fa-regular fa-clone fa-rotate-90"></i>`
+            btnElem.innerHTML = `<i class="round-btn fa-regular fa-clone fa-rotate-90"></i>`
         }, 1000)
     })
 }

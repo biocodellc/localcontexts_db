@@ -187,18 +187,33 @@
                     <div class="project-left-sidebar"><p class="bold">Identifiers</p></div>
                     <div>
                         <div class="flex-this">
-                            <div class="margin-right-16">
-                                <p>
-                                    <span class="bold">Local Contexts Project ID</span><br>
-                                    <span id="projectIDToCopy">{{ project.unique_id }}</span>
-                                </p>
-                            </div>
                             <div>
                                 <p id="copyProjectIDBtn">
                                     <i class="round-btn fa-regular fa-clone fa-rotate-90"></i>
                                 </p>
-                            </div>                            
+                            </div>  
+                            <div class="margin-left-16">
+                                <p>
+                                    <span class="bold">Local Contexts Project ID</span><br>
+                                    <span id="projectIDToCopy">{{ project.unique_id }}</span>
+                                </p>
+                            </div>                          
                         </div>
+
+                        <div class="flex-this">
+                            <div>
+                                <p id="copyProjectURLBtn">
+                                    <i class="round-btn fa-regular fa-clone fa-rotate-90"></i>
+                                </p>
+                            </div>  
+                            <div class="margin-left-16">
+                                <p>
+                                    <span class="bold">Project URL</span><br>
+                                    <span id="projectURLToCopy">{{ project.project_page }}</span>
+                                </p>
+                            </div>                          
+                        </div>
+                        
 
                         <p class="no-top-margin">
                             <span class="bold">Providers ID</span><br>
@@ -312,7 +327,7 @@
                 <div class="flex-this space-between center-text margin-top-16">
                     <div>
                         <p>
-                            <strong>{{project.related_projects.count}}</strong> Related Projects linked
+                            <strong>{{project.related_projects.count}}</strong> Related Projects connected
                         </p>
                     </div>
                     {% if community or institution or researcher %}
@@ -334,7 +349,7 @@
                                 </div>
 
                                 <div>
-                                    <a class="primary-btn green-btn" onclick="openLinkProjectModal()">Link Projects <i class="margin-left-8 fa-solid fa-link-simple"></i></a>
+                                    <a class="primary-btn green-btn" onclick="openLinkProjectModal()">Connect Projects <i class="margin-left-8 fa-solid fa-link-simple"></i></a>
                                 </div>
                             </div>    
                         {% endif %}
@@ -377,8 +392,8 @@
 
                                                     <div class="flex-this space-between margin-bottom-16">
                                                         <div class="w-80">
-                                                            <h2 class="primary-black-text no-top-margin">Unlink Project</h2>  
-                                                            <p>Are you sure you want to unlink this Project?</p>  
+                                                            <h2 class="primary-black-text no-top-margin">Remove Project Connection</h2>  
+                                                            <p>Are you sure you want to remove this connection?</p>  
                                                         </div>
                                                         <div>
                                                             <div id="close-modal-btn-{{p.unique_id}}" class="pointer"><i class="fa-regular fa-xmark fa-xl"></i></div>
@@ -399,7 +414,7 @@
                                                                     href="{% url 'researcher-unlink-project' researcher.id project.unique_id p.unique_id %}"
                                                                 {% endif %}
                                                             >
-                                                                Yes I want to unlink this Project
+                                                                Yes, remove this Project connection
                                                             </a>
                                                         </div>
 
@@ -408,7 +423,7 @@
                                                                 id="cancelBtn-{{p.unique_id}}"
                                                                 class="primary-btn white-btn center-text"
                                                             >
-                                                                No, I'd like to keep this Project linked
+                                                                No, keep this Project connected
                                                             </a>
                                                         </div>                                                        
                                                     </div>
@@ -809,7 +824,7 @@
                     {% csrf_token %}
 
                     <div class="flex-this space-between">
-                        <div><h2 class="primary-black-text no-top-margin">Link related Projects</h2></div>
+                        <div><h2 class="primary-black-text no-top-margin">Connect Existing Projects</h2></div>
                         <div>
                             <div id="closeLinkProjectsModal" class="pointer"><i class="fa-regular fa-xmark fa-xl"></i></div>
                         </div>            
@@ -817,7 +832,7 @@
 
                     <div>
                         <p>
-                            Linking related Projects enables better access to other Projects that have similar data.
+                            Connecting related Projects enables better access to other Projects that have similar data.
                         </p>  
                     </div>
 
@@ -831,7 +846,7 @@
                     </div>
 
                     <div class="margin-top-16 flex-this flex-end">
-                        <button class="primary-btn action-btn" name="link_projects_btn">Link Projects</button>
+                        <button class="primary-btn action-btn" name="link_projects_btn">Connect Projects</button>
                     </div>
 
                 </form>
