@@ -477,13 +477,8 @@ def project_actions(request, pk, project_uuid):
                 researcher.researchers_notified.all().values_list('project__unique_id', flat=True), 
                 researcher.contributing_researchers.all().values_list('project__unique_id', flat=True),
             ))
-
             project_ids = list(set(projects_list)) # remove duplicate ids
-
-            project_ids_to_exclude_list = list(chain(
-                project.related_projects.all().values_list('unique_id', flat=True), #projects that are currently related
-                ProjectArchived.objects.filter(project_uuid__in=project_ids, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) #projects that are currently related
-            ))
+            project_ids_to_exclude_list = list(project.related_projects.all().values_list('unique_id', flat=True)) #projects that are currently related
 
             # exclude projects that are already related
             for item in project_ids_to_exclude_list:
@@ -555,8 +550,8 @@ def project_actions(request, pk, project_uuid):
                         project_to_add.related_projects.add(project)
                         project_to_add.save()
 
-                        ProjectActivity.objects.create(project=project_to_add, activity=f'Project "{project_to_add}" was linked to Project "{project}" by {name}')
-                        ProjectActivity.objects.create(project=project, activity=f'Project "{project}" was linked to Project "{project_to_add}" by {name}')
+                        ProjectActivity.objects.create(project=project_to_add, activity=f'Project "{project_to_add}" was connected to Project "{project}" by {name}')
+                        ProjectActivity.objects.create(project=project, activity=f'Project "{project}" was connected to Project "{project_to_add}" by {name}')
                     
                     project.save()
                     return redirect('researcher-project-actions', researcher.id, project.unique_id)
@@ -620,8 +615,8 @@ def unlink_project(request, pk, target_proj_uuid, proj_to_remove_uuid):
     target_project.save()
     project_to_remove.save()
     name = get_users_name(request.user)
-    ProjectActivity.objects.create(project=project_to_remove, activity=f'Project "{project_to_remove}" was unlinked from Project "{target_project}" by {name}')
-    ProjectActivity.objects.create(project=target_project, activity=f'Project "{target_project}" was unlinked from Project "{project_to_remove}" by {name}')
+    ProjectActivity.objects.create(project=project_to_remove, activity=f'Connection was removed between Project "{project_to_remove}" and Project "{target_project}" by {name}')
+    ProjectActivity.objects.create(project=target_project, activity=f'Connection was removed between Project "{target_project}" and Project "{project_to_remove}" by {name}')
     return redirect('researcher-project-actions', researcher.id, target_project.unique_id)
 
         
