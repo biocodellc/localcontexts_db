@@ -1117,10 +1117,6 @@ button[disabled],
   .dropdown-check-list ul li:first-child { border-top: 0; }
   .dropdown-check-list.visible ul { display: block; }
 
-/* .project-header-div:last-child {
-    border-bottom: 1px solid #007385;
-} */
-
 /* Language Searchbar */
 .autocomplete {
     /*the container must be positioned relative:*/
