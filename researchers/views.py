@@ -477,11 +477,20 @@ def project_actions(request, pk, project_uuid):
                 researcher.researchers_notified.all().values_list('project__unique_id', flat=True), 
                 researcher.contributing_researchers.all().values_list('project__unique_id', flat=True),
             ))
-            project_ids = list(set(projects_list)) # remove duplicate ids
-            archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-            # TODO: also exclude current project and projects that are already related
-            projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id__in=archived).order_by('-date_added').values_list('unique_id', 'title')
 
+            project_ids = list(set(projects_list)) # remove duplicate ids
+
+            project_ids_to_exclude_list = list(chain(
+                project.related_projects.all().values_list('unique_id', flat=True), #projects that are currently related
+                ProjectArchived.objects.filter(project_uuid__in=project_ids, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) #projects that are currently related
+            ))
+
+            # exclude projects that are already related
+            for item in project_ids_to_exclude_list:
+                if item in project_ids:
+                    project_ids.remove(item)
+
+            projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id=project.unique_id).order_by('-date_added').values_list('unique_id', 'title')
 
             project_archived = False
             if ProjectArchived.objects.filter(project_uuid=project.unique_id, researcher_id=researcher.id).exists():
@@ -550,6 +559,7 @@ def project_actions(request, pk, project_uuid):
                         ProjectActivity.objects.create(project=project, activity=f'Project "{project}" was linked to Project "{project_to_add}" by {name}')
                     
                     project.save()
+                    return redirect('researcher-project-actions', researcher.id, project.unique_id)
 
                 elif 'delete_project' in request.POST:
                     return redirect('researcher-delete-project', researcher.id, project.unique_id)

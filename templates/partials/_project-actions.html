@@ -363,7 +363,7 @@
                                     >{{ p.title }}</a>                                     
                                 </div>
                                 {% if community or institution or researcher %}
-                                    {% if member_role == 'admin' or member_role == 'editor' %}
+                                    {% if member_role == 'admin' or member_role == 'editor' or researcher %}
                                         <div class="margin-right-8">
                                             <a 
                                                 class="primary-black-text unlink-related-project-btn pointer"
