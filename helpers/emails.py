@@ -404,7 +404,7 @@ def send_contributor_email(request, account, proj_id, is_adding):
         creator_account = created_by.institution.institution_name
     elif created_by.community:
         creator_account = created_by.community.community_name
-    elif creator_account.researcher:
+    elif created_by.researcher:
         creator_account = 'Researcher'
 
     register_url = return_register_url_str(request)
