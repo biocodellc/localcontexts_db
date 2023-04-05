@@ -308,6 +308,8 @@ def researcher_projects(request, pk):
 @login_required(login_url='login')
 def create_project(request, pk, source_proj_uuid=None, related=None):
     researcher = Researcher.objects.select_related('user').get(id=pk)
+    name = get_users_name(request.user)
+
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')
@@ -339,6 +341,7 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 if source_proj_uuid and not related:
                     data.source_project_uuid = source_proj_uuid
                     data.save()
+                    ProjectActivity.objects.create(project=data, activity=f'Sub Project "{data.title}" was added to Project by {name} | Researcher')
 
                 if source_proj_uuid and related:
                     source = Project.objects.get(unique_id=source_proj_uuid)
@@ -347,10 +350,11 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                     source.save()
                     data.save()
 
-                # Create activity
-                name = get_users_name(request.user)
-                ProjectActivity.objects.create(project=data, activity=f'Project was created by {name} | Researcher')
+                    ProjectActivity.objects.create(project=data, activity=f'Project "{source.title}" was connected to Project by {name} | Researcher')
+                    ProjectActivity.objects.create(project=source, activity=f'Project "{data.title}" was connected to Project by {name} | Researcher')
 
+                # Create activity
+                ProjectActivity.objects.create(project=data, activity=f'Project was created by {name} | Researcher')
 
                 # Add project to researcher projects
                 creator = ProjectCreator.objects.select_related('researcher').get(project=data)

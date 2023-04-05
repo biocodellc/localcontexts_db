@@ -788,6 +788,7 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
 
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+    creator_name = get_users_name(request.user)
 
     member_role = check_member_role(request.user, community)
     if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
@@ -820,6 +821,7 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 if source_proj_uuid and not related:
                     data.source_project_uuid = source_proj_uuid
                     data.save()
+                    ProjectActivity.objects.create(project=data, activity=f'Sub Project "{data.title}" was added to Project by {creator_name} | {community.community_name}')
 
                 if source_proj_uuid and related:
                     source = Project.objects.get(unique_id=source_proj_uuid)
@@ -827,9 +829,11 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                     source.related_projects.add(data)
                     source.save()
                     data.save()
+                    
+                    ProjectActivity.objects.create(project=data, activity=f'Project "{source.title}" was connected to Project by {creator_name} | {community.community_name}')
+                    ProjectActivity.objects.create(project=source, activity=f'Project "{data.title}" was connected to Project by {creator_name} | {community.community_name}')
 
                 # Create Activity
-                creator_name = get_users_name(request.user)
                 ProjectActivity.objects.create(project=data, activity=f'Project was created by {creator_name} | {community.community_name}')
 
                 # Add project to community projects
