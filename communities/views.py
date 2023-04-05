@@ -785,9 +785,6 @@ def projects(request, pk):
 @login_required(login_url='login')
 def create_project(request, pk, source_proj_uuid=None, related=None):
     community = Community.objects.select_related('community_creator').get(id=pk)
-
-    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
-    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
     creator_name = get_users_name(request.user)
 
     member_role = check_member_role(request.user, community)
@@ -865,8 +862,6 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
             'member_role': member_role,
             'form': form,
             'formset': formset,
-            'bclabels': bclabels,
-            'tklabels': tklabels,
         }
 
         return render(request, 'communities/create-project.html', context)
