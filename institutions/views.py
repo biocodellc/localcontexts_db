@@ -534,6 +534,7 @@ def institution_projects(request, pk):
 @login_required(login_url='login')
 def create_project(request, pk, source_proj_uuid=None, related=None):
     institution = Institution.objects.select_related('institution_creator').get(id=pk)
+    name = get_users_name(request.user)
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
@@ -566,6 +567,7 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 if source_proj_uuid and not related:
                     data.source_project_uuid = source_proj_uuid
                     data.save()
+                    ProjectActivity.objects.create(project=data, activity=f'Sub Project "{data.title}" was added to Project by {name} | {institution.institution_name}')
 
                 if source_proj_uuid and related:
                     source = Project.objects.get(unique_id=source_proj_uuid)
@@ -574,8 +576,10 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                     source.save()
                     data.save()
 
+                    ProjectActivity.objects.create(project=data, activity=f'Project "{source.title}" was connected to Project by {name} | {institution.institution_name}')
+                    ProjectActivity.objects.create(project=source, activity=f'Project "{data.title}" was connected to Project by {name} | {institution.institution_name}')
+
                 # Create activity
-                name = get_users_name(data.project_creator)
                 ProjectActivity.objects.create(project=data, activity=f'Project was created by {name} | {institution.institution_name}')
 
                 # Add project to institution projects
