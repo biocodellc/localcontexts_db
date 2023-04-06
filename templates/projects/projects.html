@@ -118,15 +118,28 @@
 
     </div>
 
-    {% if results %}
-        {% for project in results %}
-            {% include 'projects/project-overview.html' %}
-        {% endfor %}
-    {% else %}
-        {% for project in items %}
-            {% include 'projects/project-overview.html' %}
-        {% endfor %}  
-    {% endif %}
+    <div class="content-card-v2 table-card white-bg">
+        <table class="projects-table">
+            <tr>
+                <th><i class="fa-regular fa-line-columns"></i> Title</th>
+                <th><i class="fa-light fa-user"></i> Creator</th>
+                <th>Level</th>
+                <th><i class="fa-light fa-calendar"></i> Last updated</th>
+                <th>Visibility</th>
+            </tr>
+
+            {% if results %}
+                {% for project in results %}
+                    {% include 'projects/project-overview.html' %}
+                {% endfor %}
+            {% else %}
+                {% for project in items %}
+                    {% include 'projects/project-overview.html' %}
+                {% endfor %}  
+            {% endif %}
+
+        </table>
+      </div>
 
     {% if not results and not items %}
         <div class="w-100 center-text margin-top-16 margin-bottom-16" style="margin-top: 100px;">

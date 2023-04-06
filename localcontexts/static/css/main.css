@@ -617,6 +617,72 @@ button[disabled],
     border-radius: 5px;
 }
 
+/* PROJECTS TABLE: PROJECTS OVERVIEW */
+.table-card {
+    border-radius: 4px;
+    padding: 0px;
+}
+
+.projects-table { border-collapse: collapse; }
+
+.projects-table th,
+.projects-table tr,
+.projects-table td {
+    border: 1px solid #d5dadf;
+}
+
+.projects-table td { font-size: 16px;}
+
+.projects-table td, 
+.projects-table tr:first-child th {
+    padding: 22px;
+}
+
+.projects-table tr:first-child th {
+    color: #222222;
+    font-size: 18px;
+}
+
+.projects-table tr:first-child th:first-child,
+.projects-table tr:first-child th:nth-child(2) {
+    text-align: left;
+}
+.projects-table tr:first-child th:first-child { width: 476px; }
+.projects-table tr:first-child th:nth-child(2) { width: 290px; }
+.projects-table tr:first-child th:nth-child(3) { width: 152px; }
+.projects-table tr:first-child th:nth-child(4) { width: 209px; }
+.projects-table tr:first-child th:nth-child(5) { width: 152px; }
+
+.projects-table td:nth-child(3),
+.projects-table td:nth-child(4),
+.projects-table td:nth-child(5) {
+    text-align: center;
+}
+
+.projects-table tr:not(:first-child):nth-child(even) { background-color: #F1F5F9; }
+
+/* COLORED TAGS */
+.orange-tag, 
+.green-tag {
+    height: 40px;
+    border-radius: 51px;
+    padding: 8px 16px;
+    text-align: center;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.orange-tag {
+   background-color: #FCE2CC;
+   color: #EF6C00;
+}
+
+.green-tag {
+    background-color: #CFE7E2;
+    color: #108670;
+}
+
 /* RESEARCHER PAGE: NOTICES */
 
 .add-notice-btn {
@@ -866,27 +932,6 @@ button[disabled],
 
 .show { display: block; }
 .hide { display: none; }
-
-/* Project overview: ellipsis menu */
-.ellipsis-dropdown-content {
-    position: absolute;
-    width: 189px;
-    height: auto;
-    z-index: 1;
-    background-color: #fff;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
-    margin-left: -100px;
-    border-radius: 4px;
-}
-
-.ellipsis-dropdown-content > a {
-    width: 100%;
-    padding: 10px 16px;
-}
-
-.ellipsis-dropdown-content > a:hover {
-    background-color: #cce3e7;
-}
 
 /* Textbox message add-members */
 .add-member-message {
