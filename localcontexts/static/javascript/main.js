@@ -1033,12 +1033,6 @@ if (window.location.href.includes('connect-community') || window.location.href.i
     })
 } 
 
-function toggleEllipsisMenu(btn) {
-    let id = btn.id.split('ellipsis-')[1]
-    let dropdown = document.getElementById(`ellipsis-content-${id}`)
-    dropdown.classList.toggle('hide')
-}
-
 // Copy text to clipboard
 function copyToClipboard(elemID) {
     let span = document.getElementById(elemID)

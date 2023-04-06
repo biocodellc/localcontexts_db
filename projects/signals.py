@@ -25,3 +25,8 @@ def delete_archived_instances(sender, instance, *args, **kwargs):
     if ProjectArchived.objects.filter(project_uuid=instance.unique_id).exists():
         for notification in ProjectArchived.objects.filter(project_uuid=instance.unique_id):
             notification.delete()
+
+@receiver(post_delete, sender=Project)
+def delete_source_project_uuid(sender, instance, *args, **kwargs):
+    source_projects = Project.objects.filter(source_project_uuid=instance.unique_id)
+    source_projects.update(source_project_uuid=None)

@@ -1,11 +1,8 @@
 {% extends 'base.html' %} {% block title %} Projects {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
 
-<div id="full-div-card-{{ project.unique_id }}" class="content-card-v2 content-card-space show">
-    <div id="project-unique-{{ project.unique_id }}" class="flex-this space-between">
-
-        <div class="w-60 flex-this column">
-            <div>
-                <a class="darkteal-text underline-hover"
+        <tr>
+            <td>
+                <a class="darkteal-text underline-hover bold"
                     {% if community %}
                         href="{% url 'community-project-actions' community.id project.unique_id %}" 
                     {% endif %}
@@ -16,85 +13,36 @@
                         href="{% url 'researcher-project-actions' researcher.id project.unique_id %}" 
                     {% endif %}
                 >
-                    <h2 class="no-bottom-margin no-top-margin">{{ project.title }}</h2>
+                    {{ project.title }}
                 </a>
-            </div>
-            <div>
-                <p>
-                    <span class="bold block margin-bottom-8">     
-                        {{ project.date_added|date:'M d, Y' }} | 
-                        {% if project.project_type == 'Other' %} 
-                            {{ project.other_type }}
-                        {% else %} 
-                            {{ project.project_type }} 
-                        {% endif %}| 
-                        {{ project.project_privacy }}
-                    </span>
-
-
-                    {% for creator in project.project_creator_project.all %}
-
-                        {% if community %}
-                            <span class="bold">
-                                {% if community == creator.community %} Created {% else %} Shared {% endif %} by
-                            </span>
-                        {% endif %}
-
-                        {% if institution %}
-                            <span class="bold">
-                                {% if institution == creator.institution %} Created {% else %} Shared {% endif %} by
-                            </span>
-                        {% endif %}
-
-                        {% if researcher %}
-                            <span class="bold">
-                                {% if researcher == creator.researcher %} Created {% else %} Shared {% endif %} by
-                            </span>
-                        {% endif %}
-
-                        {% if creator.community %} {{ creator.community }} {% endif %}
-                        {% if creator.institution %} {{ creator.institution }} {% endif %}
-                        {% if creator.researcher %} {% firstof creator.researcher.user.get_full_name creator.researcher.user.username %} {% endif %}
-
-                    {% endfor %}
-                </p>
-            </div>
-        </div>
-
-        <!-- Ellipsis dropdown -->
-        <div class="w-40 flex-this column align-right">
-            <div class="flex-this w-100 flex-end">
-                <div class="dropdown">
-                    <a onclick="toggleEllipsisMenu(this)" id="ellipsis-{{ project.unique_id }}" class="kebab pointer"><i class="fa-solid fa-ellipsis fa-xl primary-black-text"></i></a>
-                    <div id="ellipsis-content-{{ project.unique_id }}" class="ellipsis-dropdown-content hide"> 
-
-                        {% if request.user == project.project_creator %}
-                            <a
-                                class="primary-black-text block"
-
-                                {% if community %}
-                                    href="{% url 'edit-project' community.id project.unique_id %}"
-                                {% endif %}
-                                {% if institution %}
-                                    href="{% url 'inst-edit-project' institution.id project.unique_id %}"
-                                {% endif %}                        
-                                {% if researcher %}
-                                    href="{% url 'researcher-edit-project' researcher.id project.unique_id %}"
-                                {% endif %}   
-                            >
-                                Edit Project 
-                            </a>                                                         
-                        {% endif %}   
-                        
-                        <a class="primary-black-text block" href="{% url 'download-project-zip' project.unique_id %}">
-                            Download
-                        </a>                                          
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
+            </td>
+            <td>
+                {% for creator in project.project_creator_project.all %}
+                    {% if creator.community %} {{ creator.community }} {% endif %}
+                    {% if creator.institution %} {{ creator.institution }} {% endif %}
+                    {% if creator.researcher %} {% firstof creator.researcher.user.get_full_name creator.researcher.user.username %} {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% if project.source_project_uuid %}
+                    <span class="orange-tag">Sub</span>
+                {% else %}
+                    <span class="green-tag">Source</span>
+                {% endif %}
+            </td>
+            <td>{{ project.date_modified|date:'d M Y' }}</td>
+            <td>
+                <i 
+                    class="fa-solid fa-lg 
+                    {% if project.project_privacy == 'Public' %}
+                        fa-lock-open
+                    {% elif project.project_privacy == 'Contributor' %}
+                        fa-eye
+                    {% elif project.project_privacy == 'Private' %}
+                        fa-lock 
+                    {% endif %}"
+                ></i>
+            </td>
+        </tr>
 
 {% endblock %}

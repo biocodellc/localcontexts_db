@@ -1,15 +1,23 @@
 <div class="pagination">
     {% if items %}
         {% if items.has_previous %}
-            <a class="darkteal-text page" href="?page=1">&laquo;</a>
-            <a class="darkteal-text page" href="?page={{ items.previous_page_number }}">{{ items.previous_page_number }}</a>
+            <a class="page-btn-nav page" href="?page=1">          
+                <i class="fa-regular fa-arrow-left"></i> Previous</span>
+            </a>
+            <a class="page-num-nav page" href="?page={{ items.previous_page_number }}">{{ items.previous_page_number }}</a>
+        {% else %}
+            <span class="grey-text margin-right-16 font-size-14 bold"><i class="fa-regular fa-arrow-left"></i> Previous</span>
         {% endif %}
 
         <span class="current"> {{ items.number }}</span>
 
         {% if items.has_next %}
-            <a class="darkteal-text page" href="?page={{ items.next_page_number }}">{{ items.next_page_number }}</a>
-            <a class="darkteal-text page" href="?page={{ items.paginator.num_pages }}"> &raquo;</a>
+            <a class="page-num-nav page" href="?page={{ items.next_page_number }}">{{ items.next_page_number }}</a>
+            <a class="page-btn-nav page" href="?page={{ items.paginator.num_pages }}"> 
+                Next <i class="fa-regular fa-arrow-right"></i>
+            </a>
+        {% else %}
+            <span class="grey-text margin-left-16 font-size-14 bold"> Next <i class="fa-regular fa-arrow-right"></i></span>
         {% endif %}
     {% endif %}
 </div>

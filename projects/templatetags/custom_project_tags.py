@@ -8,8 +8,11 @@ register = template.Library()
 
 @register.simple_tag
 def source_project_title(uuid):
-    project = Project.objects.filter(unique_id=uuid).values_list('title', flat=True)
-    return project[0]
+    try:
+        title = Project.objects.filter(unique_id=uuid).values_list('title', flat=True).first()
+        return title
+    except Project.DoesNotExist:
+        return None
 
 @register.simple_tag
 def get_all_researchers(researcher_to_exclude):
