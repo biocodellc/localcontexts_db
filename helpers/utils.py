@@ -6,7 +6,6 @@ from accounts.models import UserAffiliation
 from tklabels.models import TKLabel
 from bclabels.models import BCLabel
 from helpers.models import LabelTranslation, LabelVersion, LabelTranslationVersion
-from projects.models import ProjectActivity
 from xhtml2pdf import pisa
 
 from communities.models import Community, JoinRequest, InviteMember
@@ -162,6 +161,7 @@ def get_labels_json():
 
 # Create/Update/Delete Notices
 def crud_notices(request, selected_notices, organization, project, existing_notices):
+    from projects.models import ProjectActivity
     # organization: either instance of institution or researcher
     # selected_notices would be a list: # attribution_incomplete # bcnotice # tknotice
     # existing_notices: a queryset of notices that exist for this project already
@@ -198,6 +198,7 @@ def crud_notices(request, selected_notices, organization, project, existing_noti
         create_notices(None)
 
 def add_remove_labels(request, project, community):
+    from projects.models import ProjectActivity
     # Get uuids of each label that was checked and add them to the project
     bclabels_selected = request.POST.getlist('selected_bclabels')
     tklabels_selected = request.POST.getlist('selected_tklabels')
@@ -304,3 +305,51 @@ def handle_label_versions(label):
             translated_text=t.translated_text,
             created=version.created
         )
+
+def discoverable_project_view(project, user):
+    project_contributors = project.project_contributors
+    project_creator_org = project.project_creator_project.first()
+
+    # Initialize a dictionary to store the created account type and its corresponding boolean value
+    is_created_by = { 'community': False, 'institution': False, 'researcher': False,}
+
+    # Check which account created the project
+    if project_creator_org.community:
+        is_created_by['community'] = True
+    if project_creator_org.institution:
+        is_created_by['institution'] = True
+    if project_creator_org.researcher:
+        is_created_by['researcher'] = True
+
+        discoverable = False
+
+    if is_created_by['community'] and project_creator_org.community.is_user_in_community(user): # is user a member of the community that created the project
+        discoverable = True
+    elif is_created_by['institution'] and project_creator_org.institution.is_user_in_institution(user): # is user a member of the institution tha created the project
+        discoverable = True
+    elif is_created_by['researcher'] and Researcher.objects.filter(user=user).exists() and project_creator_org.researcher == Researcher.objects.get(user=user): # does this user have a researcher account and is it the same researcher account which created the project 
+        discoverable = True 
+    else:
+        for notified in project.project_notified.all(): # is user in community which was notified of the project
+            for community in notified.communities.all():
+                if community.is_user_in_community(user):
+                    discoverable = True
+                    break
+
+        for community in project_contributors.communities.all(): # is user in community which is a contributor
+            if community.is_user_in_community(user):
+                discoverable = True
+                break
+
+        for institution in project_contributors.institutions.all():  # is user in institution which is a contributor
+            if institution.is_user_in_institution(user):
+                discoverable = True
+                break
+
+        for researcher in project_contributors.researchers.all(): # is user a contributing researcher
+            if user == researcher.user:
+                discoverable = True
+                break
+
+    print(discoverable)
+    return discoverable

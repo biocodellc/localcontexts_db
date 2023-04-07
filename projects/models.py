@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from institutions.models import Institution
 from communities.models import Community
 from researchers.models import Researcher
+from helpers.utils import discoverable_project_view
 
 class ProjectArchived(models.Model):
     project_uuid = models.UUIDField(null=True, blank=True, db_index=True)
@@ -85,6 +86,32 @@ class Project(models.Model):
             return True
         else:
             return False
+
+    def can_user_access(self, user):
+        if user == self.project_creator:
+            return True
+        elif self.project_privacy == 'Public':
+            return True
+        elif self.project_privacy == 'Contributor':
+            return discoverable_project_view(self, user)
+        elif self.project_privacy == 'Private':
+            return False
+    
+    def get_template_name(self, user):
+        if self.project_privacy == 'Public':
+            return 'partials/_project-actions.html'
+        elif self.project_privacy == 'Contributor':
+            if user.is_anonymous or not user.is_authenticated:
+                return 'partials/_project-contributor-view.html'
+            elif discoverable_project_view(self, user) == True:
+                return 'partials/_project-actions.html'
+            else:
+                return 'partials/_project-contributor-view.html'
+        elif self.project_privacy == 'Private' and user == self.project_creator:
+            return 'partials/_project-actions.html'
+        else:
+            return None
+    
 
     def __str__(self):
         return self.title
