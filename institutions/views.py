@@ -782,8 +782,8 @@ def project_actions(request, pk, project_uuid):
                     project_to_add.related_projects.add(project)
                     project_to_add.save()
 
-                    ProjectActivity.objects.create(project=project_to_add, activity=f'Project "{project_to_add}" was linked to Project "{project}" by {name}')
-                    ProjectActivity.objects.create(project=project, activity=f'Project "{project}" was linked to Project "{project_to_add}" by {name}')
+                    ProjectActivity.objects.create(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name} | {institution.institution_name}')
+                    ProjectActivity.objects.create(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name} | {institution.institution_name}')
                 
                 project.save()
                 return redirect('institution-project-actions', institution.id, project.unique_id)
