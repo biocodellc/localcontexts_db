@@ -28,18 +28,17 @@ urlpatterns = [
     path('labels/apply-labels/<str:pk>/<uuid:project_uuid>/', views.apply_labels, name="apply-labels"),
 
     path('projects/<str:pk>/', views.projects, name="community-projects"),
-    path('projects-labels/<str:pk>/', views.projects_with_labels, name="community-projects-labels"),
-    path('projects-notices/<str:pk>/', views.projects_with_notices, name="community-projects-notices"),
-    path('projects-created/<str:pk>/', views.projects_creator, name="community-projects-creator"),
-    path('projects-contributing/<str:pk>/', views.projects_contributor, name="community-projects-contributor"),
-    path('projects-archived/<str:pk>/', views.projects_archived, name="community-projects-archived"),
 
+    path('projects/create-project/<str:pk>/<uuid:source_proj_uuid>/<str:related>', views.create_project, name="create-project"),
+    path('projects/create-project/<str:pk>/<uuid:source_proj_uuid>/', views.create_project, name="create-project"),
     path('projects/create-project/<str:pk>/', views.create_project, name="create-project"),
-    path('projects/edit-project/<str:community_id>/<str:project_uuid>/', views.edit_project, name="edit-project"),
+    
+    path('projects/edit-project/<str:community_id>/<uuid:project_uuid>/', views.edit_project, name="edit-project"),
     path('projects/actions/<str:pk>/<uuid:project_uuid>/', views.project_actions, name="community-project-actions"),
-    path('projects/delete-project/<str:community_id>/<str:project_uuid>', views.delete_project, name="community-delete-project"),
-    path('projects/archive-project/<str:community_id>/<str:project_uuid>', views.archive_project, name="community-archive-project"),
+    path('projects/delete-project/<str:community_id>/<uuid:project_uuid>', views.delete_project, name="community-delete-project"),
+    path('projects/archive-project/<str:community_id>/<uuid:project_uuid>', views.archive_project, name="community-archive-project"),
 
+    path('projects/unlink/<str:pk>/<uuid:target_proj_uuid>/<uuid:proj_to_remove_uuid>', views.unlink_project, name="community-unlink-project"),
 
     path('connections/<str:pk>/', views.connections, name="community-connections"),
     

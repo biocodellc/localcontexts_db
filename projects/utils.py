@@ -10,37 +10,37 @@ from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from accounts.utils import get_users_name
 
 def set_project_status(user, project, community, creator, project_status):
-        truncated_project_title = str(project.title)[0:30]
-        reference_id = project.unique_id
-        name = get_users_name(user)
+    truncated_project_title = str(project.title)[0:30]
+    reference_id = project.unique_id
+    name = get_users_name(user)
 
-        statuses = ProjectStatus.objects.filter(project=project, community=community)
+    statuses = ProjectStatus.objects.filter(project=project, community=community)
 
-        title = ''
-        for status in statuses:
-            status.seen = True
+    title = ''
+    for status in statuses:
+        status.seen = True
 
-            if project_status == 'seen':
-                title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
-                ProjectActivity.objects.create(project=project, activity=f'{name} from {community.community_name} set the Project status to Seen')
+        if project_status == 'seen':
+            title = f'{community.community_name} has seen and acknowledged your Project: {truncated_project_title}'
+            ProjectActivity.objects.create(project=project, activity=f'{name} from {community.community_name} set the Project status to Seen')
 
-            if project_status == 'pending':
-                status.status = 'pending'
-                title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
-                ProjectActivity.objects.create(project=project, activity=f'{name} from {community.community_name} set the Project status to Labels Pending')
+        if project_status == 'pending':
+            status.status = 'pending'
+            title = f'{community.community_name} is in the process of applying Labels to your Project: {truncated_project_title}'
+            ProjectActivity.objects.create(project=project, activity=f'{name} from {community.community_name} set the Project status to Labels Pending')
 
-            if project_status == 'not_pending':
-                status.status = 'not_pending'
-                title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
-                ProjectActivity.objects.create(project=project, activity=f'{name} from {community.community_name} set the Project status to No Labels Pending')
+        if project_status == 'not_pending':
+            status.status = 'not_pending'
+            title = f'{community.community_name} will not be applying Labels to your Project: {truncated_project_title}'
+            ProjectActivity.objects.create(project=project, activity=f'{name} from {community.community_name} set the Project status to No Labels Pending')
 
-            status.save()
+        status.save()
 
-            # Send Notification
-            if creator.institution:
-                send_simple_action_notification(user, creator.institution, title, 'Projects', reference_id)
-            if creator.researcher:
-                send_simple_action_notification(user, creator.researcher, title, 'Projects', reference_id)
+        # Send Notification
+        if creator.institution:
+            send_simple_action_notification(user, creator.institution, title, 'Projects', reference_id)
+        if creator.researcher:
+            send_simple_action_notification(user, creator.researcher, title, 'Projects', reference_id)
 
 def project_status_seen_at_comment(user, community, creator, project):
     if ProjectStatus.objects.filter(project=project, community=community).exists():

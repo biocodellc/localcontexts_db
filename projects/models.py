@@ -30,7 +30,7 @@ class Project(models.Model):
         ('Contributor', 'Contributor'),
         ('Private', 'Private'),
     }
-    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, db_index=True)
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, null=True, db_index=True, verbose_name="Unique ID (UUID)")
     project_creator = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name="project_creator")
     project_page = models.URLField(blank=True, null=True)
     project_type = models.CharField(max_length=20, null=True, choices=TYPES)
@@ -40,13 +40,15 @@ class Project(models.Model):
     description = models.TextField(null=True)
     project_contact = models.CharField(max_length=100, null=True)
     project_contact_email = models.EmailField(max_length=100, null=True)
-    publication_doi = models.CharField(max_length=200, blank=True, null=True)
-    project_data_guid = models.CharField(max_length=200, blank=True, null=True)
-    providers_id = models.CharField(max_length=200, blank=True, null=True)
-    project_boundary_geojson = models.JSONField(blank=True, null=True)
-    urls = models.JSONField(blank=True, null=True)
+    publication_doi = models.CharField(max_length=200, blank=True, null=True, verbose_name="Publication DOI")
+    project_data_guid = models.CharField(max_length=200, blank=True, null=True, verbose_name="Project data GUID")
+    providers_id = models.CharField(max_length=200, blank=True, null=True, verbose_name="Provider's ID")
+    project_boundary_geojson = models.JSONField(blank=True, null=True, verbose_name="Project boundary GeoJSON")
+    urls = models.JSONField(blank=True, null=True, verbose_name="URLs")
     date_added = models.DateTimeField(auto_now_add=True, null=True)
     date_modified = models.DateTimeField(auto_now=True, null=True)
+    source_project_uuid = models.UUIDField(null=True, verbose_name="Source Project UUID", blank=True, db_index=True)
+    related_projects = models.ManyToManyField("self", blank=True, verbose_name="Related Projects", related_name="related_projects", db_index=True)
     bc_labels = models.ManyToManyField("bclabels.BCLabel", verbose_name="BC Labels", blank=True, related_name="project_bclabels", db_index=True)
     tk_labels = models.ManyToManyField("tklabels.TKLabel", verbose_name="TK Labels", blank=True, related_name="project_tklabels", db_index=True)
 
@@ -74,6 +76,13 @@ class Project(models.Model):
                 return False
             elif self.project_notice.filter(archived=False).exists():
                 return True
+        else:
+            return False
+    
+    @property
+    def is_sub_project(self):
+        if self.source_project_uuid is not None:
+            return True
         else:
             return False
 

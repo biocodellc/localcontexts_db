@@ -3,13 +3,16 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from communities.models import Community
 from projects.models import Project, ProjectContributors, ProjectCreator
-from helpers.models import ProjectStatus, ProjectComment, Notice
 
 register = template.Library()
 
 @register.simple_tag
-def show_project_notices(project):
-    return Notice.objects.filter(project=project).values('archived', 'notice_type')
+def source_project_title(uuid):
+    try:
+        title = Project.objects.filter(unique_id=uuid).values_list('title', flat=True).first()
+        return title
+    except Project.DoesNotExist:
+        return None
 
 @register.simple_tag
 def get_all_researchers(researcher_to_exclude):

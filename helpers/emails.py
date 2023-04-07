@@ -96,6 +96,22 @@ def unsubscribe_from_mailing_list(email, name):
             "name": name}
     )
 
+def send_newsletter():
+    response = requests.get(
+        ("https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members"),
+        auth=('api', settings.MAILGUN_API_KEY),
+        )
+    info=response.json()
+    for item in info["items"]:
+        if item["subscribed"] == True:
+            email = item["address"]
+            emailb64 = urlsafe_base64_encode(force_bytes(email))
+            preferences_url = f'http://localcontextshub.org/newsletter-preferences/{emailb64}'
+            
+            data = {'email': email, 'preferences_url': preferences_url }
+            subject = 'Local Contexts Newsletter'
+            send_mailgun_template_email(email, subject, 'newsletter_template', data)
+
 # Send all Institution and community applications to support or the site admin
 def send_hub_admins_application_email(request, organization, data):
     template = ''
@@ -155,6 +171,8 @@ def send_activation_email(request, user):
     data = {'user': user.username, 'activation_url': activation_url}
     subject = 'Activate Your Local Contexts Hub Profile'
     send_mailgun_template_email(user.email, subject, 'activate_profile', data)
+# ASHLEYTODO For email in list
+
 
 #  Resend Activation Email
 def resend_activation_email(request, active_users):
@@ -386,7 +404,7 @@ def send_contributor_email(request, account, proj_id, is_adding):
         creator_account = created_by.institution.institution_name
     elif created_by.community:
         creator_account = created_by.community.community_name
-    elif creator_account.researcher:
+    elif created_by.researcher:
         creator_account = 'Researcher'
 
     register_url = return_register_url_str(request)
