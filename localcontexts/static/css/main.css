@@ -335,6 +335,28 @@ button[disabled],
     cursor: default;
 }
 
+/* COLORED TAGS */
+.orange-tag, 
+.green-tag {
+    height: 40px;
+    border-radius: 51px;
+    padding: 8px 16px;
+    text-align: center;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.orange-tag {
+   background-color: #FCE2CC;
+   color: #EF6C00;
+}
+
+.green-tag {
+    background-color: #CFE7E2;
+    color: #108670;
+}
+
 /* PAGINATION */
 .pagination {
     background-color: #fff;
@@ -660,41 +682,17 @@ button[disabled],
 .projects-table tr:first-child th:nth-child(2) {
     text-align: left;
 }
-.projects-table tr:first-child th:first-child { width: 476px; }
-.projects-table tr:first-child th:nth-child(2) { width: 290px; }
-.projects-table tr:first-child th:nth-child(3) { width: 152px; }
-.projects-table tr:first-child th:nth-child(4) { width: 209px; }
-.projects-table tr:first-child th:nth-child(5) { width: 152px; }
+.projects-table tr:first-child th:first-child { width: 590px; }
+.projects-table tr:first-child th:nth-child(2) { width: 307px; }
+.projects-table tr:first-child th:nth-child(3) { width: 230px; }
+.projects-table tr:first-child th:nth-child(4) { width: 152px; }
 
 .projects-table td:nth-child(3),
-.projects-table td:nth-child(4),
-.projects-table td:nth-child(5) {
+.projects-table td:nth-child(4) {
     text-align: center;
 }
 
 .projects-table tr:not(:first-child):nth-child(even) { background-color: #F1F5F9; }
-
-/* COLORED TAGS */
-.orange-tag, 
-.green-tag {
-    height: 40px;
-    border-radius: 51px;
-    padding: 8px 16px;
-    text-align: center;
-    font-size: 14px;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
-.orange-tag {
-   background-color: #FCE2CC;
-   color: #EF6C00;
-}
-
-.green-tag {
-    background-color: #CFE7E2;
-    color: #108670;
-}
 
 /* RESEARCHER PAGE: NOTICES */
 
