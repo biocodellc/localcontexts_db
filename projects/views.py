@@ -49,16 +49,14 @@ def view_project(request, unique_id):
         'sub_projects': sub_projects,
         'template_name': template_name
     }
-    print(template_name)
+
     if template_name:
-        if request.user.is_anonymous and project.project_privacy == 'Contributor' and template_name == 'partials/_project-contributor-view.html':
-            return render(request, 'projects/view-project.html', context)
-        elif project.can_user_access(request.user):
+        if project.can_user_access(request.user) == 'partial' or project.can_user_access(request.user) == 'partial':
             return render(request, 'projects/view-project.html', context)
         else:
             return HttpResponseForbidden('You do not have the necessary permissions to view this project.')
     else:
-        return HttpResponseForbidden('You do not have the necessary permissions to view this project.')
+        return redirect('login')
 
 
 def download_project_zip(request, unique_id):

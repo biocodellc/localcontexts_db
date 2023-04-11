@@ -71,6 +71,22 @@ class EntitiesNotified(models.Model):
     institutions = models.ManyToManyField(Institution, blank=True, related_name="institutions_notified", db_index=True)
     researchers = models.ManyToManyField(Researcher, blank=True, related_name="researchers_notified", db_index=True)
 
+    def is_user_in_notified_account(self, user):
+        is_user_in_account = False
+        for community in self.communities.all():
+            if community.is_user_in_community(user):
+                is_user_in_account = True
+                break
+        for institution in self.institutions.all():
+            if institution.is_user_in_institution(user):
+                is_user_in_account = True
+                break
+        for researcher in self.researchers.all():
+            if user == researcher.user:
+                is_user_in_account = True
+                break
+        return is_user_in_account
+
     def __str__(self):
         return str(self.project.title)
     

@@ -308,48 +308,19 @@ def handle_label_versions(label):
 
 def discoverable_project_view(project, user):
     project_contributors = project.project_contributors
-    project_creator_org = project.project_creator_project.first()
+    creator_account = project.project_creator_project.first()
+    is_created_by = creator_account.which_account_type_created()
+    notified = project.project_notified.first()
 
-    # Initialize a dictionary to store the created account type and its corresponding boolean value
-    is_created_by = { 'community': False, 'institution': False, 'researcher': False,}
+    discoverable = 'partial'
 
-    # Check which account created the project
-    if project_creator_org.community:
-        is_created_by['community'] = True
-    if project_creator_org.institution:
-        is_created_by['institution'] = True
-    if project_creator_org.researcher:
-        is_created_by['researcher'] = True
-
+    if not user.is_authenticated:
         discoverable = False
-
-    if is_created_by['community'] and project_creator_org.community.is_user_in_community(user): # is user a member of the community that created the project
+    elif creator_account.is_user_in_creator_account(user, is_created_by):
         discoverable = True
-    elif is_created_by['institution'] and project_creator_org.institution.is_user_in_institution(user): # is user a member of the institution tha created the project
+    elif project_contributors.is_user_contributor(user):
         discoverable = True
-    elif is_created_by['researcher'] and Researcher.objects.filter(user=user).exists() and project_creator_org.researcher == Researcher.objects.get(user=user): # does this user have a researcher account and is it the same researcher account which created the project 
-        discoverable = True 
-    else:
-        for notified in project.project_notified.all(): # is user in community which was notified of the project
-            for community in notified.communities.all():
-                if community.is_user_in_community(user):
-                    discoverable = True
-                    break
+    elif notified.is_user_in_notified_account(user):
+        discoverable = True
 
-        for community in project_contributors.communities.all(): # is user in community which is a contributor
-            if community.is_user_in_community(user):
-                discoverable = True
-                break
-
-        for institution in project_contributors.institutions.all():  # is user in institution which is a contributor
-            if institution.is_user_in_institution(user):
-                discoverable = True
-                break
-
-        for researcher in project_contributors.researchers.all(): # is user a contributing researcher
-            if user == researcher.user:
-                discoverable = True
-                break
-
-    print(discoverable)
     return discoverable

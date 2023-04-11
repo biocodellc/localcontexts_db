@@ -71,6 +71,11 @@ def add_to_contributors(request, account, project):
     researchers_list = [eval(i) for i in request.POST.getlist('selected_researchers')]
     communities_list = [eval(i) for i in request.POST.getlist('selected_communities')]
 
+    if project.project_privacy == 'Private':
+        if any([institutions_list, researchers_list, communities_list]):
+            project.project_privacy = 'Contributor'
+            project.save()
+
     if '/edit-project/' in request.path:
 
         if institutions_list:
@@ -166,20 +171,17 @@ def add_to_contributors(request, account, project):
         if isinstance(account, Institution):
             contributors.institutions.add(account)
 
-        selected = Institution.objects.filter(id__in=institutions_list)
-        for institution in selected:
+        for institution in Institution.objects.filter(id__in=institutions_list):
             contributors.institutions.add(institution) # add selected contribs to contribs
             send_simple_action_notification(None, institution, 'Your institution has been added as a contributor on a Project', 'Projects', project.unique_id)
             send_contributor_email(request, institution, project.unique_id, True)
 
-        selected = Researcher.objects.filter(id__in=researchers_list)
-        for researcher in selected:
+        for researcher in Researcher.objects.filter(id__in=researchers_list):
             contributors.researchers.add(researcher) # add selected contribs to contribs
             send_simple_action_notification(None, researcher, 'You have been added as a contributor on a Project', 'Projects', project.unique_id)
             send_contributor_email(request, researcher, project.unique_id, True)
 
-        selected = Community.objects.filter(id__in=communities_list)
-        for community in selected:
+        for community in Community.objects.filter(id__in=communities_list):
             contributors.communities.add(community) # add selected contribs to contribs
             send_simple_action_notification(None, community, 'Your community has been as a contributor on a Project', 'Projects', project.unique_id)
             send_contributor_email(request, community, project.unique_id, True)

@@ -1,7 +1,6 @@
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
-from helpers.models import LabelNote
 from django.contrib.auth.models import User
 
 from localcontexts.utils import dev_prod_or_local
@@ -394,6 +393,7 @@ def send_membership_email(request, account, receiver, role):
     send_mailgun_template_email(receiver.email, subject, 'member_info', data)
 
 def send_contributor_email(request, account, proj_id, is_adding):
+    from projects.models import Project
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
     creator_account = ''
     account_name = ''
