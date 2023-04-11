@@ -36,6 +36,19 @@ def send_mailgun_template_email(email, subject, template_name, data):
             "t:variables": json.dumps(data)
             })
 
+def send_tagged_mailgun_template_email(email, subject, template_name, data, tag):
+    return requests.post(
+        settings.MAILGUN_BASE_URL,
+        auth=("api", settings.MAILGUN_API_KEY),
+        data={
+            "from": "Local Contexts Hub <no-reply@localcontextshub.org>",
+            "to": email,
+            "subject": subject,
+            "template": template_name,
+            "t:variables": json.dumps(data),
+            "o:tag": [tag]
+            })
+
 """
     INTERNAL EMAILS
 """
@@ -106,11 +119,12 @@ def send_newsletter():
         if item["subscribed"] == True:
             email = item["address"]
             emailb64 = urlsafe_base64_encode(force_bytes(email))
-            preferences_url = f'http://localcontextshub.org/newsletter-preferences/{emailb64}'
+            preferences_url = f'http://localcontextshub.org/newsletter/preferences/{emailb64}'
             
             data = {'email': email, 'preferences_url': preferences_url }
-            subject = 'Local Contexts Newsletter'
-            send_mailgun_template_email(email, subject, 'newsletter_template', data)
+            subject = 'Local Contexts Newsletter: Welcome, Summit, and more'
+            tag= "April newsletter - Test"
+            send_tagged_mailgun_template_email(email, subject, 'newsletter_template', data, tag)
 
 # Send all Institution and community applications to support or the site admin
 def send_hub_admins_application_email(request, organization, data):
@@ -171,8 +185,6 @@ def send_activation_email(request, user):
     data = {'user': user.username, 'activation_url': activation_url}
     subject = 'Activate Your Local Contexts Hub Profile'
     send_mailgun_template_email(user.email, subject, 'activate_profile', data)
-# ASHLEYTODO For email in list
-
 
 #  Resend Activation Email
 def resend_activation_email(request, active_users):

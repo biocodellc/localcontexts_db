@@ -21,6 +21,7 @@ urlpatterns = [
     path('projects/', ProjectList.as_view(), name="api-projects"),
     path('projects/<uuid:unique_id>/', ProjectDetail.as_view(), name="api-project-detail"),
     path('projects/external/<str:providers_id>/', project_detail_providers, name="api-project-detail-providers"),
+    #ASHLEYTODO: change it so that the project detail (list view) can be used using either projectID or providersID. Two URLs that use one call. projects/external url would be removed
 
     path('projects/users/<str:pk>/', projects_by_user, name="api-projects-user"),
     path('projects/institutions/<str:institution_id>/', projects_by_institution, name="api-projects-institution"),

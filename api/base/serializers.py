@@ -70,6 +70,11 @@ class ProjectOverviewSerializer(serializers.ModelSerializer):
         model = Project
         fields = ('unique_id', 'providers_id', 'title', 'project_privacy', 'date_added', 'date_modified',)
 
+class ProjectDateModified(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ('unique_id', 'date_modified')
+
 class ProjectCreatorSerializer(serializers.ModelSerializer):
     institution = InstitutionSerializer()
     researcher = ResearcherSerializer()

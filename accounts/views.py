@@ -551,17 +551,17 @@ def newsletter_unsubscription(request, emailb64):
             if 'updatebtn' in request.POST:
                 if 'topic' not in request.POST:
                     messages.add_message(request, messages.ERROR, 'Please select at least one topic.')
-                    return redirect('newsletter-unsubscription')
+                    return redirect('newsletter-unsubscription', emailb64=emailb64)
                 else:
                     variables = manage_mailing_list(request, first_name)
                     add_to_mailing_list(str(email), str(name), str(variables))
                     messages.add_message(request, messages.SUCCESS, 'Your preferences have been updated.')
-                    return redirect('newsletter-unsubscription')
+                    return redirect('newsletter-unsubscription', emailb64=emailb64)
 
             if 'unsubscribebtn' in request.POST:
                 if 'unsubscribe' not in request.POST:
                     messages.add_message(request, messages.ERROR, 'Please check the box below to unsubscribe.')
-                    return redirect('newsletter-unsubscription')
+                    return redirect('newsletter-unsubscription', emailb64=emailb64)
                 else:
                     unsubscribe_from_mailing_list(str(email), str(name))
                     return redirect('newsletter-unsubscription')
