@@ -23,21 +23,14 @@
                     {% if creator.researcher %} {% firstof creator.researcher.user.get_full_name creator.researcher.user.username %} {% endif %}
                 {% endfor %}
             </td>
-            <td>
-                {% if project.source_project_uuid %}
-                    <span class="orange-tag">Sub</span>
-                {% else %}
-                    <span class="green-tag">Source</span>
-                {% endif %}
-            </td>
             <td>{{ project.date_modified|date:'d M Y' }}</td>
             <td>
                 <i 
                     class="fa-solid fa-lg 
                     {% if project.project_privacy == 'Public' %}
-                        fa-lock-open
+                        fa-eye 
                     {% elif project.project_privacy == 'Contributor' %}
-                        fa-eye
+                        fa-people-group
                     {% elif project.project_privacy == 'Private' %}
                         fa-lock 
                     {% endif %}"
