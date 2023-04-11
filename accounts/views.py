@@ -564,7 +564,7 @@ def newsletter_unsubscription(request, emailb64):
                     return redirect('newsletter-unsubscription', emailb64=emailb64)
                 else:
                     unsubscribe_from_mailing_list(str(email), str(name))
-                    return redirect('newsletter-unsubscription')
+                    return redirect('newsletter-unsubscription', emailb64=emailb64)
         return render(request, 'accounts/newsletter-unsubscription.html', context)
     else:
         return redirect('login')
