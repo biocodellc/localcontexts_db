@@ -758,7 +758,7 @@ def projects(request, pk):
             bool_dict['visibility_private'] = True
 
         elif sort_by == 'date_modified':
-            projects.order_by('-date_modified')
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids).exclude(unique_id__in=archived).order_by('-date_modified')
             bool_dict['date_modified'] = True
 
         page = paginate(request, projects, 10)
