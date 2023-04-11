@@ -425,15 +425,21 @@ def institution_projects(request, pk):
     institution = Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
 
     member_role = check_member_role(request.user, institution)
-    if member_role == False: # If user is not a member / does not have a role.
+    if not member_role: # If user is not a member / does not have a role.
         return redirect('restricted')
     else:
-        has_labels = False
-        has_notices = False
-        created = False
-        contributed = False
-        is_archived = False
-        title_az = False
+        bool_dict = {
+            'has_labels': False,
+            'has_notices': False,
+            'created': False,
+            'contributed': False,
+            'is_archived': False,
+            'title_az': False,
+            'visibility_public': False,
+            'visibility_contributor': False,
+            'visibility_private': False,
+            'date_modified': False
+        }
 
         # 1. institution projects + 
         # 2. projects institution has been notified of 
@@ -453,38 +459,20 @@ def institution_projects(request, pk):
             return redirect('institution-projects', institution.id)
         
         elif sort_by == 'has_labels':
-            projects_list = list(chain(
-                institution.institution_created_project.all().values_list('project__unique_id', flat=True), 
-                institution.institutions_notified.all().values_list('project__unique_id', flat=True), 
-                institution.contributing_institutions.all().values_list('project__unique_id', flat=True),
-            ))
-            project_ids = list(set(projects_list)) # remove duplicate ids
-            archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
             projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
                 ).exclude(unique_id__in=archived).exclude(bc_labels=None).order_by('-date_added') | Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids
                 ).exclude(unique_id__in=archived).exclude(tk_labels=None).order_by('-date_added')
-
-            has_labels = True
+            bool_dict['has_labels'] = True
 
         elif sort_by == 'has_notices':
-            projects_list = list(chain(
-                institution.institution_created_project.all().values_list('project__unique_id', flat=True), 
-                institution.institutions_notified.all().values_list('project__unique_id', flat=True), 
-                institution.contributing_institutions.all().values_list('project__unique_id', flat=True),
-            ))
-            project_ids = list(set(projects_list)) # remove duplicate ids
-            archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
             projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids, tk_labels=None, bc_labels=None).exclude(unique_id__in=archived).order_by('-date_added')
-
-
-            has_notices = True
+            bool_dict['has_notices'] = True
     
         elif sort_by == 'created':
             created_projects = institution.institution_created_project.all().values_list('project__unique_id', flat=True)
             archived = ProjectArchived.objects.filter(project_uuid__in=created_projects, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
             projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=created_projects).exclude(unique_id__in=archived).order_by('-date_added')
-
-            created = True
+            bool_dict['created'] = True
     
         elif sort_by == 'contributed':
             contrib = institution.contributing_institutions.all().values_list('project__unique_id', flat=True)
@@ -494,19 +482,32 @@ def institution_projects(request, pk):
             ))
             project_ids = list(set(projects_list)) # remove duplicate ids
             projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=contrib).exclude(unique_id__in=project_ids).order_by('-date_added')
-
-            contributed = True
+            bool_dict['contributed'] = True
 
         elif sort_by == 'archived':
             archived_projects = ProjectArchived.objects.filter(institution_id=institution.id, archived=True).values_list('project_uuid', flat=True)
             projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=archived_projects).order_by('-date_added')
-
-            is_archived = True
+            bool_dict['is_archived'] = True
         
         elif sort_by == 'title_az':
             projects = projects.order_by('title')
-            
-            title_az = True
+            bool_dict['title_az'] = True
+
+        elif sort_by == 'visibility_public':
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids, project_privacy='Public').exclude(unique_id__in=archived).order_by('-date_added')
+            bool_dict['visibility_public'] = True
+
+        elif sort_by == 'visibility_contributor':
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids, project_privacy='Contributor').exclude(unique_id__in=archived).order_by('-date_added')
+            bool_dict['visibility_contributor'] = True
+
+        elif sort_by == 'visibility_private':
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids, project_privacy='Private').exclude(unique_id__in=archived).order_by('-date_added')
+            bool_dict['visibility_private'] = True
+
+        elif sort_by == 'date_modified':
+            projects = Project.objects.select_related('project_creator').prefetch_related('bc_labels', 'tk_labels').filter(unique_id__in=project_ids).exclude(unique_id__in=archived).order_by('-date_modified')
+            bool_dict['date_modified'] = True
     
         page = paginate(request, projects, 10)
         
@@ -519,13 +520,7 @@ def institution_projects(request, pk):
             'member_role': member_role,
             'items': page,
             'results': results,
-            'has_labels': has_labels,
-            'has_notices': has_notices,
-            'created': created,
-            'contributed': contributed,
-            'is_archived': is_archived,
-            'title_az': title_az,
-
+            'bool_dict': bool_dict,
         }
         return render(request, 'institutions/projects.html', context)
 
@@ -782,8 +777,8 @@ def project_actions(request, pk, project_uuid):
                     project_to_add.related_projects.add(project)
                     project_to_add.save()
 
-                    ProjectActivity.objects.create(project=project_to_add, activity=f'Project "{project_to_add}" was linked to Project "{project}" by {name}')
-                    ProjectActivity.objects.create(project=project, activity=f'Project "{project}" was linked to Project "{project_to_add}" by {name}')
+                    ProjectActivity.objects.create(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name} | {institution.institution_name}')
+                    ProjectActivity.objects.create(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name} | {institution.institution_name}')
                 
                 project.save()
                 return redirect('institution-project-actions', institution.id, project.unique_id)
