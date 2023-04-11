@@ -388,7 +388,12 @@
                                             <a 
                                                 class="primary-black-text unlink-related-project-btn pointer"
                                                 onclick="openUnlinkProjectModal(`{{p.unique_id}}`)"
-                                            ><i class="fa-solid fa-link-simple-slash"></i></a>
+                                            >
+                                                <i 
+                                                    class="fa-solid fa-link-simple-slash" 
+                                                    aria-label="Remove Project connection to related Project"
+                                                ></i>
+                                            </a>
                                         </div>
 
                                         <div id="unlinkProjectModal-{{p.unique_id}}" class="modal hide">
