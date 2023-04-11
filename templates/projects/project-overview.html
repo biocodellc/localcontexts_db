@@ -24,17 +24,23 @@
                 {% endfor %}
             </td>
             <td>{{ project.date_modified|date:'d M Y' }}</td>
-            <td>
+            <td class="icon-tooltip-container visibility-icon-tooltip w-100">
                 <i 
-                    class="fa-solid fa-lg 
                     {% if project.project_privacy == 'Public' %}
-                        fa-eye 
+                        class="fa-solid fa-lg fa-eye"
+                        aria-label='Public Project' 
+                        data-tooltip='Public Project'
                     {% elif project.project_privacy == 'Contributor' %}
-                        fa-people-group
+                        class="fa-solid fa-lg fa-people-group"  
+                        aria-label='Contributor Project' 
+                        data-tooltip='Contributor Project'
                     {% elif project.project_privacy == 'Private' %}
-                        fa-lock 
-                    {% endif %}"
+                        class="fa-solid fa-lg fa-lock"
+                        aria-label='Private Project' 
+                        data-tooltip='Private Project'
+                    {% endif %}
                 ></i>
+
             </td>
         </tr>
 

@@ -662,7 +662,7 @@ button[disabled],
 
 .projects-table th,
 .projects-table tr,
-.projects-table td {
+.projects-table td:not(.icon-tooltip-container) {
     border: 1px solid #d5dadf;
 }
 
@@ -693,6 +693,31 @@ button[disabled],
 }
 
 .projects-table tr:not(:first-child):nth-child(even) { background-color: #F1F5F9; }
+
+/* Icons with hover tooltips */
+.icon-tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+i[data-tooltip]:hover:after {
+    content: attr(data-tooltip);
+    display: inline-block;
+    position: absolute;
+    font-family: 'BCSans', Verdana, sans-serif;
+    transform: translateX(-50%);
+    padding: 8px 16px;
+    background-color: #FF6000;
+    color: #fff;
+    border-radius: 3px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.visibility-icon-tooltip i[data-tooltip]:hover:after {
+    bottom: 75%;
+    left: 50%;
+}
 
 /* RESEARCHER PAGE: NOTICES */
 
