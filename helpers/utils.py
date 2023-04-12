@@ -6,7 +6,6 @@ from accounts.models import UserAffiliation
 from tklabels.models import TKLabel
 from bclabels.models import BCLabel
 from helpers.models import LabelTranslation, LabelVersion, LabelTranslationVersion
-from projects.models import ProjectActivity
 from xhtml2pdf import pisa
 
 from communities.models import Community, JoinRequest, InviteMember
@@ -162,6 +161,7 @@ def get_labels_json():
 
 # Create/Update/Delete Notices
 def crud_notices(request, selected_notices, organization, project, existing_notices):
+    from projects.models import ProjectActivity
     # organization: either instance of institution or researcher
     # selected_notices would be a list: # attribution_incomplete # bcnotice # tknotice
     # existing_notices: a queryset of notices that exist for this project already
@@ -198,6 +198,7 @@ def crud_notices(request, selected_notices, organization, project, existing_noti
         create_notices(None)
 
 def add_remove_labels(request, project, community):
+    from projects.models import ProjectActivity
     # Get uuids of each label that was checked and add them to the project
     bclabels_selected = request.POST.getlist('selected_bclabels')
     tklabels_selected = request.POST.getlist('selected_tklabels')
@@ -304,3 +305,22 @@ def handle_label_versions(label):
             translated_text=t.translated_text,
             created=version.created
         )
+
+def discoverable_project_view(project, user):
+    project_contributors = project.project_contributors
+    creator_account = project.project_creator_project.first()
+    is_created_by = creator_account.which_account_type_created()
+    notified = project.project_notified.first()
+
+    discoverable = 'partial'
+
+    if not user.is_authenticated:
+        discoverable = False
+    elif creator_account.is_user_in_creator_account(user, is_created_by):
+        discoverable = True
+    elif project_contributors.is_user_contributor(user):
+        discoverable = True
+    elif notified.is_user_in_notified_account(user):
+        discoverable = True
+
+    return discoverable
