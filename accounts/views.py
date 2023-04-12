@@ -528,7 +528,7 @@ def newsletter_unsubscription(request, emailb64):
                     news = variables[item]
                 if item == 'events':
                     events = variables[item]
-                if item == 'notices':
+                if item == 'notice':
                     notices = variables[item]
                 if item == 'labels':
                     labels = variables[item]
@@ -540,7 +540,7 @@ def newsletter_unsubscription(request, emailb64):
                 'tech': tech,
                 'news': news,
                 'events': events,
-                'notices': notices,
+                'notice': notice,
                 'labels': labels,
                 'subscribed':subscribed
             }
