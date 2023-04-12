@@ -529,7 +529,7 @@ def newsletter_unsubscription(request, emailb64):
                 if item == 'events':
                     events = variables[item]
                 if item == 'notice':
-                    notices = variables[item]
+                    notice = variables[item]
                 if item == 'labels':
                     labels = variables[item]
                 if item == 'first_name':
