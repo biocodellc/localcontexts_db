@@ -51,7 +51,7 @@ def view_project(request, unique_id):
     }
 
     if template_name:
-        if project.can_user_access(request.user) == 'partial' or project.can_user_access(request.user) == 'partial':
+        if project.can_user_access(request.user) == 'partial' or project.can_user_access(request.user) == True:
             return render(request, 'projects/view-project.html', context)
         else:
             return HttpResponseForbidden('You do not have the necessary permissions to view this project.')
