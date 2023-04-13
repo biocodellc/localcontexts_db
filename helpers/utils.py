@@ -315,12 +315,14 @@ def discoverable_project_view(project, user):
     discoverable = 'partial'
 
     if not user.is_authenticated:
-        discoverable = False
+        discoverable = 'partial'
     elif creator_account.is_user_in_creator_account(user, is_created_by):
         discoverable = True
     elif project_contributors.is_user_contributor(user):
         discoverable = True
     elif notified.is_user_in_notified_account(user):
         discoverable = True
+    else:
+        discoverable = False
 
     return discoverable
