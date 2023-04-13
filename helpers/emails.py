@@ -1,8 +1,6 @@
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
-from projects.models import Project
-from helpers.models import LabelNote
 from django.contrib.auth.models import User
 
 from localcontexts.utils import dev_prod_or_local
@@ -90,7 +88,7 @@ def add_to_mailing_list(email, name, variables):
     )
 
 # Get member info from newsletter mailing list
-def get_member_info(email):
+def get_newsletter_member_info(email):
     return requests.get(
         ("https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members"
          "/%s"%email),
@@ -109,23 +107,29 @@ def unsubscribe_from_mailing_list(email, name):
             "name": name}
     )
 
+# Send email to Newsletter Mailing List
 def send_newsletter():
     response = requests.get(
         ("https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members"),
         auth=('api', settings.MAILGUN_API_KEY),
         )
-    info=response.json()
-    for item in info["items"]:
-        if item["subscribed"] == True:
-            email = item["address"]
-            emailb64 = urlsafe_base64_encode(force_bytes(email))
-            preferences_url = f'http://localcontextshub.org/newsletter/preferences/{emailb64}'
-            
-            data = {'email': email, 'preferences_url': preferences_url }
-            subject = 'Local Contexts Newsletter: Welcome, Summit, and more'
-            tag= "April newsletter - Test"
-            send_tagged_mailgun_template_email(email, subject, 'newsletter_template', data, tag)
+    email = 'newsletter@localcontextshub.org'
+    data = None
+    subject = 'Local Contexts Newsletter: Welcome, Summit, and more'
+    tag= "April Newsletter"
+    send_tagged_mailgun_template_email(email, subject, 'newsletter_template', data, tag)
 
+# Send email to Testing Mailing List
+def send_test_mailing_list_email():
+    response = requests.get(
+        ("https://api.mailgun.net/v3/lists/test@localcontextshub.org/members"),
+        auth=('api', settings.MAILGUN_API_KEY),
+        )
+    email = 'test@localcontextshub.org'
+    subject = 'Testing Email'
+    data=None
+    send_mailgun_template_email(email, subject, 'testing_variables', data)
+        
 # Send all Institution and community applications to support or the site admin
 def send_hub_admins_application_email(request, organization, data):
     template = ''
