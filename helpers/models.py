@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from communities.models import Community
-from projects.models import Project
+# from projects.models import Project
 from researchers.models import Researcher
 from institutions.models import Institution
 
@@ -15,7 +15,7 @@ class Notice(models.Model):
         ('traditional_knowledge', 'traditional_knowledge'),
         ('attribution_incomplete', 'attribution_incomplete'),
     )
-    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_notice", db_index=True)
+    project = models.ForeignKey('projects.Project', null=True, on_delete=models.CASCADE, related_name="project_notice", db_index=True)
     notice_type = models.CharField(max_length=50, null=True, choices=TYPES)
     name = models.CharField(max_length=60, null=True, blank=True)
     researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
@@ -66,10 +66,26 @@ class OpenToCollaborateNoticeURL(models.Model):
         verbose_name_plural = 'Open To Collaborate Notice URLs'
 
 class EntitiesNotified(models.Model):
-    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_notified", db_index=True)
+    project = models.ForeignKey('projects.Project', null=True, on_delete=models.CASCADE, related_name="project_notified", db_index=True)
     communities = models.ManyToManyField(Community, blank=True, related_name="communities_notified", db_index=True)
     institutions = models.ManyToManyField(Institution, blank=True, related_name="institutions_notified", db_index=True)
     researchers = models.ManyToManyField(Researcher, blank=True, related_name="researchers_notified", db_index=True)
+
+    def is_user_in_notified_account(self, user):
+        is_user_in_account = False
+        for community in self.communities.all():
+            if community.is_user_in_community(user):
+                is_user_in_account = True
+                break
+        for institution in self.institutions.all():
+            if institution.is_user_in_institution(user):
+                is_user_in_account = True
+                break
+        for researcher in self.researchers.all():
+            if user == researcher.user:
+                is_user_in_account = True
+                break
+        return is_user_in_account
 
     def __str__(self):
         return str(self.project.title)
@@ -106,7 +122,7 @@ class LabelTranslation(models.Model):
         verbose_name_plural = "Label Translations"
 
 class ProjectComment(models.Model):
-    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_comment", db_index=True)
+    project = models.ForeignKey('projects.Project', null=True, on_delete=models.CASCADE, related_name="project_comment", db_index=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="comment_community", blank=True)
     sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="comment_sender", blank=True)
     sender_affiliation = models.CharField(max_length=350, blank=True)
@@ -128,7 +144,7 @@ class ProjectStatus(models.Model):
         ('not_pending', 'not_pending'),
         ('labels_applied', 'labels_applied'),
     )
-    project = models.ForeignKey(Project, null=True, on_delete=models.CASCADE, related_name="project_status", db_index=True)
+    project = models.ForeignKey('projects.Project', null=True, on_delete=models.CASCADE, related_name="project_status", db_index=True)
     community = models.ForeignKey(Community, on_delete=models.CASCADE, null=True, related_name="status_community", blank=True)
     seen = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=CHOICES, null=True, blank=True)

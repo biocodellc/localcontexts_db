@@ -1,0 +1,67 @@
+{% extends 'auth-base.html' %} {% block title %} Newsletter Preferences {% endblock %}{% load static %} {% block main %}
+
+    <div class="content-card-v2 content-card-space">
+
+        {% if subscribed %}
+        <div>
+            <h1 class="no-top-margin">Update Newsletter Preferences</h1>
+            <p>Preferences for {{ email }}</p>               
+        </div>
+
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="flex-this column w-70">
+                <label>What topic(s) are you interested in? (Check all that apply):<span title="Required" class="red-text"> *</span></label>
+                <div class="flex-this w-100 margin-top-1">
+                    <div class="w-100 margin-right-1 margin-left-16">
+                        <input type="checkbox" id="tech" name="topic" value="tech" {% if tech == 'yes' %} checked {% endif %}>
+                        <label for="tech"> Hub & API Updates</label><br>
+                        <input type="checkbox" id="news" name="topic" value="news" {% if news == 'yes' %} checked {% endif %}>
+                        <label for="news"> News and Resources</label><br>
+                        <input type="checkbox" id="events" name="topic" value="events" {% if events == 'yes' %} checked {% endif %}>
+                        <label for="events"> Events</label><br>
+                        <input type="checkbox" id="notice" name="topic" value="notice" {% if notice == 'yes' %} checked {% endif %}>
+                        <label for="notice"> Notices in Use</label><br>
+                        <input type="checkbox" id="labels" name="topic" value="labels" {% if labels == 'yes' %} checked {% endif %}>
+                        <label for="labels"> Labels in Use</label>
+                    </div>
+                </div>
+                <div class="flex-this w-100">
+                    <div class="w-100 margin-right-1">
+                        <button type="submit" class="primary-btn action-btn margin-top-2" id="updatebtn" name="updatebtn">Update</button>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-this column w-70">
+                {% include 'partials/_alerts.html' %}
+            </div>
+            <div class="flex-this column w-70">
+                <h3 class="no-bottom-margin no-top-margin">Unsubscribe from all newsletter topics</h3>
+                <div class="flex-this w-100 margin-top-1">
+                    <div class="w-100 margin-right-1 margin-left-16">
+                        <input type="checkbox" id="unsubscribe" name="unsubscribe" value="unsubscribe" onchange="unsubscribeDeselect()">
+                        <label for="unsubscribe"> Yes, I would like to unsubscribe from all newsletter topics.</label>
+                    </div>
+                </div>
+                <div class="flex-this w-100">
+                    <div class="w-100 margin-right-1">
+                        <button type="submit" class="primary-btn action-btn margin-top-2" id="unsubscribebtn" name="unsubscribebtn" disabled>Unsubscribe</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        {% else %}
+            <div>
+                <h1 class="no-top-margin">You have been successfully unsubscribed.</h1>
+                <p>If this was a mistake and you would like to subscribe again, click <a class="darkteal-text underline-hover" href="{% url 'newsletter-subscription' %}">here</a>.</p>               
+            </div>
+        {% endif %}
+
+    </div>
+
+<style>
+    
+</style>
+
+{% endblock %}

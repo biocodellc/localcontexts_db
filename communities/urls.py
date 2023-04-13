@@ -29,6 +29,7 @@ urlpatterns = [
 
     path('projects/<str:pk>/', views.projects, name="community-projects"),
 
+    path('projects/create-project/<str:pk>/<uuid:source_proj_uuid>/<str:related>', views.create_project, name="create-project"),
     path('projects/create-project/<str:pk>/<uuid:source_proj_uuid>/', views.create_project, name="create-project"),
     path('projects/create-project/<str:pk>/', views.create_project, name="create-project"),
     
@@ -37,6 +38,7 @@ urlpatterns = [
     path('projects/delete-project/<str:community_id>/<uuid:project_uuid>', views.delete_project, name="community-delete-project"),
     path('projects/archive-project/<str:community_id>/<uuid:project_uuid>', views.archive_project, name="community-archive-project"),
 
+    path('projects/unlink/<str:pk>/<uuid:target_proj_uuid>/<uuid:proj_to_remove_uuid>', views.unlink_project, name="community-unlink-project"),
 
     path('connections/<str:pk>/', views.connections, name="community-connections"),
     

@@ -156,6 +156,23 @@ class MultiProjectListDetail(ViewSet):
             })
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    def multisearch_date(self, request, unique_id):
+        try:
+            project = Project.objects.all()
+
+            if unique_id is not None:
+                unique_id = unique_id.split(',')
+                query= Q()
+                for x in unique_id:
+                    q = Q(unique_id=x)
+                    query |= q  
+                project=project.filter(query).exclude(project_privacy='Private')
+
+            serializer = ProjectDateModified(project, many=True)
+            return Response(serializer.data)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 class CommunitySlugList(generics.ListAPIView):
     queryset = Community.objects.exclude(native_land_slug=None)

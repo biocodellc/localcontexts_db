@@ -1033,12 +1033,6 @@ if (window.location.href.includes('connect-community') || window.location.href.i
     })
 } 
 
-function toggleEllipsisMenu(btn) {
-    let id = btn.id.split('ellipsis-')[1]
-    let dropdown = document.getElementById(`ellipsis-content-${id}`)
-    dropdown.classList.toggle('hide')
-}
-
 // Copy text to clipboard
 function copyToClipboard(elemID) {
     let span = document.getElementById(elemID)
@@ -1149,7 +1143,7 @@ if (deactivateAccountBtn) {
     })
 }
 
-if (window.location.href.includes('newsletter-preferences/') ) {
+if (window.location.href.includes('newsletter/preferences/') ) {
     const unsubscribeChkbox = document.getElementById('unsubscribe');
     const unsubscribeBtn = document.getElementById('unsubscribebtn');
     const updatePreferencesBtn = document.getElementById('updatebtn');
@@ -1336,14 +1330,20 @@ function copyProjectUrl(projectPageUrl, elemID) {
     }
 }
 
-let copyBtn = document.getElementById('copyProjectIDBtn')
-if (copyBtn) {
-    copyBtn.addEventListener('click', function() {
-        copyToClipboard('projectIDToCopy')
+var copyProjectURLBtn = document.getElementById('copyProjectURLBtn')
+var copyProjectIDBtn = document.getElementById('copyProjectIDBtn')
+if (copyProjectIDBtn && copyProjectURLBtn) {
+    greenCopyBtn(copyProjectIDBtn, 'projectIDToCopy')
+    greenCopyBtn(copyProjectURLBtn, 'projectURLToCopy')
+}
 
-        copyBtn.innerHTML = `<i class="round-btn fa-solid fa-check fa-beat"></i>`
+function greenCopyBtn(btnElem, spanIDToCopy) {
+    btnElem.addEventListener('click', function() {
+        copyToClipboard(spanIDToCopy)
+
+        btnElem.innerHTML = `<i class="round-btn fa-solid fa-check fa-beat"></i>`
         setTimeout(() => {
-            copyBtn.innerHTML = `<i class="round-btn fa-regular fa-clone fa-rotate-90"></i>`
+            btnElem.innerHTML = `<i class="round-btn fa-regular fa-clone fa-rotate-90"></i>`
         }, 1000)
     })
 }
@@ -1366,13 +1366,54 @@ function openDeleteProjectModal(elem) {
 
 function toggleProjectInfo(self, idToToggle) {
     let div = document.getElementById(idToToggle)
+    let allDivs = document.querySelectorAll('.project-header-div')
+    let lastDiv = allDivs[allDivs.length - 1]
 
     if (div.style.height == "0px") {
-        console.log('hello')
         self.innerHTML = '<i class="fa-solid fa-minus fa-xl darkteal-text"></i>'
         div.style.height = 'auto'
+        self.parentElement.classList.add('border-bottom-solid-teal')
+
+        if (self.parentElement != lastDiv) {
+            lastDiv.classList.add('border-bottom-solid-teal');
+        }
     } else {
         div.style.height = '0px'
         self.innerHTML = '<i class="fa-solid fa-plus fa-xl darkteal-text"></i>'
+        self.parentElement.classList.remove('border-bottom-solid-teal')
+
+        if (self.parentElement == lastDiv) {
+            lastDiv.classList.add('border-bottom-solid-teal');
+        }
     }
 }
+
+function openUnlinkProjectModal(id) {
+    const modal = document.getElementById(`unlinkProjectModal-${id}`)
+    modal.classList.replace('hide', 'show')
+
+    const cancelBtn = document.getElementById(`cancelBtn-${id}`)
+    cancelBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+
+    const closeModalBtn = document.getElementById(`close-modal-btn-${id}`)
+    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+}
+
+function openLinkProjectModal() {
+    const modal = document.getElementById(`linkProjectsModal`)
+    modal.classList.replace('hide', 'show')
+
+    const closeModalBtn = document.getElementById(`closeLinkProjectsModal`)
+    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+}
+
+var checkList = document.getElementById('relatedProjectsList');
+if (checkList) {
+    checkList.getElementsByClassName('anchor')[0].onclick = function(evt) {
+        if (checkList.classList.contains('visible'))
+          checkList.classList.remove('visible');
+        else
+          checkList.classList.add('visible');
+      }
+}
+

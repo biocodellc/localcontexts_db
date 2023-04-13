@@ -1,33 +1,5 @@
 {% extends 'auth-base.html' %} {% block title %} View Project {% endblock %} {% load static %} {% load custom_project_tags %} {% block main %}
-{% discoverable_project_view request.user project.unique_id as user_can_view %}
-
-    {% if project.project_privacy == 'Public' %}
-
-        {% include 'partials/_project-actions.html' %}
-
-    {% elif project.project_privacy == 'Contributor' %}
-        <!-- Logged in user -->
-        {% if request.user.is_authenticated %}
-            {% if user_can_view %}
-                {% include 'partials/_project-actions.html' %}
-            {% else %}
-                {% include 'partials/_project-contributor-view.html' %}
-            {% endif %}
-        {% else %}
-            {% include 'partials/_project-contributor-view.html' %}
-        {% endif %}
-
-    {% elif project.project_privacy == 'Private' %}
-
-        <!-- If project is private and project creator is accessing it -->
-        {% if project.project_creator == request.user %}
-            {% include 'partials/_project-actions.html' %}
-        {% else %}
-            <div class="content-card-v2 content-card-space">
-                <h3>This Project is private and cannot be viewed.</h3>
-            </div>
-        {% endif %}
-
-    {% endif %}
+    
+    {% include template_name %}
 
 {% endblock %}
