@@ -411,6 +411,7 @@ def send_membership_email(request, account, receiver, role):
     send_mailgun_template_email(receiver.email, subject, 'member_info', data)
 
 def send_contributor_email(request, account, proj_id, is_adding):
+    from projects.models import Project
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
     creator_account = ''
     account_name = ''
@@ -465,6 +466,7 @@ def send_contributor_email(request, account, proj_id, is_adding):
     
 
 def send_project_person_email(request, to_email, proj_id, account):
+    from projects.models import Project
     registered = User.objects.filter(email=to_email).exists()
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
 
