@@ -1,7 +1,7 @@
 from researchers.models import Researcher
 from institutions.models import Institution
 from communities.models import Community
-from projects.models import ProjectContributors, ProjectActivity
+from projects.models import ProjectActivity, ProjectContributors
 from helpers.emails import send_contributor_email
 from notifications.utils import send_simple_action_notification
 from helpers.models import ProjectStatus
@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from accounts.utils import get_users_name
 
+# PROJECT STATUS 
 def set_project_status(user, project, community, creator, project_status):
     truncated_project_title = str(project.title)[0:30]
     reference_id = project.unique_id
@@ -62,13 +63,18 @@ def project_status_seen_at_comment(user, community, creator, project):
             if creator.researcher:
                 send_simple_action_notification(user, creator.researcher, title, 'Projects', reference_id)
 
-
+# CONTRIBUTORS
 def add_to_contributors(request, account, project):
     contributors = ProjectContributors.objects.get(project=project)
     # Ensure all lists are int
     institutions_list = [eval(i) for i in request.POST.getlist('selected_institutions')]
     researchers_list = [eval(i) for i in request.POST.getlist('selected_researchers')]
     communities_list = [eval(i) for i in request.POST.getlist('selected_communities')]
+
+    if project.project_privacy == 'Private':
+        if any([institutions_list, researchers_list, communities_list]):
+            project.project_privacy = 'Contributor'
+            project.save()
 
     if '/edit-project/' in request.path:
 
@@ -165,25 +171,23 @@ def add_to_contributors(request, account, project):
         if isinstance(account, Institution):
             contributors.institutions.add(account)
 
-        selected = Institution.objects.filter(id__in=institutions_list)
-        for institution in selected:
+        for institution in Institution.objects.filter(id__in=institutions_list):
             contributors.institutions.add(institution) # add selected contribs to contribs
             send_simple_action_notification(None, institution, 'Your institution has been added as a contributor on a Project', 'Projects', project.unique_id)
             send_contributor_email(request, institution, project.unique_id, True)
 
-        selected = Researcher.objects.filter(id__in=researchers_list)
-        for researcher in selected:
+        for researcher in Researcher.objects.filter(id__in=researchers_list):
             contributors.researchers.add(researcher) # add selected contribs to contribs
             send_simple_action_notification(None, researcher, 'You have been added as a contributor on a Project', 'Projects', project.unique_id)
             send_contributor_email(request, researcher, project.unique_id, True)
 
-        selected = Community.objects.filter(id__in=communities_list)
-        for community in selected:
+        for community in Community.objects.filter(id__in=communities_list):
             contributors.communities.add(community) # add selected contribs to contribs
             send_simple_action_notification(None, community, 'Your community has been as a contributor on a Project', 'Projects', project.unique_id)
             send_contributor_email(request, community, project.unique_id, True)
 
 
+# PAGINATION FOR PROJECTS
 def paginate(request, queryset, num_of_pages):
     p = Paginator(queryset, num_of_pages)
     page_num = request.GET.get('page', 1)

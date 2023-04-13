@@ -498,10 +498,11 @@ def newsletter_subscription(request):
                     last_name = request.POST['last_name']
                     name= str(first_name) + str(' ') + str(last_name)
                     email = request.POST['email']
-                    variables = manage_mailing_list(request, first_name)
+                    emailb64 = urlsafe_base64_encode(force_bytes(email))
+                    variables = manage_mailing_list(request, first_name, emailb64)
                     add_to_mailing_list(str(email), str(name), str(variables))
                     messages.add_message(request, messages.SUCCESS, 'You have been subscribed.')
-                    return redirect('newsletter-subscription')
+                    return redirect('newsletter-unsubscription', emailb64=emailb64)
                 else:
                     messages.error(request, 'Invalid reCAPTCHA. Please try again.')
 
@@ -513,59 +514,63 @@ def newsletter_unsubscription(request, emailb64):
     environment = dev_prod_or_local(request.get_host())
 
     if environment == 'PROD' or 'localhost' in request.get_host():
-        email=force_text(urlsafe_base64_decode(emailb64))
-        response = get_member_info(email)
-        data=response.json()
-        member_info = data["member"]
-        name = member_info["name"]
-        variables = member_info["vars"]
-        subscribed = member_info["subscribed"]
-        if subscribed == True:
-            for item in variables:
-                if item == 'tech':
-                    tech = variables[item]
-                if item == 'news':
-                    news = variables[item]
-                if item == 'events':
-                    events = variables[item]
-                if item == 'notice':
-                    notice = variables[item]
-                if item == 'labels':
-                    labels = variables[item]
-                if item == 'first_name':
-                    first_name = variables[item]
-        
-            context={
-                'email':email,
-                'tech': tech,
-                'news': news,
-                'events': events,
-                'notice': notice,
-                'labels': labels,
-                'subscribed':subscribed
-            }
-        else:
-            context={'subscribed':subscribed}
+        try:
+            email=force_text(urlsafe_base64_decode(emailb64))
+            response = get_newsletter_member_info(email)
+            data=response.json()
+            member_info = data["member"]
+            name = member_info["name"]
+            variables = member_info["vars"]
+            subscribed = member_info["subscribed"]
+            if subscribed == True:
+                for item in variables:
+                    if item == 'tech':
+                        tech = variables[item]
+                    if item == 'news':
+                        news = variables[item]
+                    if item == 'events':
+                        events = variables[item]
+                    if item == 'notice':
+                        notice = variables[item]
+                    if item == 'labels':
+                        labels = variables[item]
+                    if item == 'first_name':
+                        first_name = variables[item]
+            
+                context = {
+                    'email': email,
+                    'tech': tech,
+                    'news': news,
+                    'events': events,
+                    'notice': notice,
+                    'labels': labels,
+                    'subscribed': subscribed
+                }
+            else:
+                context = {'subscribed' : subscribed}
 
-        if request.method == 'POST':
-            if 'updatebtn' in request.POST:
-                if 'topic' not in request.POST:
-                    messages.add_message(request, messages.ERROR, 'Please select at least one topic.')
-                    return redirect('newsletter-unsubscription', emailb64=emailb64)
-                else:
-                    variables = manage_mailing_list(request, first_name)
-                    add_to_mailing_list(str(email), str(name), str(variables))
-                    messages.add_message(request, messages.SUCCESS, 'Your preferences have been updated.')
-                    return redirect('newsletter-unsubscription', emailb64=emailb64)
+            if request.method == 'POST':
+                if 'updatebtn' in request.POST:
+                    if 'topic' not in request.POST:
+                        messages.add_message(request, messages.ERROR, 'Please select at least one topic.')
+                        return redirect('newsletter-unsubscription', emailb64=emailb64)
+                    else:
+                        variables = manage_mailing_list(request, first_name, email)
+                        add_to_mailing_list(str(email), str(name), str(variables))
+                        messages.add_message(request, messages.SUCCESS, 'Your preferences have been updated.')
+                        return redirect('newsletter-unsubscription', emailb64=emailb64)
 
-            if 'unsubscribebtn' in request.POST:
-                if 'unsubscribe' not in request.POST:
-                    messages.add_message(request, messages.ERROR, 'Please check the box below to unsubscribe.')
-                    return redirect('newsletter-unsubscription', emailb64=emailb64)
-                else:
-                    unsubscribe_from_mailing_list(str(email), str(name))
-                    return redirect('newsletter-unsubscription', emailb64=emailb64)
-        return render(request, 'accounts/newsletter-unsubscription.html', context)
+                if 'unsubscribebtn' in request.POST:
+                    if 'unsubscribe' not in request.POST:
+                        messages.add_message(request, messages.ERROR, 'Please check the box below to unsubscribe.')
+                        return redirect('newsletter-unsubscription', emailb64=emailb64)
+                    else:
+                        unsubscribe_from_mailing_list(str(email), str(name))
+                        return redirect('newsletter-unsubscription', emailb64=emailb64)
+            return render(request, 'accounts/newsletter-unsubscription.html', context)
+        except:
+            raise Http404()
+
     else:
         return redirect('login')
 
