@@ -34,6 +34,19 @@ def send_mailgun_template_email(email, subject, template_name, data):
             "t:variables": json.dumps(data)
             })
 
+def send_tagged_mailgun_template_email(email, subject, template_name, data, tag):
+    return requests.post(
+        settings.MAILGUN_BASE_URL,
+        auth=("api", settings.MAILGUN_API_KEY),
+        data={
+            "from": "Local Contexts Hub <no-reply@localcontextshub.org>",
+            "to": email,
+            "subject": subject,
+            "template": template_name,
+            "t:variables": json.dumps(data),
+            "o:tag": [tag]
+            })
+
 """
     INTERNAL EMAILS
 """
@@ -75,7 +88,7 @@ def add_to_mailing_list(email, name, variables):
     )
 
 # Get member info from newsletter mailing list
-def get_member_info(email):
+def get_newsletter_member_info(email):
     return requests.get(
         ("https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members"
          "/%s"%email),
@@ -94,22 +107,29 @@ def unsubscribe_from_mailing_list(email, name):
             "name": name}
     )
 
+# Send email to Newsletter Mailing List
 def send_newsletter():
     response = requests.get(
         ("https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members"),
         auth=('api', settings.MAILGUN_API_KEY),
         )
-    info=response.json()
-    for item in info["items"]:
-        if item["subscribed"] == True:
-            email = item["address"]
-            emailb64 = urlsafe_base64_encode(force_bytes(email))
-            preferences_url = f'http://localcontextshub.org/newsletter-preferences/{emailb64}'
-            
-            data = {'email': email, 'preferences_url': preferences_url }
-            subject = 'Local Contexts Newsletter'
-            send_mailgun_template_email(email, subject, 'newsletter_template', data)
+    email = 'newsletter@localcontextshub.org'
+    data = None
+    subject = 'Local Contexts Newsletter: Welcome, Summit, and more'
+    tag= "April Newsletter"
+    send_tagged_mailgun_template_email(email, subject, 'newsletter_template', data, tag)
 
+# Send email to Testing Mailing List
+def send_test_mailing_list_email():
+    response = requests.get(
+        ("https://api.mailgun.net/v3/lists/test@localcontextshub.org/members"),
+        auth=('api', settings.MAILGUN_API_KEY),
+        )
+    email = 'test@localcontextshub.org'
+    subject = 'Testing Email'
+    data=None
+    send_mailgun_template_email(email, subject, 'testing_variables', data)
+        
 # Send all Institution and community applications to support or the site admin
 def send_hub_admins_application_email(request, organization, data):
     template = ''
@@ -169,8 +189,6 @@ def send_activation_email(request, user):
     data = {'user': user.username, 'activation_url': activation_url}
     subject = 'Activate Your Local Contexts Hub Profile'
     send_mailgun_template_email(user.email, subject, 'activate_profile', data)
-# ASHLEYTODO For email in list
-
 
 #  Resend Activation Email
 def resend_activation_email(request, active_users):
@@ -393,7 +411,6 @@ def send_membership_email(request, account, receiver, role):
     send_mailgun_template_email(receiver.email, subject, 'member_info', data)
 
 def send_contributor_email(request, account, proj_id, is_adding):
-    from projects.models import Project
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
     creator_account = ''
     account_name = ''
@@ -448,7 +465,6 @@ def send_contributor_email(request, account, proj_id, is_adding):
     
 
 def send_project_person_email(request, to_email, proj_id, account):
-    from projects.models import Project
     registered = User.objects.filter(email=to_email).exists()
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
 

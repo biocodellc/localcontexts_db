@@ -33,7 +33,7 @@ urlpatterns = [
     path('registry/researchers/', views.registry_researchers, name='researcher-registry'),
     path('counter/', views.hub_counter, name='hub-counter'),
     path('newsletter/subscribe/', views.newsletter_subscription, name='newsletter-subscription'),
-    path('newsletter/preferences/<emailb64>', views.newsletter_unsubscription, name='newsletter-unsubscription'),
+    path('newsletter/preferences/<emailb64>/', views.newsletter_unsubscription, name='newsletter-unsubscription'),
 
 
     path('reset-password/', auth_views.PasswordResetView.as_view(template_name="accounts/password-reset.html"), name="reset_password"),
