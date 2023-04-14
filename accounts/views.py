@@ -11,8 +11,6 @@ from .decorators import unauthenticated_user
 from rest_framework_api_key.models import APIKey
 
 from django.core.paginator import Paginator
-from itertools import chain
-from operator import attrgetter
 
 # For emails
 from django.conf import settings
