@@ -1,0 +1,13 @@
+{% extends 'auth-base.html' %}{% block title %} 403 Forbidden {% endblock %}{% load static %}{% block main %}
+
+    <div class="white-bg page-not-found-card content-card flex-this align-center justify-center">
+        <div class="flex-this row align-center w-90">
+            <div class="w-30 center-text"><img loading="lazy" src="{% static 'images/logos/logo-404.png' %}" alt="404 Local Contexts round logo"></div>
+            <div class="w-70">
+                <div><h1 class="orange-text">403 Forbidden</h1></div>
+                <div><p>You do not have sufficient permissions to view this page. <br>Contact us at <a href="mailto:support@localcontexts.org" class="darkteal-text">support@localcontexts.org</a><br><br>  <strong>Error Code: 403 Forbidden</strong></p></div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

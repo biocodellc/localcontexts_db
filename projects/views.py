@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Project, ProjectContributors, ProjectCreator, ProjectPerson
 from helpers.models import Notice
 from helpers.utils import render_to_pdf, generate_zip
-from django.http import HttpResponse, Http404, HttpResponseForbidden
+from django.http import HttpResponse, Http404
 import requests
 from accounts.models import UserAffiliation
 from researchers.models import Researcher
@@ -54,9 +54,9 @@ def view_project(request, unique_id):
         if project.can_user_access(request.user) == 'partial' or project.can_user_access(request.user) == True:
             return render(request, 'projects/view-project.html', context)
         else:
-            return HttpResponseForbidden('You do not have the necessary permissions to view this project.')
+            return redirect('restricted')
     else:
-        return redirect('login')
+        return redirect('restricted')
 
 
 def download_project_zip(request, unique_id):
@@ -64,7 +64,7 @@ def download_project_zip(request, unique_id):
         project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
 
         if project.project_privacy == "Private":
-            return HttpResponseForbidden('Private Projects cannot be downloaded.')
+            return redirect('restricted')
         else:
             baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/'
             project_bclabels = project.bc_labels.all()

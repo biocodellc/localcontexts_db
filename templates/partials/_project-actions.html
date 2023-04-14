@@ -482,7 +482,6 @@
             {% if request.user.is_authenticated %}
                 {% if 'projects/actions/' in request.path %}
                     {% if request.user == project.project_creator %}
-
                         <a 
                             class="block" 
                             {% if community %}
@@ -496,7 +495,7 @@
                             {% endif %}
                         ><i class="fa-solid fa-pen-to-square"></i> Edit Project</a>
                     {% endif %}
-                    {% if request.user == project.project_creator or member_role == 'admin' or member_role == 'editor' %}
+                    {% if request.user == project.project_creator or member_role == 'admin' or member_role == 'editor' or user_researcher %}
                         {% if not project.source_project_uuid %}
                             <a 
                                 class="block" 
@@ -582,13 +581,31 @@
                     ><i class="fa-solid fa-user-group"></i> Notify Communities</a>
                 {% endif %}
 
-                <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
             {% endif %}
-            <a id="shareBtn" class="block pointer" onclick="copyProjectUrl('projectPageUrl', 'shareBtn')"><i class="fa-solid fa-share-nodes"></i> Share</a>
-            <input type="text" value="{{ project.project_page}}" id="projectPageUrl" class="hide">
+            {% if not project.project_privacy == 'Private' %}
+                <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
+                
+                <a id="shareBtn" class="block pointer" onclick="copyProjectUrl('projectPageUrl', 'shareBtn')"><i class="fa-solid fa-share-nodes"></i> Share</a>
+                <input type="text" value="{{ project.project_page}}" id="projectPageUrl" class="hide">
 
-            {% if project.project_privacy == 'Public' or project.project_privacy == 'Contributor' %}
                 <a class="block" href="{% url 'download-project-zip' project.unique_id %}"><i class="fa-solid fa-download"></i> Download</a>
+            {% else %}
+                <a class="block a-disabled"> 
+                    <i class="fa-solid fa-share-nodes"></i> Share
+                    <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                        <span class="tooltiptext">
+                            Private Projects cannot be shared.
+                        </span>
+                    </div> 
+                </a>
+                <a class="block a-disabled"> 
+                    <i class="fa-solid fa-download"></i> Download
+                    <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                        <span class="tooltiptext">
+                            Private Projects cannot be downloaded.
+                        </span>
+                    </div> 
+                </a>
             {% endif %}
 
             {% if 'projects/actions/' in request.path %}
@@ -670,48 +687,50 @@
         </div>  
 
         <!-- View As card: in view-projects: If user is logged in AND belongs to account of a contributor of Project, display affiliations -->
-        {% if not '/actions/' in request.path %}
-            {% if communities or institutions or user_researcher %}
+        {% if not project.project_privacy == 'Private' %}
+            {% if not '/actions/' in request.path %}
+                {% if communities or institutions or user_researcher %}
+                    <div class="actions-card content-card-space flex-this column">
+                        <h3 class="no-top-margin">View As 
+                            <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                                <span class="tooltiptext">
+                                    You are viewing what this Project looks like publicly. To access the action page as a contributor on this Project, select an account below.
+                                </span>
+                            </div> 
+                        </h3>
+
+                        {% for community in communities %}
+                            <a class="block" href="{% url 'community-project-actions' community.id project.unique_id %}"> 
+                                <i class="fa-solid fa-address-card"></i> {{ community.community_name }}
+                            </a>
+                        {% endfor %}
+                        {% for institution in institutions %}
+                            <a class="block" href="{% url 'institution-project-actions' institution.id project.unique_id %}"> 
+                                <i class="fa-solid fa-address-card"></i> {{ institution.institution_name }}
+                            </a>
+                        {% endfor %}
+                        {% if user_researcher %}
+                            <a class="block" href="{% url 'researcher-project-actions' user_researcher.id project.unique_id %}"> 
+                                <i class="fa-solid fa-address-card"></i> {{ user_researcher.user }} (Researcher)
+                            </a>
+                        {% endif %}
+                    </div> 
+                {% endif %}
+            {% else %}
                 <div class="actions-card content-card-space flex-this column">
                     <h3 class="no-top-margin">View As 
                         <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
                             <span class="tooltiptext">
-                                You are viewing what this Project looks like publicly. To access the action page as a contributor on this Project, select an account below.
+                                You are viewing the action page of this Project, which is only accessible to contributors. Use this button to see what this Project looks like publicly.
                             </span>
                         </div> 
                     </h3>
-
-                    {% for community in communities %}
-                        <a class="block" href="{% url 'community-project-actions' community.id project.unique_id %}"> 
-                            <i class="fa-solid fa-address-card"></i> {{ community.community_name }}
-                        </a>
-                    {% endfor %}
-                    {% for institution in institutions %}
-                        <a class="block" href="{% url 'institution-project-actions' institution.id project.unique_id %}"> 
-                            <i class="fa-solid fa-address-card"></i> {{ institution.institution_name }}
-                        </a>
-                    {% endfor %}
-                    {% if user_researcher %}
-                        <a class="block" href="{% url 'researcher-project-actions' user_researcher.id project.unique_id %}"> 
-                            <i class="fa-solid fa-address-card"></i> {{ user_researcher.user }} (Researcher)
-                        </a>
-                    {% endif %}
+                    <a 
+                        class="block" 
+                        href="{% url 'view-project' project.unique_id %}"
+                    ><i class="fa-solid fa-eye"></i> Public View</a>
                 </div> 
             {% endif %}
-        {% else %}
-            <div class="actions-card content-card-space flex-this column">
-                <h3 class="no-top-margin">View As 
-                    <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
-                        <span class="tooltiptext">
-                            You are viewing the action page of this Project, which is only accessible to contributors. Use this button to see what this Project looks like publicly.
-                        </span>
-                    </div> 
-                </h3>
-                <a 
-                    class="block" 
-                    href="{% url 'view-project' project.unique_id %}"
-                ><i class="fa-solid fa-eye"></i> Public View</a>
-            </div> 
         {% endif %}
 
         <!-- Community: set project status -->

@@ -22,8 +22,8 @@ def delete_member_invite(request, pk):
         return redirect('institution-member-requests', invite.institution.id)
 
 
-def restricted_view(request):
-    return render(request, 'restricted.html')
+def restricted_view(request, exception=None):
+    return render(request, '403.html', status=403)
 
 def download_open_collaborate_notice(request):
     baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/'
