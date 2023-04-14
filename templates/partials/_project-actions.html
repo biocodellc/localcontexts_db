@@ -336,7 +336,7 @@
                         </p>
                     </div>
                     {% if community or institution or researcher %}
-                        {% if member_role == 'admin' or member_role == 'editor' or request.user == project.project_creator %}
+                        {% if member_role == 'admin' or member_role == 'editor' or request.user == project.project_creator or researcher %}
                             <div class="flex-this">
                                 <div class="margin-right-8">
                                     <a 
@@ -495,7 +495,7 @@
                             {% endif %}
                         ><i class="fa-solid fa-pen-to-square"></i> Edit Project</a>
                     {% endif %}
-                    {% if request.user == project.project_creator or member_role == 'admin' or member_role == 'editor' or user_researcher %}
+                    {% if request.user == project.project_creator or member_role == 'admin' or member_role == 'editor' or researcher %}
                         {% if not project.source_project_uuid %}
                             <a 
                                 class="block" 
@@ -844,7 +844,7 @@
     </div>
 {% endif %}
 
-{% if member_role == "admin" or member_role == "editor" or request.user == project.project_creator %}
+{% if member_role == "admin" or member_role == "editor" or request.user == project.project_creator or researcher %}
     <div id="linkProjectsModal" class="modal hide">
 
         <div class="modal-defaults notice-modal flex-this column w-100">
