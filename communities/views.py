@@ -912,20 +912,19 @@ def edit_project(request, community_id, project_uuid):
 # @login_required(login_url='login')
 def project_actions(request, pk, project_uuid):
     community = Community.objects.get(id=pk)
+    project = Project.objects.prefetch_related(
+            'bc_labels', 
+            'tk_labels', 
+            'bc_labels__community', 
+            'tk_labels__community',
+            'bc_labels__bclabel_translation', 
+            'tk_labels__tklabel_translation',
+            ).get(unique_id=project_uuid)
 
     member_role = check_member_role(request.user, community)
-    if member_role == False or not request.user.is_authenticated:
+    if member_role == False or not request.user.is_authenticated or not project.can_user_access(request.user):
         return redirect('view-project', project_uuid)    
     else:
-        project = Project.objects.prefetch_related(
-                    'bc_labels', 
-                    'tk_labels', 
-                    'bc_labels__community', 
-                    'tk_labels__community',
-                    'bc_labels__bclabel_translation', 
-                    'tk_labels__tklabel_translation',
-                    ).get(unique_id=project_uuid)
-
         notices = Notice.objects.filter(project=project, archived=False)
         creator = ProjectCreator.objects.get(project=project)
         current_status = ProjectStatus.objects.filter(project=project, community=community).first()
