@@ -1313,6 +1313,17 @@ if (window.location.href.includes('labels/view/')) {
     }
 }
 
+const copyBtns = document.querySelectorAll('.copy-btn');
+
+copyBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = document.querySelector(`#${btn.dataset.target}`);
+    target.select();
+    target.setSelectionRange(0, 99999)
+    navigator.clipboard.writeText(target.value)
+  });
+});
+
 // PROJECT ACTION PAGE
 function copyProjectUrl(projectPageUrl, elemID) {
     let target = document.getElementById(projectPageUrl)
@@ -1346,6 +1357,14 @@ function greenCopyBtn(btnElem, spanIDToCopy) {
             btnElem.innerHTML = `<i class="round-btn fa-regular fa-clone fa-rotate-90"></i>`
         }, 1000)
     })
+}
+
+function openShareProjectModal(elem) {
+    const modal = document.getElementById(elem)
+    modal.classList.replace('hide', 'show')
+
+    const closeModalBtn = document.getElementById('closeShareProjectModal')
+    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
 }
 
 function openNotifyCommunitiesModal(elem) {
