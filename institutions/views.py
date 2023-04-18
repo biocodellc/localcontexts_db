@@ -685,7 +685,7 @@ def project_actions(request, pk, project_uuid):
             ).get(unique_id=project_uuid)
 
     member_role = check_member_role(request.user, institution)
-    if member_role == False or not request.user.is_authenticated:
+    if member_role == False or not request.user.is_authenticated or not project.can_user_access(request.user):
         return redirect('view-project', project_uuid)    
     else:
         notices = Notice.objects.filter(project=project, archived=False)
