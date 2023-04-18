@@ -458,7 +458,7 @@ def project_actions(request, pk, project_uuid):
         researcher = Researcher.objects.get(id=pk)
 
         user_can_view = checkif_user_researcher(researcher, request.user)
-        if user_can_view == False:
+        if user_can_view == False or not project.can_user_access(request.user):
             return redirect('view-project', project.unique_id)
         else:
             notices = Notice.objects.filter(project=project, archived=False)
