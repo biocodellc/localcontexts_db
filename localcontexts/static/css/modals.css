@@ -44,3 +44,23 @@
 .notice-modal { width: 700px; }
 /* PROJECT ACTION PAGE: UNLINK PROJECT */
 .project-unlink-modal { width: 680px; height: 202px; }
+
+/* PROJECT ACTION PAGE: SHARE PROJECT MODAL */
+.share-project-modal { width: 909px; height: 290px; }
+.text-input-to-copy { position: relative;}
+.btn-in-input {
+    position: absolute;
+    right: 8px;
+    top: 3px;
+    border: none;
+    padding: 8px 16px;
+    background: #108670;
+    border-radius: 31px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-in-input:hover {
+    background: #1f9d86;
+}

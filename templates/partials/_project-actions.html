@@ -354,7 +354,7 @@
                                 </div>
 
                                 <div>
-                                    <a class="primary-btn green-btn" onclick="openLinkProjectModal()">Connect Projects <i class="margin-left-8 fa-solid fa-link-simple"></i></a>
+                                    <a class="primary-btn green-btn" onclick="openModal('linkProjectsModal', 'closeLinkProjectsModal')">Connect Projects <i class="margin-left-8 fa-solid fa-link-simple"></i></a>
                                 </div>
                             </div>    
                         {% endif %}
@@ -396,7 +396,7 @@
                                             </a>
                                         </div>
 
-                                        <div id="unlinkProjectModal-{{p.unique_id}}" class="modal hide">
+                                        <div id="unlinkProjectModal-{{p.unique_id}}" class="modal hide" data-modal="unlinkProjectModal" data-id="{{p.unique_id}}">
                                             <div class="modal-defaults project-unlink-modal flex-this column w-100">
                                                 <div class="w-100">
 
@@ -406,7 +406,7 @@
                                                             <p>Are you sure you want to remove this connection?</p>  
                                                         </div>
                                                         <div>
-                                                            <div id="close-modal-btn-{{p.unique_id}}" class="pointer"><i class="fa-regular fa-xmark fa-xl"></i></div>
+                                                            <div id="close-modal-btn-{{p.unique_id}}" class="pointer" data-action="close"><i class="fa-regular fa-xmark fa-xl"></i></div>
                                                         </div>
                                                     </div>
                                                     
@@ -432,6 +432,7 @@
                                                             <a 
                                                                 id="cancelBtn-{{p.unique_id}}"
                                                                 class="primary-btn white-btn center-text"
+                                                                data-action="cancel"
                                                             >
                                                                 No, keep this Project connected
                                                             </a>
@@ -559,7 +560,7 @@
                         {% if member_role == 'admin' or member_role == 'editor' %}
                             <a 
                                 class="block pointer" 
-                                onclick="openNotifyCommunitiesModal(this)"
+                                onclick="openModal('notifyCommunitiesModal', 'closeNotifyModal')"
                             ><i class="fa-solid fa-user-group"></i> Notify Communities</a>
                         {% endif %}
                     {% else %}
@@ -577,7 +578,7 @@
                 {% if researcher %}
                     <a 
                         class="block pointer" 
-                        onclick="openNotifyCommunitiesModal(this)"
+                        onclick="openModal('notifyCommunitiesModal', 'closeNotifyModal')"
                     ><i class="fa-solid fa-user-group"></i> Notify Communities</a>
                 {% endif %}
 
@@ -585,8 +586,36 @@
             {% if not project.project_privacy == 'Private' %}
                 <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
                 
-                <a id="shareBtn" class="block pointer" onclick="copyProjectUrl('projectPageUrl', 'shareBtn')"><i class="fa-solid fa-share-nodes"></i> Share</a>
-                <input type="text" value="{{ project.project_page}}" id="projectPageUrl" class="hide">
+                <a id="shareBtn" class="block pointer" onclick="openModal('shareProjectModal', 'closeShareProjectModal')"><i class="fa-solid fa-share-nodes"></i> Share</a>
+
+                <div id="shareProjectModal" class="modal hide">
+                    <div class="modal-defaults share-project-modal flex-this column w-100">
+
+                        <div class="flex-this space-between">
+                            <div class="w-80">
+                                <h2 class="primary-black-text no-top-margin">Share Project</h2>  
+                            </div>
+                            <div>
+                                <div id="closeShareProjectModal" class="pointer"><i class="fa-regular fa-xmark fa-xl"></i></div>
+                            </div>
+                        </div>
+
+                        <div class="w-100 flex-this column">
+                            <label class="bold margin-top-8 margin-bottom-8 block">Local Contexts Project ID</label>
+                            <div class="text-input-to-copy">
+                                <input class="w-100" type="text" value="{{ project.unique_id }}" id="projectUUIDToCopy">
+                                <button class="copy-btn btn-in-input" data-target="projectUUIDToCopy">Copy ID</button>
+                            </div>
+
+                            <label class="bold margin-top-8 margin-bottom-8 block">Local Contexts Project URL</label>
+
+                            <div class="text-input-to-copy">
+                                <input class="w-100" type="text" value="{{ project.project_page}}" id="projectPageUrlToCopy">
+                                <button class="copy-btn btn-in-input" data-target="projectPageUrlToCopy">Copy URL</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <a class="block" href="{% url 'download-project-zip' project.unique_id %}"><i class="fa-solid fa-download"></i> Download</a>
             {% else %}
@@ -637,7 +666,7 @@
                     {% if not project.has_labels %}
                         <a 
                             class="block pointer" 
-                            onclick="openDeleteProjectModal(this)"
+                            onclick="openModal('deleteProjectModal', 'closeProjectDeletionModal')"
                         ><i class="fa-solid fa-trash"></i> Delete
 
                         <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
@@ -794,7 +823,7 @@
                     <div class="flex-this space-between">
                         <div><h2 class="primary-black-text no-top-margin">Notify Communities</h2></div>
                         <div>
-                            <div class="close-modal-btn pointer"><i class="fa-regular fa-xmark fa-xl"></i></div>
+                            <div id="closeNotifyModal" class="close-modal-btn pointer"><i class="fa-regular fa-xmark fa-xl"></i></div>
                         </div>            
                     </div>
 
