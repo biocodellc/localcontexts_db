@@ -2,6 +2,7 @@ from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
 from django.contrib.auth.models import User
+from helpers.models import LabelNote
 
 from localcontexts.utils import dev_prod_or_local
 from accounts.utils import get_users_name
