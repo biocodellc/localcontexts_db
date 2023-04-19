@@ -230,58 +230,76 @@
                     <h2 class="margin-right-8 pointer" onclick="toggleProjectInfo(this, 'projectLabelsDiv')"><i class="fa-solid fa-minus fa-xl darkteal-text"></i></h2>
                 </div>
                 <div id="projectLabelsDiv" style="height: auto; overflow: hidden;">
-                    {% for tklabel in project.tk_labels.all %}
-                        <div class="flex-this">
-                            <div class="project-left-sidebar"><p class="bold">{{ tklabel.name }}</p></div>
-                            <div>
-                                <div class="flex-this margin-top-16">
-                                    <div>
-                                        {% include 'tklabels/which-label.html' %} 
-                                    </div>
-                                    <div class="margin-left-16">
-                                        <p class="no-top-margin bold">Label applied by <a class="darkteal-text underline-hover" href="{% url 'public-community' tklabel.community.id %}">{{ tklabel.community.community_name }}</a></p><br>
-                                    </div>
-                                </div>
 
-                                <h3>{{ tklabel.language }}</h3>
-                                <p>
-                                    {{ tklabel.label_text }} <br>
-                                </p>
-                                {% for translation in tklabel.tklabel_translation.all %}
-                                    <h3>{{ translation.language }}</h3>
-                                    <p>
-                                        {{ translation.translated_text }}
-                                    </p>
-                                {% endfor %}
+                    {% for community, labels in label_groups.items %}
+                        <div class="label-group">
+                            <div class="flex-this space-between">
+                                <div>
+                                    <a class="darkteal-text underline-hover bold" href="{% url 'public-community' community.id %}">{{ community.community_name }}</a> <br>
+                                    <p class="italic">
+                                        <i class="fa-solid fa-tag"></i> {{ labels.bc_label_count|add:labels.tk_label_count }} Labels applied
+                                    </p>                                
+                                </div>
+                                <div>
+                                    <i id="{{community.id}}" onclick="showProjectLabels(this)" class="fa-solid fa-angle-down pointer" aria-label="Show Project Labels"></i>
+                                </div>
                             </div>
+                            <div id="showContent-{{community.id}}" class="hide">
+                                {% for bclabel in labels.bc_labels %}
+                                    <div class="flex-this border-bottom-not-last">
+                                        <div>
+                                            <div class="flex-this margin-top-16">
+                                                <div>
+                                                    {% include 'bclabels/which-label.html' %} 
+                                                </div>
+                                                <div class="margin-left-16">
+                                                    <p class="no-top-margin bold">{{bclabel.name}} </p><br>
+                                                </div>
+                                            </div>
+            
+                                            <h3>{{ bclabel.language }}</h3>
+                                            <p>
+                                                {{ bclabel.label_text }} <br>
+                                            </p>
+                                            {% for translation in bclabel.bclabel_translation.all %}
+                                                <h3>{{ translation.language }}</h3>
+                                                <p>
+                                                    {{ translation.translated_text }}
+                                                </p>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                                {% for tklabel in labels.tk_labels %}
+                                    <div class="flex-this border-bottom-not-last">
+                                        <div>
+                                            <div class="flex-this margin-top-16">
+                                                <div>
+                                                    {% include 'tklabels/which-label.html' %} 
+                                                </div>
+                                                <div class="margin-left-16">
+                                                    <p class="no-top-margin bold">{{ tklabel.name }} </p><br>
+                                                </div>
+                                            </div>
+            
+                                            <h3>{{ tklabel.language }}</h3>
+                                            <p>
+                                                {{ tklabel.label_text }} <br>
+                                            </p>
+                                            {% for translation in tklabel.tklabel_translation.all %}
+                                                <h3>{{ translation.language }}</h3>
+                                                <p>
+                                                    {{ translation.translated_text }}
+                                                </p>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endfor %}                                
+                            </div>
+
                         </div>
                     {% endfor %}
-                    {% for bclabel in project.bc_labels.all %}
-                        <div class="flex-this">
-                            <div class="project-left-sidebar"><p class="bold">{{ bclabel.name }}</p></div>
-                            <div>
-                                <div class="flex-this margin-top-16">
-                                    <div>
-                                        {% include 'bclabels/which-label.html' %} 
-                                    </div>
-                                    <div class="margin-left-16">
-                                        <p class="no-top-margin bold">Label applied by <a class="darkteal-text underline-hover" href="{% url 'public-community' bclabel.community.id %}">{{ bclabel.community.community_name }}</a></p><br>
-                                    </div>
-                                </div>
 
-                                <h3>{{ bclabel.language }}</h3>
-                                <p>
-                                    {{ bclabel.label_text }} <br>
-                                </p>
-                                {% for translation in bclabel.bclabel_translation.all %}
-                                    <h3>{{ translation.language }}</h3>
-                                    <p>
-                                        {{ translation.translated_text }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endfor %}
                 </div>
             {% endif %}
 
