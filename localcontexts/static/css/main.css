@@ -170,9 +170,7 @@ input:focus {
 .font-size-19 { font-size: 19px; }
 
 /* Underline text on hover */
-.underline-hover:hover { 
-    text-decoration: underline; 
-}
+.underline-hover:hover { text-decoration: underline; }
 
 /* Break up long text */
 .word-break { word-break: break-all; }
@@ -194,6 +192,7 @@ input:focus {
 .upper { text-transform: uppercase;}
 .center-text { text-align: center; }
 .right-text { text-align: right; }
+.italic { font-style: italic; }
 
 /* MARGIN & PADDING */
 .margin-top-1 { margin-top: 1%; }
@@ -1084,6 +1083,17 @@ i[data-tooltip]:hover:after {
     min-width: 260px;
     margin-right: 10px;
 }
+
+.label-group {
+    border: 1px solid #CBD5E1;
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 8px;
+    margin-top: 8px;
+}
+
+.label-group:last-child:last-of-type { margin-bottom: 16px;}
+.border-bottom-not-last:not(:last-child) { border-bottom: 1px solid #C4C4C4; }
 
 .actions-card a {
     margin: 8px 16px;

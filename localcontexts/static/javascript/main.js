@@ -1401,3 +1401,17 @@ if (checkList) {
       }
 }
 
+function showProjectLabels(elem) {
+    let id = elem.id
+    let expandDiv = document.getElementById(`showContent-${id}`)
+
+    expandDiv.classList.toggle('hide')
+    expandDiv.classList.toggle('show')
+
+    if (expandDiv.classList.contains('show')) {
+        elem.classList.replace('fa-angle-down', 'fa-angle-up')
+    } else {
+        elem.classList.replace('fa-angle-up', 'fa-angle-down')
+    }
+}
+
