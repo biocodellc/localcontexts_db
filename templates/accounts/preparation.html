@@ -4,28 +4,30 @@
         <h2 class="no-top-margin">Preparation Step</h2>
         <p class="bold">Things to know before you start creating a new account.</p>
         <p>
-            <strong>01</strong> 
-                The person that creates a new account will become the administrator of that account by default. 
-                As the administrator you take on the role as a point of contact for the account, and your email address will receive emails from other users of the Local Contexts Hub.  
-                If you would like to change roles after creating your account, you can add and change roles in the members section of the account dashboard. 
-            <br><br>
-
-            <strong>02</strong> 
-
             {% if community %}
-                We want to confirm that the account you are creating has permission by representatives of this community to be active on the Local Contexts Hub. 
-                The representative should be someone who has responsibility for approving external agreements. 
+                <strong>01 As the creator of this new account, you will become the account contact by default.</strong> You will be the main administrator and the point of contact for the account. 
+                If you would like to change the account contact or your role after creating your account, please contact us.
             {% endif %}
 
             {% if institution %}
-                We want to confirm that the account you are creating has the permission from an appropriate representative of your institution to be active on the platform. 
-                The representative should be someone who has responsibility for authorizing third-party and/or external agreements. 
+                <strong>01 As the creator of this new account, you will become the main administrator by default.</strong>
+                You will be the main administrator and the point of contact for the account. If you would like to change the account contact or your role after creating your account, please contact us.
             {% endif %}
 
+            <br><br>   
+
+            <strong>02 In order to confirm your account, we will ask for the contact information for a community representative or a letter outlining their approval. </strong>
+            We want to confirm that the account you are creating has the permission from an appropriate representative of your {% if community %} community {% else %} institution {% endif %} to be active on the platform. 
+            Since this account will represent your {% if community %} community {% else %} institution {% endif %} on the Hub, your {% if community %} community {% else %} institutional {% endif %} representative should be someone 
+            who has the responsibility for {% if community %} approving community initiatives. {% else %} authorizing third-party and/or external agreements on behalf of your organization. {% endif %}
+            <br><br> 
+
+            We will ask for the representative’s name and email, or you may upload a signed letter outlining their approval to join the Hub. The contact information or letter are needed in order to create a new account. 
+
             <br><br>
-                We ask for details such as their name and email address so that we can contact them, or alternatively ask for a letter outlining their approval of this account being created. 
-            <br><br>
-                We recommend having this information ready before continuing to create a new account.
+            Until the account is confirmed, certain features will not be available. This confirmation must be completed within 90 days, or the account will be suspended. If you have any questions, please contact us. 
+            If you are trying out the Hub, please join our <a class="darkteal-text underline-hover" href="https://anth-ja77-lc-dev-42d5.uc.r.appspot.com/login/" target="_blank" rel="noopener">sandbox site <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>. 
+
         </p>            
     </div>
 
