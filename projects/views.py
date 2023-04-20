@@ -98,11 +98,6 @@ def download_project_zip(request, unique_id):
                 notices = Notice.objects.filter(project=project)
                 for notice in notices:
                     if not notice.archived:
-                        # Add Usage Guide
-                        usage_guide_url = baseURL + 'guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf'
-                        response = requests.get(usage_guide_url) 
-                        files.append(('Notices_Usage_Guide.pdf', response.content))
-
                         # Create PNG and TXT files based on which Notices are attached to the Project
                         if notice.notice_type == 'biocultural':
                             get_img = requests.get(notice.img_url)
@@ -126,11 +121,6 @@ def download_project_zip(request, unique_id):
                             files.append(('Attribution_Incomplete' + '.txt', notice.default_text))
 
             if project_bclabels or project_tklabels:
-                # Labels Usage guide PDF
-                usage_guide_url = baseURL + 'guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf'
-                response = requests.get(usage_guide_url) 
-                files.append(('BC_TK_Label_Usage_Guide.pdf', response.content))
-
                 # Set readme text
                 readme_text = "The Traditional Knowledge (TK) and Biocultural (BC) Labels reinforce the cultural authority and rights of Indigenous communities. \nThe TK and BC Labels are intended to be displayed prominently on public-facing Indigenous community, researcher and institutional websites, metadata and digital collection's pages.\n\nThis folder contains the following files:\n"
 
@@ -174,7 +164,7 @@ def download_project_zip(request, unique_id):
             file_names = []
             for f in files:
                 file_names.append(f[0])
-            readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guide for details on how to adapt and display the Notices or Labels for your Project.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
+            readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guides (https://localcontexts.org/support/downloadable-resources/) for details on how to adapt and display the Notices or Labels for your Project.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
             files.append(('README.txt', readme_content))
 
             # Generate zip file 

@@ -1219,11 +1219,6 @@ def download_labels(request, pk):
     pdf = render_to_pdf(template_path, context)
     files.append(('Labels_Overview.pdf', pdf))
 
-    # Labels Usage guide PDF
-    usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf'
-    response = requests.get(usage_guide_url) 
-    files.append(('BC_TK_Label_Usage_Guide.pdf', response.content))
-
     # Add Label images, text and translations
     for bclabel in bclabels:
         get_image = requests.get(bclabel.img_url)
@@ -1265,7 +1260,7 @@ def download_labels(request, pk):
     file_names = []
     for f in files:
         file_names.append(f[0])
-    readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guide for details on how to adapt and display the Labels for your community.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
+    readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guides (https://localcontexts.org/support/downloadable-resources/) for details on how to adapt and display the Labels for your community.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
     files.append(('README.txt', readme_content))
 
     # Generate zip file 
