@@ -189,6 +189,7 @@ def researcher_notices(request, pk):
             'user_can_view': user_can_view,
             'form': form,
             'urls': urls,
+            'otc_download_perm': 1,
         }
         return render(request, 'researchers/notices.html', context)
 

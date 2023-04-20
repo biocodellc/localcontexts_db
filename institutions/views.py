@@ -8,6 +8,7 @@ from localcontexts.utils import dev_prod_or_local
 from projects.utils import *
 from helpers.utils import *
 from notifications.utils import send_action_notification_to_project_contribs
+from helpers.downloads import download_otc_notice
 
 from .models import *
 from projects.models import *
@@ -259,6 +260,12 @@ def institution_notices(request, pk):
     else:
         urls = OpenToCollaborateNoticeURL.objects.filter(institution=institution).values_list('url', 'name', 'id')
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
+       
+        # sets permission to download OTC Notice
+        if institution.is_approved:
+            otc_download_perm = 1
+        else:
+            otc_download_perm = 0
 
         if request.method == 'POST':
             if form.is_valid():
@@ -272,6 +279,7 @@ def institution_notices(request, pk):
             'member_role': member_role,
             'form': form,
             'urls': urls,
+            'otc_download_perm': otc_download_perm,
         }
         return render(request, 'institutions/notices.html', context)
 
