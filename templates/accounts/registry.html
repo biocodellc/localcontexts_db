@@ -29,18 +29,23 @@
                 <p>
                     Browse: 
                     <a 
-                        href="{% url 'community-registry' %}" 
-                        class="{% if '/communities' in request.path %} bold {% endif %}darkteal-text pointer underline-hover"
+                        href="{% url 'registry' %}" 
+                        class="{% if filtertype is None %} bold {% endif %}darkteal-text pointer underline-hover"
+                    >All (0)
+                    </a> |
+                    <a 
+                        href="{% url 'registry' filtertype='communities' %}" 
+                        class="{% if '/communities/' in request.path %} bold {% endif %}darkteal-text pointer underline-hover"
                     >Communities ({% community_count %})
                     </a> |
                     <a 
-                        href="{% url 'institution-registry' %}" 
-                        class="{% if '/institutions' in request.path %} bold {% endif %}darkteal-text pointer underline-hover"
+                        href="{% url 'registry' filtertype='institutions' %}" 
+                        class="{% if '/institutions/' in request.path %} bold {% endif %}darkteal-text pointer underline-hover"
                     >Institutions ({% institution_count %})
                     </a> |        
                     <a 
-                        href="{% url 'researcher-registry' %}" 
-                        class="{% if '/researchers' in request.path %} bold {% endif %}darkteal-text pointer underline-hover"
+                        href="{% url 'registry' filtertype='researchers' %}" 
+                        class="{% if '/researchers/' in request.path %} bold {% endif %}darkteal-text pointer underline-hover"
                     >Researchers ({% researcher_count %})
                     </a>       
                 </p>            
@@ -50,6 +55,18 @@
         {% include 'partials/_alerts.html' %}
 
     </div>
+
+    <!-- {% if filtertype is None  %}
+        {% if results %}
+            {% for account in results %}
+                {% include 'partials/infocards/_community-card.html' %}
+            {% endfor %}
+        {% else %}
+            {% for account in items %}
+                {% include 'partials/infocards/_community-card.html' %}
+            {% endfor %}
+        {% endif %}
+    {% endif %} -->
     
     {% if communities %}
         {% if results %}
@@ -57,7 +74,7 @@
                 {% include 'partials/infocards/_community-card.html' %}
             {% endfor %}
         {% else %}
-            {% for community in items %}
+            {% for community in communities %}
                 {% include 'partials/infocards/_community-card.html' %}
             {% endfor %}
         {% endif %}
@@ -69,7 +86,7 @@
                 {% include 'partials/infocards/_institution-card.html' %}
             {% endfor %}
         {% else %}
-            {% for institution in items %}
+            {% for institution in institutions %}
                 {% include 'partials/infocards/_institution-card.html' %}
             {% endfor %}
         {% endif %}
@@ -81,7 +98,7 @@
                 {% include 'partials/infocards/_researcher-card.html' %}
             {% endfor %}
         {% else %}
-            {% for researcher in items %}
+            {% for researcher in researchers %}
                 {% include 'partials/infocards/_researcher-card.html' %}
             {% endfor %}
         {% endif %}

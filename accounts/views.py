@@ -17,6 +17,8 @@ from django.conf import settings
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
 
+from itertools import chain
+
 from django.contrib.auth.models import User
 from communities.models import Community, InviteMember
 from institutions.models import Institution
@@ -388,6 +390,46 @@ def registry_researchers(request):
 
         context = { 'researchers': True, 'items': page, 'results': results}
         return render(request, 'accounts/registry.html', context)
+    except:
+        raise Http404()
+
+def registry_updated(request, filtertype=None):
+    try:
+        c = ""
+        r = ""
+        i = ""
+        if filtertype == None:
+            c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
+            i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
+            r = Researcher.objects.select_related('user').all().order_by('user__username')
+        #     cards = list(chain(c,i,r))
+        if filtertype == 'communities':
+            c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
+        if filtertype == 'institutions':
+            i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
+        if filtertype == 'researchers':
+            r = Researcher.objects.select_related('user').all().order_by('user__username')
+
+        cards = list(chain(c,r,i))
+        results = None
+
+        p = Paginator(cards, 5)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+
+        print(cards[0])
+
+        context = {
+            'researchers' : r,
+            'communities' : c,
+            'institutions' : i,
+            # 'items' : page,
+            'results' : results,
+            'filtertype' : filtertype
+        }
+        
+        return render(request, 'accounts/registry.html', context)
+
     except:
         raise Http404()
 
