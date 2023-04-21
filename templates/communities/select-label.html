@@ -20,12 +20,27 @@
             <div class="flex-this space-between">
                 <div><p>You currently have {{ bclabels.count }} BC Labels and {{ tklabels.count }} TK Labels customized</p></div>   
                 <div class="flex-this flex-end">
-                    <div class="margin-right-8">
-                        <a class="white-btn primary-btn" href="{% url 'labels-pdf' community.id %}" target="_blank" rel="noopener">View in PDF <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
-                    </div>
-                    <div>
-                        <a class="white-btn primary-btn" href="{% url 'download-labels' community.id %}">Download <i class="fa fa-download" aria-hidden="true"></i></a>
-                    </div>
+                    {% if can_download %}
+                        <div class="margin-right-8">
+                            <a class="white-btn primary-btn" href="{% url 'labels-pdf' community.id %}" target="_blank" rel="noopener">View in PDF <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
+                        </div>
+                        <div>
+                            <a class="white-btn primary-btn" href="{% url 'download-labels' community.id %}">Download <i class="fa fa-download" aria-hidden="true"></i></a>
+                        </div>
+                    {% else %}
+                        <div class="btn-with-helptext">
+                            <button class="primary-btn disabled-btn">Download Labels <i class="fa-solid fa-download"></i></button>
+                            <span class="btn-help-text">
+                                {% if not community.is_approved %}
+                                    Your community needs to be confirmed in order to download your Labels.
+                                {% endif %}
+                                {% if is_sandbox %}
+                                    Download of Labels is not available on the sandbox site.
+                                {% endif %}
+                            </span>
+                        </div>
+                    {% endif %}
+
                 </div>                     
             </div>
         {% else %}
