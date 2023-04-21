@@ -31,7 +31,7 @@
                     <a 
                         href="{% url 'registry' %}" 
                         class="{% if filtertype is None %} bold {% endif %}darkteal-text pointer underline-hover"
-                    >All (0)
+                    >All ({{ all_accounts|length }})
                     </a> |
                     <a 
                         href="{% url 'registry' filtertype='communities' %}" 
@@ -56,52 +56,27 @@
 
     </div>
 
-    <!-- {% if filtertype is None  %}
-        {% if results %}
-            {% for account in results %}
-                {% include 'partials/infocards/_community-card.html' %}
-            {% endfor %}
-        {% else %}
-            {% for account in items %}
-                {% include 'partials/infocards/_community-card.html' %}
-            {% endfor %}
-        {% endif %}
-    {% endif %} -->
-    
-    {% if communities %}
-        {% if results %}
-            {% for community in results %}
-                {% include 'partials/infocards/_community-card.html' %}
-            {% endfor %}
-        {% else %}
-            {% for community in communities %}
-                {% include 'partials/infocards/_community-card.html' %}
-            {% endfor %}
-        {% endif %}
-    {% endif %}
 
-    {% if institutions %}
-        {% if results %}
-            {% for institution in results %}
-                {% include 'partials/infocards/_institution-card.html' %}
-            {% endfor %}
-        {% else %}
-            {% for institution in institutions %}
-                {% include 'partials/infocards/_institution-card.html' %}
-            {% endfor %}
-        {% endif %}
-    {% endif %}
-
-    {% if researchers %}
-        {% if results %}
-            {% for researcher in results %}
-                {% include 'partials/infocards/_researcher-card.html' %}
-            {% endfor %}
-        {% else %}
-            {% for researcher in researchers %}
-                {% include 'partials/infocards/_researcher-card.html' %}
-            {% endfor %}
-        {% endif %}
+    {% if results %}
+        {% for account in results %}
+            {% if account in communities %}
+                {% include 'partials/infocards/_community-card.html' with community=account %}
+            {% elif account in institutions %}
+                {% include 'partials/infocards/_institution-card.html' with institution=account %}
+            {% elif account in researchers %}
+                {% include 'partials/infocards/_researcher-card.html' with researcher=account %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% for account in items %}
+            {% if account in communities %}
+                {% include 'partials/infocards/_community-card.html' with community=account %}
+            {% elif account in institutions %}
+                {% include 'partials/infocards/_institution-card.html' with institution=account %}
+            {% elif account in researchers %}
+                {% include 'partials/infocards/_researcher-card.html' with researcher=account %}
+            {% endif %}
+        {% endfor %}
     {% endif %}
 
     {% include 'snippets/pagination.html' %}

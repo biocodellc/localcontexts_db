@@ -17,7 +17,7 @@ from django.conf import settings
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
 
-from itertools import chain
+import itertools
 
 from django.contrib.auth.models import User
 from communities.models import Community, InviteMember
@@ -394,44 +394,38 @@ def registry_researchers(request):
         raise Http404()
 
 def registry_updated(request, filtertype=None):
-    try:
-        c = ""
-        r = ""
-        i = ""
-        if filtertype == None:
-            c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
-            i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
-            r = Researcher.objects.select_related('user').all().order_by('user__username')
-        #     cards = list(chain(c,i,r))
-        if filtertype == 'communities':
-            c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
-        if filtertype == 'institutions':
-            i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
-        if filtertype == 'researchers':
-            r = Researcher.objects.select_related('user').all().order_by('user__username')
+    # try:
+    c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
+    i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
+    r = Researcher.objects.select_related('user').all().order_by('user__username')
 
-        cards = list(chain(c,r,i))
-        results = None
+    combined_accounts = list(itertools.chain(c,r,i))
+    results = None
 
-        p = Paginator(cards, 5)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
+    cards = sorted(combined_accounts, key=lambda obj: (
+        obj.community_name if isinstance(obj, Community) and hasattr(obj, 'community_name') else '',
+        obj.institution_name if isinstance(obj, Institution) and hasattr(obj, 'institution_name') else '',
+        obj.user.username if isinstance(obj, Researcher) and hasattr(obj.user, 'username') else ''
+    ))
 
-        print(cards[0])
+    p = Paginator(cards, 5)
+    page_num = request.GET.get('page', 1)
+    page = p.page(page_num)
 
-        context = {
-            'researchers' : r,
-            'communities' : c,
-            'institutions' : i,
-            # 'items' : page,
-            'results' : results,
-            'filtertype' : filtertype
-        }
-        
-        return render(request, 'accounts/registry.html', context)
+    context = {
+        'researchers' : r,
+        'communities' : c,
+        'institutions' : i,
+        'all_accounts':combined_accounts,
+        'items' : page,
+        'results' : results,
+        'filtertype' : filtertype
+    }
+    
+    return render(request, 'accounts/registry.html', context)
 
-    except:
-        raise Http404()
+    # except:
+    #     raise Http404()
 
 # Hub stats page
 def hub_counter(request):
