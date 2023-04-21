@@ -35,11 +35,25 @@
         <div class="flex-this flex-end">
             <div class="margin-top-8 margin-right-8"><a id="addURLBtn" class="darkteal-text underline-hover pointer">Add Link</a></div>
             <div>
+                {% if otc_download_perm == 1 %}
                 <a 
                     href="{% url 'download-open-to-collaborate-notice' otc_download_perm %}" 
                     class="primary-btn white-btn"
                 >
                     Download Notice</a>
+                {% else %}
+                    <div class="btn-with-helptext">
+                        <button class="primary-btn disabled-btn">Download Notice</button>
+                        <span class="btn-help-text">
+                            {% if not institution.is_approved %}
+                                Your institution needs to be confirmed in order to download this Notice.
+                            {% endif %}
+                            {% if is_sandbox %}
+                                Download of Notices is not available on the sandbox site.
+                            {% endif %}
+                        </span>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

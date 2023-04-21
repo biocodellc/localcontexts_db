@@ -21,15 +21,11 @@ def download_otc_notice(request):
     files.append(('Open_To_Collaborate' + '.svg', get_svg.content))
     files.append(('Open_To_Collaborate' + '.txt', open_to_collab_text))
 
-    usage_guide_url = baseURL + 'guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf'
-    response = requests.get(usage_guide_url) 
-    files.append(('Institution_Notice_Usage_Guide.pdf', response.content))
-
     # Create Readme
     file_names = []
     for f in files:
         file_names.append(f[0])
-    readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guide for details on how to adapt and display the Open To Collaborate Notice.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
+    readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guides (https://localcontexts.org/support/downloadable-resources/) for details on how to adapt and display the Open To Collaborate Notice.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
     files.append(('README.txt', readme_content))
 
         # Generate zip file 
