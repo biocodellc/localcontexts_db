@@ -1,6 +1,9 @@
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
+
 from django.http import HttpResponse
+from .utils import generate_zip, render_to_pdf
 import requests
-from .utils import generate_zip
 
 # Open to Collaborate Notice
 def download_otc_notice():
@@ -35,5 +38,71 @@ def download_otc_notice():
 
     response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
     response['Content-Disposition'] = 'attachment; filename="{}"'.format(zipfile_name)
+
+    return response
+
+# Download approved community Labels
+def download_labels_zip(community):
+    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
+    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+
+    template_path = 'snippets/pdfs/community-labels.html'
+    context = {'community': community, 'bclabels': bclabels, 'tklabels': tklabels,}
+
+    files = []
+
+    # Add PDF to zip
+    pdf = render_to_pdf(template_path, context)
+    files.append(('Labels_Overview.pdf', pdf))
+
+    # Add Label images, text and translations
+    for bclabel in bclabels:
+        get_image = requests.get(bclabel.img_url)
+        get_svg = requests.get(bclabel.svg_url)
+        files.append((bclabel.name + '.png', get_image.content))
+        files.append((bclabel.name + '.svg', get_svg.content))
+
+        # Default Label text
+        text_content = bclabel.name + '\n' + bclabel.label_text
+        text_addon = []
+
+        if bclabel.bclabel_translation.all():
+            for translation in bclabel.bclabel_translation.all():
+                text_addon.append('\n\n' + translation.translated_name + ' (' + translation.language + ') ' + '\n' + translation.translated_text)
+            files.append((bclabel.name + '.txt', text_content + '\n'.join(text_addon)))
+        else:
+            files.append((bclabel.name + '.txt', text_content))
+
+    # Add Label images, text and translations
+    for tklabel in tklabels:
+        get_image = requests.get(tklabel.img_url)
+        get_svg = requests.get(tklabel.svg_url)
+        files.append((tklabel.name + '.png', get_image.content))
+        files.append((tklabel.name + '.svg', get_svg.content))
+        
+        # Default Label text
+        text_content = tklabel.name + '\n' + tklabel.label_text
+        text_addon = []
+
+        if tklabel.tklabel_translation.all():
+            for translation in tklabel.tklabel_translation.all():
+                text_addon.append('\n\n' + translation.translated_name + ' (' + translation.language + ') ' + '\n' + translation.translated_text)
+            files.append((tklabel.name + '.txt', text_content + '\n'.join(text_addon)))
+        else:
+            files.append((tklabel.name + '.txt', text_content))
+    
+    # Create Readme
+    readme_text = "The Traditional Knowledge (TK) and Biocultural (BC) Labels reinforce the cultural authority and rights of Indigenous communities.\nThe TK and BC Labels are intended to be displayed prominently on public-facing Indigenous community, researcher and institutional websites, metadata and digital collection's pages.\n\nThis folder contains the following files:\n"
+    file_names = []
+    for f in files:
+        file_names.append(f[0])
+    readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guides (https://localcontexts.org/support/downloadable-resources/) for details on how to adapt and display the Labels for your community.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
+    files.append(('README.txt', readme_content))
+
+    # Generate zip file 
+    full_zip_in_memory = generate_zip(files)
+
+    response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format(community.community_name + '-Labels.zip')
 
     return response

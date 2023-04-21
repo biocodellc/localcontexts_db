@@ -262,15 +262,12 @@ def institution_notices(request, pk):
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
        
         # sets permission to download OTC Notice
-        if institution.is_approved:
-            otc_download_perm = 1
-        else:
-            otc_download_perm = 0
-        
         if dev_prod_or_local(request.get_host()) == 'DEV':
             is_sandbox = True
-        else: 
+            otc_download_perm = 0
+        else:
             is_sandbox = False
+            otc_download_perm = 1 if institution.is_approved else 0
 
         if request.method == 'POST':
             if form.is_valid():

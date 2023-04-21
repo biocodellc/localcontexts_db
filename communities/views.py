@@ -24,7 +24,7 @@ from projects.utils import *
 from helpers.utils import *
 from accounts.utils import get_users_name
 from notifications.utils import *
-
+from helpers.downloads import download_labels_zip
 from helpers.emails import *
 
 from .forms import *
@@ -378,6 +378,10 @@ def select_label(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('public-community', community.id)
     else:
+
+        can_download = community.is_approved and dev_prod_or_local(request.get_host()) != 'DEV'
+        is_sandbox = dev_prod_or_local(request.get_host()) == 'DEV'
+
         if request.method == "POST":
             bclabel_code = request.POST.get('bc-label-code')
             tklabel_code = request.POST.get('tk-label-code')
@@ -393,6 +397,8 @@ def select_label(request, pk):
             'member_role': member_role,
             'bclabels': bclabels,
             'tklabels': tklabels,
+            'can_download': can_download,
+            'is_sandbox': is_sandbox,
         }
 
         return render(request, 'communities/select-label.html', context)
@@ -1176,7 +1182,8 @@ def connections(request, pk):
 # show community Labels in a PDF
 @login_required(login_url='login')
 def labels_pdf(request, pk):
-    # Get approved labels customized by community
+    # # Get approved labels customized by community
+    # TODO: unapproved community cant generate a PDF
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
@@ -1210,66 +1217,4 @@ def download_labels(request, pk):
     if not community.is_approved or dev_prod_or_local(request.get_host()) == 'DEV':
         return redirect('restricted')
     else:
-        bclabels = BCLabel.objects.filter(community=community, is_approved=True)
-        tklabels = TKLabel.objects.filter(community=community, is_approved=True)
-
-        template_path = 'snippets/pdfs/community-labels.html'
-        context = {'community': community, 'bclabels': bclabels, 'tklabels': tklabels,}
-
-        files = []
-
-        # Add PDF to zip
-        pdf = render_to_pdf(template_path, context)
-        files.append(('Labels_Overview.pdf', pdf))
-
-        # Add Label images, text and translations
-        for bclabel in bclabels:
-            get_image = requests.get(bclabel.img_url)
-            get_svg = requests.get(bclabel.svg_url)
-            files.append((bclabel.name + '.png', get_image.content))
-            files.append((bclabel.name + '.svg', get_svg.content))
-
-            # Default Label text
-            text_content = bclabel.name + '\n' + bclabel.label_text
-            text_addon = []
-
-            if bclabel.bclabel_translation.all():
-                for translation in bclabel.bclabel_translation.all():
-                    text_addon.append('\n\n' + translation.translated_name + ' (' + translation.language + ') ' + '\n' + translation.translated_text)
-                files.append((bclabel.name + '.txt', text_content + '\n'.join(text_addon)))
-            else:
-                files.append((bclabel.name + '.txt', text_content))
-
-        # Add Label images, text and translations
-        for tklabel in tklabels:
-            get_image = requests.get(tklabel.img_url)
-            get_svg = requests.get(tklabel.svg_url)
-            files.append((tklabel.name + '.png', get_image.content))
-            files.append((tklabel.name + '.svg', get_svg.content))
-            
-            # Default Label text
-            text_content = tklabel.name + '\n' + tklabel.label_text
-            text_addon = []
-
-            if tklabel.tklabel_translation.all():
-                for translation in tklabel.tklabel_translation.all():
-                    text_addon.append('\n\n' + translation.translated_name + ' (' + translation.language + ') ' + '\n' + translation.translated_text)
-                files.append((tklabel.name + '.txt', text_content + '\n'.join(text_addon)))
-            else:
-                files.append((tklabel.name + '.txt', text_content))
-        
-        # Create Readme
-        readme_text = "The Traditional Knowledge (TK) and Biocultural (BC) Labels reinforce the cultural authority and rights of Indigenous communities.\nThe TK and BC Labels are intended to be displayed prominently on public-facing Indigenous community, researcher and institutional websites, metadata and digital collection's pages.\n\nThis folder contains the following files:\n"
-        file_names = []
-        for f in files:
-            file_names.append(f[0])
-        readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guides (https://localcontexts.org/support/downloadable-resources/) for details on how to adapt and display the Labels for your community.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
-        files.append(('README.txt', readme_content))
-
-        # Generate zip file 
-        full_zip_in_memory = generate_zip(files)
-
-        response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
-        response['Content-Disposition'] = 'attachment; filename="{}"'.format(community.community_name + '-Labels.zip')
-
-        return response
+        return download_labels_zip(community)
