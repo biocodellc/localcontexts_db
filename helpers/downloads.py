@@ -3,7 +3,7 @@ import requests
 from .utils import generate_zip
 
 # Open to Collaborate Notice
-def download_otc_notice(request):
+def download_otc_notice():
     baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/'
     institution_text = "The Institution Notices are for use by collecting institutions, data repositories, researchers, and organizations who engage in collaborative curation with Indigenous and other marginalized communities who have been traditionally excluded from processes of documentation and record keeping.\nThe Institution Notices are intended to be displayed prominently on public-facing institutional websites, on digital collections pages and or in finding aids."
 

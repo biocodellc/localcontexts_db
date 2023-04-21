@@ -32,4 +32,4 @@ def download_open_collaborate_notice(request, perm):
     if dev_prod_or_local(request.get_host()) == 'DEV' or not has_permission:
         return redirect('restricted')
     else:
-        return download_otc_notice(request)
+        return download_otc_notice()

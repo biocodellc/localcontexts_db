@@ -177,6 +177,13 @@ def researcher_notices(request, pk):
         urls = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher).values_list('url', 'name', 'id')
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
 
+        if dev_prod_or_local(request.get_host()) == 'DEV':
+            is_sandbox = True
+            otc_download_perm = 0
+        else: 
+            is_sandbox = False
+            otc_download_perm = 1
+
         if request.method == 'POST':
             if form.is_valid():
                 data = form.save(commit=False)
@@ -189,7 +196,8 @@ def researcher_notices(request, pk):
             'user_can_view': user_can_view,
             'form': form,
             'urls': urls,
-            'otc_download_perm': 1,
+            'otc_download_perm': otc_download_perm,
+            'is_sandbox': is_sandbox,
         }
         return render(request, 'researchers/notices.html', context)
 
