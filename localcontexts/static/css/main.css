@@ -334,6 +334,32 @@ button[disabled],
     cursor: default;
 }
 
+/* Hover over text for disabled buttons */
+.btn-help-text {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #fff;
+    visibility: hidden;
+}
+
+.btn-with-helptext button {
+    position: relative;
+}
+.btn-help-text {
+    position: absolute;
+    left: 1080px;
+    width: 250px;
+    background-color: #EF6C00;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+.btn-with-helptext:hover .btn-help-text {
+  visibility: visible;
+}
+
 /* COLORED TAGS */
 .orange-tag, 
 .green-tag {
