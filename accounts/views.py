@@ -399,16 +399,38 @@ def registry_updated(request, filtertype=None):
     i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
     r = Researcher.objects.select_related('user').all().order_by('user__username')
 
-    combined_accounts = list(itertools.chain(c,r,i))
-    results = None
+    if ('q' in request.GET) and (filtertype != None):
+        q = request.GET.get('q')
+        return redirect('/registry/?q=' + q)
+    
+    elif ('q' in request.GET) and (filtertype == None):
+        q = request.GET.get('q')
 
-    cards = sorted(combined_accounts, key=lambda obj: (
-        obj.community_name if isinstance(obj, Community) and hasattr(obj, 'community_name') else '',
-        obj.institution_name if isinstance(obj, Institution) and hasattr(obj, 'institution_name') else '',
-        obj.user.username if isinstance(obj, Researcher) and hasattr(obj.user, 'username') else ''
-    ))
+        community_results = c.annotate(search=SearchVector('community_name'),rank=SearchRank(SearchVector('community_name'), SearchQuery(q))).filter(rank__gte=0.001).order_by('-rank')
+        institution_results = i.annotate(search=SearchVector('institution_name'),rank=SearchRank(SearchVector('institution_name'), SearchQuery(q))).filter(rank__gte=0.001).order_by('-rank')
+        researcher_results = r.annotate(search=SearchVector('user__username', 'user__first_name', 'user__last_name'),rank=SearchRank(SearchVector('user__username', 'user__first_name', 'user__last_name'), SearchQuery(q))).filter(rank__gte=0.001).order_by('-rank')
 
-    p = Paginator(cards, 5)
+        results = list(community_results) + list(institution_results) + list(researcher_results)
+
+        p = Paginator(results, 5)
+
+    else:
+        results = None
+        if filtertype == 'communities':
+            cards = c
+        elif filtertype == 'institutions':
+            cards = i
+        elif filtertype == 'researchers':
+            cards = r
+        else:
+            combined_accounts = list(itertools.chain(c,r,i))
+            cards = sorted(combined_accounts, key=lambda obj: (
+                obj.community_name if isinstance(obj, Community) and hasattr(obj, 'community_name') else '',
+                obj.institution_name if isinstance(obj, Institution) and hasattr(obj, 'institution_name') else '',
+                obj.user.username if isinstance(obj, Researcher) and hasattr(obj.user, 'username') else ''
+            ))
+        p = Paginator(cards, 5)
+
     page_num = request.GET.get('page', 1)
     page = p.page(page_num)
 
@@ -416,7 +438,6 @@ def registry_updated(request, filtertype=None):
         'researchers' : r,
         'communities' : c,
         'institutions' : i,
-        'all_accounts':combined_accounts,
         'items' : page,
         'results' : results,
         'filtertype' : filtertype

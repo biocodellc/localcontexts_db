@@ -31,7 +31,7 @@
                     <a 
                         href="{% url 'registry' %}" 
                         class="{% if filtertype is None %} bold {% endif %}darkteal-text pointer underline-hover"
-                    >All ({{ all_accounts|length }})
+                    >All ({% all_account_count %})
                     </a> |
                     <a 
                         href="{% url 'registry' filtertype='communities' %}" 
