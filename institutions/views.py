@@ -139,20 +139,15 @@ def confirm_institution(request, institution_id):
 def public_institution_view(request, pk):
     try:
         institution = Institution.objects.get(id=pk)
-        created_projects = ProjectCreator.objects.filter(institution=institution)
 
         # Do notices exist
         bcnotice = Notice.objects.filter(institution=institution, notice_type='biocultural').exists()
         tknotice = Notice.objects.filter(institution=institution, notice_type='traditional_knowledge').exists()
         attrnotice = Notice.objects.filter(institution=institution, notice_type='attribution_incomplete').exists()
-
-        projects = []
-
-        for p in created_projects:
-            if p.project.project_privacy == 'Public':
-                projects.append(p.project)
-        
         otc_notices = OpenToCollaborateNoticeURL.objects.filter(institution=institution)
+
+        created_projects = ProjectCreator.objects.filter(institution=institution).values_list('project__unique_id', flat=True)
+        projects = Project.objects.filter(unique_id__in=created_projects, project_privacy='Public').order_by('-date_modified')
         
         if request.user.is_authenticated:
             user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()

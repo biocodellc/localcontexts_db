@@ -60,20 +60,15 @@ def connect_researcher(request):
 def public_researcher_view(request, pk):
     try:
         researcher = Researcher.objects.get(id=pk)
-        created_projects = ProjectCreator.objects.filter(researcher=researcher)
 
         # Do notices exist
         bcnotice = Notice.objects.filter(researcher=researcher, notice_type='biocultural').exists()
         tknotice = Notice.objects.filter(researcher=researcher, notice_type='traditional_knowledge').exists()
-        attrnotice = Notice.objects.filter(researcher=researcher, notice_type='attribution_incomplete').exists()
-
-        projects = []
-
-        for p in created_projects:
-            if p.project.project_privacy == 'Public':
-                projects.append(p.project)
-        
+        attrnotice = Notice.objects.filter(researcher=researcher, notice_type='attribution_incomplete').exists()        
         otc_notices = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher)
+
+        created_projects = ProjectCreator.objects.filter(researcher=researcher).values_list('project__unique_id', flat=True)
+        projects = Project.objects.filter(unique_id__in=created_projects, project_privacy='Public').order_by('-date_modified')
 
         if request.user.is_authenticated:
             form = ContactOrganizationForm(request.POST or None)
