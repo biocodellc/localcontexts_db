@@ -635,7 +635,19 @@
                     </div>
                 </div>
 
-                <a class="block" href="{% url 'download-project-zip' project.unique_id %}"><i class="fa-solid fa-download"></i> Download</a>
+                {% if can_download %}
+                    <a class="block" href="{% url 'download-project-zip' project.unique_id %}"><i class="fa-solid fa-download"></i> Download</a>
+                {% else %}
+                    <a class="block a-disabled"> 
+                        <i class="fa-solid fa-download"></i> Download
+                        <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                            <span class="tooltiptext">
+                                Download of Projects is not available on the sandbox site.
+                            </span>
+                        </div> 
+                    </a>
+                {% endif %}
+
             {% else %}
                 <a class="block a-disabled"> 
                     <i class="fa-solid fa-share-nodes"></i> Share
