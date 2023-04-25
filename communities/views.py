@@ -928,7 +928,7 @@ def project_actions(request, pk, project_uuid):
             ).get(unique_id=project_uuid)
 
     member_role = check_member_role(request.user, community)
-    if member_role == False or not request.user.is_authenticated or not project.can_user_access(request.user):
+    if not member_role or not request.user.is_authenticated or not project.can_user_access(request.user):
         return redirect('view-project', project_uuid)    
     else:
         notices = Notice.objects.filter(project=project, archived=False)
@@ -941,25 +941,14 @@ def project_actions(request, pk, project_uuid):
         sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
         name = get_users_name(request.user)
         label_groups = return_project_labels_by_community(project)
-        can_download = True
+        can_download = False if dev_prod_or_local(request.get_host()) == 'DEV' else True
 
-        if dev_prod_or_local(request.get_host()) == 'DEV':
-            can_download = False
-
-        # for related projects list
-        projects_list = list(chain(
-            community.community_created_project.all().values_list('project__unique_id', flat=True), 
-            community.communities_notified.all().values_list('project__unique_id', flat=True), 
-            community.contributing_communities.all().values_list('project__unique_id', flat=True),
-        ))
-        project_ids = list(set(projects_list)) # remove duplicate ids
+        # for related projects list 
+        project_ids = list(set(community.community_created_project.all().values_list('project__unique_id', flat=True)
+              .union(community.communities_notified.all().values_list('project__unique_id', flat=True))
+              .union(community.contributing_communities.all().values_list('project__unique_id', flat=True))))
         project_ids_to_exclude_list = list(project.related_projects.all().values_list('unique_id', flat=True)) #projects that are currently related
-
-        # exclude projects that are already related
-        for item in project_ids_to_exclude_list:
-            if item in project_ids:
-                project_ids.remove(item)
-
+        project_ids = list(set(project_ids).difference(project_ids_to_exclude_list)) # exclude projects that are already related
         projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id=project.unique_id).order_by('-date_added').values_list('unique_id', 'title')
 
         if not creator.community:
@@ -1000,17 +989,20 @@ def project_actions(request, pk, project_uuid):
             elif 'link_projects_btn' in request.POST:
                 selected_projects = request.POST.getlist('projects_to_link')
 
+                activities = []
                 for uuid in selected_projects:
                     project_to_add = Project.objects.get(unique_id=uuid)
                     project.related_projects.add(project_to_add)
                     project_to_add.related_projects.add(project)
                     project_to_add.save()
 
-                    ProjectActivity.objects.create(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name} | {community.community_name}')
-                    ProjectActivity.objects.create(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name} | {community.community_name}')
-
+                    activities.append(ProjectActivity(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name} | {community.community_name}'))
+                    activities.append(ProjectActivity(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name} | {community.community_name}'))
+                            
+                ProjectActivity.objects.bulk_create(activities)
                 project.save()
                 return redirect('community-project-actions', community.id, project.unique_id)
+            
             elif 'delete_project' in request.POST:
                 return redirect('community-delete-project', community.id, project.unique_id)
 
