@@ -19,6 +19,10 @@ def view_project(request, unique_id):
     communities = None
     institutions = None
     user_researcher = Researcher.objects.none()
+    can_download = True
+
+    if dev_prod_or_local(request.get_host()) == 'DEV':
+        can_download = False
 
     #  If user is logged in AND belongs to account of a contributor
     if request.user.is_authenticated:
@@ -47,7 +51,8 @@ def view_project(request, unique_id):
         'institutions': institutions,
         'user_researcher': user_researcher,
         'sub_projects': sub_projects,
-        'template_name': template_name
+        'template_name': template_name,
+        'can_download': can_download,
     }
 
     if template_name:

@@ -941,6 +941,10 @@ def project_actions(request, pk, project_uuid):
         sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
         name = get_users_name(request.user)
         label_groups = return_project_labels_by_community(project)
+        can_download = True
+
+        if dev_prod_or_local(request.get_host()) == 'DEV':
+            can_download = False
 
         # for related projects list
         projects_list = list(chain(
@@ -1026,6 +1030,7 @@ def project_actions(request, pk, project_uuid):
             'sub_projects': sub_projects,
             'projects_to_link': projects_to_link,
             'label_groups': label_groups,
+            'can_download': can_download,
         }
         return render(request, 'communities/project-actions.html', context)
 
