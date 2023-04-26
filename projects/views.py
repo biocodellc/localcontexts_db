@@ -6,7 +6,7 @@ from accounts.models import UserAffiliation
 from researchers.models import Researcher
 from helpers.downloads import download_project_zip
 from localcontexts.utils import dev_prod_or_local
-from .utils import can_download_project
+from .utils import can_download_project, return_project_labels_by_community
 
 def view_project(request, unique_id):
     try:
@@ -20,6 +20,7 @@ def view_project(request, unique_id):
     communities = None
     institutions = None
     user_researcher = Researcher.objects.none()
+    label_groups = return_project_labels_by_community(project)
     can_download = can_download_project(request, creator)
 
     #  If user is logged in AND belongs to account of a contributor
@@ -51,6 +52,7 @@ def view_project(request, unique_id):
         'sub_projects': sub_projects,
         'template_name': template_name,
         'can_download': can_download,
+        'label_groups': label_groups,
     }
 
     if template_name:
