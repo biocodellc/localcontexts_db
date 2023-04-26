@@ -642,7 +642,11 @@
                         <i class="fa-solid fa-download"></i> Download
                         <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
                             <span class="tooltiptext">
-                                Download of Projects is not available on the sandbox site.
+                                {% if not community.is_approved or not institution.is_approved %}
+                                    Your account needs to be confirmed before being able to download this Project.
+                                {% else %}
+                                    Download of Projects is not available on the sandbox site.
+                                {% endif %}
                             </span>
                         </div> 
                     </a>

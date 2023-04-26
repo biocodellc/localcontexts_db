@@ -6,6 +6,7 @@ from accounts.models import UserAffiliation
 from researchers.models import Researcher
 from helpers.downloads import download_project_zip
 from localcontexts.utils import dev_prod_or_local
+import re
 
 def view_project(request, unique_id):
     try:
@@ -63,8 +64,7 @@ def view_project(request, unique_id):
 
 def download_project(request, unique_id):
     try:
-        project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
-
+        project = Project.objects.get(unique_id=unique_id)
         if project.project_privacy == "Private" or dev_prod_or_local(request.get_host()) == 'DEV':
             return redirect('restricted')
         else:
