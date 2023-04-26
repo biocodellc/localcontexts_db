@@ -6,6 +6,7 @@ from accounts.models import UserAffiliation
 from researchers.models import Researcher
 from helpers.downloads import download_project_zip
 from localcontexts.utils import dev_prod_or_local
+from .utils import can_download_project
 
 def view_project(request, unique_id):
     try:
@@ -19,7 +20,7 @@ def view_project(request, unique_id):
     communities = None
     institutions = None
     user_researcher = Researcher.objects.none()
-    can_download = False if dev_prod_or_local(request.get_host()) == 'DEV' else True
+    can_download = can_download_project(request, creator)
 
     #  If user is logged in AND belongs to account of a contributor
     if request.user.is_authenticated:
@@ -63,9 +64,10 @@ def view_project(request, unique_id):
 
 def download_project(request, unique_id):
     try:
-        project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=unique_id)
+        project = Project.objects.get(unique_id=unique_id)
+        can_download = can_download_project(request, project.project_creator_project.first())
 
-        if project.project_privacy == "Private" or dev_prod_or_local(request.get_host()) == 'DEV':
+        if project.project_privacy == "Private" or dev_prod_or_local(request.get_host()) == 'DEV' or not can_download:
             return redirect('restricted')
         else:
             return download_project_zip(project)
