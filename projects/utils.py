@@ -8,6 +8,10 @@ from helpers.models import ProjectStatus
 from django.core.paginator import Paginator
 from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from accounts.utils import get_users_name
+import itertools
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
+from localcontexts.utils import dev_prod_or_local
 
 # PROJECT STATUS 
 def set_project_status(user, project, community, creator, project_status):
@@ -203,3 +207,34 @@ def return_project_search_results(request, queryset):
     else:
         results = None
     return results
+
+def return_project_labels_by_community(project):
+    bc_labels = BCLabel.objects.filter(project_bclabels=project).select_related('community').order_by('community__community_name', 'name')
+    tk_labels = TKLabel.objects.filter(project_tklabels=project).select_related('community').order_by('community__community_name', 'name')
+    
+    label_groups = {}
+    for community, group in itertools.groupby(bc_labels, key=lambda x: x.community):
+        bc_labels_list = list(group)
+        label_groups.setdefault(community, {'bc_labels': bc_labels_list, 'tk_labels': [], 'bc_label_count': len(bc_labels_list), 'tk_label_count': 0})
+        
+    for community, group in itertools.groupby(tk_labels, key=lambda x: x.community):
+        tk_labels_list = list(group)
+        if community in label_groups:
+            label_groups[community]['tk_labels'] = tk_labels_list
+            label_groups[community]['tk_label_count'] = len(tk_labels_list)
+        else:
+            label_groups[community] = {'bc_labels': [], 'tk_labels': tk_labels_list, 'bc_label_count': 0, 'tk_label_count': len(tk_labels_list)}
+        
+    return label_groups
+
+def can_download_project(request, project_creator_instance):
+    can_download = True
+    if dev_prod_or_local(request.get_host()) == 'DEV':
+        can_download = False
+    elif project_creator_instance.community:
+        if not project_creator_instance.community.is_approved:
+            can_download = False
+    elif project_creator_instance.institution:
+        if not project_creator_instance.institution.is_approved:
+            can_download = False
+    return can_download

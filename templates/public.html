@@ -374,15 +374,23 @@
 
     <div>
         <h3>Public Projects </h3>
-        <ul>
-            {% for project in projects %}
-                <li>
-                    <a href="{% url 'view-project' project.unique_id %}" class="darkteal-text underline-hover">{{ project.title }}</a>
-                </li>
-            {% empty %}
-                No public Projects available
-            {% endfor %}  
-        </ul>                           
+
+        {% if projects %}
+            <table class="projects-table">
+                <tr>
+                    <th><i class="fa-regular fa-line-columns"></i> Title</th>
+                    <th><i class="fa-light fa-user"></i> Creator</th>
+                    <th><i class="fa-light fa-calendar"></i> Last updated</th>
+                    <th>Visibility</th>
+                </tr>
+
+                {% for project in projects %}
+                    {% include 'projects/project-overview.html' %}
+                {% endfor %}
+            </table>
+        {% else %}
+            No public Projects available
+        {% endif %}                       
     </div>
 
 </div> <!-- dashcard-->

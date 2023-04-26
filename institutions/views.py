@@ -139,20 +139,15 @@ def confirm_institution(request, institution_id):
 def public_institution_view(request, pk):
     try:
         institution = Institution.objects.get(id=pk)
-        created_projects = ProjectCreator.objects.filter(institution=institution)
 
         # Do notices exist
         bcnotice = Notice.objects.filter(institution=institution, notice_type='biocultural').exists()
         tknotice = Notice.objects.filter(institution=institution, notice_type='traditional_knowledge').exists()
         attrnotice = Notice.objects.filter(institution=institution, notice_type='attribution_incomplete').exists()
-
-        projects = []
-
-        for p in created_projects:
-            if p.project.project_privacy == 'Public':
-                projects.append(p.project)
-        
         otc_notices = OpenToCollaborateNoticeURL.objects.filter(institution=institution)
+
+        created_projects = ProjectCreator.objects.filter(institution=institution).values_list('project__unique_id', flat=True)
+        projects = Project.objects.filter(unique_id__in=created_projects, project_privacy='Public').order_by('-date_modified')
         
         if request.user.is_authenticated:
             user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()
@@ -259,6 +254,14 @@ def institution_notices(request, pk):
     else:
         urls = OpenToCollaborateNoticeURL.objects.filter(institution=institution).values_list('url', 'name', 'id')
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
+       
+        # sets permission to download OTC Notice
+        if dev_prod_or_local(request.get_host()) == 'DEV':
+            is_sandbox = True
+            otc_download_perm = 0
+        else:
+            is_sandbox = False
+            otc_download_perm = 1 if institution.is_approved else 0
 
         if request.method == 'POST':
             if form.is_valid():
@@ -272,6 +275,8 @@ def institution_notices(request, pk):
             'member_role': member_role,
             'form': form,
             'urls': urls,
+            'otc_download_perm': otc_download_perm,
+            'is_sandbox': is_sandbox,
         }
         return render(request, 'institutions/notices.html', context)
 
@@ -685,7 +690,7 @@ def project_actions(request, pk, project_uuid):
             ).get(unique_id=project_uuid)
 
     member_role = check_member_role(request.user, institution)
-    if member_role == False or not request.user.is_authenticated or not project.can_user_access(request.user):
+    if not member_role or not request.user.is_authenticated or not project.can_user_access(request.user):
         return redirect('view-project', project_uuid)    
     else:
         notices = Notice.objects.filter(project=project, archived=False)
@@ -697,21 +702,16 @@ def project_actions(request, pk, project_uuid):
         activities = ProjectActivity.objects.filter(project=project).order_by('-date')
         sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
         name = get_users_name(request.user)
+        label_groups = return_project_labels_by_community(project)
+        can_download = can_download_project(request, creator)
 
-        # for related projects list
-        projects_list = list(chain(
-            institution.institution_created_project.all().values_list('project__unique_id', flat=True), 
-            institution.institutions_notified.all().values_list('project__unique_id', flat=True), 
-            institution.contributing_institutions.all().values_list('project__unique_id', flat=True),
-        ))
-        project_ids = list(set(projects_list)) # remove duplicate ids     
+        # for related projects list 
+        project_ids = list(set(institution.institution_created_project.all().values_list('project__unique_id', flat=True)
+              .union(institution.institutions_notified.all().values_list('project__unique_id', flat=True))
+              .union(institution.contributing_institutions.all().values_list('project__unique_id', flat=True))))
         project_ids_to_exclude_list = list(project.related_projects.all().values_list('unique_id', flat=True)) #projects that are currently related
-
-        # exclude projects that are already related
-        for item in project_ids_to_exclude_list:
-            if item in project_ids:
-                project_ids.remove(item)
-
+         # exclude projects that are already related
+        project_ids = list(set(project_ids).difference(project_ids_to_exclude_list))
         projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id=project.unique_id).order_by('-date_added').values_list('unique_id', 'title')
 
         project_archived = False
@@ -771,17 +771,20 @@ def project_actions(request, pk, project_uuid):
             elif 'link_projects_btn' in request.POST:
                 selected_projects = request.POST.getlist('projects_to_link')
 
+                activities = []
                 for uuid in selected_projects:
                     project_to_add = Project.objects.get(unique_id=uuid)
                     project.related_projects.add(project_to_add)
                     project_to_add.related_projects.add(project)
                     project_to_add.save()
 
-                    ProjectActivity.objects.create(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name} | {institution.institution_name}')
-                    ProjectActivity.objects.create(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name} | {institution.institution_name}')
-                
+                    activities.append(ProjectActivity(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name} | {institution.institution_name}'))
+                    activities.append(ProjectActivity(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name} | {institution.institution_name}'))
+                            
+                ProjectActivity.objects.bulk_create(activities)
                 project.save()
                 return redirect('institution-project-actions', institution.id, project.unique_id)
+            
             elif 'delete_project' in request.POST:
                 return redirect('inst-delete-project', institution.id, project.unique_id)
 
@@ -798,7 +801,9 @@ def project_actions(request, pk, project_uuid):
             'activities': activities,
             'project_archived': project_archived,
             'sub_projects': sub_projects,
-            'projects_to_link': projects_to_link
+            'projects_to_link': projects_to_link,
+            'label_groups': label_groups,
+            'can_download': can_download,
         }
         return render(request, 'institutions/project-actions.html', context)
 

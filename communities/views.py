@@ -24,7 +24,7 @@ from projects.utils import *
 from helpers.utils import *
 from accounts.utils import get_users_name
 from notifications.utils import *
-
+from helpers.downloads import download_labels_zip
 from helpers.emails import *
 
 from .forms import *
@@ -135,7 +135,7 @@ def public_community_view(request, pk):
         ))
         project_ids = list(set(projects_list)) # remove duplicate ids
         archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
-        projects = Project.objects.select_related('project_creator').filter(unique_id__in=project_ids, project_privacy='Public').exclude(unique_id__in=archived).order_by('-date_added')
+        projects = Project.objects.select_related('project_creator').filter(unique_id__in=project_ids, project_privacy='Public').exclude(unique_id__in=archived).order_by('-date_modified')
 
         if request.user.is_authenticated:
             user_communities = UserAffiliation.objects.prefetch_related('communities').get(user=request.user).communities.all()
@@ -378,6 +378,10 @@ def select_label(request, pk):
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('public-community', community.id)
     else:
+
+        can_download = community.is_approved and dev_prod_or_local(request.get_host()) != 'DEV'
+        is_sandbox = dev_prod_or_local(request.get_host()) == 'DEV'
+
         if request.method == "POST":
             bclabel_code = request.POST.get('bc-label-code')
             tklabel_code = request.POST.get('tk-label-code')
@@ -393,6 +397,8 @@ def select_label(request, pk):
             'member_role': member_role,
             'bclabels': bclabels,
             'tklabels': tklabels,
+            'can_download': can_download,
+            'is_sandbox': is_sandbox,
         }
 
         return render(request, 'communities/select-label.html', context)
@@ -922,7 +928,7 @@ def project_actions(request, pk, project_uuid):
             ).get(unique_id=project_uuid)
 
     member_role = check_member_role(request.user, community)
-    if member_role == False or not request.user.is_authenticated or not project.can_user_access(request.user):
+    if not member_role or not request.user.is_authenticated or not project.can_user_access(request.user):
         return redirect('view-project', project_uuid)    
     else:
         notices = Notice.objects.filter(project=project, archived=False)
@@ -934,21 +940,15 @@ def project_actions(request, pk, project_uuid):
         is_community_notified = EntitiesNotified.objects.none()
         sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
         name = get_users_name(request.user)
+        label_groups = return_project_labels_by_community(project)
+        can_download = can_download_project(request, creator)
 
-        # for related projects list
-        projects_list = list(chain(
-            community.community_created_project.all().values_list('project__unique_id', flat=True), 
-            community.communities_notified.all().values_list('project__unique_id', flat=True), 
-            community.contributing_communities.all().values_list('project__unique_id', flat=True),
-        ))
-        project_ids = list(set(projects_list)) # remove duplicate ids
+        # for related projects list 
+        project_ids = list(set(community.community_created_project.all().values_list('project__unique_id', flat=True)
+              .union(community.communities_notified.all().values_list('project__unique_id', flat=True))
+              .union(community.contributing_communities.all().values_list('project__unique_id', flat=True))))
         project_ids_to_exclude_list = list(project.related_projects.all().values_list('unique_id', flat=True)) #projects that are currently related
-
-        # exclude projects that are already related
-        for item in project_ids_to_exclude_list:
-            if item in project_ids:
-                project_ids.remove(item)
-
+        project_ids = list(set(project_ids).difference(project_ids_to_exclude_list)) # exclude projects that are already related
         projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id=project.unique_id).order_by('-date_added').values_list('unique_id', 'title')
 
         if not creator.community:
@@ -989,17 +989,20 @@ def project_actions(request, pk, project_uuid):
             elif 'link_projects_btn' in request.POST:
                 selected_projects = request.POST.getlist('projects_to_link')
 
+                activities = []
                 for uuid in selected_projects:
                     project_to_add = Project.objects.get(unique_id=uuid)
                     project.related_projects.add(project_to_add)
                     project_to_add.related_projects.add(project)
                     project_to_add.save()
 
-                    ProjectActivity.objects.create(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name} | {community.community_name}')
-                    ProjectActivity.objects.create(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name} | {community.community_name}')
-
+                    activities.append(ProjectActivity(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name} | {community.community_name}'))
+                    activities.append(ProjectActivity(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name} | {community.community_name}'))
+                            
+                ProjectActivity.objects.bulk_create(activities)
                 project.save()
                 return redirect('community-project-actions', community.id, project.unique_id)
+            
             elif 'delete_project' in request.POST:
                 return redirect('community-delete-project', community.id, project.unique_id)
 
@@ -1017,8 +1020,9 @@ def project_actions(request, pk, project_uuid):
             'project_archived': project_archived,
             'is_community_notified': is_community_notified,
             'sub_projects': sub_projects,
-            'projects_to_link': projects_to_link
-
+            'projects_to_link': projects_to_link,
+            'label_groups': label_groups,
+            'can_download': can_download,
         }
         return render(request, 'communities/project-actions.html', context)
 
@@ -1175,7 +1179,8 @@ def connections(request, pk):
 # show community Labels in a PDF
 @login_required(login_url='login')
 def labels_pdf(request, pk):
-    # Get approved labels customized by community
+    # # Get approved labels customized by community
+    # TODO: unapproved community cant generate a PDF
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
     bclabels = BCLabel.objects.filter(community=community, is_approved=True)
     tklabels = TKLabel.objects.filter(community=community, is_approved=True)
@@ -1206,71 +1211,7 @@ def labels_pdf(request, pk):
 @login_required(login_url='login')
 def download_labels(request, pk):
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
-    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
-
-    template_path = 'snippets/pdfs/community-labels.html'
-    context = {'community': community, 'bclabels': bclabels, 'tklabels': tklabels,}
-
-    files = []
-
-    # Add PDF to zip
-    pdf = render_to_pdf(template_path, context)
-    files.append(('Labels_Overview.pdf', pdf))
-
-    # Labels Usage guide PDF
-    usage_guide_url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf'
-    response = requests.get(usage_guide_url) 
-    files.append(('BC_TK_Label_Usage_Guide.pdf', response.content))
-
-    # Add Label images, text and translations
-    for bclabel in bclabels:
-        get_image = requests.get(bclabel.img_url)
-        get_svg = requests.get(bclabel.svg_url)
-        files.append((bclabel.name + '.png', get_image.content))
-        files.append((bclabel.name + '.svg', get_svg.content))
-
-        # Default Label text
-        text_content = bclabel.name + '\n' + bclabel.label_text
-        text_addon = []
-
-        if bclabel.bclabel_translation.all():
-            for translation in bclabel.bclabel_translation.all():
-                text_addon.append('\n\n' + translation.translated_name + ' (' + translation.language + ') ' + '\n' + translation.translated_text)
-            files.append((bclabel.name + '.txt', text_content + '\n'.join(text_addon)))
-        else:
-            files.append((bclabel.name + '.txt', text_content))
-
-    # Add Label images, text and translations
-    for tklabel in tklabels:
-        get_image = requests.get(tklabel.img_url)
-        get_svg = requests.get(tklabel.svg_url)
-        files.append((tklabel.name + '.png', get_image.content))
-        files.append((tklabel.name + '.svg', get_svg.content))
-        
-        # Default Label text
-        text_content = tklabel.name + '\n' + tklabel.label_text
-        text_addon = []
-
-        if tklabel.tklabel_translation.all():
-            for translation in tklabel.tklabel_translation.all():
-                text_addon.append('\n\n' + translation.translated_name + ' (' + translation.language + ') ' + '\n' + translation.translated_text)
-            files.append((tklabel.name + '.txt', text_content + '\n'.join(text_addon)))
-        else:
-            files.append((tklabel.name + '.txt', text_content))
-    
-    # Create Readme
-    readme_text = "The Traditional Knowledge (TK) and Biocultural (BC) Labels reinforce the cultural authority and rights of Indigenous communities.\nThe TK and BC Labels are intended to be displayed prominently on public-facing Indigenous community, researcher and institutional websites, metadata and digital collection's pages.\n\nThis folder contains the following files:\n"
-    file_names = []
-    for f in files:
-        file_names.append(f[0])
-    readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guide for details on how to adapt and display the Labels for your community.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
-    files.append(('README.txt', readme_content))
-
-    # Generate zip file 
-    full_zip_in_memory = generate_zip(files)
-
-    response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename="{}"'.format(community.community_name + '-Labels.zip')
-
-    return response
+    if not community.is_approved or dev_prod_or_local(request.get_host()) == 'DEV':
+        return redirect('restricted')
+    else:
+        return download_labels_zip(community)

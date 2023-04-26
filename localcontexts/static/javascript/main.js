@@ -1313,22 +1313,19 @@ if (window.location.href.includes('labels/view/')) {
     }
 }
 
+(function() {
+    const copyBtns = document.querySelectorAll('.copy-btn');
+    copyBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = document.querySelector(`#${btn.dataset.target}`);
+            target.select();
+            target.setSelectionRange(0, 99999)
+            navigator.clipboard.writeText(target.value)
+        });
+    });
+})()
+
 // PROJECT ACTION PAGE
-function copyProjectUrl(projectPageUrl, elemID) {
-    let target = document.getElementById(projectPageUrl)
-    let copyBtn = document.getElementById(elemID)
-    let initialHTML = copyBtn.innerHTML
-    
-    if (target.value) {
-        target.select()
-        target.setSelectionRange(0, 99999)
-        navigator.clipboard.writeText(target.value)
-        copyBtn.innerHTML = `<i class="fa-solid fa-share-nodes"></i> Project link copied!`
-        setTimeout(() => {
-            copyBtn.innerHTML = initialHTML
-        }, 1500)
-    }
-}
 
 var copyProjectURLBtn = document.getElementById('copyProjectURLBtn')
 var copyProjectIDBtn = document.getElementById('copyProjectIDBtn')
@@ -1348,20 +1345,15 @@ function greenCopyBtn(btnElem, spanIDToCopy) {
     })
 }
 
-function openNotifyCommunitiesModal(elem) {
-    const modal = document.getElementById('notifyCommunitiesModal')
+function openModal(modalId, closeBtnId) {
+    const modal = document.getElementById(modalId)
     modal.classList.replace('hide', 'show')
 
-    const closeModalBtn = document.querySelector('.close-modal-btn')
-    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
-}
-
-function openDeleteProjectModal(elem) {
-    const modal = document.getElementById('deleteProjectModal')
-    modal.classList.replace('hide', 'show')
-
-    const closeModalBtn = document.getElementById('closeProjectDeletionModal')
-    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+    const closeModalBtn = document.getElementById(closeBtnId)
+    closeModalBtn.addEventListener('click', function() {
+        modal.classList.replace('show', 'hide')
+        closeModalBtn.removeEventListener('click', arguments.callee)
+    })
 }
 
 function toggleProjectInfo(self, idToToggle) {
@@ -1399,14 +1391,6 @@ function openUnlinkProjectModal(id) {
     closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
 }
 
-function openLinkProjectModal() {
-    const modal = document.getElementById(`linkProjectsModal`)
-    modal.classList.replace('hide', 'show')
-
-    const closeModalBtn = document.getElementById(`closeLinkProjectsModal`)
-    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
-}
-
 var checkList = document.getElementById('relatedProjectsList');
 if (checkList) {
     checkList.getElementsByClassName('anchor')[0].onclick = function(evt) {
@@ -1415,5 +1399,19 @@ if (checkList) {
         else
           checkList.classList.add('visible');
       }
+}
+
+function showProjectLabels(elem) {
+    let id = elem.id
+    let expandDiv = document.getElementById(`showContent-${id}`)
+
+    expandDiv.classList.toggle('hide')
+    expandDiv.classList.toggle('show')
+
+    if (expandDiv.classList.contains('show')) {
+        elem.classList.replace('fa-angle-down', 'fa-angle-up')
+    } else {
+        elem.classList.replace('fa-angle-up', 'fa-angle-down')
+    }
 }
 
