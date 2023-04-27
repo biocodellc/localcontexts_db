@@ -28,11 +28,8 @@ urlpatterns = [
 
     path('select-account/', views.select_account, name='select-account'),
     
-    # path('registry/communities/', views.registry_communities, name='community-registry'),
-    # path('registry/institutions/', views.registry_institutions, name='institution-registry'),
-    # path('registry/researchers/', views.registry_researchers, name='researcher-registry'),
-    path('registry/', views.registry_updated, name='registry'),
-    path('registry/<str:filtertype>/', views.registry_updated, name='registry'),
+    path('registry/', views.registry, name='registry'),
+    path('registry/<str:filtertype>/', views.registry, name='registry'),
     path('counter/', views.hub_counter, name='hub-counter'),
     path('newsletter/subscribe/', views.newsletter_subscription, name='newsletter-subscription'),
     path('newsletter/preferences/<emailb64>/', views.newsletter_unsubscription, name='newsletter-unsubscription'),
