@@ -11,6 +11,7 @@ from accounts.utils import get_users_name
 import itertools
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
+from localcontexts.utils import dev_prod_or_local
 
 # PROJECT STATUS 
 def set_project_status(user, project, community, creator, project_status):
@@ -225,3 +226,15 @@ def return_project_labels_by_community(project):
             label_groups[community] = {'bc_labels': [], 'tk_labels': tk_labels_list, 'bc_label_count': 0, 'tk_label_count': len(tk_labels_list)}
         
     return label_groups
+
+def can_download_project(request, project_creator_instance):
+    can_download = True
+    if dev_prod_or_local(request.get_host()) == 'DEV':
+        can_download = False
+    elif project_creator_instance.community:
+        if not project_creator_instance.community.is_approved:
+            can_download = False
+    elif project_creator_instance.institution:
+        if not project_creator_instance.institution.is_approved:
+            can_download = False
+    return can_download

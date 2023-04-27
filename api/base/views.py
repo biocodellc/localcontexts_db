@@ -11,6 +11,7 @@ from .serializers import *
 from projects.models import Project
 from helpers.models import Notice
 from projects.models import ProjectCreator
+from django.http import Http404
 
 @api_view(['GET'])
 def apiOverview(request, format=None):
@@ -62,6 +63,14 @@ class ProjectDetail(generics.RetrieveAPIView):
             return ProjectSerializer
         else:
             return ProjectNoNoticeSerializer
+    
+    def get_object(self):
+        try:
+            unique_id = self.kwargs.get('unique_id')
+            obj = self.queryset.get(unique_id=unique_id)
+            return obj
+        except Project.DoesNotExist:
+            raise Http404("Project does not exist")
 
 # ASHLEYTODO
 # TODO: Make this a filter instead?
