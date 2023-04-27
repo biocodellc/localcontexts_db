@@ -72,8 +72,7 @@ class ProjectDetail(generics.RetrieveAPIView):
         except Project.DoesNotExist:
             raise Http404("Project does not exist")
 
-# ASHLEYTODO
-# TODO: Make this a filter instead?
+
 @api_view(['GET'])
 def project_detail_providers(request, providers_id):
     try:
