@@ -635,7 +635,23 @@
                     </div>
                 </div>
 
-                <a class="block" href="{% url 'download-project-zip' project.unique_id %}"><i class="fa-solid fa-download"></i> Download</a>
+                {% if can_download %}
+                    <a class="block" href="{% url 'download-project-zip' project.unique_id %}"><i class="fa-solid fa-download"></i> Download</a>
+                {% else %}
+                    <a class="block a-disabled"> 
+                        <i class="fa-solid fa-download"></i> Download
+                        <div class="tooltip" style="margin-top: 6px; margin-left: 5px;"><strong>i</strong>
+                            <span class="tooltiptext">
+                                {% if 'anth-ja77-lc-dev-42d5' in request.get_host %}
+                                    Project cannot be downloaded on the sandbox site.
+                                {% else %}
+                                    Account that created this Project needs to be confirmed before download is available.
+                                {% endif %}
+                            </span>
+                        </div> 
+                    </a>
+                {% endif %}
+
             {% else %}
                 <a class="block a-disabled"> 
                     <i class="fa-solid fa-share-nodes"></i> Share

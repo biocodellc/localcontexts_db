@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import Http404
+from django.urls import reverse
 from itertools import chain
 
 from localcontexts.utils import dev_prod_or_local
@@ -59,20 +60,15 @@ def connect_researcher(request):
 def public_researcher_view(request, pk):
     try:
         researcher = Researcher.objects.get(id=pk)
-        created_projects = ProjectCreator.objects.filter(researcher=researcher)
 
         # Do notices exist
         bcnotice = Notice.objects.filter(researcher=researcher, notice_type='biocultural').exists()
         tknotice = Notice.objects.filter(researcher=researcher, notice_type='traditional_knowledge').exists()
-        attrnotice = Notice.objects.filter(researcher=researcher, notice_type='attribution_incomplete').exists()
-
-        projects = []
-
-        for p in created_projects:
-            if p.project.project_privacy == 'Public':
-                projects.append(p.project)
-        
+        attrnotice = Notice.objects.filter(researcher=researcher, notice_type='attribution_incomplete').exists()        
         otc_notices = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher)
+
+        created_projects = ProjectCreator.objects.filter(researcher=researcher).values_list('project__unique_id', flat=True)
+        projects = Project.objects.filter(unique_id__in=created_projects, project_privacy='Public').order_by('-date_modified')
 
         if request.user.is_authenticated:
             form = ContactOrganizationForm(request.POST or None)
@@ -452,7 +448,6 @@ def edit_project(request, researcher_id, project_uuid):
         }
         return render(request, 'researchers/edit-project.html', context)
 
-# @login_required(login_url='login')
 def project_actions(request, pk, project_uuid):
     project = Project.objects.prefetch_related(
                 'bc_labels', 
@@ -467,7 +462,7 @@ def project_actions(request, pk, project_uuid):
         researcher = Researcher.objects.get(id=pk)
 
         user_can_view = checkif_user_researcher(researcher, request.user)
-        if user_can_view == False or not project.can_user_access(request.user):
+        if not user_can_view or not project.can_user_access(request.user):
             return redirect('view-project', project.unique_id)
         else:
             notices = Notice.objects.filter(project=project, archived=False)
@@ -479,21 +474,15 @@ def project_actions(request, pk, project_uuid):
             sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
             name = get_users_name(request.user)
             label_groups = return_project_labels_by_community(project)
+            can_download = False if dev_prod_or_local(request.get_host()) == 'DEV' else True
 
-            # for related projects list
-            projects_list = list(chain(
-                researcher.researcher_created_project.all().values_list('project__unique_id', flat=True), 
-                researcher.researchers_notified.all().values_list('project__unique_id', flat=True), 
-                researcher.contributing_researchers.all().values_list('project__unique_id', flat=True),
-            ))
-            project_ids = list(set(projects_list)) # remove duplicate ids
+            # for related projects list 
+            project_ids = list(set(researcher.researcher_created_project.all().values_list('project__unique_id', flat=True)
+                .union(researcher.researchers_notified.all().values_list('project__unique_id', flat=True))
+                .union(researcher.contributing_researchers.all().values_list('project__unique_id', flat=True))))
             project_ids_to_exclude_list = list(project.related_projects.all().values_list('unique_id', flat=True)) #projects that are currently related
-
             # exclude projects that are already related
-            for item in project_ids_to_exclude_list:
-                if item in project_ids:
-                    project_ids.remove(item)
-
+            project_ids = list(set(project_ids).difference(project_ids_to_exclude_list))
             projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id=project.unique_id).order_by('-date_added').values_list('unique_id', 'title')
 
             project_archived = False
@@ -553,15 +542,17 @@ def project_actions(request, pk, project_uuid):
                 elif 'link_projects_btn' in request.POST:
                     selected_projects = request.POST.getlist('projects_to_link')
 
+                    activities = []
                     for uuid in selected_projects:
                         project_to_add = Project.objects.get(unique_id=uuid)
                         project.related_projects.add(project_to_add)
                         project_to_add.related_projects.add(project)
                         project_to_add.save()
 
-                        ProjectActivity.objects.create(project=project_to_add, activity=f'Project "{project_to_add}" was connected to Project "{project}" by {name}')
-                        ProjectActivity.objects.create(project=project, activity=f'Project "{project}" was connected to Project "{project_to_add}" by {name}')
+                        activities.append(ProjectActivity(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name}'))
+                        activities.append(ProjectActivity(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name}'))
                     
+                    ProjectActivity.objects.bulk_create(activities)
                     project.save()
                     return redirect('researcher-project-actions', researcher.id, project.unique_id)
 
@@ -583,6 +574,7 @@ def project_actions(request, pk, project_uuid):
                 'sub_projects': sub_projects,
                 'projects_to_link': projects_to_link,
                 'label_groups': label_groups,
+                'can_download': can_download,
             }
             return render(request, 'researchers/project-actions.html', context)
     else:

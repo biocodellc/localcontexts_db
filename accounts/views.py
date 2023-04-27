@@ -410,7 +410,12 @@ def registry_updated(request, filtertype=None):
         institution_results = i.annotate(search=SearchVector('institution_name'),rank=SearchRank(SearchVector('institution_name'), SearchQuery(q))).filter(rank__gte=0.001).order_by('-rank')
         researcher_results = r.annotate(search=SearchVector('user__username', 'user__first_name', 'user__last_name'),rank=SearchRank(SearchVector('user__username', 'user__first_name', 'user__last_name'), SearchQuery(q))).filter(rank__gte=0.001).order_by('-rank')
 
-        results = list(community_results) + list(institution_results) + list(researcher_results)
+        combined_results = list(community_results) + list(institution_results) + list(researcher_results)
+        results = sorted(combined_results, key=lambda obj: (
+            obj.community_name if isinstance(obj, Community) and hasattr(obj, 'community_name') else '',
+            obj.institution_name if isinstance(obj, Institution) and hasattr(obj, 'institution_name') else '',
+            obj.user.username if isinstance(obj, Researcher) and hasattr(obj.user, 'username') else ''
+        ))
 
         p = Paginator(results, 5)
 
