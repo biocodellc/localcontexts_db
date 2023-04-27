@@ -20,6 +20,14 @@ def researcher_count():
     return Researcher.objects.count()
 
 @register.simple_tag
+def all_account_count():
+    c = Community.approved.count()
+    i = Institution.approved.count()
+    r = Researcher.objects.count()
+    total = c + i + r
+    return total
+
+@register.simple_tag
 def join_request_inst(institution, user):
     return JoinRequest.objects.filter(institution=institution, user_from=user).exists()
 
