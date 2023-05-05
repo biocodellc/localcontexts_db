@@ -55,17 +55,20 @@
 
                 <div>
                     <h3> Projects </h3>
-                    <ul>
-                        {% connections_collaborative_projects community institution as projects %}
+                    {% connections_collaborative_projects community institution as projects %}
+
+                    <table class="projects-table">
+                        <tr>
+                            <th><i class="fa-regular fa-line-columns"></i> Title</th>
+                            <th><i class="fa-light fa-user"></i> Creator</th>
+                            <th><i class="fa-light fa-calendar"></i> Last updated</th>
+                            <th>Visibility</th>
+                        </tr>
+        
                         {% for project in projects %}
-                            <li>
-                                <a 
-                                    class="darkteal-text underline-hover"
-                                    href="{% url 'community-project-actions' community.id project.unique_id %}" 
-                                >{{ project.title }}</a>
-                            </li>
+                            {% include 'projects/project-overview.html' %}
                         {% endfor %}
-                    </ul>
+                    </table>
                 </div>
             </div>
 
@@ -114,19 +117,19 @@
                 
                 <div>
                     <h3> Projects </h3>
-                    <p>
-                        <ul>
-                            {% connections_collaborative_projects community researcher as projects %}
-                            {% for project in projects %}
-                                <li>
-                                    <a 
-                                        class="darkteal-text underline-hover"
-                                        href="{% url 'community-project-actions' community.id project.unique_id %}" 
-                                    >{{ project.title }}</a>
-                                </li>
-                            {% endfor %}                                
-                        </ul>
-                    </p>
+                    {% connections_collaborative_projects community researcher as projects %}
+                    <table class="projects-table">
+                        <tr>
+                            <th><i class="fa-regular fa-line-columns"></i> Title</th>
+                            <th><i class="fa-light fa-user"></i> Creator</th>
+                            <th><i class="fa-light fa-calendar"></i> Last updated</th>
+                            <th>Visibility</th>
+                        </tr>
+        
+                        {% for project in projects %}
+                            {% include 'projects/project-overview.html' %}
+                        {% endfor %}
+                    </table>
                 </div>
 
             </div>
@@ -177,20 +180,19 @@
                 
                 <div>
                     <h3>Projects </h3>
-                    <ul>
-
-                        {% connections_collaborative_projects community comm as projects %}
+                    {% connections_collaborative_projects community comm as projects %}
+                    <table class="projects-table">
+                        <tr>
+                            <th><i class="fa-regular fa-line-columns"></i> Title</th>
+                            <th><i class="fa-light fa-user"></i> Creator</th>
+                            <th><i class="fa-light fa-calendar"></i> Last updated</th>
+                            <th>Visibility</th>
+                        </tr>
+        
                         {% for project in projects %}
-                            <li>
-                                <a
-                                    class="darkteal-text underline-hover"
-                                    href="{% url 'community-project-actions' community.id project.unique_id %}" 
-                                >
-                                    {{ project.title }}
-                                </a>
-                            </li>
+                            {% include 'projects/project-overview.html' %}
                         {% endfor %}
-                    </ul>                           
+                    </table>                        
                 </div>
             </div>
         </div>

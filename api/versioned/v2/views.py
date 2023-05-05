@@ -18,9 +18,7 @@ class APIOverview(APIView):
         'projects_by_researcher_id': '/projects/researchers/<RESEARCHER_ID>/',
         'open_to_collaborate_notice': reverse('api-open-to-collaborate', request=request, format=format),
         'api_documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
-        'usage_guide_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Notice-Usage-Guide_2021-11-16.pdf',
-        'usage_guide_ci_notices': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-Institution-Notices-Usage-Guide_2021-11-16.pdf',
-        'usage_guide_labels': 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/guides/LC-TK_BC-Labels-Usage-Guide_2021-11-02.pdf',
+        'usage_guides': 'https://localcontexts.org/support/downloadable-resources/',
         }
         return Response(api_urls)
 

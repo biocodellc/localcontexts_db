@@ -6,7 +6,7 @@ from helpers.models import LabelNote
 
 from localcontexts.utils import dev_prod_or_local
 from accounts.utils import get_users_name
-from localcontexts.utils import return_login_url_str, return_register_url_str
+from localcontexts.utils import get_site_url
 
 from django.conf import settings
 from django.template.loader import render_to_string
@@ -213,7 +213,7 @@ def resend_activation_email(request, active_users):
 # User has activated account and has logged in: Welcome email
 def send_welcome_email(request, user):   
     subject = 'Welcome to Local Contexts Hub!'
-    url = return_login_url_str(request)
+    url = get_site_url(request, 'login')
     send_mailgun_template_email(user.email, subject, 'welcome', {"login_url": url})
 
 # TEST THIS
@@ -221,7 +221,7 @@ def send_welcome_email(request, user):
 def send_invite_user_email(request, data):
     subject = 'You have been invited to join the Local Contexts Hub'
     name = get_users_name(data.sender)
-    url = return_register_url_str(request)
+    url = get_site_url(request, 'register')
     variables = {"register_url": url, "name": name, "message": data.message}
     send_mailgun_template_email(data.email, subject, 'invite_new_user', variables)
 
@@ -229,7 +229,7 @@ def send_invite_user_email(request, data):
 # will email community or institution creator that someone wants to join the organization
 def send_join_request_email_admin(request, join_request, organization):
     name = get_users_name(request.user)
-    login_url = return_login_url_str(request)
+    login_url = get_site_url(request, 'login')
 
     # Check if organization instance is community model
     if isinstance(organization, Community):
@@ -282,7 +282,7 @@ def send_contact_email(to_email, from_name, from_email, message, account):
 
 def send_member_invite_email(request, data, account):
     name = get_users_name(data.sender)
-    login_url = return_login_url_str(request)
+    login_url = get_site_url(request, 'login')
 
     if isinstance(account, Institution):
         org_name = account.institution_name
@@ -315,7 +315,7 @@ def send_member_invite_email(request, data, account):
 # A notice has been applied by researcher or institution
 def send_email_notice_placed(request, project, community, account):
     # Can pass instance of institution or researcher as account
-    login_url = return_login_url_str(request)
+    login_url = get_site_url(request, 'login')
 
     if isinstance(account, Institution):
         subject = f'{account.institution_name} has notified you about a Project'
@@ -340,7 +340,7 @@ def send_email_notice_placed(request, project, community, account):
 
 # When Labels have been applied to a Project
 def send_email_labels_applied(request, project, community):
-    login_url = return_login_url_str(request)
+    login_url = get_site_url(request, 'login')
     subject = 'A community has applied Labels to your Project'
     data = {
         'community_name': community.community_name,
@@ -353,7 +353,7 @@ def send_email_labels_applied(request, project, community):
 # Label has been approved or not
 def send_email_label_approved(request, label, note_id):
     approver_name = get_users_name(label.approved_by)
-    login_url = return_login_url_str(request)
+    login_url = get_site_url(request, 'login')
 
     if label.is_approved:
         subject = 'Your Label has been approved'
@@ -379,7 +379,7 @@ def send_email_label_approved(request, label, note_id):
 
 # You are now a member of institution/community email
 def send_membership_email(request, account, receiver, role):
-    login_url = return_login_url_str(request)
+    login_url = get_site_url(request, 'login')
     
     if role == 'admin' or role == 'Admin':
         role_str = 'Administrator'
@@ -425,9 +425,9 @@ def send_contributor_email(request, account, proj_id, is_adding):
     elif created_by.researcher:
         creator_account = 'Researcher'
 
-    register_url = return_register_url_str(request)
+    register_url = get_site_url(request, 'register')
     project_creator = get_users_name(project.project_creator)
-    login_url = return_login_url_str(request)
+    login_url = get_site_url(request, 'login')
 
     if is_adding:        
         if isinstance(account, Community):
@@ -472,7 +472,7 @@ def send_project_person_email(request, to_email, proj_id, account):
     project = Project.objects.select_related('project_creator').get(unique_id=proj_id)
 
     project_creator = get_users_name(project.project_creator)
-    register_url = return_register_url_str(request)
+    register_url = get_site_url(request, 'register')
     subject = 'You have been added as a contributor on a Local Contexts Hub Project'
 
     if isinstance(account, Community):
