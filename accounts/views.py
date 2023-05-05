@@ -18,6 +18,8 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
 
 import itertools
+from unidecode import unidecode
+from django.db.models import Q
 
 from django.contrib.auth.models import User
 from communities.models import Community, InviteMember
@@ -339,25 +341,26 @@ def registry(request, filtertype=None):
         
         elif ('q' in request.GET) and (filtertype == None):
             q = request.GET.get('q')
+            q = unidecode(q) #removes accents from search query
 
-            # Search through account types by query (q)
-            community_results = c.annotate(search=SearchVector('community_name'),rank=SearchRank(SearchVector('community_name'), SearchQuery(q))).filter(rank__gte=0.001).order_by('-rank')
-            institution_results = i.annotate(search=SearchVector('institution_name'),rank=SearchRank(SearchVector('institution_name'), SearchQuery(q))).filter(rank__gte=0.001).order_by('-rank')
-            researcher_results = r.annotate(search=SearchVector('user__username', 'user__first_name', 'user__last_name'),rank=SearchRank(SearchVector('user__username', 'user__first_name', 'user__last_name'), SearchQuery(q))).filter(rank__gte=0.001).order_by('-rank')
-            # account.rank returns a num
+            # Filter's accounts by the search query, showing results that match with or without accents
+            c = c.filter(community_name__unaccent__icontains=q)
+            i = i.filter(institution_name__unaccent__icontains=q)
+            r = r.filter(Q(user__username__unaccent__icontains=q) | Q(user__first_name__unaccent__icontains=q) | Q(user__last_name__unaccent__icontains=q))
 
-            # Results combined and then sorted Alphabetically (Desc)
-            combined_results = list(community_results) + list(institution_results) + list(researcher_results)
-            results = sorted(combined_results, key=lambda obj: (
-                obj.community_name if isinstance(obj, Community) and hasattr(obj, 'community_name') else '',
-                obj.institution_name if isinstance(obj, Institution) and hasattr(obj, 'institution_name') else '',
-                obj.user.username if isinstance(obj, Researcher) and hasattr(obj.user, 'username') else ''
+            # Results combined and then sorted Alphabetically (Desc) Lower and strip added to sort alphabetically properly ignoring case and empty strings
+            combined_accounts = list(itertools.chain(c,r,i))
+            cards = sorted(combined_accounts, key=lambda obj: (
+                unidecode(obj.community_name.lower().strip()) if isinstance(obj, Community) else 
+                unidecode(obj.institution_name.lower().strip()) if isinstance(obj, Institution) else
+                unidecode(obj.user.first_name.lower().strip()) if isinstance(obj, Researcher) and obj.user.first_name.strip() else
+                unidecode(obj.user.username.lower().strip()) if isinstance(obj, Researcher) else ''
             ))
+            # unidecode allows for the accounts to be sorted based on the alphabet, excluding accents
 
-            p = Paginator(results, 5)
+            p = Paginator(cards, 5)
 
         else:
-            results = None
             if filtertype == 'communities':
                 cards = c
             elif filtertype == 'institutions':
@@ -365,13 +368,16 @@ def registry(request, filtertype=None):
             elif filtertype == 'researchers':
                 cards = r
             else:
-                # Accounts combined and then sorted Alphabetically (Desc)
+                # Accounts combined and then sorted Alphabetically (Desc) Lower and strip added to sort alphabetically properly ignoring case and empty strings
                 combined_accounts = list(itertools.chain(c,r,i))
                 cards = sorted(combined_accounts, key=lambda obj: (
-                    obj.community_name if isinstance(obj, Community) and hasattr(obj, 'community_name') else '',
-                    obj.institution_name if isinstance(obj, Institution) and hasattr(obj, 'institution_name') else '',
-                    obj.user.username if isinstance(obj, Researcher) and hasattr(obj.user, 'username') else ''
+                    unidecode(obj.community_name.lower().strip()) if isinstance(obj, Community) else 
+                    unidecode(obj.institution_name.lower().strip()) if isinstance(obj, Institution) else
+                    unidecode(obj.user.first_name.lower().strip()) if isinstance(obj, Researcher) and obj.user.first_name.strip() else
+                    unidecode(obj.user.username.lower().strip()) if isinstance(obj, Researcher) else ''
                 ))
+                # unidecode allows for the accounts to be sorted based on the alphabet, excluding accents
+
             p = Paginator(cards, 5)
 
         page_num = request.GET.get('page', 1)
@@ -382,7 +388,6 @@ def registry(request, filtertype=None):
             'communities' : c,
             'institutions' : i,
             'items' : page,
-            'results' : results,
             'filtertype' : filtertype
         }
         

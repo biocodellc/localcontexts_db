@@ -1,23 +1,65 @@
 <div class="pagination">
     {% if items %}
+
         {% if items.has_previous %}
-            <a class="page-btn-nav page" href="?page=1">          
-                <i class="fa-regular fa-arrow-left"></i> Previous</span>
+            <a class="page-btn-nav" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page=1">
+                <i class="fa-solid fa-chevrons-left"></i>
             </a>
-            <a class="page-num-nav page" href="?page={{ items.previous_page_number }}">{{ items.previous_page_number }}</a>
+            <a class="page-btn-nav page" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.previous_page_number }}">          
+                <i class="fa-solid fa-chevron-left"></i>&nbsp;&nbsp;Previous
+            </a>
+
+            {% if items.has_next and items.previous_page_number|add:-1 >= 1 %}
+                <span class="grey-text font-size-14 bold">...</span>
+            {% endif %}
+
+            {% if items.has_next == False %}
+                {% if items.previous_page_number|add:-2 >= 1 %}
+                    <span class="grey-text font-size-14 bold">...</span>
+                {% endif %}
+                <a class="page-num-nav page" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.previous_page_number|add:-1 }}">{{ items.previous_page_number|add:-1 }}</a>
+            {% endif %}
+
+            {% if items.previous_page_number >= 1 %}
+                <a class="page-num-nav page" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.previous_page_number }}">{{ items.previous_page_number }}</a>
+            {% endif %}
+
         {% else %}
-            <span class="grey-text margin-right-16 font-size-14 bold"><i class="fa-regular fa-arrow-left"></i> Previous</span>
+            <span class="grey-text margin-right-16 font-size-14 bold"><i class="fa-solid fa-chevrons-left"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-chevron-left"></i>&nbsp;&nbsp;Previous</span>
         {% endif %}
 
-        <span class="current"> {{ items.number }}</span>
+        <span class="current">{{ items.number }}</span>
 
         {% if items.has_next %}
-            <a class="page-num-nav page" href="?page={{ items.next_page_number }}">{{ items.next_page_number }}</a>
-            <a class="page-btn-nav page" href="?page={{ items.paginator.num_pages }}"> 
-                Next <i class="fa-regular fa-arrow-right"></i>
+            {% if items.next_page_number >= 1 %}
+                <a class="page-num-nav page" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.next_page_number }}">{{ items.next_page_number }}</a>
+            {% endif %}
+
+            {% if items.has_previous == False %}
+                <a class="page-num-nav page" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.next_page_number|add:1 }}">{{ items.next_page_number|add:1 }}</a>
+                {% if items.next_page_number|add:2 <= items.paginator.num_pages %}
+                    <span class="grey-text font-size-14 bold">...</span>
+                {% endif %}
+            {% endif %}
+
+            {% if items.has_previous and items.next_page_number|add:1 <= items.paginator.num_pages %}
+                <span class="grey-text font-size-14 bold">...</span>
+            {% endif %}
+
+            <a class="page-btn-nav page" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.next_page_number }}"> 
+                Next&nbsp;&nbsp;<i class="fa-solid fa-chevron-right"></i>
+            </a>
+            <a class="page-btn-nav" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.paginator.num_pages }}">
+                <i class="fa-solid fa-chevrons-right"></i>
             </a>
         {% else %}
-            <span class="grey-text margin-left-16 font-size-14 bold"> Next <i class="fa-regular fa-arrow-right"></i></span>
+            <span class="grey-text margin-left-16 font-size-14 bold">Next&nbsp;&nbsp;<i class="fa-solid fa-chevron-right"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-chevrons-right"></i></span>
         {% endif %}
+    
+    {% else %}
+        <span class="grey-text margin-right-16 font-size-14 bold"><i class="fa-solid fa-chevrons-left"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-chevron-left"></i>&nbsp;&nbsp;Previous</span>
+        <span class="current">1</span>
+        <span class="grey-text margin-left-16 font-size-14 bold">Next&nbsp;&nbsp;<i class="fa-solid fa-chevron-right"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-chevrons-right"></i></span>
     {% endif %}
 </div>
+
