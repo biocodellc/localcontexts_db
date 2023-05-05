@@ -155,7 +155,7 @@
                     <div>
                         <div class="flex-this">
                             <div>
-                                <p id="copyProjectIDBtn">
+                                <p class="copyProjectIDBtn">
                                     <i class="round-btn fa-regular fa-clone fa-rotate-90"></i>
                                 </p>
                             </div>  
@@ -169,7 +169,7 @@
 
                         <div class="flex-this">
                             <div>
-                                <p id="copyProjectURLBtn">
+                                <p class="copyProjectURLBtn">
                                     <i class="round-btn fa-regular fa-clone fa-rotate-90"></i>
                                 </p>
                             </div>  
@@ -619,17 +619,63 @@
                         </div>
 
                         <div class="w-100 flex-this column">
-                            <label class="bold margin-top-8 margin-bottom-8 block">Local Contexts Project ID</label>
-                            <div class="text-input-to-copy">
-                                <input class="w-100" type="text" value="{{ project.unique_id }}" id="projectUUIDToCopy">
-                                <button class="copy-btn btn-in-input" data-target="projectUUIDToCopy">Copy ID</button>
+                            <div class="flex-this">
+                                <div>
+                                    <p class="copyProjectIDBtn">
+                                        <i class="round-btn fa-regular fa-clone fa-rotate-90"></i>
+                                    </p>
+                                </div>  
+                                <div class="margin-left-16">
+                                    <p>
+                                        <span class="bold">Copy Project ID</span><br>
+                                        <span id="projectIDToCopy">{{ project.unique_id }}</span>
+                                    </p>
+                                </div>                          
+                            </div>
+    
+                            <div class="flex-this">
+                                <div>
+                                    <p class="copyProjectURLBtn">
+                                        <i class="round-btn fa-regular fa-clone fa-rotate-90"></i>
+                                    </p>
+                                </div>  
+                                <div class="margin-left-16">
+                                    <p>
+                                        <span class="bold">Copy Project URL</span><br>
+                                        <span id="projectURLToCopy">{{ project.project_page }}</span>
+                                    </p>
+                                </div>                          
                             </div>
 
-                            <label class="bold margin-top-8 margin-bottom-8 block">Local Contexts Project URL</label>
+                            <div class="border-bottom-grey margin-top-8 margin-bottom-8"></div>
+                            <div class="flex-this bold">Share on Social Media</div>
+                            <div class="flex-this">
+                                <div>
+                                    <p class="shareToSocialsBtn" data-social="email" data-project-title="{{ project.title }}" data-project-url="{{ project.project_page }}">
+                                        <i class="socials-btn fa-solid fa-envelope" style="background-color:#108670;" title="Share via Email"></i>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="shareToSocialsBtn" data-social="whatsapp" data-project-title="{{ project.title }}" data-project-url="{{ project.project_page }}">
+                                        <i class="socials-btn fa-brands fa-whatsapp" style="background-color: #25D366;" title="Share via WhatsApp"></i>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="shareToSocialsBtn" data-social="facebook" data-project-title="{{ project.title }}" data-project-url="{{ project.project_page }}">
+                                        <i class="socials-btn fa-brands fa-facebook-f" style="background-color:#4267B2;" title="Share on Facebook"></i>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="shareToSocialsBtn" data-social="twitter" data-project-title="{{ project.title }}" data-project-url="{{ project.project_page }}">
+                                        <i class="socials-btn fa-brands fa-twitter" style="background-color:#1DA1F2;" title="Share on Twitter"></i>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="shareToSocialsBtn" data-social="linkedin" data-project-title="{{ project.title }}" data-project-url="{{ project.project_page }}">
+                                        <i class="socials-btn fa-brands fa-linkedin" style="background-color:#0077b5;" title="Share on LinkedIn"></i>
+                                    </p>
+                                </div>
 
-                            <div class="text-input-to-copy">
-                                <input class="w-100" type="text" value="{{ project.project_page}}" id="projectPageUrlToCopy">
-                                <button class="copy-btn btn-in-input" data-target="projectPageUrlToCopy">Copy URL</button>
                             </div>
                         </div>
                     </div>

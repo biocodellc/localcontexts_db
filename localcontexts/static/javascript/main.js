@@ -86,13 +86,44 @@ function languageList(data) {
     autocomplete(document.getElementById('languageListInput'), langArray)
 }
 
+// converts accented letters to the unaccented equivalent
+function removeAccents(str) {
+  var map = {
+    "a": '[àáâãäåæāăąǻ]',
+    "b": '[ɓ]',
+    "c": '[çćĉċč]',
+    "d": '[ďđ]',
+    "e": '[èéêëēĕėęěɛə]',
+    "g": '[ĝğġģ]',
+    "h": '[ĥħḥ]',
+    "i": '[ìíîïĩīĭįɨİ]',
+    "j": '[ĵ]',
+    "k": '[ķ]',
+    "l": '[ĺļľŀłı̨]',
+    "n": '[ñńņňŉŋ]',
+    "o": '[òóôõöøōŏőǫ]',
+    "r": '[ŕŗř]',
+    "s": '[śŝşšșṣ]',
+    "t": '[ţťŧțṭ]',
+    "u": '[ùúûüũūŭůűų]',
+    "w": '[ŵ]',
+    "y": '[ýÿŷ]',
+    "z": '[źżž]'
+  };
+  
+  for (var pattern in map) {
+    str = str.replace(new RegExp(map[pattern], "gi"), pattern);
+  }
+  return str;
+}
+
 // Searchbar with autocomplete
 // Takes two args: text iput element and array of values to autocomplete
 function autocomplete(inp, arr) {
     var currentFocus;
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
-        var a, b, i, val = this.value;
+        var a, b, i, val = removeAccents(this.value);
         /*close any already open lists of autocompleted values*/
         closeAllLists();
         if (!val) { return false;}
@@ -106,7 +137,7 @@ function autocomplete(inp, arr) {
 
         for (i = 0; i < arr.length; i++) {
           /*check if the item starts with the same letters as the text field value:*/
-          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          if (removeAccents(arr[i]).substr(0, val.length).toUpperCase() == val.toUpperCase()) {
             /*create a DIV element for each matching element:*/
             b = document.createElement("DIV");
             /*make the matching letters bold:*/
@@ -154,15 +185,34 @@ function autocomplete(inp, arr) {
     });
 
     function addActive(x) {
-      /*a function to classify an item as "active":*/
-      if (!x) return false;
-      /*start by removing the "active" class on all items:*/
-      removeActive(x);
-      if (currentFocus >= x.length) currentFocus = 0;
-      if (currentFocus < 0) currentFocus = (x.length - 1);
-      /*add class "autocomplete-active":*/
-      x[currentFocus].classList.add("autocomplete-active");
-    }
+        /*a function to classify an item as "active":*/
+        if (!x) return false;
+        /*start by removing the "active" class on all items:*/
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        /*add class "autocomplete-active":*/
+        x[currentFocus].classList.add("autocomplete-active");
+    
+        // Get the value of the input element
+        var inputValue = inp.value;
+    
+        // Map accented characters to unaccented versions
+        var unaccentedValue = removeAccents(inputValue);
+    
+        // Loop through the autocomplete items
+        for (var i = 0; i < x.length; i++) {
+            // Get the value of the current autocomplete item
+            var itemValue = x[i].getElementsByTagName("input")[0].value;
+            // Map accented characters to unaccented versions
+            var unaccentedItemValue = removeAccents(itemValue);
+            // Check if the unaccented value matches the unaccented item value
+            if (unaccentedItemValue.toUpperCase().indexOf(unaccentedValue.toUpperCase()) > -1) {
+            /*if the item is found, mark as active:*/
+            x[i].classList.add("autocomplete-active");
+            }
+        }
+    }    
 
     function removeActive(x) {
       /*a function to remove the "active" class from all autocomplete items:*/
@@ -1327,11 +1377,15 @@ if (window.location.href.includes('labels/view/')) {
 
 // PROJECT ACTION PAGE
 
-var copyProjectURLBtn = document.getElementById('copyProjectURLBtn')
-var copyProjectIDBtn = document.getElementById('copyProjectIDBtn')
+var copyProjectURLBtn = document.getElementsByClassName('copyProjectURLBtn')
+var copyProjectIDBtn = document.getElementsByClassName('copyProjectIDBtn')
 if (copyProjectIDBtn && copyProjectURLBtn) {
-    greenCopyBtn(copyProjectIDBtn, 'projectIDToCopy')
-    greenCopyBtn(copyProjectURLBtn, 'projectURLToCopy')
+    for (var i = 0; i < copyProjectIDBtn.length; i++) {
+        greenCopyBtn(copyProjectIDBtn[i], 'projectIDToCopy')
+    }
+    for (var i = 0; i < copyProjectURLBtn.length; i++) {
+        greenCopyBtn(copyProjectURLBtn[i], 'projectURLToCopy')
+    }
 }
 
 function greenCopyBtn(btnElem, spanIDToCopy) {
@@ -1342,6 +1396,37 @@ function greenCopyBtn(btnElem, spanIDToCopy) {
         setTimeout(() => {
             btnElem.innerHTML = `<i class="round-btn fa-regular fa-clone fa-rotate-90"></i>`
         }, 1000)
+    })
+}
+
+// Share on Social Media
+var shareToSocialsBtn = document.getElementsByClassName('shareToSocialsBtn')
+if (shareToSocialsBtn) {
+    for (var i = 0; i < shareToSocialsBtn.length; i++) {
+        shareToSocialsBtnAction(shareToSocialsBtn[i])
+    }
+}
+
+function shareToSocialsBtnAction(btnElem) {
+    btnElem.addEventListener('click', function() {
+        socialType = btnElem.getAttribute("data-social")
+        projectURL = btnElem.getAttribute("data-project-url")
+        projectTitle = btnElem.getAttribute("data-project-title")
+        if (socialType == 'email') {
+            var emailSubject = encodeURIComponent("Local Contexts Project")
+            var emailBody = encodeURIComponent("Check out this Local Contexts project! "+projectTitle+" at "+projectURL)
+            var mailtoLink = "mailto:?subject="+emailSubject+"&body="+emailBody
+            window.location.href = mailtoLink
+        } else if(socialType == 'facebook') {
+            window.open('http://www.facebook.com/sharer/sharer.php?u='+projectURL, 'Share on Facebook')
+        } else if (socialType == 'twitter') {
+            window.open('https://twitter.com/intent/tweet?url='+projectURL+'&text=Check out this @LocalContexts project! #LocalContexts #traditionalknowledge #indigenousdata', 'Share on Twitter')
+        } else if (socialType == 'linkedin') {
+            window.open('https://www.linkedin.com/shareArticle?url='+projectURL)
+        } else if (socialType == 'whatsapp') {
+            messageText = encodeURIComponent("Check out this Local Contexts project! "+projectTitle+" at "+projectURL)
+            window.location.href = 'https://api.whatsapp.com/send?text='+messageText
+        }
     })
 }
 
