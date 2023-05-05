@@ -10,15 +10,16 @@ from rest_framework.permissions import IsAuthenticated
 class APIOverview(APIView):
     def get(self, request, format=None):
         api_urls = {
-            'projects_list': reverse('api-projects', request=request, format=format),
+            'server': reverse('api-overview', request=request, format=format),
+            'projects_list': '/projects/',
             'project_detail': '/projects/<PROJECT_UNIQUE_ID>/',
             'multi_project_detail':'/projects/multi/<PROJECT_UNIQUE_ID_1>,<PROJECT_UNIQUE_ID_2>/',
             'projects_by_user_id': '/projects/users/<USER_ID>/',
             'projects_by_institution_id': '/projects/institutions/<INSTITUTION_ID>/',
             'projects_by_researcher_id': '/projects/researchers/<RESEARCHER_ID>/',
-            'open_to_collaborate_notice': reverse('api-open-to-collaborate', request=request, format=format),
+            'open_to_collaborate_notice': '/notices/open_to_collaborate/',
             'api_documentation': 'https://github.com/biocodellc/localcontexts_db/wiki/API-Documentation',
-            'usage_guides': 'https://localcontexts.org/support/downloadable-resources/',
+            'usage_guides': 'https://localcontexts.org/support/downloadable-resources',
         }
         return Response(api_urls)
 
@@ -35,7 +36,7 @@ class OpenToCollaborateNotice(APIView):
         return Response(api_urls)
 
 class ProjectList(generics.ListAPIView):
-    # permission_classes = [HasAPIKey]
+    permission_classes = [HasAPIKey]
     queryset = Project.objects.exclude(project_privacy='Private')
     serializer_class = ProjectOverviewSerializer
 
@@ -47,7 +48,7 @@ class ProjectList(generics.ListAPIView):
     # '$' regex search
 
 class ProjectDetail(generics.RetrieveAPIView):
-    # permission_classes = [HasAPIKey | IsAuthenticated]
+    permission_classes = [HasAPIKey | IsAuthenticated]
     lookup_field = 'unique_id'
     queryset = Project.objects.exclude(project_privacy='Private')
 
@@ -67,7 +68,7 @@ class ProjectDetail(generics.RetrieveAPIView):
             raise Http404("Project does not exist")
 
 class ProjectsByIdViewSet(ViewSet):
-    # permission_classes = [HasAPIKey | IsAuthenticated]
+    permission_classes = [HasAPIKey | IsAuthenticated]
     def projects_by_user(self, request, pk):
         try:
             useracct = User.objects.get(id=pk)
@@ -129,6 +130,7 @@ class ProjectsByIdViewSet(ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         
 class MultiProjectListDetail(ViewSet):
+    permission_classes = [HasAPIKey | IsAuthenticated]
 
     def multisearch(self, request, unique_id):
         try:
