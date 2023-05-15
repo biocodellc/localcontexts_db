@@ -18,11 +18,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, re_path
 from helpers.views import restricted_view
-
-admin.site.site_header = 'Local Contexts Hub administration'
+from .admin import admin_site
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin_site.urls),
     path('', include('accounts.urls')),
     path('communities/', include('communities.urls')),
     path('institutions/', include('institutions.urls')),
