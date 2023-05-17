@@ -395,7 +395,7 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
 def edit_project(request, researcher_id, project_uuid):
     researcher = Researcher.objects.get(id=researcher_id)
     user_can_view = checkif_user_researcher(researcher, request.user)
-    if user_can_view == False:
+    if not user_can_view:
         return redirect('restricted')
     else:
         project = Project.objects.get(unique_id=project_uuid)
@@ -403,7 +403,6 @@ def edit_project(request, researcher_id, project_uuid):
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
         notices = Notice.objects.none()
-        urls = project.urls
 
         # Check to see if notice exists for this project and pass to template
         if Notice.objects.filter(project=project).exists():
@@ -445,7 +444,7 @@ def edit_project(request, researcher_id, project_uuid):
             'formset': formset,
             'contributors': contributors,
             'user_can_view': user_can_view,
-            'urls': urls,
+            'urls': project.urls,
         }
         return render(request, 'researchers/edit-project.html', context)
 

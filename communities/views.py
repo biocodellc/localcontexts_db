@@ -874,13 +874,12 @@ def edit_project(request, community_id, project_uuid):
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
     
     member_role = check_member_role(request.user, community)
-    if member_role == False or member_role == 'viewer': # If user is not a member / does not have a role.
+    if not member_role or member_role == 'viewer': # If user is not a member / does not have a role.
         return redirect('restricted')    
     else:
         form = EditProjectForm(request.POST or None, instance=project)
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.prefetch_related('institutions', 'researchers', 'communities').get(project=project)
-        urls = project.urls
 
         if request.method == 'POST':
             if form.is_valid() and formset.is_valid():
@@ -911,7 +910,7 @@ def edit_project(request, community_id, project_uuid):
             'form': form,
             'formset': formset,
             'contributors': contributors,
-            'urls': urls,
+            'urls': project.urls,
         }
         return render(request, 'communities/edit-project.html', context)
     
