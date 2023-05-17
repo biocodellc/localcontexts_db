@@ -902,7 +902,7 @@ def edit_project(request, community_id, project_uuid):
 
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, community, data)
-                return redirect('community-projects', community.id)
+                return redirect('community-project-actions', community.id, project.unique_id)
 
         context = {
             'member_role': member_role,

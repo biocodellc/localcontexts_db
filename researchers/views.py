@@ -434,7 +434,8 @@ def edit_project(request, researcher_id, project_uuid):
                 notices_selected = request.POST.getlist('checkbox-notice')
                 crud_notices(request, notices_selected, researcher, data, notices)
 
-            return redirect('researcher-projects', researcher.id)    
+            return redirect('researcher-project-actions', researcher.id, project.unique_id)
+ 
 
         context = {
             'researcher': researcher, 

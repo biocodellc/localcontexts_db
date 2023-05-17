@@ -663,7 +663,8 @@ def edit_project(request, institution_id, project_uuid):
                 # Pass any existing notices as well as newly selected ones
                 crud_notices(request, notices_selected, institution, data, notices)
 
-            return redirect('institution-projects', institution.id)
+            return redirect('institution-project-actions', institution.id, project.unique_id)
+
 
         context = {
             'member_role': member_role,
