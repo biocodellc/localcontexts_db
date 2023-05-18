@@ -118,7 +118,7 @@ class MyAdminSite(admin.AdminSite):
                 'No Activity'
             ],
             'datasets': [{
-                'data': [disclosure_count, otc_count, project_Labels_count, project_inactivity_count],
+                'data': [otc_count, disclosure_count, project_Labels_count, project_inactivity_count],
                 'backgroundColor': [
                     'rgb(242, 126, 48)',
                     'rgb(1, 117, 133)',
@@ -145,6 +145,9 @@ class MyAdminSite(admin.AdminSite):
                 'hoverOffset': 4
             }]
         }
+        # TODO: 
+        # - Customized labels (pending approval vs. approved)
+        # - Labels applied (project count vs. label number count)
 
         context = {
             'community_count': community_count,
@@ -289,8 +292,8 @@ class ProjectStatusAdmin(admin.ModelAdmin):
 # class LabelNoteAdmin(admin.ModelAdmin):
 #     list_display = ('bclabel', 'tklabel', 'sender',)
 
-# admin.site.register(ProjectComment, ProjectCommentAdmin)
-# admin.site.register(LabelNote, LabelNoteAdmin)
+# admin_site.register(ProjectComment, ProjectCommentAdmin)
+# admin_site.register(LabelNote, LabelNoteAdmin)
 admin_site.register(ProjectStatus, ProjectStatusAdmin)
 admin_site.register(Notice, NoticeAdmin)
 admin_site.register(LabelVersion, LabelVersionAdmin)
