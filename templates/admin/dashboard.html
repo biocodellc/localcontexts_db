@@ -5,61 +5,44 @@
         <h2>Today: {% now "M. d, Y, H:i e" %}</h2>
     </div>
 
-    <div class="flex-this col2">
-        <div class="dashboard-item-25"></div>
+    <div class="flex-this column">
 
-        <div class="dashboard-item-25">
-            <canvas id="myChart"></canvas>
+        <div class="dashboard-item-33">
+            <canvas id="accounts"></canvas>
         </div>
 
-        <div class="dashboard-item-25">
-            <canvas id="myChart2"></canvas>
+        <div class="dashboard-item-33">
+            <canvas id="projectActivity"></canvas>
         </div>
 
-        <div class="dashboard-item-25"></div>
+        <div class="dashboard-item-33">
+            <canvas id="customizedLabels"></canvas>
+        </div>
     </div>
 
-    <div id="colorPicker" class="flex-this space-between center-text justify-center">
-        <div class="stats-count-div">
-            <h2>Registered</h2>
-            <p>
-                Communities - {{ community_count }} <br>
-                Institutions - {{ institution_count}} <br>
-                Researchers - {{ researcher_count }} <br>
-                <br>
-                <strong>TOTAL: {{ reg_total }} </strong>
-            </p>
-        </div>        
-        <div class="stats-count-div">
-            <h2>Notices</h2>
-            <p>
-                TK - {{ tk_notice_count }} <br>
-                BC - {{ bc_notice_count }} <br>
-                Attribution Incomplete - {{ attr_notice_count }} <br>
-                Open to Collaborate - {{ otc_count }} <br><br>
-                <strong>TOTAL: {{ notices_total }} </strong>
-            </p>
+    <div>
+        <h1 class="center-text">Registered Users</h1>
+        <div id="colorPicker" class="flex-this space-between center-text justify-center">
+            <div class="stats-count-div">
+                <h2 class="count-header">Communities</h2>
+                <p class="count-number">{{ community_count }}</p>
+            </div>
+            <div class="stats-count-div">
+                <h2 class="count-header">Institutions</h2>
+                <p class="count-number">{{ institution_count}}</p>
+            </div>
+            <div class="stats-count-div">
+                <h2 class="count-header">Researchers</h2>
+                <p class="count-number">{{ researcher_count }}</p>
+            </div>
+            <div class="stats-count-div">
+                <h2 class="count-header">Total</h2>
+                <p class="count-number">{{ reg_total }}</p>
+            </div>        
         </div>
-        <div class="stats-count-div">
-            <h2>Projects</h2>
-            <p>
-                Communities - {{ community_projects }} <br>
-                Institutions - {{ institution_projects }} <br>
-                Researchers - {{ researcher_projects }}<br><br>
-                <strong>TOTAL: {{ projects_count }} </strong>
-            </p>
-        </div>
-        <div class="stats-count-div">
-            <h2>Labels</h2>
-            <p>
-                TK - {{ tklabels_count }} <br>
-                BC - {{ bclabels_count }} <br><br>
-                <strong>TOTAL: {{ total_labels }} </strong>
-            </p>
-        </div>           
     </div>
 
-    <div class="flex-this col2">
+    <div class="flex-this column">
         <div class="dashboard-item-50">
             <h2>Recent Project Action Updates</h2>
             <hr class="searchbar-divider">
@@ -191,7 +174,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript">
     window.onload = function() {
-        pieChart('myChart', 'Registered Hub Accounts', {{accountData|safe}});
-        pieChart('myChart2', 'Project Labels/Notices', {{projectActivityData|safe}});
+        pieChart('accounts', 'Registered Hub Accounts', {{accountData|safe}});
+        pieChart('projectActivity', 'Project Activity', {{projectActivityData|safe}});
+        pieChart('customizedLabels', 'Customized Labels', {{customizedLabels|safe}});
     };
 </script>

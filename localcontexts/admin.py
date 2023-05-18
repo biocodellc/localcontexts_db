@@ -3,7 +3,6 @@ from django.utils.translation import gettext as _
 from django.apps import apps
 from django.template.response import TemplateResponse
 from django.http import Http404
-from django.shortcuts import render
 
 from accounts.models import Profile, UserAffiliation, SignUpInvitation
 from accounts.models import Profile, UserAffiliation, SignUpInvitation, User
@@ -96,9 +95,9 @@ class MyAdminSite(admin.AdminSite):
         # Chart Data
         accountData = {
             'labels': [
-                'Community Accounts',
-                'Insitution Accounts',
-                'Researcher Accounts'
+                'Community',
+                'Insitution',
+                'Researcher'
             ],
             'datasets': [{
                 'data': [community_count, institution_count, researcher_count],
@@ -116,14 +115,31 @@ class MyAdminSite(admin.AdminSite):
                 'Engagement Notice',
                 'Disclosure Notice',
                 'Labels Applied',
-                'No Labels/Notices'
+                'No Activity'
             ],
             'datasets': [{
                 'data': [disclosure_count, otc_count, project_Labels_count, project_inactivity_count],
                 'backgroundColor': [
-                    'rgb(116, 181, 157)',
                     'rgb(242, 126, 48)',
                     'rgb(1, 117, 133)',
+                    'rgb(116, 181, 157)',
+                    'rgb(128,128,128)'
+                ],
+                'hoverOffset': 4
+            }]
+        }
+
+        customizedLabels = {
+            'labels': [
+                'TK Labels',
+                'BC Labels'
+            ],
+            'datasets': [{
+                'data': [tklabels_count, bclabels_count],
+                'backgroundColor': [
+                    'rgb(242, 126, 48)',
+                    'rgb(1, 117, 133)',
+                    'rgb(116, 181, 157)',
                     'rgb(128,128,128)'
                 ],
                 'hoverOffset': 4
@@ -154,7 +170,8 @@ class MyAdminSite(admin.AdminSite):
             'otc_count' : otc_count,
 
             'accountData' : accountData,
-            'projectActivityData' : projectActivityData
+            'projectActivityData' : projectActivityData,
+            'customizedLabels' : customizedLabels
         }
 
         return super().index(request, context)
