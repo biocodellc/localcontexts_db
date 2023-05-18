@@ -52,7 +52,7 @@ class ProjectList(generics.ListAPIView):
     # '=' exact matches
     # '$' regex search
 
-#ASHLEYTODO: Add option to pass Providers ID using Project Detail search
+#TODO: Add option to pass Providers ID using Project Detail search
 class ProjectDetail(generics.RetrieveAPIView):
     lookup_field = 'unique_id'
     queryset = Project.objects.exclude(project_privacy='Private')

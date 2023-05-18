@@ -85,7 +85,8 @@ function languageList(data) {
     // feed only array of languages into this function
     autocomplete(document.getElementById('languageListInput'), langArray)
 }
-
+// TODO: check Project creation form when notices are not selected. in main.js
+// TODO: add autocomplete for label language dropdown (customize label reg form)
 // converts accented letters to the unaccented equivalent
 function removeAccents(str) {
   var map = {
@@ -1414,7 +1415,7 @@ function shareToSocialsBtnAction(btnElem) {
         projectTitle = btnElem.getAttribute("data-project-title")
         if (socialType == 'email') {
             var emailSubject = encodeURIComponent("Local Contexts Project")
-            var emailBody = encodeURIComponent("Check out this Local Contexts project! "+projectTitle+" at "+projectURL)
+            var emailBody = encodeURIComponent("Check out this Local Contexts Project! "+projectTitle+" at "+projectURL)
             var mailtoLink = "mailto:?subject="+emailSubject+"&body="+emailBody
             window.location.href = mailtoLink
         } else if(socialType == 'facebook') {
@@ -1424,7 +1425,7 @@ function shareToSocialsBtnAction(btnElem) {
         } else if (socialType == 'linkedin') {
             window.open('https://www.linkedin.com/shareArticle?url='+projectURL)
         } else if (socialType == 'whatsapp') {
-            messageText = encodeURIComponent("Check out this Local Contexts project! "+projectTitle+" at "+projectURL)
+            messageText = encodeURIComponent("Check out this Local Contexts Project! "+projectTitle+" at "+projectURL)
             window.location.href = 'https://api.whatsapp.com/send?text='+messageText
         }
     })

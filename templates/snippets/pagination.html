@@ -29,7 +29,7 @@
         {% endif %}
 
         <span class="current">{{ items.number }}</span>
-
+<!-- TODO:http://localhost:8000/registry/researchers/?page=3 - Page 3 and Page 0 showing eventhough they don't have results -->
         {% if items.has_next %}
             {% if items.next_page_number >= 1 %}
                 <a class="page-num-nav page" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.next_page_number }}">{{ items.next_page_number }}</a>

@@ -112,7 +112,7 @@ class ProjectsByIdViewSet(ViewSet):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-#ASHLEYTODO: remove this function or convert it so that the project detail (list view) can be used using either projectID or providersID. Two URLs that use one call. projects/external url would be removed
+#TODO: remove this function or convert it so that the project detail (list view) can be used using either projectID or providersID. Two URLs that use one call. projects/external url would be removed
 # Make this a filter instead?
     def project_detail_providers(self, request, providers_id):
         try:

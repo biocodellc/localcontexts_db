@@ -348,15 +348,7 @@ def registry(request, filtertype=None):
             i = i.filter(institution_name__unaccent__icontains=q)
             r = r.filter(Q(user__username__unaccent__icontains=q) | Q(user__first_name__unaccent__icontains=q) | Q(user__last_name__unaccent__icontains=q))
 
-            # Results combined and then sorted Alphabetically (Desc) Lower and strip added to sort alphabetically properly ignoring case and empty strings
-            combined_accounts = list(itertools.chain(c,r,i))
-            cards = sorted(combined_accounts, key=lambda obj: (
-                unidecode(obj.community_name.lower().strip()) if isinstance(obj, Community) else 
-                unidecode(obj.institution_name.lower().strip()) if isinstance(obj, Institution) else
-                unidecode(obj.user.first_name.lower().strip()) if isinstance(obj, Researcher) and obj.user.first_name.strip() else
-                unidecode(obj.user.username.lower().strip()) if isinstance(obj, Researcher) else ''
-            ))
-            # unidecode allows for the accounts to be sorted based on the alphabet, excluding accents
+            cards = return_registry_accounts(c, r, i)
 
             p = Paginator(cards, 5)
 
@@ -368,15 +360,7 @@ def registry(request, filtertype=None):
             elif filtertype == 'researchers':
                 cards = r
             else:
-                # Accounts combined and then sorted Alphabetically (Desc) Lower and strip added to sort alphabetically properly ignoring case and empty strings
-                combined_accounts = list(itertools.chain(c,r,i))
-                cards = sorted(combined_accounts, key=lambda obj: (
-                    unidecode(obj.community_name.lower().strip()) if isinstance(obj, Community) else 
-                    unidecode(obj.institution_name.lower().strip()) if isinstance(obj, Institution) else
-                    unidecode(obj.user.first_name.lower().strip()) if isinstance(obj, Researcher) and obj.user.first_name.strip() else
-                    unidecode(obj.user.username.lower().strip()) if isinstance(obj, Researcher) else ''
-                ))
-                # unidecode allows for the accounts to be sorted based on the alphabet, excluding accents
+                cards = return_registry_accounts(c, r, i)
 
             p = Paginator(cards, 5)
 
