@@ -56,27 +56,20 @@
 
     </div>
 
+    {% for account in items %}
+        {% if account in communities %}
+            {% include 'partials/infocards/_community-card.html' with community=account %}
+        {% elif account in institutions %}
+            {% include 'partials/infocards/_institution-card.html' with institution=account %}
+        {% elif account in researchers %}
+            {% include 'partials/infocards/_researcher-card.html' with researcher=account %}
+        {% endif %}
+    {% endfor %}
 
-    {% if results %}
-        {% for account in results %}
-            {% if account in communities %}
-                {% include 'partials/infocards/_community-card.html' with community=account %}
-            {% elif account in institutions %}
-                {% include 'partials/infocards/_institution-card.html' with institution=account %}
-            {% elif account in researchers %}
-                {% include 'partials/infocards/_researcher-card.html' with researcher=account %}
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        {% for account in items %}
-            {% if account in communities %}
-                {% include 'partials/infocards/_community-card.html' with community=account %}
-            {% elif account in institutions %}
-                {% include 'partials/infocards/_institution-card.html' with institution=account %}
-            {% elif account in researchers %}
-                {% include 'partials/infocards/_researcher-card.html' with researcher=account %}
-            {% endif %}
-        {% endfor %}
+    {% if not items %}
+        <div class="dashcard w-100 center-text margin-top-16 margin-bottom-16">
+            <h2>There are no public accounts by that name.</h2>
+        </div>  
     {% endif %}
 
     {% include 'snippets/pagination.html' %}

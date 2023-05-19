@@ -624,14 +624,13 @@ def edit_project(request, institution_id, project_uuid):
     project = Project.objects.get(unique_id=project_uuid)
 
     member_role = check_member_role(request.user, institution)
-    if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
+    if not member_role or member_role == 'viewer': # If user is not a member / is a viewer.
         return redirect('restricted')
     else:
         form = EditProjectForm(request.POST or None, instance=project)
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
         notices = Notice.objects.none()
-        urls = project.urls
 
         # Check to see if notice exists for this project and pass to template
         if Notice.objects.filter(project=project).exists():
@@ -663,7 +662,8 @@ def edit_project(request, institution_id, project_uuid):
                 # Pass any existing notices as well as newly selected ones
                 crud_notices(request, notices_selected, institution, data, notices)
 
-            return redirect('institution-projects', institution.id)
+            return redirect('institution-project-actions', institution.id, project.unique_id)
+
 
         context = {
             'member_role': member_role,
@@ -673,7 +673,7 @@ def edit_project(request, institution_id, project_uuid):
             'form': form,
             'formset': formset,
             'contributors': contributors,
-            'urls': urls,
+            'urls': project.urls,
         }
         return render(request, 'institutions/edit-project.html', context)
 

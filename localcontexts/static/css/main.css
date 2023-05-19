@@ -320,8 +320,18 @@ input:focus {
     cursor: pointer;
 }
 
-.round-btn:hover {
-    background-color: #3c9f8d;
+.socials-btn {
+    color: #fff;
+    text-align:center;
+    width:40px;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.round-btn:hover, .socials-btn:hover {
+    opacity: .85;
 }
 
 button:disabled,
