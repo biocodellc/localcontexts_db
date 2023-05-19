@@ -17,7 +17,6 @@ from django.conf import settings
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
 
-import itertools
 from unidecode import unidecode
 from django.db.models import Q
 
