@@ -45,7 +45,7 @@
         </div>
         
         <div class="flex-this dash-btn-container flex-end">
-            {% if 'update-profile' in request.path or 'manage' in request.path or 'change-password' in request.path or 'deactivate' in request.path or 'member-invites' in request.path %}
+            {% if 'update-profile' in request.path or 'manage' in request.path or 'change-password' in request.path or 'deactivate' in request.path or 'invitations' in request.path %}
                 <div class="margin-right-8"><a href="{% url 'dashboard' %}" class="primary-btn white-btn">Back to Profile</a></div>
             {% else %}
                 <!-- Notifications -->
@@ -90,7 +90,7 @@
                                                         class="notification-type-tag white-text font-size-12 {% if n.viewed %} grey {% else %} orange-bg {% endif %}"
                                                     >
                                                         {% if n.notification_type == 'Welcome' %} Welcome {% endif %}
-                                                        {% if n.notification_type == 'Invitation' %} Invite {% endif %}
+                                                        {% if n.notification_type == 'Invitation' %} Invitation {% endif %}
                                                         {% if n.notification_type == 'Request' %} Request {% endif %}
                                                         {% if n.notification_type == 'Approval' %} Approval {% endif %}
                                                         {% if n.notification_type == 'Accept' %} Accept {% endif %}
@@ -111,8 +111,6 @@
                     </div>
                     
                     <div><a href="{% url 'update-profile' %}" class="primary-btn green-btn">Edit profile <i class="fa fa-pencil" aria-hidden="true"></i></a></div>
-
-
 
             {% endif %}
         </div>        

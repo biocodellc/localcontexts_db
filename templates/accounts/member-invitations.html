@@ -16,8 +16,25 @@
                                     alt="{{ invite.institution.invite.institution_name }} image"
                                 >
                             </div>
-                            <div class="flex-this column dashcard-text-container">
-                                <div><h3 class="dashcard-h3 darkteal-text">{{ invite.institution }}</h3></div>
+                            <div class="flex-this column w-100">
+
+                                <div class="flex-this space-between">
+                                    <div><h3 class="dashcard-h3 darkteal-text">{{ invite.institution }}</h3></div>
+ 
+                                    <div class="dashcard-btn-container">
+                                        <div class="margin-right-16 margin-top-8">
+                                            <a href="{% url 'delete-member-invitation' invite.id %}" class="darkteal-text underline-hover">Delete invite</a>
+                                        </div>
+                                        <div>
+                                            <form method="POST" action="">
+                                                {% csrf_token %}
+                                                <input value="{{ invite.id }}" type="hidden" name="invite_id">
+                                                <button class="action-btn primary-btn">Accept invite</button>
+                                            </form>
+                                        </div>
+                                    </div>                                 
+                                </div>
+
                                 <div>
                                     <p class="dashcard-subheader">Institution | Members: {% if invite.institution.get_member_count < 10 %}0{{ invite.institution.get_member_count }}{% else %}{{ invite.institution.get_member_count }}{% endif %} | 
                                         Location: {% if invite.institution.city_town %} {{ invite.institution.city_town }}, {% endif %} {% if invite.institution.state_province_region %} {{ invite.institution.state_province_region }}, {% endif %} {% if invite.institution.country.name %} {{ invite.institution.country.name }}{% endif %}
@@ -25,8 +42,10 @@
                                             None specified
                                         {% endif %}
                                     </p>
-                                </div>
+                                </div>  
+
                                 <div><p class="dashcard-description description-sm">{% if invite.institution.description %}{{ invite.institution.description }} {% else %} No description provided. {% endif %}</p></div>
+                                
                                 <div>
                                     <p class="w-70">
                                         <span class="bold primary-black-text">Invitation Sent By:</span> {% display_name invite.sender %}<br>
@@ -45,14 +64,6 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="w-15 flex-this flex-end">
-                                <a href="{% url 'delete-member-invitation' invite.id %}" class="darkteal-text underline-hover margin-right-8 margin-top-8">Delete invite</a>
-                                <form method="POST" action="">
-                                    {% csrf_token %}
-                                    <input value="{{ invite.id }}" type="hidden" name="invite_id">
-                                    <button class="action-btn primary-btn">Accept Invite</button>
-                                </form>
-                            </div>
                         </div>
                     </div>
                 {% endif %}
@@ -68,8 +79,24 @@
                                     alt="{{ invite.community.invite.community_name }} image"
                                 >
                             </div>
-                            <div class="flex-this column dashcard-text-container">
-                                <div><h3 class="dashcard-h3 darkteal-text">{{ invite.community }}</h3></div>
+                            <div class="flex-this column w-100">
+
+                                <div class="flex-this space-between">
+                                    <div><h3 class="dashcard-h3 darkteal-text">{{ invite.community }}</h3></div>
+                                    <div class="dashcard-btn-container">
+                                        <div class="margin-right-16 margin-top-8">
+                                            <a href="{% url 'delete-member-invitation' invite.id %}" class="darkteal-text underline-hover margin-right-8 margin-top-8">Delete invite</a>
+                                        </div>
+                                        <div>
+                                            <form method="POST" action="">
+                                                {% csrf_token %}
+                                                <input value="{{ invite.id }}" type="hidden" name="invite_id">
+                                                <button class="action-btn primary-btn">Accept invite</button>
+                                            </form>                                            
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div>
                                     <p class="dashcard-subheader">Community | Members: {% if invite.community.get_member_count < 10 %}0{{ invite.community.get_member_count }}{% else %}{{ invite.community.get_member_count }}{% endif %} | 
                                         Location: {% if invite.community.city_town %} {{ invite.community.city_town }}, {% endif %} {% if invite.community.state_province_region %} {{ invite.community.state_province_region }}, {% endif %} {% if invite.community.country.name %} {{ invite.community.country.name }}{% endif %}
@@ -78,6 +105,7 @@
                                         {% endif %}
                                     </p>
                                 </div>
+                                
                                 <div><p class="dashcard-description description-sm">{% if invite.community.description %}{{ invite.community.description }} {% else %} No description provided. {% endif %}</p></div>
 
                                 <div>
@@ -98,22 +126,14 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="w-30 flex-this flex-end">
-
-                                <a href="{% url 'delete-member-invitation' invite.id %}" class="darkteal-text underline-hover margin-right-8 margin-top-8">Delete invite</a>
-
-                                <form method="POST" action="">
-                                    {% csrf_token %}
-                                    <input value="{{ invite.id }}" type="hidden" name="invite_id">
-                                    <button class="action-btn primary-btn">Accept invite</button>
-                                </form>
-                            </div>
                         </div>
 
                     </div>
                 {% endif %}
 
             {% endfor %}
+        {% else %}
+            <p class="center-text">You currently have no new invitations. <br><small>Invitations appear when someone from a community or institution invites you to join their account.</small></p>
         {% endif %}
         
     </section>
