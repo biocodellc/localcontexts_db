@@ -1,4 +1,14 @@
-{% extends 'auth-base.html' %} {% block title %} View Project {% endblock %} {% load static %} {% load custom_project_tags %} {% block main %}
+{% extends 'auth-base.html' %} {% block title %} View Project {% endblock %} {% load static %} {% load custom_project_tags %} 
+
+{% block meta %}
+    <meta property="og:url" content="{{ project.project_page }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Local Contexts Project - {{ project.title }}" />
+    <meta property="og:description" content="Establishing and communicating rights over indigenous knowledge and biocultural matter." />
+    <meta property="og:image" content="https://localcontexts.org/wp-content/uploads/2022/12/Cover.png" />
+{% endblock %}
+
+{% block main %}
     
     {% include template_name %}
 

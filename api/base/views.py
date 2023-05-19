@@ -52,7 +52,7 @@ class ProjectList(generics.ListAPIView):
     # '=' exact matches
     # '$' regex search
 
-#ASHLEYTODO: Add option to pass Providers ID using Project Detail search
+#TODO: Add option to pass Providers ID using Project Detail search
 class ProjectDetail(generics.RetrieveAPIView):
     lookup_field = 'unique_id'
     queryset = Project.objects.exclude(project_privacy='Private')
@@ -72,8 +72,7 @@ class ProjectDetail(generics.RetrieveAPIView):
         except Project.DoesNotExist:
             raise Http404("Project does not exist")
 
-# ASHLEYTODO
-# TODO: Make this a filter instead?
+
 @api_view(['GET'])
 def project_detail_providers(request, providers_id):
     try:
