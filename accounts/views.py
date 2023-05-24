@@ -17,6 +17,9 @@ from django.conf import settings
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_text
 
+from unidecode import unidecode
+from django.db.models import Q
+
 from django.contrib.auth.models import User
 from communities.models import Community, InviteMember
 from institutions.models import Institution
@@ -325,69 +328,54 @@ def invite_user(request):
                 return redirect('invite')
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 
-# REGISTRY : COMMUNITIES
-def registry_communities(request):
+def registry(request, filtertype=None):
     try:
-        # Paginate the query of all approved communities
         c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
-        if request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('community_name')
-                query = SearchQuery(q)
-                results = c.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
-            
-        p = Paginator(c, 5)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
-        context = { 'communities': True, 'items': page, 'results': results }
-        return render(request, 'accounts/registry.html', context)
-    except:
-        raise Http404()
-
-# REGISTRY : INSTITUTIONS
-def registry_institutions(request):
-    try:
         i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
-        if request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('institution_name')
-                query = SearchQuery(q)
-                results = i.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
-
-        p = Paginator(i, 5)
-        page_num = request.GET.get('page', 1)
-        page = p.page(page_num)
-
-        context = { 'institutions': True, 'items': page, 'results': results}
-        return render(request, 'accounts/registry.html', context)
-    except:
-        raise Http404()
-
-# REGISTRY : RESEARCHERS
-def registry_researchers(request):
-    try:
         r = Researcher.objects.select_related('user').all().order_by('user__username')
-        if request.method == 'GET':
-            q = request.GET.get('q')
-            if q:
-                vector = SearchVector('user__username', 'user__first_name', 'user__last_name')
-                query = SearchQuery(q)
-                results = r.annotate(rank=SearchRank(vector, query)).filter(rank__gte=0.001).order_by('-rank') # project.rank returns a num
-            else:
-                results = None
 
-        p = Paginator(r, 5)
+        if ('q' in request.GET) and (filtertype != None):
+            q = request.GET.get('q')
+            return redirect('/registry/?q=' + q)
+        
+        elif ('q' in request.GET) and (filtertype == None):
+            q = request.GET.get('q')
+            q = unidecode(q) #removes accents from search query
+
+            # Filter's accounts by the search query, showing results that match with or without accents
+            c = c.filter(community_name__unaccent__icontains=q)
+            i = i.filter(institution_name__unaccent__icontains=q)
+            r = r.filter(Q(user__username__unaccent__icontains=q) | Q(user__first_name__unaccent__icontains=q) | Q(user__last_name__unaccent__icontains=q))
+
+            cards = return_registry_accounts(c, r, i)
+
+            p = Paginator(cards, 5)
+
+        else:
+            if filtertype == 'communities':
+                cards = c
+            elif filtertype == 'institutions':
+                cards = i
+            elif filtertype == 'researchers':
+                cards = r
+            else:
+                cards = return_registry_accounts(c, r, i)
+
+            p = Paginator(cards, 5)
+
         page_num = request.GET.get('page', 1)
         page = p.page(page_num)
 
-        context = { 'researchers': True, 'items': page, 'results': results}
+        context = {
+            'researchers' : r,
+            'communities' : c,
+            'institutions' : i,
+            'items' : page,
+            'filtertype' : filtertype
+        }
+        
         return render(request, 'accounts/registry.html', context)
+
     except:
         raise Http404()
 

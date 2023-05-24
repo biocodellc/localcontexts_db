@@ -320,8 +320,8 @@ input:focus {
     cursor: pointer;
 }
 
-.round-btn:hover {
-    background-color: #3c9f8d;
+.round-btn:hover, .socials-btn:hover {
+    opacity: .85;
 }
 
 button:disabled,
@@ -1282,3 +1282,24 @@ i[data-tooltip]:hover:after {
     height: auto;
   }
 
+/* SHARE PROJECT buttons */
+  .share-to-socials-container {
+    display: flex;
+    margin-top: 10px;
+}
+
+.socials-btn {
+    color: #fff;
+    text-align:center;
+    width:40px;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.socials-btn.fa-envelope { background-color: #EF6C00; }
+.socials-btn.fa-whatsapp { background-color: #25D366; }
+.socials-btn.fa-facebook-f { background-color: #4267B2; }
+.socials-btn.fa-twitter { background-color: #1DA1F2; }
+.socials-btn.fa-linkedin { background-color: #0077b5; }
