@@ -8,7 +8,7 @@ Branches:
 
 Data sources:
 - [Data used by Local Contexts Hub](https://github.com/biocodellc/localcontexts_json)
-- [ROR Parser](https://github.com/biocodellc/ror-parser)
+- [ROR API](https://api.ror.org)
 
 ## Getting Started
 What you need to run this app:

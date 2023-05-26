@@ -1,5 +1,4 @@
 {% extends 'register-base.html' %} {% block title %} Create Institution {% endblock %}{% load static %} {% block card %}
-<script src="{% static 'javascript/ror.js' %}" type="text/javascript" defer></script>
 
 <div class="flex-this column w-90">
     <div class="flex-this space-between">
@@ -16,32 +15,13 @@
     <form action="" method="POST" class="flex-this column w-100">
         {% csrf_token %}
 
-        <div class="flex-this column">
-                <label class="pad-top-1-5" for="country">Country</label>
-                {{ form.country }}
-
-            <div class="flex-this w-100">
-                <div class="w-50 margin-right-1 pad-top-1-5">
-                    <label for="institution-type-select">Institution Type</label>
-                    <div class="tooltip"><strong>i</strong>
-                        <span class="tooltiptext">Options: <br> Nonprofit <br> Company <br> Education <br> Facility <br> Government <br> Healthcare <br> Archive <br> Other</span>
-                    </div>
-
-                    <select id="institution-type-select" class="w-100">
-                        <option disabled selected="selected">-- Select Institution Type --</option>
-                    </select>
-                </div>
-                <div class="w-50 pad-top-1-5">
-                    <label for="institution-select">Institution Name</label>
-                    <select id="institution-select" name="institution_name" class="w-100" required>
-                        <option disabled selected="selected" value="">-- Select Institution Name --</option>
-                    </select>
-                </div>
-            </div>
-
-            <small>These institutions come from <a class="darkteal-text underline-hover" href="https://ror.org/" target="_blank" rel="noopener">ROR</a>. If your institution is not listed here, <span id="openNORORModalBtn" class="darkteal-text underline-hover pointer">please fill out this form</span>.</small>
-
+        <div id="ror-input-container" class="margin-top-16">
+            <label for="institution_name">Institution Name</label>
+            {{ form.institution_name }}
+            <div id="suggestionsContainer"></div>
         </div>
+        <small>These institutions come from <a class="darkteal-text underline-hover" href="https://ror.org/" target="_blank" rel="noopener">ROR <i class="fa-regular fa-arrow-up-right-from-square fa-2xs"></i></a>. If your institution is not listed here, <a href="{% url 'create-custom-institution' %}" class="darkteal-text underline-hover pointer">please fill out this form</a>.</small>
+
 
         <div class="w-100 flex-this">
             <div class="w-50 pad-top-1-5 margin-right-1">
@@ -50,14 +30,14 @@
             </div>
 
             <div class="w-50 pad-top-1-5">
-                <label for="state_province_region">State, Province, or Region</label>
-                <div class="tooltip"><strong>i</strong>
-                    <span class="tooltiptext">By stating your location we will be able to connect your Projects with communities associated with this location.</span>
-                </div>
-                
-                <br>
+                <label for="state_province_region">State, Province, or Region</label><br>
                 {{ form.state_province_region }}
             </div>
+        </div>
+
+        <div>
+            <label class="pad-top-1-5" for="country">Country</label><br>
+            {{ form.country }}                
         </div>
 
         <div class="w-100">
@@ -75,85 +55,28 @@
 
         <div class="flex-this space-between">
             <div>
+
                 {% if form.errors %}
-                    <small class="red-text">{{ form.description.errors.as_text }}</small>
+                    {% for field_name, errors in form.errors.items %}
+                        <div class="red-text">
+                            <strong>{{ field_name }}</strong>:
+                            {% for error in errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
                 {% endif %}
+
                 {% include 'partials/_alerts.html' %}
             </div>
-    
+            
+            {{ form.institution_id }}
             <div class="margin-top-8">
                 <button class="primary-btn action-btn margin-top-2" name="create-institution-btn">Continue <i class="fa fa-arrow-right"></i></button>
             </div>
         </div>
 
     </form>
-
-</div>
-
-<!-- non-ROR modal -->
-<div id="noRORModal" class="modal hide">
-
-    <div class="modal-defaults noror-modal-box flex-this column w-100">
-        <div class="w-100">
-
-            <div class="flex-this space-between">
-                <div>
-                    <h2 class="no-top-margin">Institution Creation Form</h2>  
-                    <p class="no-top-margin">Create an institution that is not on the ROR list.</p>  
-                </div>
-    
-                <div>
-                    <div id="closeNORORmodal" class="pointer"><i class="fa-regular fa-xmark fa-xl"></i></div>
-                </div>
-            </div>
-
-            <form method="POST" action="">
-                {% csrf_token %}
-                <div class="flex-this column w-100">
-
-                    <label for="institution_name">Institution Name</label>
-                    {{ noror_form.institution_name }}
-                    {% if noror_form.institution_name.errors %}
-                        <div class="msg-red w-50"><small>{{ noror_form.institution_name.errors.as_text }}</small></div> 
-                    {% endif %}
-
-                    <div class="w-100 margin-top-1">
-                        <label for="description">Description</label><br>
-                        {{ noror_form.description }}
-                        {% if noror_form.description.errors %}
-                            <div class="msg-red w-80"><small>{{ noror_form.description.errors.as_text }}</small></div> 
-                        {% endif %}
-                    </div>
-
-                    <div class="w-100 flex-this space-between">
-                        <div class="pad-top-1-5 margin-right-1 w-50">
-                            <label class="pad-top-1-5" for="city_town">Town or City</label><br>
-                            {{ noror_form.city_town }}
-                        </div>
-
-                        <div class="pad-top-1-5 w-50">
-                            <label class="pad-top-1-5" for="city_town">State or Province</label><br>
-                            {{ noror_form.state_province_region }}
-                        </div>
-                    </div>
-
-                    <div class="pad-top-1-5 margin-right-1">
-                        <label class="pad-top-1-5" for="country">Country</label><br>
-                        {{ noror_form.country }} 
-                    </div>
-
-                    {% include 'partials/_alerts.html' %} 
-
-                    <div class="flex-this flex-end">
-                        <button class="primary-btn action-btn margin-top-2" name="create-institution-noror-btn">Continue <i class="fa fa-arrow-right"></i></button>
-                    </div>                        
-
-                </div>
-
-            </form>
-
-        </div>
-    </div>
 
 </div>
 

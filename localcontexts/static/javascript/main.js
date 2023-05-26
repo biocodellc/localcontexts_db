@@ -1165,19 +1165,6 @@ function disableBtnDuringInput() {
     document.getElementById('sendMemberInviteBtn').disabled = currentValue.length === 0 || document.querySelector('option[value="' + currentValue + '"]') === null;
 }
 
-// Create institution: non-ROR modal
-if (window.location.href.includes('create-institution')) {
-    const closeNORORModalBtn = document.getElementById('closeNORORmodal')
-    let modal = document.getElementById('noRORModal')
-    const openNORORModalBtn = document.getElementById('openNORORModalBtn')
-
-    openNORORModalBtn.addEventListener('click', function() { modal.classList.replace('hide', 'show')})
-    closeNORORModalBtn.addEventListener('click', function(e)  {
-        e.preventDefault()
-        modal.classList.replace('show', 'hide')
-    } )
-}
-
 // Deactivate user popup in user settings
 var deactivateAccountBtn = document.getElementById('submitDeactivation')
 if (deactivateAccountBtn) {
@@ -1501,3 +1488,72 @@ function showProjectLabels(elem) {
     }
 }
 
+
+if (window.location.href.includes('create-institution')) {
+    const nameInputField = document.getElementById('organizationInput')
+    const suggestionsContainer = document.getElementById('suggestionsContainer')
+    const cityTownInputField = document.getElementById('institutionCityTown')
+    const stateProvRegionInputField = document.getElementById('institutionStateProvRegion')
+    const countryInputField = document.getElementById('institutionCountry')
+    const hiddenInputField = document.getElementById('institutionIDROR')
+
+    let delayTimer
+
+    nameInputField.addEventListener('input', () => {
+    clearTimeout(delayTimer)
+
+    const inputValue = nameInputField.value
+    if (inputValue.length >= 3) { // Minimum characters required before making a request
+        let queryURL = 'https://api.ror.org/organizations?query='
+        
+        delayTimer = setTimeout(() => {
+        fetch(`${queryURL}${encodeURIComponent(inputValue)}`)
+            .then(response => response.json())
+            .then(data => {
+                showSuggestions(data.items)
+            })
+            .catch(error => { console.error(error)})
+        }, 300) // Delay in milliseconds before making the request
+    } else { clearSuggestions() }
+
+    })
+
+    function showSuggestions(items) {
+        // Clear previous suggestions
+        clearSuggestions()
+        // Get the first 5 most relevant items
+        const relevantItems = items.slice(0, 5)
+
+        // Create and append suggestion items
+        relevantItems.forEach(item => {
+            const suggestionItem = document.createElement('div')
+            suggestionItem.classList.add('suggestion-item')
+            // suggestionItem.textContent = item.name
+            suggestionItem.innerHTML = `
+                ${item.name} <br> 
+                <small>${item.types}, ${item.country.country_name}</small>
+            `
+            suggestionItem.addEventListener('click', () => {
+                // Populate input field with the selected suggestion
+                nameInputField.value = item.name
+                countryInputField.value = item.country.country_name
+                hiddenInputField.value = item.id
+
+                const addresses = item.addresses;
+                if (addresses.length > 0) {
+                    const address = addresses[0];
+                    cityTownInputField.value = address.city
+                    stateProvRegionInputField.value = address.state
+
+                    // console.log("State:", address.state);
+                    // console.log("City:", address.city);
+                }
+                // Clear suggestions
+                clearSuggestions()
+            })
+                suggestionsContainer.appendChild(suggestionItem)
+        })
+    }
+    
+    function clearSuggestions() { suggestionsContainer.innerHTML = '' }
+}
