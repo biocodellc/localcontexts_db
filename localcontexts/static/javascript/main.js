@@ -1527,12 +1527,12 @@ if (window.location.href.includes('create-institution')) {
         e.preventDefault()
         form.reset()
         nameInputField.focus();
+        createInstitutionBtn.disabled = true
 
         if (nameInputField.getAttribute('readonly', true) && nameInputField.classList.contains('readonly-input')) {
             nameInputField.removeAttribute('readonly')
             nameInputField.classList.remove('readonly-input')    
         }
-
     })
 
     function showSuggestions(items) {
@@ -1560,9 +1560,6 @@ if (window.location.href.includes('create-institution')) {
                     const address = addresses[0];
                     cityTownInputField.value = address.city
                     stateProvRegionInputField.value = address.state
-
-                    // console.log("State:", address.state);
-                    // console.log("City:", address.city);
                 }
                 createInstitutionBtn.disabled = false
                 createInstitutionBtn.classList.replace('disabled-btn', 'action-btn')
@@ -1570,7 +1567,6 @@ if (window.location.href.includes('create-institution')) {
                 nameInputField.setAttribute('readonly', true)
                 nameInputField.classList.add('readonly-input')
 
-                // Clear suggestions
                 clearSuggestions()
             })
                 suggestionsContainer.appendChild(suggestionItem)
