@@ -12,7 +12,7 @@
         Read more about our privacy standards <a class="darkteal-text underline-hover" href="https://localcontexts.org/privacy-policy/" target="_blank" rel="noopener">here <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
     </p>
 
-    <form action="" method="POST" class="flex-this column w-100">
+    <form id="createInstitutionForm" action="" method="POST" class="flex-this column w-100">
         {% csrf_token %}
 
         <div id="ror-input-container" class="margin-top-16">
@@ -71,8 +71,13 @@
             </div>
             
             {{ form.institution_id }}
-            <div class="margin-top-8">
-                <button class="primary-btn action-btn margin-top-2" name="create-institution-btn">Continue <i class="fa fa-arrow-right"></i></button>
+            <div class="flex-this">
+                <div class="margin-top-8 margin-right-8">
+                    <button id="clearFormBtn" class="primary-btn white-btn margin-top-2">Clear form <i class="fa-regular fa-eraser"></i></button>
+                </div>
+                <div class="margin-top-8">
+                    <button id="createInstitutionBtn" class="primary-btn disabled-btn margin-top-2" name="create-institution-btn" disabled>Continue <i class="fa fa-arrow-right"></i></button>
+                </div>                
             </div>
         </div>
 

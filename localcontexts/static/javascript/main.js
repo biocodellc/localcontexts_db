@@ -1496,25 +1496,42 @@ if (window.location.href.includes('create-institution')) {
     const stateProvRegionInputField = document.getElementById('institutionStateProvRegion')
     const countryInputField = document.getElementById('institutionCountry')
     const hiddenInputField = document.getElementById('institutionIDROR')
+    const createInstitutionBtn = document.getElementById('createInstitutionBtn')
+    const clearFormBtn = document.getElementById('clearFormBtn')
+    const form = document.getElementById('createInstitutionForm')
 
     let delayTimer
 
-    nameInputField.addEventListener('input', () => {
-    clearTimeout(delayTimer)
+    createInstitutionBtn.disabled = true
 
-    const inputValue = nameInputField.value
-    if (inputValue.length >= 3) { // Minimum characters required before making a request
-        let queryURL = 'https://api.ror.org/organizations?query='
-        
-        delayTimer = setTimeout(() => {
-        fetch(`${queryURL}${encodeURIComponent(inputValue)}`)
-            .then(response => response.json())
-            .then(data => {
-                showSuggestions(data.items)
-            })
-            .catch(error => { console.error(error)})
-        }, 300) // Delay in milliseconds before making the request
-    } else { clearSuggestions() }
+    nameInputField.addEventListener('input', () => {
+        clearTimeout(delayTimer)
+
+        const inputValue = nameInputField.value
+
+        if (inputValue.length >= 3) { // Minimum characters required before making a request
+            let queryURL = 'https://api.ror.org/organizations?query='
+            
+            delayTimer = setTimeout(() => {
+            fetch(`${queryURL}${encodeURIComponent(inputValue)}`)
+                .then(response => response.json())
+                .then(data => {
+                    showSuggestions(data.items)
+                })
+                .catch(error => { console.error(error)})
+            }, 300) // Delay in milliseconds before making the request
+        } else { clearSuggestions() }
+    })
+
+    clearFormBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        form.reset()
+        nameInputField.focus();
+
+        if (nameInputField.getAttribute('readonly', true) && nameInputField.classList.contains('readonly-input')) {
+            nameInputField.removeAttribute('readonly')
+            nameInputField.classList.remove('readonly-input')    
+        }
 
     })
 
@@ -1528,7 +1545,6 @@ if (window.location.href.includes('create-institution')) {
         relevantItems.forEach(item => {
             const suggestionItem = document.createElement('div')
             suggestionItem.classList.add('suggestion-item')
-            // suggestionItem.textContent = item.name
             suggestionItem.innerHTML = `
                 ${item.name} <br> 
                 <small>${item.types}, ${item.country.country_name}</small>
@@ -1548,6 +1564,12 @@ if (window.location.href.includes('create-institution')) {
                     // console.log("State:", address.state);
                     // console.log("City:", address.city);
                 }
+                createInstitutionBtn.disabled = false
+                createInstitutionBtn.classList.replace('disabled-btn', 'action-btn')
+
+                nameInputField.setAttribute('readonly', true)
+                nameInputField.classList.add('readonly-input')
+
                 // Clear suggestions
                 clearSuggestions()
             })
