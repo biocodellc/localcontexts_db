@@ -21,7 +21,7 @@ def institution_img_path(self, filename):
 
 class Institution(models.Model):
     institution_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    institution_name = models.CharField(max_length=80, null=True, unique=True)
+    institution_name = models.CharField(max_length=100, null=True, unique=True)
     contact_name = models.CharField(max_length=80, null=True, blank=True)
     contact_email = models.EmailField(max_length=254, null=True, blank=True)
     image = models.ImageField(upload_to=institution_img_path, blank=True, null=True)
@@ -30,7 +30,7 @@ class Institution(models.Model):
     institution_id = models.CharField(max_length=80, blank=True, null=True)
     city_town = models.CharField(max_length=80, blank=True, null=True)
     state_province_region = models.CharField(verbose_name='state or province', max_length=100, blank=True, null=True)
-    country = CountryField(blank=True, null=True)
+    country = models.CharField(max_length=200, blank=True, null=True)
     website = models.URLField(max_length=150, blank=True, null=True)
     admins = models.ManyToManyField(User, blank=True, related_name="institution_admins")
     editors = models.ManyToManyField(User, blank=True, related_name="institution_editors")
