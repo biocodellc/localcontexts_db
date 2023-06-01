@@ -96,14 +96,9 @@
                     <h3 class="no-top-margin">{{ join_request.user_from.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not join_request.user_from.user_profile.city_town and not join_request.user_from.user_profile.state_province_region and not join_request.user_from.user_profile.country.name %}
-                {% else %}
-                    <h4 class="no-top-margin">
-                        {% if join_request.user_from.user_profile.city_town %} {{ join_request.user_from.user_profile.city_town }}, {% endif %}
-                        {% if join_request.user_from.user_profile.state_province_region %}{{ join_request.user_from.user_profile.state_province_region }}, {% endif %}
-                        {% if join_request.user_from.user_profile.country %} {{ join_request.user_from.user_profile.country.name }} {% endif%}
-                    </h4>
-                {% endif %}
+                <h4 class="no-top-margin">
+                    {{join_request.user_from.user_profile.get_location }}
+                </h4>
 
                 {% if join_request.user_from.user_profile.languages_spoken %}
                     <div class="flex-this">
@@ -186,14 +181,7 @@
                     <h3 class="no-top-margin">{{ invite.receiver.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not invite.receiver.user_profile.city_town and not invite.receiver.user_profile.state_province_region and not invite.receiver.user_profile.country.name %}
-                {% else %}
-                    <h4 class="no-top-margin">
-                        {% if invite.receiver.user_profile.city_town %} {{ invite.receiver.user_profile.city_town }}, {% endif %}
-                        {% if invite.receiver.user_profile.state_province_region %}{{ invite.receiver.user_profile.state_province_region }}, {% endif %}
-                        {% if invite.receiver.user_profile.country %} {{ invite.receiver.user_profile.country.name }} {% endif%}
-                    </h4>
-                {% endif %}
+                <h4 class="no-top-margin"> {{ invite.receiver.user_profile.get_location }} </h4>
 
                 {% if invite.receiver.user_profile.languages_spoken %}
                     <div class="flex-this">

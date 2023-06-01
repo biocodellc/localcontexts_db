@@ -45,6 +45,11 @@ class Community(models.Model):
     objects = models.Manager()
     approved = ApprovedManager()
 
+    def get_location(self):
+        components = [self.city_town, self.state_province_region, self.country.name]
+        location = ', '.join(filter(None, components)) or 'None specified'
+        return location
+
     def get_member_count(self):
         return self.admins.count() + self.editors.count() + self.viewers.count() + 1
         
