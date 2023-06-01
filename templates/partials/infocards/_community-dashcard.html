@@ -111,7 +111,8 @@
                             {% if member_role == 'admin' %} Administrator {% endif %}
                             {% if member_role == 'editor' %} Editor {% endif %}
                             {% if member_role == 'viewer' %} Viewer {% endif %} |
-                            Location: {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}</p>
+                            Location: {{ community.get_location }} 
+                        </p>
                     </div>
                     <div><p class="dashcard-description description-sm">{% if community.description %}{{ community.description }} {% else %} No description provided. {% endif %}</p></div>
                 </div>

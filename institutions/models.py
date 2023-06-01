@@ -44,6 +44,11 @@ class Institution(models.Model):
     objects = models.Manager()
     approved = ApprovedManager()
 
+    def get_location(self):
+        components = [self.city_town, self.state_province_region, self.country]
+        location = ', '.join(filter(None, components)) or 'None specified'
+        return location
+
     def get_member_count(self):
         admins = self.admins.count()
         editors = self.editors.count()
