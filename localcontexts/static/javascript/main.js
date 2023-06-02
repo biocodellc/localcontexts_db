@@ -1475,6 +1475,23 @@ if (checkList) {
         else
           checkList.classList.add('visible');
       }
+    
+    let connectBtn = document.getElementById('connectProjectsBtn')
+    let checkboxes = document.querySelectorAll('input[name="projects_to_link"]')
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            let isChecked = Array.from(checkboxes).some(function(checkbox) {
+                return checkbox.checked
+            })
+
+            connectBtn.disabled = !isChecked
+            if (isChecked) {
+                connectBtn.classList.replace('disabled-btn', 'action-btn')
+            } else {
+                connectBtn.classList.replace('action-btn', 'disabled-btn')
+            }
+        })
+    })
 }
 
 function showProjectLabels(elem) {
