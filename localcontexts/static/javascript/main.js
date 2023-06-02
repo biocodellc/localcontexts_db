@@ -67,7 +67,7 @@ if (window.location.href.includes('create-community') || window.location.href.in
 // Get languages from the IANA directory
 function fetchLanguages() {
     const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
-    
+
     fetch(endpoint)
         .then(response => {
             if (response.ok) {
@@ -83,10 +83,12 @@ function fetchLanguages() {
 function languageList(data) {
     let langArray = Object.keys(data)
     // feed only array of languages into this function
-    autocomplete(document.getElementById('languageListInput'), langArray)
+    var langInputElements = document.getElementsByClassName('languageListInput')
+    for (var i=0; i < langInputElements.length; i++) {
+        autocomplete(langInputElements[i], langArray);
+    }
 }
-// TODO: check Project creation form when notices are not selected. in main.js
-// TODO: add autocomplete for label language dropdown (customize label reg form)
+// TODO: check Project creation form when notices are not selected. in main.js, or check add member form (when user enters member name that isnt in the hub, doesn't work), or ROR input
 // converts accented letters to the unaccented equivalent
 function removeAccents(str) {
   var map = {
@@ -471,6 +473,7 @@ if (window.location.href.includes('/labels/customize') || window.location.href.i
         newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
         container.insertBefore(newForm, lastDiv)
         totalForms.setAttribute('value', `${formNum+1}`)
+        fetchLanguages()
     }
 
     fetchLanguages()
@@ -480,9 +483,9 @@ if (window.location.href.includes('/labels/customize') || window.location.href.i
         document.getElementById('saveLabelForm').submit()
 
         let oldValue = 'Save Label'
-        saveLabelBtn.setAttribute('disabled', true)
-        saveLabelBtn.innerText = 'Saving...'
-        
+            saveLabelBtn.setAttribute('disabled', true)
+            saveLabelBtn.innerText = 'Saving...'
+            
         window.addEventListener('load', function() {
             saveLabelBtn.innerText = oldValue;
             saveLabelBtn.removeAttribute('disabled');
