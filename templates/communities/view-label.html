@@ -76,7 +76,7 @@
             </div>
 
             <div class="w-80">
-                <p class="no-top-margin">
+                <p class="no-top-margin no-bottom-margin">
                     <span class="bold">Created by</span> - 
                     {% if bclabel %} {{ creator_name }} | {{ bclabel.community }} - {{ bclabel.created|date:'M Y'}} {% endif %}
                     {% if tklabel %} {{ creator_name }} | {{ tklabel.community }} - {{ tklabel.created|date:'M Y'}} {% endif %}
@@ -97,21 +97,28 @@
 
                     {% if bclabel.audiofile %}<div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
                     <br>                    
-
-                    <span class="bold block margin-top-8 margin-bottom-16">Label text</span>
-                    {% if bclabel %} {{ bclabel.label_text }} {% endif %}
-                    {% if tklabel %} {{ tklabel.label_text }} {% endif %}
                 </p>
-                
-                {% if translations %}
-                    <p>
-                        {% for translation in translations %}
-                            <span class="bold block margin-bottom-16">{{ translation.language }}</span>
-                            {{translation.translated_text}}<br><br>
-                        {% endfor %}
-                    </p>
-                {% endif %}
-                
+
+                <div>
+                    <div class="flex-this space-between">
+                        <div><p class="bold">Label text</p></div>
+                        <div>
+                            <p>
+                                {% if bclabel %} {{ bclabel.language }} {% endif %}
+                                {% if tklabel %} {{ tklabel.language }} {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="no-top-margin no-bottom-margin">
+                            {% if bclabel %} {{ bclabel.label_text }} {% endif %}
+                            {% if tklabel %} {{ tklabel.label_text }} {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                {% include 'partials/_label-translation.html' %}
+
                 <p>
                     <h3>Related Projects</h3>
                     {% if projects %}
