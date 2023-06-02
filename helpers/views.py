@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, Http404
 from communities.models import InviteMember
 from notifications.models import UserNotification
 from localcontexts.utils import dev_prod_or_local
 from .downloads import download_otc_notice
+import requests
 
 def restricted_view(request, exception=None):
     return render(request, '403.html', status=403)
@@ -33,3 +35,17 @@ def download_open_collaborate_notice(request, perm):
         return redirect('restricted')
     else:
         return download_otc_notice()
+
+@login_required(login_url='login')
+def download_support_letter(request):
+    try:
+        url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/Support%20Letter%20Template.docx'
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            file_content = response.content
+            response = HttpResponse(file_content, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            response['Content-Disposition'] = 'attachment; filename="Support_Letter_Template.docx"'
+            return response
+    except:
+        raise Http404()
