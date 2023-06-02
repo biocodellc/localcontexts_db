@@ -16,10 +16,17 @@ multisearch = MultiProjectListDetail.as_view({
 date_modified = MultiProjectListDetail.as_view({
     'get':'multisearch_date'
 })
+open_To_Collaborate_Notice = NoticeDetails.as_view({
+    'get':'open_To_Collaborate_Notice'
+})
+all_Notice_Translations = NoticeDetails.as_view({
+    'get':'all_Notice_Translations'
+})
 
 urlpatterns = [
     re_path(r'^$', APIOverview.as_view(), name="api-overview"),
-    path('notices/open_to_collaborate', OpenToCollaborateNotice.as_view(), name="api-open-to-collaborate"),
+    path('notices/open_to_collaborate', open_To_Collaborate_Notice, name="api-open-to-collaborate"),
+    path('notices/all_notice_translations', all_Notice_Translations, name="api-all-notice-translations"),
 
     path('projects/', ProjectList.as_view(), name="api-projects"),
     path('projects/<uuid:unique_id>/', ProjectDetail.as_view(), name="api-project-detail"),
