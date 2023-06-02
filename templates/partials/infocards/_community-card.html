@@ -14,8 +14,7 @@
             <div>
                 <p class="dashcard-subheader">
                     Community | Members: {% if community.get_member_count < 10 %}0{{ community.get_member_count }}{% else %}{{ community.get_member_count }}{% endif %} | 
-                    Location: {% if community.city_town %} {{ community.city_town }}, {% endif %} {% if community.state_province_region %} {{ community.state_province_region }}, {% endif %} {% if community.country.name %} {{ community.country.name }}{% endif %}
-                    {% if not community.city_town and not community.state_province_region and not community.country %} None specified {% endif %}
+                    Location: {{ community.get_location }}
                 </p>
             </div>
             <div><p class="dashcard-description description-sm">

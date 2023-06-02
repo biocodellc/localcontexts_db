@@ -24,10 +24,7 @@
                     <div><h3 class="dashcard-h3 darkteal-text">{{ institution }}</h3></div>
                     <div>
                         <p class="dashcard-subheader">Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | 
-                            Location: {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}
-                            {% if not institution.city_town and not institution.state_province_region and not institution.country %}
-                                None specified
-                            {% endif %}
+                            Location: {{ institution.get_location }}
                         </p>
                     </div>
                     <div><p class="dashcard-description description-sm">{% if institution.description %}{{ institution.description }} {% else %} No description provided. {% endif %}</p></div>
@@ -87,14 +84,7 @@
                 <div class="flex-this column dashcard-text-container">
                     <div><h3 class="dashcard-h3 darkteal-text">{% firstof researcher.user.get_full_name researcher.user.username %}</h3></div>
                     <div>
-                        <p class="dashcard-subheader">Researcher | Location: 
-                            {% if profile.city_town %} {{ profile.city_town }}, {% endif %} 
-                            {% if profile.state_province_region %} {{ profile.state_province_region }}, {% endif %} 
-                            {% if profile.country.name %} {{ profile.country.name }}{% endif %}
-                            {% if not profile.city_town and not profile.state_province_region and not profile.country %}
-                                None specified
-                            {% endif %}
-                        </p>
+                        <p class="dashcard-subheader">Researcher | Location: {{ profile.get_location }} </p>
                     </div>
                     <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }} {% else %} No description provided. {% endif %}</p></div>
                 </div>
@@ -152,10 +142,7 @@
                     <div><h3 class="dashcard-h3 darkteal-text">{{ comm }}</h3></div>
                     <div>
                         <p class="dashcard-subheader">Community | Members: {% if comm.get_member_count < 10 %}0{{ comm.get_member_count }}{% else %}{{ comm.get_member_count }}{% endif %} | 
-                            Location: {% if comm.city_town %} {{ comm.city_town }}, {% endif %} {% if comm.state_province_region %} {{ comm.state_province_region }}, {% endif %} {% if comm.country.name %} {{ comm.country.name }}{% endif %}
-                            {% if not comm.city_town and not comm.state_province_region and not comm.country %}
-                                None specified
-                            {% endif %}
+                            Location: {{ comm.get_location }}
                         </p>
                     </div>
                     <div><p class="dashcard-description description-sm">{% if comm.description %}{{ comm.description }}{% else %} No description provided. {% endif %}</p></div>

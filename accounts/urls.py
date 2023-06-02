@@ -13,8 +13,8 @@ urlpatterns = [
     path('verify/', views.verify, name='verify'),
 
     path('invite/', views.invite_user, name='invite'),
-    path('member-invites/', views.member_invitations, name='member-invitations'),
-    path('member-invites/delete/<str:pk>/', views.delete_member_invitation, name='delete-member-invitation'),
+    path('invitations/', views.member_invitations, name='member-invitations'),
+    path('invitations/delete/<str:pk>/', views.delete_member_invitation, name='delete-member-invitation'),
 
     path('dashboard/', views.dashboard, name='dashboard'),
 
