@@ -2,30 +2,55 @@ from django import forms
 from .models import Institution
 from django.utils.translation import ugettext_lazy as _
 
-class CreateInstitutionForm(forms.ModelForm):
-    class Meta:
-        model = Institution
-        fields = ['institution_id', 'city_town', 'state_province_region', 'country', 'description']
-        widgets = {
-            'city_town': forms.TextInput(attrs={'class': 'w-100'}),
-            'state_province_region': forms.TextInput(attrs={'class': 'w-100'}),
-            'description': forms.Textarea(attrs={'class': 'w-100', 'rows': 2,}),
-        }
+class CreateInstitutionForm(forms.ModelForm):    
+    institution_id = forms.CharField(widget=forms.HiddenInput(attrs={'id': 'institutionIDROR', 'value': ''}))
 
-class CreateInstitutionNoRorForm(forms.ModelForm):
     class Meta:
         model = Institution
-        fields = ['institution_name','institution_id', 'city_town', 'state_province_region', 'country', 'description']
+        fields = ['institution_name', 'institution_id', 'city_town', 'state_province_region', 'country', 'description']
         error_messages = {
             'institution_name': {
                 'unique': _("An institution by that name already exists."),
             },
         }
         widgets = {
+            'institution_name': forms.TextInput(attrs={'id':'organizationInput', 'name':'institution_name', 'class': 'w-100', 'autocomplete': 'off', 'required': True, 'placeholder': 'Search ROR institutions...'}),
+            'institution_id': forms.HiddenInput(attrs={'id': 'institutionIDROR', 'value': '', 'required': False}),
+            'city_town': forms.TextInput(attrs={'id':'institutionCityTown', 'class': 'w-100'}),
+            'state_province_region': forms.TextInput(attrs={'id':'institutionStateProvRegion', 'class': 'w-100'}),
+            'description': forms.Textarea(attrs={'class': 'w-100', 'rows': 2, 'required': True}),
+            'country': forms.TextInput(attrs={'id':'institutionCountry', 'class': 'w-100', }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        readonly_fields = ['city_town', 'state_province_region', 'country']
+        for field_name in readonly_fields:
+            self.fields[field_name].widget.attrs['readonly'] = True
+            self.fields[field_name].widget.attrs['class'] = 'readonly-input w-100'
+
+class CreateInstitutionNoRorForm(forms.ModelForm):
+    is_ror = forms.BooleanField(initial=False, widget=forms.HiddenInput)
+
+    class Meta:
+        model = Institution
+        fields = ['institution_name', 'city_town', 'state_province_region', 'country', 'description', 'is_ror']
+        error_messages = {
+            'institution_name': {
+                'unique': _("An institution by that name already exists."),
+            },
+        }
+        widgets = {
+            'institution_name': forms.TextInput(attrs={'name':'institution_name', 'class': 'w-100', 'autocomplete': 'off', 'required': True}),
             'city_town': forms.TextInput(attrs={'class': 'w-100'}),
             'state_province_region': forms.TextInput(attrs={'class': 'w-100'}),
-            'description': forms.Textarea(attrs={'class': 'w-100', 'rows': 3,}),
+            'description': forms.Textarea(attrs={'class': 'w-100', 'rows': 2,}),
+            'country': forms.TextInput(attrs={'class': 'w-100', }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['is_ror'].required = False
 
 class ConfirmInstitutionForm(forms.ModelForm):
     class Meta:
