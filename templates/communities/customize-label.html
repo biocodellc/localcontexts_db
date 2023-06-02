@@ -225,7 +225,9 @@
 
                 <div class="w-30 margin-bottom-16">
                     <label>Label language</label>
-                    {{ form.language }}
+                    <div class="autocomplete" style="width:300px;">
+                        {{ form.language }}
+                    </div>
                 </div>
 
                 <div class="w-80">
@@ -252,7 +254,7 @@
             {% include 'partials/_add-translation.html' %}
 
             <div class="text-align-right margin-bottom-16">
-                <button id="saveLabelBtn" class="primary-btn action-btn margin-top-2">Save Label</button> 
+                <button id="saveLabelBtn" name="save_label_btn" class="primary-btn action-btn margin-top-2">Save Label</button> 
             </div>
         </form>
     </div>
