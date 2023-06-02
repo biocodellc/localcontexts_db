@@ -19,6 +19,11 @@ class Profile(models.Model):
     is_researcher = models.BooleanField(default=False, null=True)
     onboarding_on = models.BooleanField(default=True, null=True, blank=True)
 
+    def get_location(self):
+        components = [self.city_town, self.state_province_region, self.country.name]
+        location = ', '.join(filter(None, components)) or 'None specified'
+        return location
+
     def __str__(self):
         return str(self.user)
     

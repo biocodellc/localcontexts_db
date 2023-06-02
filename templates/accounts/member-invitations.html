@@ -37,10 +37,7 @@
 
                                 <div>
                                     <p class="dashcard-subheader">Institution | Members: {% if invite.institution.get_member_count < 10 %}0{{ invite.institution.get_member_count }}{% else %}{{ invite.institution.get_member_count }}{% endif %} | 
-                                        Location: {% if invite.institution.city_town %} {{ invite.institution.city_town }}, {% endif %} {% if invite.institution.state_province_region %} {{ invite.institution.state_province_region }}, {% endif %} {% if invite.institution.country.name %} {{ invite.institution.country.name }}{% endif %}
-                                        {% if not invite.institution.city_town and not invite.institution.state_province_region and not invite.institution.country %}
-                                            None specified
-                                        {% endif %}
+                                        Location: {{ invite.institution.get_location }}
                                     </p>
                                 </div>  
 
@@ -99,10 +96,7 @@
 
                                 <div>
                                     <p class="dashcard-subheader">Community | Members: {% if invite.community.get_member_count < 10 %}0{{ invite.community.get_member_count }}{% else %}{{ invite.community.get_member_count }}{% endif %} | 
-                                        Location: {% if invite.community.city_town %} {{ invite.community.city_town }}, {% endif %} {% if invite.community.state_province_region %} {{ invite.community.state_province_region }}, {% endif %} {% if invite.community.country.name %} {{ invite.community.country.name }}{% endif %}
-                                        {% if not invite.community.city_town and not invite.community.state_province_region and not invite.community.country %}
-                                            None specified
-                                        {% endif %}
+                                        Location: {{ invite.community.get_location }}
                                     </p>
                                 </div>
                                 
