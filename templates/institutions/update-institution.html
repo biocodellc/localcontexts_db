@@ -10,7 +10,7 @@
                     <div class="flex-this side-nav-item {% if 'update' in request.path %} selected {% else %} grey-text {% endif %}">
                         <div class="w-20 margin-right-8"><i class="fa fa-user fa-3x" aria-hidden="true"></i></div>
                         <div class="w-80">
-                            <p class="no-top-margin"><strong>Institution Account</strong><br>Contact name, email, location, description</p>
+                            <p class="no-top-margin"><strong>Institution Account</strong><br>Contact name, email, {% if not institution.is_ror %} location, {% endif %} description</p>
                         </div>  
                     </div>   
                 </a>
@@ -34,29 +34,33 @@
                             {% endif %}
                         </div>
 
-                        <div class="w-100 margin-top-8">
-                            <div class="flex-this">
-                                <div class="w-50 margin-right-1">
-                                    <label for="city_town">City or Town</label> <br>
-                                    {{ update_form.city_town }}
-                                </div>
-                                <div class="w-50">
-                                    <label for="state_province_region">State, Province, or Region</label> <br>
-                                    {{ update_form.state_province_region }}
-                                </div>                                        
-                            </div>
-                            {% if update_form.city_town.errors %}
-                                <div class="msg-red w-50"><small>{{ update_form.city_town.errors.as_text }}</small></div> 
-                            {% endif %}
-                            {% if update_form.state_province_region.errors %}
-                                <div class="msg-red w-50"><small>{{ update_form.state_province_region.errors.as_text }}</small></div> 
-                            {% endif %}
-                        </div>
+                        {% if not institution.is_ror %}
 
-                        <div class="margin-top-8">
-                            <label for="country">Country</label>  <br>
-                            {{ update_form.country }}
-                        </div>
+                            <div class="w-100 margin-top-8">
+                                <div class="flex-this">
+                                    <div class="w-50 margin-right-1">
+                                        <label for="city_town">City or Town</label> <br>
+                                        {{ update_form.city_town }}
+                                    </div>
+                                    <div class="w-50">
+                                        <label for="state_province_region">State, Province, or Region</label> <br>
+                                        {{ update_form.state_province_region }}
+                                    </div>                                        
+                                </div>
+                                {% if update_form.city_town.errors %}
+                                    <div class="msg-red w-50"><small>{{ update_form.city_town.errors.as_text }}</small></div> 
+                                {% endif %}
+                                {% if update_form.state_province_region.errors %}
+                                    <div class="msg-red w-50"><small>{{ update_form.state_province_region.errors.as_text }}</small></div> 
+                                {% endif %}
+                            </div>
+
+                            <div class="margin-top-8">
+                                <label for="country">Country</label>  <br>
+                                {{ update_form.country }}
+                            </div>
+
+                        {% endif %}
 
                         <div class="margin-top-8 w-90">
                             {{ update_form.image.label }} <br>

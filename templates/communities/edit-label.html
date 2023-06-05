@@ -16,10 +16,17 @@
         <form id="saveLabelForm" method="POST" action="" enctype="multipart/form-data">
             {% csrf_token %}
             <div>
-                <p class="w-30">
-                    <label>Label name</label>
-                    {{ form.name }}
-                </p>
+                <div class="flex-this space-between w-80 margin-bottom-8">
+                    <div class="w-50">
+                        <label>Label name</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="w-30">
+                        <label>Language</label>
+                        {{ form.language }}
+                    </div>                    
+                </div>
+
                 <div class="w-80">
                     <label for="label_text">Label text</label>
                     {{ form.label_text }}<br>
@@ -41,16 +48,20 @@
                         {% for translation_form in formset %}
                             {% for hidden in translation_form.hidden_fields %} {{ hidden }} {% endfor %}
 
-                            <div class="flex-this space-between">
+                            <div class="flex-this space-between margin-bottom-8">
                                 <div class="w-50">
                                     <label>Customized title</label>
                                     {{ translation_form.translated_name }}
                                 </div>
                                 <div>
-                                    <label>Language</label>
-                                    {{ translation_form.language }}
+                                    <label>Language</label><br>
+                                    <div class="autocomplete" style="width:300px;">
+                                        {{ translation_form.language }}
+                                    </div>
                                 </div>
                             </div>
+
+                            <label>Translated text</label>
                             {{ translation_form.translated_text }}    
                         {% endfor %}                
                     </div>

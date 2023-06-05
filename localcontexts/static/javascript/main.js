@@ -67,7 +67,7 @@ if (window.location.href.includes('create-community') || window.location.href.in
 // Get languages from the IANA directory
 function fetchLanguages() {
     const endpoint = 'https://raw.githubusercontent.com/biocodellc/localcontexts_json/main/data/ianaObj.json'
-    
+
     fetch(endpoint)
         .then(response => {
             if (response.ok) {
@@ -83,7 +83,41 @@ function fetchLanguages() {
 function languageList(data) {
     let langArray = Object.keys(data)
     // feed only array of languages into this function
-    autocomplete(document.getElementById('languageListInput'), langArray)
+    var langInputElements = document.getElementsByClassName('languageListInput')
+    for (var i=0; i < langInputElements.length; i++) {
+        autocomplete(langInputElements[i], langArray);
+    }
+}
+// TODO: check Project creation form when notices are not selected. in main.js, or check add member form (when user enters member name that isnt in the hub, doesn't work), or ROR input
+// converts accented letters to the unaccented equivalent
+function removeAccents(str) {
+  var map = {
+    "a": '[àáâãäåæāăąǻ]',
+    "b": '[ɓ]',
+    "c": '[çćĉċč]',
+    "d": '[ďđ]',
+    "e": '[èéêëēĕėęěɛə]',
+    "g": '[ĝğġģ]',
+    "h": '[ĥħḥ]',
+    "i": '[ìíîïĩīĭįɨİ]',
+    "j": '[ĵ]',
+    "k": '[ķ]',
+    "l": '[ĺļľŀłı̨]',
+    "n": '[ñńņňŉŋ]',
+    "o": '[òóôõöøōŏőǫ]',
+    "r": '[ŕŗř]',
+    "s": '[śŝşšșṣ]',
+    "t": '[ţťŧțṭ]',
+    "u": '[ùúûüũūŭůűų]',
+    "w": '[ŵ]',
+    "y": '[ýÿŷ]',
+    "z": '[źżž]'
+  };
+  
+  for (var pattern in map) {
+    str = str.replace(new RegExp(map[pattern], "gi"), pattern);
+  }
+  return str;
 }
 
 // Searchbar with autocomplete
@@ -92,7 +126,7 @@ function autocomplete(inp, arr) {
     var currentFocus;
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
-        var a, b, i, val = this.value;
+        var a, b, i, val = removeAccents(this.value);
         /*close any already open lists of autocompleted values*/
         closeAllLists();
         if (!val) { return false;}
@@ -106,7 +140,7 @@ function autocomplete(inp, arr) {
 
         for (i = 0; i < arr.length; i++) {
           /*check if the item starts with the same letters as the text field value:*/
-          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          if (removeAccents(arr[i]).substr(0, val.length).toUpperCase() == val.toUpperCase()) {
             /*create a DIV element for each matching element:*/
             b = document.createElement("DIV");
             /*make the matching letters bold:*/
@@ -154,15 +188,34 @@ function autocomplete(inp, arr) {
     });
 
     function addActive(x) {
-      /*a function to classify an item as "active":*/
-      if (!x) return false;
-      /*start by removing the "active" class on all items:*/
-      removeActive(x);
-      if (currentFocus >= x.length) currentFocus = 0;
-      if (currentFocus < 0) currentFocus = (x.length - 1);
-      /*add class "autocomplete-active":*/
-      x[currentFocus].classList.add("autocomplete-active");
-    }
+        /*a function to classify an item as "active":*/
+        if (!x) return false;
+        /*start by removing the "active" class on all items:*/
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        /*add class "autocomplete-active":*/
+        x[currentFocus].classList.add("autocomplete-active");
+    
+        // Get the value of the input element
+        var inputValue = inp.value;
+    
+        // Map accented characters to unaccented versions
+        var unaccentedValue = removeAccents(inputValue);
+    
+        // Loop through the autocomplete items
+        for (var i = 0; i < x.length; i++) {
+            // Get the value of the current autocomplete item
+            var itemValue = x[i].getElementsByTagName("input")[0].value;
+            // Map accented characters to unaccented versions
+            var unaccentedItemValue = removeAccents(itemValue);
+            // Check if the unaccented value matches the unaccented item value
+            if (unaccentedItemValue.toUpperCase().indexOf(unaccentedValue.toUpperCase()) > -1) {
+            /*if the item is found, mark as active:*/
+            x[i].classList.add("autocomplete-active");
+            }
+        }
+    }    
 
     function removeActive(x) {
       /*a function to remove the "active" class from all autocomplete items:*/
@@ -420,6 +473,7 @@ if (window.location.href.includes('/labels/customize') || window.location.href.i
         newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
         container.insertBefore(newForm, lastDiv)
         totalForms.setAttribute('value', `${formNum+1}`)
+        fetchLanguages()
     }
 
     fetchLanguages()
@@ -429,9 +483,9 @@ if (window.location.href.includes('/labels/customize') || window.location.href.i
         document.getElementById('saveLabelForm').submit()
 
         let oldValue = 'Save Label'
-        saveLabelBtn.setAttribute('disabled', true)
-        saveLabelBtn.innerText = 'Saving...'
-        
+            saveLabelBtn.setAttribute('disabled', true)
+            saveLabelBtn.innerText = 'Saving...'
+            
         window.addEventListener('load', function() {
             saveLabelBtn.innerText = oldValue;
             saveLabelBtn.removeAttribute('disabled');
@@ -1114,19 +1168,6 @@ function disableBtnDuringInput() {
     document.getElementById('sendMemberInviteBtn').disabled = currentValue.length === 0 || document.querySelector('option[value="' + currentValue + '"]') === null;
 }
 
-// Create institution: non-ROR modal
-if (window.location.href.includes('create-institution')) {
-    const closeNORORModalBtn = document.getElementById('closeNORORmodal')
-    let modal = document.getElementById('noRORModal')
-    const openNORORModalBtn = document.getElementById('openNORORModalBtn')
-
-    openNORORModalBtn.addEventListener('click', function() { modal.classList.replace('hide', 'show')})
-    closeNORORModalBtn.addEventListener('click', function(e)  {
-        e.preventDefault()
-        modal.classList.replace('show', 'hide')
-    } )
-}
-
 // Deactivate user popup in user settings
 var deactivateAccountBtn = document.getElementById('submitDeactivation')
 if (deactivateAccountBtn) {
@@ -1327,11 +1368,15 @@ if (window.location.href.includes('labels/view/')) {
 
 // PROJECT ACTION PAGE
 
-var copyProjectURLBtn = document.getElementById('copyProjectURLBtn')
-var copyProjectIDBtn = document.getElementById('copyProjectIDBtn')
+var copyProjectURLBtn = document.getElementsByClassName('copyProjectURLBtn')
+var copyProjectIDBtn = document.getElementsByClassName('copyProjectIDBtn')
 if (copyProjectIDBtn && copyProjectURLBtn) {
-    greenCopyBtn(copyProjectIDBtn, 'projectIDToCopy')
-    greenCopyBtn(copyProjectURLBtn, 'projectURLToCopy')
+    for (var i = 0; i < copyProjectIDBtn.length; i++) {
+        greenCopyBtn(copyProjectIDBtn[i], 'projectIDToCopy')
+    }
+    for (var i = 0; i < copyProjectURLBtn.length; i++) {
+        greenCopyBtn(copyProjectURLBtn[i], 'projectURLToCopy')
+    }
 }
 
 function greenCopyBtn(btnElem, spanIDToCopy) {
@@ -1342,6 +1387,37 @@ function greenCopyBtn(btnElem, spanIDToCopy) {
         setTimeout(() => {
             btnElem.innerHTML = `<i class="round-btn fa-regular fa-clone fa-rotate-90"></i>`
         }, 1000)
+    })
+}
+
+// Share on Social Media
+var shareToSocialsBtn = document.getElementsByClassName('shareToSocialsBtn')
+if (shareToSocialsBtn) {
+    for (var i = 0; i < shareToSocialsBtn.length; i++) {
+        shareToSocialsBtnAction(shareToSocialsBtn[i])
+    }
+}
+
+function shareToSocialsBtnAction(btnElem) {
+    btnElem.addEventListener('click', function() {
+        socialType = btnElem.getAttribute("data-social")
+        projectURL = btnElem.getAttribute("data-project-url")
+        projectTitle = btnElem.getAttribute("data-project-title")
+        if (socialType == 'email') {
+            var emailSubject = encodeURIComponent("Local Contexts Project")
+            var emailBody = encodeURIComponent("Check out this Local Contexts Project! "+projectTitle+" at "+projectURL)
+            var mailtoLink = "mailto:?subject="+emailSubject+"&body="+emailBody
+            window.location.href = mailtoLink
+        } else if(socialType == 'facebook') {
+            window.open('http://www.facebook.com/sharer/sharer.php?u='+projectURL, 'Share on Facebook')
+        } else if (socialType == 'twitter') {
+            window.open('https://twitter.com/intent/tweet?url='+projectURL+'&text=Check out this @LocalContexts project! #LocalContexts #traditionalknowledge #indigenousdata', 'Share on Twitter')
+        } else if (socialType == 'linkedin') {
+            window.open('https://www.linkedin.com/shareArticle?url='+projectURL)
+        } else if (socialType == 'whatsapp') {
+            messageText = encodeURIComponent("Check out this Local Contexts Project! "+projectTitle+" at "+projectURL)
+            window.location.href = 'https://api.whatsapp.com/send?text='+messageText
+        }
     })
 }
 
@@ -1399,6 +1475,23 @@ if (checkList) {
         else
           checkList.classList.add('visible');
       }
+    
+    let connectBtn = document.getElementById('connectProjectsBtn')
+    let checkboxes = document.querySelectorAll('input[name="projects_to_link"]')
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            let isChecked = Array.from(checkboxes).some(function(checkbox) {
+                return checkbox.checked
+            })
+
+            connectBtn.disabled = !isChecked
+            if (isChecked) {
+                connectBtn.classList.replace('disabled-btn', 'action-btn')
+            } else {
+                connectBtn.classList.replace('action-btn', 'disabled-btn')
+            }
+        })
+    })
 }
 
 function showProjectLabels(elem) {
@@ -1415,3 +1508,90 @@ function showProjectLabels(elem) {
     }
 }
 
+
+if (window.location.href.includes('create-institution')) {
+    const nameInputField = document.getElementById('organizationInput')
+    const suggestionsContainer = document.getElementById('suggestionsContainer')
+    const cityTownInputField = document.getElementById('institutionCityTown')
+    const stateProvRegionInputField = document.getElementById('institutionStateProvRegion')
+    const countryInputField = document.getElementById('institutionCountry')
+    const hiddenInputField = document.getElementById('institutionIDROR')
+    const createInstitutionBtn = document.getElementById('createInstitutionBtn')
+    const clearFormBtn = document.getElementById('clearFormBtn')
+    const form = document.getElementById('createInstitutionForm')
+
+    let delayTimer
+
+    createInstitutionBtn.disabled = true
+
+    nameInputField.addEventListener('input', () => {
+        clearTimeout(delayTimer)
+
+        const inputValue = nameInputField.value
+
+        if (inputValue.length >= 3) { // Minimum characters required before making a request
+            let queryURL = 'https://api.ror.org/organizations?query='
+            
+            delayTimer = setTimeout(() => {
+            fetch(`${queryURL}${encodeURIComponent(inputValue)}`)
+                .then(response => response.json())
+                .then(data => {
+                    showSuggestions(data.items)
+                })
+                .catch(error => { console.error(error)})
+            }, 300) // Delay in milliseconds before making the request
+        } else { clearSuggestions() }
+    })
+
+    clearFormBtn.addEventListener('click', (e) => {
+        e.preventDefault()
+        form.reset()
+        nameInputField.focus();
+        createInstitutionBtn.disabled = true
+
+        if (nameInputField.getAttribute('readonly', true) && nameInputField.classList.contains('readonly-input')) {
+            nameInputField.removeAttribute('readonly')
+            nameInputField.classList.remove('readonly-input')    
+        }
+    })
+
+    function showSuggestions(items) {
+        // Clear previous suggestions
+        clearSuggestions()
+        // Get the first 5 most relevant items
+        const relevantItems = items.slice(0, 5)
+
+        // Create and append suggestion items
+        relevantItems.forEach(item => {
+            const suggestionItem = document.createElement('div')
+            suggestionItem.classList.add('suggestion-item')
+            suggestionItem.innerHTML = `
+                ${item.name} <br> 
+                <small>${item.types}, ${item.country.country_name}</small>
+            `
+            suggestionItem.addEventListener('click', () => {
+                // Populate input field with the selected suggestion
+                nameInputField.value = item.name
+                countryInputField.value = item.country.country_name
+                hiddenInputField.value = item.id
+
+                const addresses = item.addresses;
+                if (addresses.length > 0) {
+                    const address = addresses[0];
+                    cityTownInputField.value = address.city
+                    stateProvRegionInputField.value = address.state
+                }
+                createInstitutionBtn.disabled = false
+                createInstitutionBtn.classList.replace('disabled-btn', 'action-btn')
+
+                nameInputField.setAttribute('readonly', true)
+                nameInputField.classList.add('readonly-input')
+
+                clearSuggestions()
+            })
+                suggestionsContainer.appendChild(suggestionItem)
+        })
+    }
+    
+    function clearSuggestions() { suggestionsContainer.innerHTML = '' }
+}

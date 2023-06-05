@@ -69,14 +69,7 @@
                 <h3 class="no-top-margin">{{ community.community_creator.user_profile.position }}</h3>
             {% endif %}
 
-            {% if not community.community_creator.user_profile.city_town and not community.community_creator.user_profile.state_province_region and not community.community_creator.user_profile.country.name %}
-            {% else %}
-                <h4 class="no-top-margin">
-                    {% if community.community_creator.user_profile.city_town %} {{ community.community_creator.user_profile.city_town }}, {% endif %}
-                    {% if community.community_creator.user_profile.state_province_region %}{{ community.community_creator.user_profile.state_province_region }}, {% endif %}
-                    {% if community.community_creator.user_profile.country %} {{ community.community_creator.user_profile.country.name }} {% endif%}
-                </h4>
-            {% endif %}
+            <h4 class="no-top-margin"> {{community.community_creator.user_profile.get_location}}</h4>
 
             {% if community.community_creator.user_profile.languages_spoken %}
                 <div class="flex-this">
@@ -149,14 +142,7 @@
                     <h3 class="no-top-margin">{{ admin.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not admin.user_profile.city_town and not admin.user_profile.state_province_region and not admin.user_profile.country.name %}
-                {% else %}
-                    <h4 class="no-top-margin">
-                        {% if admin.user_profile.city_town %} {{ admin.user_profile.city_town }}, {% endif %}
-                        {% if admin.user_profile.state_province_region %}{{ admin.user_profile.state_province_region }}, {% endif %}
-                        {% if admin.user_profile.country %} {{ admin.user_profile.country.name }} {% endif%}
-                    </h4>
-                {% endif %}
+                <h4 class="no-top-margin"> {{ admin.user_profile.get_location }} </h4>
 
                 {% if admin.user_profile.languages_spoken %}
                     <div class="flex-this">
@@ -229,14 +215,7 @@
                     <h3 class="no-top-margin">{{ editor.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not editor.user_profile.city_town and not editor.user_profile.state_province_region and not editor.user_profile.country.name %}
-                {% else %}
-                    <h4 class="no-top-margin">
-                        {% if editor.user_profile.city_town %} {{ editor.user_profile.city_town }}, {% endif %}
-                        {% if editor.user_profile.state_province_region %}{{ editor.user_profile.state_province_region }}, {% endif %}
-                        {% if editor.user_profile.country %} {{ editor.user_profile.country.name }} {% endif%}
-                    </h4>
-                {% endif %}
+                <h4 class="no-top-margin"> {{ editor.user_profile.get_location }} </h4>
 
                 {% if editor.user_profile.languages_spoken %}
                     <div class="flex-this">
@@ -309,14 +288,7 @@
                     <h3 class="no-top-margin">{{ viewer.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not viewer.user_profile.city_town and not viewer.user_profile.state_province_region and not viewer.user_profile.country.name %}
-                {% else %}
-                    <h4 class="no-top-margin">
-                        {% if viewer.user_profile.city_town %} {{ viewer.user_profile.city_town }}, {% endif %}
-                        {% if viewer.user_profile.state_province_region %}{{ viewer.user_profile.state_province_region }}, {% endif %}
-                        {% if viewer.user_profile.country %} {{ viewer.user_profile.country.name }} {% endif%}
-                    </h4>
-                {% endif %}
+                <h4 class="no-top-margin"> {{ viewer.user_profile.get_location }} </h4>
 
                 {% if viewer.user_profile.languages_spoken %}
                     <div class="flex-this">
@@ -376,14 +348,7 @@
                 <h3 class="no-top-margin">{{ institution.institution_creator.user_profile.position }}</h3>
             {% endif %}
 
-            {% if not institution.institution_creator.user_profile.city_town and not institution.institution_creator.user_profile.state_province_region and not institution.institution_creator.user_profile.country.name %}
-            {% else %}
-                <h4 class="no-top-margin">
-                    {% if institution.institution_creator.user_profile.city_town %} {{ institution.institution_creator.user_profile.city_town }}, {% endif %}
-                    {% if institution.institution_creator.user_profile.state_province_region %}{{ institution.institution_creator.user_profile.state_province_region }}, {% endif %}
-                    {% if institution.institution_creator.user_profile.country %} {{ institution.institution_creator.user_profile.country.name }} {% endif%}
-                </h4>
-            {% endif %}
+            <h4 class="no-top-margin"> {{ institution.institution_creator.user_profile.get_location }} </h4>
 
             {% if institution.institution_creator.user_profile.languages_spoken %}
                 <div class="flex-this">
@@ -455,14 +420,7 @@
                     <h3 class="no-top-margin">{{ admin.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not admin.user_profile.city_town and not admin.user_profile.state_province_region and not admin.user_profile.country.name %}
-                {% else %}
-                    <h4 class="no-top-margin">
-                        {% if admin.user_profile.city_town %} {{ admin.user_profile.city_town }}, {% endif %}
-                        {% if admin.user_profile.state_province_region %}{{ admin.user_profile.state_province_region }}, {% endif %}
-                        {% if admin.user_profile.country %} {{ admin.user_profile.country.name }} {% endif%}
-                    </h4>
-                {% endif %}
+                <h4 class="no-top-margin"> {{ admin.user_profile.get_location }} </h4>
 
                 {% if admin.user_profile.languages_spoken %}
                     <div class="flex-this">
@@ -535,14 +493,7 @@
                     <h3 class="no-top-margin">{{ editor.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not editor.user_profile.city_town and not editor.user_profile.state_province_region and not editor.user_profile.country.name %}
-                {% else %}
-                    <h4 class="no-top-margin">
-                        {% if editor.user_profile.city_town %} {{ editor.user_profile.city_town }}, {% endif %}
-                        {% if editor.user_profile.state_province_region %}{{ editor.user_profile.state_province_region }}, {% endif %}
-                        {% if editor.user_profile.country %} {{ editor.user_profile.country.name }} {% endif%}
-                    </h4>
-                {% endif %}
+                <h4 class="no-top-margin"> {{ editor.user_profile.get_location }} </h4>
 
                 {% if editor.user_profile.languages_spoken %}
                     <div class="flex-this">
@@ -615,14 +566,7 @@
                     <h3 class="no-top-margin">{{ viewer.user_profile.position }}</h3>
                 {% endif %}
 
-                {% if not viewer.user_profile.city_town and not viewer.user_profile.state_province_region and not viewer.user_profile.country.name %}
-                {% else %}
-                    <h4 class="no-top-margin">
-                        {% if viewer.user_profile.city_town %} {{ viewer.user_profile.city_town }}, {% endif %}
-                        {% if viewer.user_profile.state_province_region %}{{ viewer.user_profile.state_province_region }}, {% endif %}
-                        {% if viewer.user_profile.country %} {{ viewer.user_profile.country.name }} {% endif%}
-                    </h4>
-                {% endif %}
+                <h4 class="no-top-margin"> {{ viewer.user_profile.get_location }} </h4>
 
                 {% if viewer.user_profile.languages_spoken %}
                     <div class="flex-this">

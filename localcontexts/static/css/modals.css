@@ -32,8 +32,6 @@
 
 /* REQUEST TO JOIN COMMUNITY OR INSTUTION IN REGISTRATION PROCESS */
 .join-modal { width: 650px; }
-/* CREATE INSTITUTION NO ROR */
-.noror-modal-box { width: 50%; }
 /* USER DEACTIVATION */
 .deactivate-modal { width: 436px; }
 /* REGISTRY */
@@ -46,7 +44,7 @@
 .project-unlink-modal { width: 680px; height: 202px; }
 
 /* PROJECT ACTION PAGE: SHARE PROJECT MODAL */
-.share-project-modal { width: 909px; height: 290px; }
+.share-project-modal { width: 700px; height: auto; }
 .text-input-to-copy { position: relative;}
 .btn-in-input {
     position: absolute;

@@ -71,51 +71,57 @@ def preparation_step(request):
 @login_required(login_url='login')
 def create_institution(request):
     form = CreateInstitutionForm(request.POST or None)
-    noror_form = CreateInstitutionNoRorForm(request.POST or None)
 
     if request.method == 'POST':
         affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user)
 
-        if 'create-institution-btn' in request.POST:
-            if form.is_valid():
-                name = request.POST.get('institution_name')
-                data = form.save(commit=False)
+        if form.is_valid():
+            name = form.cleaned_data['institution_name']
+            data = form.save(commit=False)
 
-                if Institution.objects.filter(institution_name=name).exists():
-                    messages.add_message(request, messages.ERROR, 'An institution by this name already exists.')
-                    return redirect('create-institution')
-                else:
-                    data.institution_name = name
-                    data.institution_creator = request.user
-
-                    # If in test site, approve immediately, skip confirmation step
-                    if dev_prod_or_local(request.get_host()) == 'DEV':
-                        data.is_approved = True
-                        data.save()
-                        
-                        # Add to user affiliations
-                        affiliation.institutions.add(data)
-                        affiliation.save()
-                        return redirect('dashboard')
-                    else:
-                        data.save()
-
-                        # Add to user affiliations
-                        affiliation.institutions.add(data)
-                        affiliation.save()
-                        return redirect('confirm-institution', data.id)
-        elif 'create-institution-noror-btn' in request.POST:
-            if noror_form.is_valid():
-                data = noror_form.save(commit=False)
+            if Institution.objects.filter(institution_name=name).exists():
+                messages.add_message(request, messages.ERROR, 'An institution by this name already exists.')
+                return redirect('create-institution')
+            else:
+                # data.institution_name = name
                 data.institution_creator = request.user
-                data.is_ror = False
-                data.save()
 
-                # Add to user affiliations
-                affiliation.institutions.add(data)
-                affiliation.save()
-                return redirect('confirm-institution', data.id)
-    return render(request, 'institutions/create-institution.html', {'form': form, 'noror_form': noror_form,})
+                # If in test site, approve immediately, skip confirmation step
+                if dev_prod_or_local(request.get_host()) == 'DEV':
+                    data.is_approved = True
+                    data.save()
+                    
+                    # Add to user affiliations
+                    affiliation.institutions.add(data)
+                    affiliation.save()
+                    return redirect('dashboard')
+                else:
+                    data.save()
+
+                    # Add to user affiliations
+                    affiliation.institutions.add(data)
+                    affiliation.save()
+                    return redirect('confirm-institution', data.id)
+
+    return render(request, 'institutions/create-institution.html', {'form': form })
+
+@login_required(login_url='login')
+def create_custom_institution(request):
+    noror_form = CreateInstitutionNoRorForm(request.POST or None)
+    if request.method == 'POST':
+        affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user)
+
+        if noror_form.is_valid():
+            data = noror_form.save(commit=False)
+            data.institution_creator = request.user
+            data.save()
+
+            # Add to user affiliations
+            affiliation.institutions.add(data)
+            affiliation.save()
+            return redirect('confirm-institution', data.id)
+    return render(request, 'institutions/create-custom-institution.html', {'noror_form': noror_form,})
+
 
 @login_required(login_url='login')
 def confirm_institution(request, institution_id):
@@ -624,14 +630,13 @@ def edit_project(request, institution_id, project_uuid):
     project = Project.objects.get(unique_id=project_uuid)
 
     member_role = check_member_role(request.user, institution)
-    if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
+    if not member_role or member_role == 'viewer': # If user is not a member / is a viewer.
         return redirect('restricted')
     else:
         form = EditProjectForm(request.POST or None, instance=project)
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
         notices = Notice.objects.none()
-        urls = project.urls
 
         # Check to see if notice exists for this project and pass to template
         if Notice.objects.filter(project=project).exists():
@@ -663,7 +668,8 @@ def edit_project(request, institution_id, project_uuid):
                 # Pass any existing notices as well as newly selected ones
                 crud_notices(request, notices_selected, institution, data, notices)
 
-            return redirect('institution-projects', institution.id)
+            return redirect('institution-project-actions', institution.id, project.unique_id)
+
 
         context = {
             'member_role': member_role,
@@ -673,7 +679,7 @@ def edit_project(request, institution_id, project_uuid):
             'form': form,
             'formset': formset,
             'contributors': contributors,
-            'urls': urls,
+            'urls': project.urls,
         }
         return render(request, 'institutions/edit-project.html', context)
 
