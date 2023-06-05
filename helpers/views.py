@@ -37,15 +37,29 @@ def download_open_collaborate_notice(request, perm):
         return download_otc_notice()
 
 @login_required(login_url='login')
-def download_support_letter(request):
+def download_community_support_letter(request):
     try:
-        url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/Support%20Letter%20Template.docx'
+        url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/Local%20Contexts%20Community%20Support%20Letter%20Template.docx'
         response = requests.get(url)
 
         if response.status_code == 200:
             file_content = response.content
             response = HttpResponse(file_content, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
-            response['Content-Disposition'] = 'attachment; filename="Support_Letter_Template.docx"'
+            response['Content-Disposition'] = 'attachment; filename="LC_Community_Support_Letter_Template.docx"'
+            return response
+    except:
+        raise Http404()
+
+@login_required(login_url='login')
+def download_institution_support_letter(request):
+    try:
+        url = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/agreements/Local%20Contexts%20Institution%20Information%20and%20Support%20Letter%20Template.docx'
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            file_content = response.content
+            response = HttpResponse(file_content, content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+            response['Content-Disposition'] = 'attachment; filename="LC_Institution_Support_Letter_Template.docx"'
             return response
     except:
         raise Http404()
