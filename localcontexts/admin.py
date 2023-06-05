@@ -241,7 +241,7 @@ admin_site.register(BCLabel, BCLabelAdmin)
 
 # COMMUNITIES ADMIN
 class CommunityAdmin(admin.ModelAdmin):
-    list_display = ('community_name', 'community_creator', 'contact_name', 'contact_email', 'is_approved', 'created')
+    list_display = ('community_name', 'community_creator', 'contact_name', 'contact_email', 'is_approved', 'created', 'country')
     search_fields = ('community_name', 'contact_name', 'contact_email',)
     readonly_fields = ('native_land_slug',)
 
@@ -304,7 +304,7 @@ admin_site.register(OpenToCollaborateNoticeURL, OpenToCollaborateNoticeURLAdmin)
 
 # INSTITUTIONS ADMIN
 class InstitutionAdmin(admin.ModelAdmin):
-    list_display = ('institution_name', 'institution_creator', 'contact_name', 'contact_email', 'is_approved', 'created')
+    list_display = ('institution_name', 'institution_creator', 'contact_name', 'contact_email', 'is_approved', 'is_ror', 'created', 'country')
     search_fields = ('institution_name', 'institution_creator__username', 'contact_name', 'contact_email',)
 
 admin_site.register(Institution, InstitutionAdmin)
