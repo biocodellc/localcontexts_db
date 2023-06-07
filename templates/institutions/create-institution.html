@@ -54,7 +54,7 @@
         </div>
 
         <div class="flex-this space-between">
-            <div>
+            <div class="w-60">
 
                 {% if form.errors %}
                     {% for field_name, errors in form.errors.items %}
@@ -70,7 +70,7 @@
                 {% include 'partials/_alerts.html' %}
             </div>
             
-            {{ form.institution_id }}
+            {{ form.ror_id }}
             <div class="flex-this">
                 <div class="margin-top-8 margin-right-8">
                     <button id="clearFormBtn" class="primary-btn white-btn margin-top-2">Clear form <i class="fa-regular fa-eraser"></i></button>
