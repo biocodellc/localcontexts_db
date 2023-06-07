@@ -70,22 +70,18 @@ def preparation_step(request):
 
 @login_required(login_url='login')
 def create_institution(request):
-    form = CreateInstitutionForm(request.POST or None)
-
     if request.method == 'POST':
+        form = CreateInstitutionForm(request.POST)
         affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user)
 
         if form.is_valid():
             name = form.cleaned_data['institution_name']
-            data = form.save(commit=False)
 
             if Institution.objects.filter(institution_name=name).exists():
                 messages.add_message(request, messages.ERROR, 'An institution by this name already exists.')
-                return redirect('create-institution')
             else:
-                # data.institution_name = name
+                data = form.save(commit=False)
                 data.institution_creator = request.user
-
                 # If in test site, approve immediately, skip confirmation step
                 if dev_prod_or_local(request.get_host()) == 'DEV':
                     data.is_approved = True
@@ -102,7 +98,9 @@ def create_institution(request):
                     affiliation.institutions.add(data)
                     affiliation.save()
                     return redirect('confirm-institution', data.id)
-
+    else:
+       form = CreateInstitutionForm() 
+    
     return render(request, 'institutions/create-institution.html', {'form': form })
 
 @login_required(login_url='login')
