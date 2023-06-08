@@ -362,6 +362,9 @@ def remove_member(request, pk, member_id):
         join_request = JoinRequest.objects.get(user_from=member, community=community)
         join_request.delete()
     
+    title = f'You have been removed as a member from {community.community_name}.'
+    UserNotification.objects.create(from_user=request.user, to_user=member, title=title, notification_type="Remove", community=community)
+
     if '/manage/' in request.META.get('HTTP_REFERER'):
         return redirect('manage-orgs')
     else:
