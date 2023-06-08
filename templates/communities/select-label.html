@@ -145,9 +145,16 @@
                     </div>
 
                     {% if bclabel.audiofile %}<div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
-                    <p>{{ bclabel.label_text }}</p>
-                    {% include 'partials/_label-translation.html' %}
 
+                    <div>
+                        <div class="flex-this space-between">
+                            <div><p class="bold">Label text</p></div>
+                            <div><p>{{ bclabel.language }}</p></div>
+                        </div>
+                        <div><p class="no-top-margin no-bottom-margin">{{ bclabel.label_text }} </p></div>
+                    </div>
+
+                    {% include 'partials/_label-translation.html' %}
 
                     {% if not bclabel.is_approved %}
                         {% if bclabel.bclabel_note.all %}
@@ -194,14 +201,21 @@
                     </div>
 
                     {% if tklabel.audiofile %}<div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
-                    <p>{{ tklabel.label_text }}</p>
+                   
+                    <div>
+                        <div class="flex-this space-between">
+                            <div><p class="bold">Label text</p></div>
+                            <div><p>{{ tklabel.language }}</p></div>
+                        </div>
+                        <div><p class="no-top-margin no-bottom-margin">{{ tklabel.label_text }} </p></div>
+                    </div>
+
                     {% include 'partials/_label-translation.html' %}
 
-
-                    {% if not bclabel.is_approved %}
-                        {% if bclabel.bclabel_note.all %}
+                    {% if not tklabel.is_approved %}
+                        {% if tklabel.tklabel_note.all %}
                             <h4>A note was added to this Label:</h4>
-                            {% for note in bclabel.bclabel_note.all %}
+                            {% for note in tklabel.tklabel_note.all %}
                                 <div class="margin-top-16 note-container">
                                     <p> Member {% firstof note.sender.get_full_name note.sender.username %} wrote: <br>{{ note.note }}</p>
                                 </div>

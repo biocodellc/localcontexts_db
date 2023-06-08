@@ -16,8 +16,7 @@
             <div>
                 <p class="dashcard-subheader">
                     Institution | Members: {% if institution.get_member_count < 10 %}0{{ institution.get_member_count }}{% else %}{{ institution.get_member_count }}{% endif %} | 
-                    Location: {% if institution.city_town %} {{ institution.city_town }}, {% endif %} {% if institution.state_province_region %} {{ institution.state_province_region }}, {% endif %} {% if institution.country.name %} {{ institution.country.name }}{% endif %}
-                    {% if not institution.city_town and not institution.state_province_region and not institution.country %} None specified {% endif %}
+                    Location: {{ institution.get_location }}
                 </p>
             </div>
             <div><p class="dashcard-description description-sm">

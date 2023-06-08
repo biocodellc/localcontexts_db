@@ -1,7 +1,19 @@
 {% extends 'register-base.html' %} {% block title %} Preparation Step {% endblock %} {% load static %} {% block card %}
 
     <div class="w-90">
-        <h2 class="no-top-margin">Preparation Step</h2>
+        <div class="flex-this space-between">
+            <h2 class="no-top-margin">Preparation Step</h2>
+            {% if community %}
+                <div>
+                    <a href="{% url 'download-community-support-letter' %}" class="darkteal-text underline-hover"> Download Support Letter Template <i class="fa-solid fa-download"></i></a>
+                </div>
+            {% endif %}
+            {% if institution %}
+                <div>
+                    <a href="{% url 'download-institution-support-letter' %}" class="darkteal-text underline-hover"> Download Support Letter Template <i class="fa-solid fa-download"></i></a>
+                </div>
+            {% endif %}
+        </div>
         <p class="bold">Things to know before you start creating a new account.</p>
         <p>
             {% if community %}
