@@ -1518,8 +1518,9 @@ if (window.location.href.includes('create-institution')) {
     const hiddenInputField = document.getElementById('institutionIDROR')
     const createInstitutionBtn = document.getElementById('createInstitutionBtn')
     const clearFormBtn = document.getElementById('clearFormBtn')
-    const form = document.getElementById('createInstitutionForm')
+    const descriptionField = document.getElementById('id_description')
 
+    let characterCounter = document.getElementById('charCount')
     let delayTimer
 
     createInstitutionBtn.disabled = true
@@ -1528,7 +1529,6 @@ if (window.location.href.includes('create-institution')) {
         clearTimeout(delayTimer)
 
         const inputValue = nameInputField.value
-
         if (inputValue.length >= 3) { // Minimum characters required before making a request
             let queryURL = 'https://api.ror.org/organizations?query='
             
@@ -1545,14 +1545,21 @@ if (window.location.href.includes('create-institution')) {
 
     clearFormBtn.addEventListener('click', (e) => {
         e.preventDefault()
-        form.reset()
-        nameInputField.focus();
+        nameInputField.value = ''
+        nameInputField.focus()
         createInstitutionBtn.disabled = true
 
         if (nameInputField.getAttribute('readonly', true) && nameInputField.classList.contains('readonly-input')) {
             nameInputField.removeAttribute('readonly')
-            nameInputField.classList.remove('readonly-input')    
+            nameInputField.classList.remove('readonly-input')
         }
+
+        cityTownInputField.value = ''
+        stateProvRegionInputField.value = ''
+        countryInputField.value = ''
+        descriptionField.value = ''
+
+        characterCounter.textContent = '200/200'
     })
 
     function showSuggestions(items) {
