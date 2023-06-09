@@ -228,14 +228,19 @@ def update_institution(request, pk):
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
-
     else:
         if request.method == "POST":
             update_form = UpdateInstitutionForm(request.POST, request.FILES, instance=institution)
-            if update_form.is_valid():
-                update_form.save()
-                messages.add_message(request, messages.SUCCESS, 'Updated!')
+
+            if 'clear_image' in request.POST:
+                institution.image = None
+                institution.save()
                 return redirect('update-institution', institution.id)
+            else:
+                if update_form.is_valid():
+                    update_form.save()
+                    messages.add_message(request, messages.SUCCESS, 'Updated!')
+                    return redirect('update-institution', institution.id)
         else:
             update_form = UpdateInstitutionForm(instance=institution)
 

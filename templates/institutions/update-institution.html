@@ -23,7 +23,7 @@
                 </div>
 
                 <div class="w-70">
-                    <form method="POST" action="{% url 'update-institution' institution.id %}" enctype="multipart/form-data">
+                    <form id="updateInstitutionForm" method="POST" action="{% url 'update-institution' institution.id %}" enctype="multipart/form-data">
                         {% csrf_token %}
 
                         <div>
@@ -62,9 +62,32 @@
 
                         {% endif %}
 
-                        <div class="margin-top-8 w-90">
-                            {{ update_form.image.label }} <br>
-                            {{ update_form.image }}
+                        <div class="margin-top-16">
+                            <div class="hide">{{ update_form.image }}</div>
+
+                            <div id="defaultPlaceholderUrl" data-url="{% static 'images/placeholders/institution-place.jpg' %}"></div>
+
+                            <div class="flex-this space-between">
+                                <div class="w-50">
+                                    <div id="imagePreviewContainer" class="imgPreviewContainer">
+                                        {% if not institution.image %} 
+                                            <img src="{% static 'images/placeholders/institution-place.jpg' %}">
+                                        {% else %}
+                                            <img src="{{ update_form.instance.image.url }}" alt="{{ update_form.instance.institution_name }} image">
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="flex-this">
+                                    <div>
+                                        <button id="altImageUploadBtn" class="primary-btn green-btn margin-right-8">Upload Image <i class="fa-solid fa-upload"></i></button> 
+                                    </div>
+                                    <div>
+                                        <button id="clearImageBtn" class="primary-btn white-btn" name="clear_image">Clear Image</button>
+                                    </div>
+                                </div>                                
+                            </div>
+
                             {% if update_form.image.errors %}
                                 <div class="msg-red w-50"><small>{{ update_form.image.errors.as_text }}</small></div> 
                             {% endif %}

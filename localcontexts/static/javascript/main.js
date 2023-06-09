@@ -24,8 +24,8 @@ function disableSubmitRegistrationBtn() {
     registerUserBtn.innerText = 'Submitting...'
     
     window.addEventListener('load', function() {
-        registerUserBtn.innerText = oldValue;
-        registerUserBtn.removeAttribute('disabled');
+        registerUserBtn.innerText = oldValue
+        registerUserBtn.removeAttribute('disabled')
     })
 } 
 
@@ -1602,3 +1602,39 @@ if (window.location.href.includes('create-institution')) {
     
     function clearSuggestions() { suggestionsContainer.innerHTML = '' }
 }
+
+if (window.location.href.includes('/institutions/update/') || window.location.href.includes('/communities/update/')) {
+    const realImageUploadBtn = document.getElementById('institutionImgUploadBtn')
+    const customImageUploadBtn = document.getElementById('altImageUploadBtn')
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer')
+
+    function showFileName() {
+        const selectedFile = realImageUploadBtn.files[0]
+
+        if (selectedFile) {
+            showImagePreview(selectedFile)
+        } else {
+            clearImagePreview()
+        }
+    }
+
+    function showImagePreview(file) {
+        const reader = new FileReader()
+        reader.onload = function(e) {
+            const imagePreview = document.createElement('img')
+            imagePreview.src = e.target.result
+            imagePreviewContainer.innerHTML = ''
+            imagePreviewContainer.appendChild(imagePreview)
+        }
+        reader.readAsDataURL(file)
+    }
+
+    function clearImagePreview() {
+        imagePreviewContainer.innerHTML = ''
+    }
+
+    customImageUploadBtn.addEventListener('click', function(e) {
+        e.preventDefault()
+        realImageUploadBtn.click()
+    })
+ }

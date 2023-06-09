@@ -213,15 +213,21 @@ def update_community(request, pk):
     
     else:
         update_form = UpdateCommunityForm(instance=community)
-        if member_role == 'admin': # Only admins can change the form 
-            if request.method == "POST":
-                update_form = UpdateCommunityForm(request.POST, request.FILES, instance=community)
+
+        if request.method == "POST":
+            update_form = UpdateCommunityForm(request.POST, request.FILES, instance=community)
+            
+            if 'clear_image' in request.POST:
+                community.image = None
+                community.save()
+                return redirect('update-community', community.id)
+            else:
                 if update_form.is_valid():
                     update_form.save()
                     messages.add_message(request, messages.SUCCESS, 'Updated!')
                     return redirect('update-community', community.id)
-            else:
-                update_form = UpdateCommunityForm(instance=community)
+        else:
+            update_form = UpdateCommunityForm(instance=community)
 
         context = {
             'community': community,
