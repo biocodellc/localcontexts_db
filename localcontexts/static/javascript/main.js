@@ -1603,8 +1603,8 @@ if (window.location.href.includes('create-institution')) {
     function clearSuggestions() { suggestionsContainer.innerHTML = '' }
 }
 
-if (window.location.href.includes('/institutions/update/') || window.location.href.includes('/communities/update/')) {
-    const realImageUploadBtn = document.getElementById('institutionImgUploadBtn') || document.getElementById('communityImgUploadBtn')
+if (window.location.href.includes('/institutions/update/') || window.location.href.includes('/communities/update/') || window.location.href.includes('/researchers/update/')) {
+    const realImageUploadBtn = document.getElementById('institutionImgUploadBtn') || document.getElementById('communityImgUploadBtn') || document.getElementById('researcherImgUploadBtn')
     const customImageUploadBtn = document.getElementById('altImageUploadBtn')
     const imagePreviewContainer = document.getElementById('imagePreviewContainer')
 

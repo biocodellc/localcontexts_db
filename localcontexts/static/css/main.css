@@ -1334,6 +1334,7 @@ i[data-tooltip]:hover:after {
     pointer-events: none;
 }
 
+/* Account settings: image upload */
 .imgPreviewContainer {
     width: 286px;
     height: 160.88px;
