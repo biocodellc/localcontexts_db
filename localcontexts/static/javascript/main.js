@@ -1604,7 +1604,7 @@ if (window.location.href.includes('create-institution')) {
 }
 
 if (window.location.href.includes('/institutions/update/') || window.location.href.includes('/communities/update/')) {
-    const realImageUploadBtn = document.getElementById('institutionImgUploadBtn')
+    const realImageUploadBtn = document.getElementById('institutionImgUploadBtn') || document.getElementById('communityImgUploadBtn')
     const customImageUploadBtn = document.getElementById('altImageUploadBtn')
     const imagePreviewContainer = document.getElementById('imagePreviewContainer')
 
@@ -1634,6 +1634,7 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
     }
 
     customImageUploadBtn.addEventListener('click', function(e) {
+        console.log('click')
         e.preventDefault()
         realImageUploadBtn.click()
     })

@@ -54,7 +54,7 @@ class UpdateCommunityForm(forms.ModelForm):
             'state_province_region': forms.TextInput(attrs={'class': 'w-100'}),
             'city_town': forms.TextInput(attrs={'class': 'w-100'}),
             'description': forms.Textarea(attrs={'rows': 3, 'class': 'w-100'}),
-            'image': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id': 'institutionImgUploadBtn', 'onchange': 'showFileName()'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id': 'communityImgUploadBtn', 'onchange': 'showFileName()'}),
         }
 
 class InviteMemberForm(forms.ModelForm):
