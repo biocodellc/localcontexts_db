@@ -4,59 +4,80 @@
     <div class="margin-bottom-1">
         <h2>Confirmation step</h2>
         <p>
-            {% if community %}
-                As this account will be able to apply Labels on behalf of the community it should be approved by an appropriate governance entity. You can provide contact details for an appropriate representative to confirm the establishment of this account for your community, you can also upload a letter of support.
-            {% endif %}
-            {% if institution %}
-                As this account will be able to apply Notices on behalf of the institution it should be approved by an appropriate manager. You can provide contact details for an appropriate manager to confirm the establishment of this account for your institution, you can also upload a letter of support.
-            {% endif %}
+            This account will represent your 
+            {% if institution %} institution, so the creation of this account must be approved by the appropriate representative from your institution.{% endif %}
+            {% if community %}community, so the creation of this account must be confirmed by the appropriate representative of your community. {% endif %}
+            <br><br>      
+            This step can be completed by providing either:
+            <ul>
+                <li>
+                    The name and email of a representative, who will be contacted by our team to confirm, or
+                </li>
+                <li>
+                    A letter from a representative detailing their approval to create this account.   
+                </li>
+            </ul>
         </p>    
     </div>
     
-    <form action="" method="POST" enctype="multipart/form-data" class="flex-this column w-100">
+    <form action="" method="POST" enctype="multipart/form-data" class="w-100">
         {% csrf_token %}
 
-        <div class="flex-this space-between margin-right-1">
-            <div class="w-50 margin-right-1">
-                <div>
-                    <label for="contact_name">
-                        {% if community %} Community {% endif %} 
-                        {% if institution %} Institution {% endif %} 
-                        Confirmation Contact Name
-                    </label>
-                    {{ form.contact_name }}<br>
-                    {% if form.contact_name.errors %}
-                        <div class="msg-red w-50"><small>{{ form.contact_name.errors.as_text }}</small></div> 
-                    {% endif %}
-                </div>
-        
-                <div class="margin-top-1">
-                    <label for="contact_email">
-                        {% if community %} Community {% endif %} 
-                        {% if institution %} Institution {% endif %} 
-                        Confirmation Contact Email
-                    </label>
-                    {{ form.contact_email }} <br>
-                    {% if form.contact_email.errors %}
-                        <div class="msg-red w-50"><small>{{ form.contact_email.errors.as_text }}</small></div> 
-                    {% endif %}
-                </div>
+        <div class="flex-this space-between margin-bottom-16">
+            <div class="margin-right-8 w-100">
+                <label for="contact_name">
+                    Contact name
+                </label>
+                {{ form.contact_name }}<br>
+                {% if form.contact_name.errors %}
+                    <div class="msg-red w-50"><small>{{ form.contact_name.errors.as_text }}</small></div> 
+                {% endif %}
             </div>
     
-            <div class="w-50 margin-left-1">
-                <div>
-                    <label for="support_document">Support Document</label>
-                    {{ form.support_document }}
-                    {% if form.support_document.errors %}
-                        <div class="msg-red w-50"><small>{{ form.support_document.errors.as_text }}</small></div> 
-                    {% endif %}
-                </div>
+            <div class="w-100">
+                <label for="contact_email">
+                    Contact email
+                </label>
+                {{ form.contact_email }} <br>
+                {% if form.contact_email.errors %}
+                    <div class="msg-red w-50"><small>{{ form.contact_email.errors.as_text }}</small></div> 
+                {% endif %}
             </div>
         </div>
 
-        <div class="flex-this flex-end">
-            <button class="primary-btn action-btn margin-top-2">Get Started <i class="fa fa-arrow-right"></i></button>
+        <div class="margin-top-16 margin-bottom-16 flex-this w-100">
+            <div class="w-50 margin-right-8">
+                <div>
+                    {% if community %}
+                        <a href="{% url 'download-community-support-letter' %}" class="primary-btn white-btn btn-width__longer"> Download letter template <i class="fa-solid fa-download"></i></a>
+                    {% endif %}
+                    {% if institution %}
+                        <a href="{% url 'download-institution-support-letter' %}" class="primary-btn white-btn btn-width__longer"> Download letter template <i class="fa-solid fa-download"></i></a>
+                    {% endif %}
+                </div>  
+            </div>
+
+            <div class="w-50">
+                <div class="hide">{{ form.support_document }}</div>
+                <button id="customFileUploadBtn" class="primary-btn green-btn margin-right-8">Upload letter <i class="fa-solid fa-upload"></i></button> 
+                {% if form.support_document.errors %}
+                    <div class="msg-red w-50"><small>{{ form.support_document.errors.as_text }}</small></div> 
+                {% endif %}
+            </div>
         </div>
+
+        <div class="flex-this space-between">
+            <div>
+                <p>
+                    For more information about this step, <a href="https://localcontexts.org/support/getting-started-on-the-hub/#confirmation-step" class="underline-hover darkteal-text">see our website</a>.
+                </p>
+            </div>
+
+            <div class="flex-this flex-end">
+                <button class="primary-btn action-btn margin-top-2">Continue <i class="fa fa-arrow-right"></i></button>
+            </div>            
+        </div>
+
     </form>
 
 </div>

@@ -27,6 +27,7 @@ class ConfirmCommunityForm(forms.ModelForm):
         widgets = {
             'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
             'contact_email': forms.EmailInput(attrs={'class': 'w-100', 'required': 'required'}),
+            'support_document': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id': 'communitySupportLetterUploadBtn', 'onchange': 'showFileName()'}),
         }
 
     def clean_support_document(self):
@@ -54,7 +55,7 @@ class UpdateCommunityForm(forms.ModelForm):
             'state_province_region': forms.TextInput(attrs={'class': 'w-100'}),
             'city_town': forms.TextInput(attrs={'class': 'w-100'}),
             'description': forms.Textarea(attrs={'rows': 3, 'class': 'w-100'}),
-            'image': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id': 'communityImgUploadBtn', 'onchange': 'showFileName()'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id': 'communityImgUploadBtn', 'onchange': 'showFile()'}),
         }
 
 class InviteMemberForm(forms.ModelForm):

@@ -265,6 +265,7 @@ input:focus {
 /* ACTION Buttons / Register,Sign in, etc. */
 .primary-btn {
     display: block;
+    /* height: 50px; */
     padding: 8px 16px;
     border-radius: 4px;
     font-size: 14px;
@@ -277,6 +278,10 @@ input:focus {
 .default-btn-width {
     max-width: 110px;
     min-width: 110px;
+}
+
+.btn-width__longer {
+    width: 235px;
 }
 
 .action-btn {

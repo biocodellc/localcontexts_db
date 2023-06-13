@@ -61,6 +61,7 @@ class ConfirmInstitutionForm(forms.ModelForm):
         widgets = {
             'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
             'contact_email': forms.EmailInput(attrs={'class': 'w-100', 'required': 'required'}),
+            'support_document': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id': 'institutionSupportLetterUploadBtn', 'onchange': 'showFileName()'}),
         }
 
     def clean_support_document(self):
@@ -88,5 +89,5 @@ class UpdateInstitutionForm(forms.ModelForm):
             'city_town': forms.TextInput(attrs={'class': 'w-100'}),
             'country': forms.TextInput(attrs={'class': 'w-100'}),
             'description': forms.Textarea(attrs={'class': 'w-100', 'rows': 3,}),
-            'image': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id': 'institutionImgUploadBtn', 'onchange': 'showFileName()'}),
+            'image': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id': 'institutionImgUploadBtn', 'onchange': 'showFile()'}),
         }

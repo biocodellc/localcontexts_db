@@ -1608,7 +1608,7 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
     const customImageUploadBtn = document.getElementById('altImageUploadBtn')
     const imagePreviewContainer = document.getElementById('imagePreviewContainer')
 
-    function showFileName() {
+    function showFile() {
         const selectedFile = realImageUploadBtn.files[0]
 
         if (selectedFile) {
@@ -1637,5 +1637,21 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
         console.log('click')
         e.preventDefault()
         realImageUploadBtn.click()
+    })
+ }
+
+ if (window.location.href.includes('/confirm-institution/') || window.location.href.includes('/confirm-community/')) {
+    const realFileUploadBtn = document.getElementById('communitySupportLetterUploadBtn') || document.getElementById('institutionSupportLetterUploadBtn')
+    const customFileUploadBtn = document.getElementById('customFileUploadBtn')
+
+    function showFileName() {
+        const selectedFile = realFileUploadBtn.files[0]
+        customFileUploadBtn.innerHTML = `${selectedFile.name} <i class="fa-solid fa-check"></i>`
+    }
+
+    customFileUploadBtn.addEventListener('click', function(e) {
+        // console.log('click')
+        e.preventDefault()
+        realFileUploadBtn.click()
     })
  }
