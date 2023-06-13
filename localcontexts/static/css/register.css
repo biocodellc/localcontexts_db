@@ -194,7 +194,7 @@ input[type=checkbox] {
 
 .account-card {
   width: 218px;
-  height: 383px;
+  height: 390px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -257,4 +257,42 @@ input[type=checkbox] {
 
 .test-hub-div small {
     font-size: 14px;
+}
+
+.create-account__container-width__errors {
+    width: 59%;
+}
+
+.create-account__container-width__buttons {
+    width: 45%;
+}
+
+.blue-highlight {
+    background-color: #E6F1F3;
+    padding: 5px 8px;
+    border-radius: 3px;
+}
+
+.account-registration-container {
+    overflow: scroll;
+    overflow-x: hidden;
+    padding: 20px;
+}
+
+/* scrollbar appearance */
+.account-registration-container::-webkit-scrollbar {
+    width: 10px;
+}
+  
+.account-registration-container::-webkit-scrollbar-thumb {
+    background-color: #888; /* Color of the scrollbar thumb */
+    border-radius: 6px; /* Rounded corners */
+}
+  
+.account-registration-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Color of the scrollbar thumb on hover */
+}
+  
+.account-registration-container::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color of the scrollbar track */
 }

@@ -1,6 +1,6 @@
 {% extends 'register-base.html' %} {% block title %} Create Institution {% endblock %}{% load static %} {% block card %}
 
-<div class="flex-this column w-90">
+<div class="flex-this column account-registration-container">
     <div class="flex-this space-between">
         <div><h2 class="no-top-margin margin-bottom-8">Institution Account</h2></div>
         <div>Or <a class="darkteal-text underline-hover" href="{% url 'connect-institution' %}">request to join an existing institution</a>  </div>
@@ -20,22 +20,24 @@
             {{ form.institution_name }}
             <div id="suggestionsContainer"></div>
         </div>
-        <small>These institutions come from <a class="darkteal-text underline-hover" href="https://ror.org/" target="_blank" rel="noopener">ROR <i class="fa-regular fa-arrow-up-right-from-square fa-2xs"></i></a>. If your institution is not listed here, <a href="{% url 'create-custom-institution' %}" class="darkteal-text underline-hover pointer">please fill out this form</a>.</small>
+        <div>
+            <p class="blue-highlight">These institutions come from <a class="darkteal-text underline-hover" href="https://ror.org/" target="_blank" rel="noopener">ROR <i class="fa-regular fa-arrow-up-right-from-square fa-2xs"></i></a>. If your institution is not listed here, <a href="{% url 'create-custom-institution' %}" class="darkteal-text underline-hover pointer">fill out this form</a>.</p>
+        </div>
 
 
         <div class="w-100 flex-this">
-            <div class="w-50 pad-top-1-5 margin-right-1">
+            <div class="w-50 margin-right-1">
                 <label class="pad-top-1-5" for="city_town">Town or City</label><br>
                 {{ form.city_town }}
             </div>
 
-            <div class="w-50 pad-top-1-5">
+            <div class="w-50">
                 <label for="state_province_region">State, Province, or Region</label><br>
                 {{ form.state_province_region }}
             </div>
         </div>
 
-        <div>
+        <div class="margin-top-8">
             <label class="pad-top-1-5" for="country">Country</label><br>
             {{ form.country }}                
         </div>
@@ -53,9 +55,8 @@
             <small id="charCount" class="block text-align-right">200/200</small>
         </div>
 
-        <div class="flex-this space-between">
-            <div class="w-60">
-
+        <div class="flex-this space-between margin-top-8">
+            <div class="create-account__container-width__errors">
                 {% if form.errors %}
                     {% for field_name, errors in form.errors.items %}
                         <div class="red-text">
@@ -71,11 +72,11 @@
             </div>
             
             {{ form.ror_id }}
-            <div class="flex-this">
-                <div class="margin-top-8 margin-right-8">
-                    <button id="clearFormBtn" class="primary-btn white-btn margin-top-2">Clear form <i class="fa-regular fa-eraser"></i></button>
+            <div class="flex-this creat-account__container-width__buttons">
+                <div class="margin-right-8">
+                    <button id="clearFormBtn" class="primary-btn white-btn btn-width__clear-form margin-top-2">Clear form <i class="fa-regular fa-eraser"></i></button>
                 </div>
-                <div class="margin-top-8">
+                <div>
                     <button id="createInstitutionBtn" class="primary-btn disabled-btn margin-top-2" name="create-institution-btn" disabled>Continue <i class="fa fa-arrow-right"></i></button>
                 </div>                
             </div>

@@ -24,8 +24,8 @@ function disableSubmitRegistrationBtn() {
     registerUserBtn.innerText = 'Submitting...'
     
     window.addEventListener('load', function() {
-        registerUserBtn.innerText = oldValue;
-        registerUserBtn.removeAttribute('disabled');
+        registerUserBtn.innerText = oldValue
+        registerUserBtn.removeAttribute('disabled')
     })
 } 
 
@@ -1602,3 +1602,64 @@ if (window.location.href.includes('create-institution')) {
     
     function clearSuggestions() { suggestionsContainer.innerHTML = '' }
 }
+
+if (window.location.href.includes('/institutions/update/') || window.location.href.includes('/communities/update/') || window.location.href.includes('/researchers/update/')) {
+    const realImageUploadBtn = document.getElementById('institutionImgUploadBtn') || document.getElementById('communityImgUploadBtn') || document.getElementById('researcherImgUploadBtn')
+    const customImageUploadBtn = document.getElementById('altImageUploadBtn')
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer')
+
+    function showFile() {
+        const selectedFile = realImageUploadBtn.files[0]
+
+        if (selectedFile) {
+            showImagePreview(selectedFile)
+        } else {
+            clearImagePreview()
+        }
+    }
+
+    function showImagePreview(file) {
+        const reader = new FileReader()
+        reader.onload = function(e) {
+            const imagePreview = document.createElement('img')
+            imagePreview.src = e.target.result
+            imagePreviewContainer.innerHTML = ''
+            imagePreviewContainer.appendChild(imagePreview)
+        }
+        reader.readAsDataURL(file)
+    }
+
+    function clearImagePreview() {
+        imagePreviewContainer.innerHTML = ''
+    }
+
+    customImageUploadBtn.addEventListener('click', function(e) {
+        console.log('click')
+        e.preventDefault()
+        realImageUploadBtn.click()
+    })
+ }
+
+ if (window.location.href.includes('/confirm-institution/') || window.location.href.includes('/confirm-community/')) {
+    const realFileUploadBtn = document.getElementById('communitySupportLetterUploadBtn') || document.getElementById('institutionSupportLetterUploadBtn')
+    const customFileUploadBtn = document.getElementById('customFileUploadBtn')
+    const form = document.querySelector('#confirmationForm')
+    const contactEmailInput = document.getElementById('communityContactEmailField') || document.getElementById('institutionContactEmailField')
+
+    function showFileName() {
+        const selectedFile = realFileUploadBtn.files[0]
+        customFileUploadBtn.innerHTML = `${selectedFile.name} <i class="fa-solid fa-check"></i>`
+    }
+
+    customFileUploadBtn.addEventListener('click', function(e) {
+        e.preventDefault()
+        realFileUploadBtn.click()
+    })
+
+    form.addEventListener('submit', function(e) {
+        if (realFileUploadBtn.files.length === 0 && contactEmailInput.value.trim() === '') {
+            e.preventDefault()
+            alert('Please either enter a contact email or upload a support file')
+        }
+    })
+ }

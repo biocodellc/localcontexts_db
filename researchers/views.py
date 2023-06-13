@@ -140,19 +140,24 @@ def update_researcher(request, pk):
         if request.method == 'POST':
             update_form = UpdateResearcherForm(request.POST, request.FILES, instance=researcher)
 
-            if update_form.is_valid():
-                data = update_form.save(commit=False)
-                data.save()
-
-                if not researcher.orcid:
-                    orcid_id = request.POST.get('orcidId')
-                    orcid_token = request.POST.get('orcidIdToken')
-                    researcher.orcid_auth_token = orcid_token
-                    researcher.orcid = orcid_id
-                    researcher.save()
-
-                messages.add_message(request, messages.SUCCESS, 'Updated!')
+            if 'clear_image' in request.POST:
+                researcher.image = None
+                researcher.save()
                 return redirect('update-researcher', researcher.id)
+            else:
+                if update_form.is_valid():
+                    data = update_form.save(commit=False)
+                    data.save()
+
+                    if not researcher.orcid:
+                        orcid_id = request.POST.get('orcidId')
+                        orcid_token = request.POST.get('orcidIdToken')
+                        researcher.orcid_auth_token = orcid_token
+                        researcher.orcid = orcid_id
+                        researcher.save()
+
+                    messages.add_message(request, messages.SUCCESS, 'Updated!')
+                    return redirect('update-researcher', researcher.id)
         else:
             update_form = UpdateResearcherForm(instance=researcher)
         
