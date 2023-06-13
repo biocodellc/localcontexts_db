@@ -267,7 +267,7 @@ input:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 50px;
+    min-height: 50px;
     padding: 8px 16px;
     border-radius: 4px;
     font-size: 14px;

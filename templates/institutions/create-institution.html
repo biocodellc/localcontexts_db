@@ -53,9 +53,8 @@
             <small id="charCount" class="block text-align-right">200/200</small>
         </div>
 
-        <div class="flex-this space-between">
-            <div class="w-60">
-
+        <div class="flex-this space-between margin-top-8">
+            <div class="create-account__container-width__errors">
                 {% if form.errors %}
                     {% for field_name, errors in form.errors.items %}
                         <div class="red-text">
@@ -71,11 +70,11 @@
             </div>
             
             {{ form.ror_id }}
-            <div class="flex-this">
-                <div class="margin-top-8 margin-right-8">
-                    <button id="clearFormBtn" class="primary-btn white-btn margin-top-2">Clear form <i class="fa-regular fa-eraser"></i></button>
+            <div class="flex-this creat-account__container-width__buttons">
+                <div class="margin-right-8">
+                    <button id="clearFormBtn" class="primary-btn white-btn btn-width__clear-form margin-top-2">Clear form <i class="fa-regular fa-eraser"></i></button>
                 </div>
-                <div class="margin-top-8">
+                <div>
                     <button id="createInstitutionBtn" class="primary-btn disabled-btn margin-top-2" name="create-institution-btn" disabled>Continue <i class="fa fa-arrow-right"></i></button>
                 </div>                
             </div>

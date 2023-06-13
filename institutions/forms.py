@@ -60,7 +60,7 @@ class ConfirmInstitutionForm(forms.ModelForm):
         fields = ['contact_name', 'contact_email', 'support_document']
         widgets = {
             'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
-            'contact_email': forms.EmailInput(attrs={'class': 'w-100', 'required': 'required'}),
+            'contact_email': forms.EmailInput(attrs={'class': 'w-100', 'id': 'institutionContactEmailField'}),
             'support_document': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id': 'institutionSupportLetterUploadBtn', 'onchange': 'showFileName()'}),
         }
 

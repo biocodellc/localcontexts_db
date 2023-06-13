@@ -258,3 +258,11 @@ input[type=checkbox] {
 .test-hub-div small {
     font-size: 14px;
 }
+
+.create-account__container-width__errors {
+    width: 59%;
+}
+
+.create-account__container-width__buttons {
+    width: 45%;
+}

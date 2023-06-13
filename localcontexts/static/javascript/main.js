@@ -1643,6 +1643,8 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
  if (window.location.href.includes('/confirm-institution/') || window.location.href.includes('/confirm-community/')) {
     const realFileUploadBtn = document.getElementById('communitySupportLetterUploadBtn') || document.getElementById('institutionSupportLetterUploadBtn')
     const customFileUploadBtn = document.getElementById('customFileUploadBtn')
+    const form = document.querySelector('#confirmationForm')
+    const contactEmailInput = document.getElementById('communityContactEmailField') || document.getElementById('institutionContactEmailField')
 
     function showFileName() {
         const selectedFile = realFileUploadBtn.files[0]
@@ -1652,5 +1654,12 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
     customFileUploadBtn.addEventListener('click', function(e) {
         e.preventDefault()
         realFileUploadBtn.click()
+    })
+
+    form.addEventListener('submit', function(e) {
+        if (realFileUploadBtn.files.length === 0 && contactEmailInput.value.trim() === '') {
+            e.preventDefault()
+            alert('Please either enter a contact email or upload a support file')
+        }
     })
  }
