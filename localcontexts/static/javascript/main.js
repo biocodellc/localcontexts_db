@@ -1650,7 +1650,6 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
     }
 
     customFileUploadBtn.addEventListener('click', function(e) {
-        // console.log('click')
         e.preventDefault()
         realFileUploadBtn.click()
     })
