@@ -315,6 +315,15 @@ input:focus {
     color: #fff;
 }
 
+.blue-btn {
+    background-color: #E6F1F3;
+    color: #007385;
+}
+
+.blue-btn:hover:not([disabled]) {
+    background-color: #d2eef3;
+}
+
 .orange-btn {
     background-color: #FF6000;
 }

@@ -48,12 +48,16 @@
         <div class="margin-top-16 margin-bottom-16 flex-this w-100">
             <div class="w-50 margin-right-8">
                 <div>
-                    {% if community %}
-                        <a href="{% url 'download-community-support-letter' %}" class="primary-btn white-btn btn-width__support-letter-btn"> Download letter template <i class="fa-solid fa-download"></i></a>
-                    {% endif %}
-                    {% if institution %}
-                        <a href="{% url 'download-institution-support-letter' %}" class="primary-btn white-btn btn-width__support-letter-btn"> Download letter template <i class="fa-solid fa-download"></i></a>
-                    {% endif %}
+                    <a 
+                        {% if community %}
+                            href="{% url 'download-community-support-letter' %}" 
+                        {% endif %}
+                        {% if institution %}
+                            href="{% url 'download-institution-support-letter' %}"
+                        {% endif %}
+
+                        class="primary-btn blue-btn btn-width__support-letter-btn"
+                    > Download letter template <i class="fa-solid fa-download"></i></a>
                 </div>  
             </div>
 
