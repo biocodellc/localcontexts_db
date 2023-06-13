@@ -311,8 +311,7 @@ input:focus {
 }
 
 .white-btn:hover:not([disabled]) {
-    background-color: #007385;
-    color: #fff;
+    background-color: #E6F1F3;
 }
 
 .blue-btn {

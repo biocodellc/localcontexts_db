@@ -1,6 +1,6 @@
 {% extends 'register-base.html' %} {% block title %} Create Institution {% endblock %}{% load static %} {% block card %}
 
-<div class="flex-this column w-90">
+<div class="flex-this column account-registration-container">
     <div class="flex-this space-between">
         <div><h2 class="no-top-margin margin-bottom-8">Institution Account</h2></div>
         <div>Or <a class="darkteal-text underline-hover" href="{% url 'connect-institution' %}">request to join an existing institution</a>  </div>
@@ -20,8 +20,12 @@
             <label for="institution_name">Institution Name</label>
             {{ noror_form.institution_name }}
         </div>
-        <small>If your institution is listed on <a class="darkteal-text underline-hover" href="https://ror.org/" target="_blank" rel="noopener">ROR <i class="fa-regular fa-arrow-up-right-from-square fa-2xs"></i></a>, please fill out <a href="{% url 'create-institution' %}" class="darkteal-text underline-hover pointer">this form instead</a>.</small>
 
+        <div>
+            <p class="blue-highlight">
+                If your institution is listed on <a class="darkteal-text underline-hover" href="https://ror.org/" target="_blank" rel="noopener">ROR <i class="fa-regular fa-arrow-up-right-from-square fa-2xs"></i></a>, please fill out <a href="{% url 'create-institution' %}" class="darkteal-text underline-hover pointer">this form instead</a>.
+            </p>
+        </div>
 
         <div class="w-100 flex-this">
             <div class="w-50 pad-top-1-5 margin-right-1">
