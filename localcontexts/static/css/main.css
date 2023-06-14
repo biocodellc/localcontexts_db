@@ -44,6 +44,12 @@ body {
 .ul-no-bullets { list-style-type: none; }
 .ul-no-padding { padding-left: 0; }
 
+/* ol within ol will be a b c instead of 1 2 3 */
+ol ol {
+    counter-reset: subsection;
+    list-style-type: lower-alpha;
+}
+
 a { text-decoration: none; }
 
 /* FORM INPUTS */

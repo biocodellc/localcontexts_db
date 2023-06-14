@@ -31,19 +31,77 @@
 
 <div class="content-card content-card-space white-bg">
     <div class="flex-this space-between">
+        <div><h2 class="no-top-margin">Collections Care Notices</h2></div>
+        <div class="flex-this flex-end">
+            <div>
+                <a 
+                    href="#" 
+                    class="primary-btn blue-btn"
+                >
+                    Download Notices <i class="fa-solid fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="flex-this">
+        <div><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="119px" alt="black square with a rectangle and on hand on top and bottom in the middle in white"></div>
+        <div class="flex-this column margin-left-16">
+            <div class="w-80">
+                <p class="no-top-margin">
+                    <span class="bold">What are the Collections Care Notices? </span><br>
+                    The Collections Care (CC) Notices are visible tangible identifiers developed specifically for institutions and repositories to support proper cultural care and stewardship, 
+                    led by Indigenous protocols and authority. The CC Notices recognize that there are accompanying cultural rights, protocols, and responsibilities that govern the care, display, 
+                    and access to Ancestral Belongings and culturally sensitive materials within institutional collections. The CC Notices are for implementation by institutions and repositories 
+                    within already existing cultural care policy, workflows, and practices for culturally responsive stewardship.                 
+                </p>
+                <p>
+                    <span class="bold">How to apply Collections Care Notices</span><br>
+                    <ol>
+                        <li>
+                            Download the Collections Care Notices Notices zip file.<br>
+                            <ol>
+                                <li>
+                                    Collections Care Notices are applied physically to items and collections in institutional storage contexts. 
+                                    The zip file contains Notices in PNG and SVG. Physical labels containing the Notice, name, and QR code that can be printed on Avery stickers and applied to items. 
+                                    As well as a poster that displays all Notices and their descriptions for institutions to display on their walls.
+                                </li>
+                            </ol>
+                        </li>
+                        <li>
+                            Clearly display the overall Local Contexts (LC) Notice to show that Collection Care Notices are in use for items and collections within this room.
+                        </li>
+                    </ol>
+                </p> 
+                <p>
+                    <span class="bold">Planning to use the Collections Care Notices</span><br>
+                    <ol>
+                        <li>Engage with Indigenous stakeholders in the collections to determine culturally appropriate care and governance protocols and procedures.</li>
+                        <li>Register with the Local Contexts Hub at www.LocalContextsHub.org.</li>
+                        <li>Establish support at an institutional, departmental, or otherwise administrative policy level to endure the CC Notices receive adequate internal support in implementation and use.</li>
+                    </ol>
+                </p>             
+                <p>
+                    <span class="bold">Need more information about Collections Care Notices? </span><br>
+                    <a href="https://localcontexts.org/support/downloadable-resources/#usage-guides" class="darkteal-text underline-hover">Download our usage guide here <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
+                </p>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="content-card content-card-space white-bg">
+    <div class="flex-this space-between">
         <div><h2 class="no-top-margin">Open to Collaborate Notice</h2></div>
         <div class="flex-this flex-end">
-            <div class="margin-top-8 margin-right-8"><a id="addURLBtn" class="darkteal-text underline-hover pointer">Add Link</a></div>
+            <div class="margin-right-16"><a id="addURLBtn" class="primary-btn action-btn">Add Link <i class="fa-solid fa-circle-plus"></i></a></div>
             <div>
                 {% if otc_download_perm == 1 %}
-                <a 
-                    href="{% url 'download-open-to-collaborate-notice' otc_download_perm %}" 
-                    class="primary-btn white-btn"
-                >
-                    Download Notice</a>
+                    <a href="{% url 'download-open-to-collaborate-notice' otc_download_perm %}" class="primary-btn blue-btn">
+                        Download Notice <i class="fa-solid fa-download"></i>
+                    </a>
                 {% else %}
                     <div class="btn-with-helptext">
-                        <button class="primary-btn disabled-btn">Download Notice</button>
+                        <button class="primary-btn disabled-btn">Download Notice <i class="fa-solid fa-download"></i></button>
                         <span class="btn-help-text">
                             {% if institution %}
                                 {% if not institution.is_approved %}
@@ -148,7 +206,7 @@
 </div>
 
 <div class="content-card content-card-space white-bg">
-    <h2>Traditional Knowledge Notice</h2>
+    <h2 class="no-top-margin">Traditional Knowledge Notice</h2>
     <div class="flex-this border-bottom-solid-teal">
         <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" alt="black square with the letters TK in the middle in white"></div>
         <div class="flex-this column margin-left-16">
