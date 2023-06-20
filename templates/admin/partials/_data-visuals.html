@@ -1,0 +1,96 @@
+{% load static %}
+
+<!-- Pie Charts -->
+<div class="flex-this w-100">
+
+    <div class="w-33">
+        <h2 class="center-text">Registered Hub Accounts</h2>
+        <div style="height: 400px;">
+            <canvas id="accounts"></canvas>
+        </div>
+    </div>
+
+    <div class="w-33">
+        <div class="flex-this justify-center">
+            <h2>Project Activity</h2>
+            <div class="tooltip" style="margin-top: 15px; margin-left: 5px;"><strong>i</strong>
+                <span class="tooltiptext">Project activity status by project count.</span>
+            </div>
+        </div>
+        
+        <div style="height: 400px;">
+            <canvas id="projectActivity"></canvas>
+        </div>
+    </div>
+
+    <div class="w-33">
+        <h2 class="center-text">Customized Labels</h2>
+        <div class="flex-this justify-center">
+            <div class="tooltip" style="cursor: default;background-color: #007385;"></div>
+            <p class="margin-left-1 margin-right-1 no-top-margin">BC Labels</p>
+            <div class="tooltip" style="cursor: default;background-color: #EF6C00;"></div>
+            <p class="margin-left-1 margin-right-1 no-top-margin">TK Labels</p>
+        </div>
+        <div style="height: 400px;">
+            <canvas id="customizedLabels"></canvas>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Counts -->
+<div class="w-100">
+    <h1 class="center-text">Registered Users</h1>
+    <div id="colorPicker" class="flex-this space-between center-text justify-center margin-left-8 margin-right-8">
+        <div class="stats-count-div">
+            <div class="flex-this justify-center">
+                <h2 class="count-header">New Users</h2>
+                <div class="tooltip" style="margin-top: 15px; margin-left: 5px;"><strong>i</strong>
+                    <span class="tooltiptext">In the last 30 days.</span>
+                </div>
+            </div>
+            <p class="count-number">{{ recent_users_count }}</p>
+        </div>
+        <div class="stats-count-div">
+            <h2 class="count-header">All Users</h2>
+            <p class="count-number">{{ users_total }}</p>
+        </div>
+        <div class="stats-count-div">
+            <div class="flex-this justify-center">
+                <h2 class="count-header">Countries</h2>
+                <div class="tooltip" style="margin-top: 15px; margin-left: 5px;"><strong>i</strong>
+                    <span class="tooltiptext">Count based on user profiles.</span>
+                </div>
+            </div>
+            <p class="count-number">{{ country_count }}</p>
+        </div>
+        <div class="stats-count-div">
+            <h2 class="count-header">Projects</h2>
+            <p class="count-number">{{ projects_count }}</p>
+        </div>        
+    </div>
+</div>
+
+<!-- Line Charts -->
+<div class="w-100">
+    <h1 class="center-text">Hub Activity</h1>
+    <div class="flex-this justify-center">
+        <div class="tooltip" style="cursor: default;background-color: #EF6C00;"></div>
+        <p class="margin-left-8 margin-right-1 no-top-margin">New Users</p>
+        <div class="tooltip" style="cursor: default;background-color: #3876aa;"></div>
+        <p class="margin-left-8 margin-right-1 no-top-margin">New Projects</p>
+    </div>
+    <div class="auto-margin" style="height: 400px; width:95%;">
+        <canvas id="newUsers"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+    window.onload = function() {
+        pieChart('accounts', {{accountData|safe}});
+        pieChart('projectActivity', {{projectActivityData|safe}});
+        pieChart('customizedLabels', {{customizedLabelsData|safe}});
+        barChart('newUsers', {{newUsers|safe}});
+    };
+</script>

@@ -1,0 +1,23 @@
+{% extends 'admin/index.html' %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">Home</div>
+{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block content %}
+    {% if title != 'Dashboard' %}
+            <div id="content-main">
+                {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+            </div>    
+        {% else %}
+            {% include "admin/dashboard.html" %}
+        {% endif %}
+{% endblock %}
+
+{% block nav-sidebar %}
+    {% include "admin/nav_sidebar.html" %}
+{% endblock %}
+
+{% block sidebar %}{% endblock %}
