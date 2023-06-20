@@ -1,147 +1,17 @@
 {% load static %}
 
+<script src="{% static 'javascript/admin.js' %}"></script>
+
 <div class="dashboard">
-    <div class="dashboard-item">
+    <div class="w-100">
         <h2>Today: {% now "M. d, Y, H:i e" %}</h2>
     </div>
 
-    <div class="flex-this column">
+    <!-- Data Charts and Counts (Visualizations) -->
+    {% include 'admin/partials/_data-visuals.html' %}
 
-        <div class="dashboard-item-33">
-            <canvas id="accounts"></canvas>
-        </div>
-
-        <div class="dashboard-item-33">
-            <canvas id="projectActivity"></canvas>
-        </div>
-
-        <div class="dashboard-item-33">
-            <canvas id="customizedLabels"></canvas>
-        </div>
-    </div>
-
-    <div>
-        <h1 class="center-text">Registered Users</h1>
-        <div id="colorPicker" class="flex-this space-between center-text justify-center">
-            <div class="stats-count-div">
-                <h2 class="count-header">Communities</h2>
-                <p class="count-number">{{ community_count }}</p>
-            </div>
-            <div class="stats-count-div">
-                <h2 class="count-header">Institutions</h2>
-                <p class="count-number">{{ institution_count}}</p>
-            </div>
-            <div class="stats-count-div">
-                <h2 class="count-header">Researchers</h2>
-                <p class="count-number">{{ researcher_count }}</p>
-            </div>
-            <div class="stats-count-div">
-                <h2 class="count-header">Total</h2>
-                <p class="count-number">{{ reg_total }}</p>
-            </div>        
-        </div>
-    </div>
-
-    <div class="flex-this column">
-        <div class="dashboard-item-50">
-            <h2>Recent Project Action Updates</h2>
-            <hr class="searchbar-divider">
-
-            <div class="flex-this">
-                <div class="flex-this align-center">
-                    <form method="GET" action="" class="flex-this">
-                        <select name="sort" class="project-sort">
-                            <option
-                                class="darkteal-text pointer" 
-                                value="all"
-                            >
-                                Filter: All
-                            </option>
-                            <option
-                                class="darkteal-text pointer" 
-                                value="all"
-                            >
-                                Filter: Label(s) Added
-                            </option>
-                            <option
-                                class="darkteal-text pointer" 
-                                value="all"
-                            >
-                                Filter: Notice(s) Added
-                            </option>
-                            <option
-                                class="darkteal-text pointer" 
-                                value="all"
-                            >
-                                Filter: Project Created
-                            </option>
-                        </select>  
-                        <input class="primary-btn action-btn margin-left-8" type="submit" value="Filter"> 
-                    </form>
-                    <p class="flex-this right-text">Total:100</p>
-                </div>
-            </div>
-            <br>
-            <table class="projects-table">
-                <tr>
-                    <th>Action</th>
-                    <th>Date/Time</th>
-                </tr>
-                <tr>
-                    <td>TK A Label added to Project Name by Account Name</td>
-                    <td>April 20, 2023 4:00PM EST</td>
-                </tr>
-                <tr>
-                    <td>OTC Notice added to Account Name</td>
-                    <td>April 20, 2023 4:00PM EST</td>
-                </tr>
-                <tr>
-                    <td>Project Name created by Account Name</td>
-                    <td>April 20, 2023 4:00PM EST</td>
-                </tr>
-                <tr>
-                    <td>AI Notice added to Project Name by Account Name</td>
-                    <td>April 20, 2023 4:00PM EST</td>
-                </tr>
-            </table>
-        </div>
-    
-        <div class="dashboard-item-50">
-            <h2>Map</h2>
-            <hr class="searchbar-divider">
-            <div class="flex-this align-center">
-                <form method="GET" action="" class="flex-this">
-                    <select name="sort" class="project-sort">
-                        <option
-                            class="darkteal-text pointer" 
-                            value="all"
-                        >
-                            Filter: All
-                        </option>
-                        <option
-                            class="darkteal-text pointer" 
-                            value="all"
-                        >
-                            Filter: Communities
-                        </option>
-                        <option
-                            class="darkteal-text pointer" 
-                            value="all"
-                        >
-                            Filter: Institutions
-                        </option>
-                        <option
-                            class="darkteal-text pointer" 
-                            value="all"
-                        >
-                            Filter: Researchers
-                        </option>
-                    </select>  
-                    <input class="primary-btn action-btn margin-left-8" type="submit" value="Filter"> 
-                </form>
-            </div>
-        </div>
-    </div>
+    <!-- Action Tables -->
+    {% include 'admin/partials/_action-tables.html' %}
 
     <!-- ADMIN ACTIVITY LOG -->
     <!-- <div class="module" id="recent-actions-module">
@@ -170,13 +40,3 @@
         {% endif %}
     </div> -->
 </div>
-
-<script src="{% static 'javascript/admin.js' %}"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="text/javascript">
-    window.onload = function() {
-        pieChart('accounts', 'Registered Hub Accounts', {{accountData|safe}});
-        pieChart('projectActivity', 'Project Activity', {{projectActivityData|safe}});
-        pieChart('customizedLabels', 'Customized Labels', {{customizedLabels|safe}});
-    };
-</script>

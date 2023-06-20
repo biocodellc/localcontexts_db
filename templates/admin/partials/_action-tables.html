@@ -1,0 +1,483 @@
+{% load static %}
+
+<br>
+<div class="w-100">
+    <div class="flex-this column">
+        
+        <!-- User Actions -->
+        <div class="w-50 margin-left-16 margin-right-16">
+            <div class="flex-this space-between">
+                <div class="flex-this justify-center">
+                    <h2>Recent User Action Updates</h2>
+                    <div class="tooltip" style="margin-top: 15px; margin-left: 5px;"><strong>i</strong>
+                        <span class="tooltiptext">In the last 30 days.</span>
+                    </div>
+                </div>
+                <!-- <form method="GET" action="" class="flex-this align-center">
+                    <select name="sort" class="project-sort">
+                        <option
+                            class="darkteal-text pointer" 
+                            value="all"
+                        >
+                            Filter: All
+                        </option>
+                        <option
+                            class="darkteal-text pointer" 
+                            value="all"
+                        >
+                            Filter: Label(s) Added
+                        </option>
+                        <option
+                            class="darkteal-text pointer" 
+                            value="all"
+                        >
+                            Filter: Notice(s) Added
+                        </option>
+                        <option
+                            class="darkteal-text pointer" 
+                            value="all"
+                        >
+                            Filter: Project Created
+                        </option>
+                    </select>  
+                    <input class="primary-btn action-btn margin-left-8" type="submit" value="Filter"> 
+                </form> -->
+            </div>
+            <hr class="searchbar-divider">
+
+            <table class="projects-table">
+                <tr>
+                    <th>Action</th>
+                    <th>Type of Action</th>
+                    <th>Date/Time</th>
+                </tr>
+                {% for activity in user_activity %}
+                    <tr>
+                        {% if activity.action_type == 'Member Invitation' %}
+                            <td>
+                                <a href="/admin/accounts/profile/{{activity.sender_id}}/change/">
+                                    {% if activity.sender_first_name and activity.sender_last_name %}
+                                        {{ activity.sender_first_name }} {{ activity.sender_last_name }}
+                                    {% else %}
+                                        {{ activity.sender_username }}
+                                    {% endif %}
+                                </a>
+                                    invited 
+                                <a href="/admin/accounts/profile/{{ activity.recipient_id }}/change/">
+                                    {% if activity.recipient_first_name and activity.recipient_last_name %}
+                                        {{ activity.recipient_first_name }} {{ activity.recipient_last_name }}
+                                    {% else %}
+                                        {{ activity.recipient_username }}
+                                    {% endif %}
+                                </a>
+                                    to join 
+                                {% if activity.community_id %}
+                                    <a href="/admin/communities/community/{{ activity.community_id }}/change/">
+                                        {{ activity.community_name }}  
+                                    </a>
+                                {% elif activity.institution_id %}
+                                    <a href="/admin/institutions/institution/{{ activity.institution_id }}/change/">
+                                        {{ activity.institution_name }}
+                                    </a>
+                                {% endif %}
+                            </td>
+
+                        {% elif activity.action_type == 'Sign-Up Invitation' %}
+                            <td>
+                                <a href="/admin/accounts/profile/{{activity.sender_id}}/change/">
+                                    {% if activity.sender_first_name and activity.sender_last_name %}
+                                        {{ activity.sender_first_name }} {{ activity.sender_last_name }}
+                                    {% else %}
+                                        {{ activity.sender_username }}
+                                    {% endif %}
+                                </a>
+                                invited <b>{{ activity.recipient }}</b> to join the Hub
+                            </td>
+
+                        {% elif activity.action_type == 'New User' %}
+                            <td>
+                                <a href="/admin/accounts/profile/{{activity.user_id}}/change/">
+                                    {% if activity.user_first_name and activity.user_last_name %}
+                                        {{ activity.user_first_name }} {{ activity.user_last_name }}
+                                    {% else %}
+                                        {{ activity.user_username }}
+                                    {% endif %}
+                                </a>
+                                has joined the Hub
+                            </td>
+
+                        {% elif activity.action_type == 'New Researcher' %}
+                            <td>
+                                <a href="/admin/researchers/researcher/{{activity.user_id}}/change/">
+                                    {% if activity.user_first_name and activity.user_last_name %}
+                                        {{ activity.user_first_name }} {{ activity.user_last_name }}
+                                    {% else %}
+                                        {{ activity.user_username }}
+                                    {% endif %}
+                                </a>
+                                has created a Researcher account
+                            </td>
+
+                        {% elif activity.action_type == 'New Community' %}
+                            <td>
+                                <a href="/admin/accounts/profile/{{activity.community_creator_id}}/change/">
+                                    {% if activity.community_creator_first_name and activity.community_creator_last_name %}
+                                        {{ activity.community_creator_first_name }} {{ activity.community_creator_last_name }}
+                                    {% else %}
+                                        {{ activity.community_creator_username }}
+                                    {% endif %}
+                                </a>
+                                has created a Community account: 
+                                <a href="/admin/communities/community/{{activity.community_id}}/change">{{ activity.community_name }}</a>
+                            </td>
+
+                        {% elif activity.action_type == 'New Institution' %}
+                            <td>
+                                <a href="/admin/accounts/profile/{{activity.institution_creator_id}}/change/">
+                                    {% if activity.institution_creator_first_name and activity.institution_creator_last_name %}
+                                        {{ activity.institution_creator_first_name }} {{ activity.institution_creator_last_name }}
+                                    {% else %}
+                                        {{ activity.institution_creator_username }}
+                                    {% endif %}
+                                </a>
+                                has created an Institution account: 
+                                <a href="/admin/institutions/institution/{{activity.institution_id}}/change">{{ activity.institution_name }}</a>
+                            </td>
+
+                        {% endif%}
+                        <td>{{ activity.action_type}}</td>
+                        <td>{{ activity.date|date:'N j, Y,' }} {{ activity.date|time:'g:i A e' }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <p class="flex-this flex-end"><b>Total: {{ user_activity_count }}</b><span style="padding-left:5px;padding-right:5px;">|</span><a href="/admin/notifications/usernotification/?o=-7">View All</a></p>
+        </div>
+
+        <!-- Project Actions -->
+        <div class="w-50 margin-left-16 margin-right-16">
+            <div class="flex-this space-between">
+                <div class="flex-this justify-center">
+                    <h2>Recent Project Action Updates</h2>
+                    <div class="tooltip" style="margin-top: 15px; margin-left: 5px;"><strong>i</strong>
+                        <span class="tooltiptext">In the last 30 days.</span>
+                    </div>
+                </div>
+                <!-- <form method="GET" action="" class="flex-this align-center">
+                    <select name="sort" class="project-sort">
+                        <option
+                            class="darkteal-text pointer" 
+                            value="all"
+                        >
+                            Filter: All
+                        </option>
+                        <option
+                            class="darkteal-text pointer" 
+                            value="all"
+                        >
+                            Filter: Label(s) Added
+                        </option>
+                        <option
+                            class="darkteal-text pointer" 
+                            value="all"
+                        >
+                            Filter: Notice(s) Added
+                        </option>
+                        <option
+                            class="darkteal-text pointer" 
+                            value="all"
+                        >
+                            Filter: Project Created
+                        </option>
+                    </select>  
+                    <input class="primary-btn action-btn margin-left-8" type="submit" value="Filter"> 
+                </form> -->
+            </div>
+            <hr class="searchbar-divider">
+
+            <table class="projects-table">
+                <tr>
+                    <th>Action</th>
+                    <th>Type of Action</th>
+                    <th>Date/Time</th>
+                </tr>
+                {% for activity in project_activity_detail %}
+                    <tr>
+                        {% if activity.notification_type == 'Project Edited'%}
+                            <td>
+                                <a href="/projects/{{activity.reference_id}}" target="_blank">{{ activity.project_title }}</a>
+                                was edited by 
+                                {% if activity.sender_id %}
+                                    <a href="/admin/accounts/profile/{{activity.sender_id}}/change/">
+                                        {% if activity.sender_first_name and activity.sender_last_name %}
+                                            {{ activity.sender_first_name }} {{ activity.sender_last_name }}
+                                        {% else %}
+                                            {{ activity.sender_username }}
+                                        {% endif %}
+                                    </a>
+
+                                {% elif activity.researcher_id %}
+                                    <a href="/admin/researchers/researcher/{{activity.researcher_id}}/change/">
+                                        {% if activity.researcher_first_name and activity.researcher_last_name %}
+                                            {{ activity.researcher_first_name }} {{ activity.researcher_last_name }}
+                                        {% else %}
+                                            {{ activity.researcher_username }}
+                                        {% endif %}
+                                    </a>
+
+                                {% elif activity.community_id %}
+                                    <a href="/admin/communities/community/{{activity.community_id}}/change">{{ activity.community_name}}</a>
+
+                                {% elif activity.institution_id %}
+                                    <a href="/admin/institutions/institution/{{activity.institution_id}}/change">{{ activity.institution_name}}</a>
+                                {% endif %}
+                            </td>
+
+                        {% elif activity.notification_type == 'Project Created' %}
+                            <td>
+                                <a href="/projects/{{activity.reference_id}}" target="_blank">{{ activity.project_title }}</a>
+                                was created by 
+                                {% if activity.sender_id %}
+                                    <a href="/admin/accounts/profile/{{activity.sender_id}}/change/">
+                                        {% if activity.sender_first_name and activity.sender_last_name %}
+                                            {{ activity.sender_first_name }} {{ activity.sender_last_name }}
+                                        {% else %}
+                                            {{ activity.sender_username }}
+                                        {% endif %}
+                                    </a> 
+                                {% endif %}
+                                {% if activity.researcher_id %}
+                                    (<a href="/admin/researchers/researcher/{{activity.researcher_id}}/change">Researcher</a>)
+
+                                {% elif activity.community_id %}
+                                    (<a href="/admin/communities/community/{{activity.community_id}}/change">{{ activity.community_name}}</a>)
+
+                                {% elif activity.institution_id %}
+                                    (<a href="/admin/institutions/institution/{{activity.institution_id}}/change">{{ activity.institution_name}}</a>)
+                                {% endif %}
+                            </td>
+                    
+                        {% elif activity.notification_type == 'Contributor Added' %}
+                            <td>
+                                {% if activity.researcher_id %}
+                                    <a href="/admin/researchers/researcher/{{activity.researcher_id}}/change">
+                                        {% if activity.researcher_first_name and activity.researcher_last_name %}
+                                            {{ activity.researcher_first_name }} {{ activity.researcher_last_name }}
+                                        {% else %}
+                                            {{ activity.researcher_username }}
+                                        {% endif %}
+                                    </a>
+
+                                {% elif activity.community_id %}
+                                    <a href="/admin/communities/community/{{activity.community_id}}/change">{{ activity.community_name}}</a>
+
+                                {% elif activity.institution_id %}
+                                    <a href="/admin/institutions/institution/{{activity.institution_id}}/change">{{ activity.institution_name}}</a>
+                                {% endif %}
+                                was added as a contributor on 
+                                <a href="/projects/{{activity.reference_id}}" target="_blank">{{ activity.project_title }}</a>
+                            </td>                    
+
+                        {% elif activity.notification_type == 'Community Notified' %}
+                            <td>
+                                <a href="/admin/communities/community/{{activity.community_id}}/change">{{ activity.community_name}}</a>
+                                 was notified of 
+                                <a href="/projects/{{activity.reference_id}}" target="_blank">{{ activity.project_title }}</a>
+                                by 
+                                <a href="/admin/accounts/profile/{{activity.sender_id}}/change/">
+                                    {% if activity.sender_first_name and activity.sender_last_name %}
+                                        {{ activity.sender_first_name }} {{ activity.sender_last_name }}
+                                    {% else %}
+                                        {{ activity.sender_username }}
+                                    {% endif %}
+                                </a> 
+                                {% if activity.sender_first_name|add:" "|add:activity.sender_last_name == activity.sender_account %}
+                                    (Researcher)
+                                {% else %}
+                                    ({{ activity.sender_account }})
+                                {% endif %}
+                            </td>
+
+                        {% elif activity.notification_type == 'Label(s) Applied' %}
+                            <td>
+                                <a href="/admin/communities/community/{{activity.community_id}}/change">{{ activity.community_name}}</a>
+                                 applied Labels to 
+                                <a href="/projects/{{activity.reference_id}}" target="_blank">{{ activity.project_title }}</a>
+                            </td>
+
+                        {% elif activity.notification_type == 'Disclosure Notice(s) Added' %}
+                            <td>
+                                <a href="/admin/accounts/profile/{{activity.sender_id}}/change/">
+                                    {% if activity.sender_first_name and activity.sender_last_name %}
+                                        {{ activity.sender_first_name }} {{ activity.sender_last_name }}
+                                    {% else %}
+                                        {{ activity.sender_username }}
+                                    {% endif %}
+                                </a> 
+                                {% if activity.institution_id %}
+                                    (<a href="/admin/institutions/institution/{{activity.institution_id}}/change">{{ activity.institution_name}}</a>)
+
+                                {% elif activity.researcher_id %}
+                                    (<a href="/admin/researchers/researcher/{{activity.researcher_id}}/change">
+                                        {% if activity.researcher_first_name and activity.researcher_last_name %}
+                                            {{ activity.researcher_first_name }} {{ activity.researcher_last_name }}
+                                        {% else %}
+                                            {{ activity.researcher_username }}
+                                        {% endif %}
+                                    </a>)
+                                {% endif %}
+                                 applied Notices to 
+                                <a href="/projects/{{activity.reference_id}}" target="_blank">{{ activity.project_title }}</a>
+                            </td>
+
+                        {% elif activity.notification_type == 'Engagement Notice Added' %}
+                            <td>
+                                {% if activity.institution_id %}
+                                    <a href="/admin/institutions/institution/{{activity.institution_id}}/change">{{ activity.institution_name}}</a>
+
+                                {% elif activity.researcher_id %}
+                                    <a href="/admin/researchers/researcher/{{activity.researcher_id}}/change">
+                                        {% if activity.researcher_first_name and activity.researcher_last_name %}
+                                            {{ activity.researcher_first_name }} {{ activity.researcher_last_name }}
+                                        {% else %}
+                                            {{ activity.researcher_username }}
+                                        {% endif %}
+                                    </a>
+                                {% endif %}
+                                 added an OTC Notice for 
+                                <a href="{{activity.project_link}}" target="_blank">{{ activity.project_title }}</a>
+                            </td>
+                    
+                        {% endif %}
+                        <td>{{ activity.notification_type }}</td>
+                        <td>{{ activity.date|date:'N j, Y,' }} {{ activity.date|time:'g:i A e' }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <p class="flex-this flex-end"><b>Total: {{ project_activity_count }}</b><span style="padding-left:5px;padding-right:5px;">|</span><a href="/admin/projects/projectactivity/?o=-2">View All</a></p>
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="w-100">
+    <div class="flex-this column">
+        
+        <!-- Inactive users/accounts -->
+        <div class="w-50 margin-left-16 margin-right-16">
+            <div class="flex-this space-between">
+                <div class="flex-this justify-center">
+                    <h2>Inactive Users/Accounts</h2>
+                    <div class="tooltip" style="margin-top: 15px; margin-left: 5px;"><strong>i</strong>
+                        <span class="tooltiptext">
+                            <ul>
+                                <li><strong>User Accounts:</strong> Account not confirmed in the last 30 days</li>
+                                <li><strong>Researcher Accounts:</strong> No Projects created in the last 90 days</li>
+                                <li><strong>Institution and Community Accounts:</strong> Account not confirmed in the last 90 days</li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <hr class="searchbar-divider">
+
+            <table class="projects-table">
+                <tr>
+                    <th>Account</th>
+                    <th>Account Type</th>
+                    <th>Days Inactive</th>
+                </tr>
+                {% for inactivity in inactive_data_sorted %}
+                    <tr>
+                        {% if inactivity in inactive_user_data %}
+                            <td>
+                                <a href="/admin/auth/user/{{inactivity.id}}/change/">{{ inactivity.username }}</a>
+                            </td>
+                            <td>User Account</td>
+                            <td>{{ inactivity.days_count.days }}</td>
+
+                        {% elif inactivity in inactive_researchers %}
+                            <td>
+                                <a href="/admin/researchers/researcher/{{inactivity.id}}/change/">
+                                    {% if inactivity.user__first_name and inactivity.user__last_name %}
+                                            {{ inactivity.user__first_name }} {{ inactivity.user__last_name }}
+                                    {% else %}
+                                        {{ inactivity.user__username }}
+                                    {% endif %}
+                                </a>
+                            </td>
+                            <td>Researcher Account</td>
+                            <td>{{ inactivity.days_count.days }}</td>
+                        
+                        {% elif inactivity in unconfirmed_institutions %}
+                            <td>
+                                <a href="/admin/institutions/institution/{{inactivity.id}}/change/">
+                                    {{ inactivity.institution_name}}
+                                </a>
+                            </td>
+                            <td>Institution Account</td>
+                            <td>{{ inactivity.days_count.days }}</td>
+
+                        {% elif inactivity in unconfirmed_communities %}
+                            <td>
+                                <a href="/admin/communities/community/{{inactivity.id}}/change/">
+                                    {{ inactivity.community_name}}
+                                </a>
+                            </td>
+                            <td>Community Account</td>
+                            <td>{{ inactivity.days_count.days }}</td>
+
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <p class="flex-this flex-end"><b>Total: {{ inactive_data_count }}</b></p>
+        </div>
+
+        <!-- OTC Links -->
+        <div class="w-50 margin-left-16 margin-right-16">
+            <div class="flex-this space-between">
+                <div class="flex-this justify-center">
+                    <h2>Open to Collaborate Notice URLs</h2>
+                </div>
+            </div>
+            <hr class="searchbar-divider">
+
+            <table class="projects-table">
+                <tr>
+                    <th>Project</th>
+                    <th>Added By</th>
+                    <th>Date/Time</th>
+                </tr>
+                {% for notice in otc_notices %}
+                    <tr>
+                        <td>
+                            <a href="{{notice.url}}" target="_blank">{{ notice.name }}</a>
+                        </td>
+                        <td>
+                            {% if notice.institution_id %}
+                                <a href="/admin/institutions/institution/{{notice.institution_id}}/change/">
+                                    {{ notice.institution.institution_name }}
+                                </a>
+                                
+                            {% elif notice.researcher_id %}
+                                <a href="/admin/researchers/researcher/{{notice.researcher_id}}/change/">
+                                    {% if notice.researcher.user.first_name and notice.researcher.user.last_name %}
+                                        {{ notice.researcher.user.first_name }} {{ notice.researcher.user.last_name }}
+                                    {% else %}
+                                        {{ notice.researcher.user.username }}
+                                    {% endif %}
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>{{ notice.added|date:'N j, Y,' }} {{ notice.added|time:'g:i A e' }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <br>
+            <p class="flex-this flex-end"><b>Total: {{ otc_notices_count }}</b></p>
+        </div>
+    </div>
+</div>
