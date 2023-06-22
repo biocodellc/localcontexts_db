@@ -87,61 +87,198 @@
                 </div>
 
                 <div class="w-80">
+
                     <div class="flex-this space-between">
-                        <div class="cc-notice__container">
+                        <div id="authorization" class="cc-notice__container" onclick="expandCCNotice(this)">
                             <div><img loading="lazy" src="{% static 'images/notices/collections-care/cc-authorization.png' %}" width="119px" alt=""></div>
                             <div><p>Authorization</p></div>
                         </div>
-                        <div class="cc-notice__container">
+                        <div id="belonging" class="cc-notice__container" onclick="expandCCNotice(this)">
                             <div><img loading="lazy" src="{% static 'images/notices/collections-care/cc-belonging.png' %}" width="119px" alt=""></div>
                             <div><p>Belonging</p></div>
                         </div>
                         
-                        <div class="cc-notice__container">
+                        <div id="caring" class="cc-notice__container" onclick="expandCCNotice(this)">
                             <div><img loading="lazy" src="{% static 'images/notices/collections-care/cc-caring.png' %}" width="119px" alt=""></div>
                             <div><p>Caring</p></div>
                         </div>
                     
-                        <div class="cc-notice__container">
+                        <div id="gender-aware" class="cc-notice__container" onclick="expandCCNotice(this)">
                             <div><img loading="lazy" src="{% static 'images/notices/collections-care/cc-gender-aware.png' %}" width="119px" alt=""></div>
                             <div><p>Gender Aware</p></div>
                         </div>
                     </div>
                     <div class="flex-this space-between">
-                        <div class="cc-notice__container">
+                        <div id="leave-undisturbed" class="cc-notice__container" onclick="expandCCNotice(this)">
                             <div><img loading="lazy" src="{% static 'images/notices/collections-care/cc-leave-undisturbed.png' %}" width="119px" alt=""></div>
                             <div><p>Leave Undisturbed</p></div>
                         </div>
-                        <div class="cc-notice__container">
+                        <div id="safety" class="cc-notice__container" onclick="expandCCNotice(this)">
                             <div><img loading="lazy" src="{% static 'images/notices/collections-care/cc-safety.png' %}" width="119px" alt=""></div>
                             <div><p>Safety</p></div>
                         </div>
-                        <div class="cc-notice__container">
+                        <div id="viewing" class="cc-notice__container" onclick="expandCCNotice(this)">
                             <div><img loading="lazy" src="{% static 'images/notices/collections-care/cc-viewing.png' %}" width="119px" alt=""></div>
                             <div><p>Viewing</p></div>
                         </div>
-                        <div class="cc-notice__container">
-                            <div><img loading="lazy" src="{% static 'images/notices/collections-care/cc-witholding.png' %}" width="119px" alt=""></div>
-                            <div><p>Witholding</p></div>
+                        <div id="withholding" class="cc-notice__container" onclick="expandCCNotice(this)">
+                            <div><img loading="lazy" src="{% static 'images/notices/collections-care/cc-withholding.png' %}" width="119px" alt=""></div>
+                            <div><p>Withholding</p></div>
                         </div>
                     </div>
 
-                    <div class="flex-this cc-notice__expanded-container">
-                        <div class="cc-notice__expanded-img"><img loading="lazy" src="{% static 'images/notices/collections-care/cc-witholding.png' %}" width="119px" alt=""></div>
+                    <div id="openDiv-authorization" class="flex-this cc-notice__expanded-container hide">
+                        <div class="cc-notice__expanded-img"><img loading="lazy" src="{% static 'images/notices/collections-care/cc-authorization.png' %}" width="119px" alt=""></div>
                         <div class="cc-notice__expanded-text">
-                            <div><h2 class="no-top-margin">Witholding</h2></div>
+                            <div><h2 class="no-top-margin">Authorization</h2></div>
 
                             <p>
-                                <span class="bold">Notice Description</span><br>
-                                Some text here
+                                <span class="bold">Notice Text</span><br>
+                                The Authorization Notice is being used to indicate that distinct Tribe/Community authorization through
+                                consultation needs to be obtained for any reproduction of this item including for use in exhibitions and
+                                publications in print or online.
 
                                 <br><br>
 
                                 <span class="bold">Why use this Notice?</span><br>
-                                Some more text here
+                                The Authorization Notice is being used to indicate that distinct Tribe/Community authorization through consultation needs to be obtained for any 
+                                reproduction of this item including for use in exhibitions and publications in print or online.
                             </p>
                         </div>
                     </div>
+
+                    <div id="openDiv-belonging" class="flex-this cc-notice__expanded-container hide">
+                        <div class="cc-notice__expanded-img"><img loading="lazy" src="{% static 'images/notices/collections-care/cc-belonging.png' %}" width="119px" alt=""></div>
+                        <div class="cc-notice__expanded-text">
+                            <div><h2 class="no-top-margin">Belonging</h2></div>
+
+                            <p>
+                                <span class="bold">Notice Text</span><br>
+                                The Belonging Notice is being used to indicate that only specific persons belonging to communities, clans, societies 
+                                have the right to access and handle these specific items or collections.
+
+                                <br><br>
+
+                                <span class="bold">Why use this Notice?</span><br>
+                                The Belonging Notice is being used to indicate that only specific persons belonging to communities, clans, and 
+                                societies have the right to access and handle these specific items or collections.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="openDiv-caring" class="flex-this cc-notice__expanded-container hide">
+                        <div class="cc-notice__expanded-img"><img loading="lazy" src="{% static 'images/notices/collections-care/cc-caring.png' %}" width="119px" alt=""></div>
+                        <div class="cc-notice__expanded-text">
+                            <div><h2 class="no-top-margin">Caring</h2></div>
+
+                            <p>
+                                <span class="bold">Notice Text</span><br>
+                                The Caring Notice is being used to indicate that specialized care is required. Care for items or collections
+                                will require specific community guidelines for storage and handling.
+
+                                <br><br>
+
+                                <span class="bold">Why use this Notice?</span><br>
+                                The Caring Notice is being used to indicate that specialized care is required. Care for items or collections will require specific 
+                                community guidelines for storage and handling.                           
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="openDiv-gender-aware" class="flex-this cc-notice__expanded-container hide">
+                        <div class="cc-notice__expanded-img"><img loading="lazy" src="{% static 'images/notices/collections-care/cc-gender-aware.png' %}" width="119px" alt=""></div>
+                        <div class="cc-notice__expanded-text">
+                            <div><h2 class="no-top-margin">Gender Aware</h2></div>
+
+                            <p>
+                                <span class="bold">Notice Text</span><br>
+                                The Gender Aware Notice is being used to indicate there are specific gender responsibilities that affect who can access, 
+                                view, and/or handle this item or collection.
+
+                                <br><br>
+
+                                <span class="bold">Why use this Notice?</span><br>
+                                The Gender Aware Notice is being used to indicate there are specific gender responsibilities that affect who can access, 
+                                view, and/or handle this item or collection.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="openDiv-leave-undisturbed" class="flex-this cc-notice__expanded-container hide">
+                        <div class="cc-notice__expanded-img"><img loading="lazy" src="{% static 'images/notices/collections-care/cc-leave-undisturbed.png' %}" width="119px" alt=""></div>
+                        <div class="cc-notice__expanded-text">
+                            <div><h2 class="no-top-margin">Leave Undisturbed</h2></div>
+
+                            <p>
+                                <span class="bold">Notice Text</span><br>
+                                The Leave Undisturbed Notice is being used to indicate that items in a collection should not be disturbed. 
+                                They should only be moved or disturbed under very limited circumstances according to community guidance.
+
+                                <br><br>
+
+                                <span class="bold">Why use this Notice?</span><br>
+                                The Leave Undisturbed Notice is being used to indicate that items in a collection should not be disturbed. 
+                                They should only be moved or disturbed under very limited circumstances according to community guidance.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="openDiv-safety" class="flex-this cc-notice__expanded-container hide">
+                        <div class="cc-notice__expanded-img"><img loading="lazy" src="{% static 'images/notices/collections-care/cc-safety.png' %}" width="119px" alt=""></div>
+                        <div class="cc-notice__expanded-text">
+                            <div><h2 class="no-top-margin">Safety</h2></div>
+
+                            <p>
+                                <span class="bold">Notice Text</span><br>
+                                The Safety Notice is being used to indicate that extreme caution and care needs to be taken in viewing and handling this item or collection.
+
+                                <br><br>
+
+                                <span class="bold">Why use this Notice?</span><br>
+                                The Safety Notice is being used to indicate that extreme caution and care needs to be taken in viewing and handling this item or collection.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="openDiv-viewing" class="flex-this cc-notice__expanded-container hide">
+                        <div class="cc-notice__expanded-img"><img loading="lazy" src="{% static 'images/notices/collections-care/cc-viewing.png' %}" width="119px" alt=""></div>
+                        <div class="cc-notice__expanded-text">
+                            <div><h2 class="no-top-margin">Viewing</h2></div>
+
+                            <p>
+                                <span class="bold">Notice Text</span><br>
+                                The Viewing Notice is being used to indicate that there are limits to who, how and when an item/collection can be viewed, distributed and circulated. 
+                                This includes existing images or representations of an existing or deaccessioned item/s within a collection/s.
+
+                                <br><br>
+
+                                <span class="bold">Why use this Notice?</span><br>
+                                The Viewing Notice is being used to indicate that there are limits to who, how and when an item/collection can be viewed, distributed and circulated. 
+                                This includes existing images or representations of an existing or deaccessioned item/s within a collection/s.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="openDiv-withholding" class="flex-this cc-notice__expanded-container hide">
+                        <div class="cc-notice__expanded-img"><img loading="lazy" src="{% static 'images/notices/collections-care/cc-withholding.png' %}" width="119px" alt=""></div>
+                        <div class="cc-notice__expanded-text">
+                            <div><h2 class="no-top-margin">Withholding</h2></div>
+
+                            <p>
+                                <span class="bold">Notice Text</span><br>
+                                The Withholding Notice is being used to indicate that no reproductions of this item or collection should ever be made. 
+                                If there are already existing photographs or reproductions, these should not be used in any exhibition or publication in print, online or other format.
+
+                                <br><br>
+
+                                <span class="bold">Why use this Notice?</span><br>
+                                The Withholding Notice is being used to indicate that no reproductions of this item or collection should ever be made. 
+                                If there are already existing photographs or reproductions, these should not be used in
+                                any exhibition or publication in print, online or other format.
+                            </p>
+                        </div>
+                    </div>
+
                 </div>
                 
             </div>

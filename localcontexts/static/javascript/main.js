@@ -447,6 +447,25 @@ function populateTemplate(id) {
 
 }
 
+function expandCCNotice(noticeDiv) {
+    let divID = noticeDiv.id
+    let divToOpen = document.getElementById(`openDiv-${divID}`)
+    let clickedPTag = noticeDiv.querySelector('p')
+
+    let noticeDivs = document.getElementsByClassName('cc-notice__expanded-container')
+    for (let i = 0; i < noticeDivs.length; i++) {
+        let noticeDiv = noticeDivs[i]
+
+        if (noticeDiv.id !== `openDiv-${divID}`) { 
+            let pTag = noticeDivs[i].querySelector('p')
+            pTag.classList.remove('cc-active')
+            noticeDiv.classList.add('hide')
+        }
+    }
+    divToOpen.classList.toggle('hide')
+    clickedPTag.classList.toggle('cc-active')
+}
+
 // Customize Label: clone translation form to add multiple translations
 if (window.location.href.includes('/labels/customize') || window.location.href.includes('/labels/edit')) {
     const addTranslationBtn = document.getElementById('add-translation-btn')

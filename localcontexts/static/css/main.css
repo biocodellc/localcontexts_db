@@ -1390,9 +1390,6 @@ i[data-tooltip]:hover:after {
 
 .cc-notice__container p {
     padding: 8px 16px;
-    /* background-color: #007385;
-    border-radius: 4px;
-    color: #fff; */
 }
 
 .cc-notice__container p:hover {
@@ -1417,5 +1414,10 @@ i[data-tooltip]:hover:after {
 .cc-notice__expanded-img {
     margin-left: 26px;
     margin-right: 32px;
+}
 
+.cc-active {
+    background-color: #007385;
+    border-radius: 4px;
+    color: #fff;
 }
