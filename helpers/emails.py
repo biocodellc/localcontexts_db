@@ -92,16 +92,12 @@ def add_to_mailing_list(email, name, variables):
     RESEARCHERS LIST
 '''
 
-def add_researcher_to_mailing_list(email):
-    # Example: send_simple_email('someone@domain.com', 'Hello', 'This is a test email')
+def manage_researcher_mailing_list(email, subscribed):
+    # subscribed will be a boolean
     return requests.post(
 		"https://api.mailgun.net/v3/lists/researchers@localcontextshub.org/members",
-		auth=("api", settings.MAILGUN_API_KEY),
-		data={"subscribed": True,
-            "upsert": True,
-			"address": email,
-			# "name": name,
-            }
+		auth = ("api", settings.MAILGUN_API_KEY),
+		data = {"subscribed": subscribed, "upsert": True, "address": email,}
     )
 
 def send_researcher_email():
