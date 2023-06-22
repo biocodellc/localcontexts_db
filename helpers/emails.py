@@ -88,6 +88,32 @@ def add_to_mailing_list(email, name, variables):
             "vars": variables}
     )
 
+'''
+    RESEARCHERS LIST
+'''
+
+def add_researcher_to_mailing_list(email):
+    # Example: send_simple_email('someone@domain.com', 'Hello', 'This is a test email')
+    return requests.post(
+		"https://api.mailgun.net/v3/lists/researchers@localcontextshub.org/members",
+		auth=("api", settings.MAILGUN_API_KEY),
+		data={"subscribed": True,
+            "upsert": True,
+			"address": email,
+			# "name": name,
+            }
+    )
+
+def send_researcher_email():
+    response = requests.get(
+        ("https://api.mailgun.net/v3/lists/researchers@localcontextshub.org/members"),
+        auth=('api', settings.MAILGUN_API_KEY),
+        )
+    email = 'researchers@localcontextshub.org'
+    data = None
+    subject = 'Join Us For the "Local Contexts for Researchers" Webinar'
+    send_mailgun_template_email(email, subject, 'researcher_list', data)
+
 # Get member info from newsletter mailing list
 def get_newsletter_member_info(email):
     return requests.get(
