@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import Http404
-from django.urls import reverse
 from itertools import chain
 
 from localcontexts.utils import dev_prod_or_local
@@ -46,6 +45,9 @@ def connect_researcher(request):
                 # Mark current user as researcher
                 request.user.user_profile.is_researcher = True
                 request.user.user_profile.save()
+
+                # Add researcher to mailing list
+                manage_researcher_mailing_list(request.user.email, True)
 
                 # Send support an email in prod only about a Researcher signing up
                 if dev_prod_or_local(request.get_host()) == 'PROD':
