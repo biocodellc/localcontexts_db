@@ -742,7 +742,7 @@ button[disabled],
     text-align: center;
 }
 
-.projects-table tr:not(:first-child):nth-child(even) { background-color: #F1F5F9; }
+.projects-table tr:not(:first-child):nth-of-type(even) { background-color: #F1F5F9; }
 
 /* Icons with hover tooltips */
 .icon-tooltip-container {
