@@ -34,13 +34,29 @@
         <div class="flex-this space-between">
             <div><h2 class="no-top-margin">Collections Care Notices</h2></div>
             <div class="flex-this flex-end">
+
                 <div>
-                    <a 
-                        href="#" 
-                        class="primary-btn blue-btn"
-                    >
-                        Download Notices <i class="fa-solid fa-download"></i></a>
+                    {% if ccn_download_perm == 1 %}
+                        <a href="{% url 'download-collections-care-notices' ccn_download_perm %}" class="primary-btn blue-btn">
+                            Download Notices <i class="fa-solid fa-download"></i>
+                        </a>
+                    {% else %}
+                        <div class="btn-with-helptext">
+                            <button class="primary-btn disabled-btn">Download Notices <i class="fa-solid fa-download"></i></button>
+                            <span class="btn-help-text">
+                                {% if institution %}
+                                    {% if not institution.is_approved %}
+                                        Your institution account needs to be confirmed in order to download this Notice.
+                                    {% endif %}
+                                {% endif %}
+                                {% if is_sandbox %}
+                                    Download of Notices is not available on the sandbox site.
+                                {% endif %}
+                            </span>
+                        </div>
+                    {% endif %}
                 </div>
+
             </div>
         </div>
         <div class="flex-this">

@@ -4,7 +4,7 @@ from django.http import HttpResponse, Http404
 from communities.models import InviteMember
 from notifications.models import UserNotification
 from localcontexts.utils import dev_prod_or_local
-from .downloads import download_otc_notice
+from .downloads import download_otc_notice, download_cc_notices
 import requests
 
 def restricted_view(request, exception=None):
@@ -35,6 +35,15 @@ def download_open_collaborate_notice(request, perm):
         return redirect('restricted')
     else:
         return download_otc_notice()
+
+@login_required(login_url='login')
+def download_collections_care_notices(request, perm):
+    # perm will be a 1 or 0
+    has_permission = bool(perm)
+    if dev_prod_or_local(request.get_host()) == 'DEV' or not has_permission:
+        return redirect('restricted')
+    else:
+        return download_cc_notices()
 
 @login_required(login_url='login')
 def download_community_support_letter(request):
