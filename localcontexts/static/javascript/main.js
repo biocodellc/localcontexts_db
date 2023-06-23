@@ -446,6 +446,31 @@ function populateTemplate(id) {
     }
 
 }
+  
+function expandCCNotice(noticeDiv) {
+    let divID = noticeDiv.id
+    let divToOpen = document.getElementById(`openDiv-${divID}`)
+    let clickedPTag = noticeDiv.querySelector('p')
+    let allDivs = document.querySelectorAll('.cc-notice__expanded-container')
+
+    let allPTags = Array.from(document.querySelectorAll('.cc-notice__container p'))
+
+    allPTags.forEach((node) => {
+        if (node === clickedPTag) {
+            node.classList.toggle('cc-active')
+        } else {
+            node.classList.remove('cc-active')
+        }
+    })
+
+    allDivs.forEach((div) => {
+        if (div === divToOpen) {
+            div.classList.toggle('hide')
+        } else {
+            div.classList.add('hide')
+        }
+    })
+}
 
 // Customize Label: clone translation form to add multiple translations
 if (window.location.href.includes('/labels/customize') || window.location.href.includes('/labels/edit')) {

@@ -268,9 +268,11 @@ def institution_notices(request, pk):
         if dev_prod_or_local(request.get_host()) == 'DEV':
             is_sandbox = True
             otc_download_perm = 0
+            ccn_download_perm = 0
         else:
             is_sandbox = False
             otc_download_perm = 1 if institution.is_approved else 0
+            ccn_download_perm = 1 if institution.is_approved else 0
 
         if request.method == 'POST':
             if form.is_valid():
@@ -285,6 +287,7 @@ def institution_notices(request, pk):
             'form': form,
             'urls': urls,
             'otc_download_perm': otc_download_perm,
+            'ccn_download_perm': ccn_download_perm,
             'is_sandbox': is_sandbox,
         }
         return render(request, 'institutions/notices.html', context)
