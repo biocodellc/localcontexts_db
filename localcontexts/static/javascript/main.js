@@ -446,24 +446,30 @@ function populateTemplate(id) {
     }
 
 }
-
+  
 function expandCCNotice(noticeDiv) {
     let divID = noticeDiv.id
     let divToOpen = document.getElementById(`openDiv-${divID}`)
     let clickedPTag = noticeDiv.querySelector('p')
+    let allDivs = document.querySelectorAll('.cc-notice__expanded-container')
 
-    let noticeDivs = document.getElementsByClassName('cc-notice__expanded-container')
-    for (let i = 0; i < noticeDivs.length; i++) {
-        let noticeDiv = noticeDivs[i]
+    let allPTags = Array.from(document.querySelectorAll('.cc-notice__container p'))
 
-        if (noticeDiv.id !== `openDiv-${divID}`) { 
-            let pTag = noticeDivs[i].querySelector('p')
-            pTag.classList.remove('cc-active')
-            noticeDiv.classList.add('hide')
+    allPTags.forEach((node) => {
+        if (node === clickedPTag) {
+            node.classList.toggle('cc-active')
+        } else {
+            node.classList.remove('cc-active')
         }
-    }
-    divToOpen.classList.toggle('hide')
-    clickedPTag.classList.toggle('cc-active')
+    })
+
+    allDivs.forEach((div) => {
+        if (div === divToOpen) {
+            div.classList.toggle('hide')
+        } else {
+            div.classList.add('hide')
+        }
+    })
 }
 
 // Customize Label: clone translation form to add multiple translations
