@@ -29,6 +29,142 @@
     </div>
 </div>
 
+<div class="content-card content-card-space white-bg">
+    <div class="flex-this space-between">
+        <div><h2 class="no-top-margin">Open to Collaborate Notice</h2></div>
+        <div class="flex-this flex-end">
+            <div class="margin-right-16"><a id="addURLBtn" class="primary-btn action-btn">Add Link <i class="fa-solid fa-circle-plus"></i></a></div>
+            <div>
+                {% if otc_download_perm == 1 %}
+                    <a href="{% url 'download-open-to-collaborate-notice' otc_download_perm %}" class="primary-btn blue-btn">
+                        Download Notice <i class="fa-solid fa-download"></i>
+                    </a>
+                {% else %}
+                    <div class="btn-with-helptext">
+                        <button class="primary-btn disabled-btn">Download Notice <i class="fa-solid fa-download"></i></button>
+                        <span class="btn-help-text">
+                            {% if institution %}
+                                {% if not institution.is_approved %}
+                                    Your institution account needs to be confirmed in order to download this Notice.
+                                {% endif %}
+                            {% endif %}
+                            {% if is_sandbox %}
+                                Download of Notices is not available on the sandbox site.
+                            {% endif %}
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="flex-this">
+        <div><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="119px" alt="black square with a rectangle and on hand on top and bottom in the middle in white"></div>
+        <div class="flex-this column margin-left-16">
+            <div class="w-90">
+                <p class="no-top-margin">
+                    <span class="bold">Why Use this Notice?</span><br>
+                    The Open to Collaborate Notice indicates that a researcher or an institution is committed to developing new modes of collaboration, engagement, and partnership over Indigenous collections and data that have colonial and/or problematic histories or unclear provenance. This notice indicates a commitment to change and to develop new processes for the care and stewardship of past and future heritage collections.
+                </p>
+                <p>
+                    <span class="bold">Notice Text</span><br>
+                    Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.                    
+                </p> 
+                <p>
+                    <span class="bold">How can I apply this Notice?</span><br>
+                    Unlike the other Notices, you do not need to make a project to generate an Open to Collaborate Notice. Click the “Download Notice” button on this page to download the icon image file and Notice text. You can find usage guides with information about how to apply the Notice <a class="darkteal-text underline-hover" href="https://localcontexts.org/support/downloadable-resources/" target="_blank" rel="noopener">here <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>.
+                    <br><br>
+                    If you add your Open to Collaborate Notice to a website, click the “Add Link” button and enter the information about where your Notice is displayed. If you have applied the Notice in multiple places, you can add multiple links.
+                </p>             
+                <p>
+                    <span class="bold">Places this Notice has been applied</span><br>
+                    {% if urls %}
+                        <ul>
+                            {% for url in urls %}
+                                <li class="margin-bottom-8">
+                                    <div class="flex-this w-70 space-between">
+                                        <a class="darkteal-text underline-hover block" href="{{ url.0 }}" target="_blank" rel="noopener">{{ url.1 }} <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
+                                        {% if researcher %}
+                                            <a class="darkteal-text underline-hover block" href="{% url 'researcher-delete-otc' researcher.id url.2 %}"> <i class="fa fa-trash" aria-hidden="true"></i></a>
+                                        {% endif %}     
+                                        {% if institution %}
+                                            {% if member_role == 'admin' or member_role == 'editor' %}
+                                                <a class="darkteal-text underline-hover block" href="{% url 'institution-delete-otc' institution.id url.2 %}"> <i class="fa fa-trash" aria-hidden="true"></i></a>
+                                            {% endif %}
+                                        {% endif %}                                   
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        Click on the 'Add Link’ button to add where your Notice is displayed. These links will be visible on your account’s page in the registry.
+                    {% endif %}
+                </p>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="content-card content-card-space white-bg">
+    <h2 class="no-top-margin">Traditional Knowledge Notice</h2>
+    <div class="flex-this border-bottom-solid-teal">
+        <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" alt="black square with the letters TK in the middle in white"></div>
+        <div class="flex-this column margin-left-16">
+            <div class="w-90">
+                <p class="no-top-margin">
+                    <span class="bold">Why Use this Notice?</span><br>
+                    This Notice should be used to recognize that place-based knowledge carries accompanying cultural rights and responsibilities and that appropriate permissions may need to be sought for future use of this material.
+                </p>        
+            </div>
+            <div class="w-90">
+                <p>
+                    <span class="bold">Notice Text</span><br>
+                    The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated.
+                </p>         
+            </div>
+        </div>
+    </div>
+
+    <h2>Biocultural Notice</h2>
+    <div class="flex-this border-bottom-solid-teal">
+        <div><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" alt="black square with the letters BC in the middle in white"></div>
+        <div class="flex-this column margin-left-16">
+            <div class="w-90">
+                <p class="no-top-margin">
+                    <span class="bold">Why Use this Notice?</span><br>
+                    The BC Notice should be used to recognize the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with their traditional lands, waters, and territories. It acknowledges the importance of cultural protocols and recognizes that appropriate permissions may need to be sought for future use of this material or data.            </p>
+                </p>        
+            </div>
+            <div class="w-90">
+                <p>
+                    <span class="bold">Notice Text</span><br>
+                    The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated.            </p>
+                </p>         
+            </div>
+        </div>
+    </div>
+
+    <h2>Attribution Incomplete Notice</h2>
+    <div class="flex-this border-bottom-solid-teal">
+        <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="119px" alt="black square with an unfinished square in the middle in white"></div>
+        <div class="flex-this column margin-left-16">
+            <div class="w-90">
+                <p class="no-top-margin">
+                    <span class="bold">Why Use this Notice?</span><br>
+                    The Attribution Incomplete Notice is attached to a collection or at an item level where there is incomplete, inaccurate, or missing attribution. This Notice indicates to the public that the record and/or metadata is incomplete. Visibly identifying missing attribution within collections is the first step towards correcting existing attribution to include: contributors, collaborators, other authors and/or communities of origin.                    
+                </p>        
+            </div>
+            <div class="w-90">
+                <p>
+                    <span class="bold">Notice Text</span><br>
+                    Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution.
+                </p>         
+            </div>
+        </div>
+    </div>
+
+</div>
+
 {% if institution %}
     <div class="content-card content-card-space white-bg">
         <div class="flex-this space-between">
@@ -302,82 +438,6 @@
     </div>
 {% endif %}
 
-<div class="content-card content-card-space white-bg">
-    <div class="flex-this space-between">
-        <div><h2 class="no-top-margin">Open to Collaborate Notice</h2></div>
-        <div class="flex-this flex-end">
-            <div class="margin-right-16"><a id="addURLBtn" class="primary-btn action-btn">Add Link <i class="fa-solid fa-circle-plus"></i></a></div>
-            <div>
-                {% if otc_download_perm == 1 %}
-                    <a href="{% url 'download-open-to-collaborate-notice' otc_download_perm %}" class="primary-btn blue-btn">
-                        Download Notice <i class="fa-solid fa-download"></i>
-                    </a>
-                {% else %}
-                    <div class="btn-with-helptext">
-                        <button class="primary-btn disabled-btn">Download Notice <i class="fa-solid fa-download"></i></button>
-                        <span class="btn-help-text">
-                            {% if institution %}
-                                {% if not institution.is_approved %}
-                                    Your institution account needs to be confirmed in order to download this Notice.
-                                {% endif %}
-                            {% endif %}
-                            {% if is_sandbox %}
-                                Download of Notices is not available on the sandbox site.
-                            {% endif %}
-                        </span>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-    <div class="flex-this">
-        <div><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="119px" alt="black square with a rectangle and on hand on top and bottom in the middle in white"></div>
-        <div class="flex-this column margin-left-16">
-            <div class="w-90">
-                <p class="no-top-margin">
-                    <span class="bold">Why Use this Notice?</span><br>
-                    The Open to Collaborate Notice indicates that a researcher or an institution is committed to developing new modes of collaboration, engagement, and partnership over Indigenous collections and data that have colonial and/or problematic histories or unclear provenance. This notice indicates a commitment to change and to develop new processes for the care and stewardship of past and future heritage collections.
-                </p>
-                <p>
-                    <span class="bold">Notice Text</span><br>
-                    Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.                    
-                </p> 
-                <p>
-                    <span class="bold">How can I apply this Notice?</span><br>
-                    Unlike the other Notices, you do not need to make a project to generate an Open to Collaborate Notice. Click the “Download Notice” button on this page to download the icon image file and Notice text. You can find usage guides with information about how to apply the Notice <a class="darkteal-text underline-hover" href="https://localcontexts.org/support/downloadable-resources/" target="_blank" rel="noopener">here <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>.
-                    <br><br>
-                    If you add your Open to Collaborate Notice to a website, click the “Add Link” button and enter the information about where your Notice is displayed. If you have applied the Notice in multiple places, you can add multiple links.
-                </p>             
-                <p>
-                    <span class="bold">Places this Notice has been applied</span><br>
-                    {% if urls %}
-                        <ul>
-                            {% for url in urls %}
-                                <li class="margin-bottom-8">
-                                    <div class="flex-this w-70 space-between">
-                                        <a class="darkteal-text underline-hover block" href="{{ url.0 }}" target="_blank" rel="noopener">{{ url.1 }} <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
-                                        {% if researcher %}
-                                            <a class="darkteal-text underline-hover block" href="{% url 'researcher-delete-otc' researcher.id url.2 %}"> <i class="fa fa-trash" aria-hidden="true"></i></a>
-                                        {% endif %}     
-                                        {% if institution %}
-                                            {% if member_role == 'admin' or member_role == 'editor' %}
-                                                <a class="darkteal-text underline-hover block" href="{% url 'institution-delete-otc' institution.id url.2 %}"> <i class="fa fa-trash" aria-hidden="true"></i></a>
-                                            {% endif %}
-                                        {% endif %}                                   
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        Click on the 'Add Link’ button to add where your Notice is displayed. These links will be visible on your account’s page in the registry.
-                    {% endif %}
-                </p>
-            </div>
-            
-        </div>
-    </div>
-</div>
-
 <div id="addURLModal" class="modal hide">
 
     <div class="modal-defaults notice-modal flex-this column w-100">
@@ -413,66 +473,6 @@
                     <button class="primary-btn action-btn">Add Link</button>    
                 </div>
             </form>
-        </div>
-    </div>
-
-</div>
-
-<div class="content-card content-card-space white-bg">
-    <h2 class="no-top-margin">Traditional Knowledge Notice</h2>
-    <div class="flex-this border-bottom-solid-teal">
-        <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" alt="black square with the letters TK in the middle in white"></div>
-        <div class="flex-this column margin-left-16">
-            <div class="w-90">
-                <p class="no-top-margin">
-                    <span class="bold">Why Use this Notice?</span><br>
-                    This Notice should be used to recognize that place-based knowledge carries accompanying cultural rights and responsibilities and that appropriate permissions may need to be sought for future use of this material.
-                </p>        
-            </div>
-            <div class="w-90">
-                <p>
-                    <span class="bold">Notice Text</span><br>
-                    The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated.
-                </p>         
-            </div>
-        </div>
-    </div>
-
-    <h2>Biocultural Notice</h2>
-    <div class="flex-this border-bottom-solid-teal">
-        <div><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" alt="black square with the letters BC in the middle in white"></div>
-        <div class="flex-this column margin-left-16">
-            <div class="w-90">
-                <p class="no-top-margin">
-                    <span class="bold">Why Use this Notice?</span><br>
-                    The BC Notice should be used to recognize the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with their traditional lands, waters, and territories. It acknowledges the importance of cultural protocols and recognizes that appropriate permissions may need to be sought for future use of this material or data.            </p>
-                </p>        
-            </div>
-            <div class="w-90">
-                <p>
-                    <span class="bold">Notice Text</span><br>
-                    The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated.            </p>
-                </p>         
-            </div>
-        </div>
-    </div>
-
-    <h2>Attribution Incomplete Notice</h2>
-    <div class="flex-this border-bottom-solid-teal">
-        <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="119px" alt="black square with an unfinished square in the middle in white"></div>
-        <div class="flex-this column margin-left-16">
-            <div class="w-90">
-                <p class="no-top-margin">
-                    <span class="bold">Why Use this Notice?</span><br>
-                    The Attribution Incomplete Notice is attached to a collection or at an item level where there is incomplete, inaccurate, or missing attribution. This Notice indicates to the public that the record and/or metadata is incomplete. Visibly identifying missing attribution within collections is the first step towards correcting existing attribution to include: contributors, collaborators, other authors and/or communities of origin.                    
-                </p>        
-            </div>
-            <div class="w-90">
-                <p>
-                    <span class="bold">Notice Text</span><br>
-                    Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution.
-                </p>         
-            </div>
         </div>
     </div>
 
