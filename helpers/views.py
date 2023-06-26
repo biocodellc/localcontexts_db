@@ -6,6 +6,8 @@ from notifications.models import UserNotification
 from localcontexts.utils import dev_prod_or_local
 from .downloads import download_otc_notice, download_cc_notices
 import requests
+from .models import NoticeDownloadTracker
+from institutions.models import Institution
 
 def restricted_view(request, exception=None):
     return render(request, '403.html', status=403)
@@ -37,12 +39,13 @@ def download_open_collaborate_notice(request, perm):
         return download_otc_notice()
 
 @login_required(login_url='login')
-def download_collections_care_notices(request, perm):
+def download_collections_care_notices(request, institution_id, perm):
     # perm will be a 1 or 0
     has_permission = bool(perm)
     if dev_prod_or_local(request.get_host()) == 'DEV' or not has_permission:
         return redirect('restricted')
     else:
+        NoticeDownloadTracker.objects.create(institution=Institution.objects.get(id=institution_id), user=request.user, collections_care_notices=True)
         return download_cc_notices()
 
 @login_required(login_url='login')
