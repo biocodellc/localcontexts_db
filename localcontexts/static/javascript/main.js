@@ -1351,15 +1351,27 @@ if (window.location.href.includes('dashboard')) {
 
 // addURLModal
 if (window.location.href.includes('notices')) { 
-    const modal = document.getElementById('addURLModal')
+    // OTC Add URL modal
+    const OTCModal = document.getElementById('addURLModal')
     const addURLBtn = document.getElementById('addURLBtn')
 
     addURLBtn.addEventListener('click', () => {
-        if (modal.classList.contains('hide')) { modal.classList.replace('hide', 'show')}
+        if (OTCModal.classList.contains('hide')) { OTCModal.classList.replace('hide', 'show')}
     })
+    const closeAddURLModal = document.getElementById('closeAddURLModal')
+    closeAddURLModal.addEventListener('click', function() { OTCModal.classList.replace('show', 'hide')})
 
-    const closeModalBtn = document.querySelector('.close-modal-btn')
-    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+    // CC Notices modal
+    const ccNoticeModal = document.getElementById('addCCPolicyModal')
+    if (ccNoticeModal) {
+        const openCCModalBtn = document.getElementById('openCCNoticeModal')
+        openCCModalBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+            if (ccNoticeModal.classList.contains('hide')) { ccNoticeModal.classList.replace('hide', 'show')}
+        })
+        const closeCCNoticeModal = document.getElementById('closeCCNoticeModal')
+        closeCCNoticeModal.addEventListener('click', function() { ccNoticeModal.classList.replace('show', 'hide')})    
+    }
 }
 
 if (window.location.href.includes('labels/view/')) {

@@ -170,6 +170,8 @@
         <div class="flex-this space-between">
             <div><h2 class="no-top-margin">Collections Care Notices</h2></div>
             <div class="flex-this flex-end">
+                
+                <div class="margin-right-16"><a id="openCCNoticeModal" class="primary-btn action-btn">Add Policy <i class="fa-solid fa-circle-plus"></i></a></div>
 
                 <div>
                     {% if ccn_download_perm == 1 %}
@@ -178,7 +180,7 @@
                         </a>
                     {% else %}
                         <div class="btn-with-helptext">
-                            <button class="primary-btn disabled-btn">Download Notices <i class="fa-solid fa-download"></i></button>
+                            <button class="primary-btn disabled-btn">Download Notices</button>
                             <span class="btn-help-text">
                                 {% if institution %}
                                     {% if not institution.is_approved %}
@@ -436,6 +438,43 @@
             </div>
         </div>
     </div>
+
+    <div id="addCCPolicyModal" class="modal hide">
+        <div class="modal-defaults notice-modal flex-this column w-100">
+            <div class="w-100">
+                <form method="POST" autocomplete="off">
+                    {% csrf_token %}
+    
+                    <div class="flex-this space-between">
+                        <div><h2 class="primary-black-text no-top-margin">Add Collections Care Notice Policy</h2></div>
+                        <div>
+                            <div id="closeCCNoticeModal" class="pointer"><i class="fa-regular fa-xmark fa-xl"></i></div>
+                        </div>            
+                    </div>
+    
+                    <div>
+                        <p>
+                            Before downloading the Notices, if you have a collections care policy that you can share, please upload or provide a link.
+                        </p>  
+
+                        <div class="w-50">
+                            <a href="#" class="primary-btn green-btn">
+                                Upload Document <i class="fa-solid fa-upload"></i>
+                            </a>
+                            {{ cc_policy_form.policy_document }}
+                        </div>
+
+                        <br>
+                        <label>Website URL</label><br>
+                        {{ cc_policy_form.url }}
+                    </div>
+                    <div class="flex-this flex-end w-100 margin-top-16">
+                        <button class="primary-btn action-btn" name="add_policy">Add policy </button>    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endif %}
 
 <div id="addURLModal" class="modal hide">
@@ -448,7 +487,7 @@
                 <div class="flex-this space-between">
                     <div><h2 class="primary-black-text no-top-margin">Add Open to Collaborate Notice Link</h2></div>
                     <div>
-                        <div class="close-modal-btn"><i class="fa-regular fa-xmark fa-xl"></i></div>
+                        <div id="closeAddURLModal" class="pointer"><i class="fa-regular fa-xmark fa-xl"></i></div>
                     </div>            
                 </div>
 

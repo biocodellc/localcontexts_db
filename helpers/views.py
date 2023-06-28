@@ -8,6 +8,7 @@ from .downloads import download_otc_notice, download_cc_notices
 import requests
 from .models import NoticeDownloadTracker
 from institutions.models import Institution
+from .forms import CollectionsCareNoticePolicyForm
 
 def restricted_view(request, exception=None):
     return render(request, '403.html', status=403)
@@ -45,6 +46,7 @@ def download_collections_care_notices(request, institution_id, perm):
     if dev_prod_or_local(request.get_host()) == 'DEV' or not has_permission:
         return redirect('restricted')
     else:
+        #TODO: process form for document upload and or the URL
         NoticeDownloadTracker.objects.create(institution=Institution.objects.get(id=institution_id), user=request.user, collections_care_notices=True)
         return download_cc_notices()
 

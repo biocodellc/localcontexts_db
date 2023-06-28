@@ -19,7 +19,7 @@ from django.contrib.auth.models import User
 from accounts.models import UserAffiliation
 
 from projects.forms import *
-from helpers.forms import ProjectCommentForm, OpenToCollaborateNoticeURLForm
+from helpers.forms import ProjectCommentForm, OpenToCollaborateNoticeURLForm, CollectionsCareNoticePolicyForm
 from communities.forms import InviteMemberForm, JoinRequestForm
 from accounts.forms import ContactOrganizationForm
 from .forms import *
@@ -263,6 +263,7 @@ def institution_notices(request, pk):
     else:
         urls = OpenToCollaborateNoticeURL.objects.filter(institution=institution).values_list('url', 'name', 'id')
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
+        cc_policy_form = CollectionsCareNoticePolicyForm(request.POST or None)
        
         # sets permission to download OTC Notice
         if dev_prod_or_local(request.get_host()) == 'DEV':
@@ -275,16 +276,23 @@ def institution_notices(request, pk):
             ccn_download_perm = 1 if institution.is_approved else 0
 
         if request.method == 'POST':
-            if form.is_valid():
-                data = form.save(commit=False)
-                data.institution = institution
-                data.save()
+            if 'add_policy' in request.POST:
+                if cc_policy_form.is_valid():
+                    cc_data = cc_policy_form.save(commit=False)
+                    cc_data.institution = institution
+                    cc_data.save()
+            else:
+                if form.is_valid():
+                    data = form.save(commit=False)
+                    data.institution = institution
+                    data.save()
             return redirect('institution-notices', institution.id)
 
         context = {
             'institution': institution,
             'member_role': member_role,
             'form': form,
+            'cc_policy_form': cc_policy_form,
             'urls': urls,
             'otc_download_perm': otc_download_perm,
             'ccn_download_perm': ccn_download_perm,

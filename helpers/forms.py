@@ -60,6 +60,15 @@ class OpenToCollaborateNoticeURLForm(forms.ModelForm):
             'url': forms.TextInput(attrs={'class': 'w-100'}), 
         }
 
+class CollectionsCareNoticePolicyForm(forms.ModelForm):
+    class Meta:
+        model = CollectionsCareNoticePolicy
+        fields = ['policy_document', 'url']
+        widgets = { 
+            'policy_document': forms.ClearableFileInput(attrs={'class': 'w-100'}),
+            'url': forms.TextInput(attrs={'class': 'w-100'}), 
+        }
+
 class LabelVersionForm(forms.ModelForm):
     class Meta:
         model = LabelVersion

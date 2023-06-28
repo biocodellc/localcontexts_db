@@ -281,6 +281,7 @@ input:focus {
     line-height: 21px;
     cursor: pointer;
     transition: 0.3s;
+    border: none;
 }
 
 .primary-btn i {
