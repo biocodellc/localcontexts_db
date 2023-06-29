@@ -11,6 +11,7 @@ distlib==0.3.0
 dj-database-url==0.5.0
 Django==3.1.14
 django-appconf==1.0.4
+django-chartjs==2.3.0
 django-classy-tags==2.0.0
 django-cleanup==5.1.0
 django-cookie-consent==0.2.6
