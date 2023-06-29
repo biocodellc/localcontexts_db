@@ -263,7 +263,7 @@ def institution_notices(request, pk):
     else:
         urls = OpenToCollaborateNoticeURL.objects.filter(institution=institution).values_list('url', 'name', 'id')
         form = OpenToCollaborateNoticeURLForm(request.POST or None)
-        cc_policy_form = CollectionsCareNoticePolicyForm(request.POST or None)
+        cc_policy_form = CollectionsCareNoticePolicyForm(request.POST or None, request.FILES)
        
         # sets permission to download OTC Notice
         if dev_prod_or_local(request.get_host()) == 'DEV':

@@ -219,7 +219,7 @@ class NoticeDownloadTracker(models.Model):
 
 class CollectionsCareNoticePolicy(models.Model):
     institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
-    policy_document = models.FileField(upload_to='institutions/support-files', blank=True, null=True)
+    policy_document = models.FileField(upload_to='institutions/support-files/collections-care-policies', blank=True, null=True)
     url = models.URLField('Website URL', null=True, blank=True, unique=True)
     added = models.DateTimeField(auto_now_add=True, null=True)
 
