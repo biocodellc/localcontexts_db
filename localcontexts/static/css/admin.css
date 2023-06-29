@@ -125,6 +125,11 @@
     opacity: 1;
 }
 
+.tooltip.break{
+    flex-basis: 100%;
+    width: 0;
+}
+
 .content-card-v2 {
     background-color: #fff;
     margin: 5px auto;
@@ -289,19 +294,12 @@ input[type="submit"].default,
 }
 
 /* dashboard */
-body.dashboard #content {
-    width: auto;
+#content.dasboard-main {
     padding-left: 10px;
     padding-right:10px;
     padding-top: 15px;
     padding-bottom: 15px;
 }
-.main div.colMS#content {
-    margin-right:5px;
-}
-div.dashboard {
-    margin:5px;
-} 
 
 .stats-count-div {
     border-radius: 10px;
@@ -328,7 +326,7 @@ div.dashboard {
 #colorPicker > div:nth-of-type(3) {background-color: #007385;}
 #colorPicker > div:nth-of-type(4) {background-color: #3876aa;}
 
-.dashboard table {
+.dashboard-main .dashboard table {
     width:100%
 }
 

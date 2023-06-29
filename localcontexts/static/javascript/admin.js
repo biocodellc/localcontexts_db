@@ -1,37 +1,37 @@
 // Wrap text function if label is too long
-// const wrapText = function(ctx, text, x, y, maxWidth, lineHeight) {
-//     let words = text.split(' ');
-//     let line = '';
-//     let testLine = ''; // This will store the text when we add a word, to test if it's too long
-//     let lineArray = [];
-//     let metrics = ctx.measureText(text);
-//     let testWidth = metrics.width
+const wrapText = function(ctx, text, x, y, maxWidth, lineHeight) {
+    let words = text.split(' ');
+    let line = '';
+    let testLine = ''; // This will store the text when we add a word, to test if it's too long
+    let lineArray = [];
+    let metrics = ctx.measureText(text);
+    let testWidth = metrics.width
 
-//     if (testWidth > maxWidth) {
-//         for(var n = 0; n < words.length; n++) {
-//             // Create a test line, and measure it..
-//             testLine += `${words[n]}`;
+    if (testWidth > maxWidth) {
+        for(var n = 0; n < words.length; n++) {
+            // Create a test line, and measure it..
+            testLine += `${words[n]}`;
     
-//             if (testWidth > maxWidth && n > 0) {
-//                 lineArray.push([line, x, y]);
-//                 y += lineHeight;
-//                 line = `${words[n]}`;
-//                 testLine = `${words[n]}`;
-//             }
-//             else {
-//                 line += `${words[n]}`;
-//             }
-//             if(n === words.length - 1) {
-//                 lineArray.push([line, x, y]);
-//             }
-//         }
-//     }
-//     else{
-//         lineArray.push([text, x, y]);
-//     }
+            if (testWidth > maxWidth && n > 0) {
+                lineArray.push([line, x, y]);
+                y += lineHeight;
+                line = `${words[n]}`;
+                testLine = `${words[n]}`;
+            }
+            else {
+                line += `${words[n]}`;
+            }
+            if(n === words.length - 1) {
+                lineArray.push([line, x, y]);
+            }
+        }
+    }
+    else{
+        lineArray.push([text, x, y]);
+    }
 
-//     return lineArray;
-// }
+    return lineArray;
+}
 
 // pieLabelsLine plugin, add outside labels to pie chart
 const pieLabelsLine = {
@@ -97,6 +97,7 @@ const pieLabelsLine = {
   };
 
 function pieChart(pieDiv, dataInfo) {
+  console.log(pieDiv, dataInfo)
     const ctx = document.getElementById(pieDiv);
 
     Chart.defaults.font.size = 14;
@@ -104,7 +105,7 @@ function pieChart(pieDiv, dataInfo) {
     new Chart(ctx, {
         type: 'pie',
         data: dataInfo,
-        plugins: [pieLabelsLine],
+        // plugins: [pieLabelsLine],
         options: {
             maintainAspectRatio: false,
             layout: {
