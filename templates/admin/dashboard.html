@@ -1,0 +1,29 @@
+{% extends 'admin/base_site.html' %}{% load static %}
+
+{% block title %}Dashboard | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Local Contexts Hub Administration') }}</a></h1>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">Home</a>
+        &rsaquo; Dashboard
+    </div>
+{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block coltype %}dasboard-main{% endblock %}
+{% block content %}
+    <div class="dashboard">
+        <div class="w-100">
+            <h2>Today: {% now "M. d, Y, H:i e" %}</h2>
+        </div>
+
+        <!-- Data Charts and Counts (Visualizations) -->
+        {% include 'admin/partials/_data-visuals.html' %}
+
+    </div>
+{% endblock %}
