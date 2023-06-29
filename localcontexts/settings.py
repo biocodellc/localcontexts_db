@@ -71,8 +71,6 @@ INSTALLED_APPS = [
     'rest_framework_api_key',
     'corsheaders',
     'debug_toolbar',
-
-    'chartjs',
 ]
 
 MIDDLEWARE = [

@@ -645,7 +645,6 @@ def view_label(request, pk, label_uuid):
     else:
         bclabel = BCLabel.objects.none()
         tklabel = TKLabel.objects.none()
-        translations = LabelTranslation.objects.none()
         projects = Project.objects.none()
         creator_name = ''
         approver_name = ''
@@ -655,7 +654,6 @@ def view_label(request, pk, label_uuid):
 
         if BCLabel.objects.filter(unique_id=label_uuid).exists():
             bclabel = BCLabel.objects.select_related('created_by', 'approved_by').get(unique_id=label_uuid)
-            translations = LabelTranslation.objects.filter(bclabel=bclabel)
             projects = bclabel.project_bclabels.all()
             creator_name = get_users_name(bclabel.created_by)
             approver_name = get_users_name(bclabel.approved_by)
@@ -664,7 +662,6 @@ def view_label(request, pk, label_uuid):
             tklabels = TKLabel.objects.filter(community=community).values('unique_id', 'name', 'label_type', 'is_approved')
         if TKLabel.objects.filter(unique_id=label_uuid).exists():
             tklabel = TKLabel.objects.select_related('created_by', 'approved_by').get(unique_id=label_uuid)
-            translations = LabelTranslation.objects.filter(tklabel=tklabel)
             projects = tklabel.project_tklabels.all()
             creator_name = get_users_name(tklabel.created_by)
             approver_name = get_users_name(tklabel.approved_by)
@@ -679,7 +676,6 @@ def view_label(request, pk, label_uuid):
             'tklabels': tklabels,
             'bclabel': bclabel,
             'tklabel': tklabel,
-            'translations': translations,
             'projects': projects,
             'creator_name': creator_name,
             'approver_name': approver_name,

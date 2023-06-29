@@ -44,6 +44,12 @@ body {
 .ul-no-bullets { list-style-type: none; }
 .ul-no-padding { padding-left: 0; }
 
+/* ol within ol will be a b c instead of 1 2 3 */
+ol ol {
+    counter-reset: subsection;
+    list-style-type: lower-alpha;
+}
+
 a { text-decoration: none; }
 
 /* FORM INPUTS */
@@ -736,7 +742,7 @@ button[disabled],
     text-align: center;
 }
 
-.projects-table tr:not(:first-child):nth-child(even) { background-color: #F1F5F9; }
+.projects-table tr:not(:first-child):nth-of-type(even) { background-color: #F1F5F9; }
 
 /* Icons with hover tooltips */
 .icon-tooltip-container {
@@ -1367,4 +1373,51 @@ i[data-tooltip]:hover:after {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.cc-notice__container {
+    /* border: 1px solid red; */
+    font-weight: bold;
+    text-align: center;
+    width: 23%;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.cc-notice__container:hover {
+    cursor: pointer;
+}
+
+.cc-notice__container p {
+    padding: 8px 16px;
+}
+
+.cc-notice__container p:hover {
+    cursor: pointer;
+}
+
+.cc-notice__selected {
+    /* padding: 8px 16px; */
+    background-color: #007385;
+    border-radius: 4px;
+    color: #fff;
+}
+
+.cc-notice__expanded-container {
+    padding: 16px;
+}
+
+.cc-notice__expanded-text {
+    width: 80%;
+}
+
+.cc-notice__expanded-img {
+    margin-left: 26px;
+    margin-right: 32px;
+}
+
+.cc-active {
+    background-color: #007385;
+    border-radius: 4px;
+    color: #fff;
 }
