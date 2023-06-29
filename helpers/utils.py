@@ -16,6 +16,8 @@ from notifications.models import *
 
 from accounts.utils import get_users_name
 from helpers.emails import send_membership_email
+from django.contrib.staticfiles import finders
+
 
 def check_member_role(user, organization):
     role = ''
@@ -157,6 +159,12 @@ def generate_zip(files):
 def get_labels_json():
     json_data = open('./localcontexts/static/json/Labels.json')
     data = json.load(json_data) #deserialize
+    return data
+
+def get_collections_care_notices():
+    json_path = finders.find('json/CollectionsCareNotices.json')
+    with open(json_path, 'r') as file:
+        data = json.load(file)
     return data
 
 # Create/Update/Delete Notices

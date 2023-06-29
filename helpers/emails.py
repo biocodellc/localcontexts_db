@@ -88,6 +88,28 @@ def add_to_mailing_list(email, name, variables):
             "vars": variables}
     )
 
+'''
+    RESEARCHERS LIST
+'''
+
+def manage_researcher_mailing_list(email, subscribed):
+    # subscribed will be a boolean
+    return requests.post(
+		"https://api.mailgun.net/v3/lists/researchers@localcontextshub.org/members",
+		auth = ("api", settings.MAILGUN_API_KEY),
+		data = {"subscribed": subscribed, "upsert": True, "address": email,}
+    )
+
+def send_researcher_email():
+    response = requests.get(
+        ("https://api.mailgun.net/v3/lists/researchers@localcontextshub.org/members"),
+        auth=('api', settings.MAILGUN_API_KEY),
+        )
+    email = 'researchers@localcontextshub.org'
+    data = None
+    subject = 'Join Us For the "Local Contexts for Researchers" Webinar'
+    send_mailgun_template_email(email, subject, 'researcher_list', data)
+
 # Get member info from newsletter mailing list
 def get_newsletter_member_info(email):
     return requests.get(
