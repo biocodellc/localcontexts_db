@@ -10,7 +10,7 @@ import requests
 # Open to Collaborate Notice
 def download_otc_notice():
     baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/'
-    institution_text = "The Institution Notices are for use by collecting institutions, data repositories, researchers, and organizations who engage in collaborative curation with Indigenous and other marginalized communities who have been traditionally excluded from processes of documentation and record keeping.\nThe Institution Notices are intended to be displayed prominently on public-facing institutional websites, on digital collections pages and or in finding aids."
+    institution_text = "The Open to Collaborate Notice indicates that a researcher or an institution is committed to developing new modes of collaboration, engagement, and partnership over Indigenous collections and data that have colonial and/or problematic histories or unclear provenance. \nThis notice indicates a commitment to change and to develop new processes for the care and stewardship of past and future heritage collections."
 
     # Initialize README TEXT
     readme_text = ''
@@ -160,9 +160,8 @@ def download_project_zip(project):
 
     # Set README text if both types of notice present
     if notice_exists:
-        institution_text = "The Institution Notices are for use by collecting institutions, data repositories and organizations who engage in collaborative curation with Indigenous and other marginalized communities who have been traditionally excluded from processes of documentation and record keeping.\nThe Institution Notices are intended to be displayed prominently on public-facing institutional websites, on digital collections pages and or in finding aids."
-        notice_text = "The BC, TK and Attribution Incomplete Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data. The Notices are a mechanism for researchers and institutional staff to identify Indigenous collections and Indigenous interests in data.\n\nThe Notices can function as place-holders on collections, data, or in a sample field until a TK or a BC Label is added by a community."
-        readme_text = notice_text + '\n\n' + institution_text + '\n\nThis folder contains the following files:\n'
+        text_content = "The Disclosure Notices are specific tools for institutions and researchers to identify Indigenous collections and data and to recognize there could be accompanying cultural rights, protocols, and responsibilities. \n\nThe Notices can function as place-holders on collections or data until a Traditional Knowledge or a Biocultural Label is added by a community."
+        readme_text = text_content + '\n\nThis folder contains the following files:\n'
 
     # Create PDF from project context, append to files list
     pdf = render_to_pdf(template_path, context)
