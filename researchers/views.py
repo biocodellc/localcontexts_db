@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import Http404
-from django.urls import reverse
 from itertools import chain
 
 from localcontexts.utils import dev_prod_or_local
@@ -46,6 +45,9 @@ def connect_researcher(request):
                 # Mark current user as researcher
                 request.user.user_profile.is_researcher = True
                 request.user.user_profile.save()
+
+                # Add researcher to mailing list
+                manage_researcher_mailing_list(request.user.email, True)
 
                 # Send support an email in prod only about a Researcher signing up
                 if dev_prod_or_local(request.get_host()) == 'PROD':
@@ -140,19 +142,24 @@ def update_researcher(request, pk):
         if request.method == 'POST':
             update_form = UpdateResearcherForm(request.POST, request.FILES, instance=researcher)
 
-            if update_form.is_valid():
-                data = update_form.save(commit=False)
-                data.save()
-
-                if not researcher.orcid:
-                    orcid_id = request.POST.get('orcidId')
-                    orcid_token = request.POST.get('orcidIdToken')
-                    researcher.orcid_auth_token = orcid_token
-                    researcher.orcid = orcid_id
-                    researcher.save()
-
-                messages.add_message(request, messages.SUCCESS, 'Updated!')
+            if 'clear_image' in request.POST:
+                researcher.image = None
+                researcher.save()
                 return redirect('update-researcher', researcher.id)
+            else:
+                if update_form.is_valid():
+                    data = update_form.save(commit=False)
+                    data.save()
+
+                    if not researcher.orcid:
+                        orcid_id = request.POST.get('orcidId')
+                        orcid_token = request.POST.get('orcidIdToken')
+                        researcher.orcid_auth_token = orcid_token
+                        researcher.orcid = orcid_id
+                        researcher.save()
+
+                    messages.add_message(request, messages.SUCCESS, 'Updated!')
+                    return redirect('update-researcher', researcher.id)
         else:
             update_form = UpdateResearcherForm(instance=researcher)
         

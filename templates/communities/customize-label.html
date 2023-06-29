@@ -224,10 +224,12 @@
                 </div>
 
                 <div class="w-30 margin-bottom-16">
-                    <label>Label language</label>
-                    <div class="autocomplete" style="width:300px;">
+                    <label class='block'>Label Language <small>(select from dropdown)</small></label>
+                    <div class="autocomplete flex-this align-center" style="display:flex;">
                         {{ form.language }}
+                        <button name="clear-language-btn" class="primary-btn white-btn margin-left-16 hide" style="min-height:40px;">Clear<i class="fa-regular fa-eraser"></i></button>
                     </div>
+                    
                 </div>
 
                 <div class="w-80">
@@ -253,8 +255,9 @@
             <!-- Add translation -->
             {% include 'partials/_add-translation.html' %}
 
-            <div class="text-align-right margin-bottom-16">
-                <button id="saveLabelBtn" name="save_label_btn" class="primary-btn action-btn margin-top-2">Save Label</button> 
+            <div class="text-align-right margin-bottom-16 margin-top-2 flex-this align-center">
+                <button id="saveLabelBtn" name="save_label_btn" class="primary-btn action-btn">Save Label</button> 
+                <small id="language-error" class="red-text margin-left-1 hide">Please clear or select a language from the dropdown list.</small>
             </div>
         </form>
     </div>

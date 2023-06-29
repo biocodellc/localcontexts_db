@@ -16,6 +16,8 @@ from notifications.models import *
 
 from accounts.utils import get_users_name
 from helpers.emails import send_membership_email
+from django.contrib.staticfiles import finders
+
 
 def check_member_role(user, organization):
     role = ''
@@ -157,6 +159,12 @@ def generate_zip(files):
 def get_labels_json():
     json_data = open('./localcontexts/static/json/Labels.json')
     data = json.load(json_data) #deserialize
+    return data
+
+def get_collections_care_notices():
+    json_path = finders.find('json/CollectionsCareNotices.json')
+    with open(json_path, 'r') as file:
+        data = json.load(file)
     return data
 
 # Create/Update/Delete Notices
@@ -326,3 +334,22 @@ def discoverable_project_view(project, user):
         discoverable = False
 
     return discoverable
+
+def set_ror_id(institution):
+    import requests
+
+    url = 'https://api.ror.org/organizations'
+    query = institution.institution_name
+    params = { 'query': query }
+    response = requests.get(url, params=params)
+
+    if response.status_code == 200:
+        data = response.json()
+        if 'items' in data and len(data['items']) > 0:
+            ror_id = data['items'][0]['id']
+            institution.ror_id = ror_id
+            institution.save()
+        else:
+            print('No matching institution found.')
+    else:
+        print('Error:', response.status_code)

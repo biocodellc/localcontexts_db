@@ -64,17 +64,11 @@
                                             id="{{ request.user.id }}_{{ n.id }}"
                                             onclick="markAsReadUser(this); return true;"
 
-                                            {% if not n.viewed %}
-                                                {% if n.notification_type == 'Invitation' %}
-                                                    href="{% url 'member-invitations' %}"
-                                                {% endif %}
-                                                {% if n.notification_type == 'Accept' %}
-                                                    href="{% url 'read' n.id %}"
-                                                {% endif %}
+                                            {% if n.notification_type == 'Invitation' %}
+                                                href="{% url 'member-invitations' %}"
                                             {% else %}
                                                 href="{% url 'read' n.id %}"
                                             {% endif %}
-
                                         >
                                             <div class="flex-this space-between margin-top-1">
                                                 <div>
@@ -82,11 +76,7 @@
                                                         id="notification-label-tag-{{ n.id }}" 
                                                         class="notification-type-tag white-text font-size-12 {% if n.viewed %} grey {% else %} orange-bg {% endif %}"
                                                     >
-                                                        {% if n.notification_type == 'Welcome' %} Welcome {% endif %}
-                                                        {% if n.notification_type == 'Invitation' %} Invitation {% endif %}
-                                                        {% if n.notification_type == 'Request' %} Request {% endif %}
-                                                        {% if n.notification_type == 'Approval' %} Approval {% endif %}
-                                                        {% if n.notification_type == 'Accept' %} Accept {% endif %}
+                                                        {{ n.notification_type }}
                                                     </span>
                                                 </div>
                                                 <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>

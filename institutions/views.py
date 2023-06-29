@@ -70,22 +70,18 @@ def preparation_step(request):
 
 @login_required(login_url='login')
 def create_institution(request):
-    form = CreateInstitutionForm(request.POST or None)
-
     if request.method == 'POST':
+        form = CreateInstitutionForm(request.POST)
         affiliation = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user)
 
         if form.is_valid():
             name = form.cleaned_data['institution_name']
-            data = form.save(commit=False)
 
             if Institution.objects.filter(institution_name=name).exists():
                 messages.add_message(request, messages.ERROR, 'An institution by this name already exists.')
-                return redirect('create-institution')
             else:
-                # data.institution_name = name
+                data = form.save(commit=False)
                 data.institution_creator = request.user
-
                 # If in test site, approve immediately, skip confirmation step
                 if dev_prod_or_local(request.get_host()) == 'DEV':
                     data.is_approved = True
@@ -102,7 +98,9 @@ def create_institution(request):
                     affiliation.institutions.add(data)
                     affiliation.save()
                     return redirect('confirm-institution', data.id)
-
+    else:
+       form = CreateInstitutionForm() 
+    
     return render(request, 'institutions/create-institution.html', {'form': form })
 
 @login_required(login_url='login')
@@ -230,14 +228,19 @@ def update_institution(request, pk):
     member_role = check_member_role(request.user, institution)
     if member_role == False: # If user is not a member / does not have a role.
         return redirect('restricted')
-
     else:
         if request.method == "POST":
             update_form = UpdateInstitutionForm(request.POST, request.FILES, instance=institution)
-            if update_form.is_valid():
-                update_form.save()
-                messages.add_message(request, messages.SUCCESS, 'Updated!')
+
+            if 'clear_image' in request.POST:
+                institution.image = None
+                institution.save()
                 return redirect('update-institution', institution.id)
+            else:
+                if update_form.is_valid():
+                    update_form.save()
+                    messages.add_message(request, messages.SUCCESS, 'Updated!')
+                    return redirect('update-institution', institution.id)
         else:
             update_form = UpdateInstitutionForm(instance=institution)
 
@@ -265,9 +268,11 @@ def institution_notices(request, pk):
         if dev_prod_or_local(request.get_host()) == 'DEV':
             is_sandbox = True
             otc_download_perm = 0
+            ccn_download_perm = 0
         else:
             is_sandbox = False
             otc_download_perm = 1 if institution.is_approved else 0
+            ccn_download_perm = 1 if institution.is_approved else 0
 
         if request.method == 'POST':
             if form.is_valid():
@@ -282,6 +287,7 @@ def institution_notices(request, pk):
             'form': form,
             'urls': urls,
             'otc_download_perm': otc_download_perm,
+            'ccn_download_perm': ccn_download_perm,
             'is_sandbox': is_sandbox,
         }
         return render(request, 'institutions/notices.html', context)
@@ -424,6 +430,9 @@ def remove_member(request, pk, member_id):
     if JoinRequest.objects.filter(user_from=member, institution=institution).exists():
         join_request = JoinRequest.objects.get(user_from=member, institution=institution)
         join_request.delete()
+
+    title = f'You have been removed as a member from {institution.institution_name}.'
+    UserNotification.objects.create(from_user=request.user, to_user=member, title=title, notification_type="Remove", institution=institution)
 
     if '/manage/' in request.META.get('HTTP_REFERER'):
         return redirect('manage-orgs')

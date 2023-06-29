@@ -16,10 +16,20 @@
         <form id="saveLabelForm" method="POST" action="" enctype="multipart/form-data">
             {% csrf_token %}
             <div>
-                <p class="w-30">
-                    <label>Label name</label>
-                    {{ form.name }}
-                </p>
+                <div class="flex-this w-100">
+                    <div class="w-30 margin-right-16">
+                        <label>Label name</label><br>
+                        {{ form.name }}
+                    </div>
+                    <div class="w-30">
+                        <label class="block">Language <small>(select from dropdown)</small></label>
+                        <div class="autocomplete flex-this align-center" style="display:flex;">
+                            {{ form.language }}
+                            <button name="clear-language-btn" class="primary-btn white-btn margin-left-16 hide" style="min-height:40px;">Clear<i class="fa-regular fa-eraser"></i></button>
+                        </div>
+                    </div>                    
+                </div>
+
                 <div class="w-80">
                     <label for="label_text">Label text</label>
                     {{ form.label_text }}<br>
@@ -37,33 +47,37 @@
 
                 <!-- Translations that currently exist -->
                 {% if formset %}
-                    <div class="w-80">
-                        {% for translation_form in formset %}
+                    {% for translation_form in formset %}
+                        <div class="current-translation-form">
                             {% for hidden in translation_form.hidden_fields %} {{ hidden }} {% endfor %}
 
-                            <div class="flex-this space-between">
-                                <div class="w-50">
+                            <div class="flex-this w-100">
+                                <div class="w-30 margin-right-16">
                                     <label>Customized title</label>
                                     {{ translation_form.translated_name }}
+                                    <br>
                                 </div>
-                                <div>
-                                    <label>Language</label>
-                                    <div class="autocomplete" style="width:300px;">
+                                <div class="w-30">
+                                    <label class="block">Translated Language <small>(select from dropdown)</small></label>
+                                    <div class="autocomplete flex-this align-center" style="display:flex;">
                                         {{ translation_form.language }}
+                                        <button name="clear-language-btn" class="primary-btn white-btn margin-left-16 hide" style="min-height:40px;">Clear<i class="fa-regular fa-eraser"></i></button>
                                     </div>
                                 </div>
                             </div>
-                            {{ translation_form.translated_text }}    
-                        {% endfor %}                
-                    </div>
+
+                            <div class="w-80 margin-top-8"><label>Translated text</label><br>{{ translation_form.translated_text }}</div>    
+                        </div>
+                    {% endfor %}   
                 {% endif %}
             {% endif %}
 
             <!-- Add new translations -->
             {% include 'partials/_add-translation.html' %}
 
-            <div class="text-align-right margin-bottom-8">
-                <button id="saveLabelBtn" class="primary-btn action-btn margin-top-1">Save Label</button> 
+            <div class="text-align-right margin-bottom-8 margin-top-1 flex-this align-center">
+                <button id="saveLabelBtn" class="primary-btn action-btn ">Save Label</button>
+                <small id="language-error" class="red-text margin-left-1 hide">Please clear or select a language from the dropdown list.</small>
             </div>
         </form>
     

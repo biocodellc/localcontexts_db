@@ -24,8 +24,8 @@ function disableSubmitRegistrationBtn() {
     registerUserBtn.innerText = 'Submitting...'
     
     window.addEventListener('load', function() {
-        registerUserBtn.innerText = oldValue;
-        registerUserBtn.removeAttribute('disabled');
+        registerUserBtn.innerText = oldValue
+        registerUserBtn.removeAttribute('disabled')
     })
 } 
 
@@ -85,10 +85,10 @@ function languageList(data) {
     // feed only array of languages into this function
     var langInputElements = document.getElementsByClassName('languageListInput')
     for (var i=0; i < langInputElements.length; i++) {
-        autocomplete(langInputElements[i], langArray);
+        autocomplete(langInputElements[i], langArray); 
     }
 }
-// TODO: check Project creation form when notices are not selected. in main.js, or check add member form (when user enters member name that isnt in the hub, doesn't work), or ROR input
+
 // converts accented letters to the unaccented equivalent
 function removeAccents(str) {
   var map = {
@@ -124,12 +124,16 @@ function removeAccents(str) {
 // Takes two args: text iput element and array of values to autocomplete
 function autocomplete(inp, arr) {
     var currentFocus;
+
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
         var a, b, i, val = removeAccents(this.value);
         /*close any already open lists of autocompleted values*/
         closeAllLists();
-        if (!val) { return false;}
+        if (!val) { 
+            translationFormValidation()
+            return false;
+        }
         currentFocus = -1;
         /*create a DIV element that will contain the items (values):*/
         a = document.createElement("DIV");
@@ -137,6 +141,7 @@ function autocomplete(inp, arr) {
         a.setAttribute("class", "autocomplete-items");
         /*append the DIV element as a child of the autocomplete container:*/
         this.parentNode.appendChild(a);
+        translationFormValidation()
 
         for (i = 0; i < arr.length; i++) {
           /*check if the item starts with the same letters as the text field value:*/
@@ -149,10 +154,14 @@ function autocomplete(inp, arr) {
             /*insert a input field that will hold the current array item's value:*/
             b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
             /*execute a function when someone clicks on the item value (DIV element):*/
-                b.addEventListener("click", function(e) {
+            b.addEventListener("click", function(e) {
                 /*insert the value for the autocomplete text field:*/
                 inp.value = this.getElementsByTagName("input")[0].value;
                 inp.setAttribute('value', this.getElementsByTagName("input")[0].value)
+                inp.setAttribute('readonly', true)
+                inp.classList.add('readonly-input')
+                showClearLangBtn(inp.parentElement)
+                translationFormValidation()
                 /*close the list of autocompleted values,
                 (or any other open lists of autocompleted values:*/
                 closeAllLists();
@@ -161,6 +170,7 @@ function autocomplete(inp, arr) {
           }
         }
     });
+
     /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function(e) {
         var x = document.getElementById(this.id + "autocomplete-list");
@@ -225,20 +235,90 @@ function autocomplete(inp, arr) {
     }
 
     function closeAllLists(elmnt) {
-      /*close all autocomplete lists in the document,
-      except the one passed as an argument:*/
-      var x = document.getElementsByClassName("autocomplete-items");
-      for (var i = 0; i < x.length; i++) {
-        if (elmnt != x[i] && elmnt != inp) {
-        x[i].parentNode.removeChild(x[i]);
-      }
+        /*close all autocomplete lists in the document,
+        except the one passed as an argument:*/
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+            if (elmnt != x[i] && elmnt != inp) {
+                x[i].parentNode.removeChild(x[i]);
+            }
+        }
     }
-  }
 
-  /*execute a function when someone clicks in the document:*/
-  document.addEventListener("click", function (e) {
-      closeAllLists(e.target);
-  });
+    /*execute a function when someone clicks in the document:*/
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+    });
+
+    function showClearLangBtn(elem) {
+        translationFormValidation()
+        var clearLangBtn = elem.getElementsByTagName("button")[0]
+        clearLangBtn.classList.remove("hide")
+        clearLangBtn.addEventListener("click", function(e) {
+            e.preventDefault()
+            langInput = elem.getElementsByTagName("input")[0]
+            langInput.value = ''
+            langInput.removeAttribute('value')
+            langInput.focus()
+
+            if (langInput.getAttribute('readonly', true) && langInput.classList.contains('readonly-input')) {
+                langInput.removeAttribute('readonly')
+                langInput.classList.remove('readonly-input')
+            }
+
+            if (e.target.tagName.toLowerCase() == 'i') {
+                e.target.parentNode.classList.add('hide')
+            } else { e.target.classList.add('hide') }
+
+            translationFormValidation();
+        })
+    }  
+}
+
+// check to see if the label language has been selected where needed
+function translationFormValidation() {
+    const languageError = document.getElementById('language-error')
+    const addTranslationForms = document.querySelectorAll('.add-translation-form')
+    const currentTranslationForms = document.querySelectorAll('.current-translation-form')
+    const mainLangInput = document.getElementById('id_language')
+
+    function saveLabelBtnValidation(status) {
+        if (status == 'enable') {
+            saveLabelBtn.disabled=false
+            languageError.classList.add('hide')
+        } else if (status == 'disable') {
+            saveLabelBtn.disabled=true
+            languageError.classList.remove('hide')
+        }
+    }
+
+    invalidInputs = 0
+    if (window.location.href.includes('/labels/customize') &&
+        (mainLangInput.value != '' && !mainLangInput.classList.contains('readonly-input'))) 
+        { invalidInputs += 1}
+    for (var i = 0; i < addTranslationForms.length; i++) {
+        var translatedNameInput = addTranslationForms[i].querySelector('[id$="translated_name"]')
+        var translatedLangInput = addTranslationForms[i].querySelector('[id$="language"]')
+        var translatedTextInput = addTranslationForms[i].querySelector('[id$="translated_text"]')
+
+        if ((translatedLangInput.value != '' && !translatedLangInput.classList.contains('readonly-input')) ||
+            (translatedNameInput.value != '' && !translatedLangInput.classList.contains('readonly-input')) ||
+            (translatedTextInput.value != '' && !translatedLangInput.classList.contains('readonly-input'))) 
+            { invalidInputs += 1 }
+    }
+    for (var i = 0; i < currentTranslationForms.length; i++) {
+        var translatedNameInput = currentTranslationForms[i].querySelector('[id$="translated_name"]')
+        var translatedLangInput = currentTranslationForms[i].querySelector('[id$="language"]')
+        var translatedTextInput = currentTranslationForms[i].querySelector('[id$="translated_text"]')
+
+        if ((translatedNameInput.value != '' && translatedLangInput.value == '') ||
+            (translatedTextInput.value != '' && translatedLangInput.value == '')) 
+            { invalidInputs += 1 }
+    }
+
+    if (invalidInputs == 0) {
+        saveLabelBtnValidation('enable')
+    } else {saveLabelBtnValidation('disable')}
 }
 
 // Show customized label text in community: labels
@@ -446,6 +526,31 @@ function populateTemplate(id) {
     }
 
 }
+  
+function expandCCNotice(noticeDiv) {
+    let divID = noticeDiv.id
+    let divToOpen = document.getElementById(`openDiv-${divID}`)
+    let clickedPTag = noticeDiv.querySelector('p')
+    let allDivs = document.querySelectorAll('.cc-notice__expanded-container')
+
+    let allPTags = Array.from(document.querySelectorAll('.cc-notice__container p'))
+
+    allPTags.forEach((node) => {
+        if (node === clickedPTag) {
+            node.classList.toggle('cc-active')
+        } else {
+            node.classList.remove('cc-active')
+        }
+    })
+
+    allDivs.forEach((div) => {
+        if (div === divToOpen) {
+            div.classList.toggle('hide')
+        } else {
+            div.classList.add('hide')
+        }
+    })
+}
 
 // Customize Label: clone translation form to add multiple translations
 if (window.location.href.includes('/labels/customize') || window.location.href.includes('/labels/edit')) {
@@ -471,12 +576,35 @@ if (window.location.href.includes('/labels/customize') || window.location.href.i
         formNum++
 
         newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+        newFormInputs = newForm.querySelectorAll('input')
+        for (var i = 0; i < newFormInputs.length; i++){
+            newFormInputs[i].removeAttribute('value')
+            newFormInputs[i].removeAttribute('readonly')
+            newFormInputs[i].classList.remove('readonly-input')
+        }
+        newFormLangButton = newForm.querySelector('button[name="clear-language-btn"]')
+        newFormLangButton.classList.add('hide')
         container.insertBefore(newForm, lastDiv)
         totalForms.setAttribute('value', `${formNum+1}`)
-        fetchLanguages()
+        languageFormValidation()
     }
 
-    fetchLanguages()
+    languageFormValidation()
+
+    // adds input event for translation name and text to make sure language is also selected
+    function languageFormValidation() {
+        var translation_name = document.querySelectorAll('[id$="translated_name"]')
+        var translation_text = document.querySelectorAll('[id$="translated_text"]')
+        
+        for (var i=0; i < translation_name.length; i++) {
+            translation_name[i].addEventListener('input', translationFormValidation)
+        }
+        for (var i=0; i < translation_text.length; i++) {
+            translation_text[i].addEventListener('input', translationFormValidation)
+        } 
+
+        fetchLanguages()
+    }
 
     const saveLabelBtn = document.getElementById('saveLabelBtn')
     saveLabelBtn.addEventListener('click', function() {    
@@ -1475,6 +1603,23 @@ if (checkList) {
         else
           checkList.classList.add('visible');
       }
+    
+    let connectBtn = document.getElementById('connectProjectsBtn')
+    let checkboxes = document.querySelectorAll('input[name="projects_to_link"]')
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            let isChecked = Array.from(checkboxes).some(function(checkbox) {
+                return checkbox.checked
+            })
+
+            connectBtn.disabled = !isChecked
+            if (isChecked) {
+                connectBtn.classList.replace('disabled-btn', 'action-btn')
+            } else {
+                connectBtn.classList.replace('action-btn', 'disabled-btn')
+            }
+        })
+    })
 }
 
 function showProjectLabels(elem) {
@@ -1501,8 +1646,9 @@ if (window.location.href.includes('create-institution')) {
     const hiddenInputField = document.getElementById('institutionIDROR')
     const createInstitutionBtn = document.getElementById('createInstitutionBtn')
     const clearFormBtn = document.getElementById('clearFormBtn')
-    const form = document.getElementById('createInstitutionForm')
+    const descriptionField = document.getElementById('id_description')
 
+    let characterCounter = document.getElementById('charCount')
     let delayTimer
 
     createInstitutionBtn.disabled = true
@@ -1511,7 +1657,6 @@ if (window.location.href.includes('create-institution')) {
         clearTimeout(delayTimer)
 
         const inputValue = nameInputField.value
-
         if (inputValue.length >= 3) { // Minimum characters required before making a request
             let queryURL = 'https://api.ror.org/organizations?query='
             
@@ -1528,14 +1673,21 @@ if (window.location.href.includes('create-institution')) {
 
     clearFormBtn.addEventListener('click', (e) => {
         e.preventDefault()
-        form.reset()
-        nameInputField.focus();
+        nameInputField.value = ''
+        nameInputField.focus()
         createInstitutionBtn.disabled = true
 
         if (nameInputField.getAttribute('readonly', true) && nameInputField.classList.contains('readonly-input')) {
             nameInputField.removeAttribute('readonly')
-            nameInputField.classList.remove('readonly-input')    
+            nameInputField.classList.remove('readonly-input')
         }
+
+        cityTownInputField.value = ''
+        stateProvRegionInputField.value = ''
+        countryInputField.value = ''
+        descriptionField.value = ''
+
+        characterCounter.textContent = '200/200'
     })
 
     function showSuggestions(items) {
@@ -1578,3 +1730,64 @@ if (window.location.href.includes('create-institution')) {
     
     function clearSuggestions() { suggestionsContainer.innerHTML = '' }
 }
+
+if (window.location.href.includes('/institutions/update/') || window.location.href.includes('/communities/update/') || window.location.href.includes('/researchers/update/')) {
+    const realImageUploadBtn = document.getElementById('institutionImgUploadBtn') || document.getElementById('communityImgUploadBtn') || document.getElementById('researcherImgUploadBtn')
+    const customImageUploadBtn = document.getElementById('altImageUploadBtn')
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer')
+
+    function showFile() {
+        const selectedFile = realImageUploadBtn.files[0]
+
+        if (selectedFile) {
+            showImagePreview(selectedFile)
+        } else {
+            clearImagePreview()
+        }
+    }
+
+    function showImagePreview(file) {
+        const reader = new FileReader()
+        reader.onload = function(e) {
+            const imagePreview = document.createElement('img')
+            imagePreview.src = e.target.result
+            imagePreviewContainer.innerHTML = ''
+            imagePreviewContainer.appendChild(imagePreview)
+        }
+        reader.readAsDataURL(file)
+    }
+
+    function clearImagePreview() {
+        imagePreviewContainer.innerHTML = ''
+    }
+
+    customImageUploadBtn.addEventListener('click', function(e) {
+        console.log('click')
+        e.preventDefault()
+        realImageUploadBtn.click()
+    })
+ }
+
+ if (window.location.href.includes('/confirm-institution/') || window.location.href.includes('/confirm-community/')) {
+    const realFileUploadBtn = document.getElementById('communitySupportLetterUploadBtn') || document.getElementById('institutionSupportLetterUploadBtn')
+    const customFileUploadBtn = document.getElementById('customFileUploadBtn')
+    const form = document.querySelector('#confirmationForm')
+    const contactEmailInput = document.getElementById('communityContactEmailField') || document.getElementById('institutionContactEmailField')
+
+    function showFileName() {
+        const selectedFile = realFileUploadBtn.files[0]
+        customFileUploadBtn.innerHTML = `${selectedFile.name} <i class="fa-solid fa-check"></i>`
+    }
+
+    customFileUploadBtn.addEventListener('click', function(e) {
+        e.preventDefault()
+        realFileUploadBtn.click()
+    })
+
+    form.addEventListener('submit', function(e) {
+        if (realFileUploadBtn.files.length === 0 && contactEmailInput.value.trim() === '') {
+            e.preventDefault()
+            alert('Please either enter a contact email or upload a support file')
+        }
+    })
+ }

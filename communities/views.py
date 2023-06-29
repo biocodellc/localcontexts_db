@@ -213,15 +213,21 @@ def update_community(request, pk):
     
     else:
         update_form = UpdateCommunityForm(instance=community)
-        if member_role == 'admin': # Only admins can change the form 
-            if request.method == "POST":
-                update_form = UpdateCommunityForm(request.POST, request.FILES, instance=community)
+
+        if request.method == "POST":
+            update_form = UpdateCommunityForm(request.POST, request.FILES, instance=community)
+            
+            if 'clear_image' in request.POST:
+                community.image = None
+                community.save()
+                return redirect('update-community', community.id)
+            else:
                 if update_form.is_valid():
                     update_form.save()
                     messages.add_message(request, messages.SUCCESS, 'Updated!')
                     return redirect('update-community', community.id)
-            else:
-                update_form = UpdateCommunityForm(instance=community)
+        else:
+            update_form = UpdateCommunityForm(instance=community)
 
         context = {
             'community': community,
@@ -362,6 +368,9 @@ def remove_member(request, pk, member_id):
         join_request = JoinRequest.objects.get(user_from=member, community=community)
         join_request.delete()
     
+    title = f'You have been removed as a member from {community.community_name}.'
+    UserNotification.objects.create(from_user=request.user, to_user=member, title=title, notification_type="Remove", community=community)
+
     if '/manage/' in request.META.get('HTTP_REFERER'):
         return redirect('manage-orgs')
     else:
@@ -636,7 +645,6 @@ def view_label(request, pk, label_uuid):
     else:
         bclabel = BCLabel.objects.none()
         tklabel = TKLabel.objects.none()
-        translations = LabelTranslation.objects.none()
         projects = Project.objects.none()
         creator_name = ''
         approver_name = ''
@@ -646,7 +654,6 @@ def view_label(request, pk, label_uuid):
 
         if BCLabel.objects.filter(unique_id=label_uuid).exists():
             bclabel = BCLabel.objects.select_related('created_by', 'approved_by').get(unique_id=label_uuid)
-            translations = LabelTranslation.objects.filter(bclabel=bclabel)
             projects = bclabel.project_bclabels.all()
             creator_name = get_users_name(bclabel.created_by)
             approver_name = get_users_name(bclabel.approved_by)
@@ -655,7 +662,6 @@ def view_label(request, pk, label_uuid):
             tklabels = TKLabel.objects.filter(community=community).values('unique_id', 'name', 'label_type', 'is_approved')
         if TKLabel.objects.filter(unique_id=label_uuid).exists():
             tklabel = TKLabel.objects.select_related('created_by', 'approved_by').get(unique_id=label_uuid)
-            translations = LabelTranslation.objects.filter(tklabel=tklabel)
             projects = tklabel.project_tklabels.all()
             creator_name = get_users_name(tklabel.created_by)
             approver_name = get_users_name(tklabel.approved_by)
@@ -670,7 +676,6 @@ def view_label(request, pk, label_uuid):
             'tklabels': tklabels,
             'bclabel': bclabel,
             'tklabel': tklabel,
-            'translations': translations,
             'projects': projects,
             'creator_name': creator_name,
             'approver_name': approver_name,

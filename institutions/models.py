@@ -27,7 +27,7 @@ class Institution(models.Model):
     image = models.ImageField(upload_to=institution_img_path, blank=True, null=True)
     support_document = models.FileField(upload_to=get_file_path, blank=True, null=True)
     description = models.TextField(null=True, blank=True, validators=[MaxLengthValidator(200)])
-    institution_id = models.CharField(max_length=80, blank=True, null=True)
+    ror_id = models.CharField(max_length=80, blank=True, null=True)
     city_town = models.CharField(max_length=80, blank=True, null=True)
     state_province_region = models.CharField(verbose_name='state or province', max_length=100, blank=True, null=True)
     country = models.CharField(max_length=200, blank=True, null=True)
