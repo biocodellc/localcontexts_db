@@ -168,19 +168,19 @@ def dataCharts():
     tklabels_applied_count = tk_status['applied']
 
     # Projects
-    for project in Project.objects.all():
-        if project.has_labels():
-            project_labels_count += 1
-        if project.has_labels() == False and project.has_notice() == False:
-            project_inactive_count += 1
+    # for project in Project.objects.all():
+    #     if project.has_labels():
+    #         project_labels_count += 1
+    #     if project.has_labels() == False and project.has_notice() == False:
+    #         project_inactive_count += 1
 
-    project_status = Project.objects.all().values('has_labels')
+    # project_status = Project.objects.all().values('has_labels')
     
     # .aggregate(
     #     labels=Count('id', filter=Q(has_labels=True)),
     #     inactive=Count('id', filter=(Q(has_labels=False) & Q(has_notice=False)))
     # )
-    print(project_status)
+    # print(project_status)
 
     # get last year by months (from today's date)
     start_date = datetime.now(tz=timezone.utc)
