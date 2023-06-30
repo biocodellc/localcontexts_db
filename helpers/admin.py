@@ -32,15 +32,10 @@ class NoticeDownloadTrackerAdmin(admin.ModelAdmin):
     list_display = ('user', 'institution', 'researcher', 'collections_care_notices', 'open_to_collaborate_notice', 'date_downloaded')
     search_fields = ('institution__institution_name', 'researcher__user', 'researcher__user__first_name', 'researcher__user__last_name', 'user', 'user__first_name', 'user__last_name')
 
-# class ProjectCommentAdmin(admin.ModelAdmin):
-#     list_display = ('project', 'sender', 'community', 'sender_affiliation', 'message', 'created')
-#     search_fields = ('project',)
+class CollectionsCareNoticePolicyAdmin(admin.ModelAdmin):
+    list_display = ('institution', 'added')
 
-# class LabelNoteAdmin(admin.ModelAdmin):
-#     list_display = ('bclabel', 'tklabel', 'sender',)
 
-# admin.site.register(ProjectComment, ProjectCommentAdmin)
-# admin.site.register(LabelNote, LabelNoteAdmin)
 admin.site.register(ProjectStatus, ProjectStatusAdmin)
 admin.site.register(Notice, NoticeAdmin)
 admin.site.register(LabelVersion, LabelVersionAdmin)
@@ -49,4 +44,4 @@ admin.site.register(LabelTranslation, LabelTranslationAdmin)
 admin.site.register(EntitiesNotified, EntitiesNotifiedAdmin)
 admin.site.register(OpenToCollaborateNoticeURL, OpenToCollaborateNoticeURLAdmin)
 admin.site.register(NoticeDownloadTracker, NoticeDownloadTrackerAdmin)
-
+admin.site.register(CollectionsCareNoticePolicy, CollectionsCareNoticePolicyAdmin)
