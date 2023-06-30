@@ -449,7 +449,7 @@
     <div id="addCCPolicyModal" class="modal hide">
         <div class="modal-defaults notice-modal flex-this column w-100">
             <div class="w-100">
-                <form method="POST" autocomplete="off" enctype="multipart/form-data">
+                <form id="ccPolicyForm" method="POST" autocomplete="off" enctype="multipart/form-data">
                     {% csrf_token %}
     
                     <div class="flex-this space-between">
@@ -465,9 +465,9 @@
                         </p>  
 
                         <div class="w-50">
-                            <a href="#" class="primary-btn green-btn">
+                            <button id="customCCPolicyFileUploadBtn" class="primary-btn green-btn">
                                 Upload Document <i class="fa-solid fa-upload"></i>
-                            </a>
+                            </button>
                             {{ cc_policy_form.policy_document }}
                         </div>
 

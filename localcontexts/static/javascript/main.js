@@ -1700,3 +1700,18 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
         }
     })
  }
+
+ if (window.location.href.includes('institutions/notices/')) {
+    const realFileUploadBtn = document.getElementById('ccNoticePolicyUploadBtn')
+    const customFileUploadBtn = document.getElementById('customCCPolicyFileUploadBtn')
+
+    function showFileName() {
+        const selectedFile = realFileUploadBtn.files[0]
+        customFileUploadBtn.innerHTML = `${selectedFile.name} <i class="fa-solid fa-check"></i>`
+    }
+
+    customFileUploadBtn.addEventListener('click', function(e) {
+        e.preventDefault()
+        realFileUploadBtn.click()
+    })
+ }

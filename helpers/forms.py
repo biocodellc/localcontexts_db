@@ -65,8 +65,8 @@ class CollectionsCareNoticePolicyForm(forms.ModelForm):
         model = CollectionsCareNoticePolicy
         fields = ['policy_document', 'url']
         widgets = { 
-            'policy_document': forms.ClearableFileInput(attrs={'class': 'w-100'}),
-            'url': forms.TextInput(attrs={'class': 'w-100'}), 
+            'policy_document': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id':'ccNoticePolicyUploadBtn', 'onchange': 'showFileName()'}),
+            'url': forms.TextInput(attrs={'class': 'w-100', 'placeholder':'https://'}), 
         }
 
 class LabelVersionForm(forms.ModelForm):
