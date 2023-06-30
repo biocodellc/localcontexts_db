@@ -1,8 +1,7 @@
 import itertools, calendar
 from datetime import datetime, timedelta, timezone
-from operator import attrgetter
 from django.db.models.functions import Extract
-from django.db.models import Count, Q, Case, When, IntegerField, Sum, Subquery
+from django.db.models import Count, Q
 from django.contrib import admin
 from django.urls import path
 from django.utils.translation import gettext as _
