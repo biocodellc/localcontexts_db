@@ -36,7 +36,14 @@
             <div class="margin-right-16"><a id="addURLBtn" class="primary-btn action-btn">Add Link <i class="fa-solid fa-circle-plus"></i></a></div>
             <div>
                 {% if otc_download_perm == 1 %}
-                    <a href="{% url 'download-open-to-collaborate-notice' otc_download_perm %}" class="primary-btn blue-btn">
+                    <a 
+                        {% if researcher %}
+                            href="{% url 'download-open-to-collaborate-notice-researcher' perm=otc_download_perm researcher_id=researcher.id %}" 
+                        {% endif %}
+                        {% if institution %}
+                            href="{% url 'download-open-to-collaborate-notice-institution' perm=otc_download_perm institution_id=institution.id %}" 
+                        {% endif %}
+                        class="primary-btn blue-btn">
                         Download Notice <i class="fa-solid fa-download"></i>
                     </a>
                 {% else %}
