@@ -1,7 +1,7 @@
 import itertools, calendar
 from datetime import datetime, timedelta, timezone
 from django.db.models.functions import Extract
-from django.db.models import Count, Q, Case, When, IntegerField, Sum, Subquery
+from django.db.models import Count, Q
 from django.contrib import admin
 from django.urls import path
 from django.utils.translation import gettext as _
@@ -40,8 +40,7 @@ class MyAdminSite(admin.AdminSite):
         return urls
     
     def dashboard_view(self, request):
-        # otc_notices = OpenToCollaborateNoticeURL.objects.select_related('researcher', 'institution').all().order_by('-added')
-        # otc_notices_count = otc_notices.count()
+        start_date = datetime.now(tz=timezone.utc)
 
         context = { 
             # 'otc_notices' : otc_notices, 
@@ -49,8 +48,8 @@ class MyAdminSite(admin.AdminSite):
             "app_list": self.get_app_list(request),
             **self.each_context(request),
         }
-        context.update(counts())
-        context.update(dataCharts())
+        context.update(dashboardData(start_date))
+        # context.update(dataCharts(start_date))
         # context.update(user_activity())
         # context.update(project_activity())
         # context.update(inactive_users())
@@ -83,107 +82,108 @@ class MyAdminSite(admin.AdminSite):
 admin_site = MyAdminSite(name='lc-admin')
 
 # DASHBOARD VIEWS
-def counts():
-    users_total = recent_users_count = country_count = projects_count = 0
+def dashboardData(start_date):
+    users = User.objects.all()
+    community = Community.objects.all()
+    institution = Institution.objects.all()
+    researcher = Researcher.objects.all()
+    bclabels = BCLabel.objects.all()
+    tklabels = TKLabel.objects.all()
+    projects = Project.objects.all()
 
     #Registered Users
-    users_total = User.objects.count()
-    recent_users_count = User.objects.filter(date_joined__gte=datetime.now(tz=timezone.utc) - timedelta(days=30)).count()
+    users_total = recent_users_count =0
+    users_total = users.count()
+    recent_users_count = users.filter(date_joined__gte=start_date - timedelta(days=30)).count()
 
-    # TODO: Change to Researcher, Inst, Comm account country count
-    users_by_country = Profile.objects.filter(country__isnull=False).distinct('country').values('country')
-    institutions_by_country = Institution.objects.filter(country__isnull=False).distinct('country').values('country')
-    communities_by_country = Community.objects.filter(country__isnull=False).distinct('country').values('country')
-    countries_list = []
-    for country in users_by_country:
-        if country['country'] not in countries_list:
-            countries_list.append(country['country'])
-    for country in institutions_by_country:
-        if country['country'] not in countries_list:
-            countries_list.append(country['country'])
-    for country in communities_by_country:
-        if country['country'] not in countries_list:
-            countries_list.append(country['country'])
+    # Accounts by Country
+    # FIXME: profile country saved as initials instead of full name. profile left out for now
+    country_count = 0
+    # users_by_country = Profile.objects.filter(country__isnull=False).distinct('country').values_list('country', flat=True)
+    institutions_by_country = institution.filter(country__isnull=False).distinct('country').values_list('country', flat=True)
+    communities_by_country = community.filter(country__isnull=False).distinct('country').values_list('country', flat=True)
 
-    country_count = len(countries_list)
+    countries_list = list(itertools.chain(institutions_by_country, communities_by_country))
+    country_count = len([*set(countries_list)])
+
+    # Registered accounts
+    community_count = institution_count = researcher_count = 0
+    community_count = community.count() 
+    institution_count = institution.count() 
+    researcher_count = researcher.count()
+
+    # Notices
+    otc_count = 0
+    otc_count = OpenToCollaborateNoticeURL.objects.count()
+
+    # Labels
+    bclabels_customized_count = bclabels_approved_count = bclabels_applied_count = 0
+    tklabels_customized_count = tklabels_approved_count = tklabels_applied_count = 0
     
-    projects_count = ProjectCreator.objects.select_related('institution', 'community', 'researcher').all().count()
+    bclabels_status = bclabels.aggregate(
+        customized=Count('is_approved', filter=Q(is_approved=False)),approved=Count('is_approved', filter=(
+            Q(is_approved=True) & Q(project_bclabels__isnull=True)
+            )),
+        applied=Count('id', filter=(
+            Q(is_approved=True) & Q(project_bclabels__isnull=False)
+        ), distinct=True)
+    )
+    bclabels_customized_count = bclabels_status['customized']
+    bclabels_approved_count = bclabels_status['approved']
+    bclabels_applied_count = bclabels_status['applied']
+
+    tklabels_status = tklabels.aggregate(
+       customized=Count('is_approved', filter=Q(is_approved=False)), approved=Count('is_approved', filter=(
+            Q(is_approved=True) & Q(project_tklabels__isnull=True)
+        )),
+        applied=Count('id', filter=(
+            Q(is_approved=True) & Q(project_tklabels__isnull=False)
+        ), distinct=True)
+    )
+    tklabels_customized_count = tklabels_status['customized']
+    tklabels_approved_count = tklabels_status['approved']
+    tklabels_applied_count = tklabels_status['applied']
+
+    # Projects
+    project_labels_count = project_inactive_count = project_notices_count = projects_total_count = 0
+
+    project_status = projects.aggregate(
+        has_notice=Count('id', filter=Q(project_notice__archived=False), distinct=True),
+        has_labels=Count('id', filter=(
+            Q(bc_labels__isnull=False) | Q(tk_labels__isnull=False)
+        ), distinct=True),
+        inactive=Count('id', filter=(
+            (Q(bc_labels__isnull=True) & Q(tk_labels__isnull=True)) &
+            (Q(project_notice__archived__isnull=True) | Q(project_notice__archived=True))
+        ), distinct=True),
+    )
+
+    project_notices_count = project_status['has_notice']
+    project_labels_count = project_status['has_labels']
+    project_inactive_count = project_status['inactive']
+    projects_total_count = projects.count()
+
+    chartData = {
+        'accountData' : [community_count, institution_count, researcher_count],
+        'projectActivityData' : [otc_count, project_notices_count, project_labels_count, project_inactive_count],
+        'customizedLabelsData' : [tklabels_customized_count, tklabels_approved_count, tklabels_applied_count, bclabels_customized_count, bclabels_approved_count, bclabels_applied_count]
+    }
 
     context = {
             'users_total' : users_total,
             'recent_users_count' : recent_users_count,
             'country_count' : country_count,
-            'projects_count': projects_count
+            'projects_count': projects_total_count
         }
+    
+    context.update(dataCharts(start_date, chartData))
 
     return context
 
-def dataCharts():
-    # Colors
-    teal_rgb, teal_hex = 'rgba(0, 115, 133, 1)', '#007385'
-    light_teal_rgb = 'rgba(43, 138, 153, 1)'
-    lighter_teal_rgb = 'rgba(85, 162, 174, 1)'
-    orange_rgb, orange_hex = 'rgba(239, 108, 0, 1)', '#EF6C00'
-    light_orange_rgb = 'rgba(242, 132, 43, 1)'
-    lighter_orange_rgb = 'rgba(244, 157, 85, 1)'
-    green_rgb, green_hex = 'rgba(16, 134, 112, 1)', '#108670'
-    blue_rgb, blue_hex  = 'rgb(56, 119, 170)', '#3876aa'
-    grey_rgb, grey_hex = 'rgba(100, 116, 139, 1)', '#64748B'
-
-    # Registered accounts
-    community_count = institution_count = researcher_count = 0
-    community_count = Community.objects.count() 
-    institution_count = Institution.objects.count() 
-    researcher_count = Researcher.objects.count()
-
-    # Notices
-    otc_count = disclosure_count = 0
+def dataCharts(start_date, chartData):
+    projects = Project.objects.all()
     
-    otc_count = OpenToCollaborateNoticeURL.objects.count()
-    disclosure_count = Notice.objects.all().count()
-
-    # Labels
-    bclabels_customized_count = bclabels_approved_count = bclabels_applied_count = bclabels_total= 0
-    tklabels_customized_count = tklabels_approved_count = tklabels_applied_count = tklabels_total = 0
-    project_labels_count = project_inactive_count = 0
-    
-    bclabels = BCLabel.objects.all()
-    bc_status = bclabels.aggregate(
-        approved=Count('is_approved', filter=(Q(is_approved=True) & Q(project_bclabels__isnull=True))),
-        customized=Count('is_approved', filter=Q(is_approved=False)),
-        applied=Count('id', filter=(Q(is_approved=True) & Q(project_bclabels__isnull=False)), distinct=True)
-    )
-    bclabels_customized_count = bc_status['customized']
-    bclabels_approved_count = bc_status['approved']
-    bclabels_applied_count = bc_status['applied']
-
-    tklabels = TKLabel.objects.all()
-    tk_status = tklabels.aggregate(
-        approved=Count('is_approved', filter=(Q(is_approved=True) & Q(project_tklabels__isnull=True))),
-        customized=Count('is_approved', filter=Q(is_approved=False)),
-        applied=Count('id', filter=(Q(is_approved=True) & Q(project_tklabels__isnull=False)), distinct=True)
-    )
-    tklabels_customized_count = tk_status['customized']
-    tklabels_approved_count = tk_status['approved']
-    tklabels_applied_count = tk_status['applied']
-
-    # Projects
-    # for project in Project.objects.all():
-    #     if project.has_labels():
-    #         project_labels_count += 1
-    #     if project.has_labels() == False and project.has_notice() == False:
-    #         project_inactive_count += 1
-
-    # project_status = Project.objects.all().values('has_labels')
-    
-    # .aggregate(
-    #     labels=Count('id', filter=Q(has_labels=True)),
-    #     inactive=Count('id', filter=(Q(has_labels=False) & Q(has_notice=False)))
-    # )
-    # print(project_status)
-
     # get last year by months (from today's date)
-    start_date = datetime.now(tz=timezone.utc)
     new_users_data = {}
     new_projects_data = {}
     for i in range(1, 13):
@@ -194,7 +194,7 @@ def dataCharts():
         start_date -= timedelta(days=calendar.monthrange(start_date.year, start_date.month)[1])
 
     # add user count based on month/year
-    new_users = User.objects.filter(date_joined__gte=datetime.now(tz=timezone.utc) - timedelta(days=365)).annotate(
+    new_users = User.objects.filter(date_joined__gte=start_date - timedelta(days=365)).annotate(
         month=Extract('date_joined', 'month'),
         year=Extract('date_joined', 'year'),
         ).values('month', 'year').annotate(c=Count('pk')).values('month', 'year', 'c').order_by('year', 'month') 
@@ -210,7 +210,7 @@ def dataCharts():
     new_users_counts.reverse()
 
     # add project count based on month/year
-    new_projects = Project.objects.filter(date_added__gte=datetime.now(tz=timezone.utc) - timedelta(days=365)).annotate(
+    new_projects = projects.filter(date_added__gte=start_date - timedelta(days=365)).annotate(
         month=Extract('date_added', 'month'),
         year=Extract('date_added', 'year'),
         ).values('month', 'year').annotate(c=Count('pk')).values('month', 'year', 'c').order_by('year', 'month') 
@@ -225,54 +225,63 @@ def dataCharts():
     new_project_counts = list(new_projects_data.values())
     new_project_counts.reverse()
 
+    # Colors
+    teal_rgb, teal_hex = 'rgba(0, 115, 133, 1)', '#007385'
+    light_teal_rgb, lighter_teal_rgb = 'rgba(43, 138, 153, 1)', 'rgba(85, 162, 174, 1)'
+    orange_rgb, orange_hex = 'rgba(239, 108, 0, 1)', '#EF6C00'
+    light_orange_rgb = 'rgba(242, 132, 43, 1)'
+    lighter_orange_rgb = 'rgba(244, 157, 85, 1)'
+    green_rgb, green_hex = 'rgba(16, 134, 112, 1)', '#108670'
+    blue_rgb, blue_hex  = 'rgb(56, 119, 170)', '#3876aa'
+    grey_rgb, grey_hex = 'rgba(100, 116, 139, 1)', '#64748B'
+
     # Pie Chart Data
     accountData = {
-                'labels': ['Community', 'Insitution', 'Researcher'],
-                'datasets': [{
-                    'data': [community_count, institution_count, researcher_count],
-                    'backgroundColor': [green_rgb, orange_rgb,teal_rgb],
-                    'hoverOffset': 4
-                }]
-            }
+        'labels': ['Community', 'Insitution', 'Researcher'],
+        'datasets': [{
+            'data': chartData['accountData'],
+            'backgroundColor': [green_rgb, orange_rgb,teal_rgb],
+            'hoverOffset': 4
+        }]
+    }
     projectActivityData = {
-            'labels': ['Engagement Notice', 'Disclosure Notice', 'Labels Applied', 'No Activity'],
-            'datasets': [{
-                'data': [otc_count, disclosure_count, project_labels_count, project_inactive_count],
-                'backgroundColor': [orange_rgb,teal_rgb,green_rgb,grey_rgb],
-                'hoverOffset': 4
-            }]
-        }
+        'labels': ['Engagement Notice', 'Disclosure Notice', 'Labels Applied', 'No Activity'],
+        'datasets': [{
+            'data': chartData['projectActivityData'],
+            'backgroundColor': [orange_rgb,teal_rgb,green_rgb,grey_rgb],
+            'hoverOffset': 4
+        }]
+    }
     customizedLabelsData = {
-            'labels': ['Customized', 'Approved', 'Applied', 'Customized', 'Approved', 'Applied'],
-            'datasets': [
-                {
-                    'data': [tklabels_customized_count, tklabels_approved_count, tklabels_applied_count, bclabels_customized_count, bclabels_approved_count, bclabels_applied_count],
-                    'backgroundColor': [lighter_orange_rgb, light_orange_rgb,orange_rgb, lighter_teal_rgb, light_teal_rgb,teal_rgb],
-                    'hoverOffset': 4
-                }
-            ]
-        }
+        'labels': ['Customized', 'Approved', 'Applied', 'Customized', 'Approved', 'Applied'],
+        'datasets': [{
+                'data': chartData['customizedLabelsData'],
+                'backgroundColor': [lighter_orange_rgb, light_orange_rgb,orange_rgb, lighter_teal_rgb, light_teal_rgb,teal_rgb],
+                'hoverOffset': 4
+            }
+        ]
+    }
     
     # Line Chart Data
     newUsers = {
-            'labels': new_users_months,
-            'datasets': [
-                {
+        'labels': new_users_months,
+        'datasets': [
+            {
                 'data': new_users_counts,
                 'label': 'New Users',
                 'fill': 'false',
                 'borderColor': orange_rgb,
                 'tension':0.2
-                },
-                {
+            },
+            {
                 'data': new_project_counts,
                 'label': 'New Projects',
                 'fill': 'false',
                 'borderColor': blue_rgb,
                 'tension':0.2
-                }
-            ]
-        }
+            }
+        ]
+    }
     
     context = {
         'accountData' : accountData,
