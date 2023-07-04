@@ -294,7 +294,7 @@ input:focus {
 }
 
 .btn-width__support-letter-btn {
-    width: 240px;
+    /* width: 240px; */
 }
 
 .action-btn {
