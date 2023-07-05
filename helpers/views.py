@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 from communities.models import InviteMember
@@ -8,6 +8,7 @@ from .downloads import download_otc_notice, download_cc_notices
 import requests
 from .models import NoticeDownloadTracker
 from institutions.models import Institution
+from researchers.models import Researcher
 
 def restricted_view(request, exception=None):
     return render(request, '403.html', status=403)
@@ -30,12 +31,20 @@ def delete_member_invite(request, pk):
     
 
 @login_required(login_url='login')
-def download_open_collaborate_notice(request, perm):
+def download_open_collaborate_notice(request, perm, researcher_id=None, institution_id=None):
     # perm will be a 1 or 0
     has_permission = bool(perm)
     if dev_prod_or_local(request.get_host()) == 'DEV' or not has_permission:
         return redirect('restricted')
     else:
+        if researcher_id:
+            researcher = get_object_or_404(Researcher, id=researcher_id)
+            NoticeDownloadTracker.objects.create(researcher=researcher, user=request.user,open_to_collaborate_notice=True)
+
+        elif institution_id:
+            institution = get_object_or_404(Institution, id=institution_id)
+            NoticeDownloadTracker.objects.create(institution=institution, user=request.user, open_to_collaborate_notice=True)
+
         return download_otc_notice()
 
 @login_required(login_url='login')
@@ -45,6 +54,7 @@ def download_collections_care_notices(request, institution_id, perm):
     if dev_prod_or_local(request.get_host()) == 'DEV' or not has_permission:
         return redirect('restricted')
     else:
+        #TODO: process form for document upload and or the URL
         NoticeDownloadTracker.objects.create(institution=Institution.objects.get(id=institution_id), user=request.user, collections_care_notices=True)
         return download_cc_notices()
 

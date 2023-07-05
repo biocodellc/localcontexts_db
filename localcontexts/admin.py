@@ -642,15 +642,14 @@ class ProjectStatusAdmin(admin.ModelAdmin):
     list_display = ('project', 'community', 'seen', 'status')
     search_fields = ('project__title', 'community__community_name')
 
-# class ProjectCommentAdmin(admin.ModelAdmin):
-#     list_display = ('project', 'sender', 'community', 'sender_affiliation', 'message', 'created')
-#     search_fields = ('project',)
+class NoticeDownloadTrackerAdmin(admin.ModelAdmin):
+    list_display = ('user', 'institution', 'researcher', 'collections_care_notices', 'open_to_collaborate_notice', 'date_downloaded')
+    search_fields = ('institution__institution_name', 'researcher__user', 'researcher__user__first_name', 'researcher__user__last_name', 'user', 'user__first_name', 'user__last_name')
 
-# class LabelNoteAdmin(admin.ModelAdmin):
-#     list_display = ('bclabel', 'tklabel', 'sender',)
+class CollectionsCareNoticePolicyAdmin(admin.ModelAdmin):
+    list_display = ('institution', 'added')
+    search_fields = ('institution__institution_name',)
 
-# admin_site.register(ProjectComment, ProjectCommentAdmin)
-# admin_site.register(LabelNote, LabelNoteAdmin)
 admin_site.register(ProjectStatus, ProjectStatusAdmin)
 admin_site.register(Notice, NoticeAdmin)
 admin_site.register(LabelVersion, LabelVersionAdmin)
@@ -658,6 +657,8 @@ admin_site.register(LabelTranslationVersion, LabelTranslationVersionAdmin)
 admin_site.register(LabelTranslation, LabelTranslationAdmin)
 admin_site.register(EntitiesNotified, EntitiesNotifiedAdmin)
 admin_site.register(OpenToCollaborateNoticeURL, OpenToCollaborateNoticeURLAdmin)
+admin_site.register(NoticeDownloadTracker, NoticeDownloadTrackerAdmin)
+admin_site.register(CollectionsCareNoticePolicy, CollectionsCareNoticePolicyAdmin)
 
 # INSTITUTIONS ADMIN
 class InstitutionAdmin(admin.ModelAdmin):

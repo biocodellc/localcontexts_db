@@ -456,136 +456,139 @@ def edit_project(request, researcher_id, project_uuid):
         return render(request, 'researchers/edit-project.html', context)
 
 def project_actions(request, pk, project_uuid):
-    project = Project.objects.prefetch_related(
-                'bc_labels', 
-                'tk_labels', 
-                'bc_labels__community', 
-                'tk_labels__community',
-                'bc_labels__bclabel_translation', 
-                'tk_labels__tklabel_translation',
-                ).get(unique_id=project_uuid)
+    try:
+        project = Project.objects.prefetch_related(
+                    'bc_labels', 
+                    'tk_labels', 
+                    'bc_labels__community', 
+                    'tk_labels__community',
+                    'bc_labels__bclabel_translation', 
+                    'tk_labels__tklabel_translation',
+                    ).get(unique_id=project_uuid)
 
-    if request.user.is_authenticated:
-        researcher = Researcher.objects.get(id=pk)
+        if request.user.is_authenticated:
+            researcher = Researcher.objects.get(id=pk)
 
-        user_can_view = checkif_user_researcher(researcher, request.user)
-        if not user_can_view or not project.can_user_access(request.user):
-            return redirect('view-project', project.unique_id)
-        else:
-            notices = Notice.objects.filter(project=project, archived=False)
-            creator = ProjectCreator.objects.get(project=project)
-            statuses = ProjectStatus.objects.select_related('community').filter(project=project)
-            comments = ProjectComment.objects.select_related('sender').filter(project=project)
-            entities_notified = EntitiesNotified.objects.get(project=project)
-            activities = ProjectActivity.objects.filter(project=project).order_by('-date')
-            sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
-            name = get_users_name(request.user)
-            label_groups = return_project_labels_by_community(project)
-            can_download = False if dev_prod_or_local(request.get_host()) == 'DEV' else True
+            user_can_view = checkif_user_researcher(researcher, request.user)
+            if not user_can_view or not project.can_user_access(request.user):
+                return redirect('view-project', project.unique_id)
+            else:
+                notices = Notice.objects.filter(project=project, archived=False)
+                creator = ProjectCreator.objects.get(project=project)
+                statuses = ProjectStatus.objects.select_related('community').filter(project=project)
+                comments = ProjectComment.objects.select_related('sender').filter(project=project)
+                entities_notified = EntitiesNotified.objects.get(project=project)
+                activities = ProjectActivity.objects.filter(project=project).order_by('-date')
+                sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
+                name = get_users_name(request.user)
+                label_groups = return_project_labels_by_community(project)
+                can_download = False if dev_prod_or_local(request.get_host()) == 'DEV' else True
 
-            # for related projects list 
-            project_ids = list(set(researcher.researcher_created_project.all().values_list('project__unique_id', flat=True)
-                .union(researcher.researchers_notified.all().values_list('project__unique_id', flat=True))
-                .union(researcher.contributing_researchers.all().values_list('project__unique_id', flat=True))))
-            project_ids_to_exclude_list = list(project.related_projects.all().values_list('unique_id', flat=True)) #projects that are currently related
-            # exclude projects that are already related
-            project_ids = list(set(project_ids).difference(project_ids_to_exclude_list))
-            projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id=project.unique_id).order_by('-date_added').values_list('unique_id', 'title')
+                # for related projects list 
+                project_ids = list(set(researcher.researcher_created_project.all().values_list('project__unique_id', flat=True)
+                    .union(researcher.researchers_notified.all().values_list('project__unique_id', flat=True))
+                    .union(researcher.contributing_researchers.all().values_list('project__unique_id', flat=True))))
+                project_ids_to_exclude_list = list(project.related_projects.all().values_list('unique_id', flat=True)) #projects that are currently related
+                # exclude projects that are already related
+                project_ids = list(set(project_ids).difference(project_ids_to_exclude_list))
+                projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id=project.unique_id).order_by('-date_added').values_list('unique_id', 'title')
 
-            project_archived = False
-            if ProjectArchived.objects.filter(project_uuid=project.unique_id, researcher_id=researcher.id).exists():
-                x = ProjectArchived.objects.get(project_uuid=project.unique_id, researcher_id=researcher.id)
-                project_archived = x.archived
-            form = ProjectCommentForm(request.POST or None)
+                project_archived = False
+                if ProjectArchived.objects.filter(project_uuid=project.unique_id, researcher_id=researcher.id).exists():
+                    x = ProjectArchived.objects.get(project_uuid=project.unique_id, researcher_id=researcher.id)
+                    project_archived = x.archived
+                form = ProjectCommentForm(request.POST or None)
 
-            communities_list = list(chain(
-                project.project_status.all().values_list('community__id', flat=True),
-            ))
+                communities_list = list(chain(
+                    project.project_status.all().values_list('community__id', flat=True),
+                ))
 
-            if creator.community:
-                communities_list.append(creator.community.id)
+                if creator.community:
+                    communities_list.append(creator.community.id)
 
-            communities_ids = list(set(communities_list)) # remove duplicate ids
-            communities = Community.approved.exclude(id__in=communities_ids).order_by('community_name')
+                communities_ids = list(set(communities_list)) # remove duplicate ids
+                communities = Community.approved.exclude(id__in=communities_ids).order_by('community_name')
 
-            if request.method == 'POST':
-                if request.POST.get('message'):
-                    if form.is_valid():
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.sender_affiliation = 'Researcher'
-                        data.save()
-                        send_action_notification_to_project_contribs(project)
-                        return redirect('researcher-project-actions', researcher.id, project.unique_id)
+                if request.method == 'POST':
+                    if request.POST.get('message'):
+                        if form.is_valid():
+                            data = form.save(commit=False)
+                            data.project = project
+                            data.sender = request.user
+                            data.sender_affiliation = 'Researcher'
+                            data.save()
+                            send_action_notification_to_project_contribs(project)
+                            return redirect('researcher-project-actions', researcher.id, project.unique_id)
 
-                elif 'notify_btn' in request.POST: 
-                    # Set private project to contributor view
-                    if project.project_privacy == 'Private':
-                        project.project_privacy = 'Contributor'
-                        project.save()
+                    elif 'notify_btn' in request.POST: 
+                        # Set private project to contributor view
+                        if project.project_privacy == 'Private':
+                            project.project_privacy = 'Contributor'
+                            project.save()
 
-                    communities_selected = request.POST.getlist('selected_communities')
+                        communities_selected = request.POST.getlist('selected_communities')
 
-                    researcher_name = get_users_name(researcher.user)
-                    title =  f'{researcher_name} has notified you of a Project.'
+                        researcher_name = get_users_name(researcher.user)
+                        title =  f'{researcher_name} has notified you of a Project.'
 
-                    for community_id in communities_selected:
-                        # Add communities that were notified to entities_notified instance
-                        community = Community.objects.get(id=community_id)
-                        entities_notified.communities.add(community)
+                        for community_id in communities_selected:
+                            # Add communities that were notified to entities_notified instance
+                            community = Community.objects.get(id=community_id)
+                            entities_notified.communities.add(community)
+                            
+                            # Add activity
+                            ProjectActivity.objects.create(project=project, activity=f'{community.community_name} was notified by {name}')
+
+                            # Create project status and  notification
+                            ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
+                            ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=str(project.unique_id), sender=request.user, title=title)
+                            entities_notified.save()
+
+                            # Create email 
+                            send_email_notice_placed(request, project, community, researcher)
+                            return redirect('researcher-project-actions', researcher.id, project.unique_id)
+                    elif 'link_projects_btn' in request.POST:
+                        selected_projects = request.POST.getlist('projects_to_link')
+
+                        activities = []
+                        for uuid in selected_projects:
+                            project_to_add = Project.objects.get(unique_id=uuid)
+                            project.related_projects.add(project_to_add)
+                            project_to_add.related_projects.add(project)
+                            project_to_add.save()
+
+                            activities.append(ProjectActivity(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name}'))
+                            activities.append(ProjectActivity(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name}'))
                         
-                        # Add activity
-                        ProjectActivity.objects.create(project=project, activity=f'{community.community_name} was notified by {name}')
-
-                        # Create project status and  notification
-                        ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community
-                        ActionNotification.objects.create(community=community, notification_type='Projects', reference_id=str(project.unique_id), sender=request.user, title=title)
-                        entities_notified.save()
-
-                        # Create email 
-                        send_email_notice_placed(request, project, community, researcher)
+                        ProjectActivity.objects.bulk_create(activities)
+                        project.save()
                         return redirect('researcher-project-actions', researcher.id, project.unique_id)
-                elif 'link_projects_btn' in request.POST:
-                    selected_projects = request.POST.getlist('projects_to_link')
 
-                    activities = []
-                    for uuid in selected_projects:
-                        project_to_add = Project.objects.get(unique_id=uuid)
-                        project.related_projects.add(project_to_add)
-                        project_to_add.related_projects.add(project)
-                        project_to_add.save()
+                    elif 'delete_project' in request.POST:
+                        return redirect('researcher-delete-project', researcher.id, project.unique_id)
 
-                        activities.append(ProjectActivity(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name}'))
-                        activities.append(ProjectActivity(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name}'))
-                    
-                    ProjectActivity.objects.bulk_create(activities)
-                    project.save()
-                    return redirect('researcher-project-actions', researcher.id, project.unique_id)
-
-                elif 'delete_project' in request.POST:
-                    return redirect('researcher-delete-project', researcher.id, project.unique_id)
-
-            context = {
-                'user_can_view': user_can_view,
-                'researcher': researcher,
-                'project': project,
-                'notices': notices,
-                'creator': creator,
-                'form': form,
-                'communities': communities,
-                'statuses': statuses,
-                'comments': comments,
-                'activities': activities,
-                'project_archived': project_archived,
-                'sub_projects': sub_projects,
-                'projects_to_link': projects_to_link,
-                'label_groups': label_groups,
-                'can_download': can_download,
-            }
-            return render(request, 'researchers/project-actions.html', context)
-    else:
-        return redirect('view-project', project.unique_id)
+                context = {
+                    'user_can_view': user_can_view,
+                    'researcher': researcher,
+                    'project': project,
+                    'notices': notices,
+                    'creator': creator,
+                    'form': form,
+                    'communities': communities,
+                    'statuses': statuses,
+                    'comments': comments,
+                    'activities': activities,
+                    'project_archived': project_archived,
+                    'sub_projects': sub_projects,
+                    'projects_to_link': projects_to_link,
+                    'label_groups': label_groups,
+                    'can_download': can_download,
+                }
+                return render(request, 'researchers/project-actions.html', context)
+        else:
+            return redirect('view-project', project.unique_id)
+    except:
+        raise Http404()
 
 @login_required(login_url='login')
 def archive_project(request, researcher_id, project_uuid):
