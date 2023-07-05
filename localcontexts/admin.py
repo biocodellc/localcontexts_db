@@ -1,14 +1,14 @@
 import itertools, calendar
 from datetime import datetime, timedelta, timezone
-from django.db.models.functions import Extract
-from django.db.models import Count, Q
+from django.db.models.functions import Extract, TruncMonth, Concat
+from django.db.models import Count, Q, F, Func, Value, CharField
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, reverse
 from django.utils.translation import gettext as _
 from django.apps import apps
 from django.template.response import TemplateResponse
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from accounts.models import Profile, UserAffiliation, SignUpInvitation
 from rest_framework_api_key.admin import APIKey, APIKeyModelAdmin
@@ -34,25 +34,36 @@ class MyAdminSite(admin.AdminSite):
         urls = super().get_urls()
         my_urls = [
             path('dashboard/',
-                self.admin_view(self.dashboard_view))
+                self.admin_view(self.dashboard_view), name='admin-dashboard')
         ]
         urls = my_urls + urls
         return urls
     
     def dashboard_view(self, request):
-        start_date = datetime.now(tz=timezone.utc)
+        if '_changedate' in request.POST:
+            request.session['date'] = request.POST['filter-date']
+            return redirect('lc-admin:admin-dashboard')
+        elif '_resetdate' in request.POST:
+            try:
+                del request.session['date']
+            except:
+                pass
+            return redirect('lc-admin:admin-dashboard')
+        
+        if 'date' in request.session:
+            datestr = request.session['date']
+            new_date = datetime.strptime(datestr, '%Y-%m-%dT%H:%M')
+            new_date = new_date.astimezone(timezone.utc)
+            end_date = new_date
+        else:
+            end_date = datetime.now(tz=timezone.utc)
 
         context = { 
-            # 'otc_notices' : otc_notices, 
-            # 'otc_notices_count': otc_notices_count,
             "app_list": self.get_app_list(request),
             **self.each_context(request),
+            'date' : end_date
         }
-        context.update(dashboardData(start_date))
-        # context.update(dataCharts(start_date))
-        # context.update(user_activity())
-        # context.update(project_activity())
-        # context.update(inactive_users())
+        context.update(dashboardData(end_date))
 
         return render(request, 'admin/dashboard.html', context)
     
@@ -82,7 +93,7 @@ class MyAdminSite(admin.AdminSite):
 admin_site = MyAdminSite(name='lc-admin')
 
 # DASHBOARD VIEWS
-def dashboardData(start_date):
+def dashboardData(end_date):
     users = User.objects.all()
     community = Community.objects.all()
     institution = Institution.objects.all()
@@ -94,7 +105,7 @@ def dashboardData(start_date):
     #Registered Users
     users_total = recent_users_count =0
     users_total = users.count()
-    recent_users_count = users.filter(date_joined__gte=start_date - timedelta(days=30)).count()
+    recent_users_count = users.filter(date_joined__gte=end_date - timedelta(days=30), date_joined__lte=end_date).count()
 
     # Accounts by Country
     # FIXME: profile country saved as initials instead of full name. profile left out for now
@@ -176,54 +187,47 @@ def dashboardData(start_date):
             'projects_count': projects_total_count
         }
     
-    context.update(dataCharts(start_date, chartData))
+    context.update(dataCharts(end_date, chartData))
 
     return context
 
-def dataCharts(start_date, chartData):
-    projects = Project.objects.all()
-    
+def dataCharts(end_date, chartData):
     # get last year by months (from today's date)
-    new_users_data = {}
-    new_projects_data = {}
+    lineChartData = {'user_count':{}, 'project_count':{}}
+    lineChartMonths=[]
+    dateRange = end_date
+
     for i in range(1, 13):
-        start_month = start_date.month
-        month_year = " ".join([calendar.month_name[start_month], str(start_date.year)])
-        new_users_data[month_year] = 0
-        new_projects_data[month_year] = 0
-        start_date -= timedelta(days=calendar.monthrange(start_date.year, start_date.month)[1])
+        month = dateRange.month    
+        year = dateRange.year
+        month_year = " ".join([calendar.month_name[month], str(year)])
+        lineChartMonths.append(month_year)
+        lineChartData['user_count'][month_year] = 0
+        lineChartData['project_count'][month_year] = 0
+        dateRange -= timedelta(days=calendar.monthrange(year, month)[1])
+
+    lineChartMonths.reverse()
+    lineChartData['user_count'] = dict(reversed(list(lineChartData['user_count'].items())))
+    lineChartData['project_count'] = dict(reversed(list(lineChartData['project_count'].items())))
 
     # add user count based on month/year
-    new_users = User.objects.filter(date_joined__gte=start_date - timedelta(days=365)).annotate(
-        month=Extract('date_joined', 'month'),
-        year=Extract('date_joined', 'year'),
-        ).values('month', 'year').annotate(c=Count('pk')).values('month', 'year', 'c').order_by('year', 'month') 
-    
-    for user_count in new_users:
-        user_month = user_count['month']
-        user_month_year = " ".join([calendar.month_name[user_month], str(user_count['year'])])
-        new_users_data[user_month_year] = user_count['c']
-
-    new_users_months = list(new_users_data.keys())
-    new_users_months.reverse()
-    new_users_counts = list(new_users_data.values())
-    new_users_counts.reverse()
+    new_users = User.objects.filter(date_joined__gte=(end_date - timedelta(days=365)), date_joined__lte=end_date).annotate(month=Extract('date_joined', 'month'),year=Extract('date_joined', 'year')).values('month', 'year').annotate(c=Count('pk')).values('month', 'year', 'c').order_by('year', 'month')
 
     # add project count based on month/year
-    new_projects = projects.filter(date_added__gte=start_date - timedelta(days=365)).annotate(
-        month=Extract('date_added', 'month'),
-        year=Extract('date_added', 'year'),
-        ).values('month', 'year').annotate(c=Count('pk')).values('month', 'year', 'c').order_by('year', 'month') 
+    new_projects = Project.objects.filter(date_added__gte=(end_date - timedelta(days=365)), date_added__lte=end_date).annotate(month=Extract('date_added', 'month'),year=Extract('date_added', 'year')).values('month', 'year').annotate(c=Count('pk')).values('month', 'year', 'c').order_by('year', 'month')
     
-    for project_count in new_projects:
-        project_month = project_count['month']
-        project_month_year = " ".join([calendar.month_name[project_month], str(project_count['year'])])
-        new_projects_data[project_month_year] = project_count['c']
+    for user in new_users:
+        user_month = user['month']
+        user_month_year = " ".join([calendar.month_name[user_month], str(user['year'])])
+        lineChartData['user_count'][user_month_year] = user['c']
 
-    new_project_months = list(new_projects_data.keys())
-    new_project_months.reverse()
-    new_project_counts = list(new_projects_data.values())
-    new_project_counts.reverse()
+    for project in new_projects:
+        project_month = project['month']
+        project_month_year = " ".join([calendar.month_name[project_month], str(project['year'])])
+        lineChartData['project_count'][project_month_year] = project['c']
+
+    new_users_counts = list(lineChartData['user_count'].values())
+    new_project_counts = list(lineChartData['project_count'].values())
 
     # Colors
     teal_rgb, teal_hex = 'rgba(0, 115, 133, 1)', '#007385'
@@ -264,7 +268,7 @@ def dataCharts(start_date, chartData):
     
     # Line Chart Data
     newUsers = {
-        'labels': new_users_months,
+        'labels': lineChartMonths,
         'datasets': [
             {
                 'data': new_users_counts,

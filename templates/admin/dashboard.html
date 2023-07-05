@@ -19,7 +19,16 @@
 {% block content %}
     <div class="dashboard">
         <div class="w-100">
-            <h2>Today: {% now "M. d, Y, H:i e" %}</h2>
+            <div class="dash-card flex-this space-between">
+                <h1 class="margin-left-1">Dashboard Data for {{date|date:"F d, Y, H:i e" }}</h1>
+                <form id="dashboardDateFilter" class="flex-this align-center margin-right-1" method="POST">
+                    {% csrf_token %}
+                    <input style="border:none;height:20px;" type="datetime-local" id="start" name="filter-date"
+                    value="{{date|date:'Y-m-d H:i' }}" max="{% now 'Y-m-d H:i' %}">
+                    <input class="date-btn" type="submit" value="Change Date" name="_changedate">
+                    <input class="date-btn" type="submit" value="Reset Date" name="_resetdate">
+                </form>
+            </div>
         </div>
 
         <!-- Data Charts and Counts (Visualizations) -->
