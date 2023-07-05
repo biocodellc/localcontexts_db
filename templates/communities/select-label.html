@@ -56,7 +56,8 @@
             {% if not bclabel.is_approved %}
                 <div class="w-20">
                     <small class="center-text block bold darkteal-text margin-bottom-8">
-                        {% if request.user == bclabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
+                        {% can_user_approve_label request.user bclabel member_role as user_can_approve %}
+                        {% if not user_can_approve %} Waiting approval * {% else %} Review for approval * {% endif %}
                     </small>
                     <div class="margin-top-16 margin-bottom-16">
                         <div id="{{ bclabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
@@ -76,7 +77,8 @@
             {% if not tklabel.is_approved %}
                 <div class="w-20">
                     <small class="center-text block bold darkteal-text margin-bottom-8">
-                        {% if request.user == tklabel.created_by or member_role == 'viewer' %} Waiting approval * {% else %} Review for approval * {% endif %}
+                        {% can_user_approve_label request.user tklabel member_role as user_can_approve %}
+                        {% if not user_can_approve %} Waiting approval * {% else %} Review for approval * {% endif %}
                     </small>
                     <div class="margin-top-16 margin-bottom-16">
                         <div id="{{ tklabel.unique_id }}" onclick="customText(this)" class="center-text pointer">
@@ -129,12 +131,16 @@
 
                         <div class="flex-this flex-end">
                             {% if not bclabel.is_approved %}
-                                {% if not bclabel.created_by == request.user %}
-                                    {% if member_role == 'admin' or member_role == 'editor' %}
-                                        <div class="margin-top-1">
-                                            <a class="primary-btn action-btn" href="{% url 'approve-label' community.id bclabel.unique_id %}">Review for Approval</a>
-                                        </div>
-                                    {% endif %}
+                                {% can_user_approve_label request.user bclabel member_role as user_can_approve %}
+
+                                {% if user_can_approve %}
+                                    <div class="margin-top-1">
+                                        <a class="primary-btn green-btn" href="{% url 'approve-label' community.id bclabel.unique_id %}">Review for approval</a>
+                                    </div>
+                                {% else %}
+                                    <div class="margin-top-1">
+                                        <button class="primary-btn disabled-btn" href="#" disabled>Waiting for approval</button>
+                                    </div>
                                 {% endif %}
                             {% endif %}
 
@@ -185,12 +191,16 @@
 
                         <div class="flex-this flex-end">
                             {% if not tklabel.is_approved %}
-                                {% if not tklabel.created_by == request.user %}
-                                    {% if member_role == 'admin' or member_role == 'editor' %}
-                                        <div class="margin-top-1">
-                                            <a class="primary-btn action-btn" href="{% url 'approve-label' community.id tklabel.unique_id %}">Review for Approval</a>
-                                        </div>
-                                    {% endif %}
+                                {% can_user_approve_label request.user tklabel member_role as user_can_approve %}
+
+                                {% if user_can_approve %}
+                                    <div class="margin-top-1">
+                                        <a class="primary-btn green-btn" href="{% url 'approve-label' community.id tklabel.unique_id %}">Review for approval</a>
+                                    </div>
+                                {% else %}
+                                    <div class="margin-top-1">
+                                        <button class="primary-btn disabled-btn" href="#" disabled>Waiting for approval</button>
+                                    </div>
                                 {% endif %}
                             {% endif %}
 
