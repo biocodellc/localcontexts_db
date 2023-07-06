@@ -1714,3 +1714,19 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
         realFileUploadBtn.click()
     })
  }
+
+ if (window.location.href.includes('/communities/labels/customize')) {
+    const realAudioUploadBtn = document.getElementById('originalLabelAudioUploadBtn')
+    const customAudioUploadBtn = document.getElementById('customLabelAudioFileUploadBtn')
+
+    function showAudioFileName() {
+        const selectedFile = realAudioUploadBtn.files[0]
+        customAudioUploadBtn.innerHTML = `${selectedFile.name} <i class="fa-solid fa-check"></i>`
+    }
+
+    customAudioUploadBtn.addEventListener('click', function(e) {
+        e.preventDefault()
+        realAudioUploadBtn.click()
+        console.log('click')
+    })
+ }

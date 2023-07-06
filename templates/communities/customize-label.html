@@ -223,12 +223,20 @@
                     {{ form.name }}
                 </div>
 
+                {% if form.name.errors %}
+                    <div class="msg-red w-50"><small>{{ form.name.errors.as_text }}</small></div> 
+                {% endif %}
+
                 <div class="w-30 margin-bottom-16">
                     <label>Label language</label>
                     <div class="autocomplete" style="width:300px;">
                         {{ form.language }}
                     </div>
                 </div>
+
+                {% if form.language.errors %}
+                    <div class="msg-red w-50"><small>{{ form.language.errors.as_text }}</small></div> 
+                {% endif %}
 
                 <div class="w-80">
                     <label for="label_text">Label text</label>
@@ -240,13 +248,17 @@
                     </div> 
                     {{ form.label_text }}
                 </div>
-                <div>
-                    <label>Upload audio file</label><br>
-                    {{ form.audiofile }}
-                </div>
 
-                {% if form.errors %}
-                    <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
+                {% if form.label_text.errors %}
+                    <div class="msg-red w-50"><small>{{ form.label_text.errors.as_text }}</small></div> 
+                {% endif %}
+
+                <div>
+                    <div class="hide">{{ form.audiofile }}</div>
+                    <button id="customLabelAudioFileUploadBtn" class="primary-btn green-btn">Upload audio file <i class="fa-solid fa-upload"></i></button>
+                </div>
+                {% if form.audiofile.errors %}
+                    <div class="msg-red w-50"><small>{{ form.audiofile.errors.as_text }}</small></div> 
                 {% endif %}
             </div>
 
