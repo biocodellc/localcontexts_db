@@ -27,7 +27,7 @@ class ConfirmCommunityForm(forms.ModelForm):
         widgets = {
             'contact_name': forms.TextInput(attrs={'class': 'w-100'}),
             'contact_email': forms.EmailInput(attrs={'class': 'w-100', 'id': 'communityContactEmailField'}),
-            'support_document': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id': 'communitySupportLetterUploadBtn', 'onchange': 'showFileName()'}),
+            'support_document': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id': 'communitySupportLetterUploadBtn', 'onchange': 'showFile()'}),
         }
 
     def clean_support_document(self):

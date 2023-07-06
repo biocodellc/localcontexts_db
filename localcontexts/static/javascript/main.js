@@ -1671,7 +1671,6 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
     }
 
     customImageUploadBtn.addEventListener('click', function(e) {
-        console.log('click')
         e.preventDefault()
         realImageUploadBtn.click()
     })
