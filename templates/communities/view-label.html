@@ -35,9 +35,10 @@
                                     <a class="primary-btn white-btn" href="{% url 'edit-label' community.id bclabel.unique_id %}">Edit Label <i class="fa fa-pencil" aria-hidden="true"></i></a>
                                 </div>
                             {% else %}
-                                {% if member_role == 'admin' or member_role == 'editor' %}
+                                {% can_user_approve_label request.user bclabel member_role as user_can_approve %}
+                                {% if user_can_approve %}
                                     <div class="margin-top-1">
-                                        <a class="primary-btn action-btn" href="{% url 'approve-label' community.id bclabel.unique_id %}">Review for Approval</a>
+                                        <a class="primary-btn green-btn" href="{% url 'approve-label' community.id bclabel.unique_id %}">Review for approval</a>
                                     </div>
                                 {% endif %}
                             {% endif %}
@@ -57,9 +58,10 @@
                                     <a class="primary-btn white-btn" href="{% url 'edit-label' community.id tklabel.unique_id %}">Edit Label <i class="fa fa-pencil" aria-hidden="true"></i></a>
                                 </div>
                             {% else %}
-                                {% if member_role == 'admin' or member_role == 'editor' %}
+                                {% can_user_approve_label request.user tklabel member_role as user_can_approve %}
+                                {% if user_can_approve %}
                                     <div class="margin-top-1">
-                                        <a class="primary-btn action-btn" href="{% url 'approve-label' community.id tklabel.unique_id %}">Review for Approval</a>
+                                        <a class="primary-btn green-btn" href="{% url 'approve-label' community.id tklabel.unique_id %}">Review for approval</a>
                                     </div>
                                 {% endif %}
                             {% endif %}
@@ -89,6 +91,16 @@
 
                     {% if tklabel %} 
                         {% if not tklabel.is_approved %} This Label has not been approved yet {% else %} {{ approver_name }} {% endif %}
+                    {% endif %}
+                    <br>
+
+                    <span class="bold">Last edited by</span> - 
+                    {% if bclabel %}   
+                        {% if not bclabel.last_edited_by %} No edits have been made to this Label yet {% else %} {{ last_editor_name }} {% endif %}
+                    {% endif %}
+
+                    {% if tklabel %} 
+                        {% if not tklabel.last_edited_by %} No edits have been made to this Label yet {% else %} {{ last_editor_name }} {% endif %}
                     {% endif %}
                     <br>
 

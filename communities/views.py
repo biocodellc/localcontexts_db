@@ -594,6 +594,7 @@ def edit_label(request, pk, label_id):
                 if bclabel.is_approved:
                     bclabel.is_approved = False
                     bclabel.approved_by = None
+                    bclabel.last_edited_by = request.user
                     bclabel.version += 1
                     bclabel.save()
 
@@ -605,6 +606,7 @@ def edit_label(request, pk, label_id):
                 if tklabel.is_approved:
                     tklabel.is_approved = False
                     tklabel.approved_by = None
+                    tklabel.last_edited_by = request.user
                     tklabel.version += 1
                     tklabel.save()
 
@@ -657,6 +659,7 @@ def view_label(request, pk, label_uuid):
             projects = bclabel.project_bclabels.all()
             creator_name = get_users_name(bclabel.created_by)
             approver_name = get_users_name(bclabel.approved_by)
+            last_editor_name = get_users_name(bclabel.last_edited_by)
             label_versions = LabelVersion.objects.filter(bclabel=bclabel).order_by('version')
             bclabels = BCLabel.objects.filter(community=community).exclude(unique_id=label_uuid).values('unique_id', 'name', 'label_type', 'is_approved')
             tklabels = TKLabel.objects.filter(community=community).values('unique_id', 'name', 'label_type', 'is_approved')
@@ -665,6 +668,7 @@ def view_label(request, pk, label_uuid):
             projects = tklabel.project_tklabels.all()
             creator_name = get_users_name(tklabel.created_by)
             approver_name = get_users_name(tklabel.approved_by)
+            last_editor_name = get_users_name(tklabel.last_edited_by)
             label_versions = LabelVersion.objects.filter(tklabel=tklabel).order_by('version')
             tklabels = TKLabel.objects.filter(community=community).exclude(unique_id=label_uuid).values('unique_id', 'name', 'label_type', 'is_approved')
             bclabels = BCLabel.objects.filter(community=community).values('unique_id', 'name', 'label_type', 'is_approved')
@@ -679,6 +683,7 @@ def view_label(request, pk, label_uuid):
             'projects': projects,
             'creator_name': creator_name,
             'approver_name': approver_name,
+            'last_editor_name': last_editor_name,
             'label_versions': label_versions,
         }
 
