@@ -140,7 +140,6 @@
     padding: 1% 0;
 }
 
-
 #header {
     background: linear-gradient(179.93deg, #045887 -12.22%, #058F73 156.81%);
     color: #fff;
@@ -225,7 +224,7 @@ div.breadcrumbs a {
     font-weight: bold;
 }
 
-/* nav sidebar */
+/* NAV SIDEBAR */
 .toggle-nav-sidebar{
     border-top: none;
     border-bottom: none;
@@ -251,7 +250,7 @@ div.breadcrumbs a {
     color: #fff;
 }
 
-/* buttons */
+/* BUTTONS */
 .button, 
 input[type="submit"], 
 input[type="button"], 
@@ -292,13 +291,27 @@ input[type="submit"].default,
     border: 1px solid #108670;
     color: #fff;
 }
+.date-btn{
+    padding:5px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left:10px;
+}
 
-/* dashboard */
+/* DASHBOARD */
 #content.dasboard-main {
     padding-left: 10px;
     padding-right:10px;
     padding-top: 15px;
     padding-bottom: 15px;
+    background-color:#f1f4f5;
+}
+.dash-card{
+    background-color: #fff;
+    margin: 10px;
+    border-radius: 30px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    padding:10px;
 }
 
 .stats-count-div {
