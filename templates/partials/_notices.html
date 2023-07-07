@@ -471,6 +471,10 @@
                             {{ cc_policy_form.policy_document }}
                         </div>
 
+                        {% if cc_policy_form.policy_document.errors %}
+                            <div class="msg-red w-50"><small>{{ cc_policy_form.policy_document.errors.as_text }}</small></div> 
+                        {% endif %}
+
                         <br>
                         <label>Website URL</label><br>
                         {{ cc_policy_form.url }}
