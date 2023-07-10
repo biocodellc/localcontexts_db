@@ -1709,10 +1709,37 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
         customFileUploadBtn.innerHTML = `${selectedFile.name} <i class="fa-solid fa-check"></i>`
     }
 
+    function validatePolicyDocument() {
+        const file = realFileUploadBtn.files[0]
+
+        if (file) {
+            const allowedExtensions = ['.pdf', '.doc', '.docx']
+            const fileExt = file.name.toLowerCase().substring(file.name.lastIndexOf('.'))
+
+            if (!allowedExtensions.includes(fileExt)) {
+                alert('Invalid document file extension. Only PDF and DOC/DOCX files are allowed.')
+                realFileUploadBtn.value = '' // Clear the file input field
+                customFileUploadBtn.innerHTML = 'Upload Document <i class="fa-solid fa-upload"></i>'
+                return false
+            }
+
+            const allowedMimeTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+            if (!allowedMimeTypes.includes(file.type)) {
+                alert('Invalid document file type. Only PDF and DOC/DOCX files are allowed.')
+                realFileUploadBtn.value = ''
+                customFileUploadBtn.innerHTML = 'Upload Document <i class="fa-solid fa-upload"></i>'
+                return false
+            }
+        }
+        return true
+    }
+
     customFileUploadBtn.addEventListener('click', function(e) {
         e.preventDefault()
         realFileUploadBtn.click()
     })
+
+    realFileUploadBtn.addEventListener('change', validatePolicyDocument)
  }
 
  if (window.location.href.includes('/communities/labels/customize')) {
