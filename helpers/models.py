@@ -216,3 +216,16 @@ class NoticeDownloadTracker(models.Model):
     class Meta:
         verbose_name = 'Notice Download Tracker'
         verbose_name_plural = 'Notice Download Tracker'
+
+class CollectionsCareNoticePolicy(models.Model):
+    institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
+    policy_document = models.FileField(upload_to='institutions/support-files/collections-care-policies', blank=True, null=True)
+    url = models.URLField('Website URL', null=True, blank=True, unique=True)
+    added = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return str(self.institution.institution_name)
+    
+    class Meta:
+        verbose_name = 'Collections Care Notice Policy'
+        verbose_name_plural = 'Collections Care Notice Policy'

@@ -119,3 +119,26 @@ def get_tklabel_img_url(img_type, *args, **kwargs):
     elif img_type =='tkcr':
         image_path = 'images/tk-labels/tk-creative.png'
     return static(image_path)
+
+@register.simple_tag
+def can_user_approve_label(user, label, member_role):
+    user_can_approve = True
+
+    if member_role == 'viewer':
+        user_can_approve = False
+    else:
+        if label.created_by == user:
+            # If the user is the creator of the label
+            if not label.last_edited_by:
+                # If there is no last editor, the creator cannot approve
+                user_can_approve = False
+            elif label.last_edited_by == user:
+                # If the last editor is also the creator, neither can approve
+                user_can_approve = False
+        else:
+            # If the user is not the creator
+            if label.last_edited_by == user:
+                # If the user is the last editor, they cannot approve
+                user_can_approve = False
+
+    return user_can_approve

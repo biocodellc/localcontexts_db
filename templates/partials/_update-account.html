@@ -116,29 +116,37 @@
 
                         <div class="flex-this space-between">
                             <div class="w-50">
-                                <div id="imagePreviewContainer" class="imgPreviewContainer">
+
                                     {% if community %}
-                                        {% if not community.image %} 
-                                            <img src="{% static 'images/placeholders/community-place.jpg' %}">
-                                        {% else %}
-                                            <img src="{{ update_form.instance.image.url }}" alt="{{ update_form.instance.community_name }} image">
-                                        {% endif %}
+                                        <div id="imagePreviewContainer" class="img-preview__container__rectangle">
+                                            {% if not community.image %} 
+                                                <img src="{% static 'images/placeholders/community-place.jpg' %}">
+                                            {% else %}
+                                                <img src="{{ update_form.instance.image.url }}" alt="{{ update_form.instance.community_name }} image">
+                                            {% endif %}                                        
+                                        </div>
                                     {% endif %}
+
                                     {% if institution %}
-                                        {% if not institution.image %} 
-                                            <img src="{% static 'images/placeholders/institution-place.jpg' %}">
-                                        {% else %}
-                                            <img src="{{ update_form.instance.image.url }}" alt="{{ update_form.instance.institution_name }} image">
-                                        {% endif %}
+                                        <div id="imagePreviewContainer" class="img-preview__container__rectangle">
+                                            {% if not institution.image %} 
+                                                <img src="{% static 'images/placeholders/institution-place.jpg' %}">
+                                            {% else %}
+                                                <img src="{{ update_form.instance.image.url }}" alt="{{ update_form.instance.institution_name }} image">
+                                            {% endif %}                                        
+                                        </div>
                                     {% endif %}
+
                                     {% if researcher %}
-                                        {% if not researcher.image %} 
-                                            <img src="{% static 'images/placeholders/researcher-place.jpg' %}">
-                                        {% else %}
-                                            <img src="{{ update_form.instance.image.url }}" alt="researcher account image">
-                                        {% endif %}
+                                        <div id="imagePreviewContainer" class="img-preview__container__square">
+                                            {% if not researcher.image %} 
+                                                <img src="{% static 'images/placeholders/researcher-place.jpg' %}">
+                                            {% else %}
+                                                <img src="{{ update_form.instance.image.url }}" alt="researcher account image">
+                                            {% endif %}
+                                        </div>
                                     {% endif %}
-                                </div>
+
                             </div>
 
                             <div class="flex-this">

@@ -47,6 +47,14 @@
 
         <div class="margin-top-16 margin-bottom-16 flex-this w-100">
             <div class="w-50 margin-right-8">
+                <div class="hide">{{ form.support_document }}</div>
+                <button id="customFileUploadBtn" class="primary-btn green-btn margin-right-8 w-100">Upload letter <i class="fa-solid fa-upload"></i></button> 
+                {% if form.support_document.errors %}
+                    <div class="msg-red w-100"><small>{{ form.support_document.errors.as_text }}</small></div> 
+                {% endif %}
+            </div>
+            
+            <div class="w-50">
                 <div>
                     <a 
                         {% if community %}
@@ -56,17 +64,9 @@
                             href="{% url 'download-institution-support-letter' %}"
                         {% endif %}
 
-                        class="primary-btn blue-btn btn-width__support-letter-btn"
+                        class="primary-btn blue-btn"
                     > Download letter template <i class="fa-solid fa-download"></i></a>
                 </div>  
-            </div>
-
-            <div class="w-50">
-                <div class="hide">{{ form.support_document }}</div>
-                <button id="customFileUploadBtn" class="primary-btn green-btn margin-right-8">Upload letter <i class="fa-solid fa-upload"></i></button> 
-                {% if form.support_document.errors %}
-                    <div class="msg-red w-50"><small>{{ form.support_document.errors.as_text }}</small></div> 
-                {% endif %}
             </div>
         </div>
 
