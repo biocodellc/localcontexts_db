@@ -24,8 +24,8 @@ function disableSubmitRegistrationBtn() {
     registerUserBtn.innerText = 'Submitting...'
     
     window.addEventListener('load', function() {
-        registerUserBtn.innerText = oldValue;
-        registerUserBtn.removeAttribute('disabled');
+        registerUserBtn.innerText = oldValue
+        registerUserBtn.removeAttribute('disabled')
     })
 } 
 
@@ -445,6 +445,31 @@ function populateTemplate(id) {
         }
     }
 
+}
+  
+function expandCCNotice(noticeDiv) {
+    let divID = noticeDiv.id
+    let divToOpen = document.getElementById(`openDiv-${divID}`)
+    let clickedPTag = noticeDiv.querySelector('p')
+    let allDivs = document.querySelectorAll('.cc-notice__expanded-container')
+
+    let allPTags = Array.from(document.querySelectorAll('.cc-notice__container p'))
+
+    allPTags.forEach((node) => {
+        if (node === clickedPTag) {
+            node.classList.toggle('cc-active')
+        } else {
+            node.classList.remove('cc-active')
+        }
+    })
+
+    allDivs.forEach((div) => {
+        if (div === divToOpen) {
+            div.classList.toggle('hide')
+        } else {
+            div.classList.add('hide')
+        }
+    })
 }
 
 // Customize Label: clone translation form to add multiple translations
@@ -1326,15 +1351,27 @@ if (window.location.href.includes('dashboard')) {
 
 // addURLModal
 if (window.location.href.includes('notices')) { 
-    const modal = document.getElementById('addURLModal')
+    // OTC Add URL modal
+    const OTCModal = document.getElementById('addURLModal')
     const addURLBtn = document.getElementById('addURLBtn')
 
     addURLBtn.addEventListener('click', () => {
-        if (modal.classList.contains('hide')) { modal.classList.replace('hide', 'show')}
+        if (OTCModal.classList.contains('hide')) { OTCModal.classList.replace('hide', 'show')}
     })
+    const closeAddURLModal = document.getElementById('closeAddURLModal')
+    closeAddURLModal.addEventListener('click', function() { OTCModal.classList.replace('show', 'hide')})
 
-    const closeModalBtn = document.querySelector('.close-modal-btn')
-    closeModalBtn.addEventListener('click', function() { modal.classList.replace('show', 'hide')})
+    // CC Notices modal
+    const ccNoticeModal = document.getElementById('addCCPolicyModal')
+    if (ccNoticeModal) {
+        const openCCModalBtn = document.getElementById('openCCNoticeModal')
+        openCCModalBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+            if (ccNoticeModal.classList.contains('hide')) { ccNoticeModal.classList.replace('hide', 'show')}
+        })
+        const closeCCNoticeModal = document.getElementById('closeCCNoticeModal')
+        closeCCNoticeModal.addEventListener('click', function() { ccNoticeModal.classList.replace('show', 'hide')})    
+    }
 }
 
 if (window.location.href.includes('labels/view/')) {
@@ -1602,3 +1639,105 @@ if (window.location.href.includes('create-institution')) {
     
     function clearSuggestions() { suggestionsContainer.innerHTML = '' }
 }
+
+if (window.location.href.includes('/institutions/update/') || window.location.href.includes('/communities/update/') || window.location.href.includes('/researchers/update/')) {
+    const realImageUploadBtn = document.getElementById('institutionImgUploadBtn') || document.getElementById('communityImgUploadBtn') || document.getElementById('researcherImgUploadBtn')
+    const customImageUploadBtn = document.getElementById('altImageUploadBtn')
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer')
+
+    function showFile() {
+        const selectedFile = realImageUploadBtn.files[0]
+
+        if (selectedFile) {
+            showImagePreview(selectedFile)
+        } else {
+            clearImagePreview()
+        }
+    }
+
+    function showImagePreview(file) {
+        const reader = new FileReader()
+        reader.onload = function(e) {
+            const imagePreview = document.createElement('img')
+            imagePreview.src = e.target.result
+            imagePreviewContainer.innerHTML = ''
+            imagePreviewContainer.appendChild(imagePreview)
+        }
+        reader.readAsDataURL(file)
+    }
+
+    function clearImagePreview() {
+        imagePreviewContainer.innerHTML = ''
+    }
+
+    customImageUploadBtn.addEventListener('click', function(e) {
+        e.preventDefault()
+        realImageUploadBtn.click()
+    })
+ }
+
+ if (window.location.href.includes('/confirm-institution/') || window.location.href.includes('/confirm-community/')) {
+    const realFileUploadBtn = document.getElementById('communitySupportLetterUploadBtn') || document.getElementById('institutionSupportLetterUploadBtn')
+    const customFileUploadBtn = document.getElementById('customFileUploadBtn')
+    const form = document.querySelector('#confirmationForm')
+    const contactEmailInput = document.getElementById('communityContactEmailField') || document.getElementById('institutionContactEmailField')
+
+    function showFileName() {
+        const selectedFile = realFileUploadBtn.files[0]
+        customFileUploadBtn.innerHTML = `${selectedFile.name} <i class="fa-solid fa-check"></i>`
+    }
+
+    customFileUploadBtn.addEventListener('click', function(e) {
+        e.preventDefault()
+        realFileUploadBtn.click()
+    })
+
+    form.addEventListener('submit', function(e) {
+        if (realFileUploadBtn.files.length === 0 && contactEmailInput.value.trim() === '') {
+            e.preventDefault()
+            alert('Please either enter a contact email or upload a support file')
+        }
+    })
+ }
+
+ if (window.location.href.includes('institutions/notices/')) {
+    const realFileUploadBtn = document.getElementById('ccNoticePolicyUploadBtn')
+    const customFileUploadBtn = document.getElementById('customCCPolicyFileUploadBtn')
+
+    function showFileName() {
+        const selectedFile = realFileUploadBtn.files[0]
+        customFileUploadBtn.innerHTML = `${selectedFile.name} <i class="fa-solid fa-check"></i>`
+    }
+
+    function validatePolicyDocument() {
+        const file = realFileUploadBtn.files[0]
+
+        if (file) {
+            const allowedExtensions = ['.pdf', '.doc', '.docx']
+            const fileExt = file.name.toLowerCase().substring(file.name.lastIndexOf('.'))
+
+            if (!allowedExtensions.includes(fileExt)) {
+                alert('Invalid document file extension. Only PDF and DOC/DOCX files are allowed.')
+                realFileUploadBtn.value = '' // Clear the file input field
+                customFileUploadBtn.innerHTML = 'Upload Document <i class="fa-solid fa-upload"></i>'
+                return false
+            }
+
+            const allowedMimeTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+            if (!allowedMimeTypes.includes(file.type)) {
+                alert('Invalid document file type. Only PDF and DOC/DOCX files are allowed.')
+                realFileUploadBtn.value = ''
+                customFileUploadBtn.innerHTML = 'Upload Document <i class="fa-solid fa-upload"></i>'
+                return false
+            }
+        }
+        return true
+    }
+
+    customFileUploadBtn.addEventListener('click', function(e) {
+        e.preventDefault()
+        realFileUploadBtn.click()
+    })
+
+    realFileUploadBtn.addEventListener('change', validatePolicyDocument)
+ }

@@ -1,0 +1,144 @@
+{% load static %}
+
+<!-- Pie Charts -->
+<div class="flex-this w-100 justify-center">
+
+    <div class="w-33 dash-card">
+        <div>
+            <h2 class="center-text">Registered Hub Accounts</h2>
+            
+            <div style="height: 350px;">
+                <canvas id="accounts"></canvas>
+            </div>
+
+            <div class="flex-this justify-center wrap">
+                <div class="flex-this">
+                    <div class="tooltip" style="cursor: default;background-color: #108670;"></div>
+                    <p class="no-top-margin margin-left-8 margin-right-8">Community</p>
+                </div>
+                <div class="flex-this">
+                    <div class="tooltip" style="cursor: default;background-color: #EF6C00;"></div>
+                    <p class="no-top-margin margin-left-8 margin-right-8">Institution</p>
+                </div>
+                <div class="flex-this">
+                    <div class="tooltip" style="cursor: default;background-color: #007385;"></div>
+                    <p class="no-top-margin margin-left-8 margin-right-8">Researcher</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-33 dash-card">
+        <div class="flex-this justify-center">
+            <h2>Project Activity</h2>
+            <div class="tooltip" style="margin-top: 15px; margin-left: 5px;"><strong>i</strong>
+                <span class="tooltiptext">Project activity status by project count.</span>
+            </div>
+        </div>
+        
+        <div style="height: 350px;">
+            <canvas id="projectActivity"></canvas>
+        </div>
+
+        <div class="flex-this justify-center wrap">
+            <div class="flex-this">
+                <div class="tooltip" style="cursor: default;background-color: #EF6C00;"></div>
+                <p class="no-top-margin margin-left-8 margin-right-8">Engagement Notice</p>
+            </div>
+            <div class="flex-this">
+                <div class="tooltip" style="cursor: default;background-color: #007385;"></div>
+                <p class="no-top-margin margin-left-8 margin-right-8">Disclosure Notice</p>
+            </div>
+            <div class="flex-this">
+                <div class="tooltip" style="cursor: default;background-color: #108670;"></div>
+                <p class="no-top-margin margin-left-8 margin-right-8">Labels Applied</p>
+            </div>
+            <div class="flex-this">
+                <div class="tooltip" style="cursor: default;background-color: #64748B;"></div>
+                <p class="no-top-margin margin-left-8 margin-right-8">No Activity</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-33 dash-card">
+        <h2 class="center-text">Labels Status</h2>
+        
+        <div style="height: 350px;">
+            <canvas id="customizedLabels"></canvas>
+        </div>
+
+        <div class="flex-this justify-center wrap">
+            <div class="flex-this">
+                <div class="tooltip" style="cursor: default;background-color: #EF6C00;"></div>
+                <p class="no-top-margin margin-left-8 margin-right-8">TK Labels</p>
+            </div>
+            <div class="flex-this">
+                <div class="tooltip" style="cursor: default;background-color: #007385;"></div>
+                <p class="no-top-margin margin-left-8 margin-right-8">BC Labels</p>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Counts -->
+<div class="flex-this w-100 justify-center">
+    <div class="w-100 dash-card">
+        <h1 class="center-text">Registered Users</h1>
+        <div id="colorPicker" class="flex-this space-between center-text justify-center margin-left-8 margin-right-8">
+            <div class="stats-count-div">
+                <div class="flex-this justify-center">
+                    <h2 class="count-header">New Users</h2>
+                    <div class="tooltip" style="margin-top: 15px; margin-left: 5px;"><strong>i</strong>
+                        <span class="tooltiptext">In the last 30 days.</span>
+                    </div>
+                </div>
+                <p class="count-number">{{ recent_users_count }}</p>
+            </div>
+            <div class="stats-count-div">
+                <h2 class="count-header">All Users</h2>
+                <p class="count-number">{{ users_total }}</p>
+            </div>
+            <div class="stats-count-div">
+                <div class="flex-this justify-center">
+                    <h2 class="count-header">Countries</h2>
+                    <div class="tooltip" style="margin-top: 15px; margin-left: 5px;"><strong>i</strong>
+                        <span class="tooltiptext">Count based on user profiles.</span>
+                    </div>
+                </div>
+                <p class="count-number">{{ country_count }}</p>
+            </div>
+            <div class="stats-count-div">
+                <h2 class="count-header">Projects</h2>
+                <p class="count-number">{{ projects_count }}</p>
+            </div>        
+        </div>
+    </div>
+</div>
+
+<!-- Line Charts -->
+<div class="flex-this w-100 justify-center">
+    <div class="w-100 dash-card">
+        <h1 class="center-text">Hub Activity</h1>
+        <div class="flex-this justify-center">
+            <div class="tooltip" style="cursor: default;background-color: #EF6C00;"></div>
+            <p class="margin-left-8 margin-right-1 no-top-margin">New Users</p>
+            <div class="tooltip" style="cursor: default;background-color: #3876aa;"></div>
+            <p class="margin-left-8 margin-right-1 no-top-margin">New Projects</p>
+        </div>
+        <div style="height: 400px;">
+            <canvas id="newUsers"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'javascript/admin.js' %}"></script>
+<script type="text/javascript">
+    window.onload = function() {
+        pieChart('accounts', {{accountData|safe}});
+        pieChart('projectActivity', {{projectActivityData|safe}});
+        pieChart('customizedLabels', {{customizedLabelsData|safe}});
+        barChart('newUsers', {{newUsers|safe}});
+    };
+</script>

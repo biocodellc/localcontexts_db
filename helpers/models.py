@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from communities.models import Community
-# from projects.models import Project
 from researchers.models import Researcher
 from institutions.models import Institution
 
@@ -202,3 +201,31 @@ class LabelTranslationVersion(models.Model):
     class Meta:
         verbose_name = 'Label Translation Version'
         verbose_name_plural = 'Label Translation Versions'
+
+class NoticeDownloadTracker(models.Model):
+    institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
+    researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="download_user", blank=True)
+    collections_care_notices = models.BooleanField(default=False, null=True)
+    open_to_collaborate_notice = models.BooleanField(default=False, null=True)
+    date_downloaded = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.user.get_full_name()
+    
+    class Meta:
+        verbose_name = 'Notice Download Tracker'
+        verbose_name_plural = 'Notice Download Tracker'
+
+class CollectionsCareNoticePolicy(models.Model):
+    institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
+    policy_document = models.FileField(upload_to='institutions/support-files/collections-care-policies', blank=True, null=True)
+    url = models.URLField('Website URL', null=True, blank=True, unique=True)
+    added = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return str(self.institution.institution_name)
+    
+    class Meta:
+        verbose_name = 'Collections Care Notice Policy'
+        verbose_name_plural = 'Collections Care Notice Policy'

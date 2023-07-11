@@ -213,15 +213,21 @@ def update_community(request, pk):
     
     else:
         update_form = UpdateCommunityForm(instance=community)
-        if member_role == 'admin': # Only admins can change the form 
-            if request.method == "POST":
-                update_form = UpdateCommunityForm(request.POST, request.FILES, instance=community)
+
+        if request.method == "POST":
+            update_form = UpdateCommunityForm(request.POST, request.FILES, instance=community)
+            
+            if 'clear_image' in request.POST:
+                community.image = None
+                community.save()
+                return redirect('update-community', community.id)
+            else:
                 if update_form.is_valid():
                     update_form.save()
                     messages.add_message(request, messages.SUCCESS, 'Updated!')
                     return redirect('update-community', community.id)
-            else:
-                update_form = UpdateCommunityForm(instance=community)
+        else:
+            update_form = UpdateCommunityForm(instance=community)
 
         context = {
             'community': community,
@@ -588,6 +594,7 @@ def edit_label(request, pk, label_id):
                 if bclabel.is_approved:
                     bclabel.is_approved = False
                     bclabel.approved_by = None
+                    bclabel.last_edited_by = request.user
                     bclabel.version += 1
                     bclabel.save()
 
@@ -599,6 +606,7 @@ def edit_label(request, pk, label_id):
                 if tklabel.is_approved:
                     tklabel.is_approved = False
                     tklabel.approved_by = None
+                    tklabel.last_edited_by = request.user
                     tklabel.version += 1
                     tklabel.save()
 
@@ -639,7 +647,6 @@ def view_label(request, pk, label_uuid):
     else:
         bclabel = BCLabel.objects.none()
         tklabel = TKLabel.objects.none()
-        translations = LabelTranslation.objects.none()
         projects = Project.objects.none()
         creator_name = ''
         approver_name = ''
@@ -649,19 +656,19 @@ def view_label(request, pk, label_uuid):
 
         if BCLabel.objects.filter(unique_id=label_uuid).exists():
             bclabel = BCLabel.objects.select_related('created_by', 'approved_by').get(unique_id=label_uuid)
-            translations = LabelTranslation.objects.filter(bclabel=bclabel)
             projects = bclabel.project_bclabels.all()
             creator_name = get_users_name(bclabel.created_by)
             approver_name = get_users_name(bclabel.approved_by)
+            last_editor_name = get_users_name(bclabel.last_edited_by)
             label_versions = LabelVersion.objects.filter(bclabel=bclabel).order_by('version')
             bclabels = BCLabel.objects.filter(community=community).exclude(unique_id=label_uuid).values('unique_id', 'name', 'label_type', 'is_approved')
             tklabels = TKLabel.objects.filter(community=community).values('unique_id', 'name', 'label_type', 'is_approved')
         if TKLabel.objects.filter(unique_id=label_uuid).exists():
             tklabel = TKLabel.objects.select_related('created_by', 'approved_by').get(unique_id=label_uuid)
-            translations = LabelTranslation.objects.filter(tklabel=tklabel)
             projects = tklabel.project_tklabels.all()
             creator_name = get_users_name(tklabel.created_by)
             approver_name = get_users_name(tklabel.approved_by)
+            last_editor_name = get_users_name(tklabel.last_edited_by)
             label_versions = LabelVersion.objects.filter(tklabel=tklabel).order_by('version')
             tklabels = TKLabel.objects.filter(community=community).exclude(unique_id=label_uuid).values('unique_id', 'name', 'label_type', 'is_approved')
             bclabels = BCLabel.objects.filter(community=community).values('unique_id', 'name', 'label_type', 'is_approved')
@@ -673,10 +680,10 @@ def view_label(request, pk, label_uuid):
             'tklabels': tklabels,
             'bclabel': bclabel,
             'tklabel': tklabel,
-            'translations': translations,
             'projects': projects,
             'creator_name': creator_name,
             'approver_name': approver_name,
+            'last_editor_name': last_editor_name,
             'label_versions': label_versions,
         }
 
@@ -919,114 +926,117 @@ def edit_project(request, community_id, project_uuid):
     
 # @login_required(login_url='login')
 def project_actions(request, pk, project_uuid):
-    community = Community.objects.get(id=pk)
-    project = Project.objects.prefetch_related(
-            'bc_labels', 
-            'tk_labels', 
-            'bc_labels__community', 
-            'tk_labels__community',
-            'bc_labels__bclabel_translation', 
-            'tk_labels__tklabel_translation',
-            ).get(unique_id=project_uuid)
+    try:
+        community = Community.objects.get(id=pk)
+        project = Project.objects.prefetch_related(
+                'bc_labels', 
+                'tk_labels', 
+                'bc_labels__community', 
+                'tk_labels__community',
+                'bc_labels__bclabel_translation', 
+                'tk_labels__tklabel_translation',
+                ).get(unique_id=project_uuid)
 
-    member_role = check_member_role(request.user, community)
-    if not member_role or not request.user.is_authenticated or not project.can_user_access(request.user):
-        return redirect('view-project', project_uuid)    
-    else:
-        notices = Notice.objects.filter(project=project, archived=False)
-        creator = ProjectCreator.objects.get(project=project)
-        current_status = ProjectStatus.objects.filter(project=project, community=community).first()
-        statuses = ProjectStatus.objects.filter(project=project)
-        comments = ProjectComment.objects.select_related('sender').filter(project=project)
-        activities = ProjectActivity.objects.filter(project=project).order_by('-date')
-        is_community_notified = EntitiesNotified.objects.none()
-        sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
-        name = get_users_name(request.user)
-        label_groups = return_project_labels_by_community(project)
-        can_download = can_download_project(request, creator)
+        member_role = check_member_role(request.user, community)
+        if not member_role or not request.user.is_authenticated or not project.can_user_access(request.user):
+            return redirect('view-project', project_uuid)    
+        else:
+            notices = Notice.objects.filter(project=project, archived=False)
+            creator = ProjectCreator.objects.get(project=project)
+            current_status = ProjectStatus.objects.filter(project=project, community=community).first()
+            statuses = ProjectStatus.objects.filter(project=project)
+            comments = ProjectComment.objects.select_related('sender').filter(project=project)
+            activities = ProjectActivity.objects.filter(project=project).order_by('-date')
+            is_community_notified = EntitiesNotified.objects.none()
+            sub_projects = Project.objects.filter(source_project_uuid=project.unique_id).values_list('unique_id', 'title')
+            name = get_users_name(request.user)
+            label_groups = return_project_labels_by_community(project)
+            can_download = can_download_project(request, creator)
 
-        # for related projects list 
-        project_ids = list(set(community.community_created_project.all().values_list('project__unique_id', flat=True)
-              .union(community.communities_notified.all().values_list('project__unique_id', flat=True))
-              .union(community.contributing_communities.all().values_list('project__unique_id', flat=True))))
-        project_ids_to_exclude_list = list(project.related_projects.all().values_list('unique_id', flat=True)) #projects that are currently related
-        project_ids = list(set(project_ids).difference(project_ids_to_exclude_list)) # exclude projects that are already related
-        projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id=project.unique_id).order_by('-date_added').values_list('unique_id', 'title')
+            # for related projects list 
+            project_ids = list(set(community.community_created_project.all().values_list('project__unique_id', flat=True)
+                .union(community.communities_notified.all().values_list('project__unique_id', flat=True))
+                .union(community.contributing_communities.all().values_list('project__unique_id', flat=True))))
+            project_ids_to_exclude_list = list(project.related_projects.all().values_list('unique_id', flat=True)) #projects that are currently related
+            project_ids = list(set(project_ids).difference(project_ids_to_exclude_list)) # exclude projects that are already related
+            projects_to_link = Project.objects.filter(unique_id__in=project_ids).exclude(unique_id=project.unique_id).order_by('-date_added').values_list('unique_id', 'title')
 
-        if not creator.community:
-        # 1. is community creator of project?
-        # 2. if no, has community been notified?
-            is_community_notified = EntitiesNotified.objects.filter(communities=community, project=project).exists()
+            if not creator.community:
+            # 1. is community creator of project?
+            # 2. if no, has community been notified?
+                is_community_notified = EntitiesNotified.objects.filter(communities=community, project=project).exists()
 
 
-        project_archived = False
-        if ProjectArchived.objects.filter(project_uuid=project.unique_id, community_id=community.id).exists():
-            x = ProjectArchived.objects.get(project_uuid=project.unique_id, community_id=community.id)
-            project_archived = x.archived
+            project_archived = False
+            if ProjectArchived.objects.filter(project_uuid=project.unique_id, community_id=community.id).exists():
+                x = ProjectArchived.objects.get(project_uuid=project.unique_id, community_id=community.id)
+                project_archived = x.archived
 
-        form = ProjectCommentForm(request.POST or None)
+            form = ProjectCommentForm(request.POST or None)
 
-        if request.method == "POST":
-            if 'add-comment-btn' in request.POST:
-                if form.is_valid():
-                    if request.POST.get('message'):
-                        data = form.save(commit=False)
-                        data.project = project
-                        data.sender = request.user
-                        data.sender_affiliation = community.community_name
-                        data.save()
-                        project_status_seen_at_comment(request.user, community, creator, project)
-                        # send notification to contributors
+            if request.method == "POST":
+                if 'add-comment-btn' in request.POST:
+                    if form.is_valid():
+                        if request.POST.get('message'):
+                            data = form.save(commit=False)
+                            data.project = project
+                            data.sender = request.user
+                            data.sender_affiliation = community.community_name
+                            data.save()
+                            project_status_seen_at_comment(request.user, community, creator, project)
+                            # send notification to contributors
 
-                        send_action_notification_to_project_contribs(project)
-                        return redirect('community-project-actions', community.id, project.unique_id)
-                    else:
-                        return redirect('community-project-actions', community.id, project.unique_id)
-                    
-            elif "notify-btn" in request.POST:
-                project_status = request.POST.get('project-status')
-                set_project_status(request.user, project, community, creator, project_status)                            
-                return redirect('community-project-actions', community.id, project.unique_id)
-            
-            elif 'link_projects_btn' in request.POST:
-                selected_projects = request.POST.getlist('projects_to_link')
+                            send_action_notification_to_project_contribs(project)
+                            return redirect('community-project-actions', community.id, project.unique_id)
+                        else:
+                            return redirect('community-project-actions', community.id, project.unique_id)
+                        
+                elif "notify-btn" in request.POST:
+                    project_status = request.POST.get('project-status')
+                    set_project_status(request.user, project, community, creator, project_status)                            
+                    return redirect('community-project-actions', community.id, project.unique_id)
+                
+                elif 'link_projects_btn' in request.POST:
+                    selected_projects = request.POST.getlist('projects_to_link')
 
-                activities = []
-                for uuid in selected_projects:
-                    project_to_add = Project.objects.get(unique_id=uuid)
-                    project.related_projects.add(project_to_add)
-                    project_to_add.related_projects.add(project)
-                    project_to_add.save()
+                    activities = []
+                    for uuid in selected_projects:
+                        project_to_add = Project.objects.get(unique_id=uuid)
+                        project.related_projects.add(project_to_add)
+                        project_to_add.related_projects.add(project)
+                        project_to_add.save()
 
-                    activities.append(ProjectActivity(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name} | {community.community_name}'))
-                    activities.append(ProjectActivity(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name} | {community.community_name}'))
-                            
-                ProjectActivity.objects.bulk_create(activities)
-                project.save()
-                return redirect('community-project-actions', community.id, project.unique_id)
-            
-            elif 'delete_project' in request.POST:
-                return redirect('community-delete-project', community.id, project.unique_id)
+                        activities.append(ProjectActivity(project=project, activity=f'Project "{project_to_add.title}" was connected to Project by {name} | {community.community_name}'))
+                        activities.append(ProjectActivity(project=project_to_add, activity=f'Project "{project.title}" was connected to Project by {name} | {community.community_name}'))
+                                
+                    ProjectActivity.objects.bulk_create(activities)
+                    project.save()
+                    return redirect('community-project-actions', community.id, project.unique_id)
+                
+                elif 'delete_project' in request.POST:
+                    return redirect('community-delete-project', community.id, project.unique_id)
 
-        context = {
-            'member_role': member_role,
-            'community': community,
-            'project': project,
-            'notices': notices,
-            'creator': creator,
-            'form': form,
-            'current_status': current_status,
-            'statuses': statuses,
-            'comments': comments,
-            'activities': activities,
-            'project_archived': project_archived,
-            'is_community_notified': is_community_notified,
-            'sub_projects': sub_projects,
-            'projects_to_link': projects_to_link,
-            'label_groups': label_groups,
-            'can_download': can_download,
-        }
-        return render(request, 'communities/project-actions.html', context)
+            context = {
+                'member_role': member_role,
+                'community': community,
+                'project': project,
+                'notices': notices,
+                'creator': creator,
+                'form': form,
+                'current_status': current_status,
+                'statuses': statuses,
+                'comments': comments,
+                'activities': activities,
+                'project_archived': project_archived,
+                'is_community_notified': is_community_notified,
+                'sub_projects': sub_projects,
+                'projects_to_link': projects_to_link,
+                'label_groups': label_groups,
+                'can_download': can_download,
+            }
+            return render(request, 'communities/project-actions.html', context)
+    except:
+        raise Http404()
 
 @login_required(login_url='login')
 def archive_project(request, community_id, project_uuid):

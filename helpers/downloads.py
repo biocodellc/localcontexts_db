@@ -4,13 +4,13 @@ from projects.models import ProjectContributors
 from .models import Notice
 
 from django.http import HttpResponse
-from .utils import generate_zip, render_to_pdf
+from .utils import generate_zip, render_to_pdf, get_collections_care_notices
 import requests
 
 # Open to Collaborate Notice
 def download_otc_notice():
     baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/'
-    institution_text = "The Institution Notices are for use by collecting institutions, data repositories, researchers, and organizations who engage in collaborative curation with Indigenous and other marginalized communities who have been traditionally excluded from processes of documentation and record keeping.\nThe Institution Notices are intended to be displayed prominently on public-facing institutional websites, on digital collections pages and or in finding aids."
+    institution_text = "The Open to Collaborate Notice indicates that a researcher or an institution is committed to developing new modes of collaboration, engagement, and partnership over Indigenous collections and data that have colonial and/or problematic histories or unclear provenance. \nThis notice indicates a commitment to change and to develop new processes for the care and stewardship of past and future heritage collections."
 
     # Initialize README TEXT
     readme_text = ''
@@ -33,11 +33,41 @@ def download_otc_notice():
     readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guides (https://localcontexts.org/support/downloadable-resources/) for details on how to adapt and display the Open To Collaborate Notice.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
     files.append(('README.txt', readme_content))
 
-        # Generate zip file 
+    # Generate zip file 
     full_zip_in_memory = generate_zip(files)
-
     zipfile_name = f"LC-Open_to_Collaborate_notice.zip"
+    response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format(zipfile_name)
 
+    return response
+
+def download_cc_notices():
+    baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/collections-care-notices/'
+    
+    files = []
+    notices = get_collections_care_notices()
+    for notice in notices:
+        notice_name = notice['noticeName']
+        png = requests.get(baseURL + notice['imgFileName'])
+        svg = requests.get(baseURL + notice['svgFileName'])
+        notice_name_combined = notice_name.replace(' ', '_') if ' ' in notice_name else notice_name
+        files.append((notice_name_combined + '.png', png.content))
+        files.append((notice_name_combined + '.svg', svg.content))
+        notice_default_text = notice['noticeDefaultText']
+        if notice_default_text is not None:
+            files.append((notice_name_combined + '.txt', notice_default_text))
+    
+    # Create Readme
+    readme_text = 'This folder contains the following files:\n'
+    file_names = []
+    for f in files:
+        file_names.append(f[0])
+    readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guides (https://localcontexts.org/support/downloadable-resources/) for details on how to adapt and display the Collections Care Notices.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
+    files.append(('README.txt', readme_content))
+
+    # Generate zip file 
+    full_zip_in_memory = generate_zip(files)
+    zipfile_name = f"LC-Collections_Care_Notices.zip"
     response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
     response['Content-Disposition'] = 'attachment; filename="{}"'.format(zipfile_name)
 
@@ -130,9 +160,8 @@ def download_project_zip(project):
 
     # Set README text if both types of notice present
     if notice_exists:
-        institution_text = "The Institution Notices are for use by collecting institutions, data repositories and organizations who engage in collaborative curation with Indigenous and other marginalized communities who have been traditionally excluded from processes of documentation and record keeping.\nThe Institution Notices are intended to be displayed prominently on public-facing institutional websites, on digital collections pages and or in finding aids."
-        notice_text = "The BC, TK and Attribution Incomplete Notices are specific tools for institutions and researchers which support the recognition of Indigenous interests in collections and data. The Notices are a mechanism for researchers and institutional staff to identify Indigenous collections and Indigenous interests in data.\n\nThe Notices can function as place-holders on collections, data, or in a sample field until a TK or a BC Label is added by a community."
-        readme_text = notice_text + '\n\n' + institution_text + '\n\nThis folder contains the following files:\n'
+        text_content = "The Disclosure Notices are specific tools for institutions and researchers to identify Indigenous collections and data and to recognize there could be accompanying cultural rights, protocols, and responsibilities. \n\nThe Notices can function as place-holders on collections or data until a Traditional Knowledge or a Biocultural Label is added by a community."
+        readme_text = text_content + '\n\nThis folder contains the following files:\n'
 
     # Create PDF from project context, append to files list
     pdf = render_to_pdf(template_path, context)

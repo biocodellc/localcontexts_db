@@ -28,4 +28,6 @@ class UpdateResearcherForm(forms.ModelForm):
             'website': forms.TextInput(attrs={'class': 'w-100'}),
             'primary_institution': forms.TextInput(attrs={'class': 'w-100'}),
             'description': forms.Textarea(attrs={'class': 'w-100', 'rows': 3,}),
+            'image': forms.ClearableFileInput(attrs={'class': 'w-100 hide', 'id': 'researcherImgUploadBtn', 'onchange': 'showFile()'}),
+
         }
