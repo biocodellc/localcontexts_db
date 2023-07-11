@@ -33,7 +33,14 @@
                     <label>Upload audio file</label><br>
                     {% if bclabel.audiofile %} <div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
                     {% if tklabel.audiofile %} <div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
-                    {{ form.audiofile }}
+                    <div>
+                        <div class="hide">{{ form.audiofile }}</div>
+                        <button id="customLabelAudioFileUploadBtn" class="primary-btn green-btn">Upload audio file <i class="fa-solid fa-upload"></i></button>
+                    </div>
+                    {% if form.audiofile.errors %}
+                        <div class="msg-red w-50"><small>{{ form.audiofile.errors.as_text }}</small></div> 
+                    {% endif %}
+
                 </div>
             </div>
 

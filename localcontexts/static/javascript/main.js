@@ -1754,6 +1754,5 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
     customAudioUploadBtn.addEventListener('click', function(e) {
         e.preventDefault()
         realAudioUploadBtn.click()
-        console.log('click')
     })
  }
