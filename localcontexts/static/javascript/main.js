@@ -1845,7 +1845,7 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
     realFileUploadBtn.addEventListener('change', validatePolicyDocument)
  }
 
- if (window.location.href.includes('/communities/labels/customize')) {
+ if (window.location.href.includes('/communities/labels/customize/') || window.location.href.includes('/communities/labels/edit/')) {
     const realAudioUploadBtn = document.getElementById('originalLabelAudioUploadBtn')
     const customAudioUploadBtn = document.getElementById('customLabelAudioFileUploadBtn')
 

@@ -1,4 +1,4 @@
-{% extends 'account-base.html' %} {% block title %} Edit Label {% endblock %}{% load static %} {% load custom_tags%} {% block community_content %}
+{% extends 'account-base.html' %} {% block title %} Edit Label {% endblock %}{% load static %} {% load custom_tags %} {% block community_content %}
 
 <div class="content-card-v2 content-card-space">
     <div class="w-70">
@@ -30,16 +30,29 @@
                     </div>                    
                 </div>
 
-                <div class="w-80">
+                <div class="w-80 margin-top-8">
                     <label for="label_text">Label text</label>
                     {{ form.label_text }}<br>
-                    <label>Upload audio file</label><br>
-                    {% if bclabel.audiofile %} <div><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
-                    {% if tklabel.audiofile %} <div><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
-                    <div>
-                        <div class="hide">{{ form.audiofile }}</div>
-                        <button id="customLabelAudioFileUploadBtn" class="primary-btn green-btn">Upload audio file <i class="fa-solid fa-upload"></i></button>
+
+                    <label>Label Audio File</label>
+
+                    <div class="flex-this">
+                        {% if bclabel.audiofile %} <div class="margin-right-16"><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
+                        {% if tklabel.audiofile %} <div class="margin-right-16"><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
+                        <div>
+                            <div class="hide">{{ form.audiofile }}</div>
+                            <button id="customLabelAudioFileUploadBtn" class="primary-btn green-btn">
+                                {% if bclabel.audiofile or tklabel.audiofile %}
+                                    {% firstof bclabel.audiofile.name|get_filename tklabel.audiofile.name|get_filename %}
+                                    <i class="fa-solid fa-check"></i>
+                                {% else %}
+                                    Upload audio file 
+                                    <i class="fa-solid fa-upload"></i>
+                                {% endif %}
+                            </button>
+                        </div>                        
                     </div>
+
                     {% if form.audiofile.errors %}
                         <div class="msg-red w-50"><small>{{ form.audiofile.errors.as_text }}</small></div> 
                     {% endif %}
