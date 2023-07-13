@@ -13,12 +13,13 @@
         </div>
 
         <div class="add-translation-form">
-            <div class="flex-this w-80">
+            <div class="flex-this w-100">
                 <div class="w-30 margin-right-16"><label>Translated title</label><br>{{ tran_form.translated_name }}</div>
                 <div class="w-30">
-                    <label>What language is this written in?</label><br>
-                    <div class="autocomplete" style="width:300px;">
+                    <label class="block">Translated Language <small>(select from dropdown)</small></label>
+                    <div class="autocomplete flex-this align-center" style="display:flex;">
                         {{ tran_form.language }}
+                        <button name="clear-language-btn" class="primary-btn white-btn margin-left-16 hide" style="min-height:40px;">Clear<i class="fa-regular fa-eraser"></i></button>
                     </div>
                 </div>
             </div>
