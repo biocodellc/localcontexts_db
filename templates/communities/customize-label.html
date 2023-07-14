@@ -257,10 +257,16 @@
 
                 <label>Label Audio File</label>
 
-                <div>
-                    <div class="hide">{{ form.audiofile }}</div>
-                    <button id="customLabelAudioFileUploadBtn" class="primary-btn green-btn">Upload audio file <i class="fa-solid fa-upload"></i></button>
+                <div class="flex-this">
+                    <div class="margin-right-8">
+                        <div class="hide">{{ form.audiofile }}</div>
+                        <button id="customLabelAudioFileUploadBtn" class="primary-btn green-btn">Upload audio file <i class="fa-solid fa-upload"></i></button>
+                    </div>   
+                    <div>
+                        <button id="clearAudiofileOnCustomizeBtn" class="primary-btn white-btn hide">Clear audio file <i class="fa-regular fa-eraser"></i></button>
+                    </div>                 
                 </div>
+
                 {% if form.audiofile.errors %}
                     <div class="msg-red w-50"><small>{{ form.audiofile.errors.as_text }}</small></div> 
                 {% endif %}
