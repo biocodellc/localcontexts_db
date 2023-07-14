@@ -5,6 +5,7 @@ from notifications.models import ActionNotification
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from itertools import chain
+import os
 
 register = template.Library()
 
@@ -142,3 +143,7 @@ def can_user_approve_label(user, label, member_role):
                 user_can_approve = False
 
     return user_can_approve
+
+@register.filter
+def get_filename(string):
+    return os.path.basename(string)
