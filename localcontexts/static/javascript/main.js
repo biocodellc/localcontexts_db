@@ -1844,3 +1844,27 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
 
     realFileUploadBtn.addEventListener('change', validatePolicyDocument)
  }
+
+ if (window.location.href.includes('/communities/labels/customize/') || window.location.href.includes('/communities/labels/edit/')) {
+    const realAudioUploadBtn = document.getElementById('originalLabelAudioUploadBtn')
+    const customAudioUploadBtn = document.getElementById('customLabelAudioFileUploadBtn')
+    const clearAudioFileBtn = document.getElementById('clearAudiofileOnCustomizeBtn')
+
+    function showAudioFileName() {
+        const selectedFile = realAudioUploadBtn.files[0]
+        customAudioUploadBtn.innerHTML = `${selectedFile.name} <i class="fa-solid fa-check"></i>`
+        clearAudioFileBtn.classList.remove('hide')
+    }
+
+    customAudioUploadBtn.addEventListener('click', function(e) {
+        e.preventDefault()
+        realAudioUploadBtn.click()
+    })
+
+    clearAudioFileBtn.addEventListener('click', function(e) {
+        e.preventDefault()
+        customAudioUploadBtn.innerHTML = 'Upload audio file <i class="fa-solid fa-upload"></i>'
+        clearAudioFileBtn.classList.add('hide')
+        realAudioUploadBtn.value = ''
+    })
+ }
