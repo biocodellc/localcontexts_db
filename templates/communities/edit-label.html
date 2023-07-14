@@ -52,7 +52,9 @@
                             </button>
                         </div>    
                         <div>
-                            <button id="clearAudiofileBtn" class="primary-btn white-btn" name="clear_audiofile">Clear audio file</button>
+                            {% if bclabel.audiofile or tklabel.audiofile %}
+                                <button id="clearAudiofileBtn" class="primary-btn white-btn" name="clear_audiofile">Clear audio file <i class="fa-regular fa-eraser"></i></button>
+                            {% endif %}
                         </div>                    
                     </div>
 
