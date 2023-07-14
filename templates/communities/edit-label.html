@@ -39,7 +39,7 @@
                     <div class="flex-this">
                         {% if bclabel.audiofile %} <div class="margin-right-16"><audio src="{{ bclabel.audiofile.url }}" controls></audio></div>{% endif %}
                         {% if tklabel.audiofile %} <div class="margin-right-16"><audio src="{{ tklabel.audiofile.url }}" controls></audio></div>{% endif %}
-                        <div>
+                        <div class="margin-right-8">
                             <div class="hide">{{ form.audiofile }}</div>
                             <button id="customLabelAudioFileUploadBtn" class="primary-btn green-btn">
                                 {% if bclabel.audiofile or tklabel.audiofile %}
@@ -50,7 +50,10 @@
                                     <i class="fa-solid fa-upload"></i>
                                 {% endif %}
                             </button>
-                        </div>                        
+                        </div>    
+                        <div>
+                            <button id="clearAudiofileBtn" class="primary-btn white-btn" name="clear_audiofile">Clear audio file</button>
+                        </div>                    
                     </div>
 
                     {% if form.audiofile.errors %}
