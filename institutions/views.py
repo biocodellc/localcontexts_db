@@ -150,8 +150,13 @@ def public_institution_view(request, pk):
         attrnotice = Notice.objects.filter(institution=institution, notice_type='attribution_incomplete').exists()
         otc_notices = OpenToCollaborateNoticeURL.objects.filter(institution=institution)
 
-        created_projects = ProjectCreator.objects.filter(institution=institution).values_list('project__unique_id', flat=True)
-        projects = Project.objects.filter(unique_id__in=created_projects, project_privacy='Public').order_by('-date_modified')
+        projects_list = list(chain(
+            institution.institution_created_project.all().values_list('project__unique_id', flat=True), # institution created project ids
+            institution.contributing_institutions.all().values_list('project__unique_id', flat=True), # projects where institution is contributor
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, institution_id=institution.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        projects = Project.objects.select_related('project_creator').filter(unique_id__in=project_ids, project_privacy='Public').exclude(unique_id__in=archived).order_by('-date_modified')
         
         if request.user.is_authenticated:
             user_institutions = UserAffiliation.objects.prefetch_related('institutions').get(user=request.user).institutions.all()
