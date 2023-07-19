@@ -29,6 +29,7 @@ urlpatterns = [
     path('select-account/', views.select_account, name='select-account'),
     
     path('registry/', views.registry, name='registry'),
+    path('projects-board/', views.projects_board, name='projects-board'),
     path('registry/<str:filtertype>/', views.registry, name='registry'),
     path('counter/', views.hub_counter, name='hub-counter'),
     path('newsletter/subscribe/', views.newsletter_subscription, name='newsletter-subscription'),

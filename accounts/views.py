@@ -5,6 +5,7 @@ from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.views.generic import View
 from django.contrib.auth.views import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from itertools import chain
 
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user
@@ -33,6 +34,7 @@ from projects.models import Project, ProjectCreator
 from localcontexts.utils import dev_prod_or_local
 from researchers.utils import is_user_researcher
 from helpers.utils import accept_member_invite
+from projects.utils import paginate
 
 from helpers.emails import *
 from .models import *
@@ -378,6 +380,32 @@ def registry(request, filtertype=None):
 
     except:
         raise Http404()
+
+def projects_board(request):
+    approved_institutions = Institution.objects.filter(is_approved=True).values_list('id', flat=True)
+    approved_communities = Community.objects.filter(is_approved=True).values_list('id', flat=True)
+
+    # projects_list = list(chain(
+    #     Project.objects.filter(project_privacy='Public', project_creator_project__institution__in=approved_institutions).values_list('unique_id', flat=True),
+    #     Project.objects.filter(project_privacy='Public', project_creator_project__community__in=approved_communities).values_list('unique_id', flat=True),
+    #     Project.objects.filter(project_privacy='Public', project_creator_project__researcher__user__isnull=False).values_list('unique_id', flat=True),
+    # ))
+    # project_ids = list(set(projects_list))
+    # projects = Project.objects.select_related('project_creator').filter(unique_id__in=project_ids, project_privacy='Public').order_by('-date_modified')
+
+    projects = Project.objects.filter(
+        Q(project_privacy='Public'),
+        Q(project_creator_project__institution__in=approved_institutions) |
+        Q(project_creator_project__community__in=approved_communities) |
+        Q(project_creator_project__researcher__user__isnull=False)
+    ).select_related('project_creator').order_by('-date_modified')
+
+    page = paginate(request, projects, 10)
+    context = {
+        'projects': projects,
+        'items': page,
+    }
+    return render(request, 'accounts/projects-board.html', context)
 
 # Hub stats page
 def hub_counter(request):

@@ -2,15 +2,15 @@
 
         <tr>
             <td>
-                <a class="darkteal-text underline-hover bold"
+                <a class="darkteal-text underline-hover bold pointer"
                     {% if community %}
                         href="{% url 'community-project-actions' community.id project.unique_id %}" 
-                    {% endif %}
-                    {% if institution %}
+                    {% elif institution %}
                         href="{% url 'institution-project-actions' institution.id project.unique_id %}" 
-                    {% endif %}
-                    {% if researcher %}
+                    {% elif researcher %}
                         href="{% url 'researcher-project-actions' researcher.id project.unique_id %}" 
+                    {% else %}
+                        href="{% url 'view-project' project.unique_id %}" 
                     {% endif %}
                 >
                     {{ project.title }}

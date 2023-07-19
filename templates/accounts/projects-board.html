@@ -1,0 +1,40 @@
+{% extends 'auth-base.html' %} {% block title %} Projects {% endblock %}{% load static %} {% load custom_acct_tags %}{% block main %}
+
+<section class="flex-this column align-center">
+
+    <div class="content-card-v2 content-card-space">
+        <div>
+            <h2 class="no-bottom-margin">Local Contexts Projects Board</h2><br>
+            <p class="no-top-margin w-80">
+                The Projects board includes all the public Projects that are available in the Hub.
+            </p>
+        </div>
+    </div>
+
+    <div class="content-card-v2 content-card-space">
+        <div>
+            {% if projects %}
+                <table class="projects-table">
+                    <tr>
+                        <th><i class="fa-regular fa-line-columns"></i> Title</th>
+                        <th><i class="fa-light fa-user"></i> Creator</th>
+                        <th><i class="fa-light fa-calendar"></i> Last updated</th>
+                        <th>Visibility</th>
+                    </tr>
+
+                    {% for project in items %}
+                        {% include 'projects/project-overview.html' %}
+                    {% endfor %}
+                </table>
+            {% else %}
+                No public Projects available
+            {% endif %} 
+        </div>
+    </div>
+
+    {% include 'snippets/pagination.html' %}
+
+
+</section>
+
+{% endblock %}
