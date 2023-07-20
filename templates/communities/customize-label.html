@@ -223,6 +223,10 @@
                     {{ form.name }}
                 </div>
 
+                {% if form.name.errors %}
+                    <div class="msg-red w-50"><small>{{ form.name.errors.as_text }}</small></div> 
+                {% endif %}
+
                 <div class="w-30 margin-bottom-16">
                     <label class='block'>Label Language <small>(select from dropdown)</small></label>
                     <div class="autocomplete flex-this align-center" style="display:flex;">
@@ -231,6 +235,10 @@
                     </div>
                     
                 </div>
+
+                {% if form.language.errors %}
+                    <div class="msg-red w-50"><small>{{ form.language.errors.as_text }}</small></div> 
+                {% endif %}
 
                 <div class="w-80">
                     <label for="label_text">Label text</label>
@@ -242,13 +250,25 @@
                     </div> 
                     {{ form.label_text }}
                 </div>
-                <div>
-                    <label>Upload audio file</label><br>
-                    {{ form.audiofile }}
+
+                {% if form.label_text.errors %}
+                    <div class="msg-red w-50"><small>{{ form.label_text.errors.as_text }}</small></div> 
+                {% endif %}
+
+                <label>Label Audio File</label>
+
+                <div class="flex-this">
+                    <div class="margin-right-8">
+                        <div class="hide">{{ form.audiofile }}</div>
+                        <button id="customLabelAudioFileUploadBtn" class="primary-btn green-btn">Upload audio file <i class="fa-solid fa-upload"></i></button>
+                    </div>   
+                    <div>
+                        <button id="clearAudiofileOnCustomizeBtn" class="primary-btn white-btn hide">Clear audio file <i class="fa-regular fa-eraser"></i></button>
+                    </div>                 
                 </div>
 
-                {% if form.errors %}
-                    <div class="msg-red w-50"><small>{{ form.errors.as_text }}</small></div> 
+                {% if form.audiofile.errors %}
+                    <div class="msg-red w-50"><small>{{ form.audiofile.errors.as_text }}</small></div> 
                 {% endif %}
             </div>
 

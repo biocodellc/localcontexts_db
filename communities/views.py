@@ -610,21 +610,33 @@ def edit_label(request, pk, label_id):
                     tklabel.version += 1
                     tklabel.save()
 
-            if form.is_valid() and formset.is_valid() and add_translation_formset.is_valid():
-                form.save()
-                formset.save()
+            if 'clear_audiofile' in request.POST:
+                if bclabel:
+                    bclabel.audiofile = None
+                    bclabel.save()
+                    return redirect('edit-label', community.id, bclabel.unique_id)
+                elif tklabel:
+                    tklabel.audiofile = None
+                    tklabel.save()                
+                    return redirect('edit-label', community.id, tklabel.unique_id)
+                else:
+                    pass
+            else:
+                if form.is_valid() and formset.is_valid() and add_translation_formset.is_valid():
+                    form.save()
+                    formset.save()
 
-                # Save all new label translation instances
-                instances = add_translation_formset.save(commit=False)
-                for instance in instances:
-                    if BCLabel.objects.filter(unique_id=label_id).exists():
-                        instance.bclabel = bclabel
-                    elif TKLabel.objects.filter(unique_id=label_id).exists():
-                        instance.tklabel = tklabel
-                    
-                    instance.save()
+                    # Save all new label translation instances
+                    instances = add_translation_formset.save(commit=False)
+                    for instance in instances:
+                        if BCLabel.objects.filter(unique_id=label_id).exists():
+                            instance.bclabel = bclabel
+                        elif TKLabel.objects.filter(unique_id=label_id).exists():
+                            instance.tklabel = tklabel
+                        
+                        instance.save()
 
-                return redirect('select-label', community.id)
+                    return redirect('select-label', community.id)
 
         context = {
             'community': community,
