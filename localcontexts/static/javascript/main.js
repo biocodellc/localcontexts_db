@@ -85,7 +85,7 @@ function languageList(data) {
     // feed only array of languages into this function
     var langInputElements = document.getElementsByClassName('languageListInput')
     for (var i=0; i < langInputElements.length; i++) {
-        autocomplete(langInputElements[i], langArray);
+        autocomplete(langInputElements[i], langArray); 
     }
 }
 
@@ -124,12 +124,16 @@ function removeAccents(str) {
 // Takes two args: text iput element and array of values to autocomplete
 function autocomplete(inp, arr) {
     var currentFocus;
+
     /*execute a function when someone writes in the text field:*/
     inp.addEventListener("input", function(e) {
         var a, b, i, val = removeAccents(this.value);
         /*close any already open lists of autocompleted values*/
         closeAllLists();
-        if (!val) { return false;}
+        if (!val) { 
+            translationFormValidation()
+            return false;
+        }
         currentFocus = -1;
         /*create a DIV element that will contain the items (values):*/
         a = document.createElement("DIV");
@@ -137,6 +141,7 @@ function autocomplete(inp, arr) {
         a.setAttribute("class", "autocomplete-items");
         /*append the DIV element as a child of the autocomplete container:*/
         this.parentNode.appendChild(a);
+        translationFormValidation()
 
         for (i = 0; i < arr.length; i++) {
           /*check if the item starts with the same letters as the text field value:*/
@@ -149,10 +154,14 @@ function autocomplete(inp, arr) {
             /*insert a input field that will hold the current array item's value:*/
             b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
             /*execute a function when someone clicks on the item value (DIV element):*/
-                b.addEventListener("click", function(e) {
+            b.addEventListener("click", function(e) {
                 /*insert the value for the autocomplete text field:*/
                 inp.value = this.getElementsByTagName("input")[0].value;
                 inp.setAttribute('value', this.getElementsByTagName("input")[0].value)
+                inp.setAttribute('readonly', true)
+                inp.classList.add('readonly-input')
+                showClearLangBtn(inp.parentElement)
+                translationFormValidation()
                 /*close the list of autocompleted values,
                 (or any other open lists of autocompleted values:*/
                 closeAllLists();
@@ -161,6 +170,7 @@ function autocomplete(inp, arr) {
           }
         }
     });
+
     /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function(e) {
         var x = document.getElementById(this.id + "autocomplete-list");
@@ -225,20 +235,90 @@ function autocomplete(inp, arr) {
     }
 
     function closeAllLists(elmnt) {
-      /*close all autocomplete lists in the document,
-      except the one passed as an argument:*/
-      var x = document.getElementsByClassName("autocomplete-items");
-      for (var i = 0; i < x.length; i++) {
-        if (elmnt != x[i] && elmnt != inp) {
-        x[i].parentNode.removeChild(x[i]);
-      }
+        /*close all autocomplete lists in the document,
+        except the one passed as an argument:*/
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+            if (elmnt != x[i] && elmnt != inp) {
+                x[i].parentNode.removeChild(x[i]);
+            }
+        }
     }
-  }
 
-  /*execute a function when someone clicks in the document:*/
-  document.addEventListener("click", function (e) {
-      closeAllLists(e.target);
-  });
+    /*execute a function when someone clicks in the document:*/
+    document.addEventListener("click", function (e) {
+        closeAllLists(e.target);
+    });
+
+    function showClearLangBtn(elem) {
+        translationFormValidation()
+        var clearLangBtn = elem.getElementsByTagName("button")[0]
+        clearLangBtn.classList.remove("hide")
+        clearLangBtn.addEventListener("click", function(e) {
+            e.preventDefault()
+            langInput = elem.getElementsByTagName("input")[0]
+            langInput.value = ''
+            langInput.removeAttribute('value')
+            langInput.focus()
+
+            if (langInput.getAttribute('readonly', true) && langInput.classList.contains('readonly-input')) {
+                langInput.removeAttribute('readonly')
+                langInput.classList.remove('readonly-input')
+            }
+
+            if (e.target.tagName.toLowerCase() == 'i') {
+                e.target.parentNode.classList.add('hide')
+            } else { e.target.classList.add('hide') }
+
+            translationFormValidation();
+        })
+    }  
+}
+
+// check to see if the label language has been selected where needed
+function translationFormValidation() {
+    const languageError = document.getElementById('language-error')
+    const addTranslationForms = document.querySelectorAll('.add-translation-form')
+    const currentTranslationForms = document.querySelectorAll('.current-translation-form')
+    const mainLangInput = document.getElementById('id_language')
+
+    function saveLabelBtnValidation(status) {
+        if (status == 'enable') {
+            saveLabelBtn.disabled=false
+            languageError.classList.add('hide')
+        } else if (status == 'disable') {
+            saveLabelBtn.disabled=true
+            languageError.classList.remove('hide')
+        }
+    }
+
+    invalidInputs = 0
+    if (window.location.href.includes('/labels/customize') &&
+        (mainLangInput.value != '' && !mainLangInput.classList.contains('readonly-input'))) 
+        { invalidInputs += 1}
+    for (var i = 0; i < addTranslationForms.length; i++) {
+        var translatedNameInput = addTranslationForms[i].querySelector('[id$="translated_name"]')
+        var translatedLangInput = addTranslationForms[i].querySelector('[id$="language"]')
+        var translatedTextInput = addTranslationForms[i].querySelector('[id$="translated_text"]')
+
+        if ((translatedLangInput.value != '' && !translatedLangInput.classList.contains('readonly-input')) ||
+            (translatedNameInput.value != '' && !translatedLangInput.classList.contains('readonly-input')) ||
+            (translatedTextInput.value != '' && !translatedLangInput.classList.contains('readonly-input'))) 
+            { invalidInputs += 1 }
+    }
+    for (var i = 0; i < currentTranslationForms.length; i++) {
+        var translatedNameInput = currentTranslationForms[i].querySelector('[id$="translated_name"]')
+        var translatedLangInput = currentTranslationForms[i].querySelector('[id$="language"]')
+        var translatedTextInput = currentTranslationForms[i].querySelector('[id$="translated_text"]')
+
+        if ((translatedNameInput.value != '' && translatedLangInput.value == '') ||
+            (translatedTextInput.value != '' && translatedLangInput.value == '')) 
+            { invalidInputs += 1 }
+    }
+
+    if (invalidInputs == 0) {
+        saveLabelBtnValidation('enable')
+    } else {saveLabelBtnValidation('disable')}
 }
 
 // Show customized label text in community: labels
@@ -496,12 +576,35 @@ if (window.location.href.includes('/labels/customize') || window.location.href.i
         formNum++
 
         newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+        newFormInputs = newForm.querySelectorAll('input')
+        for (var i = 0; i < newFormInputs.length; i++){
+            newFormInputs[i].removeAttribute('value')
+            newFormInputs[i].removeAttribute('readonly')
+            newFormInputs[i].classList.remove('readonly-input')
+        }
+        newFormLangButton = newForm.querySelector('button[name="clear-language-btn"]')
+        newFormLangButton.classList.add('hide')
         container.insertBefore(newForm, lastDiv)
         totalForms.setAttribute('value', `${formNum+1}`)
-        fetchLanguages()
+        languageFormValidation()
     }
 
-    fetchLanguages()
+    languageFormValidation()
+
+    // adds input event for translation name and text to make sure language is also selected
+    function languageFormValidation() {
+        var translation_name = document.querySelectorAll('[id$="translated_name"]')
+        var translation_text = document.querySelectorAll('[id$="translated_text"]')
+        
+        for (var i=0; i < translation_name.length; i++) {
+            translation_name[i].addEventListener('input', translationFormValidation)
+        }
+        for (var i=0; i < translation_text.length; i++) {
+            translation_text[i].addEventListener('input', translationFormValidation)
+        } 
+
+        fetchLanguages()
+    }
 
     const saveLabelBtn = document.getElementById('saveLabelBtn')
     saveLabelBtn.addEventListener('click', function() {    
@@ -1709,8 +1812,59 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
         customFileUploadBtn.innerHTML = `${selectedFile.name} <i class="fa-solid fa-check"></i>`
     }
 
+    function validatePolicyDocument() {
+        const file = realFileUploadBtn.files[0]
+
+        if (file) {
+            const allowedExtensions = ['.pdf', '.doc', '.docx']
+            const fileExt = file.name.toLowerCase().substring(file.name.lastIndexOf('.'))
+
+            if (!allowedExtensions.includes(fileExt)) {
+                alert('Invalid document file extension. Only PDF and DOC/DOCX files are allowed.')
+                realFileUploadBtn.value = '' // Clear the file input field
+                customFileUploadBtn.innerHTML = 'Upload Document <i class="fa-solid fa-upload"></i>'
+                return false
+            }
+
+            const allowedMimeTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+            if (!allowedMimeTypes.includes(file.type)) {
+                alert('Invalid document file type. Only PDF and DOC/DOCX files are allowed.')
+                realFileUploadBtn.value = ''
+                customFileUploadBtn.innerHTML = 'Upload Document <i class="fa-solid fa-upload"></i>'
+                return false
+            }
+        }
+        return true
+    }
+
     customFileUploadBtn.addEventListener('click', function(e) {
         e.preventDefault()
         realFileUploadBtn.click()
+    })
+
+    realFileUploadBtn.addEventListener('change', validatePolicyDocument)
+ }
+
+ if (window.location.href.includes('/communities/labels/customize/') || window.location.href.includes('/communities/labels/edit/')) {
+    const realAudioUploadBtn = document.getElementById('originalLabelAudioUploadBtn')
+    const customAudioUploadBtn = document.getElementById('customLabelAudioFileUploadBtn')
+    const clearAudioFileBtn = document.getElementById('clearAudiofileOnCustomizeBtn')
+
+    function showAudioFileName() {
+        const selectedFile = realAudioUploadBtn.files[0]
+        customAudioUploadBtn.innerHTML = `${selectedFile.name} <i class="fa-solid fa-check"></i>`
+        clearAudioFileBtn.classList.remove('hide')
+    }
+
+    customAudioUploadBtn.addEventListener('click', function(e) {
+        e.preventDefault()
+        realAudioUploadBtn.click()
+    })
+
+    clearAudioFileBtn.addEventListener('click', function(e) {
+        e.preventDefault()
+        customAudioUploadBtn.innerHTML = 'Upload audio file <i class="fa-solid fa-upload"></i>'
+        clearAudioFileBtn.classList.add('hide')
+        realAudioUploadBtn.value = ''
     })
  }
