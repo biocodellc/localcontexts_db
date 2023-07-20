@@ -40,8 +40,15 @@
                         data-tooltip='Private Project'
                     {% endif %}
                 ></i>
-
             </td>
+            {% if 'projects-board' in request.path %}
+                <td class="center-text green-icon">
+                    {% if project.has_notice %} <i class="fa-solid fa-circle-check fa-xl"></i> {% endif %}
+                </td>
+                <td class="center-text green-icon">
+                    {% if project.has_labels %} <i class="fa-solid fa-circle-check fa-xl"></i> {% endif %}
+                </td>
+            {% endif %}
         </tr>
 
 {% endblock %}

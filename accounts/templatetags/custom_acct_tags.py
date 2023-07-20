@@ -4,8 +4,23 @@ from institutions.models import Institution
 from notifications.models import UserNotification
 from accounts.utils import get_users_name
 from researchers.models import Researcher
+from django.db.models import Q
 
 register = template.Library()
+
+@register.simple_tag
+def all_projects_count(projects):
+    return projects.count()
+
+@register.simple_tag
+def projects_with_labels_count(projects):
+    results = projects.filter(Q(bc_labels__isnull=False) | Q(tk_labels__isnull=False))
+    return results.count()
+
+@register.simple_tag
+def projects_with_notices_count(projects):
+    results = projects.filter(project_notice__archived=False).distinct()
+    return results.count()
 
 @register.simple_tag
 def community_count():

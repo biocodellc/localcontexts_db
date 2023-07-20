@@ -381,18 +381,9 @@ def registry(request, filtertype=None):
     except:
         raise Http404()
 
-def projects_board(request):
+def projects_board(request, filtertype=None):
     approved_institutions = Institution.objects.filter(is_approved=True).values_list('id', flat=True)
     approved_communities = Community.objects.filter(is_approved=True).values_list('id', flat=True)
-
-    # projects_list = list(chain(
-    #     Project.objects.filter(project_privacy='Public', project_creator_project__institution__in=approved_institutions).values_list('unique_id', flat=True),
-    #     Project.objects.filter(project_privacy='Public', project_creator_project__community__in=approved_communities).values_list('unique_id', flat=True),
-    #     Project.objects.filter(project_privacy='Public', project_creator_project__researcher__user__isnull=False).values_list('unique_id', flat=True),
-    # ))
-    # project_ids = list(set(projects_list))
-    # projects = Project.objects.select_related('project_creator').filter(unique_id__in=project_ids, project_privacy='Public').order_by('-date_modified')
-
     projects = Project.objects.filter(
         Q(project_privacy='Public'),
         Q(project_creator_project__institution__in=approved_institutions) |
@@ -400,10 +391,34 @@ def projects_board(request):
         Q(project_creator_project__researcher__user__isnull=False)
     ).select_related('project_creator').order_by('-date_modified')
 
-    page = paginate(request, projects, 10)
+    if ('q' in request.GET) and (filtertype != None):
+        q = request.GET.get('q')
+        return redirect('/projects-board/?q=' + q)
+    elif ('q' in request.GET) and (filtertype == None):
+        q = request.GET.get('q')
+        q = unidecode(q) #removes accents from search query
+
+        # Filter's accounts by the search query, showing results that match with or without accents
+        results = projects.filter(title__unaccent__icontains=q)
+
+        p = Paginator(results, 5)
+    else:
+        if filtertype == 'labels':
+            results = projects.filter(Q(bc_labels__isnull=False) | Q(tk_labels__isnull=False))
+        elif filtertype == 'notices':
+            results = projects.filter(project_notice__archived=False).distinct()
+        else:
+            results = projects
+
+        p = Paginator(results, 5)
+
+    page_num = request.GET.get('page', 1)
+    page = p.page(page_num)
+
     context = {
         'projects': projects,
         'items': page,
+        'filtertype' : filtertype
     }
     return render(request, 'accounts/projects-board.html', context)
 
