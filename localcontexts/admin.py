@@ -1,20 +1,23 @@
+import csv
 import itertools, calendar
 from datetime import datetime, timedelta, timezone
-from django.db.models.functions import Extract
-from django.db.models import Count, Q
+from django.db.models.functions import Extract, Concat
+from django.db.models import Count, Q, Value, F, CharField, Case, When
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, reverse
 from django.utils.translation import gettext as _
+from django.utils.http import urlencode
+from django.utils.html import format_html, format_html_join
 from django.apps import apps
 from django.template.response import TemplateResponse
-from django.http import Http404
+from django.http import Http404, HttpResponse
+from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 
 from accounts.models import Profile, UserAffiliation, SignUpInvitation
 from rest_framework_api_key.admin import APIKey, APIKeyModelAdmin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import Group, User
-from django.contrib.auth.admin import GroupAdmin
 from bclabels.models import BCLabel
 from communities.models import Community, InviteMember, JoinRequest
 from helpers.models import *
@@ -301,6 +304,454 @@ def dataCharts(end_date, chartData):
     
     return context
 
+# DASHBOARD CUSTOM ADMIN
+class AccountTypeFilter(admin.SimpleListFilter):
+    title = 'Account Type'
+    parameter_name = 'account'
+
+    def lookups(self, request, model_admin):
+        return [
+            ('institution', 'Institution'),
+            ('researcher', 'Researcher'),
+            ('community', 'Community')
+        ]
+    
+    def queryset(self, request, queryset):
+        # print(queryset.values('project_creator_project__community_id'))
+        if self.value() == "institution":
+            try:
+                if queryset.model is ProjectPage:
+                    qs = queryset.distinct().filter(project_creator_project__institution_id__isnull=False)
+                else:
+                    qs = queryset.distinct().filter(institution_id__isnull=False)
+                return qs
+            except:
+                return queryset.none()
+            
+        elif self.value() == "researcher":
+            try:
+                if queryset.model is ProjectPage:
+                    qs = queryset.distinct().filter(project_creator_project__researcher_id__isnull=False)
+                else:
+                    qs = queryset.distinct().filter(researcher_id__isnull=False)
+                return qs
+            except:
+                return queryset.none()
+        
+        elif self.value() == "community":
+            try:
+                if queryset.model is ProjectPage:
+                    qs = queryset.distinct().filter(project_creator_project__community_id__isnull=False)
+                else:
+                    qs = queryset.distinct().filter(community_id__isnull=False)
+                return qs
+            except:
+                return queryset.none()
+            
+class PrivacyTypeFilter(admin.SimpleListFilter):
+    title = 'Privacy Type'
+    parameter_name = 'privacy'
+
+    def lookups(self, request, model_admin):
+        return [
+            ('Public', 'Public'),
+            ('Contributor', 'Contributor'),
+            ('Private', 'Private')
+        ]
+    
+    def queryset(self, request, queryset):
+        privacy = self.value()
+        try:
+            if privacy != None:
+                qs = queryset.distinct().filter(project_privacy=privacy)
+                return qs
+            else:
+                return queryset
+        except:
+            return queryset.none()
+        
+class NoticeLabelTypeFilter(admin.SimpleListFilter):
+    title = 'Notice/Labels'
+    parameter_name = 'notice_label'
+
+    def lookups(self, request, model_admin):
+        return [
+            ('notices', 'Notices'),
+            ('labels', 'Labels'),
+            ('none', 'None')
+        ]
+    
+    def queryset(self, request, queryset):
+        try:
+            if self.value() == 'notices':
+                qs = queryset.distinct().filter(Q(project_notice__archived = False))
+                return qs
+            elif self.value() == 'labels':
+                qs = queryset.distinct().filter(Q(bc_labels__isnull = False) | Q(tk_labels__isnull = False))
+                return qs
+            elif self.value() == 'none':
+                qs = queryset.distinct().filter((Q(bc_labels__isnull = True) & Q(tk_labels__isnull = True)) &
+            (Q(project_notice__archived__isnull = True) | Q(project_notice__archived = True)))
+                return qs
+            else:
+                return queryset
+        except:
+            return queryset.none()
+            
+class ExportCsvMixin:
+    def export_as_csv(self, request, queryset):
+
+        meta = self.model._meta
+        field_names = [field.name for field in meta.fields]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta.verbose_name_plural)
+        response.write(u'\ufeff'.encode('utf8'))
+        writer = csv.writer(response)
+
+        writer.writerow(field_names)
+        for obj in queryset:
+            row = writer.writerow([getattr(obj, field) for field in field_names])
+
+        return response
+
+    export_as_csv.short_description = "Export Selected"
+
+class Inactive(User):
+    class Meta:
+        proxy = True
+        verbose_name = 'Inactive Account'
+        verbose_name_plural = 'Inactive Accounts'
+        app_label = 'admin'
+
+
+class InactiveAccountsAdmin(admin.ModelAdmin):
+    model = Inactive
+    change_list_template = 'admin/change_lists/inactive_accounts_change_list.html'
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        inactive_users = User.objects.filter(is_active = False, date_joined__lte = datetime.now(tz = timezone.utc) - timedelta(days = 30)).annotate(
+            days_count = datetime.now(tz = timezone.utc) - F('date_joined'),
+            account_name = F('username'),
+            account_type = Value('User', output_field=CharField())
+        ).values('id', 'account_name', 'days_count', 'account_type')
+
+        researcher_created_projects = ProjectCreator.objects.filter(researcher__isnull = False).values_list('researcher_id')
+        inactive_researchers = Researcher.objects.exclude(id__in = researcher_created_projects).filter(date_connected__lte = datetime.now(tz = timezone.utc) - timedelta(days = 90)).annotate(
+            days_count = datetime.now(tz = timezone.utc) - F('date_connected'),
+            account_name = Case(
+                When(~Q(user__first_name="") & ~Q(user__last_name=""), 
+                     then=Concat(F('user__first_name'), Value(' '), F('user__last_name'))),
+                     default=F('user__username')
+            ),
+            account_type = Value('Researcher', output_field=CharField())
+        ).values('id', 'account_name', 'days_count', 'account_type')
+
+        inactive_institutions = Institution.objects.filter(is_approved = False, created__lte = datetime.now(tz = timezone.utc) - timedelta(days = 90)).annotate(
+            days_count = datetime.now(tz = timezone.utc) - F('created'),
+            account_name = F('institution_name'),
+            account_type = Value('Institution', output_field=CharField())
+        ).values('id', 'account_name', 'days_count', 'account_type')
+
+        inactive_communities = Community.objects.filter(is_approved = False, created__lte = datetime.now(tz = timezone.utc) - timedelta(days = 90)).annotate(
+            days_count = datetime.now(tz = timezone.utc) - F('created'),
+            account_name = F('community_name'),
+            account_type = Value('Community', output_field=CharField())
+        ).values('id', 'account_name', 'days_count', 'account_type')
+        
+        # Combine and sort the data as needed
+        results = sorted(list(itertools.chain(inactive_users, inactive_institutions, inactive_researchers, inactive_communities)), key = lambda k: k['days_count'])
+
+        paginator = Paginator(results, self.list_per_page)
+        page_number = request.GET.get('p')
+        page_obj = paginator.get_page(page_number)
+
+        # Create custom pagination context
+        pagination_context = self.get_pagination_context(page_obj, paginator, results)
+
+        response.context_data.update(**pagination_context)
+
+        return response
+
+    def get_pagination_context(self, page_obj, paginator, results):
+        if paginator.num_pages > 1:
+            print(paginator.num_pages)
+            pagination_required = True
+            show_all_url = True
+        else:
+            pagination_required = False
+            show_all_url = False
+
+        pagination = {
+            'pagination_required': pagination_required,
+            'page_obj': page_obj,
+            'paginator': paginator,
+            'results': list(page_obj),
+            'is_paginated': page_obj.has_other_pages(),
+            'result_count': len(results),
+            'show_all_url': show_all_url,
+            'page_range': paginator.page_range,
+            'page_num': page_obj.number,
+        }
+
+        return pagination
+
+admin_site.register(Inactive, InactiveAccountsAdmin)
+
+class OTCLinks(OpenToCollaborateNoticeURL):
+    class Meta:
+        proxy = True
+        verbose_name = 'Open to Collaborate Link'
+        verbose_name_plural = 'Open to Collaborate Links'
+        app_label = 'admin'
+
+class OTCLinksAdmin(admin.ModelAdmin, ExportCsvMixin):
+    model = OTCLinks
+    list_display = ('name', 'view', 'added_by', 'datetime')
+    search_fields = ('institution__institution_name', 'researcher__user__username', 'researcher__user__first_name', 'researcher__user__last_name', 'name')
+    ordering = ('-added',)
+    list_filter = (AccountTypeFilter, )
+    actions = ['export_as_csv']
+    
+    def view(self, obj):
+        project_url= obj.url
+        return format_html('<a href="{}" target="_blank" title="View External Link">View</a>', project_url)
+    view.short_description = "Project Page"
+    
+    def added_by(self, obj):
+        if obj.institution_id:
+            account_id = obj.institution_id
+            account_url = 'institutions/institution'
+            account_name = obj.institution.institution_name
+        else:
+            account_id = obj.researcher_id
+            account_url = 'researchers/researcher'
+            if obj.researcher.user.first_name!="" and obj.researcher.user.last_name!="":
+                account_name = obj.researcher.user.first_name + ' ' + obj.researcher.user.last_name
+            else:
+                account_name = obj.researcher.user.username
+        
+        return format_html('<a href="/admin/{}/{}/change/">{} </a>', account_url, account_id, account_name)
+    
+    def datetime(self, obj):
+        added_date = obj.added.strftime('%m/%d/%Y %I:%M %p (%Z)').replace('AM', 'am').replace('PM', 'pm')
+        return added_date
+    
+    datetime.short_description = "Date/Time"
+
+admin_site.register(OTCLinks, OTCLinksAdmin)
+
+class UserProfile(User):
+    class Meta:
+        proxy = True
+        verbose_name = 'User Profile'
+        verbose_name_plural = 'User Profiles'
+        app_label = 'admin'
+
+class ProfileInline(admin.StackedInline):
+    model = Profile
+
+
+class UserAffiliationInline(admin.TabularInline):
+    model = UserAffiliation
+    max_num = 0
+
+class UserProfileAdmin(UserAdmin, ExportCsvMixin):
+    model = UserProfile
+    list_display = ('profile_name', 'email', 'joined')
+    search_fields = ('first_name', 'last_name', 'username', 'email')
+    ordering = ['username', 'first_name']
+    actions = ['export_as_csv']
+    inlines = [ProfileInline, UserAffiliationInline]
+
+    def profile_name(self, obj):
+        if obj.first_name!="" and obj.last_name!="":
+            name = obj.first_name + ' ' + obj.last_name
+        else:
+            name = obj.username
+        return name
+    
+    def joined(self, obj):
+        date_joined = obj.date_joined.strftime('%m/%d/%Y %I:%M %p (%Z)').replace('AM', 'am').replace('PM', 'pm')
+        return date_joined
+
+admin_site.register(UserProfile, UserProfileAdmin)
+
+class ProjectPage(Project):
+    class Meta:
+        proxy = True
+        verbose_name = 'Project Page'
+        verbose_name_plural = 'Project Pages'
+        app_label = 'admin'
+
+class ProjectCreatorInline(admin.TabularInline):
+    model = ProjectCreator
+    max_num=0
+    show_change_link = True
+    raw_id_fields = ('community', 'researcher', 'institution')
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('community', 'institution', 'researcher', 'project')
+
+class ProjectContributorInline(admin.TabularInline):
+    model = ProjectContributors
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('project').prefetch_related('institutions', 'communities', 'researchers')
+
+class AdditionalContributorsInline(admin.TabularInline):
+    model = ProjectPerson
+    extra=0
+
+    def get_queryset(self, request):
+            return super().get_queryset(request).select_related('project')
+
+class ProjectStatusInline(admin.TabularInline):
+    model = ProjectStatus
+    extra=0
+    raw_id_fields = ('community',)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('project', 'community')
+
+class ProjectActivityInline(admin.TabularInline):
+    model = ProjectActivity
+    fields=('activity', 'date')
+    readonly_fields=('activity','date')
+    max_num=0
+    ordering = ['date']
+    classes = ['collapse']
+
+    def get_queryset(self, request):
+            return super().get_queryset(request).select_related('project')
+
+class ProjectNotesInline(admin.StackedInline):
+    model = ProjectNote
+    extra=0
+    raw_id_fields = ('community', 'sender')
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('project', 'community', 'sender')
+
+class ProjectNoticesInline(admin.StackedInline):
+    model = Notice
+    extra=0
+    max_num=3
+    readonly_fields = ('name', 'default_text', 'img_url', 'svg_url', 'archived')
+    show_change_link = True
+    raw_id_fields = ('researcher', 'institution')
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('project', 'researcher', 'institution')
+
+class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
+    model = ProjectPage
+    list_display = ('title', 'creator', 'privacy', 'link', 'created', 'notice_labels_img')
+    list_filter = (PrivacyTypeFilter, NoticeLabelTypeFilter, AccountTypeFilter)
+    search_fields = ['title', 'project_creator__first_name', 'project_creator__last_name', 'project_creator__username']
+    ordering = ['title']
+    actions = ['export_as_csv']
+    inlines = [ProjectNoticesInline, ProjectCreatorInline, ProjectContributorInline, AdditionalContributorsInline, ProjectStatusInline, ProjectActivityInline, ProjectNotesInline]
+    raw_id_fields = ('project_creator',)
+    readonly_fields = ('unique_id', 'project_page', 'date_added', 'date_modified', 'project_url', 'notice_labels_img', 'source_project_uuid')
+
+    fieldsets = [
+        (None, {'fields': ('notice_labels_img',)}),
+        ('PROJECT INFORMATION', {'fields': (
+            'title',
+            ('unique_id', 'project_url'),
+            'project_creator',
+            ('date_added', 'date_modified'),
+            ('project_type', 'other_type'),
+            'project_privacy',
+            'description',
+            ('project_contact', 'project_contact_email'),
+            ('publication_doi', 'project_data_guid', 'providers_id'),
+            'project_boundary_geojson',
+            'urls',
+            'source_project_uuid',
+            'related_projects',
+        )}),
+        ('LABELS', {'fields': ('bc_labels', 'tk_labels')})
+    ]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('project_creator', 'project_contributors').prefetch_related('bc_labels', 'tk_labels', 'related_projects')
+    
+    # Display field on both list and form
+    def notice_labels_img(self, obj):
+        images=()
+        if obj.has_labels() == True:
+            bc_labels = obj.bc_labels.all().values_list('img_url')
+            tk_labels = obj.tk_labels.all().values_list('img_url')
+            images = list(itertools.chain(bc_labels, tk_labels))
+        elif obj.has_notice() == True:
+            images = obj.project_notice.filter(project=obj.id).values_list('img_url')
+
+        return format_html_join(' ',
+            '<img src="{}" width="30px">',
+            (image for image in images))
+    notice_labels_img.short_description = 'Local Contexts Identifiers'
+
+    # Display field on list
+    def creator(self, obj):
+        creator = obj.project_creator_project.filter(project=obj.id).values()
+
+        if creator.filter(community_id__isnull=False):
+            creator_account_id = creator.values_list('community_id', flat=True).first()
+            creator_account_url = 'communities/community'
+            creator_account_name = Community.objects.filter(id=creator_account_id).values_list('community_name', flat=True).first()
+        elif creator.filter(institution_id__isnull=False):
+            creator_account_id = creator.values_list('institution_id', flat=True).first()
+            creator_account_url = 'institutions/institution'
+            creator_account_name = Institution.objects.filter(id=creator_account_id).values_list('institution_name', flat=True).first()
+        else:
+            creator_account_id = creator.values_list('researcher_id', flat=True).first()
+            creator_account_url = 'researchers/researcher'
+            creator_account_name = 'Researcher'
+        
+        if obj.project_creator.first_name != "" and obj.project_creator.last_name != "":
+            creator_name = obj.project_creator.first_name + ' ' + obj.project_creator.last_name
+        else:
+            creator_name = obj.project_creator.username
+
+        return format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> (<a href="/admin/{}/{}/change/">{}</a>)', obj.project_creator_id, creator_name, creator_account_url, creator_account_id, creator_account_name)
+
+    def privacy(self,obj):
+        if obj.project_privacy == "Public":
+            return format_html('<i class="fa-solid fa-lg fa-eye" title="Public"></i>')
+        elif obj.project_privacy == "Contributor":
+            return format_html('<i class="fa-solid fa-lg fa-people-group" title="Contributor"></i>')
+        elif obj.project_privacy == "Private":
+            return format_html('<i class="fa-solid fa-lg fa-lock" title="Private"></i>')
+    
+    def link(self, obj):
+        project_url= obj.project_page
+        return format_html('<a href="{}" target="_blank" title="View External Link">View</a>', project_url)
+    link.short_description = "Project Page"
+
+    def created(self, obj):
+        date_added = obj.date_added.strftime('%m/%d/%Y %I:%M %p (%Z)').replace('AM', 'am').replace('PM', 'pm')
+        return date_added
+    
+    # Display field on form
+    def project_url(self, obj):
+        return format_html('<a href="{}" target="_blank">{}</a>', obj.project_page, obj.project_page)
+    project_url.short_description = 'Project page'
+
+admin_site.register(ProjectPage, ProjectPageAdmin)
+
 # ACCOUNTS ADMIN
 class UserAdminCustom(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'is_superuser', 'is_active', 'last_login', 'date_joined')
@@ -467,6 +918,6 @@ admin_site.register(Researcher, ResearcherAdmin)
 class TKLabelAdmin(admin.ModelAdmin):
     list_display = ('name', 'community', 'created_by', 'language_tag', 'language', 'is_approved', 'created')
     readonly_fields = ('unique_id', 'created', 'version',)
-    search_fields = ('name', 'community__community_name', 'created_by__username',)
+    search_fields = ('name', 'community__community_name', 'created_by__username', 'label_type')
 
 admin_site.register(TKLabel, TKLabelAdmin)

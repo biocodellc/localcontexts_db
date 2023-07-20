@@ -88,7 +88,7 @@ function languageList(data) {
         autocomplete(langInputElements[i], langArray);
     }
 }
-// TODO: check Project creation form when notices are not selected. in main.js, or check add member form (when user enters member name that isnt in the hub, doesn't work), or ROR input
+
 // converts accented letters to the unaccented equivalent
 function removeAccents(str) {
   var map = {

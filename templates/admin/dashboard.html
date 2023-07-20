@@ -1,4 +1,4 @@
-{% extends 'admin/base_site.html' %}{% load static %}
+{% extends 'admin/base_site.html' %}{% load admin_list i18n static %}
 
 {% block title %}Dashboard | {{ site_title|default:_('Django site admin') }}{% endblock %}
 
@@ -8,7 +8,7 @@
 
 {% block breadcrumbs %}
     <div class="breadcrumbs">
-        <a href="{% url 'admin:index' %}">Home</a>
+        <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
         &rsaquo; Dashboard
     </div>
 {% endblock %}
