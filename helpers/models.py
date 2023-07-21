@@ -50,8 +50,8 @@ class Notice(models.Model):
         ordering = ('-created',)
 
 class OpenToCollaborateNoticeURL(models.Model):
-    institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
-    researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, db_index=True)
+    institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True, related_name="otc_institution_url")
+    researcher = models.ForeignKey(Researcher, null=True, on_delete=models.CASCADE, blank=True, db_index=True, related_name="otc_researcher_url")
     name = models.CharField('Name of Website', max_length=250, null=True, blank=True)
     url = models.URLField('Link', null=True, unique=True)
     added = models.DateTimeField(auto_now_add=True, null=True)
