@@ -123,7 +123,7 @@
                                             <div>
                                                 <a href="{% url 'public-community' account.id %}" class="darkteal-text underline-hover">{{ account.community_name }}</a> | Community 
                                             </div>
-                                            {% if account == community %} 
+                                            {% if account == community and not account == creator.community %} 
                                                 <div>
                                                     <a onclick="openRemoveContributorModal()" class="pointer darkteal-text underline-hover margin-left-16"><i class="fa-solid fa-xmark fa-lg"></i></a> 
                                                 </div>
@@ -140,7 +140,7 @@
                                             <div>
                                                 <a href="{% url 'public-institution' account.id %}" class="darkteal-text underline-hover">{{ account.institution_name }}</a> | Institution 
                                             </div>
-                                            {% if account == institution %} 
+                                            {% if account == institution and not account == creator.institution %} 
                                                 <div>
                                                     <a onclick="openRemoveContributorModal()" class="pointer darkteal-text underline-hover margin-left-16"><i class="fa-solid fa-xmark fa-lg"></i></a> 
                                                 </div>
@@ -162,7 +162,7 @@
                                                 {% endif %}
                                                 <a href="{% url 'public-researcher' account.id %}" class="darkteal-text underline-hover">{% firstof account.user.get_full_name account.user.username %}</a> | Researcher
                                             </div>
-                                            {% if account == researcher %} 
+                                            {% if account == researcher and not account == creator.researcher %} 
                                                 <div>
                                                     <a onclick="openRemoveContributorModal()" class="pointer darkteal-text underline-hover margin-left-16"><i class="fa-solid fa-xmark fa-lg"></i></a> 
                                                 </div>
