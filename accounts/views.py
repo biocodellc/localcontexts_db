@@ -360,6 +360,10 @@ def registry(request, filtertype=None):
                 cards = i
             elif filtertype == 'researchers':
                 cards = r
+            elif filtertype == 'otc':
+                researchers_with_otc = r.filter(otc_researcher_url__isnull=False)
+                institutions_with_otc = i.filter(otc_institution_url__isnull=False)
+                cards = return_registry_accounts(None, researchers_with_otc, institutions_with_otc)
             else:
                 cards = return_registry_accounts(c, r, i)
 

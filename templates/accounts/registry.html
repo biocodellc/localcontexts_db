@@ -47,7 +47,12 @@
                         href="{% url 'registry' filtertype='researchers' %}" 
                         class="{% if '/researchers/' in request.path %} bold {% endif %}darkteal-text pointer underline-hover"
                     >Researchers ({% researcher_count %})
-                    </a>       
+                    </a> |     
+                    <a 
+                        href="{% url 'registry' filtertype='otc' %}" 
+                        class="{% if '/open-to-collaborate/' in request.path %} bold {% endif %}darkteal-text pointer underline-hover"
+                    >Open To Collaborate ({% researcher_count %})
+                </a>   
                 </p>            
             </div>            
         </div>
