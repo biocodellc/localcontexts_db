@@ -50,9 +50,9 @@
                     </a> |     
                     <a 
                         href="{% url 'registry' filtertype='otc' %}" 
-                        class="{% if '/open-to-collaborate/' in request.path %} bold {% endif %}darkteal-text pointer underline-hover"
-                    >Open To Collaborate ({% researcher_count %})
-                </a>   
+                        class="{% if '/otc/' in request.path %} bold {% endif %}darkteal-text pointer underline-hover"
+                    >Open To Collaborate ({% otc_registry_count %})
+                    </a>   
                 </p>            
             </div>            
         </div>

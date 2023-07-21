@@ -43,6 +43,12 @@ def all_account_count():
     return total
 
 @register.simple_tag
+def otc_registry_count():
+    r = Researcher.objects.filter(otc_researcher_url__isnull=False).distinct().count()
+    i = Institution.objects.filter(otc_institution_url__isnull=False).distinct().count()
+    return r + i
+
+@register.simple_tag
 def join_request_inst(institution, user):
     return JoinRequest.objects.filter(institution=institution, user_from=user).exists()
 
