@@ -75,6 +75,19 @@ def send_email_with_attachment(file, to_email, subject, template):
               "subject": subject,
               "html": template})
 
+# Send email to any Mailing List (test, researchers, newsletter)
+def send_mailing_list_email(mailing_list, subject, template, tag=None):
+    response = requests.get(
+        ("https://api.mailgun.net/v3/lists/{}@localcontextshub.org/members".format(mailing_list)),
+        auth=('api', settings.MAILGUN_API_KEY),
+        )
+    email = "{}@localcontextshub.org".format(mailing_list)
+    data=None
+    if tag == None:
+        send_mailgun_template_email(email, subject, template, data)
+    else:
+        send_tagged_mailgun_template_email(email, subject, template, data, tag)
+
 # Add members to newsletter mailing list (updates users already on the mailing list)
 def add_to_mailing_list(email, name, variables):
     # Example: send_simple_email('someone@domain.com', 'Hello', 'This is a test email')
@@ -88,6 +101,25 @@ def add_to_mailing_list(email, name, variables):
             "vars": variables}
     )
 
+# Get member info from newsletter mailing list
+def get_newsletter_member_info(email):
+    return requests.get(
+        ("https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members"
+         "/%s"%email),
+        auth=('api', settings.MAILGUN_API_KEY),
+        )
+
+# Unsubscribe members from newsletter mailing list (unsubscribe from all topics)
+def unsubscribe_from_mailing_list(email, name):
+    return requests.post(
+		"https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members",
+		auth=("api", settings.MAILGUN_API_KEY),
+		data={"subscribed": False,
+            "upsert": True,
+			"address": email,
+            "name": name}
+    )
+
 '''
     RESEARCHERS LIST
 '''
@@ -99,59 +131,6 @@ def manage_researcher_mailing_list(email, subscribed):
 		auth = ("api", settings.MAILGUN_API_KEY),
 		data = {"subscribed": subscribed, "upsert": True, "address": email,}
     )
-
-def send_researcher_email():
-    response = requests.get(
-        ("https://api.mailgun.net/v3/lists/researchers@localcontextshub.org/members"),
-        auth=('api', settings.MAILGUN_API_KEY),
-        )
-    email = 'researchers@localcontextshub.org'
-    data = None
-    subject = 'Join Us For the "Local Contexts for Researchers" Webinar'
-    send_mailgun_template_email(email, subject, 'researcher_list', data)
-
-# Get member info from newsletter mailing list
-def get_newsletter_member_info(email):
-    return requests.get(
-        ("https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members"
-         "/%s"%email),
-        auth=('api', settings.MAILGUN_API_KEY),
-        )
-
-# Unsubscribe members from newsletter mailing list (unsubscribe from all topics)
-def unsubscribe_from_mailing_list(email, name):
-    # Example: send_simple_email('someone@domain.com', 'Hello', 'This is a test email')
-    return requests.post(
-		"https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members",
-		auth=("api", settings.MAILGUN_API_KEY),
-		data={"subscribed": False,
-            "upsert": True,
-			"address": email,
-            "name": name}
-    )
-
-# Send email to Newsletter Mailing List
-def send_newsletter():
-    response = requests.get(
-        ("https://api.mailgun.net/v3/lists/newsletter@localcontextshub.org/members"),
-        auth=('api', settings.MAILGUN_API_KEY),
-        )
-    email = 'newsletter@localcontextshub.org'
-    data = None
-    subject = 'Local Contexts Newsletter: Welcome, Summit, and more'
-    tag= "April Newsletter"
-    send_tagged_mailgun_template_email(email, subject, 'newsletter_template', data, tag)
-
-# Send email to Testing Mailing List
-def send_test_mailing_list_email():
-    response = requests.get(
-        ("https://api.mailgun.net/v3/lists/test@localcontextshub.org/members"),
-        auth=('api', settings.MAILGUN_API_KEY),
-        )
-    email = 'test@localcontextshub.org'
-    subject = 'Testing Email'
-    data=None
-    send_mailgun_template_email(email, subject, 'testing_variables', data)
         
 # Send all Institution and community applications to support or the site admin
 def send_hub_admins_application_email(request, organization, data):
