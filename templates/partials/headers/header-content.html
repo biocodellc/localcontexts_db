@@ -16,7 +16,13 @@
                     class="{% if '/registry/' in request.path %} active-link bold {% endif %} white-text upper" 
                     href="{% url 'registry' %}"> Local Contexts Registry
                 </a>
-            </li>           
+            </li>    
+            <li>
+                <a 
+                    class="{% if '/projects-board/' in request.path %} active-link bold {% endif %} white-text upper" 
+                    href="{% url 'projects-board' %}"> Projects
+                </a>
+            </li>          
             {% if user.is_authenticated %}
                 <li>
                     <a
