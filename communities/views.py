@@ -1027,6 +1027,12 @@ def project_actions(request, pk, project_uuid):
                 
                 elif 'delete_project' in request.POST:
                     return redirect('community-delete-project', community.id, project.unique_id)
+                
+                elif 'remove_contributor' in request.POST:
+                    contribs = ProjectContributors.objects.get(project=project)
+                    contribs.communities.remove(community)
+                    contribs.save()
+                    return redirect('community-project-actions', community.id, project.unique_id)
 
             context = {
                 'member_role': member_role,

@@ -187,11 +187,13 @@
                                             <h2 class="primary-black-text no-top-margin">Are you sure?</h2>  
                                             <p>Are you sure you want to remove your account as a contributor on this Project?</p>  
                                         </div>
-                                        <div class="flex-this w-100 text-align-center">
-                                            <div id="removeContributorBtn" class="primary-btn white-btn margin-right-1">Yes, remove</div>    
-                                            <div id="closeContributorModalBtn" class="margin-left-1 primary-btn action-btn">Cancel</div>
-                                        </div>
-                            
+                                        <form method="POST" action="">
+                                            {% csrf_token %}
+                                            <div class="flex-this w-100 text-align-center">
+                                                <button class="primary-btn white-btn margin-right-1" name="remove_contributor">Yes, remove</button>    
+                                                <button id="closeContributorModalBtn" class="margin-left-1 primary-btn action-btn">Cancel</button>
+                                            </div>                                            
+                                        </form>
                                     </div>
                                 </div>
                             </div>

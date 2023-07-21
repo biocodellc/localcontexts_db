@@ -1876,7 +1876,8 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
 
         modal.classList.remove('hide')
 
-        closeModalBtn.addEventListener('click', function() {
+        closeModalBtn.addEventListener('click', function(e) {
+            e.preventDefault()
             modal.classList.add('hide')
         })
     }

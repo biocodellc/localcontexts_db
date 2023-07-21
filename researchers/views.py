@@ -571,6 +571,12 @@ def project_actions(request, pk, project_uuid):
 
                     elif 'delete_project' in request.POST:
                         return redirect('researcher-delete-project', researcher.id, project.unique_id)
+                    
+                    elif 'remove_contributor' in request.POST:
+                        contribs = ProjectContributors.objects.get(project=project)
+                        contribs.researchers.remove(researcher)
+                        contribs.save()
+                        return redirect('researcher-project-actions', researcher.id, project.unique_id)
 
                 context = {
                     'user_can_view': user_can_view,
