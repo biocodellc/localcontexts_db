@@ -1,6 +1,7 @@
 import csv
 import itertools, calendar
 from datetime import datetime, timedelta, timezone
+from operator import attrgetter
 from django.db.models.functions import Extract, Concat
 from django.db.models import Count, Q, Value, F, CharField, Case, When
 from django.contrib import admin
@@ -8,6 +9,7 @@ from django.urls import path, reverse
 from django.utils.translation import gettext as _
 from django.utils.http import urlencode
 from django.utils.html import format_html, format_html_join
+from django.utils.safestring import mark_safe
 from django.apps import apps
 from django.template.response import TemplateResponse
 from django.http import Http404, HttpResponse
@@ -18,6 +20,7 @@ from accounts.models import Profile, UserAffiliation, SignUpInvitation
 from rest_framework_api_key.admin import APIKey, APIKeyModelAdmin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import Group, User
+from django.contrib.admin.widgets import AdminFileWidget
 from bclabels.models import BCLabel
 from communities.models import Community, InviteMember, JoinRequest
 from helpers.models import *
@@ -317,7 +320,6 @@ class AccountTypeFilter(admin.SimpleListFilter):
         ]
     
     def queryset(self, request, queryset):
-        # print(queryset.values('project_creator_project__community_id'))
         if self.value() == "institution":
             try:
                 if queryset.model is ProjectPage:
@@ -397,7 +399,18 @@ class NoticeLabelTypeFilter(admin.SimpleListFilter):
                 return queryset
         except:
             return queryset.none()
-            
+
+class AdminImageWidget(AdminFileWidget):
+    def render(self, name, value, attrs=None, renderer=None):
+        output = []
+        if value and getattr(value, "url", None):
+            image_url = value.url
+            file_name = str(value)
+            output.append(u' <img style="width: 286px;height: 160.88px;object-fit: cover;" src="%s" alt="%s" width="200"/> %s ' % \
+                (image_url, file_name, _('')))
+        output.append(super(AdminFileWidget, self).render(name, value, attrs))
+        return mark_safe(u''.join(output))
+                
 class ExportCsvMixin:
     def export_as_csv(self, request, queryset):
 
@@ -423,7 +436,6 @@ class Inactive(User):
         verbose_name = 'Inactive Account'
         verbose_name_plural = 'Inactive Accounts'
         app_label = 'admin'
-
 
 class InactiveAccountsAdmin(admin.ModelAdmin):
     model = Inactive
@@ -561,7 +573,18 @@ class UserProfile(User):
 
 class ProfileInline(admin.StackedInline):
     model = Profile
-
+    readonly_fields = ('api_key',)
+    formfield_overrides = {models.ImageField: {'widget': AdminImageWidget}}
+    fields = (
+        'profile_pic',
+        ('city_town', 'state_province_region', 'country'),
+        'position',
+        'affiliation', 
+        ('preferred_language', 'languages_spoken'),
+        'is_researcher',
+        'onboarding_on',
+        'api_key'
+    )
 
 class UserAffiliationInline(admin.TabularInline):
     model = UserAffiliation
@@ -574,6 +597,20 @@ class UserProfileAdmin(UserAdmin, ExportCsvMixin):
     ordering = ['username', 'first_name']
     actions = ['export_as_csv']
     inlines = [ProfileInline, UserAffiliationInline]
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (_('Personal info'), {'fields': (('first_name', 'last_name'), 'email')}),
+        (_('Permissions'), {
+            'fields': (('is_active', 'is_staff', 'is_superuser'), 'groups', 'user_permissions'),
+        }),
+        (_('Important dates'), {'fields': (('last_login', 'date_joined'),)}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'password1', 'password2'),
+        }),
+    )
 
     def profile_name(self, obj):
         if obj.first_name!="" and obj.last_name!="":
@@ -648,6 +685,10 @@ class ProjectNoticesInline(admin.StackedInline):
     model = Notice
     extra=0
     max_num=3
+    fields = (
+        'notice_type', ('researcher', 'institution'),
+        'name', 'default_text', 'img_url', 'svg_url', 'archived'
+    )
     readonly_fields = ('name', 'default_text', 'img_url', 'svg_url', 'archived')
     show_change_link = True
     raw_id_fields = ('researcher', 'institution')
@@ -683,7 +724,7 @@ class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
             'source_project_uuid',
             'related_projects',
         )}),
-        ('LABELS', {'fields': ('bc_labels', 'tk_labels')})
+        ('LABELS', {'fields': (('tk_labels', 'bc_labels'),)})
     ]
 
     def get_queryset(self, request):
