@@ -69,8 +69,13 @@ def public_researcher_view(request, pk):
         attrnotice = Notice.objects.filter(researcher=researcher, notice_type='attribution_incomplete').exists()        
         otc_notices = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher)
 
-        created_projects = ProjectCreator.objects.filter(researcher=researcher).values_list('project__unique_id', flat=True)
-        projects = Project.objects.filter(unique_id__in=created_projects, project_privacy='Public').order_by('-date_modified')
+        projects_list = list(chain(
+            researcher.researcher_created_project.all().values_list('project__unique_id', flat=True), # researcher created project ids
+            researcher.contributing_researchers.all().values_list('project__unique_id', flat=True), # projects where researcher is contributor
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        projects = Project.objects.select_related('project_creator').filter(unique_id__in=project_ids, project_privacy='Public').exclude(unique_id__in=archived).order_by('-date_modified')
 
         if request.user.is_authenticated:
             form = ContactOrganizationForm(request.POST or None)
@@ -566,6 +571,12 @@ def project_actions(request, pk, project_uuid):
 
                     elif 'delete_project' in request.POST:
                         return redirect('researcher-delete-project', researcher.id, project.unique_id)
+                    
+                    elif 'remove_contributor' in request.POST:
+                        contribs = ProjectContributors.objects.get(project=project)
+                        contribs.researchers.remove(researcher)
+                        contribs.save()
+                        return redirect('researcher-project-actions', researcher.id, project.unique_id)
 
                 context = {
                     'user_can_view': user_can_view,

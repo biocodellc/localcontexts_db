@@ -1427,3 +1427,7 @@ i[data-tooltip]:hover:after {
     border-radius: 4px;
     color: #fff;
 }
+
+.green-icon {
+    color: #108670;
+}

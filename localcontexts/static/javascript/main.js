@@ -1868,3 +1868,18 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
         realAudioUploadBtn.value = ''
     })
  }
+
+ if (window.location.href.includes('projects/actions/')) {
+    function openRemoveContributorModal() {
+        const modal = document.getElementById('removeContribModal')
+        const closeModalBtn = document.getElementById('closeContributorModalBtn')
+
+        modal.classList.remove('hide')
+
+        closeModalBtn.addEventListener('click', function(e) {
+            e.preventDefault()
+            modal.classList.add('hide')
+        })
+    }
+
+ }

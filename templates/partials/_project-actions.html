@@ -114,30 +114,59 @@
                 </div>
                 <div class="flex-this">
                     <div class="project-left-sidebar"><p class="bold">Contributors</p></div>
-                    <div>                    
+                    <div class="w-60">                    
                         <ul>
                             {% if project.project_contributors.communities %}
-                                {% for community in project.project_contributors.communities.all %}
-                                    <li><a href="{% url 'public-community' community.id %}" class="darkteal-text underline-hover">{{ community.community_name }}</a> | Community</li>
+                                {% for account in project.project_contributors.communities.all %}
+                                    <li>
+                                        <div class="flex-this space-between">
+                                            <div>
+                                                <a href="{% url 'public-community' account.id %}" class="darkteal-text underline-hover">{{ account.community_name }}</a> | Community 
+                                            </div>
+                                            {% if account == community and not account == creator.community %} 
+                                                <div>
+                                                    <a onclick="openRemoveContributorModal()" class="pointer darkteal-text underline-hover margin-left-16"><i class="fa-solid fa-xmark fa-lg"></i></a> 
+                                                </div>
+                                            {% endif %}                                            
+                                        </div>
+                                    </li>
                                 {% endfor %}
                             {% endif %}
 
                             {% if project.project_contributors.institutions %}
-                                {% for institution in project.project_contributors.institutions.all %}
-                                    <li><a href="{% url 'public-institution' institution.id %}" class="darkteal-text underline-hover">{{ institution.institution_name }}</a> | Institution <br></li>
+                                {% for account in project.project_contributors.institutions.all %}
+                                    <li>
+                                        <div class="flex-this space-between">
+                                            <div>
+                                                <a href="{% url 'public-institution' account.id %}" class="darkteal-text underline-hover">{{ account.institution_name }}</a> | Institution 
+                                            </div>
+                                            {% if account == institution and not account == creator.institution %} 
+                                                <div>
+                                                    <a onclick="openRemoveContributorModal()" class="pointer darkteal-text underline-hover margin-left-16"><i class="fa-solid fa-xmark fa-lg"></i></a> 
+                                                </div>
+                                            {% endif %}                                            
+                                        </div>
+                                    </li>
                                 {% endfor %}
                             {% endif %}
 
                             {% if project.project_contributors.researchers %}
-                                {% for researcher in project.project_contributors.researchers.all %}
+                                {% for account in project.project_contributors.researchers.all %}
                                     <li>
-                                        <div>
-                                            {% if researcher.orcid %}
-                                                <a class="darkteal-text" itemprop="sameAs" content="{{ researcher.orcid }}" href="{{ researcher.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
-                                                    <img loading="lazy" src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="margin-top:2.5px;" alt="ORCID iD icon">
-                                                </a>
-                                            {% endif %}
-                                            <a href="{% url 'public-researcher' researcher.id %}" class="darkteal-text underline-hover">{% firstof researcher.user.get_full_name researcher.user.username %}</a> | Researcher
+                                        <div class="flex-this space-between">
+                                            <div>
+                                                {% if account.orcid %}
+                                                    <a class="darkteal-text" itemprop="sameAs" content="{{ account.orcid }}" href="{{ account.orcid }}" target="orcid.widget" rel="me noopener noreferrer" style="vertical-align:top;">
+                                                        <img loading="lazy" src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="margin-top:2.5px;" alt="ORCID iD icon">
+                                                    </a>
+                                                {% endif %}
+                                                <a href="{% url 'public-researcher' account.id %}" class="darkteal-text underline-hover">{% firstof account.user.get_full_name account.user.username %}</a> | Researcher
+                                            </div>
+                                            {% if account == researcher and not account == creator.researcher %} 
+                                                <div>
+                                                    <a onclick="openRemoveContributorModal()" class="pointer darkteal-text underline-hover margin-left-16"><i class="fa-solid fa-xmark fa-lg"></i></a> 
+                                                </div>
+                                            {% endif %}                                            
                                         </div>
                                     </li>
                                 {% endfor %}
@@ -148,6 +177,28 @@
                                 {% endfor %}
                             {% endif %}
                         </ul>
+
+                        {% if community or institution or researcher %}
+                            <div id="removeContribModal" class="modal hide">
+                                <div class="modal-defaults deactivate-modal flex-this column w-100">
+                                    <div class="w-100">
+                            
+                                        <div>
+                                            <h2 class="primary-black-text no-top-margin">Are you sure?</h2>  
+                                            <p>Are you sure you want to remove your account as a contributor on this Project?</p>  
+                                        </div>
+                                        <form method="POST" action="">
+                                            {% csrf_token %}
+                                            <div class="flex-this w-100 text-align-center">
+                                                <button class="primary-btn white-btn margin-right-1" name="remove_contributor">Yes, remove</button>    
+                                                <button id="closeContributorModalBtn" class="margin-left-1 primary-btn action-btn">Cancel</button>
+                                            </div>                                            
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
                     </div>
                 </div>
                 <div class="flex-this">
