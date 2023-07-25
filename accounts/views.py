@@ -405,7 +405,7 @@ def projects_board(request, filtertype=None):
         # Filter's accounts by the search query, showing results that match with or without accents
         results = projects.filter(title__unaccent__icontains=q)
 
-        p = Paginator(results, 5)
+        p = Paginator(results, 10)
     else:
         if filtertype == 'labels':
             results = projects.filter(Q(bc_labels__isnull=False) | Q(tk_labels__isnull=False))
@@ -414,7 +414,7 @@ def projects_board(request, filtertype=None):
         else:
             results = projects
 
-        p = Paginator(results, 5)
+        p = Paginator(results, 10)
 
     page_num = request.GET.get('page', 1)
     page = p.page(page_num)
