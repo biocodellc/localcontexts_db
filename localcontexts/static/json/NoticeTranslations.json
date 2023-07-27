@@ -1,0 +1,74 @@
+[
+    {
+        "id": 1,
+        "noticeName": "Atribución Incompleta",
+        "noticeType": "attribution_incomplete",
+        "noticeDefaultText": "Las colecciones y documentos en nuestra institución tienen atribuciones incompletas, imprecisas y/o faltantes. Utilizamos esta Notificación para identificar claramente este material y que pueda ser actualizado o corregido por las comunidades de origen. Nuestra institución está comprometida a llevar a cabo colaboraciones y alianzas para resolver este problema de atribuciones incorrectas o faltantes.",
+        "language_tag": "es",
+        "language": "Spanish"
+    },
+    {
+        "id": 2,
+        "noticeName": "Notificación BC (Biocultural)",
+        "noticeType": "biocultural",
+        "noticeDefaultText": "La Notificación BC indica de manera visible que hay derechos y responsabilidades culturales asociadas que necesitan mayor atención en caso de cualquier instancia en la que el material en cuestión es usado o compartido. La Notificación BC reconoce los derechos de personas y comunidades Indígenas para definir las circunstancias bajo las cuales permitir el uso de información, colecciones, datos, e información de secuencia digital generada desde las formas de biodiversidad y recursos genéticos asociados con tierras, aguas y territorios tradicionales/ancestrales. La Notificación BC indica que las Etiquetas BC (Bioculturales) están en desarrollo y que su implementación está siendo negociada. Para mayor información sobre las Etiquetas BC por favor visitar https://localcontexts.org/notices/biocultural-notices/.",
+        "language_tag": "es",
+        "language": "Spanish"
+    },
+    {
+        "id": 3,
+        "noticeName": "Notificación CT (Conocimiento Tradicional)",
+        "noticeType": "traditional_knowledge",
+        "noticeDefaultText": "La Notificación de CT indica de manera visible que existen derechos y responsabilidades culturales asociados que requieren mayor atención en el caso de cualquier forma de uso y circulación futura de este material. La Notificación de CT tiene el potencial de indicar que Etiquetas de CT están siendo desarrolladas y su implementación está siendo negociada. Para mayor información sobre las Etiquetas CT por favor visitar https://localcontexts.org/notice/tk-notice/.",
+        "language_tag": "es",
+        "language": "Spanish"
+    },
+    {
+        "id": 4,
+        "noticeName": "Attribution Incomplète",
+        "noticeType": "attribution_incomplete",
+        "noticeDefaultText": "Certaines collections ou items dans nos institutions ont des attributions incomplètes, inexactes ou manquantes. Nous utilisons cette notification afin d’identifier clairement ce matériel pour qu’il soit mis à jour ou corrigé par les communautés d’origine. Notre institution s’est engagée à collaborer et à travailler en partenariat avec ces communautés afin de résoudre le problème d’attributions inexactes ou manquantes.",
+        "language_tag": "fr",
+        "language": "French"
+    },
+    {
+        "id": 5,
+        "noticeName": "Notification BC (Bioculturelle)",
+        "noticeType": "biocultural",
+        "noticeDefaultText": "La notification BC sert à rendre visible l’information selon laquelle le matériel utilisé est accompagné de droits culturels et de responsabilités qui nécessitent une attention particulière au moment de le partager ou de l’utiliser. La notification BC est une reconnaissance des droits des peuples autochtones de permettre l’utilisation d’informations, de collections, de données et d’informations sur les séquences numériques provenant de la biodiversité et des ressources associées à leurs terres, cours d’eau et territoires traditionnels. La notification BC peut indiquer que les étiquettes BC (bioculturelles) sont en cours de réalisation et que leur application est en train d’être négociée. Pour plus d’information à propos des étiquettes BC, consulter le site https://localcontexts.org/notices/biocultural-notices/.",
+        "language_tag": "fr",
+        "language": "French"
+    },
+    {
+        "id": 6,
+        "noticeName": "Notification ST (Savoir Traditionnel)",
+        "noticeType": "traditional_knowledge",
+        "noticeDefaultText": "La notification ST sert à rendre visible l’information selon laquelle des droits culturels et des responsabilités sont rattachés au matériel en question et qu’une attention particulière doit être portée à tout partage ou toute utilisation future du matériel. La notification ST peut indiquer que les étiquettes ST (savoir traditionnel) sont en cours de réalisation et que leur application est en train d’être négociée. Pour plus d’information à propos des étiquettes ST, consulter le site https://localcontexts.org/notice/tk-notice/.",
+        "language_tag": "fr",
+        "language": "French"
+    },
+    {
+        "id": 7,
+        "noticeName": "Tutukinga Kore",
+        "noticeType": "attribution_incomplete",
+        "noticeDefaultText": "Tērā ngā kohinga me ngā taonga o tō mātou wānanga, kāore anō i tutuki, kua hē nei, kua ngaro nei rānei/hoki. Ko te tikanga o tēnei Pānui, he whakamōhio atu, me whakahou, me whakatika rānei tēnei taonga e ngā hapori, nāna tonu aua taonga. E ū ana tō mātou wānanga ki tēnei āhuatanga e rongoā ai ngā take nei nā.",
+        "language_tag": "mi",
+        "language": "Māori"
+    },
+    {
+        "id": 8,
+        "noticeName": "Pānui Whakamārama BC",
+        "noticeType": "biocultural",
+        "noticeDefaultText": "Ko tā te Pānui Whakamārama BC, he āta whakaatu, tērā ētahi tikanga ā-iwi me ōna haepapa ki runga i te whakamahinga, i te horapatanga hoki o tēnei taonga me ōna raraunga rānei. Whakamanahia ai ki tēnei Pānui Whakamārama BC, ko te mana tuku iho o ngā iwi taketake ki roto i ngā kohinga mātauranga pūtaiao, me ngā raraunga hangarau mō runga i ngā hapori, ngā tāngata, me te rerenga rauropi e noho pū ana i ngā whenua, i ngā wai me ngā rohe o ngā iwi taketake. Kei roto hoki pea i tēnei Pānui BC, ko te kōrero e mea ana, tērā ngā Tohu BC (Rerenga rauropi) e waihangatia ana, ā, kei te whiriwhirihia tonutia tōna whakatinanatanga. Mō ētahi atu kōrero mō ngā Pānui Whakamārama BC, pāwhiritia i konei.",
+        "language_tag": "mi",
+        "language": "Māori"
+    },
+    {
+        "id": 9,
+        "noticeName": "Pānui Whakamārama TK",
+        "noticeType": "traditional_knowledge",
+        "noticeDefaultText": "Ko tā te Pānui Whakamārama TK, he āta whakaatu, tērā ētahi tikanga ā-iwi me ōna haepapa ki runga i te whakamahinga, i te horapatanga hoki o tēnei taonga. Kei roto hoki pea i tēnei Pānui TK, ko te kōrero e mea ana, tērā ngā Tohu TK e waihangatia ana, ā, kei te whiriwhirihia tonutia tōna whakatinanatanga. Mō ētahi atu kōrero mō ngā Pānui Whakamārama TK, pāwhiritia i konei.",
+        "language_tag": "mi",
+        "language": "Māori"
+    }
+]
