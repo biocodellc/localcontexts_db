@@ -167,8 +167,23 @@ def get_collections_care_notices():
         data = json.load(file)
     return data
 
+def get_notice_translations():
+    json_path = finders.find('json/NoticeTranslations.json')
+    with open(json_path, 'r') as file:
+        data = json.load(file)
+    
+    # Restructure the data as a nested dictionary with noticeType and language as keys
+    notice_translations = {}
+    for item in data:
+        notice_type = item['noticeType']
+        language_tag = item['languageTag']
+        if notice_type not in notice_translations:
+            notice_translations[notice_type] = {}
+        notice_translations[notice_type][language_tag] = item
+    return notice_translations
+
 # Create/Update/Delete Notices
-def crud_notices(request, selected_notices, organization, project, existing_notices):
+def crud_notices(request, selected_notices, selected_translations, organization, project, existing_notices):
     from projects.models import ProjectActivity
     # organization: either instance of institution or researcher
     # selected_notices would be a list: # attribution_incomplete # bcnotice # tknotice
@@ -176,13 +191,26 @@ def crud_notices(request, selected_notices, organization, project, existing_noti
     name = get_users_name(request.user)
 
     def create(notice_type):
-        if isinstance(organization, Institution):
-            new_notice = Notice.objects.create(notice_type=notice_type, institution=organization, project=project)
+        if isinstance(organization, (Institution, Researcher)):
+            notice_fields = {
+                'notice_type': notice_type,
+                'project': project,
+            }
+
+            if isinstance(organization, Institution):
+                notice_fields['institution'] = organization
+            elif isinstance(organization, Researcher):
+                notice_fields['researcher'] = organization
+
+            new_notice = Notice.objects.create(**notice_fields)
             ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project by {name}')
 
-        if isinstance(organization, Researcher):
-            new_notice = Notice.objects.create(notice_type=notice_type, researcher=organization, project=project)
-            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project by {name}')
+            # If any Notice translations were passed
+            if selected_translations:
+                for value in selected_translations:
+                    ntype, lang_tag = value.split('-')
+                    if new_notice.notice_type == ntype:
+                        new_notice.save(language_tag=lang_tag)
 
     def create_notices(existing_notice_types):          
         for notice_type in selected_notices:

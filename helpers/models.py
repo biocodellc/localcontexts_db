@@ -26,14 +26,15 @@ class Notice(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
 
-    # Note: this will only work once the Notice itself is saved first, check the json file for what languages are currently available.
-    # Use: notice.save(language='French')
-    def set_translation(self, language):
+    # Note: this will only work once the Notice itself is saved first, check the json file for what language tags are currently available.
+    # Use: notice.save(language='fr')
+    def set_translation(self, language_tag):
         with open('./localcontexts/static/json/NoticeTranslations.json') as json_file:
             translations_data = json.load(json_file)
-        
+            
+        translation = None
         for item in translations_data:
-            if item['noticeType'] == self.notice_type and item['language'] == language:
+            if item['noticeType'] == self.notice_type and item['languageTag'] == language_tag:
                 translation = item['noticeDefaultText']
                 break
         else:
@@ -42,13 +43,13 @@ class Notice(models.Model):
         NoticeTranslation.objects.update_or_create(
             notice=self,
             notice_type=self.notice_type,
-            language_tag=item['language_tag'],
+            language_tag=item['languageTag'],
             language=item['language'],
             translated_name=item['noticeName'],
             translated_text=translation
         )
 
-    def save(self, language=None, *args, **kwargs):
+    def save(self, language_tag=None, *args, **kwargs):
         json_data = open('./localcontexts/static/json/Notices.json')
         data = json.load(json_data) #deserialize
 
@@ -60,8 +61,8 @@ class Notice(models.Model):
                 self.svg_url = baseURL + item['svgFileName']
                 self.default_text = item['noticeDefaultText']
         
-        if language:
-            self.set_translation(language)
+        if language_tag:
+            self.set_translation(language_tag)
 
         super().save(*args, **kwargs)
 
