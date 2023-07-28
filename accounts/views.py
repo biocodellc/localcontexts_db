@@ -331,100 +331,104 @@ def invite_user(request):
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 
 def registry(request, filtertype=None):
-    # try:
-    c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
-    i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
-    r = Researcher.objects.select_related('user').all().order_by('user__username')
+    try:
+        c = Community.approved.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('community_name')
+        i = Institution.approved.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').all().order_by('institution_name')
+        r = Researcher.objects.select_related('user').all().order_by('user__username')
 
-    if ('q' in request.GET) and (filtertype != None):
-        q = request.GET.get('q')
-        return redirect('/registry/?q=' + q)
-    
-    elif ('q' in request.GET) and (filtertype == None):
-        q = request.GET.get('q')
-        q = unidecode(q) #removes accents from search query
+        if ('q' in request.GET) and (filtertype != None):
+            q = request.GET.get('q')
+            return redirect('/registry/?q=' + q)
+        
+        elif ('q' in request.GET) and (filtertype == None):
+            q = request.GET.get('q')
+            q = unidecode(q) #removes accents from search query
 
-        # Filter's accounts by the search query, showing results that match with or without accents
-        c = c.filter(community_name__unaccent__icontains=q)
-        i = i.filter(institution_name__unaccent__icontains=q)
-        r = r.filter(Q(user__username__unaccent__icontains=q) | Q(user__first_name__unaccent__icontains=q) | Q(user__last_name__unaccent__icontains=q))
+            # Filter's accounts by the search query, showing results that match with or without accents
+            c = c.filter(community_name__unaccent__icontains=q)
+            i = i.filter(institution_name__unaccent__icontains=q)
+            r = r.filter(Q(user__username__unaccent__icontains=q) | Q(user__first_name__unaccent__icontains=q) | Q(user__last_name__unaccent__icontains=q))
 
-        cards = return_registry_accounts(c, r, i)
-
-        p = Paginator(cards, 5)
-
-    else:
-        if filtertype == 'communities':
-            cards = c
-        elif filtertype == 'institutions':
-            cards = i
-        elif filtertype == 'researchers':
-            cards = r
-        elif filtertype == 'otc':
-            researchers_with_otc = r.filter(otc_researcher_url__isnull=False).distinct()
-            institutions_with_otc = i.filter(otc_institution_url__isnull=False).distinct()
-            cards = return_registry_accounts(None, researchers_with_otc, institutions_with_otc)
-        else:
             cards = return_registry_accounts(c, r, i)
 
-        p = Paginator(cards, 5)
+            p = Paginator(cards, 5)
 
-    page_num = request.GET.get('page', 1)
-    page = p.page(page_num)
+        else:
+            if filtertype == 'communities':
+                cards = c
+            elif filtertype == 'institutions':
+                cards = i
+            elif filtertype == 'researchers':
+                cards = r
+            elif filtertype == 'otc':
+                researchers_with_otc = r.filter(otc_researcher_url__isnull=False).distinct()
+                institutions_with_otc = i.filter(otc_institution_url__isnull=False).distinct()
+                cards = return_registry_accounts(None, researchers_with_otc, institutions_with_otc)
+            else:
+                cards = return_registry_accounts(c, r, i)
 
-    context = {
-        'researchers' : r,
-        'communities' : c,
-        'institutions' : i,
-        'items' : page,
-        'filtertype' : filtertype
-    }
-    
-    return render(request, 'accounts/registry.html', context)
+            p = Paginator(cards, 5)
 
-    # except:
-    #     raise Http404()
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+
+        context = {
+            'researchers' : r,
+            'communities' : c,
+            'institutions' : i,
+            'items' : page,
+            'filtertype' : filtertype
+        }
+        
+        return render(request, 'accounts/registry.html', context)
+
+    except:
+        raise Http404()
 
 def projects_board(request, filtertype=None):
-    approved_institutions = Institution.objects.filter(is_approved=True).values_list('id', flat=True)
-    approved_communities = Community.objects.filter(is_approved=True).values_list('id', flat=True)
-    projects = Project.objects.filter(
-        Q(project_privacy='Public'),
-        Q(project_creator_project__institution__in=approved_institutions) |
-        Q(project_creator_project__community__in=approved_communities) |
-        Q(project_creator_project__researcher__user__isnull=False)
-    ).select_related('project_creator').order_by('-date_modified')
+    try:
+        approved_institutions = Institution.objects.filter(is_approved=True).values_list('id', flat=True)
+        approved_communities = Community.objects.filter(is_approved=True).values_list('id', flat=True)
+        projects = Project.objects.filter(
+            Q(project_privacy='Public'),
+            Q(project_creator_project__institution__in=approved_institutions) |
+            Q(project_creator_project__community__in=approved_communities) |
+            Q(project_creator_project__researcher__user__isnull=False)
+        ).select_related('project_creator').order_by('-date_modified')
 
-    if ('q' in request.GET) and (filtertype != None):
-        q = request.GET.get('q')
-        return redirect('/projects-board/?q=' + q)
-    elif ('q' in request.GET) and (filtertype == None):
-        q = request.GET.get('q')
-        q = unidecode(q) #removes accents from search query
+        if ('q' in request.GET) and (filtertype != None):
+            q = request.GET.get('q')
+            return redirect('/projects-board/?q=' + q)
+        elif ('q' in request.GET) and (filtertype == None):
+            q = request.GET.get('q')
+            q = unidecode(q) #removes accents from search query
 
-        # Filter's accounts by the search query, showing results that match with or without accents
-        results = projects.filter(title__unaccent__icontains=q)
+            # Filter's accounts by the search query, showing results that match with or without accents
+            results = projects.filter(title__unaccent__icontains=q)
 
-        p = Paginator(results, 10)
-    else:
-        if filtertype == 'labels':
-            results = projects.filter(Q(bc_labels__isnull=False) | Q(tk_labels__isnull=False))
-        elif filtertype == 'notices':
-            results = projects.filter(project_notice__archived=False).distinct()
+            p = Paginator(results, 10)
         else:
-            results = projects
+            if filtertype == 'labels':
+                results = projects.filter(Q(bc_labels__isnull=False) | Q(tk_labels__isnull=False))
+            elif filtertype == 'notices':
+                results = projects.filter(project_notice__archived=False).distinct()
+            else:
+                results = projects
 
-        p = Paginator(results, 10)
+            p = Paginator(results, 10)
 
-    page_num = request.GET.get('page', 1)
-    page = p.page(page_num)
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
 
-    context = {
-        'projects': projects,
-        'items': page,
-        'filtertype' : filtertype
-    }
-    return render(request, 'accounts/projects-board.html', context)
+        context = {
+            'projects': projects,
+            'items': page,
+            'filtertype' : filtertype
+        }
+        return render(request, 'accounts/projects-board.html', context)
+    except:
+        raise Http404()
+
 
 # Hub stats page
 def hub_counter(request):
