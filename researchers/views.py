@@ -326,6 +326,8 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
     if user_can_view == False:
         return redirect('restricted')
     else:
+        notice_defaults = get_notice_defaults()
+
         if request.method == "GET":
             form = CreateProjectForm(request.POST or None)
             formset = ProjectPersonFormset(queryset=ProjectPerson.objects.none())
@@ -396,6 +398,7 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
             'researcher': researcher,
             'form': form,
             'formset': formset,
+            'notice_defaults': notice_defaults,
             'user_can_view': user_can_view,
         }
         return render(request, 'researchers/create-project.html', context)
@@ -412,6 +415,7 @@ def edit_project(request, researcher_id, project_uuid):
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
         notices = Notice.objects.none()
+        notice_defaults = get_notice_defaults()
 
         # Check to see if notice exists for this project and pass to template
         if Notice.objects.filter(project=project).exists():
@@ -440,7 +444,8 @@ def edit_project(request, researcher_id, project_uuid):
             
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
-                crud_notices(request, notices_selected, researcher, data, notices)
+                translations_selected = request.POST.getlist('checkbox-translation')
+                crud_notices(request, notices_selected, translations_selected, researcher, data, notices)
 
             return redirect('researcher-project-actions', researcher.id, project.unique_id)
  
@@ -449,6 +454,7 @@ def edit_project(request, researcher_id, project_uuid):
             'researcher': researcher, 
             'project': project, 
             'notices': notices,
+            'notice_defaults': notice_defaults,
             'form': form, 
             'formset': formset,
             'contributors': contributors,
