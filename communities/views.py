@@ -827,11 +827,7 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 data.project_creator = request.user
 
                 # Define project_page field
-                domain = request.get_host()
-                if 'localhost' in domain:
-                    data.project_page = f'http://{domain}/projects/{data.unique_id}'
-                else:
-                    data.project_page = f'https://{domain}/projects/{data.unique_id}'
+                data.project_page = f'{request.scheme}://{request.get_host()}/projects/{data.unique_id}'
                 
                 # Handle multiple urls, save as array
                 project_links = request.POST.getlist('project_urls')

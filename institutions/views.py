@@ -563,6 +563,8 @@ def institution_projects(request, pk):
 def create_project(request, pk, source_proj_uuid=None, related=None):
     institution = Institution.objects.select_related('institution_creator').get(id=pk)
     name = get_users_name(request.user)
+    notice_translations = get_notice_translations()
+    notice_defaults = get_notice_defaults()
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
@@ -580,11 +582,7 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 data.project_creator = request.user
 
                 # Define project_page field
-                domain = request.get_host()
-                if 'localhost' in domain:
-                    data.project_page = f'http://{domain}/projects/{data.unique_id}'
-                else:
-                    data.project_page = f'https://{domain}/projects/{data.unique_id}'
+                data.project_page = f'{request.scheme}://{request.get_host()}/projects/{data.unique_id}'
                 
                 # Handle multiple urls, save as array
                 project_links = request.POST.getlist('project_urls')
@@ -617,7 +615,8 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                crud_notices(request, notices_selected, institution, data, None)
+                translations_selected = request.POST.getlist('checkbox-translation')
+                crud_notices(request, notices_selected, translations_selected, institution, data, None)
                 
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, institution, data)
@@ -640,6 +639,8 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
 
         context = {
             'institution': institution,
+            'notice_translations': notice_translations,
+            'notice_defaults': notice_defaults,
             'form': form,
             'formset': formset,
             'member_role': member_role,
@@ -659,6 +660,8 @@ def edit_project(request, institution_id, project_uuid):
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
         notices = Notice.objects.none()
+        notice_translations = get_notice_translations()
+        notice_defaults = get_notice_defaults()
 
         # Check to see if notice exists for this project and pass to template
         if Notice.objects.filter(project=project).exists():
@@ -685,11 +688,10 @@ def edit_project(request, institution_id, project_uuid):
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, institution, data)
 
-                # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
-                # Pass any existing notices as well as newly selected ones
-                crud_notices(request, notices_selected, institution, data, notices)
-
+                translations_selected = request.POST.getlist('checkbox-translation')
+                crud_notices(request, notices_selected, translations_selected, institution, data, notices)
+                
             return redirect('institution-project-actions', institution.id, project.unique_id)
 
 
@@ -698,10 +700,12 @@ def edit_project(request, institution_id, project_uuid):
             'institution': institution, 
             'project': project, 
             'notices': notices, 
+            'notice_defaults': notice_defaults,
             'form': form,
             'formset': formset,
             'contributors': contributors,
             'urls': project.urls,
+            'notice_translations': notice_translations,
         }
         return render(request, 'institutions/edit-project.html', context)
 

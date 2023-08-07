@@ -267,7 +267,14 @@
                                     <img loading="lazy" src="{{ notice.img_url }}" width="78" height="78" alt="black square with white letters TK in the middle">
                                 </div>
                                 <p>
-                                    {{ notice.default_text }} <br>
+                                    {{ notice.default_text }} <br><br>
+                                    {% for translation in notice.notice_translations.all %}
+                                        <div class="flex-this space-between">
+                                            <h3>{{ translation.translated_name }}</h3>
+                                            <h3>{{ translation.language }}</h3>
+                                        </div>
+                                        {{ translation.translated_text }}<br><br>
+                                    {% endfor %}
                                 </p>
                             </div>
                         </div>

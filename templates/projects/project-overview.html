@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} Projects {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
+{% load static %} {% load custom_project_tags %} {% block content %}
 
         <tr>
             <td>
@@ -42,10 +42,10 @@
                 ></i>
             </td>
             {% if 'projects-board' in request.path %}
-                <td class="center-text green-icon">
+                <td class="center-text green-text">
                     {% if project.has_notice %} <i class="fa-solid fa-circle-check fa-xl"></i> {% endif %}
                 </td>
-                <td class="center-text green-icon">
+                <td class="center-text green-text">
                     {% if project.has_labels %} <i class="fa-solid fa-circle-check fa-xl"></i> {% endif %}
                 </td>
             {% endif %}
