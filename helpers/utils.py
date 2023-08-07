@@ -226,19 +226,22 @@ def crud_notices(request, selected_notices, selected_translations, organization,
                     create(notice_type)
     
     def update_notice_translation(notice, selected_translations):
-        if selected_translations:
-            for value in selected_translations:
-                ntype, lang_tag = value.split('-')
+        selected_notice_types_langs = [value.split('-') for value in selected_translations]
 
+        for translation in notice.notice_translations.all():
+            ntype = translation.notice_type
+            lang_tag = translation.language_tag
+
+            # If this notice translation is not in the selected translations and its type matches the notice, delete it
+            if (ntype, lang_tag) not in selected_notice_types_langs and notice.notice_type == ntype:
+                translation.delete()
+
+        for ntype, lang_tag in selected_notice_types_langs:
+            # Check if the notice type matches the selected translation
+            if notice.notice_type == ntype:
                 # If translation of this type in this language does NOT exist, create it.
                 if not notice.notice_translations.filter(notice_type=ntype, language_tag=lang_tag).exists():
                     notice.save(language_tag=lang_tag)
-
-                # If other translations exist that are not on the list, delete them
-                elif notice.notice_translations.exclude(notice_type=ntype, language_tag=lang_tag).exists():
-                    translations_to_delete = notice.notice_translations.exclude(notice_type=ntype, language_tag=lang_tag)
-                    for item in translations_to_delete:
-                        item.delete()
                 
     if existing_notices:
         existing_notice_types = []
