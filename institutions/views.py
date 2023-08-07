@@ -562,14 +562,15 @@ def institution_projects(request, pk):
 @login_required(login_url='login')
 def create_project(request, pk, source_proj_uuid=None, related=None):
     institution = Institution.objects.select_related('institution_creator').get(id=pk)
-    name = get_users_name(request.user)
-    notice_translations = get_notice_translations()
-    notice_defaults = get_notice_defaults()
 
     member_role = check_member_role(request.user, institution)
     if member_role == False or member_role == 'viewer': # If user is not a member / is a viewer.
         return redirect('restricted')
     else:
+        name = get_users_name(request.user)
+        notice_translations = get_notice_translations()
+        notice_defaults = get_notice_defaults()
+        
         if request.method == 'GET':
             form = CreateProjectForm(request.GET or None)
             formset = ProjectPersonFormset(queryset=ProjectPerson.objects.none())
