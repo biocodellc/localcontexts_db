@@ -294,15 +294,47 @@
                 {{ form.project_privacy.label }}* 
                 <div class="tooltip"><strong>?</strong>
                     <span class="tooltiptext">
+
+                        Limited Project information can be accessed with the Hub API:
                         <ul>
-                            <li><span class="bold">Public:</span> Contributors and notified communities will be able to interact with the project. Limited project details (title, unique ID, attached Notices or Labels) can be accessed through the Hub API.</li><br>
-                            <li><span class="bold">Contributor View:</span>  Contributors and notified communities will be able to interact with the project. Limited project details (title, unique ID) can be accessed through the Hub API.</li><br>
-                            <li><span class="bold">Private:</span>  If contributors are added, communities are notified, or Labels applied, then the private project will be changed to contributor view. Private projects cannot be accessed with the Hub API. </li>
-                        </ul>                  
+                            <li><span class="bold">Public:</span> 
+                                Project title, ID, and attached Labels/Notices
+                            </li>
+                            <li><span class="bold">Contributor View:</span>  
+                                Project title and ID
+                            </li>
+                            <li><span class="bold">Private:</span>  
+                                Private Projects cannot be accessed with the Hub API
+                            </li>
+                        </ul>   
+                        
+                        To learn more, see the <a href="https://localcontexts.org/support/api-guide/" class="white-text bold underline-hover" target="_blank" rel="noopener">Hub API Guide <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>.
+
                     </span>
                 </div>
                 <br> 
-                {{ form.project_privacy }}
+
+                {% for value, label in form.project_privacy.field.choices %}
+                    <div class="margin-bottom-8">
+                        <label for="privacy_{{ value }}">
+                            <div class="flex-this">
+                                <div class="margin-right-16">
+                                    <input 
+                                        id="privacy_{{ value }}"
+                                        type="radio" 
+                                        name="{{ form.project_privacy.name }}" 
+                                        value="{{ value }}" 
+                                        {% if form.project_privacy.value == value|stringformat:"s" %}checked{% endif %}
+                                    >
+                                </div>
+                                <div>
+                                    {{ label }}
+                                </div>                                
+                            </div>
+                        </label>
+                    </div>
+                {% endfor %}
+                
                 {% if form.project_privacy.errors %}
                     <div class="msg-red w-50"><small>{{ form.project_privacy.errors.as_text }}</small></div> 
                 {% endif %}
