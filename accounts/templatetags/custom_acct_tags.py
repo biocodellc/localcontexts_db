@@ -14,7 +14,7 @@ def all_projects_count(projects):
 
 @register.simple_tag
 def projects_with_labels_count(projects):
-    results = projects.filter(Q(bc_labels__isnull=False) | Q(tk_labels__isnull=False))
+    results = projects.filter(Q(bc_labels__isnull=False) | Q(tk_labels__isnull=False)).distinct()
     return results.count()
 
 @register.simple_tag
