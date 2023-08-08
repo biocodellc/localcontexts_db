@@ -202,7 +202,8 @@ a.section:visited {
 }
 a:link,
 a:visited,
-.paginator a.showall {
+.paginator a.showall,
+.module.collapsible table caption a.showall {
     color: #5AA497;
 }
 a:focus,
@@ -212,7 +213,8 @@ div.breadcrumbs a:hover,
 #changelist table tbody tr.selected a:hover,
 .paginator a.showall:hover,
 #changelist-filter a:hover,
-#changelist-filter li.selected a:hover {
+#changelist-filter li.selected a:hover,
+.module.collapsible table caption a.showall:hover {
     color: #007385;
     text-decoration: underline;
     font-weight: bold;

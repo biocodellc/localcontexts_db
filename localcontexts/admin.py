@@ -1,22 +1,20 @@
 import csv
 import itertools, calendar
 from datetime import datetime, timedelta, timezone
-from operator import attrgetter
 from django.db.models.functions import Extract, Concat
 from django.db.models import Count, Q, Value, F, CharField, Case, When
 from django.contrib import admin
-from django.urls import path, reverse
+from django.urls import path
 from django.utils.translation import gettext as _
-from django.utils.http import urlencode
 from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 from django.apps import apps
 from django.template.response import TemplateResponse
 from django.http import Http404, HttpResponse
-from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 
 from accounts.models import Profile, UserAffiliation, SignUpInvitation
+from accounts.utils import get_users_name
 from rest_framework_api_key.admin import APIKey, APIKeyModelAdmin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import Group, User
@@ -307,7 +305,7 @@ def dataCharts(end_date, chartData):
     
     return context
 
-# DASHBOARD CUSTOM ADMIN
+# FILTERS AND ADD-ONS
 class AccountTypeFilter(admin.SimpleListFilter):
     title = 'Account Type'
     parameter_name = 'account'
@@ -372,7 +370,7 @@ class PrivacyTypeFilter(admin.SimpleListFilter):
         except:
             return queryset.none()
         
-class NoticeLabelTypeFilter(admin.SimpleListFilter):
+class NoticeLabelFilter(admin.SimpleListFilter):
     title = 'Notice/Labels'
     parameter_name = 'notice_label'
 
@@ -410,6 +408,17 @@ class AdminImageWidget(AdminFileWidget):
                 (image_url, file_name, _('')))
         output.append(super(AdminFileWidget, self).render(name, value, attrs))
         return mark_safe(u''.join(output))
+    
+class AdminAudioWidget(AdminFileWidget):
+    def render(self, name, value, attrs=None, renderer=None):
+        output = []
+        if value and getattr(value, "url", None):
+            audio_url = value.url
+            file_name = str(value)
+            output.append(u' <audio controls><source src="%s" type="audio/mpeg" alt="%s"> %s </audio>' % \
+                (audio_url, file_name, _('')))
+        output.append(super(AdminFileWidget, self).render(name, value, attrs))
+        return mark_safe(u''.join(output))
                 
 class ExportCsvMixin:
     def export_as_csv(self, request, queryset):
@@ -430,6 +439,7 @@ class ExportCsvMixin:
 
     export_as_csv.short_description = "Export Selected"
 
+# CUSTOM ADMIN VIEWS
 class Inactive(User):
     class Meta:
         proxy = True
@@ -485,41 +495,15 @@ class InactiveAccountsAdmin(admin.ModelAdmin):
         # Combine and sort the data as needed
         results = sorted(list(itertools.chain(inactive_users, inactive_institutions, inactive_researchers, inactive_communities)), key = lambda k: k['days_count'])
 
-        paginator = Paginator(results, self.list_per_page)
-        page_number = request.GET.get('p')
-        page_obj = paginator.get_page(page_number)
-
         # Create custom pagination context
-        pagination_context = self.get_pagination_context(page_obj, paginator, results)
+        pagination_context = {
+            'results': results,
+            'result_count': len(results)
+        }
 
         response.context_data.update(**pagination_context)
 
         return response
-
-    def get_pagination_context(self, page_obj, paginator, results):
-        if paginator.num_pages > 1:
-            print(paginator.num_pages)
-            pagination_required = True
-            show_all_url = True
-        else:
-            pagination_required = False
-            show_all_url = False
-
-        pagination = {
-            'pagination_required': pagination_required,
-            'page_obj': page_obj,
-            'paginator': paginator,
-            'results': list(page_obj),
-            'is_paginated': page_obj.has_other_pages(),
-            'result_count': len(results),
-            'show_all_url': show_all_url,
-            'page_range': paginator.page_range,
-            'page_num': page_obj.number,
-        }
-
-        return pagination
-
-admin_site.register(Inactive, InactiveAccountsAdmin)
 
 class OTCLinks(OpenToCollaborateNoticeURL):
     class Meta:
@@ -539,7 +523,7 @@ class OTCLinksAdmin(admin.ModelAdmin, ExportCsvMixin):
     def view(self, obj):
         project_url= obj.url
         return format_html('<a href="{}" target="_blank" title="View External Link">View</a>', project_url)
-    view.short_description = "Project Page"
+    view.short_description = "URL"
     
     def added_by(self, obj):
         if obj.institution_id:
@@ -549,10 +533,7 @@ class OTCLinksAdmin(admin.ModelAdmin, ExportCsvMixin):
         else:
             account_id = obj.researcher_id
             account_url = 'researchers/researcher'
-            if obj.researcher.user.first_name!="" and obj.researcher.user.last_name!="":
-                account_name = obj.researcher.user.first_name + ' ' + obj.researcher.user.last_name
-            else:
-                account_name = obj.researcher.user.username
+            account_name = get_users_name(obj.researcher.user)
         
         return format_html('<a href="/admin/{}/{}/change/">{} </a>', account_url, account_id, account_name)
     
@@ -561,8 +542,6 @@ class OTCLinksAdmin(admin.ModelAdmin, ExportCsvMixin):
         return added_date
     
     datetime.short_description = "Date/Time"
-
-admin_site.register(OTCLinks, OTCLinksAdmin)
 
 class UserProfile(User):
     class Meta:
@@ -613,17 +592,12 @@ class UserProfileAdmin(UserAdmin, ExportCsvMixin):
     )
 
     def profile_name(self, obj):
-        if obj.first_name!="" and obj.last_name!="":
-            name = obj.first_name + ' ' + obj.last_name
-        else:
-            name = obj.username
+        name = get_users_name(obj)
         return name
     
     def joined(self, obj):
         date_joined = obj.date_joined.strftime('%m/%d/%Y %I:%M %p (%Z)').replace('AM', 'am').replace('PM', 'pm')
         return date_joined
-
-admin_site.register(UserProfile, UserProfileAdmin)
 
 class ProjectPage(Project):
     class Meta:
@@ -699,10 +673,12 @@ class ProjectNoticesInline(admin.StackedInline):
 class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
     model = ProjectPage
     list_display = ('title', 'creator', 'privacy', 'link', 'created', 'notice_labels_img')
-    list_filter = (PrivacyTypeFilter, NoticeLabelTypeFilter, AccountTypeFilter)
+    list_filter = (PrivacyTypeFilter, NoticeLabelFilter, AccountTypeFilter)
+    list_per_page = 25
     search_fields = ['title', 'project_creator__first_name', 'project_creator__last_name', 'project_creator__username']
     ordering = ['title']
     actions = ['export_as_csv']
+
     inlines = [ProjectNoticesInline, ProjectCreatorInline, ProjectContributorInline, AdditionalContributorsInline, ProjectStatusInline, ProjectActivityInline, ProjectNotesInline]
     raw_id_fields = ('project_creator',)
     readonly_fields = ('unique_id', 'project_page', 'date_added', 'date_modified', 'project_url', 'notice_labels_img', 'source_project_uuid')
@@ -747,25 +723,22 @@ class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
 
     # Display field on list
     def creator(self, obj):
-        creator = obj.project_creator_project.filter(project=obj.id).values()
+        creator = obj.project_creator_project.values()
 
         if creator.filter(community_id__isnull=False):
             creator_account_id = creator.values_list('community_id', flat=True).first()
             creator_account_url = 'communities/community'
-            creator_account_name = Community.objects.filter(id=creator_account_id).values_list('community_name', flat=True).first()
+            creator_account_name = obj.project_creator_project.values_list('community__community_name', flat=True).first()
         elif creator.filter(institution_id__isnull=False):
             creator_account_id = creator.values_list('institution_id', flat=True).first()
             creator_account_url = 'institutions/institution'
-            creator_account_name = Institution.objects.filter(id=creator_account_id).values_list('institution_name', flat=True).first()
+            creator_account_name = obj.project_creator_project.values_list('institution__institution_name', flat=True).first()
         else:
             creator_account_id = creator.values_list('researcher_id', flat=True).first()
             creator_account_url = 'researchers/researcher'
             creator_account_name = 'Researcher'
         
-        if obj.project_creator.first_name != "" and obj.project_creator.last_name != "":
-            creator_name = obj.project_creator.first_name + ' ' + obj.project_creator.last_name
-        else:
-            creator_name = obj.project_creator.username
+        creator_name = get_users_name(obj.project_creator)
 
         return format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> (<a href="/admin/{}/{}/change/">{}</a>)', obj.project_creator_id, creator_name, creator_account_url, creator_account_id, creator_account_name)
 
@@ -791,6 +764,9 @@ class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
         return format_html('<a href="{}" target="_blank">{}</a>', obj.project_page, obj.project_page)
     project_url.short_description = 'Project page'
 
+admin_site.register(Inactive, InactiveAccountsAdmin)
+admin_site.register(OTCLinks, OTCLinksAdmin)
+admin_site.register(UserProfile, UserProfileAdmin)
 admin_site.register(ProjectPage, ProjectPageAdmin)
 
 # ACCOUNTS ADMIN
