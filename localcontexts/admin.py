@@ -764,10 +764,245 @@ class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
         return format_html('<a href="{}" target="_blank">{}</a>', obj.project_page, obj.project_page)
     project_url.short_description = 'Project page'
 
+class Labels(TKLabel):
+    class Meta:
+        proxy = True
+        verbose_name = 'Label'
+        verbose_name_plural = 'Labels'
+        app_label = 'admin'
+
+class LabelDetailsAdmin(admin.ModelAdmin):
+    model = Labels
+    change_list_template = 'admin/change_lists/labels_change_list.html'
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        label_details = {
+            'tkattribution': {'name':'TK Attribution (TK A)', 'count': 0, 'type': 'attribution'},
+            'tkclan': {'name':'TK Clan (TK CL)', 'count': 0, 'type': 'clan'},
+            'tkfamily' : {'name':'TK Family (TK F)', 'count': 0, 'type': 'family'},
+            'tktk_multiple_community' : {'name':'TK Multiple Communities (TK MC)', 'count': 0, 'type': 'tk_multiple_community'},
+            'tkcommunity_voice' : {'name':'TK Community Voice (TK CV)', 'count': 0, 'type': 'community_voice'},
+            'tkcreative' : {'name':'TK Creative (TK CR)', 'count': 0, 'type': 'creative'},
+            'tkverified' : {'name':'TK Verified (TK V)', 'count': 0, 'type': 'verified'},
+            'tknon_verified' : {'name':'TK Non-Verified (TK NV)', 'count': 0, 'type': 'non_verified'},
+            'tkseasonal' : {'name':'TK Seasonal (TK S)', 'count': 0, 'type': 'seasonal'},
+            'tkwomen_general' : {'name':'TK Women General (TK WG)', 'count': 0, 'type': 'women_general'},
+            'tkmen_general' : {'name':'TK Men General (TK MG)', 'count': 0, 'type': 'men_general'},
+            'tkmen_restricted' : {'name':'TK Men Restricted (TK MR)', 'count': 0, 'type': 'men_restricted'},
+            'tkwomen_restricted' : {'name':'TK Women Restricted(TK WR)', 'count': 0, 'type': 'women_restricted'},
+            'tkculturally_sensitive' : {'name':'TK Culturally Sensitive (TK CS)', 'count': 0, 'type': 'culturally_sensitive'},
+            'tksecret_sacred' : {'name':'TK Secret/Sacred (TK SS)', 'count': 0, 'type': 'secret_sacred'},
+            'tkcommercial' : {'name':'TK Open to Commercialization (TK OC)', 'count': 0, 'type': 'commercial'},
+            'tknon_commercial' : {'name':'TK Non-Commercial (TK NC)', 'count': 0, 'type': 'non_commercial'},
+            'tkcommunity_use_only' : {'name':'TK Community Use Only (TK CO)', 'count': 0, 'type': 'community_use_only'},
+            'tkoutreach' : {'name':'TK Outreach (TK O)', 'count': 0, 'type': 'outreach'},
+            'tkopen_to_collaboration' : {'name':'TK Open to collaboration', 'count': 0, 'type': 'open_to_collaboration'},
+
+            'bcprovenance' : {'name':'BC Provenance (BC P)', 'count': 0, 'type': 'provenance'},
+            'bcmultiple_community' : {'name':'BC Multiple Communities (BC MC)', 'count': 0, 'type': 'multiple_community'},
+            'bcclan' : {'name':'BC Clan (BC CL)', 'count': 0, 'type': 'clan'},
+            'bcconsent_verified' : {'name':'BC Consent Verified (BC CV)', 'count': 0, 'type': 'consent_verified'},
+            'bcconsent_non_verified' : {'name':'BC Consent Non-Verified (BC CNV)', 'count': 0, 'type': 'consent_non_verified'},
+            'bcresearch' : {'name':'BC Research Use (BC R)', 'count': 0, 'type': 'research'},
+            'bccollaboration' : {'name':'BC Open to Collaboration (BC CB)', 'count': 0, 'type': 'collaboration'},
+            'bccommercialization' : {'name':'BC Open to Commercialization (BC OC)', 'count': 0, 'type': 'commercialization'},
+            'bcnon_commercial' : {'name':'BC Non-Commercial (BC NC)', 'count': 0, 'type': 'non_commercial'},
+            'bcoutreach' : {'name':'BC Outreach (BC O)', 'count': 0, 'type': 'outreach'}
+        }
+
+        tk_labels = TKLabel.objects.values('label_type').annotate(
+            label_count = Count('label_type'),
+            label_name = Concat(Value('tk'), F('label_type'))
+            ).values('label_name', 'label_count').order_by('label_name')
+        bc_labels = BCLabel.objects.values('label_type').annotate(
+            label_count = Count('label_type'),
+            label_name = Concat(Value('bc'), F('label_type'))
+            ).values('label_name', 'label_count').order_by('label_name')
+
+        for label in tk_labels:
+            label_details[label['label_name']]['count'] = label['label_count']
+            label_details[label['label_name']]['class'] = 'tk'
+        for label in bc_labels:
+            label_details[label['label_name']]['count'] = label['label_count']
+            label_details[label['label_name']]['class'] = 'bc'
+
+        # Create custom pagination context
+        pagination_context = {
+            'results' : label_details,
+            'result_count' : len(label_details)
+        }
+
+        response.context_data.update(**pagination_context)
+
+        return response
+    
+class TKLabels(TKLabel):
+    class Meta:
+        proxy = True
+        verbose_name = 'TK Label'
+        verbose_name_plural = 'TK Labels'
+        app_label = 'admin'
+
+class BCLabels(BCLabel):
+    class Meta:
+        proxy = True
+        verbose_name = 'BC Label'
+        verbose_name_plural = 'BC Labels'
+        app_label = 'admin'
+
+class LabelVersionInline(admin.StackedInline):
+    model = LabelVersion
+    readonly_fields = ('version', 'version_text', 'created_by', 'approved_by', 'created', 'translation_versions')
+    fields = ('version', 'created_by', 'version_text', 'is_approved', 'approved_by', 'created', 'translation_versions')
+    extra=0
+    max_num=0
+    show_change_link = True
+    classes = ['collapse']
+
+    def translation_versions(self, obj):
+        translation_versions = obj.label_version_translation.filter(version_instance=obj.id).count()
+        return translation_versions
+    translation_versions.short_description = 'Translation versions'
+
+    def get_queryset(self, request):
+        label_id = ((request.path_info).split("/"))[4]
+        if 'tklabels' in request.path_info:
+            response = super().get_queryset(request).filter(tklabel=label_id).select_related('created_by', 'approved_by', 'tklabel')
+        elif 'bclabels' in request.path_info:
+            response = super().get_queryset(request).filter(bclabel=label_id).select_related('created_by', 'approved_by', 'bclabel')
+        return response
+    
+class LabelTranslationInline(admin.StackedInline):
+    model = LabelTranslation
+    fields = (
+        'translated_name',
+        ('language', 'language_tag'),
+        'translated_text'
+    )
+    extra=0
+    show_change_link = True
+    classes = ['collapse']
+
+    def get_queryset(self, request):
+        label_id = ((request.path_info).split("/"))[4]
+        if 'tklabels' in request.get_full_path():
+            response = super().get_queryset(request).filter(tklabel=label_id).select_related('tklabel')
+        elif 'bclabels' in request.get_full_path():
+            response = super().get_queryset(request).filter(bclabel=label_id).select_related('bclabel')
+        return response
+ 
+class TKLabelAdmin(admin.ModelAdmin, ExportCsvMixin):
+    model = TKLabels
+    list_display = ('name', 'community', 'created_by', 'language', 'is_approved', 'created')
+    search_fields = ('name', 'community__community_name', 'created_by__username', 'label_type')
+    list_filter = ['is_approved']
+    list_per_page = 15
+    ordering = ['-created']
+    actions = ['export_as_csv']
+
+    readonly_fields = ('unique_id', 'created', 'version',)
+    raw_id_fields = ('created_by', 'community', 'approved_by', 'last_edited_by')
+    formfield_overrides = {models.FileField: {'widget': AdminAudioWidget}}
+    
+    def has_module_permission(self, request):
+        return False
+
+    def get_inlines(self, request, obj):
+        inlines = []
+        if obj.tklabel_translation.exists():
+            inlines.append(LabelTranslationInline)
+            
+        if obj.version:
+            inlines.append(LabelVersionInline)
+            
+        return inlines
+    
+    def get_fields(self, request, obj=None):
+        fields = [
+            'created_by',
+            'label_type',
+            'community',
+            'name',
+            ('language', 'language_tag'),
+            'label_text',
+            'audiofile',
+            'img_url',
+            'svg_url',
+            'is_approved',
+            'approved_by',
+            'last_edited_by',
+            'unique_id',
+            'created'
+        ]
+        if obj.version:
+            fields.append('version')
+        return fields
+    
+class BCLabelAdmin(admin.ModelAdmin, ExportCsvMixin):
+    model = BCLabels
+    list_display = ('name', 'community', 'created_by', 'language', 'is_approved', 'created')
+    search_fields = ('name', 'community__community_name', 'created_by__username', 'label_type')
+    list_filter = ['is_approved']
+    list_per_page = 15
+    ordering = ['-created']
+    actions = ['export_as_csv']
+
+    readonly_fields = ('unique_id', 'created', 'version',)
+    raw_id_fields = ('created_by', 'community', 'approved_by', 'last_edited_by')
+    formfield_overrides = {models.FileField: {'widget': AdminAudioWidget}}
+    
+    def has_module_permission(self, request):
+        return False
+
+    def get_inlines(self, request, obj):
+        inlines = []
+        if obj.version:
+            inlines.insert(0, LabelVersionInline)
+
+        if obj.bclabel_translation.exists():
+            inlines.append(LabelTranslationInline)
+
+        return inlines
+    
+    def get_fields(self, request, obj=None):
+        fields = [
+            'created_by',
+            'label_type',
+            'community',
+            'name',
+            ('language', 'language_tag'),
+            'label_text',
+            'audiofile',
+            'img_url',
+            'svg_url',
+            'is_approved',
+            'approved_by',
+            'last_edited_by',
+            'unique_id',
+            'created'
+        ]
+        if obj.version:
+            fields.append('version')
+        return fields
+
 admin_site.register(Inactive, InactiveAccountsAdmin)
 admin_site.register(OTCLinks, OTCLinksAdmin)
 admin_site.register(UserProfile, UserProfileAdmin)
 admin_site.register(ProjectPage, ProjectPageAdmin)
+admin_site.register(Labels, LabelDetailsAdmin)
+admin_site.register(TKLabels, TKLabelAdmin)
+admin_site.register(BCLabels, BCLabelAdmin)
 
 # ACCOUNTS ADMIN
 class UserAdminCustom(UserAdmin):
@@ -840,9 +1075,17 @@ class EntitiesNotifiedAdmin(admin.ModelAdmin):
     list_display = ('project',)
     search_fields = ('project__title',)
 
+class LabelTranslationVersionInline(admin.StackedInline):
+    model = LabelTranslationVersion
+    readonly_fields = ('version_instance', 'translated_name', 'language', 'language_tag', 'translated_text', 'created',)
+    extra=0
+    max_num=0
+    classes = ['collapse']
+    
 class LabelVersionAdmin(admin.ModelAdmin):
     list_display = ('version', 'bclabel', 'tklabel', 'created', 'is_approved')
     readonly_fields = ('bclabel', 'tklabel', 'version', 'version_text', 'created_by', 'approved_by', 'created',)
+    inlines = [LabelTranslationVersionInline]
 
 class LabelTranslationVersionAdmin(admin.ModelAdmin):
     list_display = ('version_instance', 'translated_name', 'language', 'created')
