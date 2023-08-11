@@ -15,8 +15,10 @@ from .models import Notice
 from notifications.models import *
 
 from accounts.utils import get_users_name
+from notifications.utils import send_user_notification_member_invite_accept
 from helpers.emails import send_membership_email
 from django.contrib.staticfiles import finders
+from django.shortcuts import get_object_or_404
 
 
 def check_member_role(user, organization):
@@ -39,43 +41,7 @@ def check_member_role(user, organization):
         return False
     
     return role
-    
-def accept_member_invite(request, invite_id):
-    invite = InviteMember.objects.get(id=invite_id)
-    affiliation = UserAffiliation.objects.get(user=invite.receiver)
 
-    # Which organization, add yto user affiliation
-    org = ''
-    if invite.community:
-        org = invite.community
-        affiliation.communities.add(org)
-
-    if invite.institution:
-        org = invite.institution
-        affiliation.institutions.add(org)
-    
-    affiliation.save()
-    
-    # Add user to role
-    if invite.role == 'viewer':
-        org.viewers.add(invite.receiver)
-    elif invite.role == 'admin':
-        org.admins.add(invite.receiver)
-    elif invite.role == 'editor':
-        org.editors.add(invite.receiver)
-    
-    org.save()
-
-    # Send email letting user know they are a member
-    send_membership_email(request, org, invite.receiver, invite.role)
-
-    # Find relevant user notification to delete
-    if UserNotification.objects.filter(to_user=invite.receiver, from_user=invite.sender, reference_id=invite.id).exists():
-        notification = UserNotification.objects.get(to_user=invite.receiver, from_user=invite.sender, reference_id=invite.id)
-        notification.delete()
-
-    # Delete invitation
-    invite.delete()
 
 def change_member_role(org, member, current_role, new_role):
     if new_role is None:
@@ -96,6 +62,38 @@ def change_member_role(org, member, current_role, new_role):
             org.editors.add(member)
         elif new_role == 'Viewer':
             org.viewers.add(member)
+
+
+def add_user_to_role(account, role, user):
+    role_map = {
+        'admin': account.admins,
+        'editor': account.editors,
+        'viewers': account.viewers,
+    }
+    role_map[role].add(user)
+    account.save()
+    
+    
+def accept_member_invite(request, invite_id):
+    invite = get_object_or_404(InviteMember, id=invite_id)
+    affiliation = get_object_or_404(UserAffiliation, user=invite.receiver)
+
+    # Which organization, add to user affiliation
+    account = invite.community or invite.institution
+    if invite.community:
+        affiliation.communities.add(account)
+    if invite.institution:
+        affiliation.institutions.add(account)
+    
+    affiliation.save()
+    
+    add_user_to_role(account, invite.role, invite.receiver) # Add user to role
+    send_user_notification_member_invite_accept(invite) # Send UserNotifications
+    send_membership_email(request, account, invite.receiver, invite.role) # Send email notifications letting user know they are a member
+
+    # Delete relevant user notification
+    UserNotification.objects.filter(to_user=invite.receiver, from_user=invite.sender, reference_id=invite.id).delete()
+
 
 def accepted_join_request(request, org, join_request_id, selected_role):
     # Passes instance of Community or Institution, a join_request pk, and a selected role

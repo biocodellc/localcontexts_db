@@ -7,7 +7,7 @@ from itertools import chain
 from localcontexts.utils import dev_prod_or_local
 from projects.utils import *
 from helpers.utils import *
-from notifications.utils import send_action_notification_to_project_contribs
+from notifications.utils import *
 
 from .models import *
 from projects.models import *
@@ -372,6 +372,7 @@ def institution_members(request, pk):
                             data.institution = institution
                             data.save()
                             
+                            send_account_member_invite(data) # Send action notification
                             send_member_invite_email(request, data, institution) # Send email to target user
                             messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
                             return redirect('institution-members', institution.id)
