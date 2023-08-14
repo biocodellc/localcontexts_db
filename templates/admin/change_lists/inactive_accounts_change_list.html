@@ -29,17 +29,6 @@
 
 {% block pagination %}
 <p class="paginator">
-    {% if pagination_required %}
-    {% for i in page_range %}
-        {% if i == page_num %}
-            <span class="this-page">{{ i }}</span>
-        {% else %}
-            <a href="?p={{ i }}">{{ i }}</a>
-        {% endif %}
-    {% endfor %}
-    {% endif %}
     {{ result_count }} {% if result_count == 1 %}{{ cl.opts.verbose_name }}{% else %}{{ cl.opts.verbose_name_plural }}{% endif %}
-    {% if show_all_url %}<a href="?all=" class="showall">{% translate 'Show all' %}</a>{% endif %}
-    {% if cl.formset and result_count %}<input type="submit" name="_save" class="default" value="{% translate 'Save' %}">{% endif %}
     </p>
 {% endblock %}

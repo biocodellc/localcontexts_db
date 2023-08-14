@@ -7,9 +7,14 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-    <div class="breadcrumbs">
-        <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
-        &rsaquo; Dashboard
+    <div class="breadcrumbs flex-this space-between">
+        <div>
+            <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+            &rsaquo; Dashboard
+        </div>
+        <div>
+            <a href="/admin/admin/">Admin Tables</a>
+        </div>
     </div>
 {% endblock %}
 
