@@ -613,20 +613,20 @@ class ProjectCreatorInline(admin.TabularInline):
     raw_id_fields = ('community', 'researcher', 'institution')
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('community', 'institution', 'researcher', 'project')
+        return super(ProjectCreatorInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project')
 
 class ProjectContributorInline(admin.TabularInline):
     model = ProjectContributors
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('project').prefetch_related('institutions', 'communities', 'researchers')
+        return super(ProjectContributorInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project')
 
 class AdditionalContributorsInline(admin.TabularInline):
     model = ProjectPerson
     extra=0
 
     def get_queryset(self, request):
-            return super().get_queryset(request).select_related('project')
+        return super(AdditionalContributorsInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project')
 
 class ProjectStatusInline(admin.TabularInline):
     model = ProjectStatus
@@ -634,7 +634,7 @@ class ProjectStatusInline(admin.TabularInline):
     raw_id_fields = ('community',)
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('project', 'community')
+        return super(ProjectStatusInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project', 'community')
 
 class ProjectActivityInline(admin.TabularInline):
     model = ProjectActivity
@@ -645,7 +645,7 @@ class ProjectActivityInline(admin.TabularInline):
     classes = ['collapse']
 
     def get_queryset(self, request):
-            return super().get_queryset(request).select_related('project')
+        return super(ProjectActivityInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project')
 
 class ProjectNotesInline(admin.StackedInline):
     model = ProjectNote
@@ -653,7 +653,7 @@ class ProjectNotesInline(admin.StackedInline):
     raw_id_fields = ('community', 'sender')
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('project', 'community', 'sender')
+        return super(ProjectNotesInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project')
 
 class ProjectNoticesInline(admin.StackedInline):
     model = Notice
@@ -668,7 +668,7 @@ class ProjectNoticesInline(admin.StackedInline):
     raw_id_fields = ('researcher', 'institution')
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('project', 'researcher', 'institution')
+        return super(ProjectNoticesInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project')
 
 class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
     model = ProjectPage
@@ -705,6 +705,12 @@ class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related('project_creator', 'project_contributors').prefetch_related('bc_labels', 'tk_labels', 'related_projects')
+    
+    def get_inline_instances(self, request, obj=None):
+        inline_instances = super().get_inline_instances(request, obj)
+        for inline_instance in inline_instances:
+            inline_instance.parent_obj = obj
+        return inline_instances
     
     # Display field on both list and form
     def notice_labels_img(self, obj):
@@ -876,11 +882,10 @@ class LabelVersionInline(admin.StackedInline):
     translation_versions.short_description = 'Translation versions'
 
     def get_queryset(self, request):
-        label_id = ((request.path_info).split("/"))[4]
-        if 'tklabels' in request.path_info:
-            response = super().get_queryset(request).filter(tklabel=label_id).select_related('created_by', 'approved_by', 'tklabel')
-        elif 'bclabels' in request.path_info:
-            response = super().get_queryset(request).filter(bclabel=label_id).select_related('created_by', 'approved_by', 'bclabel')
+        if isinstance(self.parent_obj, TKLabels):
+            response = super(LabelVersionInline, self).get_queryset(request).filter(tklabel=self.parent_obj.id).select_related('created_by', 'approved_by', 'tklabel')
+        elif isinstance(self.parent_obj, BCLabels):
+            response = super(LabelVersionInline, self).get_queryset(request).filter(bclabel=self.parent_obj.id).select_related('created_by', 'approved_by', 'bclabel')
         return response
     
 class LabelTranslationInline(admin.StackedInline):
@@ -895,11 +900,10 @@ class LabelTranslationInline(admin.StackedInline):
     classes = ['collapse']
 
     def get_queryset(self, request):
-        label_id = ((request.path_info).split("/"))[4]
-        if 'tklabels' in request.get_full_path():
-            response = super().get_queryset(request).filter(tklabel=label_id).select_related('tklabel')
-        elif 'bclabels' in request.get_full_path():
-            response = super().get_queryset(request).filter(bclabel=label_id).select_related('bclabel')
+        if isinstance(self.parent_obj, TKLabels):
+            response = super(LabelTranslationInline, self).get_queryset(request).filter(tklabel=self.parent_obj.id).select_related('tklabel')
+        elif isinstance(self.parent_obj, BCLabels):
+            response = super(LabelTranslationInline, self).get_queryset(request).filter(bclabel=self.parent_obj.id).select_related('bclabel')
         return response
  
 class TKLabelAdmin(admin.ModelAdmin, ExportCsvMixin):
@@ -921,12 +925,16 @@ class TKLabelAdmin(admin.ModelAdmin, ExportCsvMixin):
     def get_inlines(self, request, obj):
         inlines = []
         if obj.tklabel_translation.exists():
-            inlines.append(LabelTranslationInline)
-            
+            inlines.append(LabelTranslationInline)  
         if obj.version:
             inlines.append(LabelVersionInline)
-            
         return inlines
+    
+    def get_inline_instances(self, request, obj=None):
+        inline_instances = super().get_inline_instances(request, obj)
+        for inline_instance in inline_instances:
+            inline_instance.parent_obj = obj
+        return inline_instances
     
     def get_fields(self, request, obj=None):
         fields = [
@@ -967,13 +975,17 @@ class BCLabelAdmin(admin.ModelAdmin, ExportCsvMixin):
 
     def get_inlines(self, request, obj):
         inlines = []
-        if obj.version:
-            inlines.insert(0, LabelVersionInline)
-
         if obj.bclabel_translation.exists():
-            inlines.append(LabelTranslationInline)
-
+            inlines.append(LabelTranslationInline)  
+        if obj.version:
+            inlines.append(LabelVersionInline)
         return inlines
+    
+    def get_inline_instances(self, request, obj=None):
+        inline_instances = super().get_inline_instances(request, obj)
+        for inline_instance in inline_instances:
+            inline_instance.parent_obj = obj
+        return inline_instances
     
     def get_fields(self, request, obj=None):
         fields = [
