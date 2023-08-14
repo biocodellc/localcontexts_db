@@ -1,22 +1,20 @@
 import csv
 import itertools, calendar
 from datetime import datetime, timedelta, timezone
-from operator import attrgetter
 from django.db.models.functions import Extract, Concat
 from django.db.models import Count, Q, Value, F, CharField, Case, When
 from django.contrib import admin
-from django.urls import path, reverse
+from django.urls import path
 from django.utils.translation import gettext as _
-from django.utils.http import urlencode
 from django.utils.html import format_html, format_html_join
 from django.utils.safestring import mark_safe
 from django.apps import apps
 from django.template.response import TemplateResponse
 from django.http import Http404, HttpResponse
-from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 
 from accounts.models import Profile, UserAffiliation, SignUpInvitation
+from accounts.utils import get_users_name
 from rest_framework_api_key.admin import APIKey, APIKeyModelAdmin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import Group, User
@@ -307,7 +305,7 @@ def dataCharts(end_date, chartData):
     
     return context
 
-# DASHBOARD CUSTOM ADMIN
+# FILTERS AND ADD-ONS
 class AccountTypeFilter(admin.SimpleListFilter):
     title = 'Account Type'
     parameter_name = 'account'
@@ -372,7 +370,7 @@ class PrivacyTypeFilter(admin.SimpleListFilter):
         except:
             return queryset.none()
         
-class NoticeLabelTypeFilter(admin.SimpleListFilter):
+class NoticeLabelFilter(admin.SimpleListFilter):
     title = 'Notice/Labels'
     parameter_name = 'notice_label'
 
@@ -410,6 +408,17 @@ class AdminImageWidget(AdminFileWidget):
                 (image_url, file_name, _('')))
         output.append(super(AdminFileWidget, self).render(name, value, attrs))
         return mark_safe(u''.join(output))
+    
+class AdminAudioWidget(AdminFileWidget):
+    def render(self, name, value, attrs=None, renderer=None):
+        output = []
+        if value and getattr(value, "url", None):
+            audio_url = value.url
+            file_name = str(value)
+            output.append(u' <audio controls><source src="%s" type="audio/mpeg" alt="%s"> %s </audio>' % \
+                (audio_url, file_name, _('')))
+        output.append(super(AdminFileWidget, self).render(name, value, attrs))
+        return mark_safe(u''.join(output))
                 
 class ExportCsvMixin:
     def export_as_csv(self, request, queryset):
@@ -430,6 +439,7 @@ class ExportCsvMixin:
 
     export_as_csv.short_description = "Export Selected"
 
+# CUSTOM ADMIN VIEWS
 class Inactive(User):
     class Meta:
         proxy = True
@@ -485,41 +495,15 @@ class InactiveAccountsAdmin(admin.ModelAdmin):
         # Combine and sort the data as needed
         results = sorted(list(itertools.chain(inactive_users, inactive_institutions, inactive_researchers, inactive_communities)), key = lambda k: k['days_count'])
 
-        paginator = Paginator(results, self.list_per_page)
-        page_number = request.GET.get('p')
-        page_obj = paginator.get_page(page_number)
-
         # Create custom pagination context
-        pagination_context = self.get_pagination_context(page_obj, paginator, results)
+        pagination_context = {
+            'results': results,
+            'result_count': len(results)
+        }
 
         response.context_data.update(**pagination_context)
 
         return response
-
-    def get_pagination_context(self, page_obj, paginator, results):
-        if paginator.num_pages > 1:
-            print(paginator.num_pages)
-            pagination_required = True
-            show_all_url = True
-        else:
-            pagination_required = False
-            show_all_url = False
-
-        pagination = {
-            'pagination_required': pagination_required,
-            'page_obj': page_obj,
-            'paginator': paginator,
-            'results': list(page_obj),
-            'is_paginated': page_obj.has_other_pages(),
-            'result_count': len(results),
-            'show_all_url': show_all_url,
-            'page_range': paginator.page_range,
-            'page_num': page_obj.number,
-        }
-
-        return pagination
-
-admin_site.register(Inactive, InactiveAccountsAdmin)
 
 class OTCLinks(OpenToCollaborateNoticeURL):
     class Meta:
@@ -539,7 +523,7 @@ class OTCLinksAdmin(admin.ModelAdmin, ExportCsvMixin):
     def view(self, obj):
         project_url= obj.url
         return format_html('<a href="{}" target="_blank" title="View External Link">View</a>', project_url)
-    view.short_description = "Project Page"
+    view.short_description = "URL"
     
     def added_by(self, obj):
         if obj.institution_id:
@@ -549,10 +533,7 @@ class OTCLinksAdmin(admin.ModelAdmin, ExportCsvMixin):
         else:
             account_id = obj.researcher_id
             account_url = 'researchers/researcher'
-            if obj.researcher.user.first_name!="" and obj.researcher.user.last_name!="":
-                account_name = obj.researcher.user.first_name + ' ' + obj.researcher.user.last_name
-            else:
-                account_name = obj.researcher.user.username
+            account_name = get_users_name(obj.researcher.user)
         
         return format_html('<a href="/admin/{}/{}/change/">{} </a>', account_url, account_id, account_name)
     
@@ -561,8 +542,6 @@ class OTCLinksAdmin(admin.ModelAdmin, ExportCsvMixin):
         return added_date
     
     datetime.short_description = "Date/Time"
-
-admin_site.register(OTCLinks, OTCLinksAdmin)
 
 class UserProfile(User):
     class Meta:
@@ -613,17 +592,12 @@ class UserProfileAdmin(UserAdmin, ExportCsvMixin):
     )
 
     def profile_name(self, obj):
-        if obj.first_name!="" and obj.last_name!="":
-            name = obj.first_name + ' ' + obj.last_name
-        else:
-            name = obj.username
+        name = get_users_name(obj)
         return name
     
     def joined(self, obj):
         date_joined = obj.date_joined.strftime('%m/%d/%Y %I:%M %p (%Z)').replace('AM', 'am').replace('PM', 'pm')
         return date_joined
-
-admin_site.register(UserProfile, UserProfileAdmin)
 
 class ProjectPage(Project):
     class Meta:
@@ -639,20 +613,20 @@ class ProjectCreatorInline(admin.TabularInline):
     raw_id_fields = ('community', 'researcher', 'institution')
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('community', 'institution', 'researcher', 'project')
+        return super(ProjectCreatorInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project')
 
 class ProjectContributorInline(admin.TabularInline):
     model = ProjectContributors
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('project').prefetch_related('institutions', 'communities', 'researchers')
+        return super(ProjectContributorInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project')
 
 class AdditionalContributorsInline(admin.TabularInline):
     model = ProjectPerson
     extra=0
 
     def get_queryset(self, request):
-            return super().get_queryset(request).select_related('project')
+        return super(AdditionalContributorsInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project')
 
 class ProjectStatusInline(admin.TabularInline):
     model = ProjectStatus
@@ -660,7 +634,7 @@ class ProjectStatusInline(admin.TabularInline):
     raw_id_fields = ('community',)
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('project', 'community')
+        return super(ProjectStatusInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project', 'community')
 
 class ProjectActivityInline(admin.TabularInline):
     model = ProjectActivity
@@ -671,7 +645,7 @@ class ProjectActivityInline(admin.TabularInline):
     classes = ['collapse']
 
     def get_queryset(self, request):
-            return super().get_queryset(request).select_related('project')
+        return super(ProjectActivityInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project')
 
 class ProjectNotesInline(admin.StackedInline):
     model = ProjectNote
@@ -679,7 +653,7 @@ class ProjectNotesInline(admin.StackedInline):
     raw_id_fields = ('community', 'sender')
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('project', 'community', 'sender')
+        return super(ProjectNotesInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project')
 
 class ProjectNoticesInline(admin.StackedInline):
     model = Notice
@@ -694,15 +668,17 @@ class ProjectNoticesInline(admin.StackedInline):
     raw_id_fields = ('researcher', 'institution')
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('project', 'researcher', 'institution')
+        return super(ProjectNoticesInline, self).get_queryset(request).filter(project=self.parent_obj.id).select_related('project')
 
 class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
     model = ProjectPage
     list_display = ('title', 'creator', 'privacy', 'link', 'created', 'notice_labels_img')
-    list_filter = (PrivacyTypeFilter, NoticeLabelTypeFilter, AccountTypeFilter)
+    list_filter = (PrivacyTypeFilter, NoticeLabelFilter, AccountTypeFilter)
+    list_per_page = 25
     search_fields = ['title', 'project_creator__first_name', 'project_creator__last_name', 'project_creator__username']
     ordering = ['title']
     actions = ['export_as_csv']
+
     inlines = [ProjectNoticesInline, ProjectCreatorInline, ProjectContributorInline, AdditionalContributorsInline, ProjectStatusInline, ProjectActivityInline, ProjectNotesInline]
     raw_id_fields = ('project_creator',)
     readonly_fields = ('unique_id', 'project_page', 'date_added', 'date_modified', 'project_url', 'notice_labels_img', 'source_project_uuid')
@@ -730,6 +706,12 @@ class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
     def get_queryset(self, request):
         return super().get_queryset(request).select_related('project_creator', 'project_contributors').prefetch_related('bc_labels', 'tk_labels', 'related_projects')
     
+    def get_inline_instances(self, request, obj=None):
+        inline_instances = super().get_inline_instances(request, obj)
+        for inline_instance in inline_instances:
+            inline_instance.parent_obj = obj
+        return inline_instances
+    
     # Display field on both list and form
     def notice_labels_img(self, obj):
         images=()
@@ -747,25 +729,22 @@ class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
 
     # Display field on list
     def creator(self, obj):
-        creator = obj.project_creator_project.filter(project=obj.id).values()
+        creator = obj.project_creator_project.values()
 
         if creator.filter(community_id__isnull=False):
             creator_account_id = creator.values_list('community_id', flat=True).first()
             creator_account_url = 'communities/community'
-            creator_account_name = Community.objects.filter(id=creator_account_id).values_list('community_name', flat=True).first()
+            creator_account_name = obj.project_creator_project.values_list('community__community_name', flat=True).first()
         elif creator.filter(institution_id__isnull=False):
             creator_account_id = creator.values_list('institution_id', flat=True).first()
             creator_account_url = 'institutions/institution'
-            creator_account_name = Institution.objects.filter(id=creator_account_id).values_list('institution_name', flat=True).first()
+            creator_account_name = obj.project_creator_project.values_list('institution__institution_name', flat=True).first()
         else:
             creator_account_id = creator.values_list('researcher_id', flat=True).first()
             creator_account_url = 'researchers/researcher'
             creator_account_name = 'Researcher'
         
-        if obj.project_creator.first_name != "" and obj.project_creator.last_name != "":
-            creator_name = obj.project_creator.first_name + ' ' + obj.project_creator.last_name
-        else:
-            creator_name = obj.project_creator.username
+        creator_name = get_users_name(obj.project_creator)
 
         return format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> (<a href="/admin/{}/{}/change/">{}</a>)', obj.project_creator_id, creator_name, creator_account_url, creator_account_id, creator_account_name)
 
@@ -791,7 +770,251 @@ class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
         return format_html('<a href="{}" target="_blank">{}</a>', obj.project_page, obj.project_page)
     project_url.short_description = 'Project page'
 
+class Labels(TKLabel):
+    class Meta:
+        proxy = True
+        verbose_name = 'Label'
+        verbose_name_plural = 'Labels'
+        app_label = 'admin'
+
+class LabelDetailsAdmin(admin.ModelAdmin):
+    model = Labels
+    change_list_template = 'admin/change_lists/labels_change_list.html'
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        response = super().changelist_view(request, extra_context=extra_context)
+
+        label_details = {
+            'tkattribution': {'name':'TK Attribution (TK A)', 'count': 0, 'type': 'attribution'},
+            'tkclan': {'name':'TK Clan (TK CL)', 'count': 0, 'type': 'clan'},
+            'tkfamily' : {'name':'TK Family (TK F)', 'count': 0, 'type': 'family'},
+            'tktk_multiple_community' : {'name':'TK Multiple Communities (TK MC)', 'count': 0, 'type': 'tk_multiple_community'},
+            'tkcommunity_voice' : {'name':'TK Community Voice (TK CV)', 'count': 0, 'type': 'community_voice'},
+            'tkcreative' : {'name':'TK Creative (TK CR)', 'count': 0, 'type': 'creative'},
+            'tkverified' : {'name':'TK Verified (TK V)', 'count': 0, 'type': 'verified'},
+            'tknon_verified' : {'name':'TK Non-Verified (TK NV)', 'count': 0, 'type': 'non_verified'},
+            'tkseasonal' : {'name':'TK Seasonal (TK S)', 'count': 0, 'type': 'seasonal'},
+            'tkwomen_general' : {'name':'TK Women General (TK WG)', 'count': 0, 'type': 'women_general'},
+            'tkmen_general' : {'name':'TK Men General (TK MG)', 'count': 0, 'type': 'men_general'},
+            'tkmen_restricted' : {'name':'TK Men Restricted (TK MR)', 'count': 0, 'type': 'men_restricted'},
+            'tkwomen_restricted' : {'name':'TK Women Restricted(TK WR)', 'count': 0, 'type': 'women_restricted'},
+            'tkculturally_sensitive' : {'name':'TK Culturally Sensitive (TK CS)', 'count': 0, 'type': 'culturally_sensitive'},
+            'tksecret_sacred' : {'name':'TK Secret/Sacred (TK SS)', 'count': 0, 'type': 'secret_sacred'},
+            'tkcommercial' : {'name':'TK Open to Commercialization (TK OC)', 'count': 0, 'type': 'commercial'},
+            'tknon_commercial' : {'name':'TK Non-Commercial (TK NC)', 'count': 0, 'type': 'non_commercial'},
+            'tkcommunity_use_only' : {'name':'TK Community Use Only (TK CO)', 'count': 0, 'type': 'community_use_only'},
+            'tkoutreach' : {'name':'TK Outreach (TK O)', 'count': 0, 'type': 'outreach'},
+            'tkopen_to_collaboration' : {'name':'TK Open to collaboration', 'count': 0, 'type': 'open_to_collaboration'},
+
+            'bcprovenance' : {'name':'BC Provenance (BC P)', 'count': 0, 'type': 'provenance'},
+            'bcmultiple_community' : {'name':'BC Multiple Communities (BC MC)', 'count': 0, 'type': 'multiple_community'},
+            'bcclan' : {'name':'BC Clan (BC CL)', 'count': 0, 'type': 'clan'},
+            'bcconsent_verified' : {'name':'BC Consent Verified (BC CV)', 'count': 0, 'type': 'consent_verified'},
+            'bcconsent_non_verified' : {'name':'BC Consent Non-Verified (BC CNV)', 'count': 0, 'type': 'consent_non_verified'},
+            'bcresearch' : {'name':'BC Research Use (BC R)', 'count': 0, 'type': 'research'},
+            'bccollaboration' : {'name':'BC Open to Collaboration (BC CB)', 'count': 0, 'type': 'collaboration'},
+            'bccommercialization' : {'name':'BC Open to Commercialization (BC OC)', 'count': 0, 'type': 'commercialization'},
+            'bcnon_commercial' : {'name':'BC Non-Commercial (BC NC)', 'count': 0, 'type': 'non_commercial'},
+            'bcoutreach' : {'name':'BC Outreach (BC O)', 'count': 0, 'type': 'outreach'}
+        }
+
+        tk_labels = TKLabel.objects.values('label_type').annotate(
+            label_count = Count('label_type'),
+            label_name = Concat(Value('tk'), F('label_type'))
+            ).values('label_name', 'label_count').order_by('label_name')
+        bc_labels = BCLabel.objects.values('label_type').annotate(
+            label_count = Count('label_type'),
+            label_name = Concat(Value('bc'), F('label_type'))
+            ).values('label_name', 'label_count').order_by('label_name')
+
+        for label in tk_labels:
+            label_details[label['label_name']]['count'] = label['label_count']
+            label_details[label['label_name']]['class'] = 'tk'
+        for label in bc_labels:
+            label_details[label['label_name']]['count'] = label['label_count']
+            label_details[label['label_name']]['class'] = 'bc'
+
+        # Create custom pagination context
+        pagination_context = {
+            'results' : label_details,
+            'result_count' : len(label_details)
+        }
+
+        response.context_data.update(**pagination_context)
+
+        return response
+    
+class TKLabels(TKLabel):
+    class Meta:
+        proxy = True
+        verbose_name = 'TK Label'
+        verbose_name_plural = 'TK Labels'
+        app_label = 'admin'
+
+class BCLabels(BCLabel):
+    class Meta:
+        proxy = True
+        verbose_name = 'BC Label'
+        verbose_name_plural = 'BC Labels'
+        app_label = 'admin'
+
+class LabelVersionInline(admin.StackedInline):
+    model = LabelVersion
+    readonly_fields = ('version', 'version_text', 'created_by', 'approved_by', 'created', 'translation_versions')
+    fields = ('version', 'created_by', 'version_text', 'is_approved', 'approved_by', 'created', 'translation_versions')
+    extra=0
+    max_num=0
+    show_change_link = True
+    classes = ['collapse']
+
+    def translation_versions(self, obj):
+        translation_versions = obj.label_version_translation.filter(version_instance=obj.id).count()
+        return translation_versions
+    translation_versions.short_description = 'Translation versions'
+
+    def get_queryset(self, request):
+        if isinstance(self.parent_obj, TKLabels):
+            response = super(LabelVersionInline, self).get_queryset(request).filter(tklabel=self.parent_obj.id).select_related('created_by', 'approved_by', 'tklabel')
+        elif isinstance(self.parent_obj, BCLabels):
+            response = super(LabelVersionInline, self).get_queryset(request).filter(bclabel=self.parent_obj.id).select_related('created_by', 'approved_by', 'bclabel')
+        return response
+    
+class LabelTranslationInline(admin.StackedInline):
+    model = LabelTranslation
+    fields = (
+        'translated_name',
+        ('language', 'language_tag'),
+        'translated_text'
+    )
+    extra=0
+    show_change_link = True
+    classes = ['collapse']
+
+    def get_queryset(self, request):
+        if isinstance(self.parent_obj, TKLabels):
+            response = super(LabelTranslationInline, self).get_queryset(request).filter(tklabel=self.parent_obj.id).select_related('tklabel')
+        elif isinstance(self.parent_obj, BCLabels):
+            response = super(LabelTranslationInline, self).get_queryset(request).filter(bclabel=self.parent_obj.id).select_related('bclabel')
+        return response
+ 
+class TKLabelAdmin(admin.ModelAdmin, ExportCsvMixin):
+    model = TKLabels
+    list_display = ('name', 'community', 'created_by', 'language', 'is_approved', 'created')
+    search_fields = ('name', 'community__community_name', 'created_by__username', 'label_type')
+    list_filter = ['is_approved']
+    list_per_page = 15
+    ordering = ['-created']
+    actions = ['export_as_csv']
+
+    readonly_fields = ('unique_id', 'created', 'version',)
+    raw_id_fields = ('created_by', 'community', 'approved_by', 'last_edited_by')
+    formfield_overrides = {models.FileField: {'widget': AdminAudioWidget}}
+    
+    def has_module_permission(self, request):
+        return False
+
+    def get_inlines(self, request, obj):
+        inlines = []
+        if obj.tklabel_translation.exists():
+            inlines.append(LabelTranslationInline)  
+        if obj.version:
+            inlines.append(LabelVersionInline)
+        return inlines
+    
+    def get_inline_instances(self, request, obj=None):
+        inline_instances = super().get_inline_instances(request, obj)
+        for inline_instance in inline_instances:
+            inline_instance.parent_obj = obj
+        return inline_instances
+    
+    def get_fields(self, request, obj=None):
+        fields = [
+            'created_by',
+            'label_type',
+            'community',
+            'name',
+            ('language', 'language_tag'),
+            'label_text',
+            'audiofile',
+            'img_url',
+            'svg_url',
+            'is_approved',
+            'approved_by',
+            'last_edited_by',
+            'unique_id',
+            'created'
+        ]
+        if obj.version:
+            fields.append('version')
+        return fields
+    
+class BCLabelAdmin(admin.ModelAdmin, ExportCsvMixin):
+    model = BCLabels
+    list_display = ('name', 'community', 'created_by', 'language', 'is_approved', 'created')
+    search_fields = ('name', 'community__community_name', 'created_by__username', 'label_type')
+    list_filter = ['is_approved']
+    list_per_page = 15
+    ordering = ['-created']
+    actions = ['export_as_csv']
+
+    readonly_fields = ('unique_id', 'created', 'version',)
+    raw_id_fields = ('created_by', 'community', 'approved_by', 'last_edited_by')
+    formfield_overrides = {models.FileField: {'widget': AdminAudioWidget}}
+    
+    def has_module_permission(self, request):
+        return False
+
+    def get_inlines(self, request, obj):
+        inlines = []
+        if obj.bclabel_translation.exists():
+            inlines.append(LabelTranslationInline)  
+        if obj.version:
+            inlines.append(LabelVersionInline)
+        return inlines
+    
+    def get_inline_instances(self, request, obj=None):
+        inline_instances = super().get_inline_instances(request, obj)
+        for inline_instance in inline_instances:
+            inline_instance.parent_obj = obj
+        return inline_instances
+    
+    def get_fields(self, request, obj=None):
+        fields = [
+            'created_by',
+            'label_type',
+            'community',
+            'name',
+            ('language', 'language_tag'),
+            'label_text',
+            'audiofile',
+            'img_url',
+            'svg_url',
+            'is_approved',
+            'approved_by',
+            'last_edited_by',
+            'unique_id',
+            'created'
+        ]
+        if obj.version:
+            fields.append('version')
+        return fields
+
+admin_site.register(Inactive, InactiveAccountsAdmin)
+admin_site.register(OTCLinks, OTCLinksAdmin)
+admin_site.register(UserProfile, UserProfileAdmin)
 admin_site.register(ProjectPage, ProjectPageAdmin)
+admin_site.register(Labels, LabelDetailsAdmin)
+admin_site.register(TKLabels, TKLabelAdmin)
+admin_site.register(BCLabels, BCLabelAdmin)
 
 # ACCOUNTS ADMIN
 class UserAdminCustom(UserAdmin):
@@ -887,6 +1110,9 @@ class CollectionsCareNoticePolicyAdmin(admin.ModelAdmin):
 class NoticeTranslationAdmin(admin.ModelAdmin):
     list_display = ('notice', 'notice_type', 'language')
 
+class NoticeTranslationAdmin(admin.ModelAdmin):
+    list_display = ('notice', 'notice_type', 'language')
+
 admin_site.register(ProjectStatus, ProjectStatusAdmin)
 admin_site.register(Notice, NoticeAdmin)
 admin_site.register(LabelVersion, LabelVersionAdmin)
@@ -963,6 +1189,7 @@ admin_site.register(Researcher, ResearcherAdmin)
 class TKLabelAdmin(admin.ModelAdmin):
     list_display = ('name', 'community', 'created_by', 'language_tag', 'language', 'is_approved', 'created')
     readonly_fields = ('unique_id', 'created', 'version',)
+    search_fields = ('name', 'community__community_name', 'created_by__username', 'label_type')
     search_fields = ('name', 'community__community_name', 'created_by__username', 'label_type')
 
 admin_site.register(TKLabel, TKLabelAdmin)

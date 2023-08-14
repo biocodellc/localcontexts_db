@@ -1,0 +1,30 @@
+{% extends "admin/change_list.html" %}{% load admin_list i18n static %}
+
+{% block result_list %}
+<div class="results">
+    <table>
+        <thead>
+            <tr>
+                <th><div class="text"><a href="#">Label Type</a></div></th>
+                <th><div class="text"><a href="#">Customized Labels</a></div></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for type, label in results.items %}
+                <tr class="{% cycle 'row1' 'row2' %}">
+                    <td><a href="/admin/admin/{{label.class}}labels/?q={{label.type}}">{{ label.name }}</a></td>
+                    <td>{{ label.count }} Label{% if label.count != 1 %}s{% endif %}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{{ context_data }}
+{% endblock %}
+
+
+{% block pagination %}
+<p class="paginator">
+    {{ result_count }} {% if result_count == 1 %}{{ cl.opts.verbose_name }}{% else %}{{ cl.opts.verbose_name_plural }}{% endif %}
+    </p>
+{% endblock %}
