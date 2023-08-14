@@ -320,12 +320,15 @@ def researcher_projects(request, pk):
 @login_required(login_url='login')
 def create_project(request, pk, source_proj_uuid=None, related=None):
     researcher = Researcher.objects.select_related('user').get(id=pk)
-    name = get_users_name(request.user)
 
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')
     else:
+        name = get_users_name(request.user)
+        notice_defaults = get_notice_defaults()
+        notice_translations = get_notice_translations()
+
         if request.method == "GET":
             form = CreateProjectForm(request.POST or None)
             formset = ProjectPersonFormset(queryset=ProjectPerson.objects.none())
@@ -338,11 +341,7 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 data.project_creator = request.user
 
                 # Define project_page field
-                domain = request.get_host()
-                if 'localhost' in domain:
-                    data.project_page = f'http://{domain}/projects/{data.unique_id}'
-                else:
-                    data.project_page = f'https://{domain}/projects/{data.unique_id}'
+                data.project_page = f'{request.scheme}://{request.get_host()}/projects/{data.unique_id}'
                 
                 # Handle multiple urls, save as array
                 project_links = request.POST.getlist('project_urls')
@@ -375,7 +374,8 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                crud_notices(request, notices_selected, researcher, data, None)
+                translations_selected = request.POST.getlist('checkbox-translation')
+                crud_notices(request, notices_selected, translations_selected, researcher, data, None)
             
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, researcher, data)
@@ -397,8 +397,10 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
 
         context = {
             'researcher': researcher,
+            'notice_translations': notice_translations,
             'form': form,
             'formset': formset,
+            'notice_defaults': notice_defaults,
             'user_can_view': user_can_view,
         }
         return render(request, 'researchers/create-project.html', context)
@@ -415,6 +417,8 @@ def edit_project(request, researcher_id, project_uuid):
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
         notices = Notice.objects.none()
+        notice_translations = get_notice_translations()
+        notice_defaults = get_notice_defaults()
 
         # Check to see if notice exists for this project and pass to template
         if Notice.objects.filter(project=project).exists():
@@ -443,7 +447,8 @@ def edit_project(request, researcher_id, project_uuid):
             
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
-                crud_notices(request, notices_selected, researcher, data, notices)
+                translations_selected = request.POST.getlist('checkbox-translation')
+                crud_notices(request, notices_selected, translations_selected, researcher, data, notices)
 
             return redirect('researcher-project-actions', researcher.id, project.unique_id)
  
@@ -452,11 +457,14 @@ def edit_project(request, researcher_id, project_uuid):
             'researcher': researcher, 
             'project': project, 
             'notices': notices,
+            'notice_defaults': notice_defaults,
             'form': form, 
             'formset': formset,
             'contributors': contributors,
             'user_can_view': user_can_view,
             'urls': project.urls,
+            'notice_translations': notice_translations,
+
         }
         return render(request, 'researchers/edit-project.html', context)
 

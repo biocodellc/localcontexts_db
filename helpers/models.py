@@ -26,7 +26,30 @@ class Notice(models.Model):
     created = models.DateTimeField(auto_now_add=True, null=True)
     updated = models.DateTimeField(auto_now=True)
 
-    def save(self, *args, **kwargs):
+    # Note: this will only work once the Notice itself is saved first, check the json file for what language tags are currently available.
+    # Use: notice.save(language='fr')
+    def set_translation(self, language_tag):
+        with open('./localcontexts/static/json/NoticeTranslations.json') as json_file:
+            translations_data = json.load(json_file)
+            
+        translation = None
+        for item in translations_data:
+            if item['noticeType'] == self.notice_type and item['languageTag'] == language_tag:
+                translation = item['noticeDefaultText']
+                break
+        else:
+            return
+
+        NoticeTranslation.objects.update_or_create(
+            notice=self,
+            notice_type=self.notice_type,
+            language_tag=item['languageTag'],
+            language=item['language'],
+            translated_name=item['noticeName'],
+            translated_text=translation
+        )
+
+    def save(self, language_tag=None, *args, **kwargs):
         json_data = open('./localcontexts/static/json/Notices.json')
         data = json.load(json_data) #deserialize
 
@@ -37,6 +60,9 @@ class Notice(models.Model):
                 self.img_url = baseURL + item['imgFileName']
                 self.svg_url = baseURL + item['svgFileName']
                 self.default_text = item['noticeDefaultText']
+        
+        if language_tag:
+            self.set_translation(language_tag)
 
         super().save(*args, **kwargs)
 
@@ -48,6 +74,27 @@ class Notice(models.Model):
         verbose_name = 'Notice'
         verbose_name_plural = 'Notices'
         ordering = ('-created',)
+
+class NoticeTranslation(models.Model):
+    TYPES = (
+        ('biocultural', 'biocultural'),
+        ('traditional_knowledge', 'traditional_knowledge'),
+        ('attribution_incomplete', 'attribution_incomplete'),
+    )
+    notice_type = models.CharField(max_length=50, null=True, choices=TYPES)
+    notice = models.ForeignKey(Notice, on_delete=models.CASCADE, related_name="notice_translations")
+    language_tag = models.CharField(max_length=5, blank=True)
+    language = models.CharField(max_length=150, blank=True)
+    translated_name = models.CharField(max_length=150, blank=True)
+    translated_text = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.notice} - {self.language}"
+    
+    class Meta:
+        verbose_name = 'Notice Translation'
+        verbose_name_plural = 'Notice Translations'
+
 
 class OpenToCollaborateNoticeURL(models.Model):
     institution = models.ForeignKey(Institution, null=True, on_delete=models.CASCADE, blank=True, db_index=True, related_name="otc_institution_url")

@@ -188,6 +188,7 @@ input:focus {
 .orange-text { color: #EF6C00; }
 .grey-text { color: #A09D9D; }
 .red-text { color:#ff0000; }
+.green-text { color: #108670; }
 
 /* BACKGROUND COLORS */
 .orange-bg { background-color: #EF6C00; }
@@ -1428,6 +1429,9 @@ i[data-tooltip]:hover:after {
     color: #fff;
 }
 
-.green-icon {
-    color: #108670;
+.notice-translation__container {
+    border: 1px solid #f3f4f6;
+    margin: 16px 0px;
+    padding: 0px 16px;
+    background-color: #f3f4f6;
 }

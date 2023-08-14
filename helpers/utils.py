@@ -15,8 +15,10 @@ from .models import Notice
 from notifications.models import *
 
 from accounts.utils import get_users_name
+from notifications.utils import send_user_notification_member_invite_accept
 from helpers.emails import send_membership_email
 from django.contrib.staticfiles import finders
+from django.shortcuts import get_object_or_404
 
 
 def check_member_role(user, organization):
@@ -39,43 +41,7 @@ def check_member_role(user, organization):
         return False
     
     return role
-    
-def accept_member_invite(request, invite_id):
-    invite = InviteMember.objects.get(id=invite_id)
-    affiliation = UserAffiliation.objects.get(user=invite.receiver)
 
-    # Which organization, add yto user affiliation
-    org = ''
-    if invite.community:
-        org = invite.community
-        affiliation.communities.add(org)
-
-    if invite.institution:
-        org = invite.institution
-        affiliation.institutions.add(org)
-    
-    affiliation.save()
-    
-    # Add user to role
-    if invite.role == 'viewer':
-        org.viewers.add(invite.receiver)
-    elif invite.role == 'admin':
-        org.admins.add(invite.receiver)
-    elif invite.role == 'editor':
-        org.editors.add(invite.receiver)
-    
-    org.save()
-
-    # Send email letting user know they are a member
-    send_membership_email(request, org, invite.receiver, invite.role)
-
-    # Find relevant user notification to delete
-    if UserNotification.objects.filter(to_user=invite.receiver, from_user=invite.sender, reference_id=invite.id).exists():
-        notification = UserNotification.objects.get(to_user=invite.receiver, from_user=invite.sender, reference_id=invite.id)
-        notification.delete()
-
-    # Delete invitation
-    invite.delete()
 
 def change_member_role(org, member, current_role, new_role):
     if new_role is None:
@@ -96,6 +62,38 @@ def change_member_role(org, member, current_role, new_role):
             org.editors.add(member)
         elif new_role == 'Viewer':
             org.viewers.add(member)
+
+
+def add_user_to_role(account, role, user):
+    role_map = {
+        'admin': account.admins,
+        'editor': account.editors,
+        'viewers': account.viewers,
+    }
+    role_map[role].add(user)
+    account.save()
+    
+    
+def accept_member_invite(request, invite_id):
+    invite = get_object_or_404(InviteMember, id=invite_id)
+    affiliation = get_object_or_404(UserAffiliation, user=invite.receiver)
+
+    # Which organization, add to user affiliation
+    account = invite.community or invite.institution
+    if invite.community:
+        affiliation.communities.add(account)
+    if invite.institution:
+        affiliation.institutions.add(account)
+    
+    affiliation.save()
+    
+    add_user_to_role(account, invite.role, invite.receiver) # Add user to role
+    send_user_notification_member_invite_accept(invite) # Send UserNotifications
+    send_membership_email(request, account, invite.receiver, invite.role) # Send email notifications letting user know they are a member
+
+    # Delete relevant user notification
+    UserNotification.objects.filter(to_user=invite.receiver, from_user=invite.sender, reference_id=invite.id).delete()
+
 
 def accepted_join_request(request, org, join_request_id, selected_role):
     # Passes instance of Community or Institution, a join_request pk, and a selected role
@@ -167,22 +165,54 @@ def get_collections_care_notices():
         data = json.load(file)
     return data
 
-# Create/Update/Delete Notices
-def crud_notices(request, selected_notices, organization, project, existing_notices):
-    from projects.models import ProjectActivity
-    # organization: either instance of institution or researcher
-    # selected_notices would be a list: # attribution_incomplete # bcnotice # tknotice
+def get_notice_translations():
+    json_path = finders.find('json/NoticeTranslations.json')
+    with open(json_path, 'r') as file:
+        data = json.load(file)
+    
+    # Restructure the data as a nested dictionary with noticeType and language as keys
+    notice_translations = {}
+    for item in data:
+        notice_type = item['noticeType']
+        language_tag = item['languageTag']
+        if notice_type not in notice_translations:
+            notice_translations[notice_type] = {}
+        notice_translations[notice_type][language_tag] = item
+    return notice_translations
+
+def get_notice_defaults():
+    json_path = finders.find('json/Notices.json')
+    with open(json_path, 'r') as file:
+        data = json.load(file)
+    return data
+
+# Create/Update/Delete Notices and Notice Translations
+def crud_notices(request, selected_notices, selected_translations, organization, project, existing_notices):
+    # organization: instance of institution or researcher
+    # selected_notices: list: ['attribution_incomplete', 'bcnotice', 'tknotice']
     # existing_notices: a queryset of notices that exist for this project already
+    # selected_translations: list: ['traditional_knowledge-fr', 'biocultural-es'], etc.
+
+    from projects.models import ProjectActivity
     name = get_users_name(request.user)
 
     def create(notice_type):
-        if isinstance(organization, Institution):
-            new_notice = Notice.objects.create(notice_type=notice_type, institution=organization, project=project)
+        if isinstance(organization, (Institution, Researcher)):
+            notice_fields = {
+                'notice_type': notice_type,
+                'project': project,
+            }
+
+            if isinstance(organization, Institution):
+                notice_fields['institution'] = organization
+            elif isinstance(organization, Researcher):
+                notice_fields['researcher'] = organization
+
+            new_notice = Notice.objects.create(**notice_fields)
             ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project by {name}')
 
-        if isinstance(organization, Researcher):
-            new_notice = Notice.objects.create(notice_type=notice_type, researcher=organization, project=project)
-            ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project by {name}')
+            # Create any notice translations
+            update_notice_translation(new_notice, selected_translations)
 
     def create_notices(existing_notice_types):          
         for notice_type in selected_notices:
@@ -193,6 +223,24 @@ def crud_notices(request, selected_notices, organization, project, existing_noti
                 else:
                     create(notice_type)
     
+    def update_notice_translation(notice, selected_translations):
+        selected_notice_types_langs = [value.split('-') for value in selected_translations]
+
+        for translation in notice.notice_translations.all():
+            ntype = translation.notice_type
+            lang_tag = translation.language_tag
+
+            # If this notice translation is not in the selected translations and its type matches the notice, delete it
+            if (ntype, lang_tag) not in selected_notice_types_langs and notice.notice_type == ntype:
+                translation.delete()
+
+        for ntype, lang_tag in selected_notice_types_langs:
+            # Check if the notice type matches the selected translation
+            if notice.notice_type == ntype:
+                # If translation of this type in this language does NOT exist, create it.
+                if not notice.notice_translations.filter(notice_type=ntype, language_tag=lang_tag).exists():
+                    notice.save(language_tag=lang_tag)
+                
     if existing_notices:
         existing_notice_types = []
         for notice in existing_notices:
@@ -200,6 +248,7 @@ def crud_notices(request, selected_notices, organization, project, existing_noti
             if not notice.notice_type in selected_notices: # if existing notice not in selected notices, delete notice
                 notice.delete()
                 ProjectActivity.objects.create(project=project, activity=f'{notice.name} was removed from the Project by {name}')
+            update_notice_translation(notice, selected_translations)
         create_notices(existing_notice_types)
 
     else:

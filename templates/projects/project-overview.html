@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} Projects {% endblock %} {% load static %} {% load custom_project_tags %} {% block content %}
+{% load static %} {% load custom_project_tags %} {% block content %}
 
         <tr>
             <td>
@@ -24,28 +24,30 @@
                 {% endfor %}
             </td>
             <td>{{ project.date_modified|date:'d M Y' }}</td>
-            <td class="icon-tooltip-container visibility-icon-tooltip w-100">
-                <i 
-                    {% if project.project_privacy == 'Public' %}
-                        class="fa-solid fa-lg fa-eye"
-                        aria-label='Public Project' 
-                        data-tooltip='Public Project'
-                    {% elif project.project_privacy == 'Contributor' %}
-                        class="fa-solid fa-lg fa-people-group"  
-                        aria-label='Contributor Project' 
-                        data-tooltip='Contributor Project'
-                    {% elif project.project_privacy == 'Private' %}
-                        class="fa-solid fa-lg fa-lock"
-                        aria-label='Private Project' 
-                        data-tooltip='Private Project'
-                    {% endif %}
-                ></i>
-            </td>
+            {% if not 'projects-board' in request.path %}
+                <td class="icon-tooltip-container visibility-icon-tooltip w-100">
+                    <i 
+                        {% if project.project_privacy == 'Public' %}
+                            class="fa-solid fa-lg fa-eye"
+                            aria-label='Public Project' 
+                            data-tooltip='Public Project'
+                        {% elif project.project_privacy == 'Contributor' %}
+                            class="fa-solid fa-lg fa-people-group"  
+                            aria-label='Contributor Project' 
+                            data-tooltip='Contributor Project'
+                        {% elif project.project_privacy == 'Private' %}
+                            class="fa-solid fa-lg fa-lock"
+                            aria-label='Private Project' 
+                            data-tooltip='Private Project'
+                        {% endif %}
+                    ></i>
+                </td>
+            {% endif %}
             {% if 'projects-board' in request.path %}
-                <td class="center-text green-icon">
+                <td class="center-text green-text">
                     {% if project.has_notice %} <i class="fa-solid fa-circle-check fa-xl"></i> {% endif %}
                 </td>
-                <td class="center-text green-icon">
+                <td class="center-text green-text">
                     {% if project.has_labels %} <i class="fa-solid fa-circle-check fa-xl"></i> {% endif %}
                 </td>
             {% endif %}
