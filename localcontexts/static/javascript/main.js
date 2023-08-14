@@ -1079,6 +1079,22 @@ if (window.location.href.includes('/projects/edit-project') || window.location.h
         remove(removeInstitutionBtns, 'closeInst-', 'selected-institution-', 'hiddenInst-')
         remove(removeCommunityBtns, 'closeComm-', 'selected-community-', 'hiddenComm-')
     }
+
+    // SHOW/HIDE NOTICE TRANSLATIONS
+    const toggleIcons = document.querySelectorAll('.toggle-icon')
+    toggleIcons.forEach(icon => {
+        icon.addEventListener('click', () => {
+            const targetDivId = icon.getAttribute('data-target')
+            const targetDiv = document.getElementById(targetDivId)
+            targetDiv.classList.toggle('hide')
+
+            if (targetDiv.classList.contains('hide')) {
+                icon.classList.replace('fa-angle-up', 'fa-angle-down');
+            } else {
+                icon.classList.replace('fa-angle-down', 'fa-angle-up');
+            }
+        })
+    })
 }
 
 function isValidHttpUrl(string) {
@@ -1867,4 +1883,19 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
         clearAudioFileBtn.classList.add('hide')
         realAudioUploadBtn.value = ''
     })
+ }
+
+ if (window.location.href.includes('projects/actions/')) {
+    function openRemoveContributorModal() {
+        const modal = document.getElementById('removeContribModal')
+        const closeModalBtn = document.getElementById('closeContributorModalBtn')
+
+        modal.classList.remove('hide')
+
+        closeModalBtn.addEventListener('click', function(e) {
+            e.preventDefault()
+            modal.classList.add('hide')
+        })
+    }
+
  }

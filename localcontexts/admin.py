@@ -1115,6 +1115,9 @@ class CollectionsCareNoticePolicyAdmin(admin.ModelAdmin):
     list_display = ('institution', 'added')
     search_fields = ('institution__institution_name',)
 
+class NoticeTranslationAdmin(admin.ModelAdmin):
+    list_display = ('notice', 'notice_type', 'language')
+
 admin_site.register(ProjectStatus, ProjectStatusAdmin)
 admin_site.register(Notice, NoticeAdmin)
 admin_site.register(LabelVersion, LabelVersionAdmin)
@@ -1124,6 +1127,7 @@ admin_site.register(EntitiesNotified, EntitiesNotifiedAdmin)
 admin_site.register(OpenToCollaborateNoticeURL, OpenToCollaborateNoticeURLAdmin)
 admin_site.register(NoticeDownloadTracker, NoticeDownloadTrackerAdmin)
 admin_site.register(CollectionsCareNoticePolicy, CollectionsCareNoticePolicyAdmin)
+admin_site.register(NoticeTranslation, NoticeTranslationAdmin)
 
 # INSTITUTIONS ADMIN
 class InstitutionAdmin(admin.ModelAdmin):

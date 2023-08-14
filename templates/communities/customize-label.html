@@ -228,7 +228,16 @@
                 {% endif %}
 
                 <div class="w-30 margin-bottom-16">
-                    <label class='block'>Label Language <small>(select from dropdown)</small></label>
+                    <div class="flex-this">
+                        <label class='block'>Label Language <small>(select from dropdown)</small></label>
+                        <div class="tooltip" style="margin-top: 5px; margin-left: 5px;"><strong>i</strong>
+                            <span class="tooltiptext">
+                                Can't find the language you are looking for?<br>
+                                Contact us at support@localcontexts.org
+                            </span>
+                        </div>                          
+                    </div>
+
                     <div class="autocomplete flex-this align-center" style="display:flex;">
                         {{ form.language }}
                         <button name="clear-language-btn" class="primary-btn white-btn margin-left-16 hide" style="min-height:40px;">Clear<i class="fa-regular fa-eraser"></i></button>

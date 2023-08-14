@@ -5,6 +5,7 @@ from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.views.generic import View
 from django.contrib.auth.views import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from itertools import chain
 
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user
@@ -33,6 +34,7 @@ from projects.models import Project, ProjectCreator
 from localcontexts.utils import dev_prod_or_local
 from researchers.utils import is_user_researcher
 from helpers.utils import accept_member_invite
+from projects.utils import paginate
 
 from helpers.emails import *
 from .models import *
@@ -358,6 +360,10 @@ def registry(request, filtertype=None):
                 cards = i
             elif filtertype == 'researchers':
                 cards = r
+            elif filtertype == 'otc':
+                researchers_with_otc = r.filter(otc_researcher_url__isnull=False).distinct()
+                institutions_with_otc = i.filter(otc_institution_url__isnull=False).distinct()
+                cards = return_registry_accounts(None, researchers_with_otc, institutions_with_otc)
             else:
                 cards = return_registry_accounts(c, r, i)
 
@@ -378,6 +384,51 @@ def registry(request, filtertype=None):
 
     except:
         raise Http404()
+
+def projects_board(request, filtertype=None):
+    try:
+        approved_institutions = Institution.objects.filter(is_approved=True).values_list('id', flat=True)
+        approved_communities = Community.objects.filter(is_approved=True).values_list('id', flat=True)
+        projects = Project.objects.filter(
+            Q(project_privacy='Public'),
+            Q(project_creator_project__institution__in=approved_institutions) |
+            Q(project_creator_project__community__in=approved_communities) |
+            Q(project_creator_project__researcher__user__isnull=False)
+        ).select_related('project_creator').order_by('-date_modified')
+
+        if ('q' in request.GET) and (filtertype != None):
+            q = request.GET.get('q')
+            return redirect('/projects-board/?q=' + q)
+        elif ('q' in request.GET) and (filtertype == None):
+            q = request.GET.get('q')
+            q = unidecode(q) #removes accents from search query
+
+            # Filter's accounts by the search query, showing results that match with or without accents
+            results = projects.filter(title__unaccent__icontains=q)
+
+            p = Paginator(results, 10)
+        else:
+            if filtertype == 'labels':
+                results = projects.filter(Q(bc_labels__isnull=False) | Q(tk_labels__isnull=False))
+            elif filtertype == 'notices':
+                results = projects.filter(project_notice__archived=False).distinct()
+            else:
+                results = projects
+
+            p = Paginator(results, 10)
+
+        page_num = request.GET.get('page', 1)
+        page = p.page(page_num)
+
+        context = {
+            'projects': projects,
+            'items': page,
+            'filtertype' : filtertype
+        }
+        return render(request, 'accounts/projects-board.html', context)
+    except:
+        raise Http404()
+
 
 # Hub stats page
 def hub_counter(request):

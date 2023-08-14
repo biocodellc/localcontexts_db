@@ -14,16 +14,22 @@
             <li>
                 <a 
                     class="{% if '/registry/' in request.path %} active-link bold {% endif %} white-text upper" 
-                    href="{% url 'registry' %}"> Local Contexts Registry
+                    href="{% url 'registry' %}"> Registry
                 </a>
-            </li>           
+            </li>    
+            <li>
+                <a 
+                    class="{% if '/projects-board/' in request.path %} active-link bold {% endif %} white-text upper" 
+                    href="{% url 'projects-board' %}"> Projects
+                </a>
+            </li>          
             {% if user.is_authenticated %}
                 <li>
                     <a
                         class="{% if '/dashboard/' in request.path or '/update-profile/' in request.path or '/manage/' in request.path or '/change-password/' in request.path or '/deactivate/' in request.path %} 
                                     active-link bold 
                                 {% endif %} white-text upper" 
-                        href="{% url 'dashboard' %}">My Profile
+                        href="{% url 'dashboard' %}">Profile
                     </a>                
                 </li>
 
@@ -37,12 +43,6 @@
                     </a>                    
                 </li>
             {% else %}
-                <li>
-                    <a
-                        class="{% if '/register/' in request.path %} active-link bold {% endif %} white-text upper" 
-                        href="{% url 'register' %}">Register
-                    </a>                
-                </li>
 
                 <li>
                     <a class="auth-btn sign-in-btn" href="{% url 'login' %}">Login</a>

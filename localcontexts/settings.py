@@ -44,7 +44,6 @@ GOOGLE_RECAPTCHA_SECRET_KEY = os.environ['RECAPTCHA_SECRET_KEY']
 INSTALLED_APPS = [
     'maintenance_mode',
     'accounts.apps.AccountsConfig',
-    'notifications.apps.NotificationsConfig',
     'bclabels.apps.BclabelsConfig',
     'researchers.apps.ResearchersConfig',
     'projects.apps.ProjectsConfig',
@@ -54,6 +53,7 @@ INSTALLED_APPS = [
     'institutions',
     'api',
     'helpers',
+    'notifications',
 
     'django.contrib.admin',
     'django.contrib.auth',

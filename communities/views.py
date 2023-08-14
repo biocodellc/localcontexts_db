@@ -131,7 +131,7 @@ def public_community_view(request, pk):
             community.community_created_project.all().values_list('project__unique_id', flat=True), # community created project ids
             community.tklabel_community.all().values_list('project_tklabels__unique_id', flat=True), # projects where tk labels have been applied
             community.bclabel_community.all().values_list('project_bclabels__unique_id', flat=True), # projects where bclabels have been applied
-
+            community.contributing_communities.all().values_list('project__unique_id', flat=True), # projects where community is contributor
         ))
         project_ids = list(set(projects_list)) # remove duplicate ids
         archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
@@ -296,6 +296,7 @@ def community_members(request, pk):
                             data.community = community
                             data.save()
                             
+                            send_account_member_invite(data) # Send action notification
                             send_member_invite_email(request, data, community) # Send email to target user
                             messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
                             return redirect('members', community.id)
@@ -827,11 +828,7 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 data.project_creator = request.user
 
                 # Define project_page field
-                domain = request.get_host()
-                if 'localhost' in domain:
-                    data.project_page = f'http://{domain}/projects/{data.unique_id}'
-                else:
-                    data.project_page = f'https://{domain}/projects/{data.unique_id}'
+                data.project_page = f'{request.scheme}://{request.get_host()}/projects/{data.unique_id}'
                 
                 # Handle multiple urls, save as array
                 project_links = request.POST.getlist('project_urls')
@@ -1027,6 +1024,12 @@ def project_actions(request, pk, project_uuid):
                 
                 elif 'delete_project' in request.POST:
                     return redirect('community-delete-project', community.id, project.unique_id)
+                
+                elif 'remove_contributor' in request.POST:
+                    contribs = ProjectContributors.objects.get(project=project)
+                    contribs.communities.remove(community)
+                    contribs.save()
+                    return redirect('community-project-actions', community.id, project.unique_id)
 
             context = {
                 'member_role': member_role,
