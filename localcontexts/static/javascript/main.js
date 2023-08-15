@@ -1859,6 +1859,21 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
     })
 
     realFileUploadBtn.addEventListener('change', validatePolicyDocument)
+
+    // Collections Care Button Download
+    const ccNoticeDownloadBtn = document.getElementById('ccNoticeDownloadBtn')
+    ccNoticeDownloadBtn.addEventListener('click', function() {    
+        let oldValue = 'Download Notices <i class="fa-solid fa-download"></i>'
+        ccNoticeDownloadBtn.setAttribute('disabled', true)
+        ccNoticeDownloadBtn.innerHTML = 'Downloading <div class="custom-loader margin-left-8"></div>'
+
+        // Re-enable the button after a certain timeout
+        // re-enable it after a while, assuming an average download duration
+        setTimeout(function() {
+            ccNoticeDownloadBtn.innerHTML = oldValue
+            ccNoticeDownloadBtn.removeAttribute('disabled')
+        }, 15000)
+    })
  }
 
  if (window.location.href.includes('/communities/labels/customize/') || window.location.href.includes('/communities/labels/edit/')) {

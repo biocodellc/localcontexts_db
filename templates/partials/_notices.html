@@ -182,7 +182,7 @@
 
                 <div>
                     {% if ccn_download_perm == 1 %}
-                        <a href="{% url 'download-collections-care-notices' institution.id ccn_download_perm %}" class="primary-btn blue-btn">
+                        <a id="ccNoticeDownloadBtn" href="{% url 'download-collections-care-notices' institution.id ccn_download_perm %}" class="primary-btn blue-btn">
                             Download Notices <i class="fa-solid fa-download"></i>
                         </a>
                     {% else %}

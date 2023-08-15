@@ -4,8 +4,10 @@ from projects.models import ProjectContributors
 from .models import Notice
 
 from django.http import HttpResponse
-from .utils import generate_zip, render_to_pdf, get_collections_care_notices
+from .utils import generate_zip, render_to_pdf
 import requests
+import os
+from django.shortcuts import render
 
 # Open to Collaborate Notice
 def download_otc_notice():
@@ -41,37 +43,20 @@ def download_otc_notice():
 
     return response
 
-def download_cc_notices():
-    baseURL = 'https://storage.googleapis.com/anth-ja77-local-contexts-8985.appspot.com/labels/notices/collections-care-notices/'
-    
-    files = []
-    notices = get_collections_care_notices()
-    for notice in notices:
-        notice_name = notice['noticeName']
-        png = requests.get(baseURL + notice['imgFileName'])
-        svg = requests.get(baseURL + notice['svgFileName'])
-        notice_name_combined = notice_name.replace(' ', '_') if ' ' in notice_name else notice_name
-        files.append((notice_name_combined + '.png', png.content))
-        files.append((notice_name_combined + '.svg', svg.content))
-        notice_default_text = notice['noticeDefaultText']
-        if notice_default_text is not None:
-            files.append((notice_name_combined + '.txt', notice_default_text))
-    
-    # Create Readme
-    readme_text = 'This folder contains the following files:\n'
-    file_names = []
-    for f in files:
-        file_names.append(f[0])
-    readme_content = readme_text + '\n'.join(file_names) + '\n\nRefer to the Usage Guides (https://localcontexts.org/support/downloadable-resources/) for details on how to adapt and display the Collections Care Notices.\n\nFor more information, contact Local Contexts at localcontexts.org or support@localcontexts.org'
-    files.append(('README.txt', readme_content))
+def download_cc_notices(request):
+    url = os.environ.get('COLLECTIONS_CARE_NOTICES_DOWNLOAD_ZIP')
+    if url:
+        response = requests.get(url, stream=True)
+        response.raise_for_status()
 
-    # Generate zip file 
-    full_zip_in_memory = generate_zip(files)
-    zipfile_name = f"LC-Collections_Care_Notices.zip"
-    response = HttpResponse(full_zip_in_memory, content_type='application/force-download')
-    response['Content-Disposition'] = 'attachment; filename="{}"'.format(zipfile_name)
-
-    return response
+        # Create a streaming response to send the file
+        content_type = response.headers.get('content-type')
+        django_response = HttpResponse(response.iter_content(chunk_size=8192), content_type=content_type)
+        django_response['Content-Disposition'] = 'attachment; filename="Collections_Care_Notices.zip"'
+        return django_response
+    else:
+        # Handle the case where the URL is not available
+        return render(request, '500.html')
 
 # Download approved community Labels
 def download_labels_zip(community):
