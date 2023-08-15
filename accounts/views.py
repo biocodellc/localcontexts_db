@@ -165,7 +165,7 @@ def select_account(request):
 @login_required(login_url='login')
 def dashboard(request):
     user = request.user
-    n = UserNotification.objects.filter(to_user=user)
+    profile = user.user_profile
     researcher = is_user_researcher(user)
 
     affiliation = user.user_affiliations.prefetch_related(
@@ -182,8 +182,6 @@ def dashboard(request):
     user_communities = affiliation.communities.all()    
     user_institutions = affiliation.institutions.all()
 
-    profile = user.user_profile
-
     if request.method == 'POST':
         profile.onboarding_on = False
         profile.save()
@@ -193,7 +191,6 @@ def dashboard(request):
         'user_communities': user_communities,
         'user_institutions': user_institutions,
         'researcher': researcher,
-        'notifications': n,
     }
     return render(request, "accounts/dashboard.html", context)
 

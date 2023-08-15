@@ -40,14 +40,6 @@ def connections_count(community):
 #     return reverse(url_name, kwargs={'pk': community_id}) + "#project-unique-" + str(section_id)
 
 @register.simple_tag
-def community_notifications(community):
-    return ActionNotification.objects.filter(community=community)
-
-@register.simple_tag
-def unread_notifications(community):
-    return ActionNotification.objects.filter(community=community, viewed=False).exists()
-
-@register.simple_tag
 def get_bclabel_img_url(img_type, *args, **kwargs):
     # Returns image url, usage: <img loading="lazy" src="{% get_bclabel_img_url img_type %}">
     if img_type == 'bcr':

@@ -1,0 +1,231 @@
+{% load custom_notification_tags %}
+{% unread_notifications_exist request.user as unread_exist_user %}
+{% unread_notifications_exist community as unread_exist_community %}
+{% unread_notifications_exist institution as unread_exist_institution %}
+{% unread_notifications_exist researcher as unread_exist_researcher %}
+{% return_notifications request.user as user_notifications %}
+{% return_notifications community as community_notifications %}
+{% return_notifications institution as institution_notifications %}
+{% return_notifications researcher as researcher_notifications %}
+
+
+<div class="dropdown margin-right-8">
+    <a onclick="toggleNotifications()" class="primary-btn white-btn dropbtn"> 
+        Notifications 
+        <i 
+        class="
+            {% if unread_exist_user and 'dashboard' in request.path %} fa-solid fa-bell-on orange-text 
+            {% elif unread_exist_community %} fa-solid fa-bell-on orange-text 
+            {% elif unread_exist_institution %} fa-solid fa-bell-on orange-text 
+            {% elif unread_exist_researcher and not 'dashboard' in request.path %} fa-solid fa-bell-on orange-text 
+            {% else %} fa-regular fa-bell {% endif %} 
+            " 
+        aria-hidden="true"
+        ></i>
+    </a>
+    <div id="notification-v2" class="notification-dropdown-content">
+    <div class="border-bottom-solid-teal center-text">
+        <span class="orange-text bold">Notifications</span>
+    </div>
+
+        {% if user_notifications and '/dashboard/' in request.path %}
+            {% for n in user_notifications %}
+
+                <div class="border-bottom-solid-teal flex-this space-between">
+                    <div>
+                        <a 
+                            id="{{ request.user.id }}_{{ n.id }}"
+                            onclick="markAsReadUser(this); return true;"
+
+                            {% if n.notification_type == 'Invitation' %}
+                                href="{% url 'member-invitations' %}"
+                            {% else %}
+                                href="{% url 'read' n.id %}"
+                            {% endif %}
+                        >
+                            <div class="flex-this space-between margin-top-1">
+                                <div>
+                                    <span 
+                                        id="notification-label-tag-{{ n.id }}" 
+                                        class="notification-type-tag white-text font-size-12 {% if n.viewed %} grey {% else %} orange-bg {% endif %}"
+                                    >
+                                        {{ n.notification_type }}
+                                    </span>
+                                </div>
+                                <div><span class="font-size-12 grey-text">{{ n.created }} UTC</span></div>
+                            </div>
+
+                            <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>   
+                        </a>                        
+                    </div>
+
+                    <div class="margin-left-8 margin-top-8">
+                        <a href="{% url 'delete-user-notification' n.id %}">
+                            <i class="fa-solid fa-xmark fa-lg darkteal-text"></i>
+                        </a>
+                    </div>
+                </div>
+                
+            {% endfor %}
+        {% endif %}
+
+
+        {% if community %}
+
+            {% if community_notifications %}
+                {% for n in community_notifications %}
+
+                    <div class="border-bottom-solid-teal">
+                        <a
+                            id="{{ community.id }}_{{ n.id }}" 
+                            onclick="markAsRead(this); return true;"
+
+                            {% if n.notification_type == 'Labels' %}
+                                {% if n.reference_id %}
+                                    href="{% url 'view-label' community.id n.reference_id %}"
+                                {% else %}
+                                    href="{% url 'select-label' community.id %}"
+                                {% endif %}
+                            {% endif %}
+                            {% if n.notification_type == 'Members' %}
+                                {% if n.reference_id %}
+                                    href="{% url 'member-requests' community.id %}"
+                                {% else %}
+                                    href="{% url 'members' community.id %}"
+                                {% endif %}
+                            {% endif %}
+                            {% if n.notification_type == 'Projects' %}
+                                {% if n.reference_id %}
+                                    href="{% url 'community-project-actions' community.id n.reference_id %}"
+                                {% else %}
+                                    href="{% url 'community-projects' community.id %}"
+                                {% endif %}
+                            {% endif %}
+                            {% if n.notification_type == 'Connections' %}
+                                href="{% url 'community-connections' community.id %}"
+                            {% endif %}
+                        >
+                        
+                            <div class="flex-this space-between margin-top-1">
+                                <div>
+                                    <span id="notification-label-tag-{{ n.id }}" 
+                                        class="notification-type-tag white-text font-size-12 {% if n.viewed %} grey {% else %} orange-bg {% endif %}"
+                                    >
+                                    {% if n.notification_type == 'Labels' %} Labels {% endif %}
+                                    {% if n.notification_type == 'Activity' %} Activity {% endif %}
+                                    {% if n.notification_type == 'Projects' %} Projects {% endif %}
+                                    {% if n.notification_type == 'Connections' %} Connections {% endif %}
+                                    {% if n.notification_type == 'Members' %} Members {% endif %}
+                                    </span>
+                                </div>
+                                <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
+                            </div>
+
+                            <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
+                        </a>
+                    </div>
+
+                {% endfor %}
+            {% endif %}
+
+        {% endif %}
+
+        {% if institution %}
+
+            {% if institution_notifications %}
+                {% for n in institution_notifications %}
+
+                    <div class="border-bottom-solid-teal">
+                        <a
+                            id="{{ institution.id }}_{{ n.id }}" 
+                            onclick="markAsRead(this); return true;"
+
+                            {% if n.notification_type == 'Members' %}
+                                {% if n.reference_id %}
+                                    href="{% url 'institution-member-requests' institution.id %}" 
+                                {% else %}
+                                    href="{% url 'institution-members' institution.id %}"
+                                {% endif %}
+                            {% endif %}
+                            {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
+                                {% if n.reference_id %}
+                                    href="{% url 'institution-project-actions' institution.id n.reference_id %}" 
+                                {% else %}
+                                    href="{% url 'institution-projects' institution.id %}" 
+                                {% endif %}
+                            {% endif %}
+                            {% if n.notification_type == 'Connections' %}
+                                href="{% url 'institution-connections' institution.id %}" 
+                            {% endif %}
+                        >
+
+                            <div class="flex-this space-between margin-top-1">
+                                <div>
+                                    <span id="notification-label-tag-{{ n.id }}" 
+                                        class="notification-type-tag white-text font-size-12 {% if n.viewed %} grey {% else %} orange-bg {% endif %}"
+                                    >
+                                    {% if n.notification_type == 'Notices' %} Notices {% endif %}
+                                    {% if n.notification_type == 'Labels' %} Labels {% endif %}
+                                    {% if n.notification_type == 'Activity' %} Activity {% endif %}
+                                    {% if n.notification_type == 'Projects' %} Projects {% endif %}
+                                    {% if n.notification_type == 'Connections' %} Connections {% endif %}
+                                    {% if n.notification_type == 'Members' %} Members {% endif %}
+                                </span></div>
+                                <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
+                            </div>
+                            <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
+                        </a>
+
+                    </div>
+
+                {% endfor %}
+            {% endif %}
+
+        {% endif %}
+        
+        {% if researcher and not '/dashboard/' in request.path %}
+
+            {% if researcher_notifications %}
+                {% for n in researcher_notifications %}
+
+                    <div class="border-bottom-solid-teal">
+                        <a
+                            id="{{ researcher.id }}_{{ n.id }}"
+                            onclick="markAsRead(this); return true;"
+                            {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
+                                {% if n.reference_id %}
+                                    href="{% url 'researcher-project-actions' researcher.id n.reference_id %}"
+                                {% else %}
+                                    href="{% url 'researcher-projects' researcher.id %}"
+                                {% endif %}
+                            {% endif %}
+                            {% if n.notification_type == 'Connections' %}
+                                href="{% url 'researcher-connections' researcher.id %}"
+                            {% endif %}
+                        >
+
+                            <div class="flex-this space-between margin-top-1">
+                                <div>
+                                    <span id="notification-label-tag-{{ n.id }}" 
+                                        class="notification-type-tag white-text font-size-12 {% if n.viewed %} grey {% else %} orange-bg {% endif %}"
+                                    >
+                                    {% if n.notification_type == 'Notices' %} Notices {% endif %}
+                                    {% if n.notification_type == 'Labels' %} Labels {% endif %}
+                                    {% if n.notification_type == 'Activity' %} Activity {% endif %}
+                                    {% if n.notification_type == 'Projects' %} Projects {% endif %}
+                                    {% if n.notification_type == 'Connections' %} Connections {% endif %}
+                                </span></div>
+                                <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
+                            </div>
+                            <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
+                        </a>
+                    </div>
+
+                {% endfor %}
+            {% endif %}
+        
+        {% endif %}
+
+
+    </div>
+</div>

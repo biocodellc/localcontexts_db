@@ -12,13 +12,6 @@ def read_notification(request, pk):
     n.save()
     return redirect('dashboard')
 
-
-@login_required(login_url='login')
-def delete_notification(request, pk):
-    n = UserNotification.objects.get(id=pk)
-    n.delete()
-    return redirect('dashboard')
-
 @login_required(login_url='login')
 @csrf_exempt
 def read_org_notification(request, pk):
@@ -26,3 +19,9 @@ def read_org_notification(request, pk):
     n.viewed = True
     n.save()
     return render(request, 'notifications/action-read.html')
+
+@login_required(login_url='login')
+def delete_user_notification(request, pk):
+    n = UserNotification.objects.get(id=pk)
+    n.delete()
+    return redirect('dashboard')

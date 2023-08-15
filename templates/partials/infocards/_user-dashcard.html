@@ -1,5 +1,4 @@
 {% load static %} {% load custom_acct_tags %}
-{% unread_notifications_exist request.user as unread_exist %}
 
 <section class="dash-driver flex-this column">
     <div class="flex-this space-between">
@@ -42,59 +41,9 @@
                 <div class="margin-right-8"><a href="{% url 'dashboard' %}" class="primary-btn white-btn">Back to Profile</a></div>
             {% else %}
                 <!-- Notifications -->
-                    <div class="dropdown margin-right-8">
-                        <a onclick="toggleNotifications()" class="primary-btn white-btn dropbtn"> 
-                            Notifications 
-                            <i 
-                            class="fa {% if unread_exist %} fa-bell orange-text {% else %} fa-bell-o {% endif %}" 
-                            aria-hidden="true"
-                            ></i>
-                        </a>
-                        <div id="notification-v2" class="notification-dropdown-content">
-                        <div class="border-bottom-solid-teal center-text">
-                            <span class="orange-text">{% display_name request.user %}'s Notifications</span>
-                        </div>
-
-                            {% if notifications %}
-                                {% for n in notifications %}
-
-                                    <div class="border-bottom-solid-teal">
-                                        
-                                        <a 
-                                            id="{{ request.user.id }}_{{ n.id }}"
-                                            onclick="markAsReadUser(this); return true;"
-
-                                            {% if n.notification_type == 'Invitation' %}
-                                                href="{% url 'member-invitations' %}"
-                                            {% else %}
-                                                href="{% url 'read' n.id %}"
-                                            {% endif %}
-                                        >
-                                            <div class="flex-this space-between margin-top-1">
-                                                <div>
-                                                    <span 
-                                                        id="notification-label-tag-{{ n.id }}" 
-                                                        class="notification-type-tag white-text font-size-12 {% if n.viewed %} grey {% else %} orange-bg {% endif %}"
-                                                    >
-                                                        {{ n.notification_type }}
-                                                    </span>
-                                                </div>
-                                                <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
-                                            </div>
-
-                                            <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>   
-                                        </a>
-
-                                    </div>
-
-                                {% endfor %}
-                            {% endif %}
-
-                        </div>
-                    </div>
+                {% include 'snippets/notifications.html' %}
                     
-                    <div><a href="{% url 'update-profile' %}" class="primary-btn green-btn">Edit profile <i class="fa fa-pencil" aria-hidden="true"></i></a></div>
-
+                <div><a href="{% url 'update-profile' %}" class="primary-btn green-btn">Edit profile <i class="fa fa-pencil" aria-hidden="true"></i></a></div>
             {% endif %}
         </div>        
     </div>
