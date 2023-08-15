@@ -52,8 +52,8 @@ def connect_institution(request):
                     data.user_to = institution.institution_creator
                     data.save()
 
-                    # Send institution creator email
-                    send_join_request_email_admin(request, data, institution)
+                    send_action_notification_join_request(data) # Send action notification to institution
+                    send_join_request_email_admin(request, data, institution) # Send institution creator email
                     messages.add_message(request, messages.SUCCESS, "Request to join institution sent!")
                     return redirect('connect-institution')
         else:
@@ -192,8 +192,8 @@ def public_institution_view(request, pk):
                             data.user_to = institution.institution_creator
                             data.save()
 
-                            # Send email to institution creator
-                            send_join_request_email_admin(request, data, institution)
+                            send_action_notification_join_request(data) # Send action notification to institution
+                            send_join_request_email_admin(request, data, institution) # Send email to institution creator
                             return redirect('public-institution', institution.id)
                 else:
                     messages.add_message(request, messages.ERROR, 'Something went wrong')

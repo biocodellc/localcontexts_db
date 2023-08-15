@@ -77,7 +77,7 @@ def send_user_notification_member_invite_accept(member_invite): # Send notificat
 
 
 # JOIN REQUESTS
-def send_user_join_request(join_request): # Send notification when user wishes to join a community or institution
+def send_action_notification_join_request(join_request): # Send notification when user wishes to join a community or institution
     sender_name = get_users_name(join_request.user_from)
     entity = join_request.community or join_request.institution
     entity_type = 'community' if join_request.community else 'institution'
