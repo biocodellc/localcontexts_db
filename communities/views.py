@@ -62,8 +62,8 @@ def connect_community(request):
                     data.user_to = community.community_creator
                     data.save()
 
-                    send_action_notification_join_request(data) # Send action notification to community
-                    send_join_request_email_admin(request, data, community) # Send community creator email
+                    # Send community creator email
+                    send_join_request_email_admin(request, data, community)
                     messages.add_message(request, messages.SUCCESS, "Request to join community sent!")
                     return redirect('connect-community')
         else:
@@ -173,8 +173,8 @@ def public_community_view(request, pk):
                             data.user_to = community.community_creator
                             data.save()
 
-                            send_action_notification_join_request(data) # Send action notiication to community
-                            send_join_request_email_admin(request, data, community) # Send email to community creator
+                            # Send email to community creator
+                            send_join_request_email_admin(request, data, community)
                             return redirect('public-community', community.id)
                 else:
                     messages.add_message(request, messages.ERROR, 'Something went wrong')
