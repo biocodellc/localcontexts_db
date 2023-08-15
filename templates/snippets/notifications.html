@@ -32,7 +32,7 @@
             {% for n in user_notifications %}
 
                 <div class="border-bottom-solid-teal flex-this space-between">
-                    <div>
+                    <div class="w-100">
                         <a 
                             id="{{ request.user.id }}_{{ n.id }}"
                             onclick="markAsReadUser(this); return true;"
@@ -59,9 +59,9 @@
                         </a>                        
                     </div>
 
-                    <div class="margin-left-8 margin-top-8">
+                    <div class="margin-left-8">
                         <a href="{% url 'delete-user-notification' n.id %}">
-                            <i class="fa-solid fa-xmark fa-lg darkteal-text"></i>
+                            <i class="fa-regular fa-xmark fa-lg darkteal-text"></i>
                         </a>
                     </div>
                 </div>
