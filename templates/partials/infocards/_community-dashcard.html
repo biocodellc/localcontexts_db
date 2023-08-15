@@ -1,6 +1,4 @@
 {% load static %} {% block content %} {% load custom_tags %}
-{% community_notifications community as notifications %}
-{% unread_notifications community as unread_exist %}
 
     <div class="dashcard">
 
@@ -17,73 +15,7 @@
 
             <!-- Notifications -->
             <div class="flex-this w-30 flex-end">
-                <div class="dropdown">
-                    <a onclick="toggleNotifications()" class="primary-btn white-btn dropbtn"> 
-                        Notifications 
-                        <i 
-                        class="fa {% if unread_exist %} fa-bell orange-text {% else %} fa-bell-o {% endif %}" 
-                        aria-hidden="true"
-                        ></i>
-                    </a>
-                    <div id="notification-v2" class="notification-dropdown-content">
-                        <div class="border-bottom-solid-teal center-text">
-                            <span class="orange-text">{{community.community_name}} Notifications</span>
-                        </div>
-                        {% if notifications %}
-                            {% for n in notifications %}
-
-                                <div class="border-bottom-solid-teal">
-                                    <a
-                                        id="{{ community.id }}_{{ n.id }}" 
-                                        onclick="markAsRead(this); return true;"
-
-                                        {% if n.notification_type == 'Labels' %}
-                                            href="{% url 'select-label' community.id %}"
-                                        {% endif %}
-                                        {% if n.notification_type == 'Members' %}
-                                            {% if n.reference_id %}
-                                                href="{% url 'member-requests' community.id %}"
-                                            {% else %}
-                                                href="{% url 'members' community.id %}"
-                                            {% endif %}
-                                        {% endif %}
-                                        {% if n.notification_type == 'Projects' %}
-                                            {% if n.reference_id %}
-                                                href="{% url 'community-project-actions' community.id n.reference_id %}"
-                                            {% else %}
-                                                href="{% url 'community-projects' community.id %}"
-                                            {% endif %}
-                                        {% endif %}
-                                        {% if n.notification_type == 'Connections' %}
-                                            href="{% url 'community-connections' community.id %}"
-                                        {% endif %}
-                                    >
-                                    
-                                        <div class="flex-this space-between margin-top-1">
-                                            <div>
-                                                <span id="notification-label-tag-{{ n.id }}" 
-                                                    class="notification-type-tag white-text font-size-12 {% if n.viewed %} grey {% else %} orange-bg {% endif %}"
-                                                >
-                                                {% if n.notification_type == 'Labels' %} Labels {% endif %}
-                                                {% if n.notification_type == 'Activity' %} Activity {% endif %}
-                                                {% if n.notification_type == 'Projects' %} Projects {% endif %}
-                                                {% if n.notification_type == 'Connections' %} Connections {% endif %}
-                                                {% if n.notification_type == 'Members' %} Members {% endif %}
-                                                </span>
-                                            </div>
-                                            <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
-                                        </div>
-        
-                                        <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
-                                    </a>
-
-                                </div>
-
-                            {% endfor %}
-                        {% endif %}
-
-                    </div>
-                </div>
+                {% include 'snippets/notifications.html' %}
 
                 <!-- Settings -->
                 {% if request.user == community.community_creator or member_role == 'admin' %}
