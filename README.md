@@ -17,6 +17,7 @@ What you need to run this app:
 - PostGreSQL
 - Python 3.8.3 with the latest version of `pip`
 
+
 # Local Deployment
 
 ## First Time:  set up database
