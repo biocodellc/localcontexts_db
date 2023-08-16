@@ -62,8 +62,8 @@ def connect_community(request):
                     data.user_to = community.community_creator
                     data.save()
 
-                    # Send community creator email
-                    send_join_request_email_admin(request, data, community)
+                    send_action_notification_join_request(data) # Send action notification to community
+                    send_join_request_email_admin(request, data, community) # Send community creator email
                     messages.add_message(request, messages.SUCCESS, "Request to join community sent!")
                     return redirect('connect-community')
         else:
@@ -173,8 +173,8 @@ def public_community_view(request, pk):
                             data.user_to = community.community_creator
                             data.save()
 
-                            # Send email to community creator
-                            send_join_request_email_admin(request, data, community)
+                            send_action_notification_join_request(data) # Send action notiication to community
+                            send_join_request_email_admin(request, data, community) # Send email to community creator
                             return redirect('public-community', community.id)
                 else:
                     messages.add_message(request, messages.ERROR, 'Something went wrong')
@@ -461,7 +461,7 @@ def customize_label(request, pk, label_code):
                     instance.save()
                 
                 # Create notification
-                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title, refernce_id=data.unique_id)
                 return redirect('select-label', community.id)
             
         context = {
@@ -510,13 +510,18 @@ def approve_label(request, pk, label_id):
                         bclabel.is_approved = False
                         bclabel.approved_by = request.user
                         bclabel.save()
+
+                        send_action_notification_label_approved(bclabel)
                         send_email_label_approved(request, bclabel, data.id)
+
                     if tklabel:
                         data.tklabel = tklabel
                         data.save()
                         tklabel.is_approved = False
                         tklabel.approved_by = request.user
                         tklabel.save()
+
+                        send_action_notification_label_approved(tklabel)
                         send_email_label_approved(request, tklabel, data.id)
                     return redirect('select-label', community.id)
 
@@ -527,20 +532,22 @@ def approve_label(request, pk, label_id):
                     bclabel.is_approved = True
                     bclabel.approved_by = request.user
                     bclabel.save()
-                    send_email_label_approved(request, bclabel, None)
 
-                    # handle label versions and translation versions
-                    handle_label_versions(bclabel)
+                    handle_label_versions(bclabel) # handle Label versions and translation versions
+
+                    send_action_notification_label_approved(bclabel)
+                    send_email_label_approved(request, bclabel, None)
 
                 # TK LABEL
                 if tklabel:
                     tklabel.is_approved = True
                     tklabel.approved_by = request.user
                     tklabel.save()
-                    send_email_label_approved(request, tklabel, None)
 
-                    # handle Label versions and translation versions
-                    handle_label_versions(tklabel)
+                    handle_label_versions(tklabel) # handle Label versions and translation versions
+
+                    send_action_notification_label_approved(tklabel)
+                    send_email_label_approved(request, tklabel, None)
 
                 return redirect('select-label', community.id)
         

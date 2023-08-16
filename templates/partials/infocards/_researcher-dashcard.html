@@ -1,6 +1,4 @@
 {% load static %}{% load custom_researcher_tags %}
-{% researcher_notifications researcher as notifications %}
-{% unread_notifications researcher as unread_exist %}
 
     <div class="dashcard">
         
@@ -19,66 +17,9 @@
             {% if user_can_view %}
                 <!-- Notifications -->
                 <div class="flex-this w-30 flex-end">
-                    <div class="dropdown">
-                        <a onclick="toggleNotifications()" class="primary-btn white-btn dropbtn"> 
-                            Notifications 
-                            <i 
-                            class="fa {% if unread_exist %} fa-bell orange-text {% else %} fa-bell-o {% endif %}" 
-                            aria-hidden="true"
-                            ></i>
-                        </a>
-                        <div id="notification-v2" class="notification-dropdown-content">
-                            <div class="border-bottom-solid-teal center-text">
-                                <span class="orange-text">
-                                    {% firstof researcher.user.get_full_name researcher.user.username %}
-                                    Notifications</span>
-                            </div>
+                    {% include 'snippets/notifications.html' %}
 
-                            {% if notifications %}
-                                {% for n in notifications %}
-
-                                    <div class="border-bottom-solid-teal">
-                                        <a
-                                            id="{{ researcher.id }}_{{ n.id }}"
-                                            onclick="markAsRead(this); return true;"
-                                            {% if n.notification_type == 'Labels' or n.notification_type == 'Projects' %}
-                                                {% if n.reference_id %}
-                                                    href="{% url 'researcher-project-actions' researcher.id n.reference_id %}"
-                                                {% else %}
-                                                    href="{% url 'researcher-projects' researcher.id %}"
-                                                {% endif %}
-                                            {% endif %}
-                                            {% if n.notification_type == 'Connections' %}
-                                                href="{% url 'researcher-connections' researcher.id %}"
-                                            {% endif %}
-                                        >
-
-                                            <div class="flex-this space-between margin-top-1">
-                                                <div>
-                                                    <span id="notification-label-tag-{{ n.id }}" 
-                                                        class="notification-type-tag white-text font-size-12 {% if n.viewed %} grey {% else %} orange-bg {% endif %}"
-                                                    >
-                                                    {% if n.notification_type == 'Notices' %} Notices {% endif %}
-                                                    {% if n.notification_type == 'Labels' %} Labels {% endif %}
-                                                    {% if n.notification_type == 'Activity' %} Activity {% endif %}
-                                                    {% if n.notification_type == 'Projects' %} Projects {% endif %}
-                                                    {% if n.notification_type == 'Connections' %} Connections {% endif %}
-                                                </span></div>
-                                                <div><span class="font-size-12 grey-text">{{ n.created }}</span></div>
-                                            </div>
-                                            <div><p class="darkteal-text font-size-14"> {{ n.title }}</p></div>    
-                                        </a>
-                                    </div>
-
-                                {% endfor %}
-                            {% endif %}
-
-                        </div>
-                    </div>
-
-                    {% if user_can_view %}
-                        <div class="margin-left-8"><a href="{% url 'update-researcher' researcher.id %}" class="darkteal-text primary-btn white-btn">Settings <i class="fa fa-cog" aria-hidden="true"></i></a></div>
-                    {% endif %}
+                    <div class="margin-left-8"><a href="{% url 'update-researcher' researcher.id %}" class="darkteal-text primary-btn white-btn">Settings <i class="fa fa-cog" aria-hidden="true"></i></a></div>
                 </div>
             {% endif %}
             
