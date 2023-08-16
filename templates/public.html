@@ -308,7 +308,7 @@
             <div class="flex-this column dashcard-text-container">
                 <div><h3 class="dashcard-h3">{% firstof researcher.user.get_full_name researcher.user.username %}</h3></div>
                 <div>
-                    <p class="dashcard-subheader">Researcher | {{ profile.get_location }} </p>
+                    <p class="dashcard-subheader">Researcher | {{ researcher.user.user_profile.get_location }} </p>
                 </div>
                 <div><p class="dashcard-description description-sm">{% if researcher.description %}{{ researcher.description }}{% else %} No description provided. {% endif %}</p></div>
                 {% include 'partials/_alerts.html' %}
