@@ -1,37 +1,15 @@
 {% load static %}
 <div class="content-card content-card-space white-bg">
-    <div class="flex-this space-between">
-        <div class="w-60"><h2 class="no-top-margin">Notices</h2></div>
-            {% if researcher %}
-                <div class="flex-this align-center">
-                    <a class="primary-btn green-btn margin-top-2" href="{% url 'researcher-create-project' researcher.id %}">
-                        Create a Project     <i class="fa fa-arrow-right"></i>
-                    </a>
-                </div>
-            {% endif %}
-
-            {% if institution %}
-                <div class="flex-this align-center">
-                    {% if member_role == 'admin' or member_role == 'editor' %}
-                        <a class="primary-btn green-btn margin-top-2" href="{% url 'inst-create-project' institution.id %}">
-                            Create a Project     <i class="fa fa-arrow-right"></i>
-                        </a>
-                    {% endif %}
-                </div>
-            {% endif %}
-        </div>
-        <div class="w-70">
-            <p class="no-top-margin">
-                Institutions and researchers can only generate Notices. Applying Notices allows institutions and researchers to engage, acknowledge, and make visible Indigenous interests in collections, information, and data. Notices are a precursor for communities to add their Labels to a project if they choose. <br><br>
-                We recommend beginning with the Open to Collaborate Notice, which you can download from this page without creating a Project. To apply the disclosure Notices, you will create a Project to describe the context.
-            </p>
-        </div>
-    </div>
+    <h2 class="no-top-margin">Notices</h2>
+    <p class="no-top-margin w-70">
+        Institutions and researchers can only generate Notices. Applying Notices allows institutions and researchers to engage, acknowledge, and make visible Indigenous interests in collections, information, and data. Notices are a precursor for communities to add their Labels to a project if they choose. <br><br>
+        We recommend beginning with the Open to Collaborate Notice, which you can download from this page without creating a Project. To apply the disclosure Notices, you will create a Project to describe the context.
+    </p>
 </div>
 
 <div class="content-card content-card-space white-bg">
     <div class="flex-this space-between">
-        <div><h2 class="no-top-margin">Open to Collaborate Notice</h2></div>
+        <div><h2 class="no-top-margin">Engagement Notice</h2></div>
         <div class="flex-this flex-end">
             <div class="margin-right-16"><a id="addURLBtn" class="primary-btn action-btn">Add Link <i class="fa-solid fa-circle-plus"></i></a></div>
             <div>
@@ -68,20 +46,25 @@
         <div><img loading="lazy" src="{% static 'images/notices/ci-open-to-collaborate.png' %}" width="119px" alt="black square with a rectangle and on hand on top and bottom in the middle in white"></div>
         <div class="flex-this column margin-left-16">
             <div class="w-90">
-                <p class="no-top-margin">
+                <h3 class="no-top-margin">Open to Collaborate</h3>
+
+                <p class="no-top-margin">                    
                     <span class="bold">Why Use this Notice?</span><br>
-                    The Open to Collaborate Notice indicates that a researcher or an institution is committed to developing new modes of collaboration, engagement, and partnership over Indigenous collections and data that have colonial and/or problematic histories or unclear provenance. This notice indicates a commitment to change and to develop new processes for the care and stewardship of past and future heritage collections.
+                    The Engagement Notice, the Open to Collaborate Notice, indicates that a researcher or an institution is committed to developing new modes of collaboration, engagement, and partnership over Indigenous collections and data that have colonial and/or problematic histories or unclear provenance. This Notice indicates a commitment to change and to develop new processes for the care and stewardship of past and future heritage collections. We recommend beginning with the Open to Collaborate Notice.               
+                </p>
+                <p>
+                    <span class="bold">How can I use this Notice?</span><br>
+                    Access the Hub API or click the “Download Notice” button on this page to use the Open to Collaborate Notice. For detailed information about the Engagement Notice and how to apply it, 
+                    <a class="darkteal-text underline-hover" href="https://localcontexts.org/support/downloadable-resources/" target="_blank" rel="noopener">see our usage guide <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>. 
+                    <br><br>
+                    If you add the Notice to a website, click the “Add Link” button and enter the information about where your Notice is displayed. If you have applied the Notice in multiple places, you can add multiple links.
+                    <br><br>
+                    Adding a link will add a badge to your account in the Registry and the links will be accessible to others viewing your account page.
                 </p>
                 <p>
                     <span class="bold">Notice Text</span><br>
-                    Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.                    
-                </p> 
-                <p>
-                    <span class="bold">How can I apply this Notice?</span><br>
-                    Unlike the other Notices, you do not need to make a project to generate an Open to Collaborate Notice. Click the “Download Notice” button on this page to download the icon image file and Notice text. You can find usage guides with information about how to apply the Notice <a class="darkteal-text underline-hover" href="https://localcontexts.org/support/downloadable-resources/" target="_blank" rel="noopener">here <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>.
-                    <br><br>
-                    If you add your Open to Collaborate Notice to a website, click the “Add Link” button and enter the information about where your Notice is displayed. If you have applied the Notice in multiple places, you can add multiple links.
-                </p>             
+                    Our institution is committed to the development of new modes of collaboration, engagement, and partnership with Indigenous peoples for the care and stewardship of past and future heritage collections.                
+                </p>            
                 <p>
                     <span class="bold">Places this Notice has been applied</span><br>
                     {% if urls %}
@@ -113,62 +96,128 @@
 </div>
 
 <div class="content-card content-card-space white-bg">
-    <h2 class="no-top-margin">Traditional Knowledge Notice</h2>
-    <div class="flex-this border-bottom-solid-teal">
-        <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" alt="black square with the letters TK in the middle in white"></div>
-        <div class="flex-this column margin-left-16">
-            <div class="w-90">
-                <p class="no-top-margin">
-                    <span class="bold">Why Use this Notice?</span><br>
-                    This Notice should be used to recognize that place-based knowledge carries accompanying cultural rights and responsibilities and that appropriate permissions may need to be sought for future use of this material.
-                </p>        
-            </div>
-            <div class="w-90">
-                <p>
-                    <span class="bold">Notice Text</span><br>
-                    The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated.
-                </p>         
-            </div>
+    <div class="flex-this space-between">
+        <div>
+            <h2 class="no-top-margin">Disclosure Notices</h2>
+        </div>
+        <div>
+            {% if researcher %}
+                <div class="flex-this align-center">
+                    <a class="primary-btn green-btn margin-top-2" href="{% url 'researcher-create-project' researcher.id %}">
+                        Create a Project     <i class="fa fa-arrow-right"></i>
+                    </a>
+                </div>
+            {% endif %}
+
+            {% if institution %}
+                <div class="flex-this align-center">
+                    {% if member_role == 'admin' or member_role == 'editor' %}
+                        <a class="primary-btn green-btn margin-top-2" href="{% url 'inst-create-project' institution.id %}">
+                            Create a Project     <i class="fa fa-arrow-right"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}        
+        </div>        
+    </div>
+
+    <div class="w-80">
+        <p>
+            <span class="bold">Why use these Notices?</span><br>
+            The Disclosure Notices are used to identify Indigenous collections and data and to recognize there could be accompanying cultural rights, protocols, and responsibilities. The Notices allow institutions and researchers to engage, acknowledge, and make visible Indigenous interests in collections, information, and data.
+        </p>
+        <p>
+            <span class="bold">How can I use these Notices?</span><br>
+            To apply the Disclosure Notices, you will create a Project to describe the context. After creating a Project, you can use the Hub API or download from the Project page to use the Notice(s). For detailed information about the Disclosure Notices and how to apply them, 
+            <a class="darkteal-text underline-hover" href="https://localcontexts.org/support/downloadable-resources/" target="_blank" rel="noopener">see our usage guide <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>.
+        </p>        
+    </div>
+
+    <div class="flex-this justify-center">
+        <div id="disclosureTK" class="cc-notice__container" onclick="expandDisclosureNotice(this)">
+            <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" width="119px" alt="black square with the letters TK in the middle in white"></div>
+            <div><p>Traditional Knowledge</p></div>
+        </div>
+        <div id="disclosureBC" class="cc-notice__container" onclick="expandDisclosureNotice(this)">
+            <div><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" width="119px" alt="black square with the letters BC in the middle in white"></div>
+            <div><p>Biocultural</p></div>
+        </div>
+        
+        <div id="disclosureAI" class="cc-notice__container" onclick="expandDisclosureNotice(this)">
+            <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="119px" alt="black square with an unfinished square in the middle in white"></div>
+            <div><p>Attribution Incomplete</p></div>
         </div>
     </div>
 
-    <h2>Biocultural Notice</h2>
-    <div class="flex-this border-bottom-solid-teal">
-        <div><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" alt="black square with the letters BC in the middle in white"></div>
-        <div class="flex-this column margin-left-16">
-            <div class="w-90">
-                <p class="no-top-margin">
-                    <span class="bold">Why Use this Notice?</span><br>
-                    The BC Notice should be used to recognize the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with their traditional lands, waters, and territories. It acknowledges the importance of cultural protocols and recognizes that appropriate permissions may need to be sought for future use of this material or data.            </p>
-                </p>        
-            </div>
-            <div class="w-90">
-                <p>
-                    <span class="bold">Notice Text</span><br>
-                    The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated.            </p>
-                </p>         
-            </div>
+    <div class="w-80 auto-margin">
+
+        <div id="openDiv-disclosureTK" class="disclosure-notice__expanded-container hide">
+            <div class="flex-this">
+                <div><img loading="lazy" src="{% static 'images/notices/tk-notice.png' %}" alt="black square with the letters TK in the middle in white"></div>
+                <div class="flex-this column margin-left-16">
+                    <div class="w-90">
+                        <h2 class="no-top-margin">Traditional Knowledge Notice</h2>
+                        <p class="no-top-margin">
+                            <span class="bold">Why Use this Notice?</span><br>
+                            This Notice should be used to recognize that place-based knowledge carries accompanying cultural rights and responsibilities and that appropriate permissions may need to be sought for future use of this material.
+                        </p>        
+                    </div>
+                    <div class="w-90">
+                        <p>
+                            <span class="bold">Notice Text</span><br>                        
+                            The TK Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material. The TK Notice may indicate that TK Labels are in development and their implementation is being negotiated. For more information about the TK Notice click 
+                            <a class="darkteal-text underline-hover" href="https://localcontexts.org/notice/tk-notice/" target="_blank" rel="noopener">here <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>.
+                        </p>         
+                    </div>
+                </div>
+            </div>            
         </div>
+
+        <div id="openDiv-disclosureBC" class="disclosure-notice__expanded-container hide">
+            <div class="flex-this">
+                <div><img loading="lazy" src="{% static 'images/notices/bc-notice.png' %}" alt="black square with the letters BC in the middle in white"></div>
+                <div class="flex-this column margin-left-16">
+                    <div class="w-90">
+                        <h2 class="no-top-margin">Biocultural Notice</h2>
+                        <p class="no-top-margin">
+                            <span class="bold">Why Use this Notice?</span><br>
+                            The BC Notice should be used to recognize the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity and genetic resources associated with their traditional lands, waters, and territories. It acknowledges the importance of cultural protocols and recognizes that appropriate permissions may need to be sought for future use of this material or data.
+                        </p>        
+                    </div>
+                    <div class="w-90">
+                        <p>
+                            <span class="bold">Notice Text</span><br>
+                            The BC Notice is a visible notification that there are accompanying cultural rights and responsibilities that need further attention for any future sharing and use of this material or data. The BC Notice recognizes the rights of Indigenous peoples to permission the use of information, collections, data and digital sequence information generated from the biodiversity or genetic resources associated with traditional lands, waters, and territories. The BC Notice may indicate that BC (Biocultural) Labels are in development and their implementation is being negotiated. For more information about the BC Notice click 
+                            <a class="darkteal-text underline-hover" href="https://localcontexts.org/notice/bc-notice/" target="_blank" rel="noopener">here <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>.
+                        </p>         
+                    </div>
+                </div>
+            </div>            
+        </div>
+
+        <div id="openDiv-disclosureAI" class="disclosure-notice__expanded-container hide">
+            <div class="flex-this">
+                <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="119px" alt="black square with an unfinished square in the middle in white"></div>
+                <div class="flex-this column margin-left-16">
+                    <div class="w-90">
+                        <h2 class="no-top-margin">Attribution Incomplete Notice</h2>
+                        <p class="no-top-margin">
+                            <span class="bold">Why Use this Notice?</span><br>
+                            The Attribution Incomplete Notice is attached to a collection or at an item level where there is incomplete, inaccurate, or missing attribution. This Notice indicates to the public that the record and/or metadata is incomplete. Visibly identifying missing attribution within collections is the first step towards correcting existing attribution to include: contributors, collaborators, other authors and/or communities of origin.
+                        </p>        
+                    </div>
+                    <div class="w-90">
+                        <p>
+                            <span class="bold">Notice Text</span><br>
+                            Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution.
+                        </p>         
+                    </div>
+                </div>
+            </div>            
+        </div>   
+
     </div>
 
-    <h2>Attribution Incomplete Notice</h2>
-    <div class="flex-this border-bottom-solid-teal">
-        <div><img loading="lazy" src="{% static 'images/notices/ci-attribution-incomplete.png' %}" width="119px" alt="black square with an unfinished square in the middle in white"></div>
-        <div class="flex-this column margin-left-16">
-            <div class="w-90">
-                <p class="no-top-margin">
-                    <span class="bold">Why Use this Notice?</span><br>
-                    The Attribution Incomplete Notice is attached to a collection or at an item level where there is incomplete, inaccurate, or missing attribution. This Notice indicates to the public that the record and/or metadata is incomplete. Visibly identifying missing attribution within collections is the first step towards correcting existing attribution to include: contributors, collaborators, other authors and/or communities of origin.                    
-                </p>        
-            </div>
-            <div class="w-90">
-                <p>
-                    <span class="bold">Notice Text</span><br>
-                    Collections and items in our institution have incomplete, inaccurate, and/or missing attribution. We are using this notice to clearly identify this material so that it can be updated, or corrected by communities of origin. Our institution is committed to collaboration and partnerships to address this problem of incorrect or missing attribution.
-                </p>         
-            </div>
-        </div>
-    </div>
 
 </div>
 
@@ -208,42 +257,24 @@
             <div><img loading="lazy" src="{% static 'images/notices/collections-care/cc-overall-notice.png' %}" width="119px" alt=""></div>
             <div class="flex-this column margin-left-16">
                 <div class="w-80">
-                    <p class="no-top-margin">
-                        <span class="bold">What are the Collections Care Notices? </span><br>
-                        The Collections Care (CC) Notices are visible tangible identifiers developed specifically for institutions and repositories to support proper cultural care and stewardship, 
-                        led by Indigenous protocols and authority. The CC Notices recognize that there are accompanying cultural rights, protocols, and responsibilities that govern the care, display, 
-                        and access to Ancestral Belongings and culturally sensitive materials within institutional collections. The CC Notices are for implementation by institutions and repositories 
-                        within already existing cultural care policy, workflows, and practices for culturally responsive stewardship.                 
+                    <p>
+                        <span class="bold">Why use these Notices?</span><br>
+                        The Collections Care (CC) Notices are used to recognize the cultural protocols that govern the care, display, and access to cultural materials. The CC Notices recognize that there are accompanying cultural rights, protocols, and responsibilities that govern the care, display, and access to cultural materials within collections. This reflects Indigenous sensibilities and worldviews where these collections are not objects but need to be cared for as relatives and relations.
+                        <br><br>
+                        These Notices can be applied after engaging with community-specific Indigenous experts to determine the culturally appropriate care and governance for relatives and relations held in the collections.
                     </p>
                     <p>
-                        <span class="bold">How to apply Collections Care Notices</span><br>
-                        <ol>
-                            <li>
-                                Download the Collections Care Notices Notices zip file.<br>
-                                <ol>
-                                    <li>
-                                        Collections Care Notices are applied physically to items and collections in institutional storage contexts. 
-                                        The zip file contains Notices in PNG and SVG. Physical labels containing the Notice, name, and QR code that can be printed on Avery stickers and applied to items. 
-                                        As well as a poster that displays all Notices and their descriptions for institutions to display on their walls.
-                                    </li>
-                                </ol>
-                            </li>
-                            <li>
-                                Clearly display the overall Local Contexts (LC) Notice to show that Collection Care Notices are in use for items and collections within this room.
-                            </li>
-                        </ol>
-                    </p> 
+                        <span class="bold">Where can I use these Notices?</span><br>
+                        The CC Notices are for implementation by institutions and repositories internally and directly on collections in storage spaces and databases as well as within policy, workflows, and practices surrounding the care and stewardship of these important collections. The CC Notices can be used in print and digital formats.
+                    </p>
                     <p>
-                        <span class="bold">Planning to use the Collections Care Notices</span><br>
-                        <ol>
-                            <li>Engage with Indigenous stakeholders in the collections to determine culturally appropriate care and governance protocols and procedures.</li>
-                            <li>Register with the Local Contexts Hub at www.LocalContextsHub.org.</li>
-                            <li>Establish support at an institutional, departmental, or otherwise administrative policy level to endure the CC Notices receive adequate internal support in implementation and use.</li>
-                        </ol>
-                    </p>             
-                    <p>
-                        <span class="bold">Need more information about Collections Care Notices? </span><br>
-                        <a href="https://localcontexts.org/support/downloadable-resources/#usage-guides" class="darkteal-text underline-hover">Download our usage guide here <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>
+                        <span class="bold">How can I use these Notices?</span><br>
+                        Click the “Download Notices” button on this page to use the Collections Care Notices. You have the option to upload or link to a collections care policy by clicking “Add Policy.”
+                        <br><br>
+                        Within the downloaded zip file are folders for each Notice containing its text, png, svg, QR code, and printable label. Also included in the zip file is a poster with the Overall Notice that must be displayed in collections storage where the CC Notices are in use.
+                        <br><br>
+                        For detailed information about the CC Notices and how to apply them, 
+                        <a class="darkteal-text underline-hover" href="https://localcontexts.org/support/downloadable-resources/" target="_blank" rel="noopener">see our usage guide <i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>.
                     </p>
                 </div>
 
@@ -294,16 +325,17 @@
                             <div><h2 class="no-top-margin">Authorization</h2></div>
 
                             <p>
+                                <span class="bold">Why use this Notice?</span><br>
+                                The Authorization Notice is being used to indicate that distinct Tribe/Community authorization through consultation needs to be obtained for any 
+                                reproduction of this item including for use in exhibitions and publications in print or online.
+                                
+                                <br><br>
+
                                 <span class="bold">Notice Text</span><br>
                                 The Authorization Notice is being used to indicate that distinct Tribe/Community authorization through
                                 consultation needs to be obtained for any reproduction of this item including for use in exhibitions and
                                 publications in print or online.
 
-                                <br><br>
-
-                                <span class="bold">Why use this Notice?</span><br>
-                                The Authorization Notice is being used to indicate that distinct Tribe/Community authorization through consultation needs to be obtained for any 
-                                reproduction of this item including for use in exhibitions and publications in print or online.
                             </p>
                         </div>
                     </div>
@@ -314,15 +346,16 @@
                             <div><h2 class="no-top-margin">Belonging</h2></div>
 
                             <p>
-                                <span class="bold">Notice Text</span><br>
-                                The Belonging Notice is being used to indicate that only specific persons belonging to communities, clans, societies 
-                                have the right to access and handle these specific items or collections.
-
-                                <br><br>
 
                                 <span class="bold">Why use this Notice?</span><br>
                                 The Belonging Notice is being used to indicate that only specific persons belonging to communities, clans, and 
                                 societies have the right to access and handle these specific items or collections.
+                                
+                                <br><br>
+
+                                <span class="bold">Notice Text</span><br>
+                                The Belonging Notice is being used to indicate that only specific persons belonging to communities, clans, societies 
+                                have the right to access and handle these specific items or collections.
                             </p>
                         </div>
                     </div>
@@ -333,15 +366,15 @@
                             <div><h2 class="no-top-margin">Caring</h2></div>
 
                             <p>
-                                <span class="bold">Notice Text</span><br>
-                                The Caring Notice is being used to indicate that specialized care is required. Care for items or collections
-                                will require specific community guidelines for storage and handling.
+                                <span class="bold">Why use this Notice?</span><br>
+                                The Caring Notice is being used to indicate that specialized care is required. Care for items or collections will require specific 
+                                community guidelines for storage and handling.   
 
                                 <br><br>
 
-                                <span class="bold">Why use this Notice?</span><br>
-                                The Caring Notice is being used to indicate that specialized care is required. Care for items or collections will require specific 
-                                community guidelines for storage and handling.                           
+                                <span class="bold">Notice Text</span><br>
+                                The Caring Notice is being used to indicate that specialized care is required. Care for items or collections
+                                will require specific community guidelines for storage and handling.
                             </p>
                         </div>
                     </div>
@@ -352,13 +385,13 @@
                             <div><h2 class="no-top-margin">Gender Aware</h2></div>
 
                             <p>
-                                <span class="bold">Notice Text</span><br>
+                                <span class="bold">Why use this Notice?</span><br>
                                 The Gender Aware Notice is being used to indicate there are specific gender responsibilities that affect who can access, 
                                 view, and/or handle this item or collection.
 
                                 <br><br>
 
-                                <span class="bold">Why use this Notice?</span><br>
+                                <span class="bold">Notice Text</span><br>
                                 The Gender Aware Notice is being used to indicate there are specific gender responsibilities that affect who can access, 
                                 view, and/or handle this item or collection.
                             </p>
@@ -371,13 +404,13 @@
                             <div><h2 class="no-top-margin">Leave Undisturbed</h2></div>
 
                             <p>
-                                <span class="bold">Notice Text</span><br>
+                                <span class="bold">Why use this Notice?</span><br>
                                 The Leave Undisturbed Notice is being used to indicate that items in a collection should not be disturbed. 
                                 They should only be moved or disturbed under very limited circumstances according to community guidance.
-
+                                
                                 <br><br>
 
-                                <span class="bold">Why use this Notice?</span><br>
+                                <span class="bold">Notice Text</span><br>
                                 The Leave Undisturbed Notice is being used to indicate that items in a collection should not be disturbed. 
                                 They should only be moved or disturbed under very limited circumstances according to community guidance.
                             </p>
@@ -390,12 +423,12 @@
                             <div><h2 class="no-top-margin">Safety</h2></div>
 
                             <p>
-                                <span class="bold">Notice Text</span><br>
+                                <span class="bold">Why use this Notice?</span><br>
                                 The Safety Notice is being used to indicate that extreme caution and care needs to be taken in viewing and handling this item or collection.
 
                                 <br><br>
 
-                                <span class="bold">Why use this Notice?</span><br>
+                                <span class="bold">Notice Text</span><br>
                                 The Safety Notice is being used to indicate that extreme caution and care needs to be taken in viewing and handling this item or collection.
                             </p>
                         </div>
@@ -407,15 +440,16 @@
                             <div><h2 class="no-top-margin">Viewing</h2></div>
 
                             <p>
-                                <span class="bold">Notice Text</span><br>
+                                <span class="bold">Why use this Notice?</span><br>
                                 The Viewing Notice is being used to indicate that there are limits to who, how and when an item/collection can be viewed, distributed and circulated. 
                                 This includes existing images or representations of an existing or deaccessioned item/s within a collection/s.
 
                                 <br><br>
 
-                                <span class="bold">Why use this Notice?</span><br>
+                                <span class="bold">Notice Text</span><br>
                                 The Viewing Notice is being used to indicate that there are limits to who, how and when an item/collection can be viewed, distributed and circulated. 
                                 This includes existing images or representations of an existing or deaccessioned item/s within a collection/s.
+
                             </p>
                         </div>
                     </div>
@@ -426,16 +460,16 @@
                             <div><h2 class="no-top-margin">Withholding</h2></div>
 
                             <p>
-                                <span class="bold">Notice Text</span><br>
-                                The Withholding Notice is being used to indicate that no reproductions of this item or collection should ever be made. 
-                                If there are already existing photographs or reproductions, these should not be used in any exhibition or publication in print, online or other format.
-
-                                <br><br>
-
                                 <span class="bold">Why use this Notice?</span><br>
                                 The Withholding Notice is being used to indicate that no reproductions of this item or collection should ever be made. 
                                 If there are already existing photographs or reproductions, these should not be used in
                                 any exhibition or publication in print, online or other format.
+                                
+                                <br><br>
+
+                                <span class="bold">Notice Text</span><br>
+                                The Withholding Notice is being used to indicate that no reproductions of this item or collection should ever be made. 
+                                If there are already existing photographs or reproductions, these should not be used in any exhibition or publication in print, online or other format.
                             </p>
                         </div>
                     </div>
@@ -489,7 +523,6 @@
 {% endif %}
 
 <div id="addURLModal" class="modal hide">
-
     <div class="modal-defaults notice-modal flex-this column w-100">
         <div class="w-100">
             <form method="POST" autocomplete="off">
@@ -525,6 +558,5 @@
             </form>
         </div>
     </div>
-
 </div>
 
