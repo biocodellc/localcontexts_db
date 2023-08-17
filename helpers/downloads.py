@@ -2,6 +2,7 @@ from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from projects.models import ProjectContributors
 from .models import Notice
+from django.shortcuts import redirect
 
 from django.http import HttpResponse
 from .utils import generate_zip, render_to_pdf
@@ -45,24 +46,11 @@ def download_otc_notice():
 
 def download_cc_notices(request):
     url = os.environ.get('COLLECTIONS_CARE_NOTICES_DOWNLOAD_ZIP')
-    if not url:
-        return render(request, '500.html') # Handle the case where the URL is not available
-
-    try:
-        response = requests.get(url, stream=True)
-        response.raise_for_status()
-        
-        # Create a streaming response to send the file
-        content_type = response.headers.get('content-type')
-        django_response = HttpResponse(response.iter_content(chunk_size=8192), content_type=content_type)
-        django_response['Content-Disposition'] = 'attachment; filename="Collections_Care_Notices.zip"'
-        return django_response
-
-    except requests.RequestException as e:
-        # This will handle any request-related errors, including connectivity or timeout issues
-        # Optionally, you can log the exact error for debugging purposes:
-        # logging.error(f"Error fetching the file: {e}")
-        return render(request, 'download_error.html', {'error_message': str(e)})
+    if url:
+        return redirect(url)
+    else:
+        # Handle the case where the URL is not available
+        return render(request, '500.html')
 
 
 # Download approved community Labels
