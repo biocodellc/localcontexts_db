@@ -2,6 +2,7 @@ from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from projects.models import ProjectContributors
 from .models import Notice
+from django.shortcuts import redirect
 
 from django.http import HttpResponse
 from .utils import generate_zip, render_to_pdf
@@ -46,17 +47,11 @@ def download_otc_notice():
 def download_cc_notices(request):
     url = os.environ.get('COLLECTIONS_CARE_NOTICES_DOWNLOAD_ZIP')
     if url:
-        response = requests.get(url, stream=True)
-        response.raise_for_status()
-
-        # Create a streaming response to send the file
-        content_type = response.headers.get('content-type')
-        django_response = HttpResponse(response.iter_content(chunk_size=8192), content_type=content_type)
-        django_response['Content-Disposition'] = 'attachment; filename="Collections_Care_Notices.zip"'
-        return django_response
+        return redirect(url)
     else:
         # Handle the case where the URL is not available
         return render(request, '500.html')
+
 
 # Download approved community Labels
 def download_labels_zip(community):
