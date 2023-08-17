@@ -62,8 +62,8 @@ def connect_community(request):
                     data.user_to = community.community_creator
                     data.save()
 
-                    # Send community creator email
-                    send_join_request_email_admin(request, data, community)
+                    send_action_notification_join_request(data) # Send action notification to community
+                    send_join_request_email_admin(request, data, community) # Send community creator email
                     messages.add_message(request, messages.SUCCESS, "Request to join community sent!")
                     return redirect('connect-community')
         else:
@@ -131,7 +131,7 @@ def public_community_view(request, pk):
             community.community_created_project.all().values_list('project__unique_id', flat=True), # community created project ids
             community.tklabel_community.all().values_list('project_tklabels__unique_id', flat=True), # projects where tk labels have been applied
             community.bclabel_community.all().values_list('project_bclabels__unique_id', flat=True), # projects where bclabels have been applied
-
+            community.contributing_communities.all().values_list('project__unique_id', flat=True), # projects where community is contributor
         ))
         project_ids = list(set(projects_list)) # remove duplicate ids
         archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, community_id=community.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
@@ -173,8 +173,8 @@ def public_community_view(request, pk):
                             data.user_to = community.community_creator
                             data.save()
 
-                            # Send email to community creator
-                            send_join_request_email_admin(request, data, community)
+                            send_action_notification_join_request(data) # Send action notiication to community
+                            send_join_request_email_admin(request, data, community) # Send email to community creator
                             return redirect('public-community', community.id)
                 else:
                     messages.add_message(request, messages.ERROR, 'Something went wrong')
@@ -296,6 +296,7 @@ def community_members(request, pk):
                             data.community = community
                             data.save()
                             
+                            send_account_member_invite(data) # Send action notification
                             send_member_invite_email(request, data, community) # Send email to target user
                             messages.add_message(request, messages.INFO, f'Invitation sent to {selected_user}')
                             return redirect('members', community.id)
@@ -460,7 +461,7 @@ def customize_label(request, pk, label_code):
                     instance.save()
                 
                 # Create notification
-                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title, refernce_id=data.unique_id)
                 return redirect('select-label', community.id)
             
         context = {
@@ -509,13 +510,18 @@ def approve_label(request, pk, label_id):
                         bclabel.is_approved = False
                         bclabel.approved_by = request.user
                         bclabel.save()
+
+                        send_action_notification_label_approved(bclabel)
                         send_email_label_approved(request, bclabel, data.id)
+
                     if tklabel:
                         data.tklabel = tklabel
                         data.save()
                         tklabel.is_approved = False
                         tklabel.approved_by = request.user
                         tklabel.save()
+
+                        send_action_notification_label_approved(tklabel)
                         send_email_label_approved(request, tklabel, data.id)
                     return redirect('select-label', community.id)
 
@@ -526,20 +532,22 @@ def approve_label(request, pk, label_id):
                     bclabel.is_approved = True
                     bclabel.approved_by = request.user
                     bclabel.save()
-                    send_email_label_approved(request, bclabel, None)
 
-                    # handle label versions and translation versions
-                    handle_label_versions(bclabel)
+                    handle_label_versions(bclabel) # handle Label versions and translation versions
+
+                    send_action_notification_label_approved(bclabel)
+                    send_email_label_approved(request, bclabel, None)
 
                 # TK LABEL
                 if tklabel:
                     tklabel.is_approved = True
                     tklabel.approved_by = request.user
                     tklabel.save()
-                    send_email_label_approved(request, tklabel, None)
 
-                    # handle Label versions and translation versions
-                    handle_label_versions(tklabel)
+                    handle_label_versions(tklabel) # handle Label versions and translation versions
+
+                    send_action_notification_label_approved(tklabel)
+                    send_email_label_approved(request, tklabel, None)
 
                 return redirect('select-label', community.id)
         
@@ -827,11 +835,7 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 data.project_creator = request.user
 
                 # Define project_page field
-                domain = request.get_host()
-                if 'localhost' in domain:
-                    data.project_page = f'http://{domain}/projects/{data.unique_id}'
-                else:
-                    data.project_page = f'https://{domain}/projects/{data.unique_id}'
+                data.project_page = f'{request.scheme}://{request.get_host()}/projects/{data.unique_id}'
                 
                 # Handle multiple urls, save as array
                 project_links = request.POST.getlist('project_urls')
@@ -1027,6 +1031,12 @@ def project_actions(request, pk, project_uuid):
                 
                 elif 'delete_project' in request.POST:
                     return redirect('community-delete-project', community.id, project.unique_id)
+                
+                elif 'remove_contributor' in request.POST:
+                    contribs = ProjectContributors.objects.get(project=project)
+                    contribs.communities.remove(community)
+                    contribs.save()
+                    return redirect('community-project-actions', community.id, project.unique_id)
 
             context = {
                 'member_role': member_role,

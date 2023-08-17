@@ -1,0 +1,74 @@
+{% extends 'auth-base.html' %} {% block title %} Projects {% endblock %}{% load static %} {% load custom_acct_tags %}{% block main %}
+
+<section class="flex-this column align-center">
+
+    <div class="content-card-v2 content-card-space">
+
+        <div>
+            <h2 class="no-bottom-margin">Local Contexts Projects Board</h2><br>
+            <p class="no-top-margin w-80">
+                This Project Board shows all public Projects created on the Local Contexts Hub. View a Project to see additional details.
+            </p>
+        </div>
+
+        <hr class="searchbar-divider">
+
+        <div class="flex-this align-center">
+            <div>
+                <form class="default-searchbar" method="GET" action="">
+                    <input type="search" name="q" placeholder="Search" autocomplete="off">
+                    <button class="search-btn"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+                </form>
+            </div>
+            <div class="flex-this align-center margin-left-16">
+                <p>
+                    Browse: 
+                    <a 
+                        href="{% url 'projects-board' %}" 
+                        class="{% if filtertype is None %} bold {% endif %}darkteal-text pointer underline-hover"
+                    >All ({% all_projects_count projects %})
+                    </a>  |
+                    <a 
+                        href="{% url 'projects-board' filtertype='labels' %}" 
+                        class="{% if '/labels/' in request.path %} bold {% endif %}darkteal-text pointer underline-hover"
+                    >Labels ({% projects_with_labels_count projects %})
+                    </a> |
+                    <a 
+                        href="{% url 'projects-board' filtertype='notices' %}" 
+                        class="{% if '/notices/' in request.path %} bold {% endif %}darkteal-text pointer underline-hover"
+                    >Notices ({% projects_with_notices_count projects %})
+                    </a>   
+                </p>            
+            </div>            
+        </div>
+
+    </div>
+
+    <div class="content-card-v2 table-card white-bg">
+        <div>
+            {% if projects %}
+                <table class="projects-table">
+                    <tr>
+                        <th><i class="fa-regular fa-line-columns"></i> Title</th>
+                        <th><i class="fa-light fa-user"></i> Creator</th>
+                        <th><i class="fa-light fa-calendar"></i> Last updated</th>
+                        <th>Notices</th>
+                        <th>Labels</th>
+                    </tr>
+
+                    {% for project in items %}
+                        {% include 'projects/project-overview.html' %}
+                    {% endfor %}
+                </table>
+            {% else %}
+                No public Projects available
+            {% endif %} 
+        </div>
+    </div>
+
+    {% include 'snippets/pagination.html' %}
+
+
+</section>
+
+{% endblock %}

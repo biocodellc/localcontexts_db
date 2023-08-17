@@ -1,14 +1,12 @@
-from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.serializers import SerializerMethodField
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
-from helpers.models import LabelTranslation, Notice
+from helpers.models import LabelTranslation, Notice, NoticeTranslation
 from projects.models import Project, ProjectCreator
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
-from django.contrib.auth.models import User
 
 class InstitutionSerializer(serializers.ModelSerializer):
     institution_name = SerializerMethodField()
@@ -60,10 +58,17 @@ class TKLabelSerializer(serializers.ModelSerializer):
     def get_community(self, obj):
         return str(obj.community.community_name)
 
+class NoticeTranslationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NoticeTranslation
+        fields = ('translated_name', 'language_tag', 'language', 'translated_text')
+
 class NoticeSerializer(serializers.ModelSerializer):
+    translations = NoticeTranslationsSerializer(source="notice_translations", many=True)
+
     class Meta:
         model = Notice
-        fields = ('notice_type', 'name', 'img_url', 'svg_url', 'default_text', 'created', 'updated',)
+        fields = ('notice_type', 'name', 'img_url', 'svg_url', 'default_text', 'translations', 'created', 'updated',)
 
 class ProjectOverviewSerializer(serializers.ModelSerializer):
     class Meta:

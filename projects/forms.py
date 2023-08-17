@@ -5,9 +5,9 @@ from django.utils.translation import ugettext_lazy as _
 
 class CreateProjectForm(forms.ModelForm):
     PRIVACY = (
-        ('Public', 'Public: All project details can be viewed at the project link and through your public page in the registry.'),
-        ('Contributor', 'Contributor View: Anyone with the link can view the project unique identifier and any Labels or Notices attached.'),
-        ('Private', 'Private: Only the project creator can see the project information.'),
+        ('Public', 'Public: Project contributors and notified communities can interact with the Project. Anyone can access the Project with the Project URL, your page in the registry, or the Projects Board.'),
+        ('Contributor', 'Contributor View: Project contributors and notified communities can interact with the Project. Anyone with the Project URL can view the Project ID and Labels/Notices.'),
+        ('Private', 'Private: Only the Project creator can view the Project. This visibility changes to Contributor View if contributors are added, communities are notified, or Labels applied.'),
     )
     TYPES = (
         ('Item', 'Item'),
@@ -18,6 +18,7 @@ class CreateProjectForm(forms.ModelForm):
         ('Exhibition', 'Exhibition'),
         ('Other', 'Other'),
     )
+
     project_privacy = forms.ChoiceField(label=_('Who can view this project?'), choices=PRIVACY, initial='Public', widget=forms.RadioSelect(attrs={'class': 'ul-no-bullets ul-no-padding'}))
     project_type = forms.ChoiceField(label=_('What is your project type? *'), choices=TYPES, widget=forms.Select(attrs={'class': 'w-100',}))
 
@@ -62,9 +63,9 @@ ProjectPersonFormsetInline = inlineformset_factory(
 
 class EditProjectForm(forms.ModelForm):
     PRIVACY = (
-        ('Public', 'Public: All project details can be viewed at the project link and through your public page in the registry.'),
-        ('Contributor', 'Contributor View: Anyone with the link can view the project unique identifier and any Labels or Notices attached.'),
-        ('Private', 'Private: Only the project creator can see the project information.'),
+        ('Public', 'Public: Project contributors and notified communities can interact with the Project. Anyone can access the Project with the Project URL, your page in the registry, or the Projects Board.'),
+        ('Contributor', 'Contributor View: Project contributors and notified communities can interact with the Project. Anyone with the Project URL can view the Project ID and Labels/Notices.'),
+        ('Private', 'Private: Only the Project creator can view the Project. This visibility changes to Contributor View if contributors are added, communities are notified, or Labels applied.'),
     )
     TYPES = (
         ('Item', 'Item'),

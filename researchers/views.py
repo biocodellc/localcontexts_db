@@ -69,8 +69,13 @@ def public_researcher_view(request, pk):
         attrnotice = Notice.objects.filter(researcher=researcher, notice_type='attribution_incomplete').exists()        
         otc_notices = OpenToCollaborateNoticeURL.objects.filter(researcher=researcher)
 
-        created_projects = ProjectCreator.objects.filter(researcher=researcher).values_list('project__unique_id', flat=True)
-        projects = Project.objects.filter(unique_id__in=created_projects, project_privacy='Public').order_by('-date_modified')
+        projects_list = list(chain(
+            researcher.researcher_created_project.all().values_list('project__unique_id', flat=True), # researcher created project ids
+            researcher.contributing_researchers.all().values_list('project__unique_id', flat=True), # projects where researcher is contributor
+        ))
+        project_ids = list(set(projects_list)) # remove duplicate ids
+        archived = ProjectArchived.objects.filter(project_uuid__in=project_ids, researcher_id=researcher.id, archived=True).values_list('project_uuid', flat=True) # check ids to see if they are archived
+        projects = Project.objects.select_related('project_creator').filter(unique_id__in=project_ids, project_privacy='Public').exclude(unique_id__in=archived).order_by('-date_modified')
 
         if request.user.is_authenticated:
             form = ContactOrganizationForm(request.POST or None)
@@ -315,12 +320,15 @@ def researcher_projects(request, pk):
 @login_required(login_url='login')
 def create_project(request, pk, source_proj_uuid=None, related=None):
     researcher = Researcher.objects.select_related('user').get(id=pk)
-    name = get_users_name(request.user)
 
     user_can_view = checkif_user_researcher(researcher, request.user)
     if user_can_view == False:
         return redirect('restricted')
     else:
+        name = get_users_name(request.user)
+        notice_defaults = get_notice_defaults()
+        notice_translations = get_notice_translations()
+
         if request.method == "GET":
             form = CreateProjectForm(request.POST or None)
             formset = ProjectPersonFormset(queryset=ProjectPerson.objects.none())
@@ -333,11 +341,7 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 data.project_creator = request.user
 
                 # Define project_page field
-                domain = request.get_host()
-                if 'localhost' in domain:
-                    data.project_page = f'http://{domain}/projects/{data.unique_id}'
-                else:
-                    data.project_page = f'https://{domain}/projects/{data.unique_id}'
+                data.project_page = f'{request.scheme}://{request.get_host()}/projects/{data.unique_id}'
                 
                 # Handle multiple urls, save as array
                 project_links = request.POST.getlist('project_urls')
@@ -370,7 +374,8 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
 
                 # Create notices for project
                 notices_selected = request.POST.getlist('checkbox-notice')
-                crud_notices(request, notices_selected, researcher, data, None)
+                translations_selected = request.POST.getlist('checkbox-translation')
+                crud_notices(request, notices_selected, translations_selected, researcher, data, None)
             
                 # Add selected contributors to the ProjectContributors object
                 add_to_contributors(request, researcher, data)
@@ -392,8 +397,10 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
 
         context = {
             'researcher': researcher,
+            'notice_translations': notice_translations,
             'form': form,
             'formset': formset,
+            'notice_defaults': notice_defaults,
             'user_can_view': user_can_view,
         }
         return render(request, 'researchers/create-project.html', context)
@@ -410,6 +417,8 @@ def edit_project(request, researcher_id, project_uuid):
         formset = ProjectPersonFormsetInline(request.POST or None, instance=project)
         contributors = ProjectContributors.objects.get(project=project)
         notices = Notice.objects.none()
+        notice_translations = get_notice_translations()
+        notice_defaults = get_notice_defaults()
 
         # Check to see if notice exists for this project and pass to template
         if Notice.objects.filter(project=project).exists():
@@ -438,7 +447,8 @@ def edit_project(request, researcher_id, project_uuid):
             
                 # Which notices were selected to change
                 notices_selected = request.POST.getlist('checkbox-notice')
-                crud_notices(request, notices_selected, researcher, data, notices)
+                translations_selected = request.POST.getlist('checkbox-translation')
+                crud_notices(request, notices_selected, translations_selected, researcher, data, notices)
 
             return redirect('researcher-project-actions', researcher.id, project.unique_id)
  
@@ -447,11 +457,14 @@ def edit_project(request, researcher_id, project_uuid):
             'researcher': researcher, 
             'project': project, 
             'notices': notices,
+            'notice_defaults': notice_defaults,
             'form': form, 
             'formset': formset,
             'contributors': contributors,
             'user_can_view': user_can_view,
             'urls': project.urls,
+            'notice_translations': notice_translations,
+
         }
         return render(request, 'researchers/edit-project.html', context)
 
@@ -566,6 +579,12 @@ def project_actions(request, pk, project_uuid):
 
                     elif 'delete_project' in request.POST:
                         return redirect('researcher-delete-project', researcher.id, project.unique_id)
+                    
+                    elif 'remove_contributor' in request.POST:
+                        contribs = ProjectContributors.objects.get(project=project)
+                        contribs.researchers.remove(researcher)
+                        contribs.save()
+                        return redirect('researcher-project-actions', researcher.id, project.unique_id)
 
                 context = {
                     'user_can_view': user_can_view,
