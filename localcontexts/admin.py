@@ -23,6 +23,7 @@ from bclabels.models import BCLabel
 from communities.models import Community, InviteMember, JoinRequest
 from helpers.models import *
 from institutions.models import Institution
+from researchers.utils import is_user_researcher
 from notifications.models import UserNotification, ActionNotification
 from projects.models import *
 from researchers.models import Researcher
@@ -397,6 +398,92 @@ class NoticeLabelFilter(admin.SimpleListFilter):
                 return queryset
         except:
             return queryset.none()
+        
+class HubActivityTypeFilter(admin.SimpleListFilter):
+    title = 'Activity Type'
+    parameter_name = 'activity_type'
+
+    def lookups(self, request, model_admin):
+        return [
+            ('New Member Added', 'New Member Added'),
+            ('New User', 'New User'),
+            ('New Researcher', 'New Researcher'),
+            ('New Community', 'New Community'),
+            ('New Institution', 'New Institution'),
+            ('Project Edited', 'Project Edited'),
+            ('Project Created', 'Project Created'),
+            ('Community Notified', 'Community Notified'),
+            ('Label(s) Applied', 'Label(s) Applied'),
+            ('Disclosure Notice(s) Added', 'Disclosure Notice(s) Added'),
+            ('Engagement Notice Added', 'Engagement Notice Added'),
+        ]
+    
+    def queryset(self, request, queryset):
+        try:
+            if self.value() == 'New Member Added':
+                qs = queryset.distinct().filter(action_type = 'New Member Added')
+                return qs
+            elif self.value() == 'New User':
+                qs = queryset.distinct().filter(action_type = 'New User')
+                return qs
+            elif self.value() == 'New Researcher':
+                qs = queryset.distinct().filter(action_type = 'New Researcher')
+                return qs
+            elif self.value() == 'New Community':
+                qs = queryset.distinct().filter(action_type = 'New Community')
+                return qs
+            elif self.value() == 'New Institution':
+                qs = queryset.distinct().filter(action_type = 'New Institution')
+                return qs
+            elif self.value() == 'Project Edited':
+                qs = queryset.distinct().filter(action_type = 'Project Edited')
+                return qs
+            elif self.value() == 'Project Created':
+                qs = queryset.distinct().filter(action_type = 'Project Created')
+                return qs
+            elif self.value() == 'Community Notified':
+                qs = queryset.distinct().filter(action_type = 'Community Notified')
+                return qs
+            elif self.value() == 'Label(s) Applied':
+                qs = queryset.distinct().filter(action_type = 'Label(s) Applied')
+                return qs
+            elif self.value() == 'Disclosure Notice(s) Added':
+                qs = queryset.distinct().filter(action_type = 'Disclosure Notice(s) Added')
+                return qs
+            elif self.value() == 'Engagement Notice Added':
+                qs = queryset.distinct().filter(action_type = 'Engagement Notice Added')
+                return qs
+            else:
+                return queryset
+        except:
+            return queryset.none()
+        
+class DateRangeFilter(admin.SimpleListFilter):
+    title = 'Date Range'
+    parameter_name = 'date_range'
+
+    def default_value(self):
+        return 'last 30 Days'
+
+    def lookups(self, request, model_admin):
+        return [
+            ('last 30 Days', 'last 30 Days'),
+            ('last 60 Days', 'last 60 Days'),
+        ]
+    
+    def queryset(self, request, queryset):
+        try:
+            if self.value() == 'last 30 Days':
+                print((datetime.now(tz = timezone.utc) - timedelta(days = 30)))
+                qs = queryset.distinct().filter(date__lte=(datetime.now(tz = timezone.utc) - timedelta(days = 30)))
+                return qs
+            elif self.value() == 'last 60 Days':
+                qs = queryset.distinct().filter(date__lte=datetime.now(tz = timezone.utc) - timedelta(days = 60))
+                return qs
+            else:
+                return queryset
+        except:
+            return queryset.none()
 
 class AdminImageWidget(AdminFileWidget):
     def render(self, name, value, attrs=None, renderer=None):
@@ -505,6 +592,8 @@ class InactiveAccountsAdmin(admin.ModelAdmin):
 
         return response
 
+admin_site.register(Inactive, InactiveAccountsAdmin)
+
 class OTCLinks(OpenToCollaborateNoticeURL):
     class Meta:
         proxy = True
@@ -542,6 +631,8 @@ class OTCLinksAdmin(admin.ModelAdmin, ExportCsvMixin):
         return added_date
     
     datetime.short_description = "Date/Time"
+
+admin_site.register(OTCLinks, OTCLinksAdmin)
 
 class UserProfile(User):
     class Meta:
@@ -598,6 +689,8 @@ class UserProfileAdmin(UserAdmin, ExportCsvMixin):
     def joined(self, obj):
         date_joined = obj.date_joined.strftime('%m/%d/%Y %I:%M %p (%Z)').replace('AM', 'am').replace('PM', 'pm')
         return date_joined
+
+admin_site.register(UserProfile, UserProfileAdmin)
 
 class ProjectPage(Project):
     class Meta:
@@ -682,6 +775,7 @@ class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
     inlines = [ProjectNoticesInline, ProjectCreatorInline, ProjectContributorInline, AdditionalContributorsInline, ProjectStatusInline, ProjectActivityInline, ProjectNotesInline]
     raw_id_fields = ('project_creator',)
     readonly_fields = ('unique_id', 'project_page', 'date_added', 'date_modified', 'project_url', 'notice_labels_img', 'source_project_uuid')
+    list_select_related = ['communities',]
 
     fieldsets = [
         (None, {'fields': ('notice_labels_img',)}),
@@ -769,6 +863,8 @@ class ProjectPageAdmin(admin.ModelAdmin, ExportCsvMixin):
     def project_url(self, obj):
         return format_html('<a href="{}" target="_blank">{}</a>', obj.project_page, obj.project_page)
     project_url.short_description = 'Project page'
+
+admin_site.register(ProjectPage, ProjectPageAdmin)
 
 class Labels(TKLabel):
     class Meta:
@@ -1008,13 +1104,95 @@ class BCLabelAdmin(admin.ModelAdmin, ExportCsvMixin):
             fields.append('version')
         return fields
 
-admin_site.register(Inactive, InactiveAccountsAdmin)
-admin_site.register(OTCLinks, OTCLinksAdmin)
-admin_site.register(UserProfile, UserProfileAdmin)
-admin_site.register(ProjectPage, ProjectPageAdmin)
 admin_site.register(Labels, LabelDetailsAdmin)
 admin_site.register(TKLabels, TKLabelAdmin)
 admin_site.register(BCLabels, BCLabelAdmin)
+
+class HubActivity(HubActivity):
+    class Meta:
+        proxy = True
+        verbose_name = 'Hub Activity'
+        verbose_name_plural = 'Hub Activity'
+        app_label = 'admin'
+
+class HubActivityAdmin(admin.ModelAdmin):
+    list_display = ('action', 'action_type', 'date')
+    # list_display = ('action_user_id', 'action_account_type', 'community_id', 'institution_id', 'project_id', 'action_type', 'date')
+    list_per_page = 15
+    list_filter = (HubActivityTypeFilter,)
+    ordering = ('-date',)
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+    
+    def has_change_permission(self, request, obj=None):
+        return False
+    
+    def action(self, obj):
+        user_name = get_users_name(User.objects.get(id=obj.action_user_id))
+
+        if obj.action_account_type == 'institution':
+            account_id = obj.institution_id
+            account_name = Institution.objects.get(id=obj.institution_id)
+            account_link = 'institutions/institution'
+        elif obj.action_account_type == 'community':
+            account_id = obj.community_id
+            account_name = Community.objects.get(id=obj.community_id)
+            account_link = 'communities/community'
+        elif obj.action_account_type == 'researcher' or obj.action_type == 'New Researcher':
+            researcher = is_user_researcher(obj.action_user_id)
+            account_id = researcher.id
+            account_name = 'Researcher'
+            account_link = 'researchers/researcher'
+        
+        if obj.project_id and obj.action_type != 'Engagement Notice Added':
+            project = Project.objects.get(id=obj.project_id)
+        elif obj.project_id and obj.action_type == 'Engagement Notice Added':
+            project = OpenToCollaborateNoticeURL.objects.get(id=obj.project_id)
+        
+        if obj.action_type == 'New Member Added':
+            action_message = format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> joined <a href="/admin/{}/{}/change/">{}</a>', obj.action_user_id, user_name, account_link, account_id, account_name)
+
+        elif obj.action_type == 'New User':
+            action_message = format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> has joined the Hub', obj.action_user_id, user_name)
+
+        elif obj.action_type == 'New Researcher':
+            action_message = format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> has created a <a href="/admin/{}/{}/change/">Researcher</a> account', obj.action_user_id, user_name, account_link, account_id)
+
+        elif obj.action_type == 'New Community':
+            action_message = format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> has created a Community account: <a href="/admin/{}/{}/change/">{}</a>', obj.action_user_id, user_name, account_link, account_id, account_name)
+
+        elif obj.action_type == 'New Institution':
+            action_message = format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> has created an Institution account: <a href="/admin/{}/{}/change/">{}</a>', obj.action_user_id, user_name, account_link, account_id, account_name)
+
+        elif obj.action_type == 'Project Edited':
+            action_message = format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> (<a href="/admin/{}/{}/change/">{}</a>) edited Project: {} (<a href="/admin/admin/projectpage/{}/change/">Admin</a>:<a href="{}" target="_blank" title="View Project Page">External</a>)', obj.action_user_id, user_name, account_link, account_id, account_name, project.title, obj.project_id, project.project_page)
+        
+        elif obj.action_type == 'Project Created':
+            action_message = format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> (<a href="/admin/{}/{}/change/">{}</a>) created Project: <a href="/admin/admin/projectpage/{}/change/">{}</a> <a href="{}" target="_blank" title="View Project Page"><i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>', obj.action_user_id, user_name, account_link, account_id, account_name, obj.project_id, project.title, project.project_page)
+
+        elif obj.action_type == 'Community Notified':
+            community_id = obj.community_id
+            community_name = Community.objects.get(id=obj.community_id)
+            community_link = 'communities/community'
+            action_message = format_html('<a href="/admin/{}/{}/change/">{}</a> was notified by <a href="/admin/admin/userprofile/{}/change/">{}</a> (<a href="/admin/{}/{}/change/">{}</a>) of Project: <a href="/admin/admin/projectpage/{}/change/">{}</a> <a href="{}" target="_blank" title="View Project Page"><i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>', community_link, community_id, community_name, obj.action_user_id, user_name, account_link, account_id, account_name, obj.project_id, project.title, project.project_page)
+
+        elif obj.action_type == 'Label(s) Applied':
+            action_message = format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> (<a href="/admin/{}/{}/change/">{}</a>) applied Labels to Project: <a href="/admin/admin/projectpage/{}/change/">{}</a> <a href="{}" target="_blank" title="View Project Page"><i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>', obj.action_user_id, user_name, account_link, account_id, account_name, obj.project_id, project.title, project.project_page)
+
+        elif obj.action_type == 'Disclosure Notice(s) Added':
+            action_message = format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> (<a href="/admin/{}/{}/change/">{}</a>) applied Notices to Project: <a href="/admin/admin/projectpage/{}/change/">{}</a> <a href="{}" target="_blank" title="View Project Page"><i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>', obj.action_user_id, user_name, account_link, account_id, account_name, obj.project_id, project.title, project.project_page)
+
+        elif obj.action_type == 'Engagement Notice Added':
+            action_message = format_html('<a href="/admin/admin/userprofile/{}/change/">{}</a> (<a href="/admin/{}/{}/change/">{}</a>) added an OTC Notice for <a href="/admin/admin/otclinks/{}/change/">{}</a> <a href="{}" target="_blank" title="View Project Page"><i class="fa-solid fa-arrow-up-right-from-square fa-xs"></i></a>', obj.action_user_id, user_name, account_link, account_id, account_name, obj.project_id, project.name, project.url)
+
+        return action_message
+    action.short_description = "Action"
+    
+admin_site.register(HubActivity, HubActivityAdmin)
 
 # ACCOUNTS ADMIN
 class UserAdminCustom(UserAdmin):

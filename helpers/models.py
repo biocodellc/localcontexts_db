@@ -276,3 +276,30 @@ class CollectionsCareNoticePolicy(models.Model):
     class Meta:
         verbose_name = 'Collections Care Notice Policy'
         verbose_name_plural = 'Collections Care Notice Policy'
+
+class HubActivity(models.Model):
+    TYPES = (
+        ('New Member Added', 'New Member Added'),
+        ('New User', 'New User'),
+        ('New Researcher', 'New Researcher'),
+        ('New Community', 'New Community'),
+        ('New Institution', 'New Institution'),
+        ('Project Edited', 'Project Edited'),
+        ('Project Created', 'Project Created'),
+        ('Community Notified', 'Community Notified'),
+        ('Label(s) Applied', 'Label(s) Applied'),
+        ('Disclosure Notice(s) Added', 'Disclosure Notice(s) Added'),
+        ('Engagement Notice Added', 'Engagement Notice Added'),
+    )
+
+    action_user_id = models.IntegerField(null=True, blank=True)
+    action_account_type = models.CharField(max_length=250, null=True, blank=True)
+    community_id = models.IntegerField(null=True, blank=True)
+    institution_id = models.IntegerField(null=True, blank=True)
+    project_id = models.IntegerField(null=True, blank=True)
+    action_type = models.CharField(max_length=30, null=True, choices=TYPES)
+    date = models.DateTimeField(auto_now_add=True, null=True)
+
+    class Meta:
+        verbose_name = 'Hub Activity'
+        verbose_name_plural = 'Hub Activity'

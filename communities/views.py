@@ -104,6 +104,14 @@ def create_community(request):
                 affiliation = UserAffiliation.objects.prefetch_related('communities').get(user=request.user)
                 affiliation.communities.add(data)
                 affiliation.save()
+
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="New Community",
+                    community_id=data.id,
+                    action_account_type='community'
+                )
                 return redirect('confirm-community', data.id)
     return render(request, 'communities/create-community.html', {'form': form})
 
@@ -861,6 +869,15 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 # Create Activity
                 ProjectActivity.objects.create(project=data, activity=f'Project was created by {creator_name} | {community.community_name}')
 
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="Project Created",
+                    project_id=data.id,
+                    action_account_type = 'community',
+                    community_id=community.id
+                )
+
                 # Add project to community projects
                 creator = ProjectCreator.objects.select_related('community').get(project=data)
                 creator.community = community
@@ -916,6 +933,15 @@ def edit_project(request, community_id, project_uuid):
 
                 editor_name = get_users_name(request.user)
                 ProjectActivity.objects.create(project=data, activity=f'Edits to Project were made by {editor_name}')
+
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="Project Edited",
+                    project_id=data.id,
+                    action_account_type = 'community',
+                    community_id=community_id
+                )
 
                 instances = formset.save(commit=False)
                 for instance in instances:
@@ -1165,6 +1191,16 @@ def apply_labels(request, pk, project_uuid):
             # send email to project creator
             send_email_labels_applied(request, project, community)
             messages.add_message(request, messages.SUCCESS, "Labels applied!")
+
+            # Adds activity to Hub Activity
+            HubActivity.objects.create(
+                action_user_id=request.user.id,
+                action_type="Label(s) Applied",
+                community_id=community.id,
+                action_account_type='community',
+                project_id=project.id
+            )
+
             return redirect('apply-labels', community.id, project.unique_id)
 
     context = {
