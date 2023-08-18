@@ -552,6 +552,31 @@ function expandCCNotice(noticeDiv) {
     })
 }
 
+function expandDisclosureNotice(noticeDiv) {
+    let divID = noticeDiv.id
+    let divToOpen = document.getElementById(`openDiv-${divID}`)
+    let clickedPTag = noticeDiv.querySelector('p')
+    let allDivs = document.querySelectorAll('.disclosure-notice__expanded-container')
+
+    let allPTags = Array.from(document.querySelectorAll('.cc-notice__container p'))
+
+    allPTags.forEach((node) => {
+        if (node === clickedPTag) {
+            node.classList.toggle('cc-active')
+        } else {
+            node.classList.remove('cc-active')
+        }
+    })
+
+    allDivs.forEach((div) => {
+        if (div === divToOpen) {
+            div.classList.toggle('hide')
+        } else {
+            div.classList.add('hide')
+        }
+    })
+}
+
 // Customize Label: clone translation form to add multiple translations
 if (window.location.href.includes('/labels/customize') || window.location.href.includes('/labels/edit')) {
     const addTranslationBtn = document.getElementById('add-translation-btn')
@@ -1859,6 +1884,21 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
     })
 
     realFileUploadBtn.addEventListener('change', validatePolicyDocument)
+
+    // Collections Care Button Download
+    const ccNoticeDownloadBtn = document.getElementById('ccNoticeDownloadBtn')
+    ccNoticeDownloadBtn.addEventListener('click', function() {    
+        let oldValue = 'Download Notices <i class="fa-solid fa-download"></i>'
+        ccNoticeDownloadBtn.setAttribute('disabled', true)
+        ccNoticeDownloadBtn.innerHTML = 'Downloading <div class="custom-loader margin-left-8"></div>'
+
+        // Re-enable the button after a certain timeout
+        // re-enable it after a while, assuming an average download duration
+        setTimeout(function() {
+            ccNoticeDownloadBtn.innerHTML = oldValue
+            ccNoticeDownloadBtn.removeAttribute('disabled')
+        }, 15000)
+    })
  }
 
  if (window.location.href.includes('/communities/labels/customize/') || window.location.href.includes('/communities/labels/edit/')) {

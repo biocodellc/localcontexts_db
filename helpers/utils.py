@@ -159,12 +159,6 @@ def get_labels_json():
     data = json.load(json_data) #deserialize
     return data
 
-def get_collections_care_notices():
-    json_path = finders.find('json/CollectionsCareNotices.json')
-    with open(json_path, 'r') as file:
-        data = json.load(file)
-    return data
-
 def get_notice_translations():
     json_path = finders.find('json/NoticeTranslations.json')
     with open(json_path, 'r') as file:
