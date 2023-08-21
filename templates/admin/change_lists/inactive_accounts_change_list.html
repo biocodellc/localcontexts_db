@@ -1,0 +1,34 @@
+{% extends "admin/change_list.html" %}{% load admin_list i18n static %}
+
+{% block result_list %}
+<div class="results">
+    <table>
+        <thead>
+            <tr>
+                <th><div class="text"><a href="#">Account</a></div></th>
+                <th><div class="text"><a href="#">Account Type</a></div></th>
+                <th><div class="text"><a href="#">Days Inactive</a></div></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for activity in results %}
+            <tr class="{% cycle 'row1' 'row2' %}">
+                <td>
+                    <a href="/admin/{% if activity.account_type == 'User'%}admin/userprofile{% elif activity.account_type == 'Institution' %}institutions/institution{% elif activity.account_type == 'Researcher' %}researchers/researcher{% elif activity.account_type == 'Community' %}communities/community{% endif%}/{{activity.id}}/change/">{{ activity.account_name }}</a>
+                </td>
+                <td>{{ activity.account_type }}</td>
+                <td>{{ activity.days_count.days }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{{ context_data }}
+{% endblock %}
+
+
+{% block pagination %}
+<p class="paginator">
+    {{ result_count }} {% if result_count == 1 %}{{ cl.opts.verbose_name }}{% else %}{{ cl.opts.verbose_name_plural }}{% endif %}
+    </p>
+{% endblock %}
