@@ -45,7 +45,7 @@ def download_open_collaborate_notice(request, perm, researcher_id=None, institut
             institution = get_object_or_404(Institution, id=institution_id)
             NoticeDownloadTracker.objects.create(institution=institution, user=request.user, open_to_collaborate_notice=True)
 
-        return download_otc_notice(request)
+        return download_otc_notice()
 
 @login_required(login_url='login')
 def download_collections_care_notices(request, institution_id, perm):
