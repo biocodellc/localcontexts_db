@@ -161,7 +161,7 @@ def get_labels_json():
 
 def get_notice_translations():
     json_path = finders.find('json/NoticeTranslations.json')
-    with open(json_path, 'r') as file:
+    with open(json_path, 'r', encoding="utf8") as file:
         data = json.load(file)
     
     # Restructure the data as a nested dictionary with noticeType and language as keys

@@ -29,7 +29,7 @@ class Notice(models.Model):
     # Note: this will only work once the Notice itself is saved first, check the json file for what language tags are currently available.
     # Use: notice.save(language='fr')
     def set_translation(self, language_tag):
-        with open('./localcontexts/static/json/NoticeTranslations.json') as json_file:
+        with open('./localcontexts/static/json/NoticeTranslations.json', encoding="utf8") as json_file:
             translations_data = json.load(json_file)
             
         translation = None
