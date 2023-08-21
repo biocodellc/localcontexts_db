@@ -133,8 +133,6 @@
 .content-card-v2 {
     background-color: #fff;
     margin: 5px auto;
-    /* max-width: 1280px;
-    min-width: 1280px; */
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     padding: 1% 0;
@@ -168,7 +166,8 @@
     border-bottom: 2px solid #EF6C00;
 }
 #user-tools a:focus,
-#user-tools a:hover {
+#user-tools a:hover,
+#changelist-filter li.selected a {
     color: #F47D20;
     border-bottom: none;
 }
@@ -202,16 +201,46 @@ a.section:visited {
     font-weight: bold;
 }
 a:link,
-a:visited {
+a:visited,
+.paginator a.showall,
+.module.collapsible table caption a.showall {
     color: #5AA497;
 }
 a:focus,
 a:hover,
 div.breadcrumbs a:hover,
-#nav-sidebar .current-model a:hover {
+#nav-sidebar .current-model a:hover,
+#changelist table tbody tr.selected a:hover,
+.paginator a.showall:hover,
+#changelist-filter a:hover,
+#changelist-filter li.selected a:hover,
+.module.collapsible table caption a.showall:hover {
     color: #007385;
     text-decoration: underline;
     font-weight: bold;
+}
+.paginator a:link, 
+.paginator a:visited,
+.module h2, 
+#changelist-filter h2,
+.selector-chosen h2,
+fieldset.collapsed h2 {
+    background: #007385;
+}
+fieldset.collapsed h2,
+fieldset.collapsed a.collapse-toggle,
+fieldset.collapse a.collapse-toggle,
+fieldset.collapse a.collapse-toggle:hover,
+fieldset.collapse a.collapse-toggle:focus {
+    color: #fff;
+}
+.paginator a:link:hover, 
+.paginator a:visited:hover {
+    background-color: #5AA497;
+}
+.paginator a.showall,
+.paginator a.showall:hover {
+    background: none;
 }
 div.breadcrumbs {
     background-color: transparent;
@@ -222,6 +251,10 @@ div.breadcrumbs {
 div.breadcrumbs a {
     color: #007385;
     font-weight: bold;
+}
+.vForeignKeyRawIdAdminField{
+    width: 3em;
+    pointer-events:none;
 }
 
 /* NAV SIDEBAR */
@@ -242,11 +275,14 @@ div.breadcrumbs a {
 #nav-sidebar .current-app .section:visited {
     color: #F47D20;
 }
-#nav-sidebar .current-model {
+#nav-sidebar .current-model,
+#changelist table tbody tr.selected {
     background: #f27e3080;
     font-size: 12px;
+    color: #fff;
 }
-#nav-sidebar .current-model a {
+#nav-sidebar .current-model a,
+#changelist table tbody tr.selected a {
     color: #fff;
 }
 
