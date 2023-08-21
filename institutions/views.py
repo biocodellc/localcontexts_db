@@ -97,6 +97,14 @@ def create_institution(request):
                     # Add to user affiliations
                     affiliation.institutions.add(data)
                     affiliation.save()
+
+                    # Adds activity to Hub Activity
+                    HubActivity.objects.create(
+                        action_user_id=request.user.id,
+                        action_type="New Institution",
+                        institution_id=data.id,
+                        action_account_type='institution'
+                    )
                     return redirect('confirm-institution', data.id)
     else:
        form = CreateInstitutionForm() 
@@ -117,6 +125,14 @@ def create_custom_institution(request):
             # Add to user affiliations
             affiliation.institutions.add(data)
             affiliation.save()
+            
+            # Adds activity to Hub Activity
+            HubActivity.objects.create(
+                action_user_id=request.user.id,
+                action_type="New Institution",
+                institution_id=data.id,
+                action_account_type='institution'
+            )
             return redirect('confirm-institution', data.id)
     return render(request, 'institutions/create-custom-institution.html', {'noror_form': noror_form,})
 
@@ -291,6 +307,14 @@ def institution_notices(request, pk):
                     data = form.save(commit=False)
                     data.institution = institution
                     data.save()
+                    # Adds activity to Hub Activity
+                    HubActivity.objects.create(
+                        action_user_id=request.user.id,
+                        action_type="Engagement Notice Added",
+                        project_id=data.id,
+                        action_account_type = 'institution',
+                        institution_id=institution.id
+                    )
             return redirect('institution-notices', institution.id)
 
         context = {
@@ -610,6 +634,15 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 # Create activity
                 ProjectActivity.objects.create(project=data, activity=f'Project was created by {name} | {institution.institution_name}')
 
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="Project Created",
+                    project_id=data.id,
+                    action_account_type = 'institution',
+                    institution_id=institution.id
+                )
+
                 # Add project to institution projects
                 creator = ProjectCreator.objects.select_related('institution').get(project=data)
                 creator.institution = institution
@@ -678,6 +711,15 @@ def edit_project(request, institution_id, project_uuid):
 
                 editor_name = get_users_name(request.user)
                 ProjectActivity.objects.create(project=data, activity=f'Edits to Project were made by {editor_name}')
+
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="Project Edited",
+                    project_id=data.id,
+                    action_account_type = 'institution',
+                    institution_id=institution_id
+                )
 
                 instances = formset.save(commit=False)
                 for instance in instances:
@@ -794,6 +836,16 @@ def project_actions(request, pk, project_uuid):
                         
                         # Add activity
                         ProjectActivity.objects.create(project=project, activity=f'{community.community_name} was notified by {name}')
+
+                        # Adds activity to Hub Activity
+                        HubActivity.objects.create(
+                            action_user_id=request.user.id,
+                            action_type="Community Notified",
+                            community_id=community.id,
+                            institution_id=institution.id,
+                            action_account_type='institution',
+                            project_id=project.id
+                        )
 
                         # Create project status, first comment and  notification
                         ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community

@@ -2,6 +2,7 @@ from .models import ActionNotification, UserNotification
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
+from helpers.models import HubActivity
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
 from accounts.utils import get_users_name
@@ -77,6 +78,13 @@ def send_user_notification_member_invite_accept(member_invite): # Send notificat
 
     member_invite.delete() # Deletes the invitation after it has been accepted
 
+    # Adds activity to Hub Activity
+    HubActivity.objects.create(
+        action_user_id=member_invite.receiver.id,
+        action_type="New Member Added",
+        action_account_type = entity_type,
+        **{f"{entity_type}_id": entity.id}
+    )
 
 # JOIN REQUESTS
 def send_action_notification_join_request(join_request): # Send notification when user wishes to join a community or institution
