@@ -45,10 +45,10 @@
             {% endif %}
             {% if 'projects-board' in request.path %}
                 <td class="center-text green-text">
-                    {% if project.has_notice %} <i class="fa-solid fa-circle-check fa-xl"></i> {% endif %}
+                    {% if project.has_notice %} <i class="fa-solid fa-circle-check fa-xl"></i> {% else %} <i class="fa-duotone fa-dash fa-xl"></i> {% endif %}
                 </td>
                 <td class="center-text green-text">
-                    {% if project.has_labels %} <i class="fa-solid fa-circle-check fa-xl"></i> {% endif %}
+                    {% if project.has_labels %} <i class="fa-solid fa-circle-check fa-xl"></i> {% else %} <i class="fa-duotone fa-dash fa-xl"></i> {% endif %}
                 </td>
             {% endif %}
         </tr>

@@ -27,7 +27,7 @@ from institutions.models import Institution
 from researchers.models import Researcher
 from bclabels.models import BCLabel
 from tklabels.models import TKLabel
-from helpers.models import Notice, OpenToCollaborateNoticeURL
+from helpers.models import Notice, OpenToCollaborateNoticeURL, HubActivity
 from notifications.models import UserNotification
 from projects.models import Project, ProjectCreator
 
@@ -80,6 +80,10 @@ def register(request):
                             invite.delete()
 
                     send_activation_email(request, user)
+                    HubActivity.objects.create(
+                        action_user_id=user.id,
+                        action_type="New User"
+                    )
                     return redirect('verify')
             else:
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
@@ -165,7 +169,7 @@ def select_account(request):
 @login_required(login_url='login')
 def dashboard(request):
     user = request.user
-    n = UserNotification.objects.filter(to_user=user)
+    profile = user.user_profile
     researcher = is_user_researcher(user)
 
     affiliation = user.user_affiliations.prefetch_related(
@@ -182,8 +186,6 @@ def dashboard(request):
     user_communities = affiliation.communities.all()    
     user_institutions = affiliation.institutions.all()
 
-    profile = user.user_profile
-
     if request.method == 'POST':
         profile.onboarding_on = False
         profile.save()
@@ -193,7 +195,6 @@ def dashboard(request):
         'user_communities': user_communities,
         'user_institutions': user_institutions,
         'researcher': researcher,
-        'notifications': n,
     }
     return render(request, "accounts/dashboard.html", context)
 
@@ -327,6 +328,11 @@ def invite_user(request):
                 send_invite_user_email(request, data)
                 # Save invitation instance
                 data.save()
+                HubActivity.objects.create(
+                    action_user_id=data.sender.id,
+                    action_type="Sign-Up Invitation",
+                    recipient_email=data.email
+                )
                 return redirect('invite')
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 

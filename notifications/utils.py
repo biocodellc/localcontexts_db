@@ -2,6 +2,9 @@ from .models import ActionNotification, UserNotification
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
+from helpers.models import HubActivity
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
 from accounts.utils import get_users_name
 
 def send_simple_action_notification(sender, target_org, title, notification_type, reference_id):
@@ -75,12 +78,30 @@ def send_user_notification_member_invite_accept(member_invite): # Send notificat
 
     member_invite.delete() # Deletes the invitation after it has been accepted
 
+    # Adds activity to Hub Activity
+    HubActivity.objects.create(
+        action_user_id=member_invite.receiver.id,
+        action_type="New Member Added",
+        action_account_type = entity_type,
+        **{f"{entity_type}_id": entity.id}
+    )
 
 # JOIN REQUESTS
-def send_user_join_request(join_request): # Send notification when user wishes to join a community or institution
+def send_action_notification_join_request(join_request): # Send notification when user wishes to join a community or institution
     sender_name = get_users_name(join_request.user_from)
     entity = join_request.community or join_request.institution
     entity_type = 'community' if join_request.community else 'institution'
     title = f"{sender_name} is requesting to join {entity}"
-
     ActionNotification.objects.create(title=title, **{entity_type: entity}, sender=join_request.user_from, notification_type="Members", reference_id=join_request.id)
+
+
+def send_action_notification_label_approved(label):
+    if isinstance(label, TKLabel):
+        label_type = 'TK Label'
+    if isinstance(label, BCLabel):
+        label_type = 'BC Label'
+    if label.is_approved:
+        title = f"A {label_type} has been approved by {label.approved_by}"
+    else:
+        title = f"A note has been added to {label_type} by {label.approved_by}"
+    ActionNotification.objects.create(title=title, community=label.community, sender=label.approved_by, notification_type="Labels", reference_id=label.unique_id)

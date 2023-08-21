@@ -52,6 +52,12 @@ def connect_researcher(request):
                 # Send support an email in prod only about a Researcher signing up
                 if dev_prod_or_local(request.get_host()) == 'PROD':
                     send_email_to_support(data)
+
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="New Researcher"
+                )
                     
                 return redirect('dashboard')
 
@@ -197,6 +203,13 @@ def researcher_notices(request, pk):
                 data = form.save(commit=False)
                 data.researcher = researcher
                 data.save()
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="Engagement Notice Added",
+                    project_id=data.id,
+                    action_account_type = 'researcher'
+                )
             return redirect('researcher-notices', researcher.id)
 
         context = {
@@ -367,6 +380,14 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 # Create activity
                 ProjectActivity.objects.create(project=data, activity=f'Project was created by {name} | Researcher')
 
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="Project Created",
+                    project_id=data.id,
+                    action_account_type = 'researcher'
+                )
+
                 # Add project to researcher projects
                 creator = ProjectCreator.objects.select_related('researcher').get(project=data)
                 creator.researcher = researcher
@@ -433,6 +454,14 @@ def edit_project(request, researcher_id, project_uuid):
 
                 editor_name = get_users_name(request.user)
                 ProjectActivity.objects.create(project=data, activity=f'Edits to Project were made by {editor_name}')
+
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="Project Edited",
+                    project_id=data.id,
+                    action_account_type = 'researcher'
+                )
 
                 instances = formset.save(commit=False)
                 for instance in instances:
@@ -551,6 +580,15 @@ def project_actions(request, pk, project_uuid):
                             
                             # Add activity
                             ProjectActivity.objects.create(project=project, activity=f'{community.community_name} was notified by {name}')
+
+                            # Adds activity to Hub Activity
+                            HubActivity.objects.create(
+                                action_user_id=request.user.id,
+                                action_type="Community Notified",
+                                community_id=community.id,
+                                action_account_type='researcher',
+                                project_id=project.id
+                            )
 
                             # Create project status and  notification
                             ProjectStatus.objects.create(project=project, community=community, seen=False) # Creates a project status for each community

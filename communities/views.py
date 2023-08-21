@@ -62,8 +62,8 @@ def connect_community(request):
                     data.user_to = community.community_creator
                     data.save()
 
-                    # Send community creator email
-                    send_join_request_email_admin(request, data, community)
+                    send_action_notification_join_request(data) # Send action notification to community
+                    send_join_request_email_admin(request, data, community) # Send community creator email
                     messages.add_message(request, messages.SUCCESS, "Request to join community sent!")
                     return redirect('connect-community')
         else:
@@ -104,6 +104,14 @@ def create_community(request):
                 affiliation = UserAffiliation.objects.prefetch_related('communities').get(user=request.user)
                 affiliation.communities.add(data)
                 affiliation.save()
+
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="New Community",
+                    community_id=data.id,
+                    action_account_type='community'
+                )
                 return redirect('confirm-community', data.id)
     return render(request, 'communities/create-community.html', {'form': form})
 
@@ -173,8 +181,8 @@ def public_community_view(request, pk):
                             data.user_to = community.community_creator
                             data.save()
 
-                            # Send email to community creator
-                            send_join_request_email_admin(request, data, community)
+                            send_action_notification_join_request(data) # Send action notiication to community
+                            send_join_request_email_admin(request, data, community) # Send email to community creator
                             return redirect('public-community', community.id)
                 else:
                     messages.add_message(request, messages.ERROR, 'Something went wrong')
@@ -461,7 +469,7 @@ def customize_label(request, pk, label_code):
                     instance.save()
                 
                 # Create notification
-                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title)
+                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title, refernce_id=data.unique_id)
                 return redirect('select-label', community.id)
             
         context = {
@@ -510,13 +518,18 @@ def approve_label(request, pk, label_id):
                         bclabel.is_approved = False
                         bclabel.approved_by = request.user
                         bclabel.save()
+
+                        send_action_notification_label_approved(bclabel)
                         send_email_label_approved(request, bclabel, data.id)
+
                     if tklabel:
                         data.tklabel = tklabel
                         data.save()
                         tklabel.is_approved = False
                         tklabel.approved_by = request.user
                         tklabel.save()
+
+                        send_action_notification_label_approved(tklabel)
                         send_email_label_approved(request, tklabel, data.id)
                     return redirect('select-label', community.id)
 
@@ -527,20 +540,22 @@ def approve_label(request, pk, label_id):
                     bclabel.is_approved = True
                     bclabel.approved_by = request.user
                     bclabel.save()
-                    send_email_label_approved(request, bclabel, None)
 
-                    # handle label versions and translation versions
-                    handle_label_versions(bclabel)
+                    handle_label_versions(bclabel) # handle Label versions and translation versions
+
+                    send_action_notification_label_approved(bclabel)
+                    send_email_label_approved(request, bclabel, None)
 
                 # TK LABEL
                 if tklabel:
                     tklabel.is_approved = True
                     tklabel.approved_by = request.user
                     tklabel.save()
-                    send_email_label_approved(request, tklabel, None)
 
-                    # handle Label versions and translation versions
-                    handle_label_versions(tklabel)
+                    handle_label_versions(tklabel) # handle Label versions and translation versions
+
+                    send_action_notification_label_approved(tklabel)
+                    send_email_label_approved(request, tklabel, None)
 
                 return redirect('select-label', community.id)
         
@@ -854,6 +869,15 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                 # Create Activity
                 ProjectActivity.objects.create(project=data, activity=f'Project was created by {creator_name} | {community.community_name}')
 
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="Project Created",
+                    project_id=data.id,
+                    action_account_type = 'community',
+                    community_id=community.id
+                )
+
                 # Add project to community projects
                 creator = ProjectCreator.objects.select_related('community').get(project=data)
                 creator.community = community
@@ -909,6 +933,15 @@ def edit_project(request, community_id, project_uuid):
 
                 editor_name = get_users_name(request.user)
                 ProjectActivity.objects.create(project=data, activity=f'Edits to Project were made by {editor_name}')
+
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="Project Edited",
+                    project_id=data.id,
+                    action_account_type = 'community',
+                    community_id=community_id
+                )
 
                 instances = formset.save(commit=False)
                 for instance in instances:
@@ -1158,6 +1191,16 @@ def apply_labels(request, pk, project_uuid):
             # send email to project creator
             send_email_labels_applied(request, project, community)
             messages.add_message(request, messages.SUCCESS, "Labels applied!")
+
+            # Adds activity to Hub Activity
+            HubActivity.objects.create(
+                action_user_id=request.user.id,
+                action_type="Label(s) Applied",
+                community_id=community.id,
+                action_account_type='community',
+                project_id=project.id
+            )
+
             return redirect('apply-labels', community.id, project.unique_id)
 
     context = {

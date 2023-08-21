@@ -1,7 +1,6 @@
 from django import template
 from communities.models import Community, JoinRequest
 from institutions.models import Institution
-from notifications.models import UserNotification
 from accounts.utils import get_users_name
 from researchers.models import Researcher
 from django.db.models import Q
@@ -55,10 +54,6 @@ def join_request_inst(institution, user):
 @register.simple_tag
 def join_request_comm(community, user):
     return JoinRequest.objects.filter(community=community, user_from=user).exists()
-
-@register.simple_tag
-def unread_notifications_exist(user):
-    return UserNotification.objects.filter(to_user=user, viewed=False).exists()
 
 @register.simple_tag
 def display_name(user):
