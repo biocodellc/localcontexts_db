@@ -5,7 +5,7 @@ from io import BytesIO
 from accounts.models import UserAffiliation
 from tklabels.models import TKLabel
 from bclabels.models import BCLabel
-from helpers.models import LabelTranslation, LabelVersion, LabelTranslationVersion
+from helpers.models import LabelTranslation, LabelVersion, LabelTranslationVersion, HubActivity
 from xhtml2pdf import pisa
 
 from communities.models import Community, JoinRequest, InviteMember
@@ -199,8 +199,23 @@ def crud_notices(request, selected_notices, selected_translations, organization,
 
             if isinstance(organization, Institution):
                 notice_fields['institution'] = organization
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="Disclosure Notice(s) Added",
+                    project_id=project.id,
+                    action_account_type = 'institution',
+                    institution_id=organization.id
+                )
             elif isinstance(organization, Researcher):
                 notice_fields['researcher'] = organization
+                # Adds activity to Hub Activity
+                HubActivity.objects.create(
+                    action_user_id=request.user.id,
+                    action_type="Disclosure Notice(s) Added",
+                    project_id=project.id,
+                    action_account_type = 'researcher'
+                )
 
             new_notice = Notice.objects.create(**notice_fields)
             ProjectActivity.objects.create(project=project, activity=f'{new_notice.name} was applied to the Project by {name}')

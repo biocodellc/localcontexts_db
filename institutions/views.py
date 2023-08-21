@@ -643,14 +643,6 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
                     institution_id=institution.id
                 )
 
-                HubActivity.objects.create(
-                    action_user_id=request.user.id,
-                    action_type="Disclosure Notice(s) Added",
-                    project_id=data.id,
-                    action_account_type = 'institution',
-                    institution_id=institution.id
-                )
-
                 # Add project to institution projects
                 creator = ProjectCreator.objects.select_related('institution').get(project=data)
                 creator.institution = institution
