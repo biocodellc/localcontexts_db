@@ -171,6 +171,9 @@ def send_email_to_support(researcher):
     title = f'{name} has created a Researcher Account'
     send_simple_email('support@localcontexts.org', title, template)  
 
+def send_researcher_survey(researcher):
+    send_mailgun_template_email(researcher.user.email, 'Local Contexts Hub: Researcher survey', 'researcher_survey', None)
+
 """
     EMAILS FOR ACCOUNTS APP
 """
@@ -183,6 +186,7 @@ def send_activation_email(request, user):
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = generate_token.make_token(user)
 
+    # TODO: rewrite this
     if 'localhost' in domain:
         activation_url = f'http://{domain}/activate/{uid}/{token}'
     else:
