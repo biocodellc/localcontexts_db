@@ -469,7 +469,7 @@ def customize_label(request, pk, label_code):
                     instance.save()
                 
                 # Create notification
-                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title, refernce_id=data.unique_id)
+                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title, reference_id=data.unique_id)
                 return redirect('select-label', community.id)
             
         context = {
@@ -1252,31 +1252,30 @@ def labels_pdf(request, pk):
     # # Get approved labels customized by community
     # TODO: unapproved community cant generate a PDF
     community = Community.objects.select_related('community_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
-    bclabels = BCLabel.objects.filter(community=community, is_approved=True)
-    tklabels = TKLabel.objects.filter(community=community, is_approved=True)
+    if community.is_approved:
+        bclabels = BCLabel.objects.filter(community=community, is_approved=True)
+        tklabels = TKLabel.objects.filter(community=community, is_approved=True)
 
-    template_path = 'snippets/pdfs/community-labels.html'
-    context = {'community': community, 'bclabels': bclabels, 'tklabels': tklabels,}
+        template_path = 'snippets/pdfs/community-labels.html'
+        context = {'community': community, 'bclabels': bclabels, 'tklabels': tklabels,}
 
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
+        # Create a Django response object, and specify content_type as pdf
+        response = HttpResponse(content_type='application/pdf')
 
-    # if download:
-    # response['Content-Disposition'] = 'attachment; filename="labels.pdf"'
-    
-    # if display
-    response['Content-Disposition'] = 'filename="labels.pdf"'
+        response['Content-Disposition'] = 'filename="labels.pdf"'
 
-    # find the template and render it.
-    template = get_template(template_path)
-    html = template.render(context)
+        # find the template and render it.
+        template = get_template(template_path)
+        html = template.render(context)
 
-    # create a pdf
-    pisa_status = pisa.CreatePDF(html, dest=response, encoding='UTF-8')
-    # if error then show view
-    if pisa_status.err:
-       return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response
+        # create a pdf
+        pisa_status = pisa.CreatePDF(html, dest=response, encoding='UTF-8')
+        # if error then show view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+    else:
+        return redirect('restricted')
 
 @login_required(login_url='login')
 def download_labels(request, pk):

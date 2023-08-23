@@ -191,6 +191,7 @@ def send_activation_email(request, user):
         activation_url = f'http://{domain}/activate/{uid}/{token}'
     else:
         activation_url = f'https://{domain}/activate/{uid}/{token}'
+    activation_url = f'{request.scheme}://{domain}/activate/{uid}/{token}'
 
     data = {'user': user.username, 'activation_url': activation_url}
     subject = 'Activate Your Local Contexts Hub Profile'
@@ -205,11 +206,8 @@ def resend_activation_email(request, active_users):
     token = generate_token.make_token(active_users[0])
     user = active_users[0].username
 
-    if 'localhost' in domain:
-        activation_url = f'http://{domain}/activate/{uid}/{token}'
-    else:
-        activation_url = f'https://{domain}/activate/{uid}/{token}'
-
+    activation_url = f'{request.scheme}://{domain}/activate/{uid}/{token}'
+    
     data = {'user': user, 'activation_url': activation_url}
     subject = 'Activate Your Local Contexts Hub Profile'
     send_mailgun_template_email(to_email, subject, 'activate_profile', data)
