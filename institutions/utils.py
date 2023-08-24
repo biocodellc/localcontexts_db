@@ -3,7 +3,8 @@ from .models import Institution
 def get_institution(pk):
     return Institution.objects.select_related('institution_creator').prefetch_related('admins', 'editors', 'viewers').get(id=pk)
 
-# TODO: where is this used??
+# This is for retroactively adding ROR IDs to Institutions.
+# Currently not being used anywhere.
 def set_ror_id(institution):
     import requests
 
