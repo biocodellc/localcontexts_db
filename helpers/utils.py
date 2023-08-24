@@ -22,25 +22,21 @@ from django.shortcuts import get_object_or_404
 
 
 def check_member_role(user, organization):
-    role = ''
-    if isinstance(organization, Community):
-        if user == organization.community_creator:
-            return 'admin'
+    # Check for creator roles
+    if isinstance(organization, Community) and user == organization.community_creator:
+        return 'admin'
+    if isinstance(organization, Institution) and user == organization.institution_creator:
+        return 'admin'
 
-    if isinstance(organization, Institution):
-        if user == organization.institution_creator:
-            return 'admin'
-    
-    if user in organization.admins.all():
-        role = 'admin'
-    elif user in organization.editors.all():
-        role = 'editor'
-    elif user in organization.viewers.all():
-        role = 'viewer'
-    else:
-        return False
-    
-    return role
+    # Check for admin/editor/viewer roles
+    if organization.admins.filter(id=user.id).exists():
+        return 'admin'
+    elif organization.editors.filter(id=user.id).exists():
+        return 'editor'
+    elif organization.viewers.filter(id=user.id).exists():
+        return 'viewer'
+
+    return False
 
 
 def change_member_role(org, member, current_role, new_role):
