@@ -40,24 +40,19 @@ def check_member_role(user, organization):
 
 
 def change_member_role(org, member, current_role, new_role):
-    if new_role is None:
-        pass
-    else:
-        # Remove user from previous role
-        if current_role == 'admin':
-            org.admins.remove(member)
-        elif current_role == 'editor':
-            org.editors.remove(member)
-        elif current_role == 'viewer':
-            org.viewers.remove(member)
-        
-        # Add user to new role
-        if new_role == 'Administrator':
-            org.admins.add(member)
-        elif new_role == 'Editor':
-            org.editors.add(member)
-        elif new_role == 'Viewer':
-            org.viewers.add(member)
+    role_map = {
+        'admin': org.admins,
+        'editor': org.editors,
+        'viewer': org.viewers,
+    }
+
+    if current_role and current_role in role_map:
+        role_map[current_role].remove(member)
+    
+    if new_role and new_role in role_map:
+        role_map[new_role].add(member)
+
+    org.save()
 
 
 def add_user_to_role(account, role, user):
