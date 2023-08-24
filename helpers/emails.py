@@ -185,12 +185,7 @@ def send_activation_email(request, user):
     domain = current_site.domain
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = generate_token.make_token(user)
-
-    # TODO: rewrite this
-    if 'localhost' in domain:
-        activation_url = f'http://{domain}/activate/{uid}/{token}'
-    else:
-        activation_url = f'https://{domain}/activate/{uid}/{token}'
+    
     activation_url = f'{request.scheme}://{domain}/activate/{uid}/{token}'
 
     data = {'user': user.username, 'activation_url': activation_url}
