@@ -420,46 +420,50 @@ def customize_label(request, pk, label_code):
     member_role = check_member_role(request.user, community)
     name = get_users_name(request.user)
 
-    form_class, label_display, label_type = get_form_and_label_type(label_code)
-    form = form_class(request.POST or None, request.FILES)
-    title = f"A {label_display} was customized by {name} and is waiting approval by another member of the community."
+    if does_label_type_exist(community, label_code): # check if label of this type already exists
+        messages.error(request, 'A Label of this type has already been customized by your community')
+        return redirect('select-label', community.id)
+    else:
+        form_class, label_display, label_type = get_form_and_label_type(label_code)
+        form = form_class(request.POST or None, request.FILES)
+        title = f"A {label_display} was customized by {name} and is waiting approval by another member of the community."
 
-    if request.method == "GET":
-        add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
+        if request.method == "GET":
+            add_translation_formset = AddLabelTranslationFormSet(queryset=LabelTranslation.objects.none())
 
-    elif request.method == "POST":
-        add_translation_formset = AddLabelTranslationFormSet(request.POST)
+        elif request.method == "POST":
+            add_translation_formset = AddLabelTranslationFormSet(request.POST)
 
-        if form.is_valid() and add_translation_formset.is_valid():
-            data = form.save(commit=False)
-            if not data.language:
-                data.language = 'English'
-            data.label_type = label_type
-            data.community = community
-            data.created_by = request.user
-            data.save()
+            if form.is_valid() and add_translation_formset.is_valid():
+                data = form.save(commit=False)
+                if not data.language:
+                    data.language = 'English'
+                data.label_type = label_type
+                data.community = community
+                data.created_by = request.user
+                data.save()
 
-            # Save all label translation instances
-            instances = add_translation_formset.save(commit=False)
-            for instance in instances:
-                if label_code.startswith('tk'):
-                    instance.tklabel = data
-                elif label_code.startswith('bc'):
-                    instance.bclabel = data
-                instance.save()
+                # Save all label translation instances
+                instances = add_translation_formset.save(commit=False)
+                for instance in instances:
+                    if label_code.startswith('tk'):
+                        instance.tklabel = data
+                    elif label_code.startswith('bc'):
+                        instance.bclabel = data
+                    instance.save()
+                
+                # Create notification
+                ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title, reference_id=data.unique_id)
+                return redirect('select-label', community.id)
             
-            # Create notification
-            ActionNotification.objects.create(community=community, sender=request.user, notification_type="Labels", title=title, reference_id=data.unique_id)
-            return redirect('select-label', community.id)
-        
-    context = {
-        'member_role': member_role,
-        'community': community,
-        'label_code': label_code,
-        'form': form,
-        'add_translation_formset': add_translation_formset,
-    }
-    return render(request, 'communities/customize-label.html', context)
+        context = {
+            'member_role': member_role,
+            'community': community,
+            'label_code': label_code,
+            'form': form,
+            'add_translation_formset': add_translation_formset,
+        }
+        return render(request, 'communities/customize-label.html', context)
 
 @login_required(login_url='login')
 @member_required(roles=['admin', 'editor'])
