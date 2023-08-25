@@ -421,7 +421,7 @@ def customize_label(request, pk, label_code):
     name = get_users_name(request.user)
 
     if does_label_type_exist(community, label_code): # check if label of this type already exists
-        messages.error(request, 'A Label of this type already exists')
+        messages.error(request, 'A Label of this type has already been customized by your community')
         return redirect('select-label', community.id)
     else:
         form_class, label_display, label_type = get_form_and_label_type(label_code)
