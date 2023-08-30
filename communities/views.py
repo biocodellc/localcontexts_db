@@ -885,8 +885,8 @@ def create_project(request, pk, source_proj_uuid=None, related=None):
 
 @login_required(login_url='login')
 @member_required(roles=['admin', 'editor'])
-def edit_project(request, community_id, project_uuid):
-    community = get_community(community_id)
+def edit_project(request, pk, project_uuid):
+    community = get_community(pk)
     project = Project.objects.prefetch_related('bc_labels', 'tk_labels').get(unique_id=project_uuid)
     member_role = check_member_role(request.user, community)
 
@@ -910,7 +910,7 @@ def edit_project(request, community_id, project_uuid):
                 action_type="Project Edited",
                 project_id=data.id,
                 action_account_type = 'community',
-                community_id=community_id
+                community_id=pk
             )
 
             instances = formset.save(commit=False)
@@ -1057,22 +1057,22 @@ def project_actions(request, pk, project_uuid):
 
 @login_required(login_url='login')
 @member_required(roles=['admin', 'editor'])
-def archive_project(request, community_id, project_uuid):
-    if not ProjectArchived.objects.filter(community_id=community_id, project_uuid=project_uuid).exists():
-        ProjectArchived.objects.create(community_id=community_id, project_uuid=project_uuid, archived=True)
+def archive_project(request, pk, project_uuid):
+    if not ProjectArchived.objects.filter(community_id=pk, project_uuid=project_uuid).exists():
+        ProjectArchived.objects.create(community_id=pk, project_uuid=project_uuid, archived=True)
     else:
-        archived_project = ProjectArchived.objects.get(community_id=community_id, project_uuid=project_uuid)
+        archived_project = ProjectArchived.objects.get(community_id=pk, project_uuid=project_uuid)
         if archived_project.archived:
             archived_project.archived = False
         else:
             archived_project.archived = True
         archived_project.save()
-    return redirect('community-project-actions', community_id, project_uuid)
+    return redirect('community-project-actions', pk, project_uuid)
 
 @login_required(login_url='login')
 @member_required(roles=['admin', 'editor'])
-def delete_project(request, community_id, project_uuid):
-    community = Community.objects.get(id=community_id)
+def delete_project(request, pk, project_uuid):
+    community = Community.objects.get(id=pk)
     project = Project.objects.get(unique_id=project_uuid)
 
     if ActionNotification.objects.filter(reference_id=project.unique_id).exists():
