@@ -331,7 +331,6 @@ def invite_user(request):
                 HubActivity.objects.create(
                     action_user_id=data.sender.id,
                     action_type="Sign-Up Invitation",
-                    recipient_email=data.email
                 )
                 return redirect('invite')
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
