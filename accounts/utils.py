@@ -1,19 +1,12 @@
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
-import itertools
 from unidecode import unidecode
 
 def get_users_name(user):
-    if user is not None:
-        if user.get_full_name():
-            return user.get_full_name()
-        else:
-            return user.username
-    else:
-        return None
+    if user:
+        return user.get_full_name() or user.username
+    return None
 
 def manage_mailing_list(request, first_name, emailb64):
     selections = request.POST.getlist('topic')

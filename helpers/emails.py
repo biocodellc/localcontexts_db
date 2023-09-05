@@ -171,6 +171,9 @@ def send_email_to_support(researcher):
     title = f'{name} has created a Researcher Account'
     send_simple_email('support@localcontexts.org', title, template)  
 
+def send_researcher_survey(researcher):
+    send_mailgun_template_email(researcher.user.email, 'Local Contexts Hub: Researcher survey', 'researcher_survey', None)
+
 """
     EMAILS FOR ACCOUNTS APP
 """
@@ -182,11 +185,8 @@ def send_activation_email(request, user):
     domain = current_site.domain
     uid = urlsafe_base64_encode(force_bytes(user.pk))
     token = generate_token.make_token(user)
-
-    if 'localhost' in domain:
-        activation_url = f'http://{domain}/activate/{uid}/{token}'
-    else:
-        activation_url = f'https://{domain}/activate/{uid}/{token}'
+    
+    activation_url = f'{request.scheme}://{domain}/activate/{uid}/{token}'
 
     data = {'user': user.username, 'activation_url': activation_url}
     subject = 'Activate Your Local Contexts Hub Profile'
@@ -201,11 +201,8 @@ def resend_activation_email(request, active_users):
     token = generate_token.make_token(active_users[0])
     user = active_users[0].username
 
-    if 'localhost' in domain:
-        activation_url = f'http://{domain}/activate/{uid}/{token}'
-    else:
-        activation_url = f'https://{domain}/activate/{uid}/{token}'
-
+    activation_url = f'{request.scheme}://{domain}/activate/{uid}/{token}'
+    
     data = {'user': user, 'activation_url': activation_url}
     subject = 'Activate Your Local Contexts Hub Profile'
     send_mailgun_template_email(to_email, subject, 'activate_profile', data)

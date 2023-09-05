@@ -666,7 +666,7 @@ class UserProfileAdmin(UserAdmin, ExportCsvMixin):
     model = UserProfile
     list_display = ('profile_name', 'email', 'joined')
     search_fields = ('first_name', 'last_name', 'username', 'email')
-    ordering = ['username', 'first_name']
+    ordering = ['-date_joined', 'username', 'first_name']
     actions = ['export_as_csv']
     inlines = [ProfileInline, UserAffiliationInline]
     fieldsets = (
@@ -691,6 +691,7 @@ class UserProfileAdmin(UserAdmin, ExportCsvMixin):
     def joined(self, obj):
         date_joined = obj.date_joined.strftime('%m/%d/%Y %I:%M %p (%Z)').replace('AM', 'am').replace('PM', 'pm')
         return date_joined
+    joined.admin_order_field = "date_joined"
 
 admin_site.register(UserProfile, UserProfileAdmin)
 
@@ -950,9 +951,6 @@ class HubActivityAdmin(admin.ModelAdmin):
     ordering = ('-date',)
 
     def has_add_permission(self, request):
-        return False
-
-    def has_delete_permission(self, request, obj=None):
         return False
     
     def has_change_permission(self, request, obj=None):

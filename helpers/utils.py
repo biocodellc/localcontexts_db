@@ -22,46 +22,37 @@ from django.shortcuts import get_object_or_404
 
 
 def check_member_role(user, organization):
-    role = ''
-    if isinstance(organization, Community):
-        if user == organization.community_creator:
-            return 'admin'
+    # Check for creator roles
+    if isinstance(organization, Community) and user == organization.community_creator:
+        return 'admin'
+    if isinstance(organization, Institution) and user == organization.institution_creator:
+        return 'admin'
 
-    if isinstance(organization, Institution):
-        if user == organization.institution_creator:
-            return 'admin'
-    
-    if user in organization.admins.all():
-        role = 'admin'
-    elif user in organization.editors.all():
-        role = 'editor'
-    elif user in organization.viewers.all():
-        role = 'viewer'
-    else:
-        return False
-    
-    return role
+    # Check for admin/editor/viewer roles
+    if organization.admins.filter(id=user.id).exists():
+        return 'admin'
+    elif organization.editors.filter(id=user.id).exists():
+        return 'editor'
+    elif organization.viewers.filter(id=user.id).exists():
+        return 'viewer'
+
+    return False
 
 
 def change_member_role(org, member, current_role, new_role):
-    if new_role is None:
-        pass
-    else:
-        # Remove user from previous role
-        if current_role == 'admin':
-            org.admins.remove(member)
-        elif current_role == 'editor':
-            org.editors.remove(member)
-        elif current_role == 'viewer':
-            org.viewers.remove(member)
-        
-        # Add user to new role
-        if new_role == 'Administrator':
-            org.admins.add(member)
-        elif new_role == 'Editor':
-            org.editors.add(member)
-        elif new_role == 'Viewer':
-            org.viewers.add(member)
+    role_map = {
+        'admin': org.admins,
+        'editor': org.editors,
+        'viewer': org.viewers,
+    }
+
+    if current_role and current_role in role_map:
+        role_map[current_role].remove(member)
+    
+    if new_role and new_role in role_map:
+        role_map[new_role].add(member)
+
+    org.save()
 
 
 def add_user_to_role(account, role, user):
@@ -392,22 +383,3 @@ def discoverable_project_view(project, user):
         discoverable = False
 
     return discoverable
-
-def set_ror_id(institution):
-    import requests
-
-    url = 'https://api.ror.org/organizations'
-    query = institution.institution_name
-    params = { 'query': query }
-    response = requests.get(url, params=params)
-
-    if response.status_code == 200:
-        data = response.json()
-        if 'items' in data and len(data['items']) > 0:
-            ror_id = data['items'][0]['id']
-            institution.ror_id = ror_id
-            institution.save()
-        else:
-            print('No matching institution found.')
-    else:
-        print('Error:', response.status_code)

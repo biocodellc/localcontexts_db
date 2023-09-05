@@ -4,11 +4,11 @@ from helpers.utils import get_labels_json
 data = get_labels_json()
 
 def check_bclabel_type(label):
-    for key, values in data.items():
-        if key == 'bcLabels':
-            if(isinstance(values, list)):
-                for value in values:
-                    if label == value['labelCode']:
-                        return value['labelType']
-                    elif label == 'placeholder':
-                        return False
+    bc_labels = data.get('bcLabels', [])
+    
+    if label == 'placeholder':
+        return False
+
+    for value in bc_labels:
+        if label == value['labelCode']:
+            return value['labelType']
