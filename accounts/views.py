@@ -312,17 +312,19 @@ def invite_user(request):
         if invite_form.is_valid():
             data = invite_form.save(commit=False)
             data.sender = request.user
-            email_exists = User.objects.filter(email=data.email).exists()
 
-            if email_exists:
-                messages.add_message(request, messages.INFO, 'This email is already in use')
+            if User.objects.filter(email=data.email).exists():
+                messages.add_message(request, messages.ERROR, 'This user is already in the Hub')
                 return redirect('invite')
             else: 
-                messages.add_message(request, messages.SUCCESS, 'Invitation Sent!')
-                send_invite_user_email(request, data)
-                # Save invitation instance
-                data.save()
-                return redirect('invite')
+                if SignUpInvitation.objects.filter(email=data.email).exists():
+                    messages.add_message(request, messages.ERROR, 'An invitation has already been sent to this email')
+                    return redirect('invite')
+                else:
+                    messages.add_message(request, messages.SUCCESS, 'Invitation Sent')
+                    send_invite_user_email(request, data)
+                    data.save()
+                    return redirect('invite')
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 
 def registry(request, filtertype=None):
