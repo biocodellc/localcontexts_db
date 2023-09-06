@@ -1,11 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, Http404
 from django.contrib import messages, auth
-from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
 from django.views.generic import View
 from django.contrib.auth.views import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-from itertools import chain
 
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user
@@ -25,16 +23,12 @@ from django.contrib.auth.models import User
 from communities.models import Community, InviteMember
 from institutions.models import Institution
 from researchers.models import Researcher
-from bclabels.models import BCLabel
-from tklabels.models import TKLabel
-from helpers.models import Notice, OpenToCollaborateNoticeURL, HubActivity
-from notifications.models import UserNotification
-from projects.models import Project, ProjectCreator
+from helpers.models import HubActivity
+from projects.models import Project
 
 from localcontexts.utils import dev_prod_or_local
 from researchers.utils import is_user_researcher
 from helpers.utils import accept_member_invite
-from projects.utils import paginate
 
 from helpers.emails import *
 from .models import *
