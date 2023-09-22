@@ -1,3 +1,7 @@
+from django.utils.http import url_has_allowed_host_and_scheme
+
+from django.conf import settings
+
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
@@ -46,3 +50,13 @@ def return_registry_accounts(community_accounts, researcher_accounts, institutio
     ))
 
     return cards
+
+
+def get_next_path(request, default_path: str):
+    next_path = request.POST.get('next')
+
+    # validate next_path exists and is not an open redirect
+    if next_path and url_has_allowed_host_and_scheme(next_path, settings.ALLOWED_HOSTS):
+        return next_path
+
+    return default_path

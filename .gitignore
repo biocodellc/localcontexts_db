@@ -10,6 +10,7 @@ start.sh
 maintenance_mode_state.txt
 
 .vscode/
+.idea/
 
 staticfiles
 # Django #

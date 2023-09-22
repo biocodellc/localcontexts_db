@@ -122,6 +122,7 @@ def verify(request):
                 return redirect('verify')
     return render(request, 'accounts/verify.html', {'form': form})
 
+
 @unauthenticated_user
 def login(request):
     envi = dev_prod_or_local(request.get_host())
@@ -130,6 +131,7 @@ def login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = auth.authenticate(request, username=username, password=password)
+        next_path = get_next_path(request, default_path='dashboard')
 
         # If user is found, log in the user.
         if user is not None:
@@ -140,7 +142,7 @@ def login(request):
                 return redirect('create-profile')
             else:
                 auth.login(request, user)
-                return redirect('dashboard')
+                return redirect(next_path)
         else:
             messages.error(request, 'Your username or password does not match an account')
             return redirect('login')
