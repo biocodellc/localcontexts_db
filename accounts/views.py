@@ -130,7 +130,7 @@ def login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = auth.authenticate(request, username=username, password=password)
-        next = request.POST.get('next', 'dashboard')
+        next_path = request.POST.get('next', 'dashboard')
 
         # If user is found, log in the user.
         if user is not None:
@@ -141,7 +141,7 @@ def login(request):
                 return redirect('create-profile')
             else:
                 auth.login(request, user)
-                return redirect(next)
+                return redirect(next_path)
         else:
             messages.error(request, 'Your username or password does not match an account')
             return redirect('login')
