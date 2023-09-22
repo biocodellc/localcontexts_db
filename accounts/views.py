@@ -6,6 +6,7 @@ from django.contrib.auth.views import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 
 from django.contrib.auth.decorators import login_required
+from django.utils.http import url_has_allowed_host_and_scheme
 from .decorators import unauthenticated_user
 from rest_framework_api_key.models import APIKey
 
@@ -122,6 +123,17 @@ def verify(request):
                 return redirect('verify')
     return render(request, 'accounts/verify.html', {'form': form})
 
+
+def get_next_path(request, default_path: str):
+    next_path = request.POST.get('next')
+
+    # validate next_path exists and is not an open redirect
+    if next_path and url_has_allowed_host_and_scheme(next_path, settings.ALLOWED_HOSTS):
+        return next_path
+
+    return default_path
+
+
 @unauthenticated_user
 def login(request):
     envi = dev_prod_or_local(request.get_host())
@@ -130,7 +142,7 @@ def login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = auth.authenticate(request, username=username, password=password)
-        next_path = request.POST.get('next', 'dashboard')
+        next_path = get_next_path(request, default_path='dashboard')
 
         # If user is found, log in the user.
         if user is not None:
