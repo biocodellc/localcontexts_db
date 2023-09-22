@@ -403,7 +403,7 @@ def projects_board(request, filtertype=None):
             q = unidecode(q) #removes accents from search query
 
             # Filter's accounts by the search query, showing results that match with or without accents
-            results = projects.filter(title__unaccent__icontains=q)
+            results = projects.filter(Q(title__unaccent__icontains=q) | Q(description__unaccent__icontains=q))
 
             p = Paginator(results, 10)
         else:
