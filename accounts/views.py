@@ -6,7 +6,6 @@ from django.contrib.auth.views import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 
 from django.contrib.auth.decorators import login_required
-from django.utils.http import url_has_allowed_host_and_scheme
 from .decorators import unauthenticated_user
 from rest_framework_api_key.models import APIKey
 
@@ -122,16 +121,6 @@ def verify(request):
                 messages.add_message(request, messages.ERROR, 'Email did not match any registration email.')
                 return redirect('verify')
     return render(request, 'accounts/verify.html', {'form': form})
-
-
-def get_next_path(request, default_path: str):
-    next_path = request.POST.get('next')
-
-    # validate next_path exists and is not an open redirect
-    if next_path and url_has_allowed_host_and_scheme(next_path, settings.ALLOWED_HOSTS):
-        return next_path
-
-    return default_path
 
 
 @unauthenticated_user
