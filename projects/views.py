@@ -75,3 +75,6 @@ def download_project(request, unique_id):
             return download_project_zip(project)
     except:
         raise Http404()
+
+def embed_project(request, unique_id):
+    return render(request, 'projects/embed-project.html')
