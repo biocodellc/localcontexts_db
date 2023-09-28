@@ -309,6 +309,10 @@ def delete_member_invitation(request, pk):
 
 @login_required(login_url='login')
 def invite_user(request):
+    # use internal path that request came, otherwise use the default path
+    default_path = 'invite'
+    selected_path = urllib.parse.urlparse(request.META.get('HTTP_REFERER')).path or default_path
+
     invite_form = SignUpInvitationForm(request.POST or None)
     if request.method == "POST":
         if invite_form.is_valid():
@@ -317,16 +321,22 @@ def invite_user(request):
 
             if User.objects.filter(email=data.email).exists():
                 messages.add_message(request, messages.ERROR, 'This user is already in the Hub')
-                return redirect('invite')
+                return redirect(selected_path)
             else: 
                 if SignUpInvitation.objects.filter(email=data.email).exists():
                     messages.add_message(request, messages.ERROR, 'An invitation has already been sent to this email')
-                    return redirect('invite')
+                    return redirect(selected_path)
                 else:
                     messages.add_message(request, messages.SUCCESS, 'Invitation Sent')
                     send_invite_user_email(request, data)
                     data.save()
-                    return redirect('invite')
+                    return redirect(selected_path)
+
+    # when validation fails and selected_path is not the default
+    # redirect to selected path
+    if selected_path != default_path:
+        return redirect(selected_path)
+
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
 
 def registry(request, filtertype=None):
