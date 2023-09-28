@@ -611,10 +611,12 @@
 {% endif %}
 
 
-<!-- ADD MEMBER MODAL -->
+<!-- MEMBER MODAL -->
 
 <div id="memberModal" class="modal hide">
-    <div class="modal-defaults add-member-modal flex-this column w-100">
+
+    <!-- ADD MEMBER MODAL VIEW -->
+    <div id="addMemberModalView" class="modal-defaults add-member-modal flex-this column w-100 show">
 
         <div class="flex-this space-between">
             <div>
@@ -672,13 +674,15 @@
                             <button 
                                 id="sendMemberInviteBtn" 
                                 class="primary-btn action-btn" 
-                                name="send_invite_btn" 
+                                name="send_invite_btn"
                                 disabled
                             >Send Invitation </button>
                         </div>
 
                         <div class="w-50 margin-top-2 right-text">
-                            <small>Looking for someone who isn't on this list? <br><a class="darkteal-text" href="{% url 'invite' %}">Invite them to Local Contexts Hub</a>.</small>
+                            <small>Looking for someone who isn't on this list? <br><a onclick="openInviteUserModalView()" class="darkteal-text">
+                                <span class="pointer">Invite them to Local Contexts Hub</span>
+                            </small>
                         </div>
                     </div>
 
@@ -686,4 +690,31 @@
         </div>
 
     </div>
+
+    <!-- INVITE NEW USER MODAL VIEW -->
+    <div id="inviteUserModalView" class="modal-defaults add-member-modal flex-this column w-100 hide">
+
+        <h3>Invite New User</h3>
+        <form method="POST" action="{% url 'invite' %}">
+            {% csrf_token %}
+
+            <label for="email"> Email Address </label><br>
+            {{ invite_form.email }}<br>
+
+            <label for="message"> Output Message (Optional) </label><br>
+            {{ invite_form.message }}<br>
+
+            {% include 'partials/_alerts.html' %}
+            <div class="flex-this row">
+                <div class="flex-this row w-50 flex-start">
+                    <button onclick="openAddModalView()" type="button" class="primary-btn white-btn margin-top-2">Back</button>
+                </div>
+                <div class="flex-this row w-50 flex-end">
+                    <button type="submit" class="primary-btn action-btn margin-top-2">Send Invitation</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
 </div>
+
