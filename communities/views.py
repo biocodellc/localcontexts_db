@@ -15,7 +15,7 @@ from helpers.forms import *
 from bclabels.forms import *
 from tklabels.forms import *
 from projects.forms import *
-from accounts.forms import ContactOrganizationForm
+from accounts.forms import ContactOrganizationForm, SignUpInvitationForm
 
 from localcontexts.utils import dev_prod_or_local
 from projects.utils import *
@@ -314,6 +314,7 @@ def community_members(request, pk):
         'form': form,
         'join_requests_count': join_requests_count,
         'users': users,
+        'invite_form': SignUpInvitationForm()
     }
     return render(request, 'communities/members.html', context)
 
