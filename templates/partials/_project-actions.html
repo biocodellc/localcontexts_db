@@ -687,14 +687,14 @@
                             <div class="w-100 flex-this column margin-bottom-16">
                                 <label class="bold margin-top-8 margin-bottom-8 block">Local Contexts Project ID</label>
                                 <div class="text-input-to-copy">
-                                    <input class="w-100" type="text" value="{{ project.unique_id }}" id="projectUUIDToCopy">
+                                    <input class="w-100" type="text" value="{{ project.unique_id }}" id="projectUUIDToCopy" readonly>
                                     <button class="copy-btn btn-in-input" data-target="projectUUIDToCopy">Copy ID</button>
                                 </div>
     
                                 <label class="bold margin-top-8 margin-bottom-8 block">Local Contexts Project URL</label>
     
                                 <div class="text-input-to-copy">
-                                    <input class="w-100" type="text" value="{{ project.project_page}}" id="projectPageUrlToCopy">
+                                    <input class="w-100" type="text" value="{{ project.project_page}}" id="projectPageUrlToCopy" readonly>
                                     <button class="copy-btn btn-in-input" data-target="projectPageUrlToCopy">Copy URL</button>
                                 </div>
                             </div>
