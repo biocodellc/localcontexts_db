@@ -1268,9 +1268,36 @@ function copyToClipboard(elemID) {
 }
 
 // Add member modal
+function openAddModalView() {
+    const inviteView = document.getElementById('inviteUserModalView')
+    const addView = document.getElementById('addMemberModalView')
+
+    // hide inviteView and show addView
+    addView.classList.replace('hide', 'show')
+    inviteView.classList.replace('show', 'hide')
+
+    // stop clicking on elements below
+    event.stopPropagation()
+}
+
+function openInviteUserModalView() {
+    const inviteView = document.getElementById('inviteUserModalView')
+    const addView = document.getElementById('addMemberModalView')
+
+    // hide addView and show inviteView
+    addView.classList.replace('show', 'hide')
+    inviteView.classList.replace('hide', 'show')
+
+    // stop clicking on elements below
+    event.stopPropagation()
+}
+
 function openMemberModal() {
     const memberModal = document.getElementById('memberModal')
     memberModal.classList.replace('hide', 'show')
+
+    // by default open the addModalView
+    openAddModalView()
 
     const closeBtn = document.querySelector('.close-modal-btn')
     closeBtn.onclick = function() {
