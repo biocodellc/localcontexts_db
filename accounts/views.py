@@ -309,9 +309,10 @@ def delete_member_invitation(request, pk):
 
 @login_required(login_url='login')
 def invite_user(request):
-    # use internal path that request came, otherwise use the default path
+    # use internally referred path, otherwise use the default path
     default_path = 'invite'
-    selected_path = urllib.parse.urlparse(request.META.get('HTTP_REFERER')).path or default_path
+    referred_path = request.headers.get('Referer', default_path)
+    selected_path = urllib.parse.urlparse(referred_path).path
 
     invite_form = SignUpInvitationForm(request.POST or None)
     if request.method == "POST":
@@ -334,7 +335,7 @@ def invite_user(request):
 
     # when validation fails and selected_path is not the default
     # redirect to selected path
-    if selected_path != default_path:
+    if selected_path.strip('/') != default_path:
         return redirect(selected_path)
 
     return render(request, 'accounts/invite.html', {'invite_form': invite_form})
