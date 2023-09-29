@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Project, ProjectContributors, ProjectCreator
 from helpers.models import Notice
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
 from django.http import Http404
 from accounts.models import UserAffiliation
 from researchers.models import Researcher
@@ -77,4 +79,20 @@ def download_project(request, unique_id):
         raise Http404()
 
 def embed_project(request, unique_id):
-    return render(request, 'projects/embed-project.html')
+    layout = request.GET.get('lt')
+    lang = request.GET.get('lang')
+
+    project = Project.objects.get(unique_id=unique_id)
+    notices = Notice.objects.filter(project=project, archived=False)
+    tk_labels = TKLabel.objects.filter(project_tklabels=project)
+    bc_labels = BCLabel.objects.filter(project_bclabels=project)
+    
+    context = {
+        'layout' : layout,
+        'lang' : lang,
+        'notices' : notices,
+        'tk_labels' :  tk_labels,
+        'bc_labels' : bc_labels,
+        'project' : project
+    }
+    return render(request, 'projects/embed-project.html', context)

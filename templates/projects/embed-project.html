@@ -1,114 +1,98 @@
-<!-- http://localhost:8000/projects/embed/597bbfd7-2379-47e9-895b-e0db2353336f/ -->
+<!-- Notices: http://localhost:8000/projects/embed/597bbfd7-2379-47e9-895b-e0db2353336f ?lt=1&lang=es -->
 {% load static %}
 <header>
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
 </header>
 
 <!-- Icons w/o title -->
-<div style="display:none;">
-    <div class="flex-this wrap w-100">
-        <div class="center-text no-top-margin no-bottom-margin auto-margin">
-            <div class="padding-bottom-1 pad-top-1"><img loading="lazy" class="img-sizedown-small pointer" src="{% static 'images/tk-labels/tk-attribution.png' %}" alt="TK Attribution (TK A) Label"></div>
-        </div>
+{% if not layout or layout == "1" %}
+    <div class="flex-this flex-start wrap w-100 margin-top-1">
+        {% if notices %}
+            {% for notice in notices %}
+                <div class="margin-left-1 margin-right-1">
+                    <img loading="lazy" class="img-sizedown-small pointer" src="{{ notice.img_url }}" alt="">
+                </div>
+            {% endfor %}
 
-        <div class="center-text no-top-margin no-bottom-margin auto-margin">
-            <div class="padding-bottom-1 pad-top-1"><img loading="lazy" class="img-sizedown-small pointer" src="{% static 'images/tk-labels/tk-clan.png' %}" alt="TK Clan (TK CL) Label"></div>
-        </div>
-
-        <div class="center-text no-top-margin no-bottom-margin auto-margin">
-            <div class="padding-bottom-1 pad-top-1"><img loading="lazy" class="img-sizedown-small pointer" src="{% static 'images/tk-labels/tk-family.png' %}" alt="TK Family (TK F) Label"></div>
-        </div>
-
-        <div class="center-text no-top-margin no-bottom-margin auto-margin">
-            <div class="padding-bottom-1 pad-top-1"><img loading="lazy" class="img-sizedown-small pointer" src="{% static 'images/tk-labels/tk-multiple-community.png' %}" alt="TK Multiple Communities (TK MC) Label"></div>
-        </div>
-
-        <div class="center-text no-top-margin no-bottom-margin auto-margin">
-            <div class="padding-bottom-1 pad-top-1"><img loading="lazy" class="img-sizedown-small pointer" src="{% static 'images/tk-labels/tk-community-voice.png' %}" alt="TK Community Voice (TK CV) Label"></div>
-        </div>
-
-        <div class="center-text no-top-margin no-bottom-margin auto-margin">
-            <div class="padding-bottom-1 pad-top-1"><img loading="lazy" class="img-sizedown-small pointer" src="{% static 'images/tk-labels/tk-creative.png' %}" alt="TK Creative (TK CR) Label"></div>
-        </div>
+        {% elif labels %}
+        {% endif %}
     </div>
-    <div class="flex-this wrap w-100">
-        <div class="flex-this ">
-            <div class="margin-left-8 margin-right-8 padding-bottom-1 pad-top-1"><a href="https://localcontexts.org"><img style="width:30px;" src="https://localcontexts.org/wp-content/uploads/2023/04/White-Background.png" alt="Local Contexts Icon"></a></div>
-            <div class="auto-margin font-size-14"><a class="darkteal-text underline-hover bold" href="http://localhost:8000/projects/597bbfd7-2379-47e9-895b-e0db2353336f">http://localhost:8000/projects/597bbfd7-2379-47e9-895b-e0db2353336f</a></div>
-        </div>
-    </div>
-</div>
-
-<!-- <div style="height:30px;"></div> -->
+{% endif%}
 
 <!-- Icons w/ title -->
-<div style="display:none;">
+{% if layout == "2" %}
     <div class="flex-this wrap w-100">
-        <div class="center-text no-top-margin no-bottom-margin auto-margin">
-            <div class="padding-bottom-1 pad-top-1"><img loading="lazy" class="img-sizedown-small pointer" src="{% static 'images/tk-labels/tk-attribution.png' %}" alt="TK Attribution (TK A) Label"></div>
-            <div class="font-size-14"><p>TK Attribution (TK A) </p></div>
-        </div>
+        {% if notices %}
+            {% for notice in notices %}
+                <div class="flex-this column center-text w-20 margin-left-8 margin-right-8 margin-top-1">
+                    <div class="margin-left-1 margin-right-1">
+                        <img loading="lazy" class="w-100 pointer" style="max-width:150px;min-width:50px;padding-right:5px;padding-left:5px;" src="{{ notice.img_url }}" alt="">
+                    </div>
+                    <div class="margin-left-1 margin-right-1">
+                        {% if not lang or lang == 'en' %}
+                            <p class="margin-top-8 margin-bottom-8 font-size-14">
+                                {% if notice.notice_type == 'biocultural' %} Biocultural Notice{% endif %}
+                                {% if notice.notice_type == 'traditional_knowledge' %} Traditional Knowledge Notice{% endif %}
+                                {% if notice.notice_type == 'attribution_incomplete' %} Attribution Incomplete Notice{% endif %}
+                            </p>
+                        {% endif %}
 
-        <div class="center-text no-top-margin no-bottom-margin auto-margin">
-            <div class="padding-bottom-1 pad-top-1"><img loading="lazy" class="img-sizedown-small pointer" src="{% static 'images/tk-labels/tk-clan.png' %}" alt="TK Clan (TK CL) Label"></div>
-            <div class="font-size-14"><p>TK Clan (TK CL)</p></div>
-        </div>
+                        {% for translation in notice.notice_translations.all %}
+                            {% if lang == translation.language_tag %}
+                                <p class="margin-top-8 margin-bottom-8 font-size-14">{{ translation.translated_name }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
 
-        <div class="center-text no-top-margin no-bottom-margin auto-margin">
-            <div class="padding-bottom-1 pad-top-1"><img loading="lazy" class="img-sizedown-small pointer" src="{% static 'images/tk-labels/tk-family.png' %}" alt="TK Family (TK F) Label"></div>
-            <div class="font-size-14"><p>TK Family (TK F) </p></div>
-        </div>
-
-        <div class="center-text no-top-margin no-bottom-margin auto-margin">
-            <div class="padding-bottom-1 pad-top-1"><img loading="lazy" class="img-sizedown-small pointer" src="{% static 'images/tk-labels/tk-multiple-community.png' %}" alt="TK Multiple Communities (TK MC) Label"></div>
-            <div class="font-size-14"><p>TK Multiple <br>Communities (TK MC)</p></div>
-        </div>
-
-        <div class="center-text no-top-margin no-bottom-margin auto-margin">
-            <div class="padding-bottom-1 pad-top-1"><img loading="lazy" class="img-sizedown-small pointer" src="{% static 'images/tk-labels/tk-community-voice.png' %}" alt="TK Community Voice (TK CV) Label"></div>
-            <div class="font-size-14"><p>TK Community Voice (TK CV) </p></div>
-        </div>
-
-        <div class="center-text no-top-margin no-bottom-margin auto-margin">
-            <div class="padding-bottom-1 pad-top-1"><img loading="lazy" class="img-sizedown-small pointer" src="{% static 'images/tk-labels/tk-creative.png' %}" alt="TK Creative (TK CR) Label"></div>
-            <div class="font-size-14"><p>TK Creative (TK CR) </p></div>
-        </div>
+        {% elif labels %}
+        {% endif %}
     </div>
-    <div class="flex-this wrap w-100">
-        <div class="flex-this ">
-            <div class="margin-left-8 margin-right-8 padding-bottom-1 pad-top-1"><a href="https://localcontexts.org"><img style="width:30px;" src="https://localcontexts.org/wp-content/uploads/2023/04/White-Background.png" alt="Local Contexts Icon"></a></div>
-            <div class="auto-margin font-size-14"><a class="darkteal-text underline-hover bold" href="http://localhost:8000/projects/597bbfd7-2379-47e9-895b-e0db2353336f">http://localhost:8000/projects/597bbfd7-2379-47e9-895b-e0db2353336f</a></div>
-        </div>
-    </div>
-</div>
-
-<!-- <div style="height:30px;"></div> -->
+{% endif%}
 
 <!-- Full Text -->
-<div style="display:block;">
+{% if layout == "3" %}
     <div class="flex-this wrap w-100">
-        <div class="center-text flex-this w-100">
-            <div class="padding-bottom-1 pad-top-1 pad-right-1 auto-margin"><img loading="lazy" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-attribution.png' %}" alt="TK Attribution (TK A) Label"></div>
-            <div style="text-align:left;" class="w-100">
-                <h3 class=" padding-bottom-1 pad-top-1 pad-right-1 no-top-margin no-bottom-margin">TK Attribution (TK A)</h3>
-                <h4 class="no-top-margin no-bottom-margin padding-bottom-1">English</h4>
-                <p class="no-top-margin">This Label is being used to correct historical mistakes or exclusions pertaining to this material. This is especially in relation to the names of the people involved in performing or making this work and/or correctly naming the community from which it originally derives. As a user you are being asked to also apply the correct attribution in any future use of this work.</p>
-            </div>
-        </div>
 
-        <div class="center-text flex-this w-100">
-            <div class="padding-bottom-1 pad-top-1 pad-right-1 auto-margin"><img loading="lazy" class="default-label-img pointer" src="{% static 'images/tk-labels/tk-clan.png' %}" alt="TK Attribution (TK A) Label"></div>
-            <div style="text-align:left;" class="w-100">
-                <h3 class=" padding-bottom-1 pad-top-1 pad-right-1 no-top-margin no-bottom-margin">TK Clan (TK CL)</h3>
-                <h4 class="no-top-margin no-bottom-margin padding-bottom-1">English</h4>
-                <p class="no-top-margin">This Label is being used to indicate that this material is traditionally and usually not publicly available. The Label lets future users know that this material has specific conditions for use and sharing because of clan membership and/or relationships. This material is not, and never was, free, public, or available for everyone. This Label asks viewers of these materials to respect the cultural values and expectations about circulation and use defined by designated clans, members, and their internal relations.</p>
-            </div>
-        </div>
+        {% if notices %}
+            {% for notice in notices %}
+                <div class="center-text flex-this wrap w-100">
+                    <div class="w-20 auto-margin">
+                        <img loading="lazy" class="w-100" style="max-width:150px;min-width:50px;padding-right:5px;padding-left:5px;" src="{{ notice.img_url }}" alt="">
+                    </div>
+                    <div style="text-align:left;padding-right:5px;" class="w-80 auto-margin">
+                        {% if not lang or lang == 'en' %}
+                            <h3 class=" padding-bottom-1 pad-top-1 no-top-margin no-bottom-margin">
+                                {% if notice.notice_type == 'biocultural' %} Biocultural {% endif %}
+                                {% if notice.notice_type == 'traditional_knowledge' %} Traditional Knowledge {% endif %}
+                                {% if notice.notice_type == 'attribution_incomplete' %} Attribution Incomplete {% endif %}
+                            </h3>
+                            <h4 class="no-top-margin no-bottom-margin padding-bottom-1">English</h4>
+                            <p class="no-top-margin">{{ notice.default_text }}</p>
+                        {% endif %}
+
+                        {% for translation in notice.notice_translations.all %}
+                            {% if lang == translation.language_tag %}
+                                <h3 class=" padding-bottom-1 pad-top-1 no-top-margin no-bottom-margin">
+                                    {{ translation.translated_name }}
+                                </h3>
+                                <h4 class="no-top-margin no-bottom-margin padding-bottom-1">{{ translation.language }}</h4>
+                                <p class="no-top-margin">{{ translation.translated_text }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% elif labels %}
+        {% endif %}
     </div>
-    <div class="flex-this wrap w-100">
-        <div class="flex-this ">
-            <div class="margin-left-8 margin-right-8 padding-bottom-1 pad-top-1"><a href="https://localcontexts.org"><img style="width:30px;" src="https://localcontexts.org/wp-content/uploads/2023/04/White-Background.png" alt="Local Contexts Icon"></a></div>
-            <div class="auto-margin font-size-14"><a class="darkteal-text underline-hover bold" href="http://localhost:8000/projects/597bbfd7-2379-47e9-895b-e0db2353336f">http://localhost:8000/projects/597bbfd7-2379-47e9-895b-e0db2353336f</a></div>
-        </div>
+{% endif %}
+
+<div class="flex-this wrap w-100">
+    <div class="flex-this ">
+        <div class="margin-left-8 margin-right-8 padding-bottom-1 pad-top-1"><a href="https://localcontexts.org"><img style="width:30px;" src="https://localcontexts.org/wp-content/uploads/2023/04/White-Background.png" alt="Local Contexts Icon"></a></div>
+        <div class="auto-margin font-size-14"><a class="darkteal-text underline-hover bold" href="{{project.project_page}}">{{project.project_page}}</a></div>
     </div>
 </div>
