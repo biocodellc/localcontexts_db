@@ -75,7 +75,7 @@ class SignUpInvitationForm(forms.ModelForm):
         fields = ['email', 'message']
         widgets = {
             'message': forms.Textarea(attrs={'rows': 4, 'cols': 65}),
-            'email': forms.TextInput(attrs={'size': 65}),
+            'email': forms.EmailInput(attrs={'size': 65}),
         }
 
 class ContactOrganizationForm(forms.Form):
