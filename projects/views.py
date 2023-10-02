@@ -82,17 +82,24 @@ def embed_project(request, unique_id):
     layout = request.GET.get('lt')
     lang = request.GET.get('lang')
 
-    project = Project.objects.get(unique_id=unique_id)
+    project = project = Project.objects.prefetch_related(
+                    'bc_labels', 
+                    'tk_labels', 
+                    'bc_labels__community', 
+                    'tk_labels__community',
+                    'bc_labels__bclabel_translation', 
+                    'tk_labels__tklabel_translation',
+                    ).get(unique_id=unique_id)
     notices = Notice.objects.filter(project=project, archived=False)
-    tk_labels = TKLabel.objects.filter(project_tklabels=project)
-    bc_labels = BCLabel.objects.filter(project_bclabels=project)
+    label_groups = return_project_labels_by_community(project)
+    # tk_labels = TKLabel.objects.filter(project_tklabels=project)
+    # bc_labels = BCLabel.objects.filter(project_bclabels=project)
     
     context = {
         'layout' : layout,
         'lang' : lang,
         'notices' : notices,
-        'tk_labels' :  tk_labels,
-        'bc_labels' : bc_labels,
+        'label_groups' :  label_groups,
         'project' : project
     }
     return render(request, 'projects/embed-project.html', context)
