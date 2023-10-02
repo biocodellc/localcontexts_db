@@ -23,7 +23,7 @@ from accounts.models import UserAffiliation
 from projects.forms import *
 from helpers.forms import ProjectCommentForm, OpenToCollaborateNoticeURLForm, CollectionsCareNoticePolicyForm
 from communities.forms import InviteMemberForm, JoinRequestForm
-from accounts.forms import ContactOrganizationForm
+from accounts.forms import ContactOrganizationForm, SignUpInvitationForm
 from .forms import *
 
 from helpers.emails import *
@@ -407,6 +407,7 @@ def institution_members(request, pk):
         'member_role': member_role,
         'join_requests_count': join_requests_count,
         'users': users,
+        'invite_form': SignUpInvitationForm(),
     }    
     return render(request, 'institutions/members.html', context)
 
