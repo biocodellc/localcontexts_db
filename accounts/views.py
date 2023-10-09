@@ -131,10 +131,9 @@ def login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = auth.authenticate(request, username=username, password=password)
-        next_path = get_next_path(request, default_path='dashboard')
-
         # If user is found, log in the user.
         if user is not None:
+            returned_values = get_next_path(request, user, default_path='dashboard')
             if not user.last_login:
                 auth.login(request, user)
                 # Welcome email
@@ -142,7 +141,9 @@ def login(request):
                 return redirect('create-profile')
             else:
                 auth.login(request, user)
-                return redirect(next_path)
+                if len(returned_values) > 1:
+                    return redirect(returned_values[0], returned_values[1])
+                return redirect(returned_values[0])
         else:
             messages.error(request, 'Your username or password does not match an account')
             return redirect('login')
@@ -179,7 +180,7 @@ def dashboard(request):
         'institutions__viewers'
         ).all().first()
 
-    user_communities = affiliation.communities.all()    
+    user_communities = affiliation.communities.all()
     user_institutions = affiliation.institutions.all()
 
     if request.method == 'POST':
