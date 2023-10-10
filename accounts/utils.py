@@ -55,7 +55,6 @@ def return_registry_accounts(community_accounts, researcher_accounts, institutio
 
     return cards
 
-
 def get_next_path(request, user, default_path: str):
     next_path = request.POST.get('next')
 
@@ -68,36 +67,34 @@ def get_next_path(request, user, default_path: str):
             Q(community__admins=user) |
             Q(community__editors=user),
             is_approved=False
-        ).prefetch_related("community").first() or
+        ).prefetch_related('community').first() or
         BCLabel.objects.filter(
             Q(community__community_creator=user) |
             Q(community__admins=user) |
             Q(community__editors=user),
             is_approved=False
-        ).prefetch_related("community").first())
-
-    instituation = user_institutions.filter(institution_created_project__project__project_creator=user).first()
+        ).prefetch_related('community').first())
+    
+    institution = user_institutions.filter(institution_created_project__project__project_creator=user).first()
 
     if user_communities:
-
         if unapproved_label:
             pk = unapproved_label.community.id
-            next_path = "select-label"
+            next_path = 'select-label'
             return [next_path, pk]
-
         else:
             pk = user_communities.id
-            next_path = "community-projects"
+            next_path = 'community-projects'
             return [next_path, pk]
 
     if user_institutions:
-        if instituation:
-            pk = instituation.id
-            next_path = "institution-projects"
+        if institution:
+            pk = institution.id
+            next_path = 'institution-projects'
             return [next_path, pk]
         else:
             pk = user_institutions.first().id
-            next_path = "institution-notices"
+            next_path = 'institution-notices'
             return [next_path, pk]
 
     # validate next_path exists and is not an open redirect
