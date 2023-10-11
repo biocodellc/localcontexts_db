@@ -1,0 +1,68 @@
+{% load static %}
+
+<div class="browser-support-container">
+    <p>If you are accessing this site using Safari or Internet Explorer, the site may not behave as expected. Try to access with Google Chrome for best performance</p>
+    <button class="browser-support-btn">Got it!</button>
+</div>
+
+<style>
+    .browser-support-container {
+        display: flex;
+        justify-content: space-between;
+        position: fixed;
+        top: -100%; /* Initially hidden */
+        left: 0;
+        right: 0;
+        background-color: #2f3640;
+        opacity: 0.9;
+        color: #f5f6fa;
+        padding: 10px;
+        box-shadow: 0 2px 16px #2f364075;
+        transition: 400ms;
+        z-index: 1;
+    }
+
+    .browser-support-container.active {
+        top: 0; /* Show the banner at the top */
+    }
+
+    .browser-support-btn {
+        background-color: #e84118;
+        border: 0;
+        color: #f5f6fa;
+        padding: 6px 20px;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    function agentHas(keyword) {
+      return navigator.userAgent.toLowerCase().search(keyword.toLowerCase()) > -1;
+    }
+
+    function isIE() {
+        return !!document.documentMode;
+    }
+
+    function isSafari() {
+        return (!!window.ApplePaySetupFeature || !!window.safari) && agentHas("Safari") && !agentHas("Chrome") && !agentHas("CriOS");
+    }
+
+    var browserSupportContainer = document.querySelector('.browser-support-container');
+    var browserSupportBtn = document.querySelector('.browser-support-btn');
+
+    browserSupportBtn.addEventListener('click', function() {
+        browserSupportContainer.classList.remove('active');
+        localStorage.setItem('supportBannerDisplayed', 'true')
+    });
+
+    if (isIE() || isSafari()) {
+      setTimeout( () => {
+        if (!localStorage.getItem('supportBannerDisplayed')){
+            browserSupportContainer.classList.add('active');
+        }
+      }, 2000)
+    }
+</script>
