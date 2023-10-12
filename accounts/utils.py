@@ -5,7 +5,6 @@ from django.conf import settings
 from communities.models import Community
 from institutions.models import Institution
 from researchers.models import Researcher
-
 from unidecode import unidecode
 
 def get_users_name(user):

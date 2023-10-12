@@ -132,7 +132,7 @@ def login(request):
         password = request.POST.get('password')
         user = auth.authenticate(request, username=username, password=password)
         next_path = get_next_path(request, default_path='dashboard')
-      
+
         # If user is found, log in the user.
         if user is not None:
             if not user.last_login:
@@ -179,7 +179,7 @@ def dashboard(request):
         'institutions__viewers'
         ).all().first()
 
-    user_communities = affiliation.communities.all()
+    user_communities = affiliation.communities.all()    
     user_institutions = affiliation.institutions.all()
 
     if request.method == 'POST':
