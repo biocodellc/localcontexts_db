@@ -51,6 +51,7 @@ def return_registry_accounts(community_accounts, researcher_accounts, institutio
 
     return cards
 
+
 def get_next_path(request, default_path: str):
     next_path = request.POST.get('next')
 
