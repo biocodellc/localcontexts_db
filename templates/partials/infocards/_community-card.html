@@ -39,7 +39,7 @@
                                 <a class="primary-btn action-btn" href="{% url 'select-label' community.id %}">View account</a>
                             {% endif %}
                         {% endfor %}
-                    {%else%}
+                    {% else %}
                         <a class="primary-btn action-btn" href="{% url 'select-label' community.id %}">View account</a>
                     {% endif %} 
                 {% endif %}
