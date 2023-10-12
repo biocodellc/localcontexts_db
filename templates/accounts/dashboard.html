@@ -28,13 +28,13 @@
 
         {% if user_communities %}
             {% for community in user_communities %}
-                {% include 'partials/infocards/_community-card.html' %}
+                {% include 'partials/infocards/_community-card.html' with approved_label=community.approved_label %}
             {% endfor %}
         {% endif %}
 
         {% if user_institutions %}
             {% for institution in user_institutions %}
-                {% include 'partials/infocards/_institution-card.html' %}
+                {% include 'partials/infocards/_institution-card.html' with institution_projects=institution.institution_projects %}
             {% endfor %}
         {% endif %}
 

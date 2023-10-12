@@ -131,9 +131,10 @@ def login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = auth.authenticate(request, username=username, password=password)
+        next_path = get_next_path(request, default_path='dashboard')
+      
         # If user is found, log in the user.
         if user is not None:
-            next_path_values = get_next_path(request, user, default_path='dashboard')
             if not user.last_login:
                 auth.login(request, user)
                 # Welcome email
@@ -141,9 +142,7 @@ def login(request):
                 return redirect('create-profile')
             else:
                 auth.login(request, user)
-                if len(next_path_values) > 1:
-                    return redirect(next_path_values[0], next_path_values[1])
-                return redirect(next_path_values[0])
+                return redirect(next_path)
         else:
             messages.error(request, 'Your username or password does not match an account')
             return redirect('login')
