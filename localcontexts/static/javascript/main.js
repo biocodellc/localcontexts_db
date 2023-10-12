@@ -1598,6 +1598,47 @@ function greenCopyBtn(btnElem, spanIDToCopy) {
     })
 }
 
+// Embed Code customization options
+if (window.location.href.includes('projects')) {
+    var embedCode = document.getElementById('projectPageEmbedToCopy')
+    var layoutDropdown = document.getElementById('embedLayoutOptions')
+    var languageDropdown = document.getElementById('embedLanguageOptions')
+    var layoutType = null
+    var languageType = null
+    var customizationOptions = null
+
+    if (layoutDropdown) {
+        layoutDropdown.addEventListener("change", function(e) {
+            layoutType = 'lt='+this.value
+            updateEmbedCode()
+        })
+    }
+    if (languageDropdown) {
+        languageDropdown.addEventListener("change", function(e) {
+            languageType = 'lang='+this.value
+            updateEmbedCode()
+        })
+    }
+
+    function updateEmbedCode() {
+        if (layoutType && languageType) {
+            customizationOptions = layoutType+'&'+languageType
+            console.log(1)
+        }
+        else if (!(languageType)) {
+            customizationOptions = layoutType
+            console.log(2)
+        }
+        else if (!(layoutType)) {
+            customizationOptions = languageType
+            console.log(3)
+        }
+
+        embedCode.value = '<iframe width="560" height="250" src="http://localhost:8000/projects/embed/f5850e3d-931e-46c0-9cb1-9969a4672271?'+customizationOptions+'" title="Local Contexts Project Identifiers" frameborder="0"></iframe>'
+    }
+}
+
+
 // Share on Social Media
 var shareToSocialsBtn = document.getElementsByClassName('shareToSocialsBtn')
 if (shareToSocialsBtn) {
