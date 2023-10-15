@@ -1969,4 +1969,15 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
         event.stopPropagation()
     }
 
+    function closeMemberModal() {
+        const modalContent = document.getElementById('memberModalContent')
+        const elementClickedIsChild = modalContent.contains(event.target)
+        const elementClickedIsSelf = modalContent === event.target
+        const elementClickedIsNotChild = !elementClickedIsChild || elementClickedIsSelf
+
+        if (elementClickedIsNotChild) {
+            const modal = document.getElementById('memberModal')
+            modal.classList.replace('show', 'hide')
+        }
+    }
  }
