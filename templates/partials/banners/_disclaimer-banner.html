@@ -1,12 +1,12 @@
 {% load static %}
 
-<div class="browser-disclaimer-container">
+<div class="disclaimer-container">
     <p>If you are accessing this site using Safari or Internet Explorer, the site may not behave as expected. Try to access with Google Chrome for best performance</p>
-    <button class="browser-disclaimer-btn">Got it!</button>
+    <button class="disclaimer-btn">Got it!</button>
 </div>
 
 <style>
-    .browser-disclaimer-container {
+    .disclaimer-container {
         display: flex;
         justify-content: space-between;
         position: fixed;
@@ -22,11 +22,11 @@
         z-index: 1;
     }
 
-    .browser-disclaimer-container.active {
+    .disclaimer-container.active {
         top: 0; /* Show the banner at the top */
     }
 
-    .browser-disclaimer-btn {
+    .disclaimer-btn {
         background-color: #e84118;
         border: 0;
         color: #f5f6fa;
@@ -50,18 +50,18 @@
         return (!!window.ApplePaySetupFeature || !!window.safari) && agentHas("Safari") && !agentHas("Chrome") && !agentHas("CriOS");
     }
 
-    var browserDisclaimerContainer = document.querySelector('.browser-disclaimer-container');
-    var browserDisclaimerBtn = document.querySelector('.browser-disclaimer-btn');
+    var disclaimerContainer = document.querySelector('.disclaimer-container');
+    var disclaimerBtn = document.querySelector('.disclaimer-btn');
 
-    browserDisclaimerBtn.addEventListener('click', function() {
-        browserDisclaimerContainer.classList.remove('active');
+    disclaimerBtn.addEventListener('click', function() {
+        disclaimerContainer.classList.remove('active');
         localStorage.setItem('disclaimerBannerDisplayed', 'true');
     });
 
     if (isIE() || isSafari()) {
         setTimeout(function() {
             if (!localStorage.getItem('disclaimerBannerDisplayed')) {
-                browserDisclaimerContainer.classList.add('active');
+                disclaimerContainer.classList.add('active');
             }
         }, 2000);
     }
