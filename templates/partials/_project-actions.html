@@ -724,13 +724,13 @@
                                         {% if project.has_bclabels or project.has_tklabels %}
                                             {% for community, labels in label_groups.items %}
                                                 {% for tklabel in labels.tk_labels %}
-                                                    <option class="darkteal-text pointer" value="{{ tklabel.language_tag }}" selected>{{ tklabel.language }}</option>
+                                                    <option class="darkteal-text pointer" value="{{ tklabel.language_tag }}">{{ tklabel.language }}</option>
                                                     {% for translation in tklabel.tklabel_translation.all %}
                                                         <option class="darkteal-text pointer" value="{{ translation.language_tag }}">{{ translation.language }}</option>
                                                     {% endfor %}
                                                 {% endfor %}
                                                 {% for bclabel in labels.bc_labels %}
-                                                    <option class="darkteal-text pointer" value="{{ bclabel.language_tag }}" selected>{{ bclabel.language }}</option>
+                                                    <option class="darkteal-text pointer" value="{{ bclabel.language_tag }}">{{ bclabel.language }}</option>
                                                     {% for translation in bclabel.bclabel_translation.all %}
                                                         <option class="darkteal-text pointer" value="{{ translation.language_tag }}">{{ translation.language }}</option>
                                                     {% endfor %}

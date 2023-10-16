@@ -1578,7 +1578,18 @@ if (window.location.href.includes('projects')) {
     var embedCode = document.getElementById('projectPageEmbedToCopy')
     var layoutDropdown = document.getElementById('embedLayoutOptions')
     var languageDropdown = document.getElementById('embedLanguageOptions')
+    var langArray= new Array();
     var layoutType, languageType, customizationOptions = null
+
+    for (i=0;i < languageDropdown.options.length; i++) {
+        if (langArray.includes(languageDropdown.options[i].value) == false) {
+            langArray.push(languageDropdown.options[i].value)
+            languageDropdown.options[i].classList.remove("hide");
+        }
+        else {
+            languageDropdown.options[i].classList.add("hide");
+        }
+    }
 
     if (layoutDropdown) {
         layoutDropdown.addEventListener("change", function(e) {
