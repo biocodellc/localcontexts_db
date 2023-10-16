@@ -1,0 +1,68 @@
+{% load static %}
+
+<div class="browser-disclaimer-container">
+    <p>If you are accessing this site using Safari or Internet Explorer, the site may not behave as expected. Try to access with Google Chrome for best performance</p>
+    <button class="browser-disclaimer-btn">Got it!</button>
+</div>
+
+<style>
+    .browser-disclaimer-container {
+        display: flex;
+        justify-content: space-between;
+        position: fixed;
+        top: -100%; /* Initially hidden */
+        left: 0;
+        right: 0;
+        background-color: #2f3640;
+        opacity: 0.9;
+        color: #f5f6fa;
+        padding: 10px;
+        box-shadow: 0 2px 16px #2f364075;
+        transition: 400ms;
+        z-index: 1;
+    }
+
+    .browser-disclaimer-container.active {
+        top: 0; /* Show the banner at the top */
+    }
+
+    .browser-disclaimer-btn {
+        background-color: #e84118;
+        border: 0;
+        color: #f5f6fa;
+        padding: 6px 20px;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    function agentHas(keyword) {
+      return navigator.userAgent.toLowerCase().search(keyword.toLowerCase()) > -1;
+    }
+
+    function isIE() {
+        return agentHas("MSIE") || agentHas("Trident");
+    }
+
+    function isSafari() {
+        return (!!window.ApplePaySetupFeature || !!window.safari) && agentHas("Safari") && !agentHas("Chrome") && !agentHas("CriOS");
+    }
+
+    var browserDisclaimerContainer = document.querySelector('.browser-disclaimer-container');
+    var browserDisclaimerBtn = document.querySelector('.browser-disclaimer-btn');
+
+    browserDisclaimerBtn.addEventListener('click', function() {
+        browserDisclaimerContainer.classList.remove('active');
+        localStorage.setItem('disclaimerBannerDisplayed', 'true');
+    });
+
+    if (isIE() || isSafari()) {
+        setTimeout(function() {
+            if (!localStorage.getItem('disclaimerBannerDisplayed')) {
+                browserDisclaimerContainer.classList.add('active');
+            }
+        }, 2000);
+    }
+</script>
