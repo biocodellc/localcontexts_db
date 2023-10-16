@@ -1,11 +1,9 @@
 from django.db import models
-from django.db.models import Q
 from django.core.validators import MaxLengthValidator
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from institutions.models import Institution
 import uuid
-from itertools import chain
 import os
 
 class ApprovedManager(models.Manager):
@@ -70,17 +68,9 @@ class Community(models.Model):
         else:
             return False
 
-    def get_collaborator(self):
-        return list(chain(self.admins.all(), self.editors.all()))
-
     def __str__(self):
         return str(self.community_name)
 
-    @property
-    def approved_label(self):
-        approved_label = (self.tklabel_community.filter(is_approved=True).first() or self.bclabel_community.filter(is_approved=True).first()) 
-        return approved_label
-    
     class Meta:
         indexes = [models.Index(fields=['id', 'community_creator', 'image'])]
         verbose_name = 'Community'
