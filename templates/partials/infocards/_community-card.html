@@ -31,17 +31,10 @@
                     >View public page</a>
                 {% endif %}
                 {% if '/dashboard/' in request.path %}
-                    {% if approved_label %}
-                        {% for collaborator in community.get_collaborator %}
-                            {% if request.user == collaborator %}
-                                <a class="primary-btn action-btn" href="{% url 'community-projects' community.id %}">View account</a>
-                            {% else %}
-                                <a class="primary-btn action-btn" href="{% url 'select-label' community.id %}">View account</a>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        <a class="primary-btn action-btn" href="{% url 'select-label' community.id %}">View account</a>
-                    {% endif %} 
+                    <a 
+                        class="primary-btn action-btn"
+                        href="{% url 'select-label' community.id %}"                        
+                    >View account</a>
                 {% endif %}
             </div>
         </div>

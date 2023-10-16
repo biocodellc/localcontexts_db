@@ -40,26 +40,10 @@
                     {% endif %}
                 {% endif %}
                 {% if '/dashboard/' in request.path %}
-                    {% if institution_projects%}                    
-                        {% for creator in institution.get_distinct_creators%}
-                           {% if request.user == creator.project.project_creator %}
-                            <a 
-                                class="primary-btn action-btn"
-                                href="{% url 'institution-projects' institution.id %}"
-                            >View account</a>
-                            {% else %}
-                            <a 
-                            class="primary-btn action-btn"
-                            href="{% url 'institution-notices' institution.id %}"
-                            >View account</a>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        <a 
+                    <a 
                         class="primary-btn action-btn"
                         href="{% url 'institution-notices' institution.id %}"
-                        >View account</a>
-                    {% endif %}
+                    >View account</a>
                 {% endif %}
             </div>
         </div>
