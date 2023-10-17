@@ -41,7 +41,7 @@ jmespath==0.10.0
 lazy-object-proxy==1.4.3
 mccabe==0.6.1
 packaging==21.0
-Pillow==9.3.0
+pillow>=10.0.1
 pip==23.1.2
 protobuf==3.17.3
 psycopg2-binary==2.8.5
