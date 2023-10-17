@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'rest_framework_api_key',
     'corsheaders',
     'debug_toolbar',
+    'dbbackup',
 ]
 
 MIDDLEWARE = [
@@ -238,3 +239,7 @@ if DEBUG:
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+# we can change this to a remote source
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/backups/'}
