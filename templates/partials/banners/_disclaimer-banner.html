@@ -9,7 +9,6 @@
     .disclaimer-container {
         display: flex;
         justify-content: space-between;
-        position: fixed;
         top: -100%; /* Initially hidden */
         left: 0;
         right: 0;
@@ -24,6 +23,10 @@
 
     .disclaimer-container.active {
         top: 0; /* Show the banner at the top */
+    }
+
+    .disclaimer-container.fixed {
+        position: fixed; /* Show the banner at the top */
     }
 
     .disclaimer-btn {
@@ -50,6 +53,7 @@
         return (!!window.ApplePaySetupFeature || !!window.safari) && agentHas("Safari") && !agentHas("Chrome") && !agentHas("CriOS");
     }
 
+    var sandboxContainer = document.querySelector('.sandbox-container');
     var disclaimerContainer = document.querySelector('.disclaimer-container');
     var disclaimerBtn = document.querySelector('.disclaimer-btn');
 
@@ -61,7 +65,13 @@
     if (isIE() || isSafari()) {
         setTimeout(function() {
             if (!localStorage.getItem('disclaimerBannerDisplayed')) {
-                disclaimerContainer.classList.add('active');
+                if(sandboxContainer) {
+                    sandboxContainer.appendChild(disclaimerContainer);
+                }
+                else {
+                    disclaimerContainer.classList.add('active');
+                    disclaimerContainer.classList.add('fixed');
+                }
             }
         }, 2000);
     }
