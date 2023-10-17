@@ -13,7 +13,7 @@ class ApprovedManager(models.Manager):
 def get_file_path(self, filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (str(uuid.uuid4()), ext)
-    return os.path.join('communities/support-files', filename)  
+    return os.path.join('communities/support-files', filename)
 
 def community_img_path(self, filename):
     ext = filename.split('.')[-1]
@@ -52,21 +52,24 @@ class Community(models.Model):
 
     def get_member_count(self):
         return self.admins.count() + self.editors.count() + self.viewers.count() + 1
-        
+
     def get_admins(self):
         return self.admins.all()
 
     def get_editors(self):
         return self.editors.all()
-    
+
     def get_viewers(self):
         return self.viewers.all()
-    
+
     def is_user_in_community(self, user):
         if user in self.viewers.all() or user in self.editors.all() or user in self.admins.all() or user == self.community_creator:
             return True
         else:
             return False
+
+    def get_collaborator(self):
+        return set(chain(self.admins.all(), self.editors.all()))
 
     def __str__(self):
         return str(self.community_name)
@@ -100,7 +103,7 @@ class InviteMember(models.Model):
 
     def __str__(self):
         return f"{self.sender}-{self.receiver}-{self.status}"
-    
+
     class Meta:
         indexes = [models.Index(fields=['sender', 'receiver', 'community', 'institution'])]
         verbose_name = 'Member Invitation'

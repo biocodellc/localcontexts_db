@@ -30,12 +30,28 @@
                         href="{% url 'public-community' community.id %}" 
                     >View public page</a>
                 {% endif %}
+ 
                 {% if '/dashboard/' in request.path %}
                     <a 
                         class="primary-btn action-btn"
                         href="{% url 'select-label' community.id %}"                        
                     >View account</a>
+                    {% if approved_label %}
+                        {% for collaborator in community.get_collaborator %}
+                            {% if request.user == collaborator %}
+                                <a class="primary-btn action-btn" href="{% url 'community-projects' community.id %}">View account</a>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <a class="primary-btn action-btn" href="{% url 'select-label' community.id %}">View account</a>
+                    {% endif %} 
                 {% endif %}
+
+                {% for viewer in community.get_viewers %}
+                    {% if request.user == viewer and approved_label %}
+                        <a class="primary-btn action-btn" href="{% url 'select-label' community.id %}">View account</a>
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
 
