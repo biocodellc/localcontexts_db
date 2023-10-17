@@ -242,4 +242,4 @@ CORS_ALLOW_CREDENTIALS = True
 
 # we can change this to a remote source
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DBBACKUP_STORAGE_OPTIONS = {'location': '/backups/'}
+DBBACKUP_STORAGE_OPTIONS = {'location': 'backups/'}
