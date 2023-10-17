@@ -1267,31 +1267,6 @@ function copyToClipboard(elemID) {
     textArea.remove();
 }
 
-// Add member modal
-function openAddModalView() {
-    const inviteView = document.getElementById('inviteUserModalView')
-    const addView = document.getElementById('addMemberModalView')
-
-    // hide inviteView and show addView
-    addView.classList.replace('hide', 'show')
-    inviteView.classList.replace('show', 'hide')
-
-    // stop clicking on elements below
-    event.stopPropagation()
-}
-
-function openInviteUserModalView() {
-    const inviteView = document.getElementById('inviteUserModalView')
-    const addView = document.getElementById('addMemberModalView')
-
-    // hide addView and show inviteView
-    addView.classList.replace('show', 'hide')
-    inviteView.classList.replace('hide', 'show')
-
-    // stop clicking on elements below
-    event.stopPropagation()
-}
-
 function openMemberModal() {
     const memberModal = document.getElementById('memberModal')
     memberModal.classList.replace('hide', 'show')
@@ -1603,7 +1578,18 @@ if (window.location.href.includes('projects')) {
     var embedCode = document.getElementById('projectPageEmbedToCopy')
     var layoutDropdown = document.getElementById('embedLayoutOptions')
     var languageDropdown = document.getElementById('embedLanguageOptions')
+    var langArray= new Array();
     var layoutType, languageType, customizationOptions = null
+
+    for (i=0;i < languageDropdown.options.length; i++) {
+        if (langArray.includes(languageDropdown.options[i].value) == false) {
+            langArray.push(languageDropdown.options[i].value)
+            languageDropdown.options[i].classList.remove("hide");
+        }
+        else {
+            languageDropdown.options[i].classList.add("hide");
+        }
+    }
 
     if (layoutDropdown) {
         layoutDropdown.addEventListener("change", function(e) {
@@ -2000,4 +1986,44 @@ if (window.location.href.includes('/institutions/update/') || window.location.hr
         })
     }
 
+ }
+
+ if (window.location.href.includes('communities/members/') ||  window.location.href.includes('institutions/members/')) {
+
+    // Add member modal
+    function openAddModalView() {
+        const inviteView = document.getElementById('inviteUserModalView')
+        const addView = document.getElementById('addMemberModalView')
+
+        // hide inviteView and show addView
+        addView.classList.replace('hide', 'show')
+        inviteView.classList.replace('show', 'hide')
+
+        // stop clicking on elements below
+        event.stopPropagation()
+    }
+
+    function openInviteUserModalView() {
+        const inviteView = document.getElementById('inviteUserModalView')
+        const addView = document.getElementById('addMemberModalView')
+
+        // hide addView and show inviteView
+        addView.classList.replace('show', 'hide')
+        inviteView.classList.replace('hide', 'show')
+
+        // stop clicking on elements below
+        event.stopPropagation()
+    }
+
+    function closeMemberModal() {
+        const modalContent = document.getElementById('memberModalContent')
+        const elementClickedIsChild = modalContent.contains(event.target)
+        const elementClickedIsSelf = modalContent === event.target
+        const elementClickedIsNotChild = !elementClickedIsChild || elementClickedIsSelf
+
+        if (elementClickedIsNotChild) {
+            const modal = document.getElementById('memberModal')
+            modal.classList.replace('show', 'hide')
+        }
+    }
  }
