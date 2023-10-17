@@ -37,21 +37,18 @@
                         href="{% url 'select-label' community.id %}"                        
                     >View account</a>
                     {% if approved_label %}
-                        {% for collaborator in community.get_collaborator %}
-                            {% if request.user == collaborator %}
-                                <a class="primary-btn action-btn" href="{% url 'community-projects' community.id %}">View account</a>
-                            {% endif %}
-                        {% endfor %}
+                        {% if request.user in community.get_collaborator or request.user == community.community_creator %}
+                            <a class="primary-btn action-btn" href="{% url 'community-projects' community.id %}">View account</a>
+                        {% endif %}
                     {% else %}
                         <a class="primary-btn action-btn" href="{% url 'select-label' community.id %}">View account</a>
                     {% endif %} 
                 {% endif %}
 
-                {% for viewer in community.get_viewers %}
-                    {% if request.user == viewer and approved_label %}
-                        <a class="primary-btn action-btn" href="{% url 'select-label' community.id %}">View account</a>
-                    {% endif %}
-                {% endfor %}
+                {% if request.user in  community.get_viewers and approved_label %}
+                    <a class="primary-btn action-btn" href="{% url 'select-label' community.id %}">View account</a>
+                {% endif %}
+
             </div>
         </div>
 

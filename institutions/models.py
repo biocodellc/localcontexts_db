@@ -71,6 +71,10 @@ class Institution(models.Model):
         else:
             return False
 
+    def get_distinct_creators(self):
+        project_creators = self.institution_created_project.filter(institution=self).distinct("project__project_creator")
+        return [element.project.project_creator for element in project_creators]
+
     def __str__(self):
         return str(self.institution_name)
 
