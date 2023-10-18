@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from institutions.models import Institution
 import uuid
+from itertools import chain
 import os
 
 class ApprovedManager(models.Manager):
@@ -73,6 +74,11 @@ class Community(models.Model):
 
     def __str__(self):
         return str(self.community_name)
+
+    @property
+    def approved_label(self):
+        approved_label = (self.tklabel_community.filter(is_approved=True).first() or self.bclabel_community.filter(is_approved=True).first()) 
+        return approved_label
 
     class Meta:
         indexes = [models.Index(fields=['id', 'community_creator', 'image'])]

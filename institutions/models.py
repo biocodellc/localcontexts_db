@@ -78,6 +78,11 @@ class Institution(models.Model):
     def __str__(self):
         return str(self.institution_name)
 
+    @property
+    def institution_projects(self):
+        institution_projects = self.institution_created_project.filter(institution=self)
+        return institution_projects
+
     class Meta:
         indexes = [models.Index(fields=['id', 'institution_creator', 'image'])]
         verbose_name = 'Institution'
