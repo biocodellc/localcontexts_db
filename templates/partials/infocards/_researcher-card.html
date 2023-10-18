@@ -38,6 +38,7 @@
                         </div>
                     {% endif %}
                 {% endif %}
+
                 {% if '/dashboard/' in request.path %}
                     {% if researcher.get_projects %}
                         <a 
@@ -45,10 +46,10 @@
                             href="{% url 'researcher-projects' researcher.id %}"
                         >View account</a>
                     {% else %}
-                    <a 
-                        class="primary-btn action-btn"
-                        href="{% url 'researcher-notices' researcher.id %}"
-                    >View account</a>
+                        <a 
+                            class="primary-btn action-btn"
+                            href="{% url 'researcher-notices' researcher.id %}"
+                        >View account</a>
                     {% endif %}
                 {% endif %}
             </div>
