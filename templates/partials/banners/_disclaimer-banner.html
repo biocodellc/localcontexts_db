@@ -58,6 +58,7 @@
     var disclaimerBtn = document.querySelector('.disclaimer-btn');
 
     disclaimerBtn.addEventListener('click', function() {
+        disclaimerContainer.classList.add('fixed');
         disclaimerContainer.classList.remove('active');
         localStorage.setItem('disclaimerBannerDisplayed', 'true');
     });
