@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="disclaimer-container">
+<div class="disclaimer-container fixed">
     <p>If you are accessing this site using Safari or Internet Explorer, the site may not behave as expected. Try to access with Google Chrome for best performance</p>
     <button class="disclaimer-btn">Got it!</button>
 </div>
@@ -67,10 +67,10 @@
             if (!localStorage.getItem('disclaimerBannerDisplayed')) {
                 if(sandboxContainer) {
                     sandboxContainer.appendChild(disclaimerContainer);
+                    disclaimerContainer.classList.remove('fixed');
                 }
                 else {
                     disclaimerContainer.classList.add('active');
-                    disclaimerContainer.classList.add('fixed');
                 }
             }
         }, 2000);
