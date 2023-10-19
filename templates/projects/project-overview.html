@@ -18,7 +18,7 @@
             </td>
             <td>
                 {% for creator in project.project_creator_project.all %}
-                    {% if 'projects-board' in request.path%}
+                    {% if 'projects-board' in request.path %}
                         {% if creator.community %}
                             <a class="darkteal-text underline-hover bold pointer" href="{% url 'public-community' creator.community.id %}">
                                 {{ creator.community }}
