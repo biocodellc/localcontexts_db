@@ -1580,8 +1580,9 @@ if (window.location.href.includes('projects')) {
     var languageDropdown = document.getElementById('embedLanguageOptions')
     var langArray= new Array();
     var layoutType, languageType, customizationOptions = null
+    projectID = embedCode.dataset.projectId
     
-    embedCode.value = '<iframe width="560" height="250" src="http://'+window.location.host+'/projects/embed/f5850e3d-931e-46c0-9cb1-9969a4672271/" title="Local Contexts Project Identifiers" frameborder="0"></iframe>'
+    embedCode.value = '<iframe width="560" height="250" src="http://' + window.location.host + '/projects/embed/' + projectID + '/" title="Local Contexts Project Identifiers" frameborder="0"></iframe>'
 
     for (i=0;i < languageDropdown.options.length; i++) {
         if (langArray.includes(languageDropdown.options[i].value) == false) {
@@ -1617,7 +1618,7 @@ if (window.location.href.includes('projects')) {
             customizationOptions = languageType
         }
 
-        embedCode.value = '<iframe width="560" height="250" src="http://'+window.location.host+'/projects/embed/f5850e3d-931e-46c0-9cb1-9969a4672271?'+customizationOptions+'" title="Local Contexts Project Identifiers" frameborder="0"></iframe>'
+        embedCode.value = '<iframe width="560" height="250" src="http://' + window.location.host + '/projects/embed/' + projectID + '?' + customizationOptions + '" title="Local Contexts Project Identifiers" frameborder="0"></iframe>'
     }
 }
 
