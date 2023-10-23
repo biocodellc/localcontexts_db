@@ -33,10 +33,10 @@ def truncate_datetime(dt: datetime, interval_name: str):
     """
 
     if interval_name == 'year':
-        return datetime(year=dt.year)
+        return datetime(year=dt.year, month=1, day=1)
 
     elif interval_name == 'month':
-        return datetime(year=dt.year, month=dt.month)
+        return datetime(year=dt.year, month=dt.month, day=1)
 
     elif interval_name == 'week':
         # note start of week may be in previous month
