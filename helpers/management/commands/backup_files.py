@@ -11,7 +11,6 @@ from dbbackup.storage import Storage
 from dbbackup.management.commands import dbbackup
 
 
-
 TIME_FORMAT = '%Y:%m:%d:%H:%M:%S'
 IGNORED_FILES = ['gitkeep']
 Interval = namedtuple('Interval', ['name', 'max_backups'])
@@ -25,7 +24,7 @@ INTERVALS = [
 
 def truncate_datetime(dt: datetime, interval_name: str):
     """
-    Rounds precision down to the nearest year, month, week, or day.
+    Rounds datetime precision down to the nearest year, month, week, or day.
     """
 
     if interval_name == 'year':
@@ -43,7 +42,7 @@ def truncate_datetime(dt: datetime, interval_name: str):
         return datetime(year=dt.year, month=dt.month, day=dt.day)
 
     else:
-        raise Exception('Invalid  Interval Name')
+        raise Exception('Invalid Interval Name')
 
 
 def should_save_new_file(interval: Interval, files: List[str]):
@@ -60,6 +59,24 @@ def should_save_new_file(interval: Interval, files: List[str]):
     return truncated_recent_file_time != truncated_current_time
 
 
+def create_backup(file_path: str):
+    management.call_command(dbbackup.Command(), verbosity=0, output_filename=file_path)
+
+
+def remove_oldest_file(interval: Interval, files_in_folder):
+
+    # when folder is empty, skip removing the oldest file
+    if len(files_in_folder) == 0:
+        return
+
+    # when the file count hasn't reached the limit, skip removing the oldest file
+    if len(files_in_folder) <= interval.max_backups:
+        return
+
+    oldest_file = files_in_folder[0]
+    Storage().delete_file(oldest_file)
+
+
 class Command(BaseCommand):
     help = "Runs backup code"
 
@@ -67,11 +84,9 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS('Running backup Script')
         )
-
-        storage = Storage()
         for interval in INTERVALS:
             try:
-                files = storage.list_directory(path=interval.name)
+                files = Storage().list_directory(path=interval.name)
             except:
                 files = []
 
@@ -80,9 +95,8 @@ class Command(BaseCommand):
                 self.stdout.write(
                     self.style.SUCCESS(f'Creating Backup For {interval.name} Named {file_path}')
                 )
-                management.call_command(dbbackup.Command(), verbosity=0, output_filename=file_path)
-
-            # prune, by removing the oldest x files in folder
+                create_backup(file_path)
+                remove_oldest_file(interval, files)
 
         self.stdout.write(
             self.style.SUCCESS('Backup Script Complete')
