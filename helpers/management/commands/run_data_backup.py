@@ -29,7 +29,7 @@ class Command(BaseCommand):
     storage = Storage()
 
     @staticmethod
-    def truncate_datetime(dt: datetime, interval_name: str):
+    def truncate_datetime(dt: datetime, interval_name: str) -> datetime:
         """
         Rounds datetime precision down to the nearest year, month, week, or day.
         """
@@ -51,15 +51,18 @@ class Command(BaseCommand):
         else:
             raise Exception('Invalid Interval Name')
 
-    def create_backup(self, file_path: str):
+    def create_backup(self, file_path: str) -> bool:
+        # returns True when backup was created and False otherwise
         try:
             management.call_command(dbbackup.Command(), verbosity=0, output_filename=file_path)
+            return True
         except (Exception,):
             self.stdout.write(
                 self.style.ERROR(f'Error Creating File {file_path}')
             )
+            return False
 
-    def should_save_new_file(self, interval: Interval, files: List[str]):
+    def should_save_new_file(self, interval: Interval, files: List[str]) -> bool:
         if len(files) == 0:
             return True
 
@@ -82,28 +85,37 @@ class Command(BaseCommand):
         if len(files_in_folder) <= interval.max_backups:
             return
 
-        oldest_file = files_in_folder[0]
+        oldest_file_name = files_in_folder[0]
+        oldest_file_path = f'{interval.name}/{oldest_file_name}'
         try:
-            self.storage.delete_file(oldest_file)
+            self.storage.delete_file(oldest_file_path)
+            self.stdout.write(
+                self.style.SUCCESS(f'Deleted Old Backup For {interval.name} Named {oldest_file_name}')
+            )
         except (Exception,):
             self.stdout.write(
-                self.style.ERROR(f'Error Deleting File {oldest_file}')
+                self.style.ERROR(f'Error Deleting File {oldest_file_name}')
             )
 
     def job(self):
         for interval in INTERVALS:
             try:
                 files = self.storage.list_directory(path=interval.name)
+                files.sort()
             except (Exception,):
                 files = []
 
             if self.should_save_new_file(interval, files):
-                file_path = f'{interval.name}/{time.strftime(TIME_FORMAT)}.psql'
+                file_name = f'{time.strftime(TIME_FORMAT)}.psql'
+                file_path = f'{interval.name}/{file_name}'
                 self.stdout.write(
-                    self.style.SUCCESS(f'Creating Backup For {interval.name} Named {file_path}')
+                    self.style.SUCCESS(f'Creating Backup For {interval.name} Named {file_name}')
                 )
-                self.create_backup(file_path)
-                self.remove_oldest_file(interval, files)
+                creation_successful = self.create_backup(file_path)
+
+                if creation_successful:
+                    files.append(file_name)
+                    self.remove_oldest_file(interval, files)
 
         self.stdout.write(
             self.style.SUCCESS('Backup Script Complete')
