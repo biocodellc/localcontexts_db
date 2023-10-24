@@ -14,7 +14,6 @@ from dbbackup.management.commands import dbbackup
 
 
 TIME_FORMAT = '%Y:%m:%d:%H:%M:%S'
-IGNORED_FILES = ['gitkeep']
 Interval = namedtuple('Interval', ['name', 'max_backups'])
 INTERVALS = [
     Interval('day', 7),
