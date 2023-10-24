@@ -56,7 +56,7 @@ class Command(BaseCommand):
             management.call_command(dbbackup.Command(), verbosity=0, output_filename=file_path)
         except (Exception,):
             self.stdout.write(
-                self.style.SUCCESS(f'Error Creating File {file_path}')
+                self.style.ERROR(f'Error Creating File {file_path}')
             )
 
     def should_save_new_file(self, interval: Interval, files: List[str]):
@@ -87,13 +87,10 @@ class Command(BaseCommand):
             self.storage.delete_file(oldest_file)
         except (Exception,):
             self.stdout.write(
-                self.style.SUCCESS(f'Error Deleting File {oldest_file}')
+                self.style.ERROR(f'Error Deleting File {oldest_file}')
             )
 
     def job(self):
-        self.stdout.write(
-            self.style.SUCCESS('Running backup Script')
-        )
         for interval in INTERVALS:
             try:
                 files = self.storage.list_directory(path=interval.name)
@@ -113,6 +110,9 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        self.stdout.write(
+            self.style.SUCCESS('Running backup Script')
+        )
         scheduler = BlockingScheduler()
         scheduler.add_job(self.job, 'cron', hour=23, minute=30)
         scheduler.start()
