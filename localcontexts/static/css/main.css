@@ -456,7 +456,7 @@ button[disabled],
     transition: background-color .3s
 }
 
-.pagination > span.current{
+.pagination > span.current {
     display: inline-block;
     color: #fff;
     background-color: #007385;
@@ -466,7 +466,7 @@ button[disabled],
     border-radius: 20%;
 }
 
-.pagination > a.num{
+.pagination > a.num {
     border: 2px solid #007385;
     border-radius: 20%;
     color: #007385;
