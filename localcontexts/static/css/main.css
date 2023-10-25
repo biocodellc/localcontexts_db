@@ -457,7 +457,6 @@ button[disabled],
 
 .pagination > span.current{
     display: inline-block;
-    font-size: large;
     color: #fff;
     background-color: #007385;
     border: 2px solid #007385;
