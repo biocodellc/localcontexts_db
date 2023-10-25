@@ -453,6 +453,7 @@ button[disabled],
 .page:hover:not(.page-btn-nav) {
     color: #007385;
     background-color: #e1f6f9;
+    transition: background-color .3s
 }
 
 .pagination > span.current{
