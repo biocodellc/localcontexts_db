@@ -22,7 +22,8 @@ db.sqlite3
 media
 
 # Backup files # 
-*.bak 
+*.bak
+/backups
 
 # Python # 
 *.py[cod] 

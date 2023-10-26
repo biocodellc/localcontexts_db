@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'rest_framework_api_key',
     'corsheaders',
     'debug_toolbar',
+    'dbbackup',
 ]
 
 MIDDLEWARE = [
@@ -238,3 +239,20 @@ if DEBUG:
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+
+if os.environ.get('DBBACKUP_ACCESS_KEY') and  \
+    os.environ.get('DBBACKUP_SECRET_KEY') and \
+    os.environ.get('DBBACKUP_BUCKET_NAME') and \
+    os.environ.get('DBBACKUP_ENDPOINT_URL'):
+    # upload backups to S3 bucket
+    DBBACKUP_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    DBBACKUP_STORAGE_OPTIONS = {
+        'access_key': os.environ.get('DBBACKUP_ACCESS_KEY'),
+        'secret_key': os.environ.get('DBBACKUP_SECRET_KEY'),
+        'bucket_name': os.environ.get('DBBACKUP_BUCKET_NAME'),
+        'endpoint_url': os.environ.get('DBBACKUP_ENDPOINT_URL'),
+    }
+else:
+    # upload backups to local file system
+    DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    DBBACKUP_STORAGE_OPTIONS = {'location': 'backups/'}

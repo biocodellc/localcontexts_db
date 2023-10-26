@@ -1,4 +1,5 @@
 appdirs==1.4.4
+apscheduler==3.10.4
 arabic-reshaper==3.0.0
 asgiref==3.2.10
 astroid==2.4.2
@@ -11,6 +12,7 @@ distlib==0.3.0
 dj-database-url==0.5.0
 Django==3.1.14
 django-appconf==1.0.4
+django-dbbackup==4.0.2
 django-chartjs==2.3.0
 django-classy-tags==2.0.0
 django-cleanup==5.1.0

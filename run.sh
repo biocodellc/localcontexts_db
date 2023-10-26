@@ -8,4 +8,5 @@
 #
 
 . ./env.sh
+python manage.py run_data_backup &
 gunicorn -b :$PORT -w 2 --timeout 90 localcontexts.wsgi:application
