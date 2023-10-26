@@ -42,6 +42,7 @@
 .notice-modal { width: 700px; }
 /* PROJECT ACTION PAGE: UNLINK PROJECT */
 .project-unlink-modal { width: 680px; height: 202px; }
+.announcement-modal { width: 680px;}
 
 /* PROJECT ACTION PAGE: SHARE PROJECT MODAL */
 .share-project-modal { width: 700px; height: auto; }

@@ -687,15 +687,57 @@
                             <div class="w-100 flex-this column margin-bottom-16">
                                 <label class="bold margin-top-8 margin-bottom-8 block">Local Contexts Project ID</label>
                                 <div class="text-input-to-copy">
-                                    <input class="w-100" type="text" value="{{ project.unique_id }}" id="projectUUIDToCopy">
+                                    <input class="w-100 grey-chip" type="text" value="{{ project.unique_id }}" id="projectUUIDToCopy" readonly>
                                     <button class="copy-btn btn-in-input" data-target="projectUUIDToCopy">Copy ID</button>
                                 </div>
     
                                 <label class="bold margin-top-8 margin-bottom-8 block">Local Contexts Project URL</label>
     
                                 <div class="text-input-to-copy">
-                                    <input class="w-100" type="text" value="{{ project.project_page}}" id="projectPageUrlToCopy">
+                                    <input class="w-100 grey-chip" type="text" value="{{ project.project_page}}" id="projectPageUrlToCopy" readonly>
                                     <button class="copy-btn btn-in-input" data-target="projectPageUrlToCopy">Copy URL</button>
+                                </div>
+
+                                <label class="bold margin-top-8 no-bottom-margin block">Embed Project</label>
+                                <p class="font-size-14 no-top-margin margin-bottom-8">Add this project's identifiers to your website by copying the code below.</p>
+    
+                                <div class="text-input-to-copy">
+                                    <input class="w-100 grey-chip" type="text" data-project-id="{{ project.unique_id}}" id="projectPageEmbedToCopy" readonly>
+                                    <button class="copy-btn btn-in-input" data-target="projectPageEmbedToCopy">Copy Code</button>
+                                </div>
+                                <p class="font-size-14 margin-top-1 no-bottom-margin">Embed Options</p>
+                                <div class="flex-this">
+                                    <select id="embedLayoutOptions" name="layout" class="project-sort w-30 margin-top-1 margin-right-1">
+                                        <option class="darkteal-text pointer" value="1" selected>Icons Only</option>
+                                        <option class="darkteal-text pointer" value="2">Icon and Title</option>
+                                        <option class="darkteal-text pointer" value="3">Icon, Title and Text</option>
+                                    </select>
+                                    <select id="embedLanguageOptions" name="language" class="project-sort w-30 margin-top-1 margin-right-1">
+                                        {% if notices %}
+                                            <option class="darkteal-text pointer" value="en" selected>English</option>
+                                            {% for notice in notices %}
+                                                {% for translation in notice.notice_translations.all %}
+                                                    <option class="darkteal-text pointer" value="{{ translation.language_tag }}">{{ translation.language }}</option>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% if project.has_bclabels or project.has_tklabels %}
+                                            {% for community, labels in label_groups.items %}
+                                                {% for tklabel in labels.tk_labels %}
+                                                    <option class="darkteal-text pointer" value="{{ tklabel.language_tag }}">{{ tklabel.language }}</option>
+                                                    {% for translation in tklabel.tklabel_translation.all %}
+                                                        <option class="darkteal-text pointer" value="{{ translation.language_tag }}">{{ translation.language }}</option>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                                {% for bclabel in labels.bc_labels %}
+                                                    <option class="darkteal-text pointer" value="{{ bclabel.language_tag }}">{{ bclabel.language }}</option>
+                                                    {% for translation in bclabel.bclabel_translation.all %}
+                                                        <option class="darkteal-text pointer" value="{{ translation.language_tag }}">{{ translation.language }}</option>
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </select>
                                 </div>
                             </div>
 

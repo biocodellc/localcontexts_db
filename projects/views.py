@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from .models import Project, ProjectContributors, ProjectCreator
 from helpers.models import Notice
+from bclabels.models import BCLabel
+from tklabels.models import TKLabel
 from django.http import Http404
 from accounts.models import UserAffiliation
 from researchers.models import Researcher
@@ -75,3 +77,29 @@ def download_project(request, unique_id):
             return download_project_zip(project)
     except:
         raise Http404()
+
+def embed_project(request, unique_id):
+    layout = request.GET.get('lt')
+    lang = request.GET.get('lang')
+
+    project = project = Project.objects.prefetch_related(
+                    'bc_labels', 
+                    'tk_labels', 
+                    'bc_labels__community', 
+                    'tk_labels__community',
+                    'bc_labels__bclabel_translation', 
+                    'tk_labels__tklabel_translation',
+                    ).get(unique_id=unique_id)
+    notices = Notice.objects.filter(project=project, archived=False)
+    label_groups = return_project_labels_by_community(project)
+    # tk_labels = TKLabel.objects.filter(project_tklabels=project)
+    # bc_labels = BCLabel.objects.filter(project_bclabels=project)
+    
+    context = {
+        'layout' : layout,
+        'lang' : lang,
+        'notices' : notices,
+        'label_groups' :  label_groups,
+        'project' : project
+    }
+    return render(request, 'projects/embed-project.html', context)

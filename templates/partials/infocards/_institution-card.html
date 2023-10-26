@@ -39,11 +39,26 @@
                         </div>
                     {% endif %}
                 {% endif %}
+
                 {% if '/dashboard/' in request.path %}
-                    <a 
-                        class="primary-btn action-btn"
-                        href="{% url 'institution-notices' institution.id %}"
-                    >View account</a>
+                    {% if institution_projects %}
+                        {% if request.user in institution.get_distinct_creators  %}
+                            <a 
+                                class="primary-btn action-btn"
+                                href="{% url 'institution-projects' institution.id %}"
+                            >View account</a>
+                        {% else %}
+                            <a 
+                                class="primary-btn action-btn"
+                                href="{% url 'institution-notices' institution.id %}"
+                            >View account</a>
+                        {% endif %}
+                    {% else %}
+                        <a 
+                            class="primary-btn action-btn"
+                            href="{% url 'institution-notices' institution.id %}"
+                        >View account</a>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

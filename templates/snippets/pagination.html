@@ -20,26 +20,26 @@
             {% endif %}
 
             {% if items.number == items.paginator.num_pages and items.number|add:-2 >= 1 %}
-                <a class="page-num-nav page" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.previous_page_number|add:-1 }}">{{ items.previous_page_number|add:-1 }}</a>
+                <a class="page-num-nav page num" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.previous_page_number|add:-1 }}">{{ items.previous_page_number|add:-1 }}</a>
             {% endif %}
 
             {% if items.previous_page_number >= 1 %}
-                <a class="page-num-nav page" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.previous_page_number }}">{{ items.previous_page_number }}</a>
+                <a class="page-num-nav page num" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.previous_page_number }}">{{ items.previous_page_number }}</a>
             {% endif %}
 
         {% else %}
             <span class="grey-text margin-right-16 font-size-14 bold"><i class="fa-solid fa-chevrons-left"></i>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa-solid fa-chevron-left"></i>&nbsp;&nbsp;Previous</span>
         {% endif %}
 
-        <span class="current">{{ items.number }}</span>
+        <span class="current">{{ items.number }} </span>
 
         {% if items.has_next %}
             {% if items.next_page_number >= 1 %}
-                <a class="page-num-nav page" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.next_page_number }}">{{ items.next_page_number }}</a>
+                <a class="page-num-nav page num" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.next_page_number }}">{{ items.next_page_number }}</a>
             {% endif %}
 
             {% if items.number == 1 and items.number|add:2 <= items.paginator.num_pages %}
-                <a class="page-num-nav page" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.next_page_number|add:1 }}">{{ items.next_page_number|add:1 }}</a>
+                <a class="page-num-nav page num" href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ items.next_page_number|add:1 }}">{{ items.next_page_number|add:1 }}</a>
             {% endif %}
 
             {% if items.has_previous == False %}

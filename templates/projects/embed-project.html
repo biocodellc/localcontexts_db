@@ -1,0 +1,244 @@
+{% load static %}
+<header>
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <meta content="text/html; charset=UTF-8; X-Content-Type-Options=nosniff" http-equiv="Content-Type" />
+</header>
+
+<!-- Icons w/o title -->
+{% if not layout or layout == "1" %}
+    <div class="flex-this flex-start wrap w-100 margin-top-1">
+        {% if notices %}
+            {% for notice in notices %}
+                <div class="margin-left-1 margin-right-1">
+                    <img loading="lazy" class="margin-bottom-8 img-sizedown-small pointer" src="{{ notice.img_url }}" alt="">
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if project.has_bclabels or project.has_tklabels %}
+            {% for community, labels in label_groups.items %}
+                {% for tklabel in labels.tk_labels %}
+                    <div class="margin-left-1 margin-right-1">
+                        <img loading="lazy" class="margin-bottom-8 img-sizedown-small pointer" src="{{ tklabel.img_url }}" alt="">
+                    </div>
+                {% endfor %}
+                {% for bclabel in labels.bc_labels %}
+                    <div class="margin-left-1 margin-right-1">
+                        <img loading="lazy" class="margin-bottom-8 img-sizedown-small pointer" src="{{ bclabel.img_url }}" alt="">
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endif%}
+
+<!-- Icons w/ title -->
+{% if layout == "2" %}
+    <div class="flex-this wrap w-100">
+        {% if notices %}
+            {% for notice in notices %}
+                {% if not lang or lang == 'en' %}
+                    <div class="flex-this column center-text w-20 margin-left-8 margin-right-8 margin-top-1">
+                        <div class="margin-left-1 margin-right-1">
+                            <img loading="lazy" class="w-100 pointer" style="max-width:150px;min-width:50px;padding:5px;" src="{{ notice.img_url }}" alt="">
+                        </div>
+                        <div class="margin-left-1 margin-right-1">
+                            <p class="margin-top-8 margin-bottom-8 font-size-14">
+                                {% if notice.notice_type == 'traditional_knowledge' %} Traditional Knowledge Notice{% endif %}
+                                {% if notice.notice_type == 'biocultural' %} Biocultural Notice{% endif %}
+                                {% if notice.notice_type == 'attribution_incomplete' %} Attribution Incomplete Notice{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                
+                {% else %}
+                    {% for translation in notice.notice_translations.all %}
+                        {% if lang == translation.language_tag %}
+                            <div class="flex-this column center-text w-20 margin-left-8 margin-right-8 margin-top-1">
+                                <div class="margin-left-1 margin-right-1">
+                                    <img loading="lazy" class="w-100 pointer" style="max-width:150px;min-width:50px;padding:5px;" src="{{ notice.img_url }}" alt="">
+                                </div>
+                                <div class="margin-left-1 margin-right-1">
+                                    <p class="margin-top-8 margin-bottom-8 font-size-14">{{ translation.translated_name }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% if project.has_bclabels or project.has_tklabels %}
+            {% for community, labels in label_groups.items %}
+                {% for tklabel in labels.tk_labels %}
+                    {% if not lang or lang == 'en' %}
+                        <div class="flex-this column center-text w-20 margin-left-8 margin-right-8 margin-top-1">
+                            <div class="margin-left-1 margin-right-1">
+                                <img loading="lazy" class="w-100 pointer" style="max-width:150px;min-width:50px;padding:5px;" src="{{ tklabel.img_url }}" alt="">
+                            </div>
+                            <div class="margin-left-1 margin-right-1">
+                                    <p class="margin-top-8 margin-bottom-8 font-size-14">{{ tklabel.name }}</p>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        {% for translation in tklabel.tklabel_translation.all %}
+                            {% if lang == translation.language_tag %}
+                                <div class="flex-this column center-text w-20 margin-left-8 margin-right-8 margin-top-1">
+                                    <div class="margin-left-1 margin-right-1">
+                                        <img loading="lazy" class="w-100 pointer" style="max-width:150px;min-width:50px;padding:5px;" src="{{ tklabel.img_url }}" alt="">
+                                    </div>
+                                    <div class="margin-left-1 margin-right-1">
+                                            <p class="margin-top-8 margin-bottom-8 font-size-14">{{ translation.translated_name }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+
+                {% for bclabel in labels.bc_labels %}
+                    {% if not lang or lang == 'en' %}
+                        <div class="flex-this column center-text w-20 margin-left-8 margin-right-8 margin-top-1">
+                            <div class="margin-left-1 margin-right-1">
+                                <img loading="lazy" class="w-100 pointer" style="max-width:150px;min-width:50px;padding:5px;" src="{{ bclabel.img_url }}" alt="">
+                            </div>
+                            <div class="margin-left-1 margin-right-1">
+                                    <p class="margin-top-8 margin-bottom-8 font-size-14">{{ bclabel.name }}</p>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        {% for translation in bclabel.bclabel_translation.all %}
+                            {% if lang == translation.language_tag %}
+                                <div class="flex-this column center-text w-20 margin-left-8 margin-right-8 margin-top-1">
+                                    <div class="margin-left-1 margin-right-1">
+                                        <img loading="lazy" class="w-100 pointer" style="max-width:150px;min-width:50px;padding:5px;" src="{{ bclabel.img_url }}" alt="">
+                                    </div>
+                                    <div class="margin-left-1 margin-right-1">
+                                            <p class="margin-top-8 margin-bottom-8 font-size-14">{{ translation.translated_name }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endif%}
+
+<!-- Full Text -->
+{% if layout == "3" %}
+    <div class="flex-this wrap w-100">
+        {% if notices %}
+            {% for notice in notices %}
+                {% if not lang or lang == 'en' %}
+                    <div class="center-text flex-this wrap w-100">
+                        <div class="w-20 auto-margin">
+                            <img loading="lazy" class="w-100" style="max-width:150px;min-width:50px;padding:5px;" src="{{ notice.img_url }}" alt="">
+                        </div>
+                        <div style="text-align:left;padding-right:5px;" class="w-80 auto-margin">
+                            <h3 class=" padding-bottom-1 pad-top-1 no-top-margin no-bottom-margin">
+                                {% if notice.notice_type == 'traditional_knowledge' %} Traditional Knowledge {% endif %}
+                                {% if notice.notice_type == 'biocultural' %} Biocultural {% endif %}
+                                {% if notice.notice_type == 'attribution_incomplete' %} Attribution Incomplete {% endif %}
+                            </h3>
+                            <h4 class="no-top-margin no-bottom-margin padding-bottom-1">English</h4>
+                            <p class="no-top-margin">{{ notice.default_text }}</p>
+                        </div>
+                    </div>
+                
+                {% else %}
+                    {% for translation in notice.notice_translations.all %}
+                        {% if lang == translation.language_tag %}
+                            <div class="center-text flex-this wrap w-100">
+                                <div class="w-20 auto-margin">
+                                    <img loading="lazy" class="w-100" style="max-width:150px;min-width:50px;padding:5px;" src="{{ notice.img_url }}" alt="">
+                                </div>
+                                <div style="text-align:left;padding-right:5px;" class="w-80 auto-margin">
+                                    <h3 class=" padding-bottom-1 pad-top-1 no-top-margin no-bottom-margin">{{ translation.translated_name }}</h3>
+                                    <h4 class="no-top-margin no-bottom-margin padding-bottom-1">{{ translation.language }}</h4>
+                                    <p class="no-top-margin">{{ translation.translated_text }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% if project.has_bclabels or project.has_tklabels %}
+            {% for community, labels in label_groups.items %}
+                {% for tklabel in labels.tk_labels %}
+                    {% if not lang or lang == 'en' and lang == tklabel.language_tag %}
+                        <div class="center-text flex-this wrap w-100">
+                            <div class="w-20 auto-margin">
+                                <img loading="lazy" class="w-100" style="max-width:150px;min-width:50px;padding:5px;" src="{{ tklabel.img_url }}" alt="">
+                            </div>
+                            <div style="text-align:left;padding-right:5px;" class="w-80 auto-margin">
+                                <h3 class="padding-bottom-1 pad-top-1 no-top-margin no-bottom-margin">{{ tklabel.name}}</h3>
+                                <h4 class="no-top-margin no-bottom-margin padding-bottom-1">{{ tklabel.language}}</h4>
+                                <p class="no-top-margin">{{ tklabel.label_text}}</p>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        {% for translation in tklabel.tklabel_translation.all %}
+                            {% if lang == translation.language_tag %}
+                                <div class="center-text flex-this wrap w-100">
+                                    <div class="w-20 auto-margin">
+                                        <img loading="lazy" class="w-100" style="max-width:150px;min-width:50px;padding:5px;" src="{{ tklabel.img_url }}" alt="">
+                                    </div>
+                                    <div style="text-align:left;padding-right:5px;" class="w-80 auto-margin">
+                                        <h3 class="padding-bottom-1 pad-top-1 no-top-margin no-bottom-margin">{{ translation.translated_name }}</h3>
+                                        <h4 class="no-top-margin no-bottom-margin padding-bottom-1">{{ translation.language}}</h4>
+                                        <p class="no-top-margin">{{ translation.translated_text }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+
+                {% for bclabel in labels.bc_labels %}
+                    {% if not lang or lang == 'en' and lang == bclabel.language_tag %}
+                        <div class="center-text flex-this wrap w-100">
+                            <div class="w-20 auto-margin">
+                                <img loading="lazy" class="w-100" style="max-width:150px;min-width:50px;padding:5px;" src="{{ bclabel.img_url }}" alt="">
+                            </div>
+                            <div style="text-align:left;padding-right:5px;" class="w-80 auto-margin">
+                                <h3 class="padding-bottom-1 pad-top-1 no-top-margin no-bottom-margin">{{ bclabel.name}}</h3>
+                                <h4 class="no-top-margin no-bottom-margin padding-bottom-1">{{ bclabel.language}}</h4>
+                                <p class="no-top-margin">{{ bclabel.label_text}}</p>
+                            </div>
+                        </div>
+
+                    {% else %}
+                        {% for translation in bclabel.bclabel_translation.all %}
+                            {% if lang == translation.language_tag %}
+                                <div class="center-text flex-this wrap w-100">
+                                    <div class="w-20 auto-margin">
+                                        <img loading="lazy" class="w-100" style="max-width:150px;min-width:50px;padding:5px;" src="{{ bclabel.img_url }}" alt="">
+                                    </div>
+                                    <div style="text-align:left;padding-right:5px;" class="w-80 auto-margin">
+                                        <h3 class="padding-bottom-1 pad-top-1 no-top-margin no-bottom-margin">{{ translation.translated_name }}</h3>
+                                        <h4 class="no-top-margin no-bottom-margin padding-bottom-1">{{ translation.language}}</h4>
+                                        <p class="no-top-margin">{{ translation.translated_text }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endif %}
+
+<div class="flex-this wrap w-100">
+    <div class="flex-this ">
+        <div class="margin-left-8 margin-right-8 padding-bottom-1 pad-top-1"><a href="https://localcontexts.org"><img style="width:30px;" src="https://localcontexts.org/wp-content/uploads/2023/04/White-Background.png" alt="Local Contexts Icon"></a></div>
+        <div class="auto-margin font-size-14"><a class="darkteal-text underline-hover bold" href="{{project.project_page}}">{{project.project_page}}</a></div>
+    </div>
+</div>

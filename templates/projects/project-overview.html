@@ -18,9 +18,27 @@
             </td>
             <td>
                 {% for creator in project.project_creator_project.all %}
-                    {% if creator.community %} {{ creator.community }} {% endif %}
-                    {% if creator.institution %} {{ creator.institution }} {% endif %}
-                    {% if creator.researcher %} {% firstof creator.researcher.user.get_full_name creator.researcher.user.username %} {% endif %}
+                    {% if 'projects-board' in request.path %}
+                        {% if creator.community %}
+                            <a class="darkteal-text underline-hover bold pointer" href="{% url 'public-community' creator.community.id %}">
+                                {{ creator.community }}
+                            </a>
+                        {% endif %}
+                        {% if creator.institution %} 
+                            <a class="darkteal-text underline-hover bold pointer" href="{% url 'public-institution' creator.institution.id %}"> 
+                                {{ creator.institution }}
+                            </a> 
+                        {% endif %}
+                        {% if creator.researcher %}
+                            <a class="darkteal-text underline-hover bold pointer" href="{% url 'public-researcher' creator.researcher.id %}"> 
+                                {% firstof creator.researcher.user.get_full_name creator.researcher.user.username %}
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        {% if creator.community %} {{ creator.community }} {% endif %}
+                        {% if creator.institution %} {{ creator.institution }} {% endif %}
+                        {% if creator.researcher %} {% firstof creator.researcher.user.get_full_name creator.researcher.user.username %} {% endif %}
+                    {% endif %}
                 {% endfor %}
             </td>
             <td>{{ project.date_modified|date:'d M Y' }}</td>

@@ -427,9 +427,10 @@ button[disabled],
     min-width: 1280px;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
     border-radius: 4px;
-    padding: 8px;
+    padding: 10px;
     text-align: center;
     margin: 10px auto;
+    font-weight: bold;
 }
  
 .page-btn-nav {
@@ -439,21 +440,36 @@ button[disabled],
 }
 
 .page-num-nav {
+    display: inline; 
     color: #A09D9D;
 }
 
-.current, .page {
-    display: inline-block;
-    margin: 0 3px;
+.page {
+    margin: 0 5px;
     padding: 8px 16px;
     font-weight: bold;
 }
 
-.page:hover:not(.page-btn-nav), .current {
-    background-color: #007385;
-    border-radius: 50%;
+.page:hover:not(.page-btn-nav) {
+    color: #007385;
+    background-color: #e1f6f9;
+    transition: background-color .3s
+}
+
+.pagination > span.current {
+    display: inline-block;
     color: #fff;
-    transition: background-color .3s;
+    background-color: #007385;
+    border: 2px solid #007385;
+    margin: 0 5px;
+    padding: 8px 16px;
+    border-radius: 20%;
+}
+
+.pagination > a.num {
+    border: 2px solid #007385;
+    border-radius: 20%;
+    color: #007385;
 }
 
 /* Community: select-labels: Listen and Example btns */

@@ -1,0 +1,83 @@
+{% load static %}
+
+<div class="disclaimer-container fixed">
+    <p>If you are accessing this site using Safari or Internet Explorer, the site may not behave as expected. Try to access with Google Chrome for best performance</p>
+    <button class="disclaimer-btn">Got it!</button>
+</div>
+
+<style>
+    .disclaimer-container {
+        display: flex;
+        justify-content: space-between;
+        top: -100%; /* Initially hidden */
+        left: 0;
+        right: 0;
+        background-color: #2f3640;
+        opacity: 0.9;
+        color: #f5f6fa;
+        padding: 10px;
+        box-shadow: 0 2px 16px #2f364075;
+        transition: 400ms;
+        z-index: 1;
+    }
+
+    .disclaimer-container.active {
+        top: 0; /* Show the banner at the top */
+    }
+
+    .disclaimer-container.fixed {
+        position: fixed; /* Show the banner at the top */
+    }
+
+    .disclaimer-btn {
+        background-color: #e84118;
+        border: 0;
+        color: #f5f6fa;
+        padding: 6px 20px;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    function agentHas(keyword) {
+      return navigator.userAgent.toLowerCase().search(keyword.toLowerCase()) > -1;
+    }
+
+    function isIE() {
+        return agentHas("MSIE") || agentHas("Trident");
+    }
+
+    function isSafari() {
+        return (!!window.ApplePaySetupFeature || !!window.safari) && agentHas("Safari") && !agentHas("Chrome") && !agentHas("CriOS");
+    }
+
+    function isEdge() {
+        return agentHas("Edge") || agentHas("Edg");
+    }
+    
+    var sandboxContainer = document.querySelector('.sandbox-container');
+    var disclaimerContainer = document.querySelector('.disclaimer-container');
+    var disclaimerBtn = document.querySelector('.disclaimer-btn');
+
+    disclaimerBtn.addEventListener('click', function() {
+        disclaimerContainer.classList.add('fixed');
+        disclaimerContainer.classList.remove('active');
+        localStorage.setItem('disclaimerBannerDisplayed', 'true');
+    });
+
+    if (isIE() || isSafari() || isEdge()) {
+        setTimeout(function() {
+            if (!localStorage.getItem('disclaimerBannerDisplayed')) {
+                if (sandboxContainer) {
+                    sandboxContainer.appendChild(disclaimerContainer);
+                    disclaimerContainer.classList.remove('fixed');
+                }
+                else {
+                    disclaimerContainer.classList.add('active');
+                }
+            }
+        }, 2000);
+    }
+</script>
