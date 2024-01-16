@@ -96,6 +96,9 @@ class ActivateAccountView(View):
         if user is not None and generate_token.check_token(user, token):
             user.is_active=True
             user.save()
+
+            add_to_active_users_mailing_list(request, user.email, None)
+
             messages.add_message(request, messages.INFO, 'Profile activation successful. You may now log in.')
             return redirect('login')
         return render(request, 'snippets/activate-failed.html', status=401)
@@ -206,6 +209,7 @@ def create_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            add_to_active_users_mailing_list(request, request.user.email, request.user.get_full_name()) #update mailing list with name
             return redirect('select-account')
     else:
         user_form = UserCreateProfileForm(instance=request.user)
@@ -260,6 +264,8 @@ def deactivate_user(request):
         user = request.user
         user.is_active = False
         user.save()
+        remove_from_active_users_mailing_list(request, user.email, user.get_full_name()) #update mailing list with name
+
         auth.logout(request)
         messages.add_message(request, messages.INFO, 'Your account has been deactivated.')
         return redirect('login')
@@ -460,7 +466,7 @@ def newsletter_subscription(request):
                     email = request.POST['email']
                     emailb64 = urlsafe_base64_encode(force_bytes(email))
                     variables = manage_mailing_list(request, first_name, emailb64)
-                    add_to_mailing_list(str(email), str(name), str(variables))
+                    add_to_newsletter_mailing_list(str(email), str(name), str(variables))
                     messages.add_message(request, messages.SUCCESS, 'You have been subscribed.')
                     return redirect('newsletter-unsubscription', emailb64=emailb64)
                 else:
@@ -516,7 +522,7 @@ def newsletter_unsubscription(request, emailb64):
                         return redirect('newsletter-unsubscription', emailb64=emailb64)
                     else:
                         variables = manage_mailing_list(request, first_name, email)
-                        add_to_mailing_list(str(email), str(name), str(variables))
+                        add_to_newsletter_mailing_list(str(email), str(name), str(variables))
                         messages.add_message(request, messages.SUCCESS, 'Your preferences have been updated.')
                         return redirect('newsletter-unsubscription', emailb64=emailb64)
 
