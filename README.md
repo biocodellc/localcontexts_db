@@ -1,4 +1,6 @@
-# Local Contexts Hub Main Repository
+# Local Contexts Hub Archived Repository
+
+For the current repository, please visit the [Local Contexts Organization's repository](https://github.com/localcontexts/localcontextshub)
 Prod Link:
 - [Local Contexts Hub](https://localcontextshub.org/)
 
